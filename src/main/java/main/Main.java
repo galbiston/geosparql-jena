@@ -23,6 +23,8 @@ public class Main {
         String testLocation = "Phase Three";
         
        LOGGER.info("Error: {} Location: {}", testVariable, testLocation);
+       
+       //Here some new stuff.
       
     }
     
