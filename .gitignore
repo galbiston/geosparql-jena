@@ -1,6 +1,7 @@
 
 .gradle/
 build/
+private/
 
 # Ignore Gradle GUI config
 gradle-app.setting
