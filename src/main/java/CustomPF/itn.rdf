@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:osgb="http://www.ordnancesurvey.co.uk/xml/namespaces/osgb"
+         xmlns:gml="http://www.opengis.net/ont/gml/3.2#"
+         xmlns:geo="http://www.opengis.net/ont/geosparql#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:ntu="http://ntu.ac.uk/ont/geo#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+   
+   <rdfs:Class rdf:about="ntu:RoadNode">
+      <rdfs:subClassOf rdf:resource="geo:Feature"/>
+      <rdfs:subClassOf rdf:resource="osgb:RoadNode"/>
+   </rdfs:Class>
+   <rdfs:Class rdf:about="ntu:RoadLink">
+      <rdfs:subClassOf rdf:resource="geo:Feature"/>
+      <rdfs:subClassOf rdf:resource="osgb:RoadLink"/>
+   </rdfs:Class>
+   <rdf:Property rdf:about="ntu:hasExactGeometry">
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
+   </rdf:Property>
+   <rdf:Property rdf:about="ntu:hasPointGeometry">
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
+   </rdf:Property>
+   <geo:gmlLiteral rdf:about="rdfs:Datatype">
+      <rdfs:isDefinedBy rdf:resource="http://www.opengis.net/spec/geosparql/1.0"/>
+      <rdfs:label xml:lang="en">GML literal</rdfs:label>
+      <rdfs:comment xml:lang="en">The datatype of GML literal values</rdfs:comment>
+   </geo:gmlLiteral>
+   
+   <ntu:RoadNode rdf:about="http://ntu.ac.uk/ont/geo#A">
+      <rdfs:label>osgb4000000015347797</rdfs:label>
+      <ntu:hasPointGeometry>
+         <gml:Point>
+            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>455483.192,339437.019</gml:coordinates></gml:Point>]]></gml:asGML>
+         </gml:Point>
+      </ntu:hasPointGeometry>
+      <osgb:descriptiveGroup rdf:datatype="xs:string">Road Topology</osgb:descriptiveGroup>
+      <osgb:referenceToTopographicArea>
+         <ntu:TopographicArea rdf:about="ntu:osgb1000000098271083"/>
+      </osgb:referenceToTopographicArea>
+   </ntu:RoadNode>
+   
+   <ntu:RoadNode rdf:about="http://ntu.ac.uk/ont/geo#B">
+      <rdfs:label>osgb4000000015348251</rdfs:label>
+      <ntu:hasPointGeometry>
+         <gml:Point>
+            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>457858.03,339326.045</gml:coordinates></gml:Point>]]></gml:asGML>
+         </gml:Point>
+      </ntu:hasPointGeometry>
+      <osgb:descriptiveGroup rdf:datatype="xs:string">Road Topology</osgb:descriptiveGroup>
+      <osgb:referenceToTopographicArea>
+         <ntu:TopographicArea rdf:about="ntu:osgb1000002080267739"/>
+      </osgb:referenceToTopographicArea>
+   </ntu:RoadNode>
+   
+</rdf:RDF>

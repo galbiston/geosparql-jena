@@ -1,0 +1,92 @@
+<!doctype html><html class="script-off" lang="en-gb"><head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<title>Ordnance Survey Great Britain XML and GML namespaces | Xml | Ordnance Survey</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="description" content="You have arrived at this page because you have used an XML or GML namespace name as a web address. " />
+		<meta name="keywords" content="ordnance survey namespaces, ordnance survey great britain namespaces, os namespaces xml and gml, namespaces xml and gml, os namespaces xml and gml" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="application-name" content="Ordnance Survey" />
+		<meta name="msapplication-TileImage" content="/images/ui/windows-8-application-173.png" />
+		<meta name="msapplication-TileColor" content="#591477" />
+        <link rel="canonical" href="https://www.ordnancesurvey.co.uk/xml/namespaces/osgb/" />
+		<link rel="stylesheet" media="all" href="/css/global.min.css" />
+		
+		<link rel="stylesheet" media="all" href="/css/core/article.min.css" />
+		
+		
+		<script src="/scripts/jquery.min.js"></script>
+		<script src="/scripts/global.min.js"></script>
+		
+		<script src="/scripts/core/article.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				iridiumInit(false, false, false, false);
+			});
+		</script>
+		
+
+		<link rel="icon" href="/images/ui/favicon.ico" type="image/x-icon" />
+		<!-- iPad 3 -->
+		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/ui/apple-touch-icon-144x144.png">
+		<!-- iPhone/iPod touch 4+ -->
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/ui/apple-touch-icon-114x114.png">
+		<!-- iPad 1 & 2 -->
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/ui/apple-touch-icon-72x72.png">
+		<!-- iPhone 3GS/iPod touch 3 and Android 2.1+ -->
+		<link rel="apple-touch-icon-precomposed" href="/images/ui/apple-touch-icon-57x57.png">
+		
+		
+		
+		
+	</head><!--[if IE 8]><body class="browser-lt-ie9 browser-ie8 location-public core-article"><![endif]--><!--[if IE 7]><body class="browser-lt-ie9 browser-ie7 location-public core-article"><![endif]--><!--[if gt IE 8]><body class="location-public core-article"><![endif]--><!--[if !IE]><!--><body class="location-public core-article"><!--<![endif]-->
+
+		<div class="accessibility-hide">
+			<p>Jump to the following:</p>
+			<ul>
+				<li><a href="#main" tabindex="-1">Main content</a></li>
+				<li><a href="#globalMenu" tabindex="-1">Main navigation</a></li>
+				<li><a href="#footNav" tabindex="-1">Supplementary navigation</a></li>
+				<li><a href="#globalSearch" tabindex="-1">Site search</a></li>
+			</ul>
+		</div>
+
+		<div id="header" role="banner">
+			<div class="grid-container grid-row">
+				<div class="grid-cols-12">
+					<div id="logo">
+    <a href="/" title="Ordnance Survey home" tabindex="30"><img src="/images/ui/os-logo.png" width="159" height="40" alt="Ordnance Survey logo" /></a>
+</div>
+
+                                    <ul id="headerControls">
+                    <li id="controlsBasket"><a href="/shop/checkout/cart" title="Basket total" tabindex="30"><span id="basketText">Your basket</span><span>&#160;</span></a></li>
+                    <li id="controlsContact"><a href="/contact/" title="Contact us" tabindex="30"><span id="contactText">Contact us</span></a></li>
+                    <li id="controlsSearch"><a href="#globalSearch" title="Site search" tabindex="30">Search</a></li><li id="controlsSections"><a href="#globalMenu" title="Navigation sections" tabindex="30">Sections</a></li>
+                </ul>
+                				
+                </div>
+			</div>
+		</div>
+
+		<div id="messages">
+			<div class="message">
+				<h2>Internet cookies at Ordnance Survey</h2>
+				<p>We use cookies on this website in order to make your visit run more smoothly and to give us statistics that help us plan future enhancements. <a href="/cookies/index.html" tabindex="-1">Learn more about the cookies we use</a>.</p>
+			</div>
+		</div><div id="nav" role="navigation"><div id="navGlobal"><div class="grid-container grid-row"><div class="grid-cols-12"><form id="globalSearch" role="search" action="/search/"><label for="searchQuery" tabindex="20"><span class="accessibility-hide">Site search</span></label><input type="text" name="q" id="searchQuery" placeholder="Search for information, products &amp; places" tabindex="20" /><input type="image" src="/images/ui/site-search.png" alt="Search" tabindex="20" /></form><div class="accessibility-hide"><a href="#main" tabindex="-1">Skip main navigation</a></div><ul id="globalMenu" role="menubar"><li id="globalPublic" class="active"><a href="/" class="icon-nav-britain" role="menuitem" tabindex="10">Public</a></li><li id="globalBusinessandgovernment"><a href="/business-and-government/" class="icon-nav-case" role="menuitem" tabindex="10">Business &amp; government</a></li><li id="globalInternational"><a href="/international/" class="icon-nav-globe" role="menuitem" tabindex="10">International</a></li><li id="globalInnovation"><a href="/innovate/" role="menuitem" tabindex="10">Innovate</a></li><li id="globalAbout"><a href="/about/" role="menuitem" tabindex="10">About</a></li></ul></div></div></div><div id="controlsMenu"><a href="#globalMenu" title="Navigation menu" tabindex="30">Menu</a></div><div id="navPrimary"><div class="grid-container grid-row"><div class="grid-cols-12"><ul class="primaryMenu" role="menubar"><li><a href="/" role="menuitem" class="icon-nav-home">Home</a></li><li><a href="/shop/" role="menuitem" class="icon-nav-map">Shop</a><ul role="menu"><li><a href="/shop/maps.html" role="menuitem">Paper maps</a></li><li><a href="/shop/os-maps-online.html" role="menuitem">OS Maps online</a></li><li><a href="/shop/custom-made-maps.html" role="menuitem">Custom Made maps</a></li><li><a href="/shop/gps.html" role="menuitem">GPS</a></li><li><a href="/shop/digital-maps.html" role="menuitem">PC &amp; mobile</a></li><li><a href="/shop/outdoorgear.html" role="menuitem">Outdoor gear</a></li><li><a href="/shop/books.html" role="menuitem">Books</a></li><li><a href="/shop/gifts.html" role="menuitem">Gifts</a></li><li><a href="/shop/walking.html" role="menuitem">Walking</a></li><li><a href="/shop/cycling.html" role="menuitem">Cycling</a></li><li><a href="/shop/camping.html" role="menuitem">Camping</a></li><li><a href="/shop/latest-offers.html" role="menuitem">Offers</a></li></ul></li><li><a href="/education-research/index.html" role="menuitem" class="icon-nav-education">Education &amp; research</a><ul role="menu"><li><a href="/education-research/digimap.html" role="menuitem">Digimap</a></li><li><a href="/education-research/teaching-resources/index.html" role="menuitem">Teaching resources</a></li><li><a href="/education-research/higher-and-further-education/index.html" role="menuitem">Universities and colleges</a></li><li><a href="/education-research/research/index.html" role="menuitem">Research</a></li><li><a href="/education-research/maps-for-schools/mapzone.html" role="menuitem">Mapzone</a></li></ul></li><li><a href="/resources/index.html" role="menuitem" class="icon-nav-folder">Resources</a></li><li><a href="/election-maps/index.html" role="menuitem" class="icon-nav-britain">Election maps</a></li><li><a href="/blog/" role="menuitem" class="icon-nav-people">Blog</a></li><li><a href="/support/index.html" role="menuitem" class="icon-nav-lifebelt">Support</a></li></ul></div></div></div></div><div id="main" role="main" itemscope itemtype="http://schema.org/Article">
+			<div id="mainHeading">
+				<div class="grid-container grid-row">
+					<div class="grid-cols-12">
+						<ul class="breadcrumbs"></ul>
+                        <div id="headingShare"></div>
+                        
+						<h1 itemprop="name">Ordnance&nbsp;Survey Great&nbsp;Britain XML and GML namespaces</h1>
+                        
+						
+					</div>
+				</div>
+			</div><div class="grid-container grid-row"><div class="grid-cols-7 grid-nest main-content" itemprop="articleBody"><div class="grid-row"><div class="grid-cols-12 grid-trim"><p>You have arrived at this page because you have used an XML or GML namespace name as a web address.</p><p>For information on our XML and GML products, including the locations of the schema definition files, see:</p><ul><li class="icon-bullet-right"><a href="/business-and-government/products/mastermap-products.html">OS MasterMap</a></li><li class="icon-bullet-right"><a href="/business-and-government/products/vectormap-products.html">OS VectorMap</a></li><li class="icon-bullet-right"><a href="/business-and-government/products/height-and-imagery-products.html">Height and imagery products</a> (including OS Terrain products)</li></ul></p></div></div></div><div class="grid-cols-4 grid-nest main-aside grid-offset-1 grid-trim"></div></div></div><a href="#header" id="backToTop">Back to top</a>[an error occurred while processing this directive]
+    [an error occurred while processing this directive]
+    
+	
+	</body>
+</html>

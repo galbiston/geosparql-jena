@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'application'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -14,7 +14,7 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = 'main.Main'
 }
 
-//mainClassName = 'main.Main'
+mainClassName = 'main.Main'
 
 repositories {
     mavenCentral()
@@ -27,6 +27,9 @@ dependencies {
     // TODO: Add dependencies here ...
     // You can read more about how to add dependency here:
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
+    
+    //JTS suite
+    compile 'com.vividsolutions:jts-assembly-distribution:1.14.0'
     
     //Apache Jena EXCLUDE its log part
     compile (group: 'org.apache.jena', name: 'jena-spatial', version: '3.1.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
