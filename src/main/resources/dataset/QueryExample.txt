@@ -1,0 +1,17 @@
+
+SELECT * 
+WHERE{
+ntu:A ntu:hasFeature ?aFea.
+?b ntu:hasGeometry ?bGeom.
+?aFea geo:sfWithin ?bGeom.
+}
+
+SELECT * 
+WHERE{
+ntu:A ntu:hasFeature ?aFea.
+?b ntu:hasGeometry ?bGeom.
+?aFea ntu:hasGeometry ?aGeom.
+?aGeom gml:asGML ?aGML.
+?bGeom gml:asGML ?bGML.
+FILTER ( geof:sfwithin( ?aGML, ?bGML ) )
+}

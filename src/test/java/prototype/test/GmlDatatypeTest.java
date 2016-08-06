@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CustomPF;
+package prototype.test;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
+import datatype.GmlDatatype;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -25,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vocabulary.Prefixes;
 
 /**
  *
@@ -45,7 +47,7 @@ public class GmlDatatypeTest {
         RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
         TypeMapper.getInstance().registerDatatype(gmlDataType);
         LOGGER.info("Before Reading Data");
-        MODEL.read("/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/java/CustomPF/itn.rdf");
+        MODEL.read(TestDataLocation.DATA);
         LOGGER.info("After Reading Data");
 
     }
@@ -74,7 +76,7 @@ public class GmlDatatypeTest {
         gsf.setBase(new Coordinate(0, 0));
         Geometry testGeometry = gsf.createRectangle();
         RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
-        LOGGER.info("test unparse result: {}", gmlDataType.unparse(testGeometry));
+        LOGGER.info("test unparse result: \n{}", gmlDataType.unparse(testGeometry));
     }
 
     /**
@@ -100,7 +102,7 @@ public class GmlDatatypeTest {
             // Cast the object into geometry
             Geometry geometry = (Geometry) gmlDataType.parse(qs.getLiteral("aGML").getLexicalForm());
             if (geometry != null) {
-                LOGGER.info("successfully parse gmlLiteral into geometry: {}", geometry);
+                LOGGER.info("successfully parse gmlLiteral into geometry: \n{}", gmlDataType.unparse(geometry));
             }
         }
     }

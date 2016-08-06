@@ -17,16 +17,24 @@ if (!hasProperty('mainClass')) {
 mainClassName = 'main.Main'
 
 repositories {
+    //Custom Maven Repository
+    //Notice: MUST put this before Maven central otherwise will cause jai-core.jar not find error.
+    maven {
+     url "http://download.osgeo.org/webdav/geotools/"
+    }
+    
+    //Maven central
     mavenCentral()
-    // You may define additional repositories, or even remove "mavenCentral()".
-    // Read more about repositories here:
-    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:repositories
 }
 
 dependencies {
-    // TODO: Add dependencies here ...
-    // You can read more about how to add dependency here:
-    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
+    
+    //Geotools 
+    //compile group: 'org.geotools', name: 'gt-shapefile', version: '15.0'
+    //compile group: 'org.geotools', name: 'gt-app-schema', version: '15.0'
+    
+    //JScience Units Converter
+    compile 'org.jscience:jscience:4.3.1'
     
     //JTS suite
     compile 'com.vividsolutions:jts-assembly-distribution:1.14.0'

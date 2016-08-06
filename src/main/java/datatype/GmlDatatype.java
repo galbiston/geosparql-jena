@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CustomPF;
+package datatype;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.gml2.GMLReader;
+import com.vividsolutions.jts.io.gml2.GMLWriter;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.jena.datatypes.BaseDatatype;
@@ -29,6 +30,9 @@ public class GmlDatatype extends BaseDatatype {
     public static final String theTypeURI = "geo:gmlLiteral";
     public static final RDFDatatype theGmlDatatype = new GmlDatatype();
 
+    public static final String GMLPrefix = "gml";
+    public static final String GMLSRSNAme = "urn:ogc:def:crs:EPSG::27700";
+
     /**
      * private constructor - single global instance.
      */
@@ -39,8 +43,15 @@ public class GmlDatatype extends BaseDatatype {
     /**
      * Convert a value of this datatype out to lexical form.
      */
-    public String unparse(Geometry geometry) {
-        return geometry.toString();
+    @Override
+    public String unparse(Object geometry) {
+        Geometry geom = (Geometry) geometry;
+        GMLWriter gmlWriter = new GMLWriter();
+        gmlWriter.setNamespace(true);
+        gmlWriter.setSrsName(GMLSRSNAme);
+        gmlWriter.setPrefix(GMLPrefix);
+        String gml = gmlWriter.write(geom);
+        return gml;
     }
 
     /**
@@ -48,16 +59,16 @@ public class GmlDatatype extends BaseDatatype {
      *
      * @throws DatatypeFormatException if the lexical form is not legal
      */
+    @Override
     public Geometry parse(String lexicalForm) throws DatatypeFormatException {
 
         String gmlString = lexicalForm.toString();
-        LOGGER.info("the gmlLiteral is {}", gmlString);
         GMLReader gmlReader = new GMLReader();
         try {
             Geometry geometry = gmlReader.read(gmlString, null);
             return geometry;
         } catch (SAXException | IOException | ParserConfigurationException ex) {
-            LOGGER.warn("cannot parse gmlLiteral to geometry");
+            LOGGER.warn("Illegal GML literal: {}", gmlString);
             return null;
         }
     }

@@ -21,6 +21,7 @@
    </rdf:Property>
    <rdf:Property rdf:about="ntu:hasPointGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>
    <geo:gmlLiteral rdf:about="rdfs:Datatype">
       <rdfs:isDefinedBy rdf:resource="http://www.opengis.net/spec/geosparql/1.0"/>

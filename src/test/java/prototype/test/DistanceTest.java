@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package CustomPF;
+package prototype.test;
 
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.Query;
@@ -26,6 +26,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vocabulary.Prefixes;
+import vocabulary.Vocabulary;
 
 /**
  *
@@ -45,7 +47,7 @@ public class DistanceTest {
         MODEL = ModelFactory.createDefaultModel();
         LOGGER.info("Before Reading Data");
         //InputStream in = FileManager.get().open( "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/java/propertyfunction/spatialdata.rdf" );
-        MODEL.read("/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/java/CustomPF/itn.rdf");
+        MODEL.read(TestDataLocation.DATA);
         LOGGER.info("After Reading Data");
     }
 
@@ -72,7 +74,6 @@ public class DistanceTest {
                 + "ntu:A ntu:hasPointGeometry ?aGeom . ?aGeom gml:asGML ?aGML . "
                 + "ntu:B ntu:hasPointGeometry ?bGeom . ?bGeom gml:asGML ?bGML . "
                 + "?distance ext:distance(?aGML ?bGML) ."
-                //                + "FILTER ( ext:distance(?aGML, ?bGML) > 1)"
                 + " }"
                 + "LIMIT 2";
 
@@ -80,7 +81,7 @@ public class DistanceTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put("http://example/f#distance", CustomPF.Distance.class);
+        PropertyFunctionRegistry.get().put("http://example/f#distance", prototype.Distance.class);
         //FunctionRegistry.get().put("http://example/f#distance", CustomPF.DistanceFilterFunc.class) ;
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
@@ -101,7 +102,7 @@ public class DistanceTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put("http://example/f#distance", CustomPF.Distance.class);
+        PropertyFunctionRegistry.get().put("http://example/f#distance", prototype.Distance.class);
 
         QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
         ResultSet rs = qe.execSelect();
@@ -126,7 +127,7 @@ public class DistanceTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         Query queryCom = query.asQuery();
-        System.out.print("Blah");
+        System.out.print(query.toString());
     }
 
 }
