@@ -68,7 +68,7 @@ public class DistanceFilterFuncTest {
                 + "?b ntu:hasPointGeometry ?bGeom . ?bGeom gml:asGML ?bGML . "
                 + "FILTER ( ?bGeom != ?aGeom )"
                 + " }"
-                + "ORDER BY DESC ( ext:distance(?aGML, ?bGML, uom:metre) )";
+                + "ORDER BY DESC ( ext:distance(?aGML, ?bGML, uom:degree) )";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
 

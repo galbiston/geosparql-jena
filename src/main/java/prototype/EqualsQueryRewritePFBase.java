@@ -5,12 +5,8 @@
  */
 package prototype;
 
-import queryrewrite.expr.EqualsExprFunc;
-import static prototype.EqualsQueryRewritePF.hiddenVariableCount;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
 import org.apache.jena.sparql.algebra.op.OpFilter;
@@ -27,6 +23,9 @@ import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static prototype.EqualsQueryRewritePF.hiddenVariableCount;
+import queryrewrite.expr.EqualsExprFunc;
+import vocabulary.Vocabulary;
 
 /**
  *
@@ -34,9 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public class EqualsQueryRewritePFBase extends PropertyFunctionBase {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(Distance.class);
-
-    public static final String GML_URI = "http://www.opengis.net/ont/gml#";
+    private static final Logger LOGGER = LoggerFactory.getLogger(EqualsQueryRewritePFBase.class);
 
     @Override
     public QueryIterator exec(Binding binding, PropFuncArg argSubject, Node predicate, PropFuncArg argObject, ExecutionContext execCxt) {
@@ -57,16 +54,14 @@ public class EqualsQueryRewritePFBase extends PropertyFunctionBase {
         Var GeomVar_OBJ = createNewVar();
 
         BasicPattern bp = new BasicPattern();
-        Property gmlProperty = ResourceFactory.createProperty(GML_URI + "asGML");
-        Property geometryProperty = ResourceFactory.createProperty("http://www.opengis.net/ont/geosparql#" + "hasGeometry");
 
-        Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, gmlProperty.asNode(), GMLVar_SUB);
-        Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, gmlProperty.asNode(), GMLVar_OBJ);
+        Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
+        Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
-        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, geometryProperty.asNode(), GeomVar_SUB);
-        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, geometryProperty.asNode(), GeomVar_OBJ);
-        Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, gmlProperty.asNode(), GMLVar_SUB);
-        Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, gmlProperty.asNode(), GMLVar_OBJ);
+        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Vocabulary.GEOMPOINT_PRO.asNode(), GeomVar_SUB);
+        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GEOMPOINT_PRO.asNode(), GeomVar_OBJ);
+        Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
+        Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
         Expr expr = new EqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 

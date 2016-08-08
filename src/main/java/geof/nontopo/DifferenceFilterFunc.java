@@ -5,10 +5,44 @@
  */
 package geof.nontopo;
 
+import com.vividsolutions.jts.geom.Geometry;
+import datatype.GmlDatatype;
+import org.apache.jena.datatypes.DatatypeFormatException;
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.expr.NodeValue;
+import org.apache.jena.sparql.function.FunctionBase2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author haozhechen
  */
-public class DifferenceFilterFunc {
+public class DifferenceFilterFunc extends FunctionBase2 {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DifferenceFilterFunc.class);
+
+    @Override
+    public NodeValue exec(NodeValue v1, NodeValue v2) {
+
+        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+
+        //Transfer the parameters as Nodes
+        Node node1 = v1.asNode();
+        Node node2 = v2.asNode();
+
+        try {
+            Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
+
+            Geometry difference = g1.difference(g2);
+
+            return NodeValue.makeNodeString(gmlDataType.unparse(difference));
+        } catch (DatatypeFormatException dfx) {
+            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
+            return NodeValue.nvEmptyString;
+        }
+    }
 
 }

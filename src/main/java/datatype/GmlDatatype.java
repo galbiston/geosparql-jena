@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
  */
 public class GmlDatatype extends BaseDatatype {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(GmlDatatype.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GmlDatatype.class);
     public static final String theTypeURI = "geo:gmlLiteral";
     public static final RDFDatatype theGmlDatatype = new GmlDatatype();
 
@@ -68,7 +68,7 @@ public class GmlDatatype extends BaseDatatype {
             Geometry geometry = gmlReader.read(gmlString, null);
             return geometry;
         } catch (SAXException | IOException | ParserConfigurationException ex) {
-            LOGGER.warn("Illegal GML literal: {}", gmlString);
+            LOGGER.error("Illegal GML literal: {}", gmlString);
             return null;
         }
     }

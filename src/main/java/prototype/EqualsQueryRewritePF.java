@@ -5,7 +5,6 @@
  */
 package prototype;
 
-import queryrewrite.expr.EqualsExprFunc;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.query.*;
@@ -24,6 +23,7 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunction;
 import org.apache.jena.sparql.util.NodeUtils;
+import queryrewrite.expr.EqualsExprFunc;
 
 /**
  *

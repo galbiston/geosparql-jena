@@ -5,10 +5,41 @@
  */
 package geof.nontopo;
 
+import com.vividsolutions.jts.geom.Geometry;
+import datatype.GmlDatatype;
+import org.apache.jena.datatypes.DatatypeFormatException;
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.expr.NodeValue;
+import org.apache.jena.sparql.function.FunctionBase1;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  * @author haozhechen
  */
-public class BoundaryFilterFunc {
+public class BoundaryFilterFunc extends FunctionBase1 {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BoundaryFilterFunc.class);
+
+    @Override
+    public NodeValue exec(NodeValue v) {
+
+        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+
+        Node node = v.asNode();
+
+        try {
+            Geometry g1 = (Geometry) gmlDataType.parse(node.getLiteralLexicalForm());
+
+            Geometry boundary = g1.getBoundary();
+
+            return NodeValue.makeNodeString(gmlDataType.unparse(boundary));
+        } catch (DatatypeFormatException dfx) {
+            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
+            return NodeValue.nvEmptyString;
+        }
+    }
 
 }

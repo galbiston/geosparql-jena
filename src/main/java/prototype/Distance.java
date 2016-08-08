@@ -5,8 +5,8 @@
  */
 package prototype;
 
-import datatype.GmlDatatype;
 import com.vividsolutions.jts.geom.Geometry;
+import datatype.GmlDatatype;
 import java.util.List;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Distance extends PropertyFunctionBase {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(Distance.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Distance.class);
 
     @Override
     public QueryIterator exec(Binding binding, PropFuncArg argSubject, Node predicate, PropFuncArg argObject, ExecutionContext execCtx) {

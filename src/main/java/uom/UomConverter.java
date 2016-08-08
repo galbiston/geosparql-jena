@@ -29,22 +29,28 @@ public class UomConverter {
 
         switch (destiUnit) {
             case Vocabulary.METRE_URI:
+                LOGGER.info("Current Uint of Measurement: METRE");
                 //use formula: s = rθ to calculate distance in metre
                 distance = radians * 6371000.0;
                 break;
             case Vocabulary.DEGREE_URI:
+                LOGGER.info("Current Uint of Measurement: DEGREE");
                 //the default unit is degree
                 break;
             case Vocabulary.GRIDSPACING_URI:
-
+                LOGGER.info("GRID SPACING is not supported currently");
                 break;
             case Vocabulary.RADIAN_URI:
+                LOGGER.info("Current Uint of Measurement: RADIAN");
                 distance = radians;
                 break;
             case Vocabulary.UNITY_URI:
+                LOGGER.info("UNITY is not supported currently");
+                //unitless ratio of two quantities with the same units
                 break;
             default:
-                LOGGER.warn("Unsupported Unit Type: {}", destiUnit);
+                LOGGER.error("Unknow Unit Type: {}", destiUnit);
+                distance = -1;
                 break;
         }
 

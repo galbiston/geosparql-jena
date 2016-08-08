@@ -21,12 +21,12 @@ import org.slf4j.LoggerFactory;
  */
 public class EqualsPropertyFunc extends PropertyFunctionBase {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(EqualsPropertyFunc.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EqualsPropertyFunc.class);
 
     @Override
     public QueryIterator exec(Binding binding, PropFuncArg argSubject, Node predicate, PropFuncArg argObject, ExecutionContext execCxt) {
 
         return IterLib.noResults(execCxt);
     }
-    
+
 }

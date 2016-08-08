@@ -6,7 +6,6 @@
 package prototype.test;
 
 import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
@@ -15,7 +14,6 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,7 +25,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vocabulary.Prefixes;
-import vocabulary.Vocabulary;
 
 /**
  *
@@ -113,21 +110,6 @@ public class DistanceTest {
         }
         double expResult = 5.545;
         assertEquals(result, expResult, 0);
-    }
-
-    @Ignore
-    @Test
-    public void bindingDELETEME() {
-        String queryString = "SELECT ?x WHERE{?x a ?buildingType; ?buildingName ?name}";
-
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        bindings.add("buildingType", Vocabulary.BUILDING_TYPE_RES);
-        bindings.add("buildingName", ResourceFactory.createProperty("http://ntu.ac.uk/buildingName"));
-        bindings.add("name", ResourceFactory.createPlainLiteral("Erasmus Darwin"));
-
-        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
-        Query queryCom = query.asQuery();
-        System.out.print(query.toString());
     }
 
 }

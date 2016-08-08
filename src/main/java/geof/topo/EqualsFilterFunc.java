@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 public class EqualsFilterFunc extends FunctionBase2 {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(EqualsFilterFunc.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EqualsFilterFunc.class);
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
@@ -31,18 +31,17 @@ public class EqualsFilterFunc extends FunctionBase2 {
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();
 
-        boolean result = false;
-
         try {
             Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
             Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
 
-            result = g1.contains(g2);
-        } catch (DatatypeFormatException dfx) {
-            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry");
-        }
+            boolean result = g1.equals(g2);
 
-        return NodeValue.makeBoolean(result);
+            return NodeValue.makeBoolean(result);
+        } catch (DatatypeFormatException dfx) {
+            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
+            return NodeValue.FALSE;
+        }
 
     }
 

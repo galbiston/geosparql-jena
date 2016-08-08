@@ -5,8 +5,9 @@
  */
 package queryrewrite.expr;
 
-import datatype.GmlDatatype;
 import com.vividsolutions.jts.geom.Geometry;
+import datatype.GmlDatatype;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.Expr;
@@ -14,6 +15,7 @@ import org.apache.jena.sparql.expr.ExprFunction2;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vocabulary.Vocabulary;
 
 /**
  *
@@ -21,12 +23,10 @@ import org.slf4j.LoggerFactory;
  */
 public class EqualsExprFunc extends ExprFunction2 {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(EqualsExprFunc.class);
-
-    private static final String symbol = "geof:sfEquals";
+    private static final Logger LOGGER = LoggerFactory.getLogger(EqualsExprFunc.class);
 
     public EqualsExprFunc(Expr expr1, Expr expr2) {
-        super(expr1, expr2, symbol);
+        super(expr1, expr2, Vocabulary.EQUALS_SYMBOL);
     }
 
     @Override
@@ -36,17 +36,18 @@ public class EqualsExprFunc extends ExprFunction2 {
         Node node1 = x.asNode();
         Node node2 = y.asNode();
 
-        Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
-        Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
+        try {
+            Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
 
-        boolean result = g1.equals(g2);
+            boolean result = g1.equals(g2);
 
-        if (result) {
-            LOGGER.info("These 2 geometries are equal");
-            return NodeValue.makeBoolean(true);
-        } else {
-            return NodeValue.makeBoolean(false);
+            return NodeValue.makeBoolean(result);
+        } catch (DatatypeFormatException dfx) {
+            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
+            return NodeValue.FALSE;
         }
+
     }
 
     @Override

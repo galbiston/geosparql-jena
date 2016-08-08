@@ -33,9 +33,6 @@ dependencies {
     //compile group: 'org.geotools', name: 'gt-shapefile', version: '15.0'
     //compile group: 'org.geotools', name: 'gt-app-schema', version: '15.0'
     
-    //JScience Units Converter
-    compile 'org.jscience:jscience:4.3.1'
-    
     //JTS suite
     compile 'com.vividsolutions:jts-assembly-distribution:1.14.0'
     
