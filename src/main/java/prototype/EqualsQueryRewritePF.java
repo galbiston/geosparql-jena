@@ -23,7 +23,7 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunction;
 import org.apache.jena.sparql.util.NodeUtils;
-import queryrewrite.expr.EqualsExprFunc;
+import queryrewrite.expr.sf.SFEqualsExprFunc;
 
 /**
  *
@@ -75,7 +75,7 @@ public class EqualsQueryRewritePF implements PropertyFunction {
 
         BasicPattern bp = new BasicPattern();
         Property gmlProperty = ResourceFactory.createProperty(uri + "asGML");
-        Property geometry = ResourceFactory.createProperty("http://ntu.ac.uk/ont/geo#" + "hasPointGeometry");
+        Property geometry = ResourceFactory.createProperty("http://ntu.ac.uk/ont/geo#" + "hasExactGeometry");
 
         Triple t1 = new Triple(nodeVar1, gmlProperty.asNode(), var1);
         Triple t2 = new Triple(nodeVar2, gmlProperty.asNode(), var2);
@@ -84,7 +84,7 @@ public class EqualsQueryRewritePF implements PropertyFunction {
         OpBGP op = new OpBGP(bp);
         System.out.println("op: " + op.toString());
 
-        Expr expr = new EqualsExprFunc(new ExprVar(var1.getName()), new ExprVar(var2.getName()));
+        Expr expr = new SFEqualsExprFunc(new ExprVar(var1.getName()), new ExprVar(var2.getName()));
         //Expr regex = new E_Regex(new ExprVar(var2.getName()), pattern, "i");
         Op filter = OpFilter.filter(expr, op);
         System.out.println("filter: " + filter.toString());

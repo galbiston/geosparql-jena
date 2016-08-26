@@ -29,6 +29,9 @@ repositories {
 
 dependencies {
     
+    //Apache Lucene
+    compile 'org.apache.lucene:lucene-core:6.1.0'
+    
     //Geotools 
     //compile group: 'org.geotools', name: 'gt-shapefile', version: '15.0'
     //compile group: 'org.geotools', name: 'gt-app-schema', version: '15.0'
@@ -38,7 +41,7 @@ dependencies {
     
     //Apache Jena EXCLUDE its log part
     compile (group: 'org.apache.jena', name: 'jena-spatial', version: '3.1.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
-    
+        
     //Logging Framework
     compile group:'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'

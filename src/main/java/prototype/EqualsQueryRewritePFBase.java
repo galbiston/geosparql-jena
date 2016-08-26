@@ -24,7 +24,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static prototype.EqualsQueryRewritePF.hiddenVariableCount;
-import queryrewrite.expr.EqualsExprFunc;
+import queryrewrite.expr.sf.SFEqualsExprFunc;
 import vocabulary.Vocabulary;
 
 /**
@@ -58,32 +58,32 @@ public class EqualsQueryRewritePFBase extends PropertyFunctionBase {
         Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
         Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
-        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Vocabulary.GEOMPOINT_PRO.asNode(), GeomVar_SUB);
-        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GEOMPOINT_PRO.asNode(), GeomVar_OBJ);
+        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Vocabulary.GEOMEXACT_PRO.asNode(), GeomVar_SUB);
+        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GEOMEXACT_PRO.asNode(), GeomVar_OBJ);
         Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
         Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
-        Expr expr = new EqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new SFEqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         if (nodeVar_SUB.isLiteral()) {
             if (nodeVar_OBJ.isLiteral()) {
                 //Subject is GML literal, Object is GML Literal
                 System.out.println("Subject is GML literal, Object is GML Literal");
 
-                expr = new EqualsExprFunc(exprVar_SUB, exprVar_OBJ);
+                expr = new SFEqualsExprFunc(exprVar_SUB, exprVar_OBJ);
             } else if (nodeVar_OBJ.isURI()) {
                 //Subject is GML literal, Object is Feature
                 System.out.println("Subject is GML literal, Object is Feature");
                 bp.add(FeaHasGeom_OBJ);
                 bp.add(GeomHasGML_OBJ);
 
-                expr = new EqualsExprFunc(exprVar_SUB, new ExprVar(GMLVar_OBJ.getName()));
+                expr = new SFEqualsExprFunc(exprVar_SUB, new ExprVar(GMLVar_OBJ.getName()));
             } else {
                 //Subject is GML literal, Object is Geometry variable
                 System.out.println("Subject is GML literal, Object is Geometry variable");
                 bp.add(NodeVarHasGML_OBJ);
 
-                expr = new EqualsExprFunc(exprVar_SUB, new ExprVar(GMLVar_OBJ.getName()));
+                expr = new SFEqualsExprFunc(exprVar_SUB, new ExprVar(GMLVar_OBJ.getName()));
             }
 
         } else if (nodeVar_SUB.isURI()) {
@@ -93,7 +93,7 @@ public class EqualsQueryRewritePFBase extends PropertyFunctionBase {
                 bp.add(FeaHasGeom_SUB);
                 bp.add(GeomHasGML_SUB);
 
-                expr = new EqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), exprVar_OBJ);
+                expr = new SFEqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), exprVar_OBJ);
             } else if (nodeVar_OBJ.isURI()) {
                 //Subject is Feature, Object is Feature
                 System.out.println("Subject is Feature, Object is Feature");
@@ -117,7 +117,7 @@ public class EqualsQueryRewritePFBase extends PropertyFunctionBase {
                 System.out.println("Subject is Geometry variable, Object is GML Literal");
                 bp.add(NodeVarHasGML_SUB);
 
-                expr = new EqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), exprVar_OBJ);
+                expr = new SFEqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), exprVar_OBJ);
             } else if (nodeVar_OBJ.isURI()) {
                 //Subject is Geometry variable, Object is Feature
                 System.out.println("Subject is Geometry variable, Object is Feature");

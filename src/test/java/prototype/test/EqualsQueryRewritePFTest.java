@@ -79,8 +79,8 @@ public class EqualsQueryRewritePFTest {
         System.out.println("exec");
 
         String queryString = "SELECT ?b WHERE{ "
-                + "ntu:A ntu:hasPointGeometry ?aGeom. "
-                + "?b ntu:hasPointGeometry ?bGeom. "
+                + "ntu:A ntu:hasExactGeometry ?aGeom. "
+                + "?b ntu:hasExactGeometry ?bGeom. "
                 + "ntu:A geo:sfEquals ?bGeom. "
                 + " }";
 

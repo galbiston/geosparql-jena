@@ -14,8 +14,6 @@ import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.reasoner.Reasoner;
-import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,13 +42,11 @@ public class EqualsQueryRewritePFBaseTest {
 
         MODEL = ModelFactory.createDefaultModel();
         LOGGER.info("Before Reading Data");
-        //InputStream in = FileManager.get().open( "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/java/propertyfunction/spatialdata.rdf" );
         MODEL.read(TestDataLocation.DATA);
         LOGGER.info("After Reading Data");
 
-        Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
-        INF_MODEL = ModelFactory.createInfModel(reasoner, MODEL);
-
+        //Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
+        //INF_MODEL = ModelFactory.createInfModel(reasoner, MODEL);
     }
 
     @AfterClass
@@ -74,7 +70,7 @@ public class EqualsQueryRewritePFBaseTest {
 
         String queryString = "SELECT ?b WHERE{ "
                 //                + "ntu:A ntu:hasPointGeometry ?aGeom. "
-                + "?b geo:hasGeometry ?bGeom. "
+                + "?b ntu:hasExactGeometry ?bGeom. "
                 //                + "?bGeom gml:asGML ?bGML ."
                 + "ntu:A geo:sfEquals ?bGeom. "
                 + " }";
@@ -85,9 +81,9 @@ public class EqualsQueryRewritePFBaseTest {
         query.setNsPrefixes(Prefixes.get());
         PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfEquals", prototype.EqualsQueryRewritePFBase.class);
 
-        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), INF_MODEL)) {
+        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();
-            LOGGER.info("success in executing result!");
+            LOGGER.info("success in executing result: \n{}", query.toString());
             ResultSetFormatter.out(rs);
         }
 

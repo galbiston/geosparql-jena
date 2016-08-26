@@ -66,7 +66,7 @@ public class DisjointFilterFuncTest {
     }
 
     /**
-     * Test of exec method, of class DisjointFilterFunc.
+     * Test of exec method, of class SFDisjointFilterFunc.
      */
     @Test
     public void testExec() {
@@ -82,7 +82,7 @@ public class DisjointFilterFuncTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        FunctionRegistry.get().put("http://www.opengis.net/def/function/geosparql/sfDisjoint", geof.topo.DisjointFilterFunc.class);
+        FunctionRegistry.get().put("http://www.opengis.net/def/function/geosparql/sfDisjoint", geof.topo.sf.SFDisjointFilterFunc.class);
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), INF_MODEL)) {
             ResultSet rs = qExec.execSelect();

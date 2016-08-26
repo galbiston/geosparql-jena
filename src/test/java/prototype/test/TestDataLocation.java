@@ -12,5 +12,7 @@ package prototype.test;
 public class TestDataLocation {
 
     public static final String DATA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/itn.rdf";
+    public static final String SCHEMA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/schema.rdf";
+    public static final String RULE = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/rule.txt";
 
 }

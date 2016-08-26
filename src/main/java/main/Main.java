@@ -25,16 +25,18 @@ public class Main {
     private static InfModel INF_MODEL;
 
     public static void getGeoFunctionRegistry() {
+        //Property Function Registry
+
         //Topological Function Registry
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.CONTAINS_NAME), geof.topo.ContainsFilterFunc.class);
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.CROSSES_NAME), geof.topo.CrossesFilterFunc.class);
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.DISJOINT_NAME), geof.topo.DisjointFilterFunc.class);
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.EQUALS_NAME), geof.topo.EqualsFilterFunc.class);
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.INTERSECTS_NAME), geof.topo.IntersectsFilterFunc.class);
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.OVERLAPS_NAME), geof.topo.OverlapsFilterFunc.class);
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.TOUCHES_NAME), geof.topo.TouchesFilterFunc.class);
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.WITHIN_NAME), geof.topo.WithinFilterFunc.class);
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RELATE_NAME), geof.topo.RelateFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SF_CONTAINS_NAME), geof.topo.sf.SFContainsFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SF_CROSSES_NAME), geof.topo.sf.SFCrossesFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SF_DISJOINT_NAME), geof.topo.sf.SFDisjointFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SF_EQUALS_NAME), geof.topo.sf.SFEqualsFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SF_INTERSECTS_NAME), geof.topo.sf.SFIntersectsFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SF_OVERLAPS_NAME), geof.topo.sf.SFOverlapsFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SF_TOUCHES_NAME), geof.topo.sf.SFTouchesFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SF_WITHIN_NAME), geof.topo.sf.SFWithinFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RELATE_NAME), geof.topo.sf.SFRelateFilterFunc.class);
 
         //Non-Topological Function Registry
         FunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.DISTANCE_NAME), geof.nontopo.DistanceFilterFunc.class);
@@ -51,14 +53,14 @@ public class Main {
 
     public static void getQRFunctionRegistry() {
         //Query Rewrite Property Function Registry
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.CONTAINS_NAME), queryrewrite.pf.ContainsQRPropertyFunc.class);
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.CROSSES_NAME), queryrewrite.pf.CrossesQRPropertyFunc.class);
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.DISJOINT_NAME), queryrewrite.pf.DisjointQRPropertyFunc.class);
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EQUALS_NAME), queryrewrite.pf.EqualsQRPropertyFunc.class);
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.INTERSECTS_NAME), queryrewrite.pf.IntersectsQRPropertyFunc.class);
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.OVERLAPS_NAME), queryrewrite.pf.OverlapsQRPropertyFunc.class);
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.TOUCHES_NAME), queryrewrite.pf.TouchesQRPropertyFunc.class);
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.WITHIN_NAME), queryrewrite.pf.WithinQRPropertyFunc.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.SFContainsQRPropertyFunc.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.SFCrossesQRPropertyFunc.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.SFDisjointQRPropertyFunc.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.SFEqualsQRPropertyFunc.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.SFIntersectsQRPropertyFunc.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.SFOverlapsQRPropertyFunc.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.SFTouchesQRPropertyFunc.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.SFWithinQRPropertyFunc.class);
 
     }
 

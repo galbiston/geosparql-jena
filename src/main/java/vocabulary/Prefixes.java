@@ -21,7 +21,7 @@ public class Prefixes {
         map.put("ntu", "http://ntu.ac.uk/ont/geo#");
         map.put("geo", "http://www.opengis.net/ont/geosparql#");
         map.put("geof", "http://www.opengis.net/def/function/geosparql/");
-        map.put("ext", "http://example/f#");
+        map.put("geor", "http://www.opengis.net/def/rule/geosparql/");
         map.put("xsd", "http://www.w3.org/2001/XMLSchema#");
         map.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
         map.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");

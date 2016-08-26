@@ -5,7 +5,9 @@
  */
 package datatype;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.gml2.GMLReader;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
 import java.io.IOException;
@@ -62,13 +64,19 @@ public class GmlDatatype extends BaseDatatype {
     @Override
     public Geometry parse(String lexicalForm) throws DatatypeFormatException {
 
-        String gmlString = lexicalForm.toString();
+        GeometryFactory geomFactory = new GeometryFactory();
+
         GMLReader gmlReader = new GMLReader();
         try {
-            Geometry geometry = gmlReader.read(gmlString, null);
-            return geometry;
+            if (lexicalForm.isEmpty()) {
+                //Return an empty Geometry Object
+                return geomFactory.createPoint(new Coordinate());
+            } else {
+                Geometry geometry = gmlReader.read(lexicalForm, null);
+                return geometry;
+            }
         } catch (SAXException | IOException | ParserConfigurationException ex) {
-            LOGGER.error("Illegal GML literal: {}", gmlString);
+            LOGGER.error("Illegal GML literal: {}", lexicalForm);
             return null;
         }
     }
