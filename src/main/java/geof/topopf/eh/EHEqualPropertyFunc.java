@@ -5,7 +5,6 @@
  */
 package geof.topopf.eh;
 
-import geof.topopf.sf.*;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.algebra.Op;
 import org.apache.jena.sparql.algebra.op.OpBGP;
@@ -19,7 +18,7 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import queryrewrite.expr.sf.SFEqualsExprFunc;
+import queryrewrite.expr.eh.EHEqualExprFunc;
 
 /**
  *
@@ -40,7 +39,7 @@ public class EHEqualPropertyFunc extends PropertyFunctionBase {
         BasicPattern bp = new BasicPattern();
 
         //Spefify the Expr Function type here:
-        Expr expr = new SFEqualsExprFunc(exprVar_SUB, exprVar_OBJ);
+        Expr expr = new EHEqualExprFunc(exprVar_SUB, exprVar_OBJ);
 
         OpBGP op = new OpBGP(bp);
         Op filter = OpFilter.filter(expr, op);

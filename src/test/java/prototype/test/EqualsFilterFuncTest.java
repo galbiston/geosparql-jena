@@ -50,8 +50,8 @@ public class EqualsFilterFuncTest {
         MODEL = ModelFactory.createDefaultModel();
         //Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
         //Model schema = FileManager.get().loadModel(TestDataLocation.SCHEMA);
-        //MODEL.read(TestDataLocation.DATA);
-        //MODEL = FileManager.get().loadModel(TestDataLocation.DATA);
+        //MODEL.read(TestDataLocation.SAMPLE);
+        //MODEL = FileManager.get().loadModel(TestDataLocation.SAMPLE);
         //==========================================================
         //==========================================================
         //==========================================================
@@ -78,7 +78,7 @@ public class EqualsFilterFuncTest {
         //==========================================================
         //==========================================================
         INF_MODEL = ModelFactory.createInfModel(reasoner, MODEL);
-        INF_MODEL.read(TestDataLocation.DATA);
+        INF_MODEL.read(TestDataLocation.SAMPLE);
         INF_MODEL.prepare();
     }
 

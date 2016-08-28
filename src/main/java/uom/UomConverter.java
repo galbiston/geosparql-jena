@@ -22,6 +22,13 @@ public class UomConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UomConverter.class);
 
+    /**
+     * This method converts the values that come form JTS to a value in the
+     * destination Unit
+     *
+     * @param destiUnit - the destination Unit to be used
+     * @param distance - the value that come form JTS
+     */
     public static double ConvertToUnit(String destiUnit, double distance) {
 
         //convert to radian

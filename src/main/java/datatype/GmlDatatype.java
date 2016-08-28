@@ -43,7 +43,9 @@ public class GmlDatatype extends BaseDatatype {
     }
 
     /**
-     * Convert a value of this datatype out to lexical form.
+     * This method Un-parses the JTS Geometry to the GML literal
+     *
+     * @param geometry - the JTS Geometry to be un-parsed
      */
     @Override
     public String unparse(Object geometry) {
@@ -57,9 +59,9 @@ public class GmlDatatype extends BaseDatatype {
     }
 
     /**
-     * Parse a lexical form of this datatype to a value
+     * This method Parses the GML literal to the JTS Geometry
      *
-     * @throws DatatypeFormatException if the lexical form is not legal
+     * @param lexicalForm - the GML literal to be parsed
      */
     @Override
     public Geometry parse(String lexicalForm) throws DatatypeFormatException {

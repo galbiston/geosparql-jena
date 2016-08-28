@@ -42,7 +42,7 @@ public class IntersectsQRPropertyFuncTest {
     @BeforeClass
     public static void setUpClass() {
         MODEL = ModelFactory.createDefaultModel();
-        MODEL.read(TestDataLocation.DATA);
+        MODEL.read(TestDataLocation.SAMPLE);
     }
 
     @AfterClass

@@ -43,7 +43,7 @@ public class EqualsQueryRewritePFTest {
         MODEL = ModelFactory.createDefaultModel();
         LOGGER.info("Before Reading Data");
         //InputStream in = FileManager.get().open( "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/java/propertyfunction/spatialdata.rdf" );
-        MODEL.read(TestDataLocation.DATA);
+        MODEL.read(TestDataLocation.SAMPLE);
         LOGGER.info("After Reading Data");
 
         INF_MODEL = ModelFactory.createRDFSModel(MODEL);

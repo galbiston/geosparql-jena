@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import queryrewrite.expr.sf.SFEqualsExprFunc;
+import queryrewrite.expr.eh.EHEqualExprFunc;
 import vocabulary.Vocabulary;
 
 /**
@@ -58,7 +58,7 @@ public class EHEqualQRPropertyFunc extends PropertyFunctionBase {
         Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
-        Expr expr = new SFEqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new EHEqualExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         if (nodeVar_SUB.isURI()) {
             if (nodeVar_OBJ.isURI()) {

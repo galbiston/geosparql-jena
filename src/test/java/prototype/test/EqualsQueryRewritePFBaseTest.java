@@ -42,7 +42,7 @@ public class EqualsQueryRewritePFBaseTest {
 
         MODEL = ModelFactory.createDefaultModel();
         LOGGER.info("Before Reading Data");
-        MODEL.read(TestDataLocation.DATA);
+        MODEL.read(TestDataLocation.SAMPLE);
         LOGGER.info("After Reading Data");
 
         //Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();

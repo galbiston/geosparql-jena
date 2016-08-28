@@ -47,7 +47,7 @@ public class GmlDatatypeTest {
         RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
         TypeMapper.getInstance().registerDatatype(gmlDataType);
         LOGGER.info("Before Reading Data");
-        MODEL.read(TestDataLocation.DATA);
+        MODEL.read(TestDataLocation.SAMPLE);
         LOGGER.info("After Reading Data");
 
     }

@@ -59,8 +59,8 @@ public class Vocabulary {
     public static final String RCC_DISCONNECTED_SYMBOL = "geof:rcc8dc";
     public static final String RCC_EXTCONNECTED_SYMBOL = "geof:rcc8ec";
     public static final String RCC_PARTOVERLAP_SYMBOL = "geof:rcc8po";
-    public static final String RCC_TANPROPERPARTINVERSE_SYMBOL = "geof:rcc8ppi";
-    public static final String RCC_TANPROPERPART_SYMBOL = "geof:rcc8pp";
+    public static final String RCC_TANPROPERPARTINVERSE_SYMBOL = "geof:rcc8tppi";
+    public static final String RCC_TANPROPERPART_SYMBOL = "geof:rcc8tpp";
     public static final String RCC_NTANPROPERPART_SYMBOL = "geof:rcc8ntpp";
     public static final String RCC_NTANPROPERPARTINVERSE_SYMBOL = "geof:rcc8ntppi";
 

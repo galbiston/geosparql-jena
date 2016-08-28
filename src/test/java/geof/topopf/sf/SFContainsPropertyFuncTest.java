@@ -39,8 +39,12 @@ public class SFContainsPropertyFuncTest {
 
     @BeforeClass
     public static void setUpClass() {
+        long dataReadStartTime = System.nanoTime();
         MODEL = ModelFactory.createDefaultModel();
-        MODEL.read(TestDataLocation.DATA);
+        MODEL.read(TestDataLocation.SAMPLE);
+        long endTime = System.nanoTime();
+        long duration = endTime - dataReadStartTime;
+        LOGGER.info("Data Read Time: {} ", duration / 1000000);
     }
 
     @AfterClass
@@ -62,10 +66,13 @@ public class SFContainsPropertyFuncTest {
     public void testExec() {
         System.out.println("exec");
 
+        long queryStartTime = System.nanoTime();
         String queryString = "SELECT ?place WHERE{ "
-                + "ntu:D ntu:hasExactGeometry ?dGeom . ?dGeom gml:asGML ?dGML . "
-                + "?place ntu:hasExactGeometry ?Geom . ?Geom gml:asGML ?GML . "
-                + "?dGML geo:sfContains ?GML"
+                //+ "ntu:D ntu:hasExactGeometry ?dGeom . "
+                //+ "?dGeom gml:asGML ?dGML . "
+                + "?place ntu:hasExactGeometry ?Geom . "
+                + "?Geom gml:asGML ?GML . "
+                //+ "?dGML geo:sfContains ?GML"
                 + " }";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
@@ -76,8 +83,10 @@ public class SFContainsPropertyFuncTest {
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();
-            LOGGER.info("Test Query: \n{}", qExec.getQuery().toString());
+            long endTime = System.nanoTime();
+            long duration = endTime - queryStartTime;
             ResultSetFormatter.out(rs);
+            LOGGER.info("Query Execution Time: {}", duration / 1000000);
         }
 
     }
