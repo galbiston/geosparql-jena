@@ -6,7 +6,7 @@
 package queryrewrite.expr.rcc8;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GmlDatatype;
+import datatype.WktDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
@@ -31,14 +31,14 @@ public class RCC8TPPExprFunc extends ExprFunction2 {
 
     @Override
     public NodeValue eval(NodeValue x, NodeValue y) {
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
 
         Node node1 = x.asNode();
         Node node2 = y.asNode();
 
         try {
-            Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) wktDataType.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) wktDataType.parse(node2.getLiteralLexicalForm());
 
             // Use DE-9IM to model the relationship
             // Use JTS's relate function to implement

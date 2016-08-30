@@ -6,7 +6,7 @@
 package geof.topo.eh;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GmlDatatype;
+import datatype.WktDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
@@ -26,14 +26,14 @@ public class EHCoversFilterFunc extends FunctionBase2 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
 
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();
 
         try {
-            Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) wktDataType.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) wktDataType.parse(node2.getLiteralLexicalForm());
 
             // Use DE-9IM to model the relationship
             // Use JTS's relate function to implement

@@ -6,7 +6,7 @@
 package geof.nontopo;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GmlDatatype;
+import datatype.WktDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
@@ -26,12 +26,12 @@ public class GetSRIDFilterFunc extends FunctionBase1 {
     @Override
     public NodeValue exec(NodeValue v) {
 
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
 
         Node node = v.asNode();
 
         try {
-            Geometry g1 = (Geometry) gmlDataType.parse(node.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) wktDataType.parse(node.getLiteralLexicalForm());
 
             int srid = g1.getSRID();
 

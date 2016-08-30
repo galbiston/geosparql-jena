@@ -6,7 +6,7 @@
 package geof.nontopo;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GmlDatatype;
+import datatype.WktDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
@@ -27,7 +27,7 @@ public class DistanceFilterFunc extends FunctionBase3 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
 
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
 
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();
@@ -37,8 +37,8 @@ public class DistanceFilterFunc extends FunctionBase3 {
         LOGGER.info("Current unit: {}", node3.getLocalName());
 
         try {
-            Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) wktDataType.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) wktDataType.parse(node2.getLiteralLexicalForm());
 
             double distance = g1.distance(g2);
             //Default unit is central angle degrees, need t oconvert to destination uom

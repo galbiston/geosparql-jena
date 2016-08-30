@@ -6,7 +6,7 @@
 package geof.nontopo;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GmlDatatype;
+import datatype.WktDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
@@ -26,19 +26,19 @@ public class UnionFilterFunc extends FunctionBase2 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
 
         //Transfer the parameters as Nodes
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();
 
         try {
-            Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) wktDataType.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) wktDataType.parse(node2.getLiteralLexicalForm());
 
             Geometry union = g1.union(g2);
 
-            return NodeValue.makeNodeString(gmlDataType.unparse(union));
+            return NodeValue.makeNodeString(wktDataType.unparse(union));
         } catch (DatatypeFormatException dfx) {
             LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
             return NodeValue.nvEmptyString;
