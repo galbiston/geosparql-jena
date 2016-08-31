@@ -33,9 +33,9 @@ public class GetSRIDFilterFunc extends FunctionBase1 {
         try {
             Geometry g1 = (Geometry) wktDataType.parse(node.getLiteralLexicalForm());
 
-            int srid = g1.getSRID();
+            String SRID = (String) g1.getUserData();
 
-            return NodeValue.makeNodeString("SRID:" + srid);
+            return NodeValue.makeNodeString("SRID:" + g1);
         } catch (DatatypeFormatException dfx) {
             LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
             return NodeValue.nvEmptyString;

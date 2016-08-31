@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class WktDatatype extends BaseDatatype {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WktDatatype.class);
-    public static final String theTypeURI = "geo:wktLiteral";
+    public static final String theTypeURI = "http://www.opengis.net/ont/sf#wktLiteral";
     public static final RDFDatatype theWktDatatype = new WktDatatype();
 
     /**
@@ -71,7 +71,10 @@ public class WktDatatype extends BaseDatatype {
                 //Return an empty Geometry Object
                 return geomFactory.createPoint(new Coordinate());
             } else {
-                Geometry geometry = wktReader.read(lexicalForm);
+                String SRID = lexicalForm.substring(1, lexicalForm.indexOf(">"));
+                String wktLiteral = lexicalForm.substring(lexicalForm.indexOf(">") + 1);
+                Geometry geometry = wktReader.read(wktLiteral);
+                geometry.setUserData(SRID);
                 return geometry;
             }
         } catch (ParseException ex) {

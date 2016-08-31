@@ -16,7 +16,6 @@ public class Prefixes {
 
     public static final Map<String, String> get() {
         Map<String, String> map = new HashMap<>();
-        map.put("osgb", "http://www.ordnancesurvey.co.uk/xml/namespaces/osgb");
         map.put("sf", "http://www.opengis.net/ont/sf#");
         map.put("ntu", "http://ntu.ac.uk/ont/geo#");
         map.put("geo", "http://www.opengis.net/ont/geosparql#");
