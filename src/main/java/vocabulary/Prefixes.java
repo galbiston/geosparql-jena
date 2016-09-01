@@ -25,6 +25,8 @@ public class Prefixes {
         map.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
         map.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
         map.put("uom", "http://www.opengis.net/def/uom/OGC/1.0/");
+        map.put("lgd", "http://linkedgeodata.org/ontology/");
+        map.put("lgdg", "http://linkedgeodata.org/geometry/");
 
         return map;
     }

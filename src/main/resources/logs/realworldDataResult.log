@@ -1,0 +1,313 @@
+
+2016-09-01 20:46:17 - Data Model Read Time: 1489ms
+2016-09-01 20:46:17 - Executing the 1th query... ...
+2016-09-01 20:46:17 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?place
+WHERE
+  { ?place  rdf:type    geo:Feature ;
+            rdfs:label  "Sofaditikos"@en
+  }
+
+2016-09-01 20:46:17 - Query Execution Time: 221 ms With 8 Results
+2016-09-01 20:46:17 - Executing the 2th query... ...
+2016-09-01 20:46:17 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?place
+WHERE
+  { ?place  rdf:type         lgd:Motorway ;
+            lgd:hasGeometry  ?geom .
+    ?geom   lgd:asWKT        ?wkt
+    FILTER geof:sfContains(?wkt, "Point(23 40)"^^geo:wktLiteral)
+  }
+
+2016-09-01 20:46:18 - Query Execution Time: 52 ms With 0 Result
+2016-09-01 20:46:18 - Executing the 3th query... ...
+2016-09-01 20:46:18 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?place
+WHERE
+  { ?place  rdf:type         lgd:Motorway ;
+            lgd:hasGeometry  ?geom .
+    ?geom   lgd:asWKT        ?wkt
+    FILTER geof:sfWithin(?wkt, "Polygon((19 39, 21 39, 21 40, 19 40, 19 39))"^^geo:wktLiteral)
+  }
+
+2016-09-01 20:46:18 - Query Execution Time: 11 ms With 311 Results
+2016-09-01 20:46:18 - Executing the 4th query... ...
+2016-09-01 20:46:18 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?place
+WHERE
+  { ?place  rdf:type         lgd:Motorway ;
+            lgd:hasGeometry  ?geom .
+    ?geom   lgd:asWKT        ?wkt
+    FILTER geof:sfIntersects(?wkt, "Polygon((20 39, 21 39, 21 40, 20 40, 20 39))"^^geo:wktLiteral)
+  }
+
+2016-09-01 20:46:18 - Query Execution Time: 6 ms With 15 Results
+2016-09-01 20:46:18 - Executing the 5th query... ...
+2016-09-01 20:46:18 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?placeA
+WHERE
+  { ?placeA   rdf:type         lgd:Motorway ;
+              lgd:hasGeometry  ?geomA .
+    ?geomA    lgd:asWKT        ?wktA .
+    lgdg:way15624241
+              lgd:asWKT        ?wktC
+    FILTER geof:sfCrosses(?wktA, ?wktC)
+  }
+
+2016-09-01 20:46:18 - Query Execution Time: 11 ms With 0 Result
+2016-09-01 20:46:18 - Executing the 6th query... ...
+2016-09-01 20:46:18 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?placeA ?placeB
+WHERE
+  { ?placeA  rdf:type         lgd:Motorway ;
+             lgd:hasGeometry  ?geomA .
+    ?geomA   lgd:asWKT        ?wktA .
+    ?placeB  rdf:type         lgd:Motorway ;
+             lgd:hasGeometry  ?geomB .
+    ?geomB   lgd:asWKT        ?wktB
+    BIND(geof:distance(?wktA, ?wktB, uom:metre) AS ?dist)
+    FILTER ( ( ?dist < 5000 ) && ( ! sameTerm(?geomA, ?geomB) ) )
+  }
+
+2016-09-01 20:57:19 - Query Execution Time: 24 ms With 8978 Results
+2016-09-01 20:57:19 - Executing the 7th query... ...
+2016-09-01 20:57:19 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?place
+WHERE
+  { ?place  rdf:type         lgd:Motorway ;
+            lgd:hasGeometry  ?geom .
+    ?geom   lgd:asWKT        ?wkt
+    BIND(geof:distance(?wkt, "POINT(20 40)"^^geo:wktLiteral, uom:metre) AS ?dist)
+  }
+ORDER BY ASC(?dist)
+LIMIT   2
+
+2016-09-01 20:57:19 - Query Execution Time: 11 ms With 2 Results
+2016-09-01 20:57:19 - Executing the 8th query... ...
+2016-09-01 20:57:19 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?place
+WHERE
+  { ?place    rdf:type         lgd:Motorway ;
+              lgd:hasGeometry  ?geom .
+    ?geom     lgd:asWKT        ?wkt .
+    lgdg:way15624241
+              lgd:asWKT        ?wktF
+    BIND(geof:distance(?wkt, ?wktF, uom:metre) AS ?dist)
+  }
+ORDER BY ASC(?dist)
+LIMIT   2
+
+2016-09-01 20:57:19 - Query Execution Time: 6 ms With 2 Results
+2016-09-01 20:57:19 - Executing the 9th query... ...
+2016-09-01 20:57:19 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?overlap
+WHERE
+  { ?place  rdf:type         lgd:Motorway ;
+            lgd:hasGeometry  ?geom .
+    ?geom   lgd:asWKT        ?wkt
+    BIND(geof:intersection(?wkt, "Polygon((20 39, 21 39, 21 40, 20 40, 20 39))"^^geo:wktLiteral) AS ?overlap)
+    FILTER geof:sfIntersects(?wkt, "Polygon((20 39, 21 39, 21 40, 20 40, 20 39))"^^geo:wktLiteral)
+  }
+
+2016-09-01 20:57:20 - Query Execution Time: 5 ms With 315 Results
+2016-09-01 20:57:20 - Executing the 10th query... ...
+2016-09-01 20:57:20 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  (geof:buffer(?wkt, 10, uom:metre) AS ?buf)
+WHERE
+  { lgdg:way15624241
+              lgd:asWKT  ?wkt
+  }
+
+2016-09-01 20:57:20 - Query Execution Time: 5 ms With 1 Result
+2016-09-01 20:57:20 - Executing the 11th query... ...
+2016-09-01 20:57:20 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  (geof:union(?wktC, ?wktB) AS ?union)
+WHERE
+  { lgdg:way15624241
+              lgd:asWKT  ?wktB .
+    lgdg:way15624308
+              lgd:asWKT  ?wktC
+  }
+
+2016-09-01 20:57:20 - Query Execution Time: 4 ms With 1 Result
+2016-09-01 20:57:20 - Executing the 12th query... ...
+2016-09-01 20:57:20 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?place (COUNT(?geom) AS ?no_objects)
+WHERE
+  { ?place  lgd:hasGeometry  ?geom .
+    ?geom   lgd:asWKT        ?wkt
+    FILTER geof:sfWithin(?wkt, "Polygon((20 39, 21 39, 21 40, 20 40, 20 39))"^^geo:wktLiteral)
+  }
+GROUP BY ?place
+
+2016-09-01 20:57:20 - Query Execution Time: 11 ms With 1082 Results
+2016-09-01 20:57:20 - Executing the 13th query... ...
+2016-09-01 20:57:20 - 
+PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
+PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX  sf:   <http://www.opengis.net/ont/sf#>
+PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
+PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
+PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
+
+SELECT  ?place
+WHERE
+  { ?place  rdf:type         lgd:Motorway ;
+            lgd:hasGeometry  ?geom .
+    ?geom   lgd:asWKT        ?wkt
+    FILTER NOT EXISTS { lgdg:way15624241
+                                  lgd:asWKT  ?wktA
+                        FILTER ( geof:distance(?wkt, ?wktA, uom:metre) < 100000 )
+                      }
+  }
+
+2016-09-01 20:57:20 - Query Execution Time: 10 ms With 4402 Results

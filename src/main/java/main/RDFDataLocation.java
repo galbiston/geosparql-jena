@@ -30,4 +30,9 @@ public class RDFDataLocation {
      * Topological data - large
      */
     public static final String TOPODATA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/topo.rdf";
+
+    /**
+     * Linked geodata - extremely large
+     */
+    public static final String GEODATA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/linkedgeodata.nt";
 }

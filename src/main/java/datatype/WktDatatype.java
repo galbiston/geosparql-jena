@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class WktDatatype extends BaseDatatype {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WktDatatype.class);
-    public static final String theTypeURI = "http://www.opengis.net/ont/sf#wktLiteral";
+    public static final String theTypeURI = "http://www.opengis.net/ont/geosparql#wktLiteral";
     public static final RDFDatatype theWktDatatype = new WktDatatype();
 
     /**
@@ -67,14 +67,20 @@ public class WktDatatype extends BaseDatatype {
 
         WKTReader wktReader = new WKTReader();
         try {
+            // Detect the empty lexicalForm and return an empty geometry.
             if (lexicalForm.isEmpty()) {
                 //Return an empty Geometry Object
                 return geomFactory.createPoint(new Coordinate());
-            } else {
+            } // If the lexicalForm contains the SRS URI, need to retrive that URI.
+            else if (lexicalForm.contains("http")) {
                 String SRID = lexicalForm.substring(1, lexicalForm.indexOf(">"));
                 String wktLiteral = lexicalForm.substring(lexicalForm.indexOf(">") + 1);
                 Geometry geometry = wktReader.read(wktLiteral);
                 geometry.setUserData(SRID);
+                return geometry;
+            } // In this case, the lexicalForm is pure WKT.
+            else {
+                Geometry geometry = wktReader.read(lexicalForm);
                 return geometry;
             }
         } catch (ParseException ex) {

@@ -24,6 +24,7 @@
 <!-- Point A -->
 <ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#A">
     <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#AExactGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place1</ntu:name>
 </ntu:PlaceOfInterest>
 <sf:Point rdf:about="http://ntu.ac.uk/ont/geo#AExactGeom">
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)]]></geo:asWKT>
@@ -31,13 +32,29 @@
 
 
       
-<!-- LineString C -->
-<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#C">
-    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#CExactGeom"/>
+<!-- LineString B -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#B">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#BExactGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place2</ntu:name>
 </ntu:PlaceOfInterest>   
-<sf:LineString rdf:about="http://ntu.ac.uk/ont/geo#CExactGeom">
+<sf:LineString rdf:about="http://ntu.ac.uk/ont/geo#BExactGeom">
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LineString(-83.4 34.0, -83.3 34.3)]]></geo:asWKT>
 </sf:LineString>
+
+   
+   
+<!-- Polygon C -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#C">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#CExactGeom"/>
+    <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#CPointGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place3</ntu:name>
+</ntu:PlaceOfInterest>
+<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#CExactGeom">
+    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))]]></geo:asWKT>
+</sf:Polygon>     
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#CPointGeom">
+    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.3)]]></geo:asWKT>
+</sf:Point>
 
    
    
@@ -45,12 +62,13 @@
 <ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#D">
     <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#DExactGeom"/>
     <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#DPointGeom"/>
-</ntu:PlaceOfInterest>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place4</ntu:name>
+</ntu:PlaceOfInterest>     
 <sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#DExactGeom">
-    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))]]></geo:asWKT>
-</sf:Polygon>     
+    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))]]></geo:asWKT>
+</sf:Polygon>      
 <sf:Point rdf:about="http://ntu.ac.uk/ont/geo#DPointGeom">
-    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.3)]]></geo:asWKT>
+    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.5 34.2)]]></geo:asWKT>
 </sf:Point>
 
    
@@ -59,39 +77,27 @@
 <ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#E">
     <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#EExactGeom"/>
     <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#EPointGeom"/>
-</ntu:PlaceOfInterest>     
-<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#EExactGeom">
-    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))]]></geo:asWKT>
-</sf:Polygon>      
-<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#EPointGeom">
-    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.5 34.2)]]></geo:asWKT>
-</sf:Point>
-
-   
-   
-<!-- Polygon F -->
-<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#F">
-    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#FExactGeom"/>
-    <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#FPointGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place5</ntu:name>
 </ntu:PlaceOfInterest>
-<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#FExactGeom">
+<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#EExactGeom">
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))]]></geo:asWKT>
 </sf:Polygon>
-<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#FPointGeom">
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#EPointGeom">
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.1 34.4)]]></geo:asWKT>
 </sf:Point>
 
 
 
-<!-- Polygon G -->
-<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#G">
-    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#GExactGeom"/>
-    <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#GPointGeom"/>
+<!-- Polygon F -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#F">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#FExactGeom"/>
+    <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#FPointGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place6</ntu:name>
 </ntu:PlaceOfInterest>
-<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#GExactGeom">
+<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#FExactGeom">
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))]]></geo:asWKT>
 </sf:Polygon>
-<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#GPointGeom">
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#FPointGeom">
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/sf#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.2 34.1)]]></geo:asWKT>
 </sf:Point>
 
