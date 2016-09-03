@@ -1,7 +1,6 @@
-
-2016-09-01 20:46:17 - Data Model Read Time: 1489ms
-2016-09-01 20:46:17 - Executing the 1th query... ...
-2016-09-01 20:46:17 - 
+2016-09-03 02:10:30 - Data Model Read Time: 1291ms
+2016-09-03 02:10:30 - Executing the 1th query... ...
+2016-09-03 02:10:30 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -20,9 +19,9 @@ WHERE
             rdfs:label  "Sofaditikos"@en
   }
 
-2016-09-01 20:46:17 - Query Execution Time: 221 ms With 8 Results
-2016-09-01 20:46:17 - Executing the 2th query... ...
-2016-09-01 20:46:17 - 
+2016-09-03 02:10:30 - Query Execution Time: 284 ms With 8 Results
+2016-09-03 02:10:30 - Executing the 2th query... ...
+2016-09-03 02:10:30 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -43,9 +42,9 @@ WHERE
     FILTER geof:sfContains(?wkt, "Point(23 40)"^^geo:wktLiteral)
   }
 
-2016-09-01 20:46:18 - Query Execution Time: 52 ms With 0 Result
-2016-09-01 20:46:18 - Executing the 3th query... ...
-2016-09-01 20:46:18 - 
+2016-09-03 02:10:31 - Query Execution Time: 374 ms With 0 Result
+2016-09-03 02:10:31 - Executing the 3th query... ...
+2016-09-03 02:10:31 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -66,9 +65,9 @@ WHERE
     FILTER geof:sfWithin(?wkt, "Polygon((19 39, 21 39, 21 40, 19 40, 19 39))"^^geo:wktLiteral)
   }
 
-2016-09-01 20:46:18 - Query Execution Time: 11 ms With 311 Results
-2016-09-01 20:46:18 - Executing the 4th query... ...
-2016-09-01 20:46:18 - 
+2016-09-03 02:10:31 - Query Execution Time: 220 ms With 311 Results
+2016-09-03 02:10:31 - Executing the 4th query... ...
+2016-09-03 02:10:31 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -89,9 +88,9 @@ WHERE
     FILTER geof:sfIntersects(?wkt, "Polygon((20 39, 21 39, 21 40, 20 40, 20 39))"^^geo:wktLiteral)
   }
 
-2016-09-01 20:46:18 - Query Execution Time: 6 ms With 15 Results
-2016-09-01 20:46:18 - Executing the 5th query... ...
-2016-09-01 20:46:18 - 
+2016-09-03 02:10:31 - Query Execution Time: 173 ms With 15 Results
+2016-09-03 02:10:31 - Executing the 5th query... ...
+2016-09-03 02:10:31 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -114,9 +113,9 @@ WHERE
     FILTER geof:sfCrosses(?wktA, ?wktC)
   }
 
-2016-09-01 20:46:18 - Query Execution Time: 11 ms With 0 Result
-2016-09-01 20:46:18 - Executing the 6th query... ...
-2016-09-01 20:46:18 - 
+2016-09-03 02:10:31 - Query Execution Time: 237 ms With 0 Result
+2016-09-03 02:10:31 - Executing the 6th query... ...
+2016-09-03 02:10:31 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -141,9 +140,9 @@ WHERE
     FILTER ( ( ?dist < 5000 ) && ( ! sameTerm(?geomA, ?geomB) ) )
   }
 
-2016-09-01 20:57:19 - Query Execution Time: 24 ms With 8978 Results
-2016-09-01 20:57:19 - Executing the 7th query... ...
-2016-09-01 20:57:19 - 
+2016-09-03 02:21:01 - Query Execution Time: 630066 ms With 8978 Results
+2016-09-03 02:21:01 - Executing the 7th query... ...
+2016-09-03 02:21:01 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -166,9 +165,9 @@ WHERE
 ORDER BY ASC(?dist)
 LIMIT   2
 
-2016-09-01 20:57:19 - Query Execution Time: 11 ms With 2 Results
-2016-09-01 20:57:19 - Executing the 8th query... ...
-2016-09-01 20:57:19 - 
+2016-09-03 02:21:01 - Query Execution Time: 153 ms With 2 Results
+2016-09-03 02:21:01 - Executing the 8th query... ...
+2016-09-03 02:21:01 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -193,9 +192,9 @@ WHERE
 ORDER BY ASC(?dist)
 LIMIT   2
 
-2016-09-01 20:57:19 - Query Execution Time: 6 ms With 2 Results
-2016-09-01 20:57:19 - Executing the 9th query... ...
-2016-09-01 20:57:19 - 
+2016-09-03 02:21:02 - Query Execution Time: 180 ms With 2 Results
+2016-09-03 02:21:02 - Executing the 9th query... ...
+2016-09-03 02:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -217,9 +216,9 @@ WHERE
     FILTER geof:sfIntersects(?wkt, "Polygon((20 39, 21 39, 21 40, 20 40, 20 39))"^^geo:wktLiteral)
   }
 
-2016-09-01 20:57:20 - Query Execution Time: 5 ms With 315 Results
-2016-09-01 20:57:20 - Executing the 10th query... ...
-2016-09-01 20:57:20 - 
+2016-09-03 02:21:02 - Query Execution Time: 324 ms With 315 Results
+2016-09-03 02:21:02 - Executing the 10th query... ...
+2016-09-03 02:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -238,9 +237,9 @@ WHERE
               lgd:asWKT  ?wkt
   }
 
-2016-09-01 20:57:20 - Query Execution Time: 5 ms With 1 Result
-2016-09-01 20:57:20 - Executing the 11th query... ...
-2016-09-01 20:57:20 - 
+2016-09-03 02:21:02 - Query Execution Time: 47 ms With 1 Result
+2016-09-03 02:21:02 - Executing the 11th query... ...
+2016-09-03 02:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -261,9 +260,9 @@ WHERE
               lgd:asWKT  ?wktC
   }
 
-2016-09-01 20:57:20 - Query Execution Time: 4 ms With 1 Result
-2016-09-01 20:57:20 - Executing the 12th query... ...
-2016-09-01 20:57:20 - 
+2016-09-03 02:21:02 - Query Execution Time: 6 ms With 1 Result
+2016-09-03 02:21:02 - Executing the 12th query... ...
+2016-09-03 02:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -284,9 +283,9 @@ WHERE
   }
 GROUP BY ?place
 
-2016-09-01 20:57:20 - Query Execution Time: 11 ms With 1082 Results
-2016-09-01 20:57:20 - Executing the 13th query... ...
-2016-09-01 20:57:20 - 
+2016-09-03 02:21:02 - Query Execution Time: 479 ms With 1082 Results
+2016-09-03 02:21:02 - Executing the 13th query... ...
+2016-09-03 02:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -310,4 +309,4 @@ WHERE
                       }
   }
 
-2016-09-01 20:57:20 - Query Execution Time: 10 ms With 4402 Results
+2016-09-03 02:21:03 - Query Execution Time: 297 ms With 4402 Results

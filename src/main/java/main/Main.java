@@ -59,7 +59,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        realworldQuery();
+        //realworldQuery();
+        sampleQuery();
     }
 
     public static void realworldQuery() {
@@ -382,7 +383,7 @@ public class Main {
         return INF_MODEL;
     }
 
-    public static void evaluateQuery(String queryString) {
+    public static synchronized void evaluateQuery(String queryString) {
         LOGGER.info("Executing the {}th query... ...", QUERYCOUNT++);
         long queryStartTime = System.nanoTime();
 
@@ -393,12 +394,14 @@ public class Main {
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             LOGGER.info("\n" + query.asQuery().toString());
             ResultSet rs = qExec.execSelect();
-            long endTime = System.nanoTime();
-            long duration = endTime - queryStartTime;
+
             ResultSetFormatter.out(rs);
 
-            LOGGER.info("Query Execution Time: {} ms", duration / 1000000);
         }
+
+        long endTime = System.nanoTime();
+        long duration = endTime - queryStartTime;
+        LOGGER.info("Query Execution Time: {} ms", duration / 1000000);
     }
 
 }

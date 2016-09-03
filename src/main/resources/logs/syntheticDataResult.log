@@ -1,6 +1,6 @@
-2016-09-01 15:38:10 - Data Model Read Time: 67097697ms
-2016-09-01 15:38:10 - Executing the 1th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:01 - Data Model Read Time: 65ms
+2016-09-03 03:21:01 - Executing the 1th query... ...
+2016-09-03 03:21:01 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -8,7 +8,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?place
@@ -17,9 +19,9 @@ WHERE
             ntu:name  "place1"
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 190 ms With 1 Result
-2016-09-01 15:38:11 - Executing the 2th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 203 ms With 1 Result
+2016-09-03 03:21:02 - Executing the 2th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -27,7 +29,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?place
@@ -38,9 +42,9 @@ WHERE
     FILTER geof:sfContains(?wkt, "Point(-83.4 34.4)"^^sf:wktLiteral)
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 48 ms With 2 Results
-2016-09-01 15:38:11 - Executing the 3th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 128 ms With 2 Results
+2016-09-03 03:21:02 - Executing the 3th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -48,7 +52,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?place
@@ -58,9 +64,9 @@ WHERE
     FILTER geof:sfWithin(?wkt, "Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))"^^sf:wktLiteral)
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 13 ms With 3 Results
-2016-09-01 15:38:11 - Executing the 4th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 20 ms With 3 Results
+2016-09-03 03:21:02 - Executing the 4th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -68,7 +74,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?place
@@ -78,9 +86,9 @@ WHERE
     FILTER geof:sfIntersects(?wkt, "Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))"^^sf:wktLiteral)
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 10 ms With 6 Results
-2016-09-01 15:38:11 - Executing the 5th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 25 ms With 6 Results
+2016-09-03 03:21:02 - Executing the 5th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -88,7 +96,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?placeA
@@ -100,9 +110,9 @@ WHERE
     FILTER geof:sfCrosses(?wktA, ?wktC)
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 12 ms With 1 Result
-2016-09-01 15:38:11 - Executing the 6th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 31 ms With 1 Result
+2016-09-03 03:21:02 - Executing the 6th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -110,7 +120,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?placeA ?placeB
@@ -123,9 +135,9 @@ WHERE
     FILTER ( ( ?dist < 500000 ) && ( ! sameTerm(?geomA, ?geomB) ) )
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 21 ms With 10 Results
-2016-09-01 15:38:11 - Executing the 7th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 79 ms With 10 Results
+2016-09-03 03:21:02 - Executing the 7th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -133,7 +145,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?place
@@ -145,9 +159,9 @@ WHERE
 ORDER BY ASC(?dist)
 LIMIT   2
 
-2016-09-01 15:38:11 - Query Execution Time: 20 ms With 2 Results
-2016-09-01 15:38:11 - Executing the 8th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 36 ms With 2 Results
+2016-09-03 03:21:02 - Executing the 8th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -155,7 +169,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?place
@@ -169,9 +185,9 @@ WHERE
 ORDER BY ASC(?dist)
 LIMIT   2
 
-2016-09-01 15:38:11 - Query Execution Time: 12 ms With 2 Results
-2016-09-01 15:38:11 - Executing the 9th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 26 ms With 2 Results
+2016-09-03 03:21:02 - Executing the 9th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -179,7 +195,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?overlap
@@ -190,9 +208,9 @@ WHERE
     FILTER geof:sfIntersects(?wkt, "Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))"^^sf:wktLiteral)
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 12 ms With 6 Results
-2016-09-01 15:38:11 - Executing the 10th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 92 ms With 6 Results
+2016-09-03 03:21:02 - Executing the 10th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -200,7 +218,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  (geof:buffer(?wkt, 10, uom:metre) AS ?buf)
@@ -209,9 +229,9 @@ WHERE
     ?geom  geo:asWKT             ?wkt
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 11 ms With 1 Result
-2016-09-01 15:38:11 - Executing the 11th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 58 ms With 1 Result
+2016-09-03 03:21:02 - Executing the 11th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -219,7 +239,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  (geof:union(?wktC, ?wktB) AS ?union)
@@ -230,9 +252,9 @@ WHERE
     ?geomC  geo:asWKT             ?wktC
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 10 ms With 1 Result
-2016-09-01 15:38:11 - Executing the 12th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 20 ms With 1 Result
+2016-09-03 03:21:02 - Executing the 12th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -240,7 +262,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?place (COUNT(?geom) AS ?no_objects)
@@ -251,9 +275,9 @@ WHERE
   }
 GROUP BY ?place
 
-2016-09-01 15:38:11 - Query Execution Time: 19 ms With 4 Results
-2016-09-01 15:38:11 - Executing the 13th query... ...
-2016-09-01 15:38:11 - 
+2016-09-03 03:21:02 - Query Execution Time: 84 ms With 4 Results
+2016-09-03 03:21:02 - Executing the 13th query... ...
+2016-09-03 03:21:02 - 
 PREFIX  geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX  geor: <http://www.opengis.net/def/rule/geosparql/>
 PREFIX  uom:  <http://www.opengis.net/def/uom/OGC/1.0/>
@@ -261,7 +285,9 @@ PREFIX  sf:   <http://www.opengis.net/ont/sf#>
 PREFIX  geof: <http://www.opengis.net/def/function/geosparql/>
 PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX  lgd:  <http://linkedgeodata.org/ontology/>
 PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  lgdg: <http://linkedgeodata.org/geometry/>
 PREFIX  ntu:  <http://ntu.ac.uk/ont/geo#>
 
 SELECT  ?place
@@ -274,4 +300,4 @@ WHERE
                       }
   }
 
-2016-09-01 15:38:11 - Query Execution Time: 12 ms With 4 Results
+2016-09-03 03:21:02 - Query Execution Time: 64 ms With 4 Results
