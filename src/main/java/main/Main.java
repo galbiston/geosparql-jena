@@ -60,7 +60,7 @@ public class Main {
 
     public static void main(String[] args) {
         //realworldQuery();
-        sampleQuery();
+        //sampleQuery();
     }
 
     public static void realworldQuery() {

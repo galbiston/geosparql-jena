@@ -1,46 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF xmlns:osgb="http://www.ordnancesurvey.co.uk/xml/namespaces/osgb"
-         xmlns:gml="http://www.opengis.net/ont/gml#"
+<rdf:RDF xmlns:osgb="http://www.ordnancesurvey.co.uk/xml/namespaces/osgb/"
+         xmlns:sf="http://www.opengis.net/ont/sf#"
          xmlns:geo="http://www.opengis.net/ont/geosparql#"
          xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
          xmlns:ntu="http://ntu.ac.uk/ont/geo#"
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
    
-   <rdfs:Class rdf:about="ntu:RoadNode">
-      <rdfs:subClassOf rdf:resource="geo:Feature"/>
-      <rdfs:subClassOf rdf:resource="osgb:RoadNode"/>
+   <rdfs:Class rdf:about="http://ntu.ac.uk/ont/geo#RoadNode">
+      <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#Feature"/>
+      <rdfs:subClassOf rdf:resource="http://www.ordnancesurvey.co.uk/xml/namespaces/osgb/RoadNode"/>
    </rdfs:Class>
-   <rdfs:Class rdf:about="ntu:RoadLink">
-      <rdfs:subClassOf rdf:resource="geo:Feature"/>
-      <rdfs:subClassOf rdf:resource="osgb:RoadLink"/>
+   <rdfs:Class rdf:about="http://ntu.ac.uk/ont/geo#RoadLink">
+      <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#Feature"/>
+      <rdfs:subClassOf rdf:resource="http://www.ordnancesurvey.co.uk/xml/namespaces/osgb/RoadLink"/>
    </rdfs:Class>
-   <rdfs:Class rdf:about="ntu:TopographicArea">
-      <rdfs:subClassOf rdf:resource="geo:Feature"/>
-      <rdfs:subClassOf rdf:resource="osgb:TopographicArea"/>
+   <rdfs:Class rdf:about="http://ntu.ac.uk/ont/geo#TopographicArea">
+      <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#Feature"/>
+      <rdfs:subClassOf rdf:resource="http://www.ordnancesurvey.co.uk/xml/namespaces/osgb/TopographicArea"/>
    </rdfs:Class>
-   <rdf:Property rdf:about="ntu:hasExactGeometry">
+   <rdf:Property rdf:about="http://ntu.ac.uk/ont/geo#hasExactGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>
-   <rdf:Property rdf:about="ntu:hasPointGeometry">
+   <rdf:Property rdf:about="http://ntu.ac.uk/ont/geo#hasPointGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>
-   <geo:gmlLiteral rdf:about="rdfs:Datatype">
-      <rdfs:isDefinedBy rdf:resource="http://www.opengis.net/spec/geosparql/1.0"/>
-      <rdfs:label xml:lang="en">GML literal</rdfs:label>
-      <rdfs:comment xml:lang="en">The datatype of GML literal values</rdfs:comment>
-   </geo:gmlLiteral>
    
    <!-- Instance Below -->
    <!-- Point A -->
    <ntu:RoadNode rdf:about="http://ntu.ac.uk/ont/geo#A">
       <rdfs:label>Point</rdfs:label>
       <ntu:hasExactGeometry>
-         <gml:Point>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>]]></gml:asGML>
-         </gml:Point>
+         <sf:Point>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>]]></geo:asGML>
+         </sf:Point>
       </ntu:hasExactGeometry>
    </ntu:RoadNode>
    
@@ -48,9 +43,9 @@
    <ntu:RoadNode rdf:about="http://ntu.ac.uk/ont/geo#B">
       <rdfs:label>Empty</rdfs:label>
       <ntu:hasExactGeometry>
-         <gml:Point>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"></gml:asGML>
-         </gml:Point>
+         <sf:Point>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"></gml:asGML>
+         </sf:Point>
       </ntu:hasExactGeometry>
    </ntu:RoadNode>
    
@@ -58,9 +53,9 @@
    <ntu:RoadLink rdf:about="http://ntu.ac.uk/ont/geo#C">
       <rdfs:label>LineString</rdfs:label>
       <ntu:hasExactGeometry>
-         <gml:LineString>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:LineString srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.0 -83.3,34.3</gml:coordinates></gml:LineString>]]></gml:asGML>
-         </gml:LineString>
+         <sf:LineString>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:LineString srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.0 -83.3,34.3</gml:coordinates></gml:LineString>]]></geo:asGML>
+         </sf:LineString>
       </ntu:hasExactGeometry>
    </ntu:RoadLink>
    
@@ -68,14 +63,14 @@
    <ntu:TopographicArea rdf:about="http://ntu.ac.uk/ont/geo#D">
       <rdfs:label>Polygon</rdfs:label>
       <ntu:hasExactGeometry>
-         <gml:Polygon>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Polygon srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.6,34.1 -83.2,34.1 -83.2,34.5 -83.6,34.5 -83.6,34.1</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></gml:asGML>
-         </gml:Polygon>
+         <sf:Polygon>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.6,34.1 -83.2,34.1 -83.2,34.5 -83.6,34.5 -83.6,34.1</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+         </sf:Polygon>
       </ntu:hasExactGeometry>
       <ntu:hasPointGeometry>
-         <gml:Point>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.3</gml:coordinates></gml:Point>]]></gml:asGML>
-         </gml:Point>
+         <sf:Point>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.3</gml:coordinates></gml:Point>]]></geo:asGML>
+         </sf:Point>
       </ntu:hasPointGeometry>
    </ntu:TopographicArea>
    
@@ -83,14 +78,14 @@
    <ntu:TopographicArea rdf:about="http://ntu.ac.uk/ont/geo#E">
       <rdfs:label>Polygon</rdfs:label>
       <ntu:hasExactGeometry>
-         <gml:Polygon>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Polygon srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.6,34.1 -83.4,34.1 -83.4,34.3 -83.6,34.3 -83.6,34.1</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></gml:asGML>
-         </gml:Polygon>
+         <sf:Polygon>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.6,34.1 -83.4,34.1 -83.4,34.3 -83.6,34.3 -83.6,34.1</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+         </sf:Polygon>
       </ntu:hasExactGeometry>
       <ntu:hasPointGeometry>
-         <gml:Point>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.5,34.2</gml:coordinates></gml:Point>]]></gml:asGML>
-         </gml:Point>
+         <sf:Point>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.5,34.2</gml:coordinates></gml:Point>]]></geo:asGML>
+         </sf:Point>
       </ntu:hasPointGeometry>
    </ntu:TopographicArea>
    
@@ -98,14 +93,14 @@
    <ntu:TopographicArea rdf:about="http://ntu.ac.uk/ont/geo#F">
       <rdfs:label>Polygon</rdfs:label>
       <ntu:hasExactGeometry>
-         <gml:Polygon>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Polygon srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.2,34.3 -83.0,34.3 -83.0,34.5 -83.2,34.5 -83.2,34.3</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></gml:asGML>
-         </gml:Polygon>
+         <sf:Polygon>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.2,34.3 -83.0,34.3 -83.0,34.5 -83.2,34.5 -83.2,34.3</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+         </sf:Polygon>
       </ntu:hasExactGeometry>
       <ntu:hasPointGeometry>
-         <gml:Point>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.1,34.4</gml:coordinates></gml:Point>]]></gml:asGML>
-         </gml:Point>
+         <sf:Point>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.1,34.4</gml:coordinates></gml:Point>]]></geo:asGML>
+         </sf:Point>
       </ntu:hasPointGeometry>
    </ntu:TopographicArea>
    
@@ -113,14 +108,14 @@
    <ntu:TopographicArea rdf:about="http://ntu.ac.uk/ont/geo#G">
       <rdfs:label>Polygon</rdfs:label>
       <ntu:hasExactGeometry>
-         <gml:Polygon>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Polygon srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.3,34.0 -83.1,34.0 -83.1,34.2 -83.3,34.2 -83.3,34.0</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></gml:asGML>
-         </gml:Polygon>
+         <sf:Polygon>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.3,34.0 -83.1,34.0 -83.1,34.2 -83.3,34.2 -83.3,34.0</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+         </sf:Polygon>
       </ntu:hasExactGeometry>
       <ntu:hasPointGeometry>
-         <gml:Point>
-            <gml:asGML rdf:datatype="geo:gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.2,34.1</gml:coordinates></gml:Point>]]></gml:asGML>
-         </gml:Point>
+         <sf:Point>
+            <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.2,34.1</gml:coordinates></gml:Point>]]></geo:asGML>
+         </sf:Point>
       </ntu:hasPointGeometry>
    </ntu:TopographicArea>
       

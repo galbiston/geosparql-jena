@@ -6,9 +6,8 @@
 package queryrewrite.expr.rcc8;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.WktDatatype;
+import datatype.GeneralDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprFunction2;
@@ -31,14 +30,15 @@ public class RCC8EQExprFunc extends ExprFunction2 {
 
     @Override
     public NodeValue eval(NodeValue x, NodeValue y) {
-        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
+
+        GeneralDatatype generalDatatype = new GeneralDatatype();
 
         Node node1 = x.asNode();
         Node node2 = y.asNode();
 
         try {
-            Geometry g1 = (Geometry) wktDataType.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) wktDataType.parse(node2.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) generalDatatype.parse(node2.getLiteralLexicalForm());
 
             boolean result = g1.equals(g2);
 

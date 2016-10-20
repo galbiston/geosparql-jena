@@ -6,9 +6,8 @@
 package geof.nontopo;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.WktDatatype;
+import datatype.GeneralDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -30,7 +29,7 @@ public class BufferFilterFunc extends FunctionBase3 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
 
-        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
+        GeneralDatatype generalDatatype = new GeneralDatatype();
 
         //Transfer the parameters as Nodes
         Node node1 = v1.asNode();
@@ -41,14 +40,14 @@ public class BufferFilterFunc extends FunctionBase3 {
         LOGGER.info("Current unit: {}", node3.getLocalName());
 
         try {
-            Geometry g1 = (Geometry) wktDataType.parse(node1.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
 
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
             radius = UomConverter.ConvertToUnit(destiUnit, radius);
 
             Geometry buffer = g1.buffer(radius);
 
-            return NodeValue.makeNodeString(wktDataType.unparse(buffer));
+            return NodeValue.makeNodeString(generalDatatype.unparse(buffer));
         } catch (DatatypeFormatException dfx) {
             LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
             return NodeValue.nvEmptyString;

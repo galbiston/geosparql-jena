@@ -5,9 +5,7 @@
  */
 package datatype;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import com.vividsolutions.jts.io.WKTWriter;
@@ -27,7 +25,15 @@ import org.slf4j.LoggerFactory;
 public class WktDatatype extends BaseDatatype {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WktDatatype.class);
+
+    /**
+     * The default WKT type URI.
+     */
     public static final String theTypeURI = "http://www.opengis.net/ont/geosparql#wktLiteral";
+
+    /**
+     * A static instance of WktDatatype.
+     */
     public static final RDFDatatype theWktDatatype = new WktDatatype();
 
     /**
@@ -41,15 +47,20 @@ public class WktDatatype extends BaseDatatype {
      * This method Un-parses the JTS Geometry to the WKT literal
      *
      * @param geometry - the JTS Geometry to be un-parsed
-     * @return wkt - the returned wkt Literal
+     * @return WKT - the returned WKT Literal.
+     * <br> Notice that the Spatial Reference System is not specified in
+     * returned WKT literal.
+     *
      */
     @Override
     public String unparse(Object geometry) {
         Geometry geom = (Geometry) geometry;
+
         WKTWriter wktWriter = new WKTWriter();
         wktWriter.setFormatted(true);
         String wkt = wktWriter.write(geom);
         return wkt;
+
     }
 
     /**
@@ -62,25 +73,29 @@ public class WktDatatype extends BaseDatatype {
      */
     @Override
     public Geometry parse(String lexicalForm) throws DatatypeFormatException {
-
-        GeometryFactory geomFactory = new GeometryFactory();
-
         WKTReader wktReader = new WKTReader();
         try {
-            // Detect the empty lexicalForm and return an empty geometry.
-            if (lexicalForm.isEmpty()) {
-                //Return an empty Geometry Object
-                return geomFactory.createPoint(new Coordinate());
-            } // If the lexicalForm contains the SRS URI, need to retrive that URI.
-            else if (lexicalForm.contains("http")) {
+            if (lexicalForm.contains("http")) {
+                /**
+                 * If the lexicalForm contains the SRS URI, need to retrieve
+                 * that URI.
+                 */
+
                 String SRID = lexicalForm.substring(1, lexicalForm.indexOf(">"));
                 String wktLiteral = lexicalForm.substring(lexicalForm.indexOf(">") + 1);
                 Geometry geometry = wktReader.read(wktLiteral);
                 geometry.setUserData(SRID);
                 return geometry;
-            } // In this case, the lexicalForm is pure WKT.
-            else {
+            } else {
+                /**
+                 * If the RDF data does not specify a spatial reference system
+                 * id, then, "http://www.opengis.net/def/crs/OGC/1.3/CRS84" will
+                 * be assigned to the geometry.
+                 */
+
+                String SRID = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
                 Geometry geometry = wktReader.read(lexicalForm);
+                geometry.setUserData(SRID);
                 return geometry;
             }
         } catch (ParseException ex) {
@@ -88,5 +103,4 @@ public class WktDatatype extends BaseDatatype {
             return null;
         }
     }
-
 }

@@ -7,9 +7,8 @@ package geof.topo.relate;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
-import datatype.WktDatatype;
+import datatype.GeneralDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -26,15 +25,16 @@ public class RelateFilterFunc extends FunctionBase3 {
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
-        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
+
+        GeneralDatatype generalDatatype = new GeneralDatatype();
 
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();
         Node node3 = v3.asNode();
 
         try {
-            Geometry g1 = (Geometry) wktDataType.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) wktDataType.parse(node2.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) generalDatatype.parse(node2.getLiteralLexicalForm());
             String compreMatrix = node3.getLiteral().getLexicalForm();
 
             IntersectionMatrix matrix = g1.relate(g2);

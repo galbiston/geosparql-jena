@@ -204,8 +204,10 @@ SELECT  ?overlap
 WHERE
   { ?place  ntu:hasExactGeometry  ?geom .
     ?geom   geo:asWKT             ?wkt
-    BIND(geof:intersection(?wkt, "Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))"^^sf:wktLiteral) AS ?overlap)
-    FILTER geof:sfIntersects(?wkt, "Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))"^^sf:wktLiteral)
+    BIND(geof:intersection(?wkt, 
+"Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))"^^sf:wktLiteral) AS ?overlap)
+    FILTER geof:sfIntersects(?wkt, 
+"Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))"^^sf:wktLiteral)
   }
 
 2016-09-03 03:21:02 - Query Execution Time: 92 ms With 6 Results

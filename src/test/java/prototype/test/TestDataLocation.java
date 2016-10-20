@@ -30,4 +30,9 @@ public class TestDataLocation {
      * Topological data - large
      */
     public static final String TOPODATA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/topo.rdf";
+
+    /**
+     * GeoSPARQL schema
+     */
+    public static final String SCHEMA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/schema/geosparql_vocab_all.rdf";
 }

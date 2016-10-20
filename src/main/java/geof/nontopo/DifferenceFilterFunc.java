@@ -6,9 +6,8 @@
 package geof.nontopo;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.WktDatatype;
+import datatype.GeneralDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -26,19 +25,19 @@ public class DifferenceFilterFunc extends FunctionBase2 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
+        GeneralDatatype generalDatatype = new GeneralDatatype();
 
         //Transfer the parameters as Nodes
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();
 
         try {
-            Geometry g1 = (Geometry) wktDataType.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) wktDataType.parse(node2.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) generalDatatype.parse(node2.getLiteralLexicalForm());
 
             Geometry difference = g1.difference(g2);
 
-            return NodeValue.makeNodeString(wktDataType.unparse(difference));
+            return NodeValue.makeNodeString(generalDatatype.unparse(difference));
         } catch (DatatypeFormatException dfx) {
             LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
             return NodeValue.nvEmptyString;
