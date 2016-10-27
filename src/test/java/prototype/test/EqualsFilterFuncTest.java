@@ -100,9 +100,14 @@ public class EqualsFilterFuncTest {
     public void testExec() {
 
         System.out.println("exec");
-        String queryString = "SELECT ?b WHERE{ "
-                + "?b rdf:type geo:SpatialObject ."
-                + " }";
+        String queryString = "SELECT ?dimension, ?coordinateDimension, ?spatialDimension, ?isEmpty, ?isSimple WHERE{"
+                + " ntu:A geo:hasGeometry ?aGeom ."
+                + " ?aGeom geo:dimension ?dimension ."
+                + " ?aGeom geo:coordinateDimension ?coordinateDimension ."
+                + " ?aGeom geo:spatialDimension ?spatialDimension ."
+                + " ?aGeom geo:isEmpty ?isEmpty ."
+                + " ?aGeom geo:isSimple ?isSimple."
+                + "}";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
 

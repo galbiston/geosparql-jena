@@ -40,10 +40,10 @@ public class GmlDatatype extends BaseDatatype {
     public static final String GMLPrefix = "gml";
 
     /**
-     * The spatial reference system "urn:ogc:def:crs:EPSG::27700" is returned
+     * The spatial reference system "urn:ogc:def:crs:OGC::CRS84" is returned
      * for all generated GML literal.
      */
-    public static final String GMLSRSNAme = "urn:ogc:def:crs:EPSG::27700";
+    public static final String GMLSRSNAme = "urn:ogc:def:crs:OGC::CRS84";
 
     /**
      * private constructor - single global instance.
@@ -58,7 +58,7 @@ public class GmlDatatype extends BaseDatatype {
      * @param geometry - the JTS Geometry to be un-parsed
      * @return GML - the returned GML Literal.
      * <br> Notice that the Spatial Reference System
-     * "urn:ogc:def:crs:EPSG::27700" is predefined in the returned GML literal.
+     * "urn:ogc:def:crs:OGC::CRS84" is predefined in the returned GML literal.
      */
     @Override
     public String unparse(Object geometry) {
@@ -84,6 +84,7 @@ public class GmlDatatype extends BaseDatatype {
         GMLReader gmlReader = new GMLReader();
         try {
             Geometry geometry = gmlReader.read(lexicalForm, null);
+            geometry.setUserData(GMLSRSNAme);
             return geometry;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
             LOGGER.error("Illegal GML literal: {}", lexicalForm);

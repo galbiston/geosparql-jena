@@ -80,6 +80,7 @@ public class GeneralDatatype {
              */
             LOGGER.info("Empty input lexical.");
             GeometryFactory geomFactory = new GeometryFactory();
+
             return geomFactory.createPoint(new Coordinate());
         } else if (lexicalForm.contains("gml")) {
             /**

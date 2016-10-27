@@ -27,6 +27,11 @@
     <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place1</ntu:name>
 </ntu:PlaceOfInterest>
 <sf:Point rdf:about="http://ntu.ac.uk/ont/geo#AExactGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)]]></geo:asWKT>
 </sf:Point>
 
@@ -38,6 +43,11 @@
     <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place2</ntu:name>
 </ntu:PlaceOfInterest>   
 <sf:LineString rdf:about="http://ntu.ac.uk/ont/geo#BExactGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LineString(-83.4 34.0, -83.3 34.3)]]></geo:asWKT>
 </sf:LineString>
 
@@ -50,9 +60,19 @@
     <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place3</ntu:name>
 </ntu:PlaceOfInterest>
 <sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#CExactGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))]]></geo:asWKT>
 </sf:Polygon>     
 <sf:Point rdf:about="http://ntu.ac.uk/ont/geo#CPointGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.3)]]></geo:asWKT>
 </sf:Point>
 
@@ -65,9 +85,19 @@
     <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place4</ntu:name>
 </ntu:PlaceOfInterest>     
 <sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#DExactGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))]]></geo:asWKT>
 </sf:Polygon>      
 <sf:Point rdf:about="http://ntu.ac.uk/ont/geo#DPointGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.5 34.2)]]></geo:asWKT>
 </sf:Point>
 
@@ -80,9 +110,19 @@
     <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place5</ntu:name>
 </ntu:PlaceOfInterest>
 <sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#EExactGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))]]></geo:asWKT>
 </sf:Polygon>
 <sf:Point rdf:about="http://ntu.ac.uk/ont/geo#EPointGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.1 34.4)]]></geo:asWKT>
 </sf:Point>
 
@@ -95,9 +135,19 @@
     <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place6</ntu:name>
 </ntu:PlaceOfInterest>
 <sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#FExactGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))]]></geo:asWKT>
 </sf:Polygon>
 <sf:Point rdf:about="http://ntu.ac.uk/ont/geo#FPointGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isSimple>
     <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.2 34.1)]]></geo:asWKT>
 </sf:Point>
 

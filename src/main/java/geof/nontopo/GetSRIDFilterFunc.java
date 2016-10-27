@@ -34,7 +34,7 @@ public class GetSRIDFilterFunc extends FunctionBase1 {
 
             String SRID = (String) g1.getUserData();
 
-            return NodeValue.makeNodeString("SRID:" + g1);
+            return NodeValue.makeNodeString(SRID);
         } catch (DatatypeFormatException dfx) {
             LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
             return NodeValue.nvEmptyString;

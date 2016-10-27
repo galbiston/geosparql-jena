@@ -81,8 +81,8 @@ public class WktDatatype extends BaseDatatype {
                  * that URI.
                  */
 
-                String SRID = lexicalForm.substring(1, lexicalForm.indexOf(">"));
-                String wktLiteral = lexicalForm.substring(lexicalForm.indexOf(">") + 1);
+                String SRID = lexicalForm.substring(lexicalForm.indexOf("<") + 1, lexicalForm.indexOf(">"));
+                String wktLiteral = lexicalForm.replaceAll("<" + SRID + ">", "");
                 Geometry geometry = wktReader.read(wktLiteral);
                 geometry.setUserData(SRID);
                 return geometry;

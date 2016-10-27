@@ -38,3 +38,13 @@ ntu:A ntu:hasExactGeometry ?aGeom .
 
 FILTER ( geof:equals(?aWKT, ?WKT ) )
 }
+
+    SELECT ?place
+    WHERE {
+    ntu:A ntu:hasExactGeometry ?aGeom .
+    ?aGeom geo:asWKT ?aWKT .
+    ?place ntu:hasExactGeometry ?bGeom .
+    ?bGeom geo:asWKT ?bWKT .
+    ?aWKT geo:sfWithin ?bWKT .
+    }
+

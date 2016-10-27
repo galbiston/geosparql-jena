@@ -19,6 +19,7 @@ import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
+import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.ReasonerVocabulary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +38,8 @@ public class Main {
     private static int QUERYCOUNT = 1;
 
     /**
-     * Initiate all the GeoSPARQL property, query rewrite, and filter functions
-     *
+     * Initialize all the GeoSPARQL property and filter functions.
+     * <br>Use this for standard GeoSPARQL setup
      */
     public static void init() {
 
@@ -47,20 +48,66 @@ public class Main {
 
         NonTopoFunctionsRegistry.loadFiltFunctions(filterRegistry);
 
-        SFFunctionRegistry.loadPropFunctions(propertyRegistry);
-        SFFunctionRegistry.loadFiltFunctions(filterRegistry);
+        SimpleFeaturesFunctionRegistry.loadPropFunctions(propertyRegistry);
+        SimpleFeaturesFunctionRegistry.loadFiltFunctions(filterRegistry);
 
-        EHFunctionsRegistry.loadPropFunctions(propertyRegistry);
-        EHFunctionsRegistry.loadFiltFunctions(filterRegistry);
+        EgenhoferFunctionsRegistry.loadPropFunctions(propertyRegistry);
+        EgenhoferFunctionsRegistry.loadFiltFunctions(filterRegistry);
 
         RCC8FunctionsRegistry.loadPropFunctions(propertyRegistry);
         RCC8FunctionsRegistry.loadFiltFunctions(filterRegistry);
 
     }
 
+    /**
+     * Initialize all the GeoSPARQL property and filter functions as well as the
+     * query rewrite functions.
+     * <br>Use this for fully GeoSPARQL functionality, need to be used with
+     * inference model
+     * <br>
+     */
+    public static void initWithQueryRewriteFunctions() {
+
+        final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
+        final FunctionRegistry filterRegistry = FunctionRegistry.get(ARQ.getContext());
+
+        NonTopoFunctionsRegistry.loadFiltFunctions(filterRegistry);
+
+        SimpleFeaturesFunctionRegistry.loadPropFunctions(propertyRegistry);
+        SimpleFeaturesFunctionRegistry.loadFiltFunctions(filterRegistry);
+        SimpleFeaturesFunctionRegistry.loadQueryRewriteFunctions(propertyRegistry);
+
+        EgenhoferFunctionsRegistry.loadPropFunctions(propertyRegistry);
+        EgenhoferFunctionsRegistry.loadFiltFunctions(filterRegistry);
+        EgenhoferFunctionsRegistry.loadQueryRewriteFunctions(propertyRegistry);
+
+        RCC8FunctionsRegistry.loadPropFunctions(propertyRegistry);
+        RCC8FunctionsRegistry.loadFiltFunctions(filterRegistry);
+        RCC8FunctionsRegistry.loadQueryRewriteFunctions(propertyRegistry);
+
+    }
+
     public static void main(String[] args) {
         //realworldQuery();
         //sampleQuery();
+        initWithQueryRewriteFunctions();
+        //PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfEquals", prototype.SFEqualsQRPropertyFunc.class);
+
+        MODEL = ModelFactory.createDefaultModel();
+        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
+        Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
+        reasoner = reasoner.bindSchema(schema);
+        INF_MODEL = ModelFactory.createInfModel(reasoner, MODEL);
+        INF_MODEL.read(RDFDataLocation.SAMPLE_WKT);
+        INF_MODEL.prepare();
+
+        //Find a spatial location with a given name.
+        String Q1 = "SELECT ?wkt WHERE{"
+                + "ntu:A geo:hasGeometry ?geom ."
+                + "?geom geo:asWKT ?wkt ."
+                + "}";
+
+        evaluateQueryWithInfModel(Q1);
     }
 
     public static void realworldQuery() {
@@ -383,7 +430,7 @@ public class Main {
         return INF_MODEL;
     }
 
-    public static synchronized void evaluateQuery(String queryString) {
+    public static void evaluateQuery(String queryString) {
         LOGGER.info("Executing the {}th query... ...", QUERYCOUNT++);
         long queryStartTime = System.nanoTime();
 
@@ -392,6 +439,27 @@ public class Main {
         query.setNsPrefixes(Prefixes.get());
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
+            LOGGER.info("\n" + query.asQuery().toString());
+            ResultSet rs = qExec.execSelect();
+
+            ResultSetFormatter.out(rs);
+
+        }
+
+        long endTime = System.nanoTime();
+        long duration = endTime - queryStartTime;
+        LOGGER.info("Query Execution Time: {} ms", duration / 1000000);
+    }
+
+    public static void evaluateQueryWithInfModel(String queryString) {
+        LOGGER.info("Executing the {}th query... ...", QUERYCOUNT++);
+        long queryStartTime = System.nanoTime();
+
+        QuerySolutionMap bindings = new QuerySolutionMap();
+        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
+        query.setNsPrefixes(Prefixes.get());
+
+        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), INF_MODEL)) {
             LOGGER.info("\n" + query.asQuery().toString());
             ResultSet rs = qExec.execSelect();
 
