@@ -14,25 +14,25 @@ public class RDFDataLocation {
     /**
      * Sample Data - small and quick
      */
-    public static final String SAMPLE = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/testSample.rdf";
+    public static final String SAMPLE = RDFDataLocation.class.getClassLoader().getResource("dataset/testSample.rdf").toString();
 
     /**
      * Sample Data in WKT - small and quick
      */
-    public static final String SAMPLE_WKT = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/sampleWKT.rdf";
+    public static final String SAMPLE_WKT = RDFDataLocation.class.getClassLoader().getResource("dataset/sampleWKT.rdf").toString();
 
     /**
      * ITN data - middle
      */
-    public static final String ITNDATA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/itn.rdf";
+    public static final String ITNDATA = RDFDataLocation.class.getClassLoader().getResource("dataset/itn.rdf").toString();
 
     /**
      * Topological data - large
      */
-    public static final String TOPODATA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/topo.rdf";
+    public static final String TOPODATA = RDFDataLocation.class.getClassLoader().getResource("dataset/topo.rdf").toString();
 
     /**
      * Linked geodata - extremely large
      */
-    public static final String GEODATA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/linkedgeodata.nt";
+    public static final String GEODATA = RDFDataLocation.class.getClassLoader().getResource("dataset/linkedgeodata.nt").toString();
 }
