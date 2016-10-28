@@ -9,7 +9,6 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
 import main.RDFDataLocation;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -32,20 +31,23 @@ import vocabulary.Prefixes;
  *
  * @author haozhechen
  */
-public class WktDatatypeTest {
+public class GMLDatatypeTest1 {
 
     private static Model MODEL;
-    private static final Logger LOGGER = LoggerFactory.getLogger(WktDatatypeTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GMLDatatypeTest1.class);
 
-    public WktDatatypeTest() {
+    public GMLDatatypeTest1() {
     }
 
     @BeforeClass
     public static void setUpClass() {
+
         MODEL = ModelFactory.createDefaultModel();
-        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
-        TypeMapper.getInstance().registerDatatype(wktDataType);
-        MODEL.read(RDFDataLocation.SAMPLE_WKT);
+        GMLDatatype1 gmlDataType = GMLDatatype1.theGmlDatatype;
+        TypeMapper.getInstance().registerDatatype(gmlDataType);
+        LOGGER.info("Before Reading Data");
+        MODEL.read(RDFDataLocation.SAMPLE);
+        LOGGER.info("After Reading Data");
 
     }
 
@@ -62,7 +64,7 @@ public class WktDatatypeTest {
     }
 
     /**
-     * Test of unparse method, of class WktDatatype.
+     * Test of unparse method, of class GMLDatatype1.
      */
     @Test
     public void testUnparse() {
@@ -72,19 +74,19 @@ public class WktDatatypeTest {
         gsf.setNumPoints(4);
         gsf.setBase(new Coordinate(0, 0));
         Geometry testGeometry = gsf.createRectangle();
-        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
-        LOGGER.info("test unparse result: \n{}", wktDataType.unparse(testGeometry));
-
+        GMLDatatype1 gmlDataType = GMLDatatype1.theGmlDatatype;
+        LOGGER.info("test unparse result: \n{}", gmlDataType.unparse(testGeometry));
     }
 
     /**
-     * Test of parse method, of class WktDatatype.
+     * Test of parse method, of class GMLDatatype1.
      */
     @Test
     public void testParse() {
         System.out.println("parse");
-        String queryString = "SELECT ?dWKT WHERE{ "
-                + "ntu:D ntu:hasExactGeometry ?dGeom . ?dGeom geo:asWKT ?dWKT . "
+        String queryString = "SELECT ?aGML ?bGML WHERE{ "
+                + "ntu:A ntu:hasPointGeometry ?aGeom . ?aGeom gml:asGML ?aGML . "
+                + "ntu:B ntu:hasPointGeometry ?bGeom . ?bGeom gml:asGML ?bGML . "
                 + " }";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
@@ -92,19 +94,16 @@ public class WktDatatypeTest {
         query.setNsPrefixes(Prefixes.get());
 
         QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
-        WktDatatype wktDataType = WktDatatype.theWktDatatype;
+        GMLDatatype1 gmlDataType = GMLDatatype1.theGmlDatatype;
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
             // Cast the object into geometry
-            LOGGER.info("WKT Literal: {}", qs.getLiteral("dWKT").getLexicalForm());
-            Geometry geometry = wktDataType.parse(qs.getLiteral("dWKT").getLexicalForm());
+            Geometry geometry = gmlDataType.parse(qs.getLiteral("aGML").getLexicalForm());
             if (geometry != null) {
-                LOGGER.info("successfully parse wktLiteral into geometry: \n{}", wktDataType.unparse(geometry));
-                LOGGER.info("User Data: {}", geometry.getUserData().toString());
+                LOGGER.info("successfully parse gmlLiteral into geometry: \n{}", gmlDataType.unparse(geometry));
             }
         }
-
     }
 
 }

@@ -17,13 +17,13 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author haozhechen
- *
- * description: WktDatatype class allows the URI "geo:gmlLiteral" to be used as
- * a datatype and it will parse that datatype to a JTL Geometry.
- */
-public class WktDatatype extends BaseDatatype {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WktDatatype.class);
+ description: WKTDatatype1 class allows the URI "geo:gmlLiteral" to be used as
+ a datatype and it will parse that datatype to a JTL Geometry.
+ */
+public class WKTDatatype1 extends BaseDatatype {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(WKTDatatype1.class);
 
     /**
      * The default WKT type URI.
@@ -31,14 +31,14 @@ public class WktDatatype extends BaseDatatype {
     public static final String theTypeURI = "http://www.opengis.net/ont/geosparql#wktLiteral";
 
     /**
-     * A static instance of WktDatatype.
+     * A static instance of WKTDatatype1.
      */
-    public static final WktDatatype theWktDatatype = new WktDatatype();
+    public static final WKTDatatype1 theWktDatatype = new WKTDatatype1();
 
     /**
      * private constructor - single global instance.
      */
-    private WktDatatype() {
+    private WKTDatatype1() {
         super(theTypeURI);
     }
 
