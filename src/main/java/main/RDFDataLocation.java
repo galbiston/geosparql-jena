@@ -35,4 +35,9 @@ public class RDFDataLocation {
      * Linked geodata - extremely large
      */
     public static final String GEODATA = RDFDataLocation.class.getClassLoader().getResource("dataset/linkedgeodata.nt").toString();
+
+    /**
+     * GeoSPARQL schema
+     */
+    public static final String SCHEMA = RDFDataLocation.class.getClassLoader().getResource("schema/geosparql_vocab_all.rdf").toString();
 }

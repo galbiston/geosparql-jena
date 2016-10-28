@@ -8,6 +8,7 @@ package datatype;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
+import main.RDFDataLocation;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -25,7 +26,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import prototype.test.TestDataLocation;
 import vocabulary.Prefixes;
 
 /**
@@ -45,7 +45,7 @@ public class WktDatatypeTest {
         MODEL = ModelFactory.createDefaultModel();
         RDFDatatype wktDataType = WktDatatype.theWktDatatype;
         TypeMapper.getInstance().registerDatatype(wktDataType);
-        MODEL.read(TestDataLocation.SAMPLE_WKT);
+        MODEL.read(RDFDataLocation.SAMPLE_WKT);
 
     }
 

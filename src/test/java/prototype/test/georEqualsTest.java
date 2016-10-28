@@ -5,6 +5,7 @@
  */
 package prototype.test;
 
+import main.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -40,7 +41,7 @@ public class georEqualsTest {
     public static void setUpClass() {
 
         MODEL = ModelFactory.createDefaultModel();
-        MODEL.read(TestDataLocation.SAMPLE);
+        MODEL.read(RDFDataLocation.SAMPLE);
 
     }
 

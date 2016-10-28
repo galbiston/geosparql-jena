@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
 import datatype.WktDatatype;
+import main.RDFDataLocation;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -47,7 +48,7 @@ public class GmlDatatypeTest {
         RDFDatatype gmlDataType = WktDatatype.theWktDatatype;
         TypeMapper.getInstance().registerDatatype(gmlDataType);
         LOGGER.info("Before Reading Data");
-        MODEL.read(TestDataLocation.SAMPLE);
+        MODEL.read(RDFDataLocation.SAMPLE);
         LOGGER.info("After Reading Data");
 
     }

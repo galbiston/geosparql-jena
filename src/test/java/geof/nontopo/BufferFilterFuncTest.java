@@ -5,6 +5,7 @@
  */
 package geof.nontopo;
 
+import main.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -21,7 +22,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import prototype.test.TestDataLocation;
 import vocabulary.Prefixes;
 import vocabulary.Vocabulary;
 
@@ -41,7 +41,7 @@ public class BufferFilterFuncTest {
     public static void setUpClass() {
         long dataReadStartTime = System.nanoTime();
         MODEL = ModelFactory.createDefaultModel();
-        MODEL.read(TestDataLocation.SAMPLE_WKT);
+        MODEL.read(RDFDataLocation.SAMPLE_WKT);
         long endTime = System.nanoTime();
         long duration = endTime - dataReadStartTime;
         LOGGER.info("Data Read Time: {} ", duration / 1000000);

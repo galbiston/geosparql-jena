@@ -5,6 +5,7 @@
  */
 package prototype.test;
 
+import main.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -40,7 +41,7 @@ public class DistanceFilterFuncTest {
 
         MODEL = ModelFactory.createDefaultModel();
         LOGGER.info("Before Reading Data");
-        MODEL.read(TestDataLocation.SAMPLE);
+        MODEL.read(RDFDataLocation.SAMPLE);
         LOGGER.info("After Reading Data");
     }
 

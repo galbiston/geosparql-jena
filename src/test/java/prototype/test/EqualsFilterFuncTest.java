@@ -5,6 +5,7 @@
  */
 package prototype.test;
 
+import main.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -49,9 +50,9 @@ public class EqualsFilterFuncTest {
     public static void setUpClass() {
         MODEL = ModelFactory.createDefaultModel();
         Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
-        //Model schema = FileManager.get().loadModel(TestDataLocation.SCHEMA);
-        //MODEL.read(TestDataLocation.SAMPLE);
-        //MODEL = FileManager.get().loadModel(TestDataLocation.SAMPLE);
+        //Model schema = FileManager.get().loadModel(RDFDataLocation.SCHEMA);
+        //MODEL.read(RDFDataLocation.SAMPLE);
+        //MODEL = FileManager.get().loadModel(RDFDataLocation.SAMPLE);
         //==========================================================
         //==========================================================
         //==========================================================
@@ -78,7 +79,7 @@ public class EqualsFilterFuncTest {
         //==========================================================
         //==========================================================
         INF_MODEL = ModelFactory.createInfModel(reasoner, MODEL);
-        INF_MODEL.read(TestDataLocation.SAMPLE_WKT);
+        INF_MODEL.read(RDFDataLocation.SAMPLE_WKT);
     }
 
     @AfterClass
