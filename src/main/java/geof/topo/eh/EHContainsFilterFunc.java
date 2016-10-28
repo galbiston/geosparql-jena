@@ -31,8 +31,8 @@ public class EHContainsFilterFunc extends FunctionBase2 {
         Node node2 = v2.asNode();
 
         try {
-            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) generalDatatype.parse(node2.getLiteralLexicalForm());
+            Geometry g1 =  generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g2 =  generalDatatype.parse(node2.getLiteralLexicalForm());
 
             // Use DE-9IM to model the relationship
             // Use JTS's relate function to implement

@@ -40,7 +40,7 @@ public class BufferFilterFunc extends FunctionBase3 {
         LOGGER.info("Current unit: {}", node3.getLocalName());
 
         try {
-            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g1 =  generalDatatype.parse(node1.getLiteralLexicalForm());
 
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
             radius = UomConverter.ConvertToUnit(destiUnit, radius);

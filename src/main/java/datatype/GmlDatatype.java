@@ -12,7 +12,6 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +31,7 @@ public class GmlDatatype extends BaseDatatype {
     /**
      * A static instance of WktDatatype.
      */
-    public static final RDFDatatype theGmlDatatype = new GmlDatatype();
+    public static final GmlDatatype theGmlDatatype = new GmlDatatype();
 
     /**
      * XML element tag "gml" is defined for the convenience of GML generation.
@@ -40,8 +39,8 @@ public class GmlDatatype extends BaseDatatype {
     public static final String GMLPrefix = "gml";
 
     /**
-     * The spatial reference system "urn:ogc:def:crs:OGC::CRS84" is returned
-     * for all generated GML literal.
+     * The spatial reference system "urn:ogc:def:crs:OGC::CRS84" is returned for
+     * all generated GML literal.
      */
     public static final String GMLSRSNAme = "urn:ogc:def:crs:OGC::CRS84";
 

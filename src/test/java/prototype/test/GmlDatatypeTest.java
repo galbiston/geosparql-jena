@@ -101,7 +101,7 @@ public class GmlDatatypeTest {
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
             // Cast the object into geometry
-            Geometry geometry = (Geometry) gmlDataType.parse(qs.getLiteral("aGML").getLexicalForm());
+            Geometry geometry = gmlDataType.parse(qs.getLiteral("aGML").getLexicalForm());
             if (geometry != null) {
                 LOGGER.info("successfully parse gmlLiteral into geometry: \n{}", gmlDataType.unparse(geometry));
             }

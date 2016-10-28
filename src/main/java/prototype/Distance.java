@@ -8,7 +8,6 @@ package prototype;
 import com.vividsolutions.jts.geom.Geometry;
 import datatype.WktDatatype;
 import java.util.List;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.Substitute;
 import org.apache.jena.sparql.core.Var;
@@ -37,10 +36,10 @@ public class Distance extends PropertyFunctionBase {
         argObject = Substitute.substitute(argObject, binding);
         List<Node> list = argObject.getArgList();
 
-        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
+        WktDatatype wktDataType = WktDatatype.theWktDatatype;
 
-        Geometry g1 = (Geometry) wktDataType.parse(list.get(0).getLiteralLexicalForm());
-        Geometry g2 = (Geometry) wktDataType.parse(list.get(1).getLiteralLexicalForm());
+        Geometry g1 = wktDataType.parse(list.get(0).getLiteralLexicalForm());
+        Geometry g2 = wktDataType.parse(list.get(1).getLiteralLexicalForm());
         Double distance = -1d;
 
         distance = g1.distance(g2);

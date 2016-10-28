@@ -33,8 +33,8 @@ public class RelateFilterFunc extends FunctionBase3 {
         Node node3 = v3.asNode();
 
         try {
-            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) generalDatatype.parse(node2.getLiteralLexicalForm());
+            Geometry g1 =  generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g2 =  generalDatatype.parse(node2.getLiteralLexicalForm());
             String compreMatrix = node3.getLiteral().getLexicalForm();
 
             IntersectionMatrix matrix = g1.relate(g2);

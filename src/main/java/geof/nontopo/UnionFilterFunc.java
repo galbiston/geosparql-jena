@@ -32,8 +32,8 @@ public class UnionFilterFunc extends FunctionBase2 {
         Node node2 = v2.asNode();
 
         try {
-            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) generalDatatype.parse(node2.getLiteralLexicalForm());
+            Geometry g1 =  generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g2 =  generalDatatype.parse(node2.getLiteralLexicalForm());
 
             Geometry union = g1.union(g2);
 

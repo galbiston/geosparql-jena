@@ -12,7 +12,6 @@ import com.vividsolutions.jts.io.WKTWriter;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
 import static datatype.GmlDatatype.GMLPrefix;
 import static datatype.GmlDatatype.GMLSRSNAme;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,8 +88,8 @@ public class GeneralDatatype {
              */
             LOGGER.info("The GML input: {}", lexicalForm);
             isGML = true;
-            RDFDatatype gmlDatatype = GmlDatatype.theGmlDatatype;
-            Geometry geometry = (Geometry) gmlDatatype.parse(lexicalForm);
+            GmlDatatype gmlDatatype = (GmlDatatype) GmlDatatype.theGmlDatatype;
+            Geometry geometry = gmlDatatype.parse(lexicalForm);
             return geometry;
         } else {
             /**
@@ -100,8 +99,8 @@ public class GeneralDatatype {
              */
             LOGGER.info("The XML input: {}", lexicalForm);
             isGML = false;
-            RDFDatatype wktDatatype = WktDatatype.theWktDatatype;
-            Geometry geometry = (Geometry) wktDatatype.parse(lexicalForm);
+            WktDatatype wktDatatype = WktDatatype.theWktDatatype;
+            Geometry geometry = wktDatatype.parse(lexicalForm);
             return geometry;
         }
     }

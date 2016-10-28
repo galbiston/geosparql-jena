@@ -92,13 +92,13 @@ public class WktDatatypeTest {
         query.setNsPrefixes(Prefixes.get());
 
         QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
-        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
+        WktDatatype wktDataType = WktDatatype.theWktDatatype;
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
             // Cast the object into geometry
             LOGGER.info("WKT Literal: {}", qs.getLiteral("dWKT").getLexicalForm());
-            Geometry geometry = (Geometry) wktDataType.parse(qs.getLiteral("dWKT").getLexicalForm());
+            Geometry geometry = wktDataType.parse(qs.getLiteral("dWKT").getLexicalForm());
             if (geometry != null) {
                 LOGGER.info("successfully parse wktLiteral into geometry: \n{}", wktDataType.unparse(geometry));
                 LOGGER.info("User Data: {}", geometry.getUserData().toString());

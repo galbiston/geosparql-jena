@@ -11,7 +11,6 @@ import com.vividsolutions.jts.io.WKTReader;
 import com.vividsolutions.jts.io.WKTWriter;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,7 @@ public class WktDatatype extends BaseDatatype {
     /**
      * A static instance of WktDatatype.
      */
-    public static final RDFDatatype theWktDatatype = new WktDatatype();
+    public static final WktDatatype theWktDatatype = new WktDatatype();
 
     /**
      * private constructor - single global instance.

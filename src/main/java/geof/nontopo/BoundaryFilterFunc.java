@@ -30,7 +30,7 @@ public class BoundaryFilterFunc extends FunctionBase1 {
         Node node = v.asNode();
 
         try {
-            Geometry g1 = (Geometry) generalDatatype.parse(node.getLiteralLexicalForm());
+            Geometry g1 =  generalDatatype.parse(node.getLiteralLexicalForm());
 
             Geometry boundary = g1.getBoundary();
 

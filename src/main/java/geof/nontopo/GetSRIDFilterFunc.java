@@ -30,7 +30,7 @@ public class GetSRIDFilterFunc extends FunctionBase1 {
         Node node = v.asNode();
 
         try {
-            Geometry g1 = (Geometry) generalDatatype.parse(node.getLiteralLexicalForm());
+            Geometry g1 =  generalDatatype.parse(node.getLiteralLexicalForm());
 
             String SRID = (String) g1.getUserData();
 

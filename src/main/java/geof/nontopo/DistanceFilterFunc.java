@@ -36,8 +36,8 @@ public class DistanceFilterFunc extends FunctionBase3 {
         LOGGER.info("Current unit: {}", node3.getLocalName());
 
         try {
-            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) generalDatatype.parse(node2.getLiteralLexicalForm());
+            Geometry g1 =  generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g2 =  generalDatatype.parse(node2.getLiteralLexicalForm());
 
             double distance = g1.distance(g2);
             //Default unit is central angle degrees, need t oconvert to destination uom

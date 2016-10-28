@@ -30,7 +30,7 @@ public class EnvelopFilterFunc extends FunctionBase1 {
         Node node = v.asNode();
 
         try {
-            Geometry g1 = (Geometry) generalDatatype.parse(node.getLiteralLexicalForm());
+            Geometry g1 =  generalDatatype.parse(node.getLiteralLexicalForm());
 
             Geometry envelope = g1.getEnvelope();
 
