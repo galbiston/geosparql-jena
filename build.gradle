@@ -30,11 +30,11 @@ repositories {
 dependencies {
     
     //Apache Lucene
-    compile 'org.apache.lucene:lucene-core:6.1.0'
+    //compile 'org.apache.lucene:lucene-core:6.1.0'
     
     //Geotools 
-    //compile group: 'org.geotools', name: 'gt-shapefile', version: '15.0'
-    //compile group: 'org.geotools', name: 'gt-app-schema', version: '15.0'
+    compile group: 'org.geotools', name: 'gt-shapefile', version: '15.0'
+    compile group: 'org.geotools', name: 'gt-epsg-hsql', version: '15.0'
     
     //JTS suite
     compile 'com.vividsolutions:jts-assembly-distribution:1.14.0'

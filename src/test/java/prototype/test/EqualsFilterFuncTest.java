@@ -20,8 +20,8 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
+import org.apache.jena.util.FileManager;
 import org.apache.jena.util.PrintUtil;
-import org.apache.jena.vocabulary.ReasonerVocabulary;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -48,7 +48,7 @@ public class EqualsFilterFuncTest {
     @BeforeClass
     public static void setUpClass() {
         MODEL = ModelFactory.createDefaultModel();
-        //Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
+        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
         //Model schema = FileManager.get().loadModel(TestDataLocation.SCHEMA);
         //MODEL.read(TestDataLocation.SAMPLE);
         //MODEL = FileManager.get().loadModel(TestDataLocation.SAMPLE);
@@ -56,14 +56,14 @@ public class EqualsFilterFuncTest {
         //==========================================================
         //==========================================================
         //RDFS Reasoner
-        Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
-        reasoner.setParameter(ReasonerVocabulary.PROPsetRDFSLevel, ReasonerVocabulary.RDFS_DEFAULT);
+        //Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
+        //reasoner.setParameter(ReasonerVocabulary.PROPsetRDFSLevel, ReasonerVocabulary.RDFS_DEFAULT);
         //==========================================================
         //==========================================================
         //==========================================================
         //OWL Reasoner
-        //Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
-        //reasoner = reasoner.bindSchema(schema);
+        Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
+        reasoner = reasoner.bindSchema(schema);
         //==========================================================
         //==========================================================
         //==========================================================
@@ -78,8 +78,7 @@ public class EqualsFilterFuncTest {
         //==========================================================
         //==========================================================
         INF_MODEL = ModelFactory.createInfModel(reasoner, MODEL);
-        INF_MODEL.read(TestDataLocation.SAMPLE);
-        INF_MODEL.prepare();
+        INF_MODEL.read(TestDataLocation.SAMPLE_WKT);
     }
 
     @AfterClass
@@ -101,12 +100,14 @@ public class EqualsFilterFuncTest {
     public void testExec() {
 
         System.out.println("exec");
-        String queryString = "SELECT ?b WHERE{ "
-                + "?b geo:hasGeometry ?bGeom."
-                //                + "ntu:A ntu:hasPointGeometry ?aGeom . ?aGeom gml:asGML ?aGML . "
-                //                + "?b ntu:hasPointGeometry ?bGeom . ?bGeom gml:asGML ?bGML . "
-                //                + "FILTER ( ext:sfEquals(?aGML, ?bGML) )"
-                + " }";
+        String queryString = "SELECT ?dimension, ?coordinateDimension, ?spatialDimension, ?isEmpty, ?isSimple WHERE{"
+                + " ntu:A geo:hasGeometry ?aGeom ."
+                + " ?aGeom geo:dimension ?dimension ."
+                + " ?aGeom geo:coordinateDimension ?coordinateDimension ."
+                + " ?aGeom geo:spatialDimension ?spatialDimension ."
+                + " ?aGeom geo:isEmpty ?isEmpty ."
+                + " ?aGeom geo:isSimple ?isSimple."
+                + "}";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
 

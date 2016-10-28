@@ -41,7 +41,7 @@ public class SFContainsPropertyFuncTest {
     public static void setUpClass() {
         long dataReadStartTime = System.nanoTime();
         MODEL = ModelFactory.createDefaultModel();
-        MODEL.read(TestDataLocation.SAMPLE);
+        MODEL.read(TestDataLocation.SAMPLE_WKT);
         long endTime = System.nanoTime();
         long duration = endTime - dataReadStartTime;
         LOGGER.info("Data Read Time: {} ", duration / 1000000);
@@ -71,7 +71,7 @@ public class SFContainsPropertyFuncTest {
                 //+ "ntu:D ntu:hasExactGeometry ?dGeom . "
                 //+ "?dGeom gml:asGML ?dGML . "
                 + "?place ntu:hasExactGeometry ?Geom . "
-                + "?Geom gml:asGML ?GML . "
+                + "?Geom geo:asWKT ?WKT . "
                 //+ "?dGML geo:sfContains ?GML"
                 + " }";
 

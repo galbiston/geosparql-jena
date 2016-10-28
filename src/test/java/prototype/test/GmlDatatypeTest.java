@@ -8,7 +8,7 @@ package prototype.test;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
-import datatype.GmlDatatype;
+import datatype.WktDatatype;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -44,7 +44,7 @@ public class GmlDatatypeTest {
     public static void setUpClass() {
 
         MODEL = ModelFactory.createDefaultModel();
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype gmlDataType = WktDatatype.theWktDatatype;
         TypeMapper.getInstance().registerDatatype(gmlDataType);
         LOGGER.info("Before Reading Data");
         MODEL.read(TestDataLocation.SAMPLE);
@@ -65,7 +65,7 @@ public class GmlDatatypeTest {
     }
 
     /**
-     * Test of unparse method, of class GmlDatatype.
+     * Test of unparse method, of class WktDatatype.
      */
     @Test
     public void testUnparse() {
@@ -75,12 +75,12 @@ public class GmlDatatypeTest {
         gsf.setNumPoints(4);
         gsf.setBase(new Coordinate(0, 0));
         Geometry testGeometry = gsf.createRectangle();
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype gmlDataType = WktDatatype.theWktDatatype;
         LOGGER.info("test unparse result: \n{}", gmlDataType.unparse(testGeometry));
     }
 
     /**
-     * Test of parse method, of class GmlDatatype.
+     * Test of parse method, of class WktDatatype.
      */
     @Test
     public void testParse() {
@@ -95,7 +95,7 @@ public class GmlDatatypeTest {
         query.setNsPrefixes(Prefixes.get());
 
         QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype gmlDataType = WktDatatype.theWktDatatype;
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();

@@ -6,7 +6,7 @@
 package prototype;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GmlDatatype;
+import datatype.WktDatatype;
 import java.util.List;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
@@ -37,10 +37,10 @@ public class Distance extends PropertyFunctionBase {
         argObject = Substitute.substitute(argObject, binding);
         List<Node> list = argObject.getArgList();
 
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        RDFDatatype wktDataType = WktDatatype.theWktDatatype;
 
-        Geometry g1 = (Geometry) gmlDataType.parse(list.get(0).getLiteralLexicalForm());
-        Geometry g2 = (Geometry) gmlDataType.parse(list.get(1).getLiteralLexicalForm());
+        Geometry g1 = (Geometry) wktDataType.parse(list.get(0).getLiteralLexicalForm());
+        Geometry g2 = (Geometry) wktDataType.parse(list.get(1).getLiteralLexicalForm());
         Double distance = -1d;
 
         distance = g1.distance(g2);

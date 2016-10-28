@@ -6,9 +6,8 @@
 package geof.topo.sf;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GmlDatatype;
+import datatype.GeneralDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -26,14 +25,14 @@ public class SFIntersectsFilterFunc extends FunctionBase2 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        GeneralDatatype generalDatatype = new GeneralDatatype();
 
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();
 
         try {
-            Geometry g1 = (Geometry) gmlDataType.parse(node1.getLiteralLexicalForm());
-            Geometry g2 = (Geometry) gmlDataType.parse(node2.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) generalDatatype.parse(node1.getLiteralLexicalForm());
+            Geometry g2 = (Geometry) generalDatatype.parse(node2.getLiteralLexicalForm());
 
             boolean result = g1.intersects(g2);
 

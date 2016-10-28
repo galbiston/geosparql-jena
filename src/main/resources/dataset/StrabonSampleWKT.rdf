@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:geo="http://www.opengis.net/ont/geosparql#"
+	 xmlns:strdf="http://strdf.di.uoa.gr/ontology#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:ntu="http://ntu.ac.uk/ont/geo#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:sf="http://www.opengis.net/ont/sf#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#">
+   
+   <rdfs:Class rdf:about="http://ntu.ac.uk/ont/geo#PlaceOfInterest">
+      <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#Feature"/>
+   </rdfs:Class>
+   <rdf:Property rdf:about="ntu:hasExactGeometry">
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
+   </rdf:Property>
+   <rdf:Property rdf:about="ntu:hasPointGeometry">
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
+   </rdf:Property>
+
+   
+<!-- Instance Below -->
+<!-- Point A -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#A">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#AExactGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place1</ntu:name>
+</ntu:PlaceOfInterest>
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#AExactGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)]]></strdf:hasGeometry>
+</sf:Point>
+
+
+      
+<!-- LineString B -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#B">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#BExactGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place2</ntu:name>
+</ntu:PlaceOfInterest>   
+<sf:LineString rdf:about="http://ntu.ac.uk/ont/geo#BExactGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LineString(-83.4 34.0, -83.3 34.3)]]></strdf:hasGeometry>
+</sf:LineString>
+
+   
+   
+<!-- Polygon C -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#C">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#CExactGeom"/>
+    <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#CPointGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place3</ntu:name>
+</ntu:PlaceOfInterest>
+<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#CExactGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))]]></strdf:hasGeometry>
+</sf:Polygon>     
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#CPointGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.3)]]></strdf:hasGeometry>
+</sf:Point>
+
+   
+   
+<!-- Polygon D -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#D">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#DExactGeom"/>
+    <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#DPointGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place4</ntu:name>
+</ntu:PlaceOfInterest>     
+<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#DExactGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))]]></strdf:hasGeometry>
+</sf:Polygon>      
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#DPointGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.5 34.2)]]></strdf:hasGeometry>
+</sf:Point>
+
+   
+   
+<!-- Polygon E -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#E">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#EExactGeom"/>
+    <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#EPointGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place5</ntu:name>
+</ntu:PlaceOfInterest>
+<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#EExactGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))]]></strdf:hasGeometry>
+</sf:Polygon>
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#EPointGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.1 34.4)]]></strdf:hasGeometry>
+</sf:Point>
+
+
+
+<!-- Polygon F -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#F">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#FExactGeom"/>
+    <ntu:hasPointGeometry rdf:resource="http://ntu.ac.uk/ont/geo#FPointGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">place6</ntu:name>
+</ntu:PlaceOfInterest>
+<sf:Polygon rdf:about="http://ntu.ac.uk/ont/geo#FExactGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))]]></strdf:hasGeometry>
+</sf:Polygon>
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#FPointGeom">
+    <strdf:hasGeometry rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.2 34.1)]]></strdf:hasGeometry>
+</sf:Point>
+
+            
+</rdf:RDF>

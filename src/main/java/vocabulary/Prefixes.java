@@ -16,8 +16,7 @@ public class Prefixes {
 
     public static final Map<String, String> get() {
         Map<String, String> map = new HashMap<>();
-        map.put("osgb", "http://www.ordnancesurvey.co.uk/xml/namespaces/osgb");
-        map.put("gml", "http://www.opengis.net/ont/gml#");
+        map.put("sf", "http://www.opengis.net/ont/sf#");
         map.put("ntu", "http://ntu.ac.uk/ont/geo#");
         map.put("geo", "http://www.opengis.net/ont/geosparql#");
         map.put("geof", "http://www.opengis.net/def/function/geosparql/");
@@ -26,6 +25,8 @@ public class Prefixes {
         map.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
         map.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
         map.put("uom", "http://www.opengis.net/def/uom/OGC/1.0/");
+        map.put("lgd", "http://linkedgeodata.org/ontology/");
+        map.put("lgdg", "http://linkedgeodata.org/geometry/");
 
         return map;
     }

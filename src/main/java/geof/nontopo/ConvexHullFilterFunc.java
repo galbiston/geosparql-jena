@@ -6,9 +6,8 @@
 package geof.nontopo;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GmlDatatype;
+import datatype.GeneralDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
@@ -26,16 +25,16 @@ public class ConvexHullFilterFunc extends FunctionBase1 {
     @Override
     public NodeValue exec(NodeValue v) {
 
-        RDFDatatype gmlDataType = GmlDatatype.theGmlDatatype;
+        GeneralDatatype generalDatatype = new GeneralDatatype();
 
         Node node = v.asNode();
 
         try {
-            Geometry g1 = (Geometry) gmlDataType.parse(node.getLiteralLexicalForm());
+            Geometry g1 = (Geometry) generalDatatype.parse(node.getLiteralLexicalForm());
 
             Geometry convex = g1.convexHull();
 
-            return NodeValue.makeNodeString(gmlDataType.unparse(convex));
+            return NodeValue.makeNodeString(generalDatatype.unparse(convex));
         } catch (DatatypeFormatException dfx) {
             LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
             return NodeValue.nvEmptyString;
