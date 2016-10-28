@@ -24,12 +24,12 @@ public class GmlDatatype extends BaseDatatype {
     private static final Logger LOGGER = LoggerFactory.getLogger(GmlDatatype.class);
 
     /**
-     * The default WKT type URI.
+     * The default GML type URI.
      */
     public static final String theTypeURI = "http://www.opengis.net/ont/geosparql#gmlLiteral";
 
     /**
-     * A static instance of WktDatatype.
+     * A static instance of GmlDatatype.
      */
     public static final GmlDatatype theGmlDatatype = new GmlDatatype();
 
