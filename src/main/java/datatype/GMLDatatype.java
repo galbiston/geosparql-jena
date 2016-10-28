@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author haozhechen
  */
-public class GMLDatatype1 extends BaseDatatype {
+public class GMLDatatype extends BaseDatatype {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GMLDatatype1.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GMLDatatype.class);
 
     /**
      * The default GML type URI.
@@ -29,9 +29,9 @@ public class GMLDatatype1 extends BaseDatatype {
     public static final String theTypeURI = "http://www.opengis.net/ont/geosparql#gmlLiteral";
 
     /**
-     * A static instance of GMLDatatype1.
+     * A static instance of GMLDatatype.
      */
-    public static final GMLDatatype1 theGmlDatatype = new GMLDatatype1();
+    public static final GMLDatatype theGmlDatatype = new GMLDatatype();
 
     /**
      * XML element tag "gml" is defined for the convenience of GML generation.
@@ -47,7 +47,7 @@ public class GMLDatatype1 extends BaseDatatype {
     /**
      * private constructor - single global instance.
      */
-    public GMLDatatype1() {
+    public GMLDatatype() {
         super(theTypeURI);
     }
 

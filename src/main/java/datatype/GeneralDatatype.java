@@ -10,8 +10,8 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.WKTWriter;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
-import static datatype.GMLDatatype1.GMLPrefix;
-import static datatype.GMLDatatype1.GMLSRSNAme;
+import static datatype.GMLDatatype.GMLPrefix;
+import static datatype.GMLDatatype.GMLSRSNAme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +88,7 @@ public class GeneralDatatype {
              */
             LOGGER.info("The GML input: {}", lexicalForm);
             isGML = true;
-            GMLDatatype1 gmlDatatype = (GMLDatatype1) GMLDatatype1.theGmlDatatype;
+            GMLDatatype gmlDatatype = (GMLDatatype) GMLDatatype.theGmlDatatype;
             Geometry geometry = gmlDatatype.parse(lexicalForm);
             return geometry;
         } else {
@@ -99,7 +99,7 @@ public class GeneralDatatype {
              */
             LOGGER.info("The XML input: {}", lexicalForm);
             isGML = false;
-            WKTDatatype1 wktDatatype = WKTDatatype1.theWktDatatype;
+            WKTDatatype wktDatatype = WKTDatatype.theWktDatatype;
             Geometry geometry = wktDatatype.parse(lexicalForm);
             return geometry;
         }
