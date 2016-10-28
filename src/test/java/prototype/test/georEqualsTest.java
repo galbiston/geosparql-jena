@@ -74,7 +74,7 @@ public class georEqualsTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), prototype.georEquals.class);
+        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Prefixes.GEO_URI, Vocabulary.SF_EQUALS_NAME), prototype.georEquals.class);
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();
 

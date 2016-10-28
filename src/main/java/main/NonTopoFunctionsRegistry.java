@@ -6,6 +6,7 @@
 package main;
 
 import org.apache.jena.sparql.function.FunctionRegistry;
+import vocabulary.Prefixes;
 import vocabulary.Vocabulary;
 
 /**
@@ -24,16 +25,16 @@ public class NonTopoFunctionsRegistry {
     public static void loadFiltFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.BOUNDARY_NAME), geof.nontopo.BoundaryFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.BUFFER_NAME), geof.nontopo.BufferFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.CONVEXHULL_NAME), geof.nontopo.ConvexHullFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.DIFFERENCE_NAME), geof.nontopo.DifferenceFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.DISTANCE_NAME), geof.nontopo.DistanceFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.ENVELOPE_NAME), geof.nontopo.EnvelopFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.GETSRID_NAME), geof.nontopo.GetSRIDFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.INTERSECTION_NAME), geof.nontopo.IntersectionFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.SYMDIFFERENCE_NAME), geof.nontopo.SymDifferenceFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.UNION_NAME), geof.nontopo.UnionFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.BOUNDARY_NAME), geof.nontopo.BoundaryFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.BUFFER_NAME), geof.nontopo.BufferFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.CONVEXHULL_NAME), geof.nontopo.ConvexHullFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.DIFFERENCE_NAME), geof.nontopo.DifferenceFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.DISTANCE_NAME), geof.nontopo.DistanceFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.ENVELOPE_NAME), geof.nontopo.EnvelopFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.GETSRID_NAME), geof.nontopo.GetSRIDFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.INTERSECTION_NAME), geof.nontopo.IntersectionFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.SYMDIFFERENCE_NAME), geof.nontopo.SymDifferenceFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.UNION_NAME), geof.nontopo.UnionFilterFunc.class);
 
     }
 

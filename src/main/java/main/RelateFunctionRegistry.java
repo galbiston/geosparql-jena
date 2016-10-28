@@ -6,6 +6,7 @@
 package main;
 
 import org.apache.jena.sparql.function.FunctionRegistry;
+import vocabulary.Prefixes;
 import vocabulary.Vocabulary;
 
 /**
@@ -28,7 +29,7 @@ public class RelateFunctionRegistry {
     public static void loadFiltFunctions(FunctionRegistry registry) {
 
         // Dimensionally extended 9 intersection model Function: relate
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RELATE_NAME), geof.topo.relate.RelateFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.RELATE_NAME), geof.topo.relate.RelateFilterFunc.class);
 
     }
 

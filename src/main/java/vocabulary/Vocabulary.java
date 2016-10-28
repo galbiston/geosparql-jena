@@ -7,19 +7,15 @@ package vocabulary;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
+import static vocabulary.Prefixes.GEO_URI;
+import static vocabulary.Prefixes.GML_URI;
+import static vocabulary.Prefixes.NTU_URI;
 
 /**
  *
  * @author haozhechen
  */
 public class Vocabulary {
-
-    //URI
-    public static final String GML_URI = "http://www.opengis.net/ont/gml#";
-    public static final String GEOF_URI = "http://www.opengis.net/def/function/geosparql/";
-    public static final String GEOR_URI = "http://www.opengis.net/def/rule/geosparql/";
-    public static final String GEO_URI = "http://www.opengis.net/ont/geosparql#";
-    public static final String NTU_URI = "http://ntu.ac.uk/ont/geo#";
 
     //Property
     public static final Property GML_PRO = ResourceFactory.createProperty(GML_URI + "asGML");
