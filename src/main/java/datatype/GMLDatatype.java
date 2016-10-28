@@ -14,6 +14,7 @@ import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static vocabulary.Prefixes.GEO_URI;
 
 /**
  *
@@ -26,12 +27,12 @@ public class GMLDatatype extends BaseDatatype {
     /**
      * The default GML type URI.
      */
-    public static final String theTypeURI = "http://www.opengis.net/ont/geosparql#gmlLiteral";
+    public static final String theTypeURI = GEO_URI + "gmlLiteral";
 
     /**
      * A static instance of GMLDatatype.
      */
-    public static final GMLDatatype theGmlDatatype = new GMLDatatype();
+    public static final GMLDatatype theGMLDatatype = new GMLDatatype();
 
     /**
      * XML element tag "gml" is defined for the convenience of GML generation.
@@ -42,7 +43,7 @@ public class GMLDatatype extends BaseDatatype {
      * The spatial reference system "urn:ogc:def:crs:OGC::CRS84" is returned for
      * all generated GML literal.
      */
-    public static final String GMLSRSNAme = "urn:ogc:def:crs:OGC::CRS84";
+    public static final String GMLSRSName = "urn:ogc:def:crs:OGC::CRS84";
 
     /**
      * private constructor - single global instance.
@@ -64,7 +65,7 @@ public class GMLDatatype extends BaseDatatype {
         Geometry geom = (Geometry) geometry;
         GMLWriter gmlWriter = new GMLWriter();
         gmlWriter.setNamespace(true);
-        gmlWriter.setSrsName(GMLSRSNAme);
+        gmlWriter.setSrsName(GMLSRSName);
         gmlWriter.setPrefix(GMLPrefix);
         String gml = gmlWriter.write(geom);
         return gml;
@@ -83,7 +84,7 @@ public class GMLDatatype extends BaseDatatype {
         GMLReader gmlReader = new GMLReader();
         try {
             Geometry geometry = gmlReader.read(lexicalForm, null);
-            geometry.setUserData(GMLSRSNAme);
+            geometry.setUserData(GMLSRSName);
             return geometry;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
             LOGGER.error("Illegal GML literal: {}", lexicalForm);

@@ -13,13 +13,14 @@ import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static vocabulary.Prefixes.GEO_URI;
 
 /**
  *
  * @author haozhechen
-
- description: WKTDatatype class allows the URI "geo:gmlLiteral" to be used as
- a datatype and it will parse that datatype to a JTL Geometry.
+ *
+ * description: WKTDatatype class allows the URI "geo:gmlLiteral" to be used as
+ * a datatype and it will parse that datatype to a JTL Geometry.
  */
 public class WKTDatatype extends BaseDatatype {
 
@@ -28,12 +29,12 @@ public class WKTDatatype extends BaseDatatype {
     /**
      * The default WKT type URI.
      */
-    public static final String theTypeURI = "http://www.opengis.net/ont/geosparql#wktLiteral";
+    public static final String theTypeURI = GEO_URI + "wktLiteral";
 
     /**
      * A static instance of WKTDatatype.
      */
-    public static final WKTDatatype theWktDatatype = new WKTDatatype();
+    public static final WKTDatatype theWKTDatatype = new WKTDatatype();
 
     /**
      * private constructor - single global instance.

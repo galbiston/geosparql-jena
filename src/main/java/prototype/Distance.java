@@ -36,7 +36,7 @@ public class Distance extends PropertyFunctionBase {
         argObject = Substitute.substitute(argObject, binding);
         List<Node> list = argObject.getArgList();
 
-        WKTDatatype wktDataType = WKTDatatype.theWktDatatype;
+        WKTDatatype wktDataType = WKTDatatype.theWKTDatatype;
 
         Geometry g1 = wktDataType.parse(list.get(0).getLiteralLexicalForm());
         Geometry g2 = wktDataType.parse(list.get(1).getLiteralLexicalForm());

@@ -11,7 +11,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.WKTWriter;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
 import static datatype.GMLDatatype.GMLPrefix;
-import static datatype.GMLDatatype.GMLSRSNAme;
+import static datatype.GMLDatatype.GMLSRSName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class GeneralDatatype {
             LOGGER.info("GML literal is unparsed.");
             GMLWriter gmlWriter = new GMLWriter();
             gmlWriter.setNamespace(true);
-            gmlWriter.setSrsName(GMLSRSNAme);
+            gmlWriter.setSrsName(GMLSRSName);
             gmlWriter.setPrefix(GMLPrefix);
             String gml = gmlWriter.write(geom);
             return gml;
@@ -88,7 +88,7 @@ public class GeneralDatatype {
              */
             LOGGER.info("The GML input: {}", lexicalForm);
             isGML = true;
-            GMLDatatype gmlDatatype = (GMLDatatype) GMLDatatype.theGmlDatatype;
+            GMLDatatype gmlDatatype = (GMLDatatype) GMLDatatype.theGMLDatatype;
             Geometry geometry = gmlDatatype.parse(lexicalForm);
             return geometry;
         } else {
@@ -99,7 +99,7 @@ public class GeneralDatatype {
              */
             LOGGER.info("The XML input: {}", lexicalForm);
             isGML = false;
-            WKTDatatype wktDatatype = WKTDatatype.theWktDatatype;
+            WKTDatatype wktDatatype = WKTDatatype.theWKTDatatype;
             Geometry geometry = wktDatatype.parse(lexicalForm);
             return geometry;
         }

@@ -43,7 +43,7 @@ public class WKTDatatypeTest {
     @BeforeClass
     public static void setUpClass() {
         MODEL = ModelFactory.createDefaultModel();
-        RDFDatatype wktDataType = WKTDatatype.theWktDatatype;
+        RDFDatatype wktDataType = WKTDatatype.theWKTDatatype;
         TypeMapper.getInstance().registerDatatype(wktDataType);
         MODEL.read(RDFDataLocation.SAMPLE_WKT);
 
@@ -72,7 +72,7 @@ public class WKTDatatypeTest {
         gsf.setNumPoints(4);
         gsf.setBase(new Coordinate(0, 0));
         Geometry testGeometry = gsf.createRectangle();
-        RDFDatatype wktDataType = WKTDatatype.theWktDatatype;
+        RDFDatatype wktDataType = WKTDatatype.theWKTDatatype;
         LOGGER.info("test unparse result: \n{}", wktDataType.unparse(testGeometry));
 
     }
@@ -92,7 +92,7 @@ public class WKTDatatypeTest {
         query.setNsPrefixes(Prefixes.get());
 
         QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
-        WKTDatatype wktDataType = WKTDatatype.theWktDatatype;
+        WKTDatatype wktDataType = WKTDatatype.theWKTDatatype;
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();

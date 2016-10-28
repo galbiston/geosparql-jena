@@ -43,7 +43,7 @@ public class GMLDatatypeTest {
     public static void setUpClass() {
 
         MODEL = ModelFactory.createDefaultModel();
-        GMLDatatype gmlDataType = GMLDatatype.theGmlDatatype;
+        GMLDatatype gmlDataType = GMLDatatype.theGMLDatatype;
         TypeMapper.getInstance().registerDatatype(gmlDataType);
         LOGGER.info("Before Reading Data");
         MODEL.read(RDFDataLocation.SAMPLE);
@@ -74,7 +74,7 @@ public class GMLDatatypeTest {
         gsf.setNumPoints(4);
         gsf.setBase(new Coordinate(0, 0));
         Geometry testGeometry = gsf.createRectangle();
-        GMLDatatype gmlDataType = GMLDatatype.theGmlDatatype;
+        GMLDatatype gmlDataType = GMLDatatype.theGMLDatatype;
         LOGGER.info("test unparse result: \n{}", gmlDataType.unparse(testGeometry));
     }
 
@@ -94,7 +94,7 @@ public class GMLDatatypeTest {
         query.setNsPrefixes(Prefixes.get());
 
         QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
-        GMLDatatype gmlDataType = GMLDatatype.theGmlDatatype;
+        GMLDatatype gmlDataType = GMLDatatype.theGMLDatatype;
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
