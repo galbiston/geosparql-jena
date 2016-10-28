@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vocabulary.Prefixes;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -44,7 +43,6 @@ public class DistanceTest {
     public static void setUpClass() {
         MODEL = ModelFactory.createDefaultModel();
         LOGGER.info("Before Reading Data");
-        //InputStream in = FileManager.get().open( "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/java/propertyfunction/spatialdata.rdf" );
         MODEL.read(TestDataLocation.SAMPLE);
         LOGGER.info("After Reading Data");
     }
