@@ -37,13 +37,13 @@ public class GMLDatatype extends BaseDatatype {
     /**
      * XML element tag "gml" is defined for the convenience of GML generation.
      */
-    public static final String GMLPrefix = "gml";
+    public static final String GML_PREFIX = "gml";
 
     /**
      * The spatial reference system "urn:ogc:def:crs:OGC::CRS84" is returned for
      * all generated GML literal.
      */
-    public static final String GMLSRSName = "urn:ogc:def:crs:OGC::CRS84";
+    public static final String GML_SRS_NAME = "urn:ogc:def:crs:OGC::CRS84";
 
     /**
      * private constructor - single global instance.
@@ -63,11 +63,12 @@ public class GMLDatatype extends BaseDatatype {
     @Override
     public String unparse(Object geometry) {
         Geometry geom = (Geometry) geometry;
-        GMLWriter gmlWriter = new GMLWriter();
-        gmlWriter.setNamespace(true);
-        gmlWriter.setSrsName(GMLSRSName);
-        gmlWriter.setPrefix(GMLPrefix);
+        GMLWriter gmlWriter = new GMLWriter(true);
+        String srsName = GeometryDatatype.getSRSName(geom);
+        gmlWriter.setSrsName(srsName);
+        gmlWriter.setPrefix(GML_PREFIX);
         String gml = gmlWriter.write(geom);
+
         return gml;
     }
 
@@ -84,7 +85,7 @@ public class GMLDatatype extends BaseDatatype {
         GMLReader gmlReader = new GMLReader();
         try {
             Geometry geometry = gmlReader.read(lexicalForm, null);
-            geometry.setUserData(GMLSRSName);
+            GeometryDatatype.setSRSName(geometry, GML_SRS_NAME);  //TODO is this required - or does the reader take care of it??
             return geometry;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
             LOGGER.error("Illegal GML literal: {}", lexicalForm);

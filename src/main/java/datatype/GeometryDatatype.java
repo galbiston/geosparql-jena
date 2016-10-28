@@ -10,8 +10,9 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.WKTWriter;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
-import static datatype.GMLDatatype.GMLPrefix;
-import static datatype.GMLDatatype.GMLSRSName;
+import static datatype.GMLDatatype.GML_PREFIX;
+import static datatype.GMLDatatype.GML_SRS_NAME;
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,20 +20,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author haozhechen
  */
-public class GeneralDatatype {
+public class GeometryDatatype {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GeneralDatatype.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GeometryDatatype.class);
 
-    public GeneralDatatype() {
+    private boolean isGML;
 
-    }
-
-    /**
-     * This boolean tag will indicate whether the GML datatype or the WKT
-     * datatype is in use for the latest query.
-     */
-    public static boolean isGML;
-
+    //TODO - reduce down to only the SRS Name methods. Everything else can be based on retrieving the literal type.
     /**
      * This method Un-parses the JTS Geometry to the WKT or GML literal
      *
@@ -50,8 +44,8 @@ public class GeneralDatatype {
             LOGGER.info("GML literal is unparsed.");
             GMLWriter gmlWriter = new GMLWriter();
             gmlWriter.setNamespace(true);
-            gmlWriter.setSrsName(GMLSRSName);
-            gmlWriter.setPrefix(GMLPrefix);
+            gmlWriter.setSrsName(GML_SRS_NAME);
+            gmlWriter.setPrefix(GML_PREFIX);
             String gml = gmlWriter.write(geom);
             return gml;
         } else {
@@ -103,6 +97,28 @@ public class GeneralDatatype {
             Geometry geometry = wktDatatype.parse(lexicalForm);
             return geometry;
         }
+    }
+
+    protected static final String SRS_NAME_KEY = "srsName";
+
+    public static void setSRSName(Geometry geom, String srsName) {
+        //Best practice to use a java.util.Map for user data: http://docs.geotools.org/stable/userguide/library/jts/geometry.html#id1
+
+        HashMap<String, String> map;
+        if (geom.getUserData() == null) {
+            map = new HashMap<>();
+        } else {
+            map = (HashMap) geom.getUserData();
+        }
+        map.put(SRS_NAME_KEY, srsName);
+
+        geom.setUserData(map);
+    }
+
+    public static String getSRSName(Geometry geom) {
+
+        HashMap<String, String> map = (HashMap) geom.getUserData();
+        return map.get(SRS_NAME_KEY);
     }
 
 }

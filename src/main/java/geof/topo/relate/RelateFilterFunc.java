@@ -7,7 +7,7 @@ package geof.topo.relate;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
-import datatype.GeneralDatatype;
+import datatype.GeometryDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -26,7 +26,7 @@ public class RelateFilterFunc extends FunctionBase3 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
 
-        GeneralDatatype generalDatatype = new GeneralDatatype();
+        GeometryDatatype generalDatatype = new GeometryDatatype();
 
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();

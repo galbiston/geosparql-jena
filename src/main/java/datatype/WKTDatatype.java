@@ -37,6 +37,11 @@ public class WKTDatatype extends BaseDatatype {
     public static final WKTDatatype theWKTDatatype = new WKTDatatype();
 
     /**
+     * Default SRS Name as GeoSPARQL Standard.
+     */
+    public static final String DEFAULT_SRS_NAME = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+    /**
      * private constructor - single global instance.
      */
     private WKTDatatype() {
@@ -59,45 +64,58 @@ public class WKTDatatype extends BaseDatatype {
         WKTWriter wktWriter = new WKTWriter();
         wktWriter.setFormatted(true);
         String wkt = wktWriter.write(geom);
-        return wkt;
+        String srsName = GeometryDatatype.getSRSName(geom);
+        String wktLiteral = "<" + srsName + "> " + wkt;
+        return wktLiteral;
 
     }
 
     /**
      * This method Parses the WKT literal to the JTS Geometry
      *
+     *
+     * Req 10 All RDFS Literals of type geo:wktLiteral shall consist of an
+     * optional URI identifying the coordinate reference system followed by
+     * Simple Features Well Known Text (WKT) describing a geometric value. Valid
+     * geo:wktLiterals are formed by concatenating a valid, absolute URI as
+     * defined in [RFC 2396], one or more spaces (Unicode U+0020 character) as a
+     * separator, and a WKT string as defined in Simple Features [ISO 19125-1].
+     *
+     * Req 11 The URI <http://www.opengis.net/def/crs/OGC/1.3/CRS84> shall be
+     * assumed as the spatial reference system for geo:wktLiterals that do not
+     * specify an explicit spatial reference system URI.
+     *
+     *
      * @param lexicalForm - the WKT literal to be parsed
-     * @return geometry - if the WKT literal is valid.
-     * <br> empty geometry - if the WKT literal is empty.
-     * <br> null - if the WKT literal is invalid.
+     * @return geometry - if the WKT literal is valid. empty geometry - if the
+     * WKT literal is empty. null - if the WKT literal is invalid.
      */
     @Override
     public Geometry parse(String lexicalForm) throws DatatypeFormatException {
         WKTReader wktReader = new WKTReader();
         try {
-            if (lexicalForm.contains("http")) {
-                /**
-                 * If the lexicalForm contains the SRS URI, need to retrieve
-                 * that URI.
-                 */
 
-                String SRID = lexicalForm.substring(lexicalForm.indexOf("<") + 1, lexicalForm.indexOf(">"));
-                String wktLiteral = lexicalForm.replaceAll("<" + SRID + ">", "");
-                Geometry geometry = wktReader.read(wktLiteral);
-                geometry.setUserData(SRID);
-                return geometry;
+            String srsName;
+            String wktLiteral;
+
+            int startSRS = lexicalForm.indexOf("<");
+            int endSRS = lexicalForm.indexOf(">");
+
+            //Check that both chevrons are located and extract SRS name, otherwise default.
+            if (startSRS != -1 && endSRS != -1) {
+                srsName = lexicalForm.substring(startSRS + 1, endSRS);
+
+                wktLiteral = lexicalForm.substring(endSRS + 1);
+
             } else {
-                /**
-                 * If the RDF data does not specify a spatial reference system
-                 * id, then, "http://www.opengis.net/def/crs/OGC/1.3/CRS84" will
-                 * be assigned to the geometry.
-                 */
-
-                String SRID = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
-                Geometry geometry = wktReader.read(lexicalForm);
-                geometry.setUserData(SRID);
-                return geometry;
+                srsName = DEFAULT_SRS_NAME;
+                wktLiteral = lexicalForm;
             }
+
+            Geometry geometry = wktReader.read(wktLiteral);
+            GeometryDatatype.setSRSName(geometry, srsName);
+
+            return geometry;
         } catch (ParseException ex) {
             LOGGER.error("Illegal WKT literal: {}", lexicalForm);
             return null;

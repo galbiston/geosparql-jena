@@ -7,25 +7,16 @@ package datatype;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
-import main.RDFDataLocation;
-import org.apache.jena.datatypes.TypeMapper;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vocabulary.Prefixes;
 
 /**
  *
@@ -33,7 +24,6 @@ import vocabulary.Prefixes;
  */
 public class GMLDatatypeTest {
 
-    private static Model MODEL;
     private static final Logger LOGGER = LoggerFactory.getLogger(GMLDatatypeTest.class);
 
     public GMLDatatypeTest() {
@@ -41,14 +31,6 @@ public class GMLDatatypeTest {
 
     @BeforeClass
     public static void setUpClass() {
-
-        MODEL = ModelFactory.createDefaultModel();
-        GMLDatatype gmlDataType = GMLDatatype.theGMLDatatype;
-        TypeMapper.getInstance().registerDatatype(gmlDataType);
-        LOGGER.info("Before Reading Data");
-        MODEL.read(RDFDataLocation.SAMPLE);
-        LOGGER.info("After Reading Data");
-
     }
 
     @AfterClass
@@ -69,13 +51,26 @@ public class GMLDatatypeTest {
     @Test
     public void testUnparse() {
         System.out.println("unparse");
-        GeometricShapeFactory gsf = new GeometricShapeFactory();
-        gsf.setSize(10);
-        gsf.setNumPoints(4);
-        gsf.setBase(new Coordinate(0, 0));
-        Geometry testGeometry = gsf.createRectangle();
-        GMLDatatype gmlDataType = GMLDatatype.theGMLDatatype;
-        LOGGER.info("test unparse result: \n{}", gmlDataType.unparse(testGeometry));
+
+        //JTS GMLWriter needs changing to GeoTools writer if possible. Version 3. http://gis.stackexchange.com/questions/3940/how-to-write-gml-with-geotools
+        String expResult = "<gml:Point xmlns:gml=\'http://www.opengis.net/ont/gml\' srsName=\'http://www.opengis.net/def/crs/OGC/1.3/CRS84\'><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
+
+        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(-83.38, 33.95);
+        Point geometry = geometryFactory.createPoint(coord);
+        GeometryDatatype.setSRSName(geometry, WKTDatatype.DEFAULT_SRS_NAME);
+
+        String result = instance.unparse(geometry);
+        result = result.replaceAll("\t", "");
+        result = result.replaceAll("\n", "");
+        result = result.replaceAll(">  <", "><");
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+
+        assertEquals(expResult, result);
+
     }
 
     /**
@@ -84,26 +79,79 @@ public class GMLDatatypeTest {
     @Test
     public void testParse() {
         System.out.println("parse");
-        String queryString = "SELECT ?aGML ?bGML WHERE{ "
-                + "ntu:A ntu:hasPointGeometry ?aGeom . ?aGeom gml:asGML ?aGML . "
-                + "ntu:B ntu:hasPointGeometry ?bGeom . ?bGeom gml:asGML ?bGML . "
-                + " }";
+        String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
-        query.setNsPrefixes(Prefixes.get());
+        GMLDatatype instance = GMLDatatype.theGMLDatatype;
 
-        QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
-        GMLDatatype gmlDataType = GMLDatatype.theGMLDatatype;
-        ResultSet rs = qe.execSelect();
-        while (rs.hasNext()) {
-            QuerySolution qs = rs.next();
-            // Cast the object into geometry
-            Geometry geometry = gmlDataType.parse(qs.getLiteral("aGML").getLexicalForm());
-            if (geometry != null) {
-                LOGGER.info("successfully parse gmlLiteral into geometry: \n{}", gmlDataType.unparse(geometry));
-            }
-        }
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(33.95, -88.38);
+        Point expGeometry = geometryFactory.createPoint(coord);
+
+        String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = true;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parse method, of class GMLDatatype.
+     */
+    @Test
+    public void testParseNotEqual() {
+        System.out.println("parseNotEqual");
+        String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
+
+        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(-88.38, 33.95);
+        Point expGeometry = geometryFactory.createPoint(coord);
+
+        String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = false;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parse method, of class GMLDatatype.
+     */
+    @Test
+    public void testParseNotEqual2() {
+        System.out.println("parseNotEqual2");
+        String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
+
+        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(33.95, -88.38);
+        Point expGeometry = geometryFactory.createPoint(coord);
+
+        String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = false;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
     }
 
 }

@@ -6,7 +6,7 @@
 package geof.topo.sf;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeneralDatatype;
+import datatype.GeometryDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -26,7 +26,7 @@ public class SFContainsFilterFunc extends FunctionBase2 {
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
         //RDFDatatype wktDataType = WktDatatype.theWktDatatype;
-        GeneralDatatype generalDatatype = new GeneralDatatype();
+        GeometryDatatype generalDatatype = new GeometryDatatype();
 
         Node node1 = v1.asNode();
         Node node2 = v2.asNode();

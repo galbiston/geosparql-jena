@@ -20,28 +20,28 @@ repositories {
     //Custom Maven Repository
     //Notice: MUST put this before Maven central otherwise will cause jai-core.jar not find error.
     maven {
-     url "http://download.osgeo.org/webdav/geotools/"
+        url "http://download.osgeo.org/webdav/geotools/"
     }
-    
+
     //Maven central
     mavenCentral()
 }
 
 dependencies {
-    
+
     //Apache Lucene
     //compile 'org.apache.lucene:lucene-core:6.1.0'
-    
-    //Geotools 
-    compile group: 'org.geotools', name: 'gt-shapefile', version: '15.0'
-    compile group: 'org.geotools', name: 'gt-epsg-hsql', version: '15.0'
-    
-    //JTS suite
-    compile 'com.vividsolutions:jts-assembly-distribution:1.14.0'
-    
+
+    //Geotools: http://docs.geotools.org/latest/userguide.old/library/
+    ext.geoToolsVersion = '16.0'
+    compile group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
+    compile group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
+
+    compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
+
     //Apache Jena EXCLUDE its log part
     compile (group: 'org.apache.jena', name: 'apache-jena', version: '3.1.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
-        
+
     //Logging Framework
     compile group:'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'

@@ -6,7 +6,7 @@
 package geof.nontopo;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeneralDatatype;
+import datatype.GeometryDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -25,7 +25,7 @@ public class ConvexHullFilterFunc extends FunctionBase1 {
     @Override
     public NodeValue exec(NodeValue v) {
 
-        GeneralDatatype generalDatatype = new GeneralDatatype();
+        GeometryDatatype generalDatatype = new GeometryDatatype();
 
         Node node = v.asNode();
 

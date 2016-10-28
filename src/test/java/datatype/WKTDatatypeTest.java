@@ -7,26 +7,16 @@ package datatype;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
-import main.RDFDataLocation;
-import org.apache.jena.datatypes.RDFDatatype;
-import org.apache.jena.datatypes.TypeMapper;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vocabulary.Prefixes;
 
 /**
  *
@@ -34,7 +24,6 @@ import vocabulary.Prefixes;
  */
 public class WKTDatatypeTest {
 
-    private static Model MODEL;
     private static final Logger LOGGER = LoggerFactory.getLogger(WKTDatatypeTest.class);
 
     public WKTDatatypeTest() {
@@ -42,10 +31,6 @@ public class WKTDatatypeTest {
 
     @BeforeClass
     public static void setUpClass() {
-        MODEL = ModelFactory.createDefaultModel();
-        RDFDatatype wktDataType = WKTDatatype.theWKTDatatype;
-        TypeMapper.getInstance().registerDatatype(wktDataType);
-        MODEL.read(RDFDataLocation.SAMPLE_WKT);
 
     }
 
@@ -67,13 +52,21 @@ public class WKTDatatypeTest {
     @Test
     public void testUnparse() {
         System.out.println("unparse");
-        GeometricShapeFactory gsf = new GeometricShapeFactory();
-        gsf.setSize(10);
-        gsf.setNumPoints(4);
-        gsf.setBase(new Coordinate(0, 0));
-        Geometry testGeometry = gsf.createRectangle();
-        RDFDatatype wktDataType = WKTDatatype.theWKTDatatype;
-        LOGGER.info("test unparse result: \n{}", wktDataType.unparse(testGeometry));
+
+        String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (-83.38 33.95)";
+
+        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(-83.38, 33.95);
+        Point geometry = geometryFactory.createPoint(coord);
+        GeometryDatatype.setSRSName(geometry, WKTDatatype.DEFAULT_SRS_NAME);
+
+        String result = instance.unparse(geometry);
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
 
     }
 
@@ -81,30 +74,156 @@ public class WKTDatatypeTest {
      * Test of parse method, of class WKTDatatype.
      */
     @Test
-    public void testParse() {
-        System.out.println("parse");
-        String queryString = "SELECT ?dWKT WHERE{ "
-                + "ntu:D ntu:hasExactGeometry ?dGeom . ?dGeom geo:asWKT ?dWKT . "
-                + " }";
+    public void testParseNoSRS() {
+        System.out.println("parseNoSRS");
+        String lexicalForm = "POINT(-83.38 33.95)";
+        WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
-        query.setNsPrefixes(Prefixes.get());
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
 
-        QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
-        WKTDatatype wktDataType = WKTDatatype.theWKTDatatype;
-        ResultSet rs = qe.execSelect();
-        while (rs.hasNext()) {
-            QuerySolution qs = rs.next();
-            // Cast the object into geometry
-            LOGGER.info("WKT Literal: {}", qs.getLiteral("dWKT").getLexicalForm());
-            Geometry geometry = wktDataType.parse(qs.getLiteral("dWKT").getLexicalForm());
-            if (geometry != null) {
-                LOGGER.info("successfully parse wktLiteral into geometry: \n{}", wktDataType.unparse(geometry));
-                LOGGER.info("User Data: {}", geometry.getUserData().toString());
-            }
-        }
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(-83.38, 33.95);
+        Point expGeometry = geometryFactory.createPoint(coord);
 
+        String expSRSName = WKTDatatype.DEFAULT_SRS_NAME;
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = true;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parse method, of class WKTDatatype.
+     */
+    @Test
+    public void testParseNoSRSNotEqual() {
+        System.out.println("parseNoSRSNotEqual");
+        String lexicalForm = "POINT(-83.38 33.95)";
+        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(-88.38, 33.95);
+        Point expGeometry = geometryFactory.createPoint(coord);
+
+        String expSRSName = WKTDatatype.DEFAULT_SRS_NAME;
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = false;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parse method, of class WKTDatatype.
+     */
+    @Test
+    public void testParseNoSRSNotEqual2() {
+        System.out.println("parseNoSRSNotEqual2");
+        String lexicalForm = "POINT(-83.38 33.95)";
+        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(-83.38, 33.95);
+        Point expGeometry = geometryFactory.createPoint(coord);
+
+        String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = false;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parse method, of class WKTDatatype.
+     */
+    @Test
+    public void testParseSRS() {
+        System.out.println("parseSRS");
+        String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
+        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(33.95, -88.38);
+        Point expGeometry = geometryFactory.createPoint(coord);
+
+        String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = true;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parse method, of class WKTDatatype.
+     */
+    @Test
+    public void testParseSRSNotEqual() {
+        System.out.println("parseSRSNotEqual");
+        String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
+        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(-88.38, 33.95);
+        Point expGeometry = geometryFactory.createPoint(coord);
+
+        String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = false;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of parse method, of class WKTDatatype.
+     */
+    @Test
+    public void testParseSRSNotEqual2() {
+        System.out.println("parseSRSNotEqual2");
+        String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
+        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+
+        Geometry geometry = instance.parse(lexicalForm);
+        String srsName = GeometryDatatype.getSRSName(geometry);
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Coordinate coord = new Coordinate(33.95, -88.38);
+        Point expGeometry = geometryFactory.createPoint(coord);
+
+        String expSRSName = WKTDatatype.DEFAULT_SRS_NAME;
+
+        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
+        boolean expResult = false;
+
+        System.out.println("Expected: " + expResult + " Result: " + result);
+
+        assertEquals(expResult, result);
     }
 
 }

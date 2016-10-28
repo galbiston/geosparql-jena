@@ -6,7 +6,7 @@
 package queryrewrite.expr.rcc8;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeneralDatatype;
+import datatype.GeometryDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.Expr;
@@ -31,7 +31,7 @@ public class RCC8NTPPIExprFunc extends ExprFunction2 {
     @Override
     public NodeValue eval(NodeValue x, NodeValue y) {
 
-        GeneralDatatype generalDatatype = new GeneralDatatype();
+        GeometryDatatype generalDatatype = new GeometryDatatype();
 
         Node node1 = x.asNode();
         Node node2 = y.asNode();

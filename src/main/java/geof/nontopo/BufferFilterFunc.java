@@ -6,7 +6,7 @@
 package geof.nontopo;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeneralDatatype;
+import datatype.GeometryDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -29,7 +29,7 @@ public class BufferFilterFunc extends FunctionBase3 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
 
-        GeneralDatatype generalDatatype = new GeneralDatatype();
+        GeometryDatatype generalDatatype = new GeometryDatatype();
 
         //Transfer the parameters as Nodes
         Node node1 = v1.asNode();
