@@ -88,6 +88,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
+
+        LOGGER.info("GeoSPARQL Started");
+
         //realworldQuery();
         //sampleQuery();
         initWithQueryRewriteFunctions();
@@ -108,6 +111,8 @@ public class Main {
                 + "}";
 
         evaluateQueryWithInfModel(Q1);
+
+        LOGGER.info("GeoSPARQL Ended");
     }
 
     public static void realworldQuery() {
