@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototype.test;
+package datatype;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
-import datatype.WktDatatype;
 import main.RDFDataLocation;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -45,7 +43,7 @@ public class GmlDatatypeTest {
     public static void setUpClass() {
 
         MODEL = ModelFactory.createDefaultModel();
-        RDFDatatype gmlDataType = WktDatatype.theWktDatatype;
+        GmlDatatype gmlDataType = GmlDatatype.theGmlDatatype;
         TypeMapper.getInstance().registerDatatype(gmlDataType);
         LOGGER.info("Before Reading Data");
         MODEL.read(RDFDataLocation.SAMPLE);
@@ -66,7 +64,7 @@ public class GmlDatatypeTest {
     }
 
     /**
-     * Test of unparse method, of class WktDatatype.
+     * Test of unparse method, of class GmlDatatype.
      */
     @Test
     public void testUnparse() {
@@ -76,12 +74,12 @@ public class GmlDatatypeTest {
         gsf.setNumPoints(4);
         gsf.setBase(new Coordinate(0, 0));
         Geometry testGeometry = gsf.createRectangle();
-        RDFDatatype gmlDataType = WktDatatype.theWktDatatype;
+        GmlDatatype gmlDataType = GmlDatatype.theGmlDatatype;
         LOGGER.info("test unparse result: \n{}", gmlDataType.unparse(testGeometry));
     }
 
     /**
-     * Test of parse method, of class WktDatatype.
+     * Test of parse method, of class GmlDatatype.
      */
     @Test
     public void testParse() {
@@ -96,7 +94,7 @@ public class GmlDatatypeTest {
         query.setNsPrefixes(Prefixes.get());
 
         QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
-        RDFDatatype gmlDataType = WktDatatype.theWktDatatype;
+        GmlDatatype gmlDataType = GmlDatatype.theGmlDatatype;
         ResultSet rs = qe.execSelect();
         while (rs.hasNext()) {
             QuerySolution qs = rs.next();
