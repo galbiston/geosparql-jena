@@ -5,14 +5,10 @@
  */
 package geof.nontopo;
 
-import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeometryDatatype;
+import datatype.CRSGeometry;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -20,25 +16,21 @@ import org.slf4j.LoggerFactory;
  */
 public class BoundaryFilterFunc extends FunctionBase1 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BoundaryFilterFunc.class);
-
     @Override
     public NodeValue exec(NodeValue v) {
 
-        GeometryDatatype generalDatatype = new GeometryDatatype();
-
-        Node node = v.asNode();
+        NodeValue resultNodeValue;
 
         try {
-            Geometry g1 = generalDatatype.parse(node.getLiteralLexicalForm());
+            CRSGeometry geometry = CRSGeometry.extract(v);
+            CRSGeometry boundary = geometry.getBoundary();
+            resultNodeValue = boundary.getResultNode();
 
-            Geometry boundary = g1.getBoundary();
-
-            return NodeValue.makeNodeString(generalDatatype.unparse(boundary));
         } catch (DatatypeFormatException dfx) {
-            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
-            return NodeValue.nvEmptyString;
+            resultNodeValue = NodeValue.nvEmptyString;
         }
+
+        return resultNodeValue;
     }
 
 }

@@ -5,14 +5,13 @@
  */
 package geof.nontopo;
 
-import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeometryDatatype;
+import datatype.CRSGeometry;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
 
 /**
  *
@@ -20,28 +19,24 @@ import org.slf4j.LoggerFactory;
  */
 public class IntersectionFilterFunc extends FunctionBase2 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IntersectionFilterFunc.class);
-
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        GeometryDatatype generalDatatype = new GeometryDatatype();
-
-        //Transfer the parameters as Nodes
-        Node node1 = v1.asNode();
-        Node node2 = v2.asNode();
+        NodeValue resultNodeValue;
 
         try {
-            Geometry g1 =  generalDatatype.parse(node1.getLiteralLexicalForm());
-            Geometry g2 =  generalDatatype.parse(node2.getLiteralLexicalForm());
+            CRSGeometry geometry1 = CRSGeometry.extract(v1);
+            CRSGeometry geometry2 = CRSGeometry.extract(v2);
 
-            Geometry intersection = g1.intersection(g2);
+            CRSGeometry intersection = geometry1.intersection(geometry2);
 
-            return NodeValue.makeNodeString(generalDatatype.unparse(intersection));
-        } catch (DatatypeFormatException dfx) {
-            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
-            return NodeValue.nvEmptyString;
+            resultNodeValue = intersection.getResultNode();
+
+        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
+            resultNodeValue = NodeValue.nvEmptyString;
         }
+
+        return resultNodeValue;
     }
 
 }

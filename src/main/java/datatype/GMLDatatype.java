@@ -65,7 +65,7 @@ public class GMLDatatype extends BaseDatatype {
     public String unparse(Object geometry) {
         CRSGeometry geom = (CRSGeometry) geometry;
         GMLWriter gmlWriter = new GMLWriter(false);
-        String srsName = geom.getSrsName();
+        String srsName = geom.getSrsURI();
         gmlWriter.setSrsName(srsName);
         gmlWriter.setPrefix(GML_PREFIX);
         String gml = gmlWriter.write(geom.getGeometry());

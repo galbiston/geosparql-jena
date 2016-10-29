@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uom;
+package datatype;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,10 @@ import vocabulary.Vocabulary;
  *
  * Generally there are 2 ways to treat the figure of earth: 1: As oblate
  * spheroid 2: As sphere
+ *
+ * TODO - The above isn't the case as JTS is cartesian (i.e. planar) and has no
+ * concept of distance. - toWKT on a CRS contains the spheroid or cartesian and
+ * unit attribute of the coordinate system.
  *
  * @author haozhechen
  */

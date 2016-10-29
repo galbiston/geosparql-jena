@@ -5,14 +5,10 @@
  */
 package geof.nontopo;
 
-import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeometryDatatype;
+import datatype.CRSGeometry;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -20,23 +16,16 @@ import org.slf4j.LoggerFactory;
  */
 public class GetSRIDFilterFunc extends FunctionBase1 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetSRIDFilterFunc.class);
-
     @Override
     public NodeValue exec(NodeValue v) {
 
-        GeometryDatatype generalDatatype = new GeometryDatatype();
-
-        Node node = v.asNode();
-
         try {
-            Geometry g1 =  generalDatatype.parse(node.getLiteralLexicalForm());
+            CRSGeometry geometry = CRSGeometry.extract(v);
 
-            String SRID = (String) g1.getUserData();
+            String srid = geometry.getSRID();
 
-            return NodeValue.makeNodeString(SRID);
+            return NodeValue.makeNodeString(srid);
         } catch (DatatypeFormatException dfx) {
-            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
             return NodeValue.nvEmptyString;
         }
     }

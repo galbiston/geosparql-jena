@@ -5,15 +5,14 @@
  */
 package geof.nontopo;
 
-import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeometryDatatype;
+import datatype.CRSGeometry;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uom.UomConverter;
+import datatype.UomConverter;
 
 /**
  *
@@ -26,31 +25,32 @@ public class BufferFilterFunc extends FunctionBase3 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BufferFilterFunc.class);
 
+    //TODO - This seems to be assuming WGS84 rather than handling different coordinate systems and scales.
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
 
-        GeometryDatatype generalDatatype = new GeometryDatatype();
-
         //Transfer the parameters as Nodes
-        Node node1 = v1.asNode();
         Node node2 = v2.asNode();
         //the units
         Node node3 = v3.asNode();
         String destiUnit = node3.getURI();
         LOGGER.info("Current unit: {}", node3.getLocalName());
 
+        NodeValue resultNodeValue;
+
         try {
-            Geometry g1 =  generalDatatype.parse(node1.getLiteralLexicalForm());
+            CRSGeometry geometry = CRSGeometry.extract(v1);
 
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
             radius = UomConverter.ConvertToUnit(destiUnit, radius);
 
-            Geometry buffer = g1.buffer(radius);
+            CRSGeometry buffer = geometry.buffer(radius);
 
-            return NodeValue.makeNodeString(generalDatatype.unparse(buffer));
+            resultNodeValue = buffer.getResultNode();
         } catch (DatatypeFormatException dfx) {
-            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
-            return NodeValue.nvEmptyString;
+            resultNodeValue = NodeValue.nvEmptyString;
         }
+
+        return resultNodeValue;
     }
 }

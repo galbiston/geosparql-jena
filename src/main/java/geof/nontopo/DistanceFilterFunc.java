@@ -5,15 +5,17 @@
  */
 package geof.nontopo;
 
-import com.vividsolutions.jts.geom.Geometry;
-import datatype.GeometryDatatype;
+import datatype.CRSGeometry;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uom.UomConverter;
+import datatype.UomConverter;
 
 /**
  *
@@ -26,20 +28,16 @@ public class DistanceFilterFunc extends FunctionBase3 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
 
-        GeometryDatatype generalDatatype = new GeometryDatatype();
-
-        Node node1 = v1.asNode();
-        Node node2 = v2.asNode();
         //the units
         Node node3 = v3.asNode();
         String destiUnit = node3.getURI();
         LOGGER.info("Current unit: {}", node3.getLocalName());
 
         try {
-            Geometry g1 =  generalDatatype.parse(node1.getLiteralLexicalForm());
-            Geometry g2 =  generalDatatype.parse(node2.getLiteralLexicalForm());
+            CRSGeometry geometry1 = CRSGeometry.extract(v1);
+            CRSGeometry geometry2 = CRSGeometry.extract(v2);
 
-            double distance = g1.distance(g2);
+            double distance = geometry1.distance(geometry2);
             //Default unit is central angle degrees, need t oconvert to destination uom
             distance = UomConverter.ConvertToUnit(destiUnit, distance);
 
@@ -47,9 +45,7 @@ public class DistanceFilterFunc extends FunctionBase3 {
             distance = UomConverter.ConvertToUnit(destiUnit, distance);
 
             return NodeValue.makeDouble(distance);
-        } catch (DatatypeFormatException dfx) {
-            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", dfx);
-
+        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
             return NodeValue.nvZERO;
         }
 
