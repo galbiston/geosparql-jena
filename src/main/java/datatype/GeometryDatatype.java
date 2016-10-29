@@ -83,8 +83,8 @@ public class GeometryDatatype {
             LOGGER.info("The GML input: {}", lexicalForm);
             isGML = true;
             GMLDatatype gmlDatatype = (GMLDatatype) GMLDatatype.theGMLDatatype;
-            Geometry geometry = gmlDatatype.parse(lexicalForm);
-            return geometry;
+            //Geometry geometry = gmlDatatype.parse(lexicalForm);
+            return null;
         } else {
             /**
              * Otherwise, the literal is WKT literal, However, if the input
@@ -94,8 +94,8 @@ public class GeometryDatatype {
             LOGGER.info("The XML input: {}", lexicalForm);
             isGML = false;
             WKTDatatype wktDatatype = WKTDatatype.theWKTDatatype;
-            Geometry geometry = wktDatatype.parse(lexicalForm);
-            return geometry;
+            //Geometry geometry = wktDatatype.parse(lexicalForm);
+            return null;
         }
     }
 

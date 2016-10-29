@@ -6,12 +6,13 @@
 package datatype;
 
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+import static org.hamcrest.CoreMatchers.not;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -59,8 +60,10 @@ public class WKTDatatypeTest {
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
-        Point geometry = geometryFactory.createPoint(coord);
-        GeometryDatatype.setSRSName(geometry, WKTDatatype.DEFAULT_SRS_NAME);
+        Point point = geometryFactory.createPoint(coord);
+        String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+        CRSGeometry geometry = new CRSGeometry(point, srsURI, GeoSerialisation.WKT);
 
         String result = instance.unparse(geometry);
 
@@ -79,19 +82,17 @@ public class WKTDatatypeTest {
         String lexicalForm = "POINT(-83.38 33.95)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        Geometry geometry = instance.parse(lexicalForm);
-        String srsName = GeometryDatatype.getSRSName(geometry);
+        CRSGeometry result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
+        String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        String expSRSName = WKTDatatype.DEFAULT_SRS_NAME;
+        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
-        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
-        boolean expResult = true;
-
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        System.out.println("Expected: " + expResult);
+        System.out.println(" Result: " + result);
 
         assertEquals(expResult, result);
     }
@@ -105,21 +106,20 @@ public class WKTDatatypeTest {
         String lexicalForm = "POINT(-83.38 33.95)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        Geometry geometry = instance.parse(lexicalForm);
-        String srsName = GeometryDatatype.getSRSName(geometry);
+        CRSGeometry result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-88.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSName = WKTDatatype.DEFAULT_SRS_NAME;
+        String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
-        boolean expResult = false;
+        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        System.out.println("Expected: " + expResult);
+        System.out.println(" Result: " + result);
 
-        assertEquals(expResult, result);
+        assertThat(expResult, not(result));
     }
 
     /**
@@ -131,21 +131,20 @@ public class WKTDatatypeTest {
         String lexicalForm = "POINT(-83.38 33.95)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        Geometry geometry = instance.parse(lexicalForm);
-        String srsName = GeometryDatatype.getSRSName(geometry);
+        CRSGeometry result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+        String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
-        boolean expResult = false;
+        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        System.out.println("Expected: " + expResult);
+        System.out.println(" Result: " + result);
 
-        assertEquals(expResult, result);
+        assertThat(expResult, not(result));
     }
 
     /**
@@ -157,19 +156,18 @@ public class WKTDatatypeTest {
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        Geometry geometry = instance.parse(lexicalForm);
-        String srsName = GeometryDatatype.getSRSName(geometry);
+        CRSGeometry result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+        String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
-        boolean expResult = true;
+        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        System.out.println("Expected: " + expResult);
+        System.out.println(" Result: " + result);
 
         assertEquals(expResult, result);
     }
@@ -183,21 +181,20 @@ public class WKTDatatypeTest {
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        Geometry geometry = instance.parse(lexicalForm);
-        String srsName = GeometryDatatype.getSRSName(geometry);
+        CRSGeometry result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-88.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
+        String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
-        boolean expResult = false;
+        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        System.out.println("Expected: " + expResult);
+        System.out.println(" Result: " + result);
 
-        assertEquals(expResult, result);
+        assertThat(expResult, not(result));
     }
 
     /**
@@ -209,21 +206,20 @@ public class WKTDatatypeTest {
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        Geometry geometry = instance.parse(lexicalForm);
-        String srsName = GeometryDatatype.getSRSName(geometry);
+        CRSGeometry result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSName = WKTDatatype.DEFAULT_SRS_NAME;
+        String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        boolean result = (geometry.equals(expGeometry)) && (srsName.equals(expSRSName));
-        boolean expResult = false;
+        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        System.out.println("Expected: " + expResult);
+        System.out.println(" Result: " + result);
 
-        assertEquals(expResult, result);
+        assertThat(expResult, not(result));
     }
 
 }

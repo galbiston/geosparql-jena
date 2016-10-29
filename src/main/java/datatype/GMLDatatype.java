@@ -5,6 +5,7 @@
  */
 package datatype;
 
+import com.jcabi.xml.XMLDocument;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.gml2.GMLReader;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
@@ -62,12 +63,12 @@ public class GMLDatatype extends BaseDatatype {
      */
     @Override
     public String unparse(Object geometry) {
-        Geometry geom = (Geometry) geometry;
-        GMLWriter gmlWriter = new GMLWriter(true);
-        String srsName = GeometryDatatype.getSRSName(geom);
+        CRSGeometry geom = (CRSGeometry) geometry;
+        GMLWriter gmlWriter = new GMLWriter(false);
+        String srsName = geom.getSrsName();
         gmlWriter.setSrsName(srsName);
         gmlWriter.setPrefix(GML_PREFIX);
-        String gml = gmlWriter.write(geom);
+        String gml = gmlWriter.write(geom.getGeometry());
 
         return gml;
     }
@@ -81,12 +82,14 @@ public class GMLDatatype extends BaseDatatype {
      * <br> null - if the GML literal is invalid.
      */
     @Override
-    public Geometry parse(String lexicalForm) throws DatatypeFormatException {
+    public CRSGeometry parse(String lexicalForm) throws DatatypeFormatException {
         GMLReader gmlReader = new GMLReader();
         try {
             Geometry geometry = gmlReader.read(lexicalForm, null);
-            GeometryDatatype.setSRSName(geometry, GML_SRS_NAME);  //TODO is this required - or does the reader take care of it??
-            return geometry;
+            XMLDocument xmlDoc = new XMLDocument(lexicalForm);
+            String srsURI = xmlDoc.node().getAttributes().getNamedItem("srsName").getNodeValue();
+            CRSGeometry geom = new CRSGeometry(geometry, srsURI, GeoSerialisation.GML);
+            return geom;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
             LOGGER.error("Illegal GML literal: {}", lexicalForm);
             return null;

@@ -39,7 +39,7 @@ public class WKTDatatype extends BaseDatatype {
     /**
      * Default SRS Name as GeoSPARQL Standard.
      */
-    public static final String DEFAULT_SRS_NAME = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+    public static final String DEFAULT_SRS_URI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
     /**
      * private constructor - single global instance.
@@ -59,15 +59,15 @@ public class WKTDatatype extends BaseDatatype {
      */
     @Override
     public String unparse(Object geometry) {
-        Geometry geom = (Geometry) geometry;
+
+        CRSGeometry geom = (CRSGeometry) geometry;
 
         WKTWriter wktWriter = new WKTWriter();
         wktWriter.setFormatted(true);
-        String wkt = wktWriter.write(geom);
-        String srsName = GeometryDatatype.getSRSName(geom);
-        String wktLiteral = "<" + srsName + "> " + wkt;
-        return wktLiteral;
+        String wkt = wktWriter.write(geom.getGeometry());
+        String wktLiteral = "<" + geom.getSrsName() + "> " + wkt;
 
+        return wktLiteral;
     }
 
     /**
@@ -91,11 +91,12 @@ public class WKTDatatype extends BaseDatatype {
      * WKT literal is empty. null - if the WKT literal is invalid.
      */
     @Override
-    public Geometry parse(String lexicalForm) throws DatatypeFormatException {
-        WKTReader wktReader = new WKTReader();
+    public CRSGeometry parse(String lexicalForm) throws DatatypeFormatException {
+
+        CRSGeometry geometry;
         try {
 
-            String srsName;
+            String srsURI;
             String wktLiteral;
 
             int startSRS = lexicalForm.indexOf("<");
@@ -103,22 +104,23 @@ public class WKTDatatype extends BaseDatatype {
 
             //Check that both chevrons are located and extract SRS name, otherwise default.
             if (startSRS != -1 && endSRS != -1) {
-                srsName = lexicalForm.substring(startSRS + 1, endSRS);
-
+                srsURI = lexicalForm.substring(startSRS + 1, endSRS);
                 wktLiteral = lexicalForm.substring(endSRS + 1);
 
             } else {
-                srsName = DEFAULT_SRS_NAME;
+                srsURI = DEFAULT_SRS_URI;
                 wktLiteral = lexicalForm;
             }
 
-            Geometry geometry = wktReader.read(wktLiteral);
-            GeometryDatatype.setSRSName(geometry, srsName);
+            WKTReader wktReader = new WKTReader();
+            Geometry geom = wktReader.read(wktLiteral);
+            geometry = new CRSGeometry(geom, srsURI, GeoSerialisation.WKT);
 
-            return geometry;
         } catch (ParseException ex) {
             LOGGER.error("Illegal WKT literal: {}", lexicalForm);
-            return null;
+            throw new DatatypeFormatException("Illegal WKT literal: " + lexicalForm);
         }
+
+        return geometry;
     }
 }

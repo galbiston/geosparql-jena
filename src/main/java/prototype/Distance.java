@@ -38,8 +38,8 @@ public class Distance extends PropertyFunctionBase {
 
         WKTDatatype wktDataType = WKTDatatype.theWKTDatatype;
 
-        Geometry g1 = wktDataType.parse(list.get(0).getLiteralLexicalForm());
-        Geometry g2 = wktDataType.parse(list.get(1).getLiteralLexicalForm());
+        Geometry g1 = wktDataType.parse(list.get(0).getLiteralLexicalForm()).getGeometry();
+        Geometry g2 = wktDataType.parse(list.get(1).getLiteralLexicalForm()).getGeometry();
         Double distance = -1d;
 
         distance = g1.distance(g2);
