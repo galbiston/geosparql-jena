@@ -22,20 +22,17 @@ public class UnionFilterFunc extends FunctionBase2 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        NodeValue resultNodeValue;
-
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
             GeometryWrapper union = geometry1.union(geometry2);
-            resultNodeValue = union.getResultNode();
+            return union.getResultNode();
 
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
-            resultNodeValue = NodeValue.nvEmptyString;
+            return NodeValue.nvEmptyString;
         }
 
-        return resultNodeValue;
     }
 
 }

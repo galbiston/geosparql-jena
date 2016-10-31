@@ -22,21 +22,18 @@ public class IntersectionFilterFunc extends FunctionBase2 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        NodeValue resultNodeValue;
-
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
             GeometryWrapper intersection = geometry1.intersection(geometry2);
 
-            resultNodeValue = intersection.getResultNode();
+            return intersection.getResultNode();
 
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
-            resultNodeValue = NodeValue.nvEmptyString;
+            return NodeValue.nvEmptyString;
         }
 
-        return resultNodeValue;
     }
 
 }

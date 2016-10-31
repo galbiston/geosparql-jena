@@ -19,18 +19,13 @@ public class BoundaryFilterFunc extends FunctionBase1 {
     @Override
     public NodeValue exec(NodeValue v) {
 
-        NodeValue resultNodeValue;
-
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v);
             GeometryWrapper boundary = geometry.getBoundary();
-            resultNodeValue = boundary.getResultNode();
+            return boundary.getResultNode();
 
         } catch (DatatypeFormatException dfx) {
-            resultNodeValue = NodeValue.nvEmptyString;
+            return NodeValue.nvEmptyString;
         }
-
-        return resultNodeValue;
     }
-
 }

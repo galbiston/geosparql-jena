@@ -19,19 +19,16 @@ public class ConvexHullFilterFunc extends FunctionBase1 {
     @Override
     public NodeValue exec(NodeValue v) {
 
-        NodeValue resultNodeValue;
-
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v);
 
             GeometryWrapper convexHull = geometry.convexHull();
-            resultNodeValue = convexHull.getResultNode();
+            return convexHull.getResultNode();
 
         } catch (DatatypeFormatException dfx) {
-            resultNodeValue = NodeValue.nvEmptyString;
+            return NodeValue.nvEmptyString;
         }
 
-        return resultNodeValue;
     }
 
 }

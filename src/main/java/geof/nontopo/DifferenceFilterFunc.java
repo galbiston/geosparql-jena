@@ -22,20 +22,16 @@ public class DifferenceFilterFunc extends FunctionBase2 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        NodeValue resultNodeValue;
-
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
             GeometryWrapper difference = geometry1.difference(geometry2);
-            resultNodeValue = difference.getResultNode();
+            return difference.getResultNode();
 
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
-            resultNodeValue = NodeValue.nvEmptyString;
+            return NodeValue.nvEmptyString;
         }
-
-        return resultNodeValue;
 
     }
 
