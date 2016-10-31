@@ -21,7 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import main.RDFDataLocation;
+import vocabulary.RDFDataLocation;
 import vocabulary.Prefixes;
 import vocabulary.Vocabulary;
 

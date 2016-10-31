@@ -5,7 +5,7 @@
  */
 package geof.nontopo;
 
-import main.RDFDataLocation;
+import vocabulary.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;

@@ -5,6 +5,7 @@
  */
 package main;
 
+import vocabulary.RDFDataLocation;
 import functionregistry.NonTopological;
 import functionregistry.RCC8;
 import functionregistry.SimpleFeatures;
