@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author haozhechen
+ * @deprecated
  */
 public class Distance extends PropertyFunctionBase {
 

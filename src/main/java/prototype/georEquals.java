@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  * @author haozhechen
+ * @deprecated
  */
 public class georEquals extends PropertyFunctionBase {
 

@@ -28,6 +28,7 @@ import queryrewrite.expr.sf.SFEqualsExprFunc;
 /**
  *
  * @author haozhechen
+ * @deprecated
  */
 public class EqualsQueryRewritePF implements PropertyFunction {
 

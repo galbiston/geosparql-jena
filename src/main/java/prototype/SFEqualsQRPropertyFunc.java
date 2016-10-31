@@ -27,6 +27,7 @@ import vocabulary.Vocabulary;
 /**
  *
  * @author haozhechen
+ * @deprecated
  */
 public class SFEqualsQRPropertyFunc extends PropertyFunctionBase {
 

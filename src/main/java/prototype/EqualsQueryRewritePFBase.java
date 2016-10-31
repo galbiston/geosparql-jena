@@ -30,6 +30,7 @@ import vocabulary.Vocabulary;
 /**
  *
  * @author haozhechen
+ * @deprecated
  */
 public class EqualsQueryRewritePFBase extends PropertyFunctionBase {
 
