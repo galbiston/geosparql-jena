@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package datatype;
+package implementation.datatype;
 
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import support.UomVocabulary;
+import implementation.support.UomVocabulary;
 
 /**
  * Default unit in JTS is central angle degrees That's why we need a

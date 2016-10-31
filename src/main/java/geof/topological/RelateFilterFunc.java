@@ -6,7 +6,7 @@
 package geof.topological;
 
 import com.vividsolutions.jts.geom.IntersectionMatrix;
-import datatype.GeometryWrapper;
+import implementation.datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;

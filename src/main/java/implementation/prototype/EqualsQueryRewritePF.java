@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototype;
+package implementation.prototype;
 
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;

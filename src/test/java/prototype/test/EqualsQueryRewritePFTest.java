@@ -5,7 +5,7 @@
  */
 package prototype.test;
 
-import support.RDFDataLocation;
+import implementation.support.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -23,7 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import support.Prefixes;
+import implementation.support.Prefixes;
 
 /**
  *
@@ -88,7 +88,7 @@ public class EqualsQueryRewritePFTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfEquals", prototype.EqualsQueryRewritePF.class);
+        PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfEquals", implementation.prototype.EqualsQueryRewritePF.class);
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), INF_MODEL)) {
             ResultSet rs = qExec.execSelect();

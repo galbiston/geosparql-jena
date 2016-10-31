@@ -22,7 +22,7 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.simplefeatures.expressionfunction.Equals;
-import support.Vocabulary;
+import implementation.support.Vocabulary;
 
 /**
  *

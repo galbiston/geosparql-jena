@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package functionregistry;
+package implementation.functionregistry;
 
 import geof.topological.simplefeatures.filterfunction.*;
-import static functionregistry.FunctionLoader.addFilterFunction;
-import static functionregistry.FunctionLoader.addPropertyFunction;
+import static implementation.functionregistry.FunctionLoader.addFilterFunction;
+import static implementation.functionregistry.FunctionLoader.addPropertyFunction;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
-import support.Vocabulary;
+import implementation.support.Vocabulary;
 
 /**
  *

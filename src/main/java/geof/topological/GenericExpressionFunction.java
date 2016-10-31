@@ -5,7 +5,7 @@
  */
 package geof.topological;
 
-import datatype.GeometryWrapper;
+import implementation.datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprFunction2;

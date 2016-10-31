@@ -5,7 +5,7 @@
  */
 package geof.topological.simplefeatures.filterfunction;
 
-import datatype.GeometryWrapper;
+import implementation.datatype.GeometryWrapper;
 import geof.topological.GenericFilterFunction;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;

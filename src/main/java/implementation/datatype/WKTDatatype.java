@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package datatype;
+package implementation.datatype;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
@@ -13,7 +13,7 @@ import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static support.Prefixes.GEO_URI;
+import static implementation.support.Prefixes.GEO_URI;
 
 /**
  *

@@ -5,13 +5,13 @@
  */
 package geof.topological.rcc8.expressionfunction;
 
-import datatype.GeometryWrapper;
+import implementation.datatype.GeometryWrapper;
 import geof.topological.GenericExpressionFunction;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
-import support.Vocabulary;
+import implementation.support.Vocabulary;
 
 /**
  *

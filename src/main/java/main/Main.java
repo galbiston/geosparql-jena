@@ -5,11 +5,11 @@
  */
 package main;
 
-import support.RDFDataLocation;
-import functionregistry.NonTopological;
-import functionregistry.RCC8;
-import functionregistry.SimpleFeatures;
-import functionregistry.Egenhofer;
+import implementation.support.RDFDataLocation;
+import implementation.functionregistry.NonTopological;
+import implementation.functionregistry.RCC8;
+import implementation.functionregistry.SimpleFeatures;
+import implementation.functionregistry.Egenhofer;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -28,7 +28,7 @@ import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.ReasonerVocabulary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import support.Prefixes;
+import implementation.support.Prefixes;
 
 /**
  *

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package functionregistry;
+package implementation.functionregistry;
 
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
-import support.Prefixes;
-import support.Vocabulary;
+import implementation.support.Prefixes;
+import implementation.support.Vocabulary;
 
 /**
  *

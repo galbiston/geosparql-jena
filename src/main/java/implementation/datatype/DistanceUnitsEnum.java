@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package datatype;
+package implementation.datatype;
 
 /**
  *
  * @author Greg
  */
-public enum GeoSerialisationEnum {
+public enum DistanceUnitsEnum {
 
-    WKT, GML
+    metres, degrees, radians, gridSpacing, unity, unknown
 
 }

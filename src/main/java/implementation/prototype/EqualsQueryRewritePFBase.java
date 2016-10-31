@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototype;
+package implementation.prototype;
 
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -23,9 +23,9 @@ import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static prototype.EqualsQueryRewritePF.hiddenVariableCount;
+import static implementation.prototype.EqualsQueryRewritePF.hiddenVariableCount;
 import geof.topological.simplefeatures.expressionfunction.Equals;
-import support.Vocabulary;
+import implementation.support.Vocabulary;
 
 /**
  *

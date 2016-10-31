@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototype;
+package implementation.prototype;
 
 import com.vividsolutions.jts.geom.Geometry;
-import datatype.WKTDatatype;
+import implementation.datatype.WKTDatatype;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.Substitute;

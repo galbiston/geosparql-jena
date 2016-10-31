@@ -5,7 +5,7 @@
  */
 package geof.nontopological.filterfunction;
 
-import datatype.GeometryWrapper;
+import implementation.datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;

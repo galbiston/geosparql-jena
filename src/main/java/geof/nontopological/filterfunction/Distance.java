@@ -5,9 +5,9 @@
  */
 package geof.nontopological.filterfunction;
 
-import datatype.DistanceUnitsEnum;
-import datatype.GeometryWrapper;
-import datatype.UomConverter;
+import implementation.datatype.DistanceUnitsEnum;
+import implementation.datatype.GeometryWrapper;
+import implementation.datatype.UomConverter;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;

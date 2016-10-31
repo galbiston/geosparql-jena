@@ -5,7 +5,7 @@
  */
 package prototype.test;
 
-import support.RDFDataLocation;
+import implementation.support.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -25,7 +25,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import support.Prefixes;
+import implementation.support.Prefixes;
 
 /**
  *
@@ -78,7 +78,7 @@ public class DistanceTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put("http://example/f#distance", prototype.Distance.class);
+        PropertyFunctionRegistry.get().put("http://example/f#distance", implementation.prototype.Distance.class);
         //FunctionRegistry.get().put("http://example/f#distance", CustomPF.DistanceFilterFunc.class) ;
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
@@ -99,7 +99,7 @@ public class DistanceTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put("http://example/f#distance", prototype.Distance.class);
+        PropertyFunctionRegistry.get().put("http://example/f#distance", implementation.prototype.Distance.class);
 
         QueryExecution qe = QueryExecutionFactory.create(query.asQuery(), MODEL);
         ResultSet rs = qe.execSelect();
