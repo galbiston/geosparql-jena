@@ -63,7 +63,7 @@ public class WKTDatatypeTest {
         Point point = geometryFactory.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        CRSGeometry geometry = new CRSGeometry(point, srsURI, GeoSerialisation.WKT);
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisation.WKT);
 
         String result = instance.unparse(geometry);
 
@@ -82,14 +82,14 @@ public class WKTDatatypeTest {
         String lexicalForm = "POINT(-83.38 33.95)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
         String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -106,7 +106,7 @@ public class WKTDatatypeTest {
         String lexicalForm = "POINT(-83.38 33.95)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-88.38, 33.95);
@@ -114,7 +114,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -131,7 +131,7 @@ public class WKTDatatypeTest {
         String lexicalForm = "POINT(-83.38 33.95)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
@@ -139,7 +139,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -156,7 +156,7 @@ public class WKTDatatypeTest {
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
@@ -164,7 +164,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -181,7 +181,7 @@ public class WKTDatatypeTest {
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-88.38, 33.95);
@@ -189,7 +189,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -206,7 +206,7 @@ public class WKTDatatypeTest {
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
         WKTDatatype instance = WKTDatatype.theWKTDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
@@ -214,7 +214,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);

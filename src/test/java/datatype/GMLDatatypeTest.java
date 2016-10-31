@@ -62,7 +62,7 @@ public class GMLDatatypeTest {
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point point = geometryFactory.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
-        CRSGeometry geometry = new CRSGeometry(point, srsURI, GeoSerialisation.GML);
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisation.GML);
 
         String result = instance.unparse(geometry);
 
@@ -83,7 +83,7 @@ public class GMLDatatypeTest {
 
         GMLDatatype instance = GMLDatatype.theGMLDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
@@ -91,7 +91,7 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSName, GeoSerialisation.GML);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisation.GML);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -109,7 +109,7 @@ public class GMLDatatypeTest {
 
         GMLDatatype instance = GMLDatatype.theGMLDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-88.38, 33.95);
@@ -117,7 +117,7 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSName, GeoSerialisation.GML);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisation.GML);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -135,7 +135,7 @@ public class GMLDatatypeTest {
 
         GMLDatatype instance = GMLDatatype.theGMLDatatype;
 
-        CRSGeometry result = instance.parse(lexicalForm);
+        GeometryWrapper result = instance.parse(lexicalForm);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
@@ -143,7 +143,7 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        CRSGeometry expResult = new CRSGeometry(expGeometry, expSRSName, GeoSerialisation.GML);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisation.GML);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
