@@ -34,6 +34,7 @@ public class UomConverter {
      *
      * @param destiUnit - the destination Unit to be used
      * @param distance - the value that come form JTS
+     * @deprecated
      */
     public static double ConvertToUnit(String destiUnit, double distance) {
 
