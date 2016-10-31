@@ -102,7 +102,7 @@ public class UomConverter {
                 return DistanceUnitsEnum.metres;
             case "DEGREE":
                 return DistanceUnitsEnum.degrees;
-            case "GRIDSPACING":
+            case "GRID SPACING":
                 return DistanceUnitsEnum.gridSpacing;
             case "RADIAN":
                 return DistanceUnitsEnum.radians;
