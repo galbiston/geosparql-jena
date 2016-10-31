@@ -6,8 +6,8 @@
 package functionregistry;
 
 import org.apache.jena.sparql.function.FunctionRegistry;
-import vocabulary.Prefixes;
-import vocabulary.Vocabulary;
+import support.Prefixes;
+import support.Vocabulary;
 
 /**
  *

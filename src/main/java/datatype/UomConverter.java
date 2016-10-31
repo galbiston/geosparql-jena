@@ -9,7 +9,7 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vocabulary.UomVocabulary;
+import support.UomVocabulary;
 
 /**
  * Default unit in JTS is central angle degrees That's why we need a

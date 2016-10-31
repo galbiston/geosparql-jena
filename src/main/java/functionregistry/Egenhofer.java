@@ -10,7 +10,7 @@ import static functionregistry.FunctionLoader.addFilterFunction;
 import static functionregistry.FunctionLoader.addPropertyFunction;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
-import vocabulary.Vocabulary;
+import support.Vocabulary;
 
 /**
  *

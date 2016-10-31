@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vocabulary;
+package support;
 
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
-import static vocabulary.Prefixes.GEO_URI;
-import static vocabulary.Prefixes.GML_URI;
-import static vocabulary.Prefixes.NTU_URI;
+import static support.Prefixes.GEO_URI;
+import static support.Prefixes.GML_URI;
+import static support.Prefixes.NTU_URI;
 
 /**
  *

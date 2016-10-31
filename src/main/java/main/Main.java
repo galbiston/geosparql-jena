@@ -5,7 +5,7 @@
  */
 package main;
 
-import vocabulary.RDFDataLocation;
+import support.RDFDataLocation;
 import functionregistry.NonTopological;
 import functionregistry.RCC8;
 import functionregistry.SimpleFeatures;
@@ -28,7 +28,7 @@ import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.ReasonerVocabulary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vocabulary.Prefixes;
+import support.Prefixes;
 
 /**
  *

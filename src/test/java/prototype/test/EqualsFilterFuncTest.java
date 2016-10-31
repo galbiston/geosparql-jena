@@ -5,7 +5,7 @@
  */
 package prototype.test;
 
-import vocabulary.RDFDataLocation;
+import support.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -31,7 +31,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vocabulary.Prefixes;
+import support.Prefixes;
 
 /**
  *

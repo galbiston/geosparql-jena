@@ -13,7 +13,7 @@ import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static vocabulary.Prefixes.GEO_URI;
+import static support.Prefixes.GEO_URI;
 
 /**
  *

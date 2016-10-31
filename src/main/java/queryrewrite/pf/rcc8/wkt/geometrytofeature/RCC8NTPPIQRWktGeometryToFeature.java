@@ -22,7 +22,7 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import queryrewrite.expr.rcc8.RCC8NTPPIExprFunc;
-import vocabulary.Vocabulary;
+import support.Vocabulary;
 
 /**
  *

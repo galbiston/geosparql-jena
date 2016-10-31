@@ -14,7 +14,7 @@ import org.apache.jena.sparql.expr.ExprFunction2;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vocabulary.Vocabulary;
+import support.Vocabulary;
 
 /**
  *

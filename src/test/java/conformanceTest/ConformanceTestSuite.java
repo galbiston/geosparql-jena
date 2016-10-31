@@ -7,7 +7,7 @@ package conformanceTest;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import vocabulary.RDFDataLocation;
+import support.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -22,7 +22,7 @@ import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.util.FileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vocabulary.Prefixes;
+import support.Prefixes;
 
 /**
  *
