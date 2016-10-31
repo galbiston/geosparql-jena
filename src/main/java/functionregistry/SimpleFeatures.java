@@ -28,14 +28,14 @@ public class SimpleFeatures {
     public static void loadPropFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
-        addPropertyFunction(registry, Vocabulary.SF_CONTAINS_NAME, geof.topopf.sf.SFContainsPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.SF_CROSSES_NAME, geof.topopf.sf.SFCrossesPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.SF_DISJOINT_NAME, geof.topopf.sf.SFDisjointPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.SF_EQUALS_NAME, geof.topopf.sf.SFEqualsPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.SF_INTERSECTS_NAME, geof.topopf.sf.SFIntersectsPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.SF_OVERLAPS_NAME, geof.topopf.sf.SFOverlapsPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.SF_TOUCHES_NAME, geof.topopf.sf.SFTouchesPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.SF_WITHIN_NAME, geof.topopf.sf.SFWithinPropertyFunc.class);
+        addPropertyFunction(registry, Vocabulary.SF_CONTAINS_NAME, geof.topological.simplefeatures.propertyfunction.Contains.class);
+        addPropertyFunction(registry, Vocabulary.SF_CROSSES_NAME, geof.topological.simplefeatures.propertyfunction.Crosses.class);
+        addPropertyFunction(registry, Vocabulary.SF_DISJOINT_NAME, geof.topological.simplefeatures.propertyfunction.Disjoint.class);
+        addPropertyFunction(registry, Vocabulary.SF_EQUALS_NAME, geof.topological.simplefeatures.propertyfunction.Equals.class);
+        addPropertyFunction(registry, Vocabulary.SF_INTERSECTS_NAME, geof.topological.simplefeatures.propertyfunction.Intersects.class);
+        addPropertyFunction(registry, Vocabulary.SF_OVERLAPS_NAME, geof.topological.simplefeatures.propertyfunction.Overlaps.class);
+        addPropertyFunction(registry, Vocabulary.SF_TOUCHES_NAME, geof.topological.simplefeatures.propertyfunction.Touches.class);
+        addPropertyFunction(registry, Vocabulary.SF_WITHIN_NAME, geof.topological.simplefeatures.propertyfunction.Within.class);
     }
 
     /**

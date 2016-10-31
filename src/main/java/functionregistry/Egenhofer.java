@@ -28,14 +28,14 @@ public class Egenhofer {
     public static void loadPropFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
-        addPropertyFunction(registry, Vocabulary.EH_CONTAINS_NAME, geof.topopf.eh.EHContainsPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.EH_COVERED_BY_NAME, geof.topopf.eh.EHCoveredByPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.EH_COVERS_NAME, geof.topopf.eh.EHCoversPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.EH_DISJOINT_NAME, geof.topopf.eh.EHDisjointPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.EH_EQUALS_NAME, geof.topopf.eh.EHEqualPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.EH_INSIDE_NAME, geof.topopf.eh.EHInsidePropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.EH_MEET_NAME, geof.topopf.eh.EHMeetPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.EH_OVERLAP_NAME, geof.topopf.eh.EHOverlapPropertyFunc.class);
+        addPropertyFunction(registry, Vocabulary.EH_CONTAINS_NAME, geof.topological.egenhofer.propertyfunction.Contains.class);
+        addPropertyFunction(registry, Vocabulary.EH_COVERED_BY_NAME, geof.topological.egenhofer.propertyfunction.CoveredBy.class);
+        addPropertyFunction(registry, Vocabulary.EH_COVERS_NAME, geof.topological.egenhofer.propertyfunction.Covers.class);
+        addPropertyFunction(registry, Vocabulary.EH_DISJOINT_NAME, geof.topological.egenhofer.propertyfunction.Disjoint.class);
+        addPropertyFunction(registry, Vocabulary.EH_EQUALS_NAME, geof.topological.egenhofer.propertyfunction.Equals.class);
+        addPropertyFunction(registry, Vocabulary.EH_INSIDE_NAME, geof.topological.egenhofer.propertyfunction.Inside.class);
+        addPropertyFunction(registry, Vocabulary.EH_MEET_NAME, geof.topological.egenhofer.propertyfunction.Meet.class);
+        addPropertyFunction(registry, Vocabulary.EH_OVERLAP_NAME, geof.topological.egenhofer.propertyfunction.Overlap.class);
     }
 
     /**

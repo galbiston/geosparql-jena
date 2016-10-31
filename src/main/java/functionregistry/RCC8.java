@@ -28,14 +28,14 @@ public class RCC8 {
     public static void loadPropFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, geof.topopf.rcc8.RCC8DCPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, geof.topopf.rcc8.RCC8EQPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, geof.topopf.rcc8.RCC8ECPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, geof.topopf.rcc8.RCC8NTPPIPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, geof.topopf.rcc8.RCC8NTPPPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, geof.topopf.rcc8.RCC8POPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, geof.topopf.rcc8.RCC8TPPIPropertyFunc.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, geof.topopf.rcc8.RCC8TPPPropertyFunc.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, geof.topological.rcc8.propertyfunction.Disconnected.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, geof.topological.rcc8.propertyfunction.Equals.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, geof.topological.rcc8.propertyfunction.ExternallyConnected.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, geof.topological.rcc8.propertyfunction.NonTangentalProperPartInverse.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, geof.topological.rcc8.propertyfunction.NonTangentalProperPart.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, geof.topological.rcc8.propertyfunction.PartiallyOverlapping.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, geof.topological.rcc8.propertyfunction.TangentalProperPartInverse.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, geof.topological.rcc8.propertyfunction.TangentalProperPart.class);
     }
 
     /**

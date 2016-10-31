@@ -20,11 +20,11 @@ import support.Vocabulary;
  *
  * @author haozhechen
  */
-public class EHEqualExprFunc extends ExprFunction2 {
+public class EHEqualsExprFunc extends ExprFunction2 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EHEqualExprFunc.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EHEqualsExprFunc.class);
 
-    public EHEqualExprFunc(Expr expr1, Expr expr2) {
+    public EHEqualsExprFunc(Expr expr1, Expr expr2) {
         super(expr1, expr2, Vocabulary.EH_EQUALS_SYMBOL);
     }
 
@@ -51,7 +51,7 @@ public class EHEqualExprFunc extends ExprFunction2 {
 
     @Override
     public Expr copy(Expr arg1, Expr arg2) {
-        return new EHEqualExprFunc(arg1, arg2);
+        return new EHEqualsExprFunc(arg1, arg2);
     }
 
 }
