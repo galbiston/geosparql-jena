@@ -5,7 +5,7 @@
  */
 package geof.nontopo;
 
-import datatype.CRSGeometry;
+import datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
@@ -22,8 +22,8 @@ public class EnvelopFilterFunc extends FunctionBase1 {
         NodeValue resultNodeValue;
 
         try {
-            CRSGeometry geometry = CRSGeometry.extract(v);
-            CRSGeometry envelope = geometry.getEnvelope();
+            GeometryWrapper geometry = GeometryWrapper.extract(v);
+            GeometryWrapper envelope = geometry.getEnvelope();
             resultNodeValue = envelope.getResultNode();
 
         } catch (DatatypeFormatException dfx) {

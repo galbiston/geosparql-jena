@@ -5,7 +5,7 @@
  */
 package geof.nontopo;
 
-import datatype.CRSGeometry;
+import datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -25,10 +25,10 @@ public class SymDifferenceFilterFunc extends FunctionBase2 {
         NodeValue resultNodeValue;
 
         try {
-            CRSGeometry geometry1 = CRSGeometry.extract(v1);
-            CRSGeometry geometry2 = CRSGeometry.extract(v2);
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
-            CRSGeometry difference = geometry1.symDifference(geometry2);
+            GeometryWrapper difference = geometry1.symDifference(geometry2);
             resultNodeValue = difference.getResultNode();
 
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {

@@ -5,7 +5,7 @@
  */
 package geof.nontopo;
 
-import datatype.CRSGeometry;
+import datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
@@ -22,8 +22,8 @@ public class BoundaryFilterFunc extends FunctionBase1 {
         NodeValue resultNodeValue;
 
         try {
-            CRSGeometry geometry = CRSGeometry.extract(v);
-            CRSGeometry boundary = geometry.getBoundary();
+            GeometryWrapper geometry = GeometryWrapper.extract(v);
+            GeometryWrapper boundary = geometry.getBoundary();
             resultNodeValue = boundary.getResultNode();
 
         } catch (DatatypeFormatException dfx) {

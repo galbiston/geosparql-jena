@@ -5,7 +5,7 @@
  */
 package geof.nontopo;
 
-import datatype.CRSGeometry;
+import datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -39,12 +39,12 @@ public class BufferFilterFunc extends FunctionBase3 {
         NodeValue resultNodeValue;
 
         try {
-            CRSGeometry geometry = CRSGeometry.extract(v1);
+            GeometryWrapper geometry = GeometryWrapper.extract(v1);
 
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
             radius = UomConverter.ConvertToUnit(destiUnit, radius);
 
-            CRSGeometry buffer = geometry.buffer(radius);
+            GeometryWrapper buffer = geometry.buffer(radius);
 
             resultNodeValue = buffer.getResultNode();
         } catch (DatatypeFormatException dfx) {

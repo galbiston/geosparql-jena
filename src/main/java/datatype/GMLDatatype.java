@@ -63,7 +63,7 @@ public class GMLDatatype extends BaseDatatype {
      */
     @Override
     public String unparse(Object geometry) {
-        CRSGeometry geom = (CRSGeometry) geometry;
+        GeometryWrapper geom = (GeometryWrapper) geometry;
         GMLWriter gmlWriter = new GMLWriter(false);
         String srsName = geom.getSrsURI();
         gmlWriter.setSrsName(srsName);
@@ -82,13 +82,13 @@ public class GMLDatatype extends BaseDatatype {
      * <br> null - if the GML literal is invalid.
      */
     @Override
-    public CRSGeometry parse(String lexicalForm) throws DatatypeFormatException {
+    public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
         GMLReader gmlReader = new GMLReader();
         try {
             Geometry geometry = gmlReader.read(lexicalForm, null);
             XMLDocument xmlDoc = new XMLDocument(lexicalForm);
             String srsURI = xmlDoc.node().getAttributes().getNamedItem("srsName").getNodeValue();
-            CRSGeometry geom = new CRSGeometry(geometry, srsURI, GeoSerialisation.GML);
+            GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisation.GML);
             return geom;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
             LOGGER.error("Illegal GML literal: {}", lexicalForm);

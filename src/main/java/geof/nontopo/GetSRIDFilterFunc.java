@@ -5,7 +5,7 @@
  */
 package geof.nontopo;
 
-import datatype.CRSGeometry;
+import datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
@@ -20,7 +20,7 @@ public class GetSRIDFilterFunc extends FunctionBase1 {
     public NodeValue exec(NodeValue v) {
 
         try {
-            CRSGeometry geometry = CRSGeometry.extract(v);
+            GeometryWrapper geometry = GeometryWrapper.extract(v);
 
             String srid = geometry.getSRID();
 

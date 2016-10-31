@@ -5,7 +5,7 @@
  */
 package geof.nontopo;
 
-import datatype.CRSGeometry;
+import datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -34,8 +34,8 @@ public class DistanceFilterFunc extends FunctionBase3 {
         LOGGER.info("Current unit: {}", node3.getLocalName());
 
         try {
-            CRSGeometry geometry1 = CRSGeometry.extract(v1);
-            CRSGeometry geometry2 = CRSGeometry.extract(v2);
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
             double distance = geometry1.distance(geometry2);
             //Default unit is central angle degrees, need t oconvert to destination uom

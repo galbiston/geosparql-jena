@@ -5,7 +5,7 @@
  */
 package geof.nontopo;
 
-import datatype.CRSGeometry;
+import datatype.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
@@ -22,9 +22,9 @@ public class ConvexHullFilterFunc extends FunctionBase1 {
         NodeValue resultNodeValue;
 
         try {
-            CRSGeometry geometry = CRSGeometry.extract(v);
+            GeometryWrapper geometry = GeometryWrapper.extract(v);
 
-            CRSGeometry convexHull = geometry.convexHull();
+            GeometryWrapper convexHull = geometry.convexHull();
             resultNodeValue = convexHull.getResultNode();
 
         } catch (DatatypeFormatException dfx) {

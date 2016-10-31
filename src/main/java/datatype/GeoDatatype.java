@@ -27,9 +27,9 @@ public class GeoDatatype {
         return result;
     }
 
-    public static final CRSGeometry parse(String lexicalForm, String datatypeURI) throws DatatypeFormatException {
+    public static final GeometryWrapper parse(String lexicalForm, String datatypeURI) throws DatatypeFormatException {
 
-        CRSGeometry geometry;
+        GeometryWrapper geometry;
         if (datatypeURI.equals(WKTDatatype.theTypeURI)) {
             WKTDatatype datatype = WKTDatatype.theWKTDatatype;
             geometry = datatype.parse(lexicalForm);

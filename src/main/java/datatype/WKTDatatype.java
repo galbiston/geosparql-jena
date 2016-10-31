@@ -60,7 +60,7 @@ public class WKTDatatype extends BaseDatatype {
     @Override
     public String unparse(Object geometry) {
 
-        CRSGeometry geom = (CRSGeometry) geometry;
+        GeometryWrapper geom = (GeometryWrapper) geometry;
 
         WKTWriter wktWriter = new WKTWriter();
         wktWriter.setFormatted(true);
@@ -91,9 +91,9 @@ public class WKTDatatype extends BaseDatatype {
      * WKT literal is empty. null - if the WKT literal is invalid.
      */
     @Override
-    public CRSGeometry parse(String lexicalForm) throws DatatypeFormatException {
+    public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
 
-        CRSGeometry geometry;
+        GeometryWrapper geometry;
         try {
 
             String srsURI;
@@ -114,7 +114,7 @@ public class WKTDatatype extends BaseDatatype {
 
             WKTReader wktReader = new WKTReader();
             Geometry geom = wktReader.read(wktLiteral);
-            geometry = new CRSGeometry(geom, srsURI, GeoSerialisation.WKT);
+            geometry = new GeometryWrapper(geom, srsURI, GeoSerialisation.WKT);
 
         } catch (ParseException ex) {
             LOGGER.error("Illegal WKT literal: {}", lexicalForm);
