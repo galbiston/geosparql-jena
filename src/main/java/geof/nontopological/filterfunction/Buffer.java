@@ -19,6 +19,7 @@ import org.apache.jena.sparql.function.FunctionBase3;
  * "<gml:Point ...>...</gml:Point>"
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class Buffer extends FunctionBase3 {
 

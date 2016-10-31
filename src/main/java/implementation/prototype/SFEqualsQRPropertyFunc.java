@@ -27,6 +27,7 @@ import implementation.support.Vocabulary;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  * @deprecated
  */
 public class SFEqualsQRPropertyFunc extends PropertyFunctionBase {

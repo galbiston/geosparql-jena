@@ -14,6 +14,7 @@ import static implementation.support.Prefixes.NTU_URI;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class Vocabulary {
 

@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author Greg
+ * @author Gregory Albiston
  */
 public class CRSRegistry {
 

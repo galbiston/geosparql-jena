@@ -28,6 +28,7 @@ import geof.topological.simplefeatures.expressionfunction.Equals;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  * @deprecated
  */
 public class EqualsQueryRewritePF implements PropertyFunction {

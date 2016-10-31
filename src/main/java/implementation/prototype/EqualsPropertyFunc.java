@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  * @deprecated
  */
 public class EqualsPropertyFunc extends PropertyFunctionBase {

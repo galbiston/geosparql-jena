@@ -11,6 +11,7 @@ import java.util.Map;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class Prefixes {
 

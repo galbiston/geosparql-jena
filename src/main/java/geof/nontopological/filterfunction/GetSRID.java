@@ -13,6 +13,7 @@ import org.apache.jena.sparql.function.FunctionBase1;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class GetSRID extends FunctionBase1 {
 

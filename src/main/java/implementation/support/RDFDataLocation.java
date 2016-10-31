@@ -8,6 +8,7 @@ package implementation.support;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class RDFDataLocation {
 

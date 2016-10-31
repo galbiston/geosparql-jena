@@ -21,7 +21,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 
 /**
  *
- * @author Greg
+ * @author Gregory Albiston
  */
 public abstract class GenericPropertyFunction extends PropertyFunctionBase {
 

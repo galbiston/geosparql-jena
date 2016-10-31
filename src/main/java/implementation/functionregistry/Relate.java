@@ -8,6 +8,7 @@ package implementation.functionregistry;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class Relate {
 

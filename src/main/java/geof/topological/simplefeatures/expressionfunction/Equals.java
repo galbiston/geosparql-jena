@@ -16,6 +16,7 @@ import implementation.support.Vocabulary;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class Equals extends GenericExpressionFunction {
 

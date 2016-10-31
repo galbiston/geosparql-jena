@@ -15,6 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  * RCC8TPPI means tangential proper part inverse
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class TangentalProperPartInverse extends GenericFilterFunction {
 

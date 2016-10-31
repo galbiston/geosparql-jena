@@ -12,7 +12,7 @@ import implementation.support.Vocabulary;
 
 /**
  *
- * @author Greg
+ * @author Gregory Albiston
  */
 public class FunctionLoader {
 

@@ -15,6 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  * RCC8EQ means equal
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class Equals extends GenericFilterFunction {
 

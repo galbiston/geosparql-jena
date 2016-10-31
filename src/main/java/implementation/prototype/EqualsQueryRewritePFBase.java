@@ -30,6 +30,7 @@ import implementation.support.Vocabulary;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  * @deprecated
  */
 public class EqualsQueryRewritePFBase extends PropertyFunctionBase {

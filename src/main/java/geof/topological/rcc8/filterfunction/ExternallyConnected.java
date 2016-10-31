@@ -15,6 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  * RCC8EC means externally connected
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class ExternallyConnected extends GenericFilterFunction {
 

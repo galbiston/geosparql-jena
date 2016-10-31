@@ -16,6 +16,7 @@ import implementation.support.Vocabulary;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class TangentalProperPartInverse extends GenericExpressionFunction {
 

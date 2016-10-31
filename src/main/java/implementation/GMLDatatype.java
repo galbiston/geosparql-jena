@@ -21,6 +21,7 @@ import static implementation.support.Prefixes.GEO_URI;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class GMLDatatype extends BaseDatatype {
 

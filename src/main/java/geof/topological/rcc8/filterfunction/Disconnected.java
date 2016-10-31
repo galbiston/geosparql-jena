@@ -15,6 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  * RCC8DC means Disconnected or disjoint in SF
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class Disconnected extends GenericFilterFunction {
 

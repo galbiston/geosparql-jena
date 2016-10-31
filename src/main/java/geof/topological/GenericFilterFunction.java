@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author Greg
+ * @author Gregory Albiston
  */
 public abstract class GenericFilterFunction extends FunctionBase2 {
 

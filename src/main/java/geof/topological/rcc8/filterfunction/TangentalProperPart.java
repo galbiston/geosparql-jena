@@ -15,6 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  * RCC8TPP means tangential proper part
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class TangentalProperPart extends GenericFilterFunction {
 

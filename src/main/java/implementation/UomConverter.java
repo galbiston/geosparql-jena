@@ -24,6 +24,7 @@ import implementation.support.UomVocabulary;
  * unit attribute of the coordinate system.
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class UomConverter {
 

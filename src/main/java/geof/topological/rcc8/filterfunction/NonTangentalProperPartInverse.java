@@ -15,6 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  * RCC8NTPPI means non-tangential proper part inverse
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class NonTangentalProperPartInverse extends GenericFilterFunction {
 

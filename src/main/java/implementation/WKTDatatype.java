@@ -19,6 +19,7 @@ import static implementation.support.Prefixes.GEO_URI;
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  *
  * description: WKTDatatype class allows the URI "geo:gmlLiteral" to be used as
  * a datatype and it will parse that datatype to a JTL Geometry.

@@ -15,6 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  * RCC8NTPP means non-tangential proper part
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class NonTangentalProperPart extends GenericFilterFunction {
 

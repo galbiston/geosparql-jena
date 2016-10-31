@@ -7,7 +7,7 @@ package implementation.support;
 
 /**
  *
- * @author Greg
+ * @author Gregory Albiston
  */
 public class UomVocabulary {
 

@@ -15,6 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  * RCC8PO means Partially overlapping
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
 public class PartiallyOverlapping extends GenericFilterFunction {
 

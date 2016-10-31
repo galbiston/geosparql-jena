@@ -11,7 +11,7 @@ import org.apache.jena.datatypes.DatatypeFormatException;
 
 /**
  *
- * @author Greg
+ * @author Gregory Albiston
  */
 public class DatatypeSelector {
 
