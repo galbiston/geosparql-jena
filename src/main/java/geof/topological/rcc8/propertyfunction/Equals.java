@@ -7,7 +7,6 @@ package geof.topological.rcc8.propertyfunction;
 
 import geof.topological.GenericPropertyFunction;
 import org.apache.jena.sparql.expr.Expr;
-import queryrewrite.expr.rcc8.RCC8EQExprFunc;
 
 /**
  *
@@ -17,7 +16,7 @@ public class Equals extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new RCC8EQExprFunc(expr1, expr2);
+        return new geof.topological.rcc8.expressionfunction.Equals(expr1, expr2);
     }
 
 }

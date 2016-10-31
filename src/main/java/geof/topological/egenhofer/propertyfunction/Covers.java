@@ -7,7 +7,6 @@ package geof.topological.egenhofer.propertyfunction;
 
 import geof.topological.GenericPropertyFunction;
 import org.apache.jena.sparql.expr.Expr;
-import queryrewrite.expr.eh.EHCoversExprFunc;
 
 /**
  *
@@ -17,7 +16,7 @@ public class Covers extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new EHCoversExprFunc(expr1, expr2);
+        return new geof.topological.egenhofer.expressionfunction.Covers(expr1, expr2);
     }
 
 }

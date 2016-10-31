@@ -18,7 +18,6 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import queryrewrite.expr.eh.EHContainsExprFunc;
 
 /**
  *
@@ -39,7 +38,7 @@ public abstract class GenericPropertyFunction extends PropertyFunctionBase {
         BasicPattern bp = new BasicPattern();
 
         //Spefify the Expr Function type here:
-        Expr expr = new EHContainsExprFunc(exprVar_SUB, exprVar_OBJ);
+        Expr expr = expressionFunction(exprVar_SUB, exprVar_OBJ);
 
         OpBGP op = new OpBGP(bp);
         Op filter = OpFilter.filter(expr, op);

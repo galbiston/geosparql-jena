@@ -7,7 +7,6 @@ package geof.topological.egenhofer.propertyfunction;
 
 import geof.topological.GenericPropertyFunction;
 import org.apache.jena.sparql.expr.Expr;
-import queryrewrite.expr.eh.EHDisjointExprFunc;
 
 /**
  *
@@ -17,7 +16,7 @@ public class Disjoint extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new EHDisjointExprFunc(expr1, expr2);
+        return new geof.topological.egenhofer.expressionfunction.Disjoint(expr1, expr2);
     }
 
 }

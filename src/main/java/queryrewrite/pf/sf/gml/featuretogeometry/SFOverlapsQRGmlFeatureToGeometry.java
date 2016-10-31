@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import queryrewrite.expr.sf.SFOverlapsExprFunc;
+import geof.topological.simplefeatures.expressionfunction.SFOverlapsExprFunc;
 import support.Vocabulary;
 
 /**

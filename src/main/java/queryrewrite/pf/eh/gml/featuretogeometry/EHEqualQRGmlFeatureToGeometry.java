@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import queryrewrite.expr.eh.EHEqualsExprFunc;
+import geof.topological.egenhofer.expressionfunction.Equals;
 import support.Vocabulary;
 
 /**
@@ -54,7 +54,7 @@ public class EHEqualQRGmlFeatureToGeometry extends PropertyFunctionBase {
         Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
 
         //Spefify the Expr Function type here:
-        Expr expr = new EHEqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new Equals(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         bp.add(FeaHasGeom_SUB);
         bp.add(GeomHasGML_SUB);

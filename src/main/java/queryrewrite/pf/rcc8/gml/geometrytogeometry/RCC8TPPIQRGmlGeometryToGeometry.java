@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import queryrewrite.expr.rcc8.RCC8TPPIExprFunc;
+import geof.topological.rcc8.expressionfunction.TangentalProperPartInverse;
 import support.Vocabulary;
 
 /**
@@ -51,7 +51,7 @@ public class RCC8TPPIQRGmlGeometryToGeometry extends PropertyFunctionBase {
         Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
-        Expr expr = new RCC8TPPIExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new TangentalProperPartInverse(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         bp.add(NodeVarHasGML_SUB);
         bp.add(NodeVarHasGML_OBJ);

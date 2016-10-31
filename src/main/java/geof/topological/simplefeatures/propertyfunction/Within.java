@@ -7,7 +7,7 @@ package geof.topological.simplefeatures.propertyfunction;
 
 import geof.topological.GenericPropertyFunction;
 import org.apache.jena.sparql.expr.Expr;
-import queryrewrite.expr.sf.SFWithinExprFunc;
+import geof.topological.simplefeatures.expressionfunction.SFWithinExprFunc;
 
 /**
  *
