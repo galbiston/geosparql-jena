@@ -5,6 +5,7 @@
  */
 package implementation.datatype;
 
+import implementation.support.GeoSerialisationEnum;
 import com.vividsolutions.jts.geom.Geometry;
 import org.apache.jena.datatypes.DatatypeFormatException;
 

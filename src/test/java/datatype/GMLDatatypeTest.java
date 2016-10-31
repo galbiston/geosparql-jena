@@ -5,7 +5,7 @@
  */
 package datatype;
 
-import implementation.datatype.GeoSerialisationEnum;
+import implementation.support.GeoSerialisationEnum;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.GeometryWrapper;
 import com.vividsolutions.jts.geom.Coordinate;

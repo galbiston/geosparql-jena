@@ -5,6 +5,8 @@
  */
 package implementation.datatype;
 
+import implementation.support.DistanceUnitsEnum;
+import implementation.support.GeoSerialisationEnum;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import java.util.Objects;

@@ -5,6 +5,7 @@
  */
 package implementation.datatype;
 
+import implementation.support.GeoSerialisationEnum;
 import com.jcabi.xml.XMLDocument;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.gml2.GMLReader;

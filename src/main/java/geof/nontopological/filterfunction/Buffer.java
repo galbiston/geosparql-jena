@@ -5,7 +5,7 @@
  */
 package geof.nontopological.filterfunction;
 
-import implementation.datatype.DistanceUnitsEnum;
+import implementation.support.DistanceUnitsEnum;
 import implementation.datatype.GeometryWrapper;
 import implementation.datatype.UomConverter;
 import org.apache.jena.datatypes.DatatypeFormatException;

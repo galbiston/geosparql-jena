@@ -5,6 +5,7 @@
  */
 package implementation.datatype;
 
+import implementation.support.DistanceUnitsEnum;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.slf4j.Logger;
