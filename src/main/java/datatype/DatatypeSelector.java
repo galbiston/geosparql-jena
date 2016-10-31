@@ -12,7 +12,7 @@ import org.apache.jena.datatypes.DatatypeFormatException;
  *
  * @author Greg
  */
-public class GeoDatatype {
+public class DatatypeSelector {
 
     public static final String unparse(Geometry geometry, GeoSerialisationEnum serialisation) {
 

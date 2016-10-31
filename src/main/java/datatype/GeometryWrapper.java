@@ -224,7 +224,7 @@ public class GeometryWrapper {
 
     public NodeValue getResultNode() {
 
-        String lexicalForm = GeoDatatype.unparse(geometry, serialisation);
+        String lexicalForm = DatatypeSelector.unparse(geometry, serialisation);
         return NodeValue.makeNodeString(lexicalForm);
     }
 
@@ -236,7 +236,7 @@ public class GeometryWrapper {
             String dataTypeURI = node.getLiteralDatatypeURI();
             String lexicalForm = node.getLiteralLexicalForm();
 
-            GeometryWrapper geometry = GeoDatatype.parse(lexicalForm, dataTypeURI);
+            GeometryWrapper geometry = DatatypeSelector.parse(lexicalForm, dataTypeURI);
             return geometry;
 
         } catch (DatatypeFormatException ex) {
