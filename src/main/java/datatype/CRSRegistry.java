@@ -19,8 +19,9 @@ import org.slf4j.LoggerFactory;
  */
 public class CRSRegistry {
 
-    private static final HashMap<String, CoordinateReferenceSystem> REGISTRY = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(CRSRegistry.class);
+    private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
+    private static final HashMap<String, DistanceUnitsEnum> DISTANCE_UNITS_REGISTRY = new HashMap<>();
 
     static {
         addCRS(DEFAULT_SRS_URI);
@@ -28,11 +29,14 @@ public class CRSRegistry {
 
     public static final void addCRS(String srsURI) {
 
-        if (!REGISTRY.containsKey(srsURI)) {
+        if (!CRS_REGISTRY.containsKey(srsURI)) {
 
             try {
                 CoordinateReferenceSystem crs = CRS.decode(srsURI);
-                REGISTRY.put(srsURI, crs);
+                CRS_REGISTRY.put(srsURI, crs);
+                DistanceUnitsEnum units = extractCRSDistanceUnits(crs);
+                DISTANCE_UNITS_REGISTRY.put(srsURI, units);
+
             } catch (FactoryException ex) {
                 LOGGER.error("CRS Parse Error: {} {}", DEFAULT_SRS_URI, ex.getMessage());
             }
@@ -42,10 +46,16 @@ public class CRSRegistry {
     public static final CoordinateReferenceSystem getCRS(String srsURI) {
 
         addCRS(srsURI);
-        return REGISTRY.get(srsURI);
+        return CRS_REGISTRY.get(srsURI);
     }
 
-    public static final DistanceUnitsEnum extractCRSDistanceUnits(CoordinateReferenceSystem crs) {
+    public static final DistanceUnitsEnum getDistanceUnits(String srsURI) {
+
+        addCRS(srsURI);
+        return DISTANCE_UNITS_REGISTRY.get(srsURI);
+    }
+
+    private static final DistanceUnitsEnum extractCRSDistanceUnits(CoordinateReferenceSystem crs) {
 
         //TODO Extract units from WKT string.
         String wktMetadata = crs.toWKT();

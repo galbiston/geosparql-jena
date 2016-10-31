@@ -119,7 +119,7 @@ public class UomConverter {
 
         //TODO Convert between the different combinations.
         //TODO No mention of kilometres, centimetres, millimetres???
-        return 0.0;
+        return;
     }
 
 }
