@@ -6,6 +6,7 @@
 package datatype;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.IntersectionMatrix;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
@@ -163,9 +164,15 @@ public class GeometryWrapper {
         return new GeometryWrapper(geo, this.srsURI, this.serialisation, this.distanceUnits);
     }
 
-    public boolean relate(GeometryWrapper targetGeometry, String intersectionPattern) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+    public IntersectionMatrix relate(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return geometry.relate(transformedGeometry.geometry);
+    }
+
+    public boolean relate(GeometryWrapper targetGeometry, String intersectionPattern) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
         return geometry.relate(transformedGeometry.geometry, intersectionPattern);
     }
 
@@ -181,6 +188,54 @@ public class GeometryWrapper {
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
         Geometry geo = this.geometry.union(transformedGeometry.getGeometry());
         return new GeometryWrapper(geo, this.srsURI, this.serialisation, this.distanceUnits);
+    }
+
+    public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return this.geometry.contains(transformedGeometry.getGeometry());
+    }
+
+    public boolean crosses(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return this.geometry.crosses(transformedGeometry.getGeometry());
+    }
+
+    public boolean disjoint(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return this.geometry.disjoint(transformedGeometry.getGeometry());
+    }
+
+    public boolean equals(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return this.geometry.equals((Geometry) transformedGeometry.getGeometry());
+    }
+
+    public boolean intersects(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return this.geometry.intersects(transformedGeometry.getGeometry());
+    }
+
+    public boolean overlaps(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return this.geometry.overlaps(transformedGeometry.getGeometry());
+    }
+
+    public boolean touches(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return this.geometry.touches(transformedGeometry.getGeometry());
+    }
+
+    public boolean within(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        return this.geometry.within(transformedGeometry.getGeometry());
     }
 
     @Override
