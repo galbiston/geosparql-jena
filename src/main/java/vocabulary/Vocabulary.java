@@ -24,13 +24,6 @@ public class Vocabulary {
     public static final Property GEOMEXACT_PRO = ResourceFactory.createProperty(NTU_URI + "hasExactGeometry");
     public static final Property GEOMPOINT_PRO = ResourceFactory.createProperty(NTU_URI + "hasPointGeometry");
 
-    //Units Of Measurement URI
-    public static final String METRE_URI = "http://www.opengis.net/def/uom/OGC/1.0/metre";
-    public static final String DEGREE_URI = "http://www.opengis.net/def/uom/OGC/1.0/degree";
-    public static final String GRIDSPACING_URI = "http://www.opengis.net/def/uom/OGC/1.0/GridSpacing";
-    public static final String RADIAN_URI = "http://www.opengis.net/def/uom/OGC/1.0/radian";
-    public static final String UNITY_URI = "http://www.opengis.net/def/uom/OGC/1.0/unity";
-
     //Simple Feature Topological function symbols:
     public static final String SF_CONTAINS_SYMBOL = "geof:sfContains";
     public static final String SF_CROSSES_SYMBOL = "geof:sfCrosses";

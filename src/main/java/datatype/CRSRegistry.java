@@ -45,4 +45,16 @@ public class CRSRegistry {
         return REGISTRY.get(srsURI);
     }
 
+    public static final DistanceUnitsEnum extractCRSDistanceUnits(CoordinateReferenceSystem crs) {
+
+        //TODO Extract units from WKT string.
+        String wktMetadata = crs.toWKT();
+
+        String units;
+
+        DistanceUnitsEnum distanceUnits = UomConverter.extract(units);
+
+        return distanceUnits;
+    }
+
 }

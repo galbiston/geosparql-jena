@@ -5,9 +5,11 @@
  */
 package datatype;
 
+import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.expr.NodeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vocabulary.Vocabulary;
+import vocabulary.UomVocabulary;
 
 /**
  * Default unit in JTS is central angle degrees That's why we need a
@@ -39,24 +41,24 @@ public class UomConverter {
         double radians = Math.toRadians(distance);
 
         switch (destiUnit) {
-            case Vocabulary.METRE_URI:
-                LOGGER.info("Current Uint of Measurement: METRE");
+            case UomVocabulary.METRE_URI:
+                LOGGER.error("Current Uint of Measurement: METRE");
                 //use formula: s = rθ to calculate distance in metre
                 distance = radians * 6371000.0;
                 break;
-            case Vocabulary.DEGREE_URI:
-                LOGGER.info("Current Uint of Measurement: DEGREE");
+            case UomVocabulary.DEGREE_URI:
+                LOGGER.error("Current Uint of Measurement: DEGREE");
                 //the default unit is degree
                 break;
-            case Vocabulary.GRIDSPACING_URI:
-                LOGGER.info("GRID SPACING is not supported currently");
+            case UomVocabulary.GRIDSPACING_URI:
+                LOGGER.error("GRID SPACING is not supported currently");
                 break;
-            case Vocabulary.RADIAN_URI:
-                LOGGER.info("Current Uint of Measurement: RADIAN");
+            case UomVocabulary.RADIAN_URI:
+                LOGGER.error("Current Uint of Measurement: RADIAN");
                 distance = radians;
                 break;
-            case Vocabulary.UNITY_URI:
-                LOGGER.info("UNITY is not supported currently");
+            case UomVocabulary.UNITY_URI:
+                LOGGER.error("UNITY is not supported currently");
                 //unitless ratio of two quantities with the same units
                 break;
             default:
@@ -66,6 +68,57 @@ public class UomConverter {
         }
 
         return distance;
+    }
+
+    public static final DistanceUnitsEnum extract(NodeValue nodeValue) {
+
+        Node node3 = nodeValue.asNode();
+        String distanceUnitsURI = node3.getURI();
+
+        switch (distanceUnitsURI) {
+            case UomVocabulary.METRE_URI:
+                return DistanceUnitsEnum.metres;
+            case UomVocabulary.DEGREE_URI:
+                return DistanceUnitsEnum.degrees;
+            case UomVocabulary.GRIDSPACING_URI:
+                return DistanceUnitsEnum.gridSpacing;
+            case UomVocabulary.RADIAN_URI:
+                return DistanceUnitsEnum.radians;
+            case UomVocabulary.UNITY_URI:
+                return DistanceUnitsEnum.unity;
+            default:
+                LOGGER.error("Unknown Distance Unit URI: {}", distanceUnitsURI);
+                return DistanceUnitsEnum.unknown;
+        }
+
+    }
+
+    public static final DistanceUnitsEnum extract(String unitsString) {
+
+        //TODO Check string values are correct.
+        switch (unitsString.toUpperCase()) {
+            case "METRE":
+                return DistanceUnitsEnum.metres;
+            case "DEGREE":
+                return DistanceUnitsEnum.degrees;
+            case "GRIDSPACING":
+                return DistanceUnitsEnum.gridSpacing;
+            case "RADIAN":
+                return DistanceUnitsEnum.radians;
+            case "UNITY":
+                return DistanceUnitsEnum.unity;
+            default:
+                LOGGER.error("Unknown Distance Unit: {}", unitsString);
+                return DistanceUnitsEnum.unknown;
+        }
+
+    }
+
+    public static final double conversion(double sourceDistance, DistanceUnitsEnum sourceDistanceUnits, DistanceUnitsEnum targetDistanceUnits) {
+
+        //TODO Convert between the different combinations.
+        //TODO No mention of kilometres, centimetres, millimetres???
+        return 0.0;
     }
 
 }
