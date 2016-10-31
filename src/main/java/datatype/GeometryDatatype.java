@@ -11,6 +11,7 @@ import org.apache.jena.datatypes.DatatypeFormatException;
 /**
  *
  * @author Greg
+ * @deprecated
  */
 public class GeometryDatatype {
 
