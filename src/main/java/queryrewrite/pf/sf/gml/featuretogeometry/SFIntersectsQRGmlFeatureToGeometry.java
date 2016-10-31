@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.simplefeatures.expressionfunction.SFIntersectsExprFunc;
+import geof.topological.simplefeatures.expressionfunction.Intersects;
 import support.Vocabulary;
 
 /**
@@ -55,7 +55,7 @@ public class SFIntersectsQRGmlFeatureToGeometry extends PropertyFunctionBase {
         Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
 
         //Spefify the Expr Function type here:
-        Expr expr = new SFIntersectsExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new Intersects(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         bp.add(FeaHasGeom_SUB);
         bp.add(GeomHasGML_SUB);

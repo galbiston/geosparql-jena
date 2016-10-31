@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.simplefeatures.expressionfunction.SFWithinExprFunc;
+import geof.topological.simplefeatures.expressionfunction.Within;
 import support.Vocabulary;
 
 /**
@@ -55,7 +55,7 @@ public class SFWithinQRWktFeatureToFeature extends PropertyFunctionBase {
         Triple GeomHasWKT_OBJ = new Triple(GeomVar_OBJ, Vocabulary.WKT_PRO.asNode(), WKTVar_OBJ);
 
         //Spefify the Expr Function type here:
-        Expr expr = new SFWithinExprFunc(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));
+        Expr expr = new Within(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));
 
         bp.add(FeaHasGeom_SUB);
         bp.add(FeaHasGeom_OBJ);

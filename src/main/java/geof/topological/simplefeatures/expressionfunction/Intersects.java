@@ -17,15 +17,15 @@ import support.Vocabulary;
  *
  * @author haozhechen
  */
-public class SFIntersectsExprFunc extends GenericExpressionFunction {
+public class Intersects extends GenericExpressionFunction {
 
-    public SFIntersectsExprFunc(Expr expr1, Expr expr2) {
+    public Intersects(Expr expr1, Expr expr2) {
         super(expr1, expr2, Vocabulary.SF_INTERSECTS_SYMBOL);
     }
 
     @Override
     public Expr copy(Expr arg1, Expr arg2) {
-        return new SFIntersectsExprFunc(arg1, arg2);
+        return new Intersects(arg1, arg2);
     }
 
     @Override

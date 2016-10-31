@@ -7,7 +7,6 @@ package geof.topological.simplefeatures.propertyfunction;
 
 import geof.topological.GenericPropertyFunction;
 import org.apache.jena.sparql.expr.Expr;
-import geof.topological.simplefeatures.expressionfunction.SFCrossesExprFunc;
 
 /**
  *
@@ -17,7 +16,7 @@ public class Crosses extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new SFCrossesExprFunc(expr1, expr2);
+        return new geof.topological.simplefeatures.expressionfunction.Crosses(expr1, expr2);
     }
 
 }

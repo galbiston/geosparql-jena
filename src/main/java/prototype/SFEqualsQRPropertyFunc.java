@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.simplefeatures.expressionfunction.SFEqualsExprFunc;
+import geof.topological.simplefeatures.expressionfunction.Equals;
 import support.Vocabulary;
 
 /**
@@ -59,7 +59,7 @@ public class SFEqualsQRPropertyFunc extends PropertyFunctionBase {
         Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.WKT_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
-        Expr expr = new SFEqualsExprFunc(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new Equals(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         bp.add(NodeVarHasGML_SUB);
         bp.add(NodeVarHasGML_OBJ);

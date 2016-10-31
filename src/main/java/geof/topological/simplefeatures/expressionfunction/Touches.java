@@ -17,19 +17,19 @@ import support.Vocabulary;
  *
  * @author haozhechen
  */
-public class SFCrossesExprFunc extends GenericExpressionFunction {
+public class Touches extends GenericExpressionFunction {
 
-    public SFCrossesExprFunc(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.SF_CROSSES_SYMBOL);
+    public Touches(Expr expr1, Expr expr2) {
+        super(expr1, expr2, Vocabulary.SF_OVERLAPS_SYMBOL);
     }
 
     @Override
     public Expr copy(Expr arg1, Expr arg2) {
-        return new SFCrossesExprFunc(arg1, arg2);
+        return new Touches(arg1, arg2);
     }
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.crosses(targetGeometry);
+        return sourceGeometry.touches(targetGeometry);
     }
 }

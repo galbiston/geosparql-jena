@@ -17,19 +17,19 @@ import support.Vocabulary;
  *
  * @author haozhechen
  */
-public class SFTouchesExprFunc extends GenericExpressionFunction {
+public class Disjoint extends GenericExpressionFunction {
 
-    public SFTouchesExprFunc(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.SF_OVERLAPS_SYMBOL);
+    public Disjoint(Expr expr1, Expr expr2) {
+        super(expr1, expr2, Vocabulary.SF_DISJOINT_SYMBOL);
     }
 
     @Override
     public Expr copy(Expr arg1, Expr arg2) {
-        return new SFTouchesExprFunc(arg1, arg2);
+        return new Disjoint(arg1, arg2);
     }
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.touches(targetGeometry);
+        return sourceGeometry.disjoint(targetGeometry);
     }
 }

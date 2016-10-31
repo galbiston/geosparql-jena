@@ -23,7 +23,7 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunction;
 import org.apache.jena.sparql.util.NodeUtils;
-import geof.topological.simplefeatures.expressionfunction.SFEqualsExprFunc;
+import geof.topological.simplefeatures.expressionfunction.Equals;
 
 /**
  *
@@ -85,7 +85,7 @@ public class EqualsQueryRewritePF implements PropertyFunction {
         OpBGP op = new OpBGP(bp);
         System.out.println("op: " + op.toString());
 
-        Expr expr = new SFEqualsExprFunc(new ExprVar(var1.getName()), new ExprVar(var2.getName()));
+        Expr expr = new Equals(new ExprVar(var1.getName()), new ExprVar(var2.getName()));
         //Expr regex = new E_Regex(new ExprVar(var2.getName()), pattern, "i");
         Op filter = OpFilter.filter(expr, op);
         System.out.println("filter: " + filter.toString());

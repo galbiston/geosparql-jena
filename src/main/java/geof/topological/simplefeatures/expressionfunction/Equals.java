@@ -17,19 +17,19 @@ import support.Vocabulary;
  *
  * @author haozhechen
  */
-public class SFOverlapsExprFunc extends GenericExpressionFunction {
+public class Equals extends GenericExpressionFunction {
 
-    public SFOverlapsExprFunc(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.SF_OVERLAPS_SYMBOL);
+    public Equals(Expr expr1, Expr expr2) {
+        super(expr1, expr2, Vocabulary.SF_EQUALS_SYMBOL);
     }
 
     @Override
     public Expr copy(Expr arg1, Expr arg2) {
-        return new SFOverlapsExprFunc(arg1, arg2);
+        return new Equals(arg1, arg2);
     }
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.overlaps(targetGeometry);
+        return sourceGeometry.equals(targetGeometry);
     }
 }

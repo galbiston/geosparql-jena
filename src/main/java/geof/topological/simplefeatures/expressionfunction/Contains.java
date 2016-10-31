@@ -17,19 +17,20 @@ import support.Vocabulary;
  *
  * @author haozhechen
  */
-public class SFWithinExprFunc extends GenericExpressionFunction {
+public class Contains extends GenericExpressionFunction {
 
-    public SFWithinExprFunc(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.SF_WITHIN_SYMBOL);
+    public Contains(Expr expr1, Expr expr2) {
+        super(expr1, expr2, Vocabulary.SF_CONTAINS_SYMBOL);
     }
 
     @Override
     public Expr copy(Expr arg1, Expr arg2) {
-        return new SFWithinExprFunc(arg1, arg2);
+        return new Contains(arg1, arg2);
     }
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.within(targetGeometry);
+        return sourceGeometry.contains(targetGeometry);
     }
+
 }
