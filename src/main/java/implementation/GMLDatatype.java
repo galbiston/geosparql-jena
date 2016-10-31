@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype;
+package implementation;
 
 import implementation.support.GeoSerialisationEnum;
 import com.jcabi.xml.XMLDocument;

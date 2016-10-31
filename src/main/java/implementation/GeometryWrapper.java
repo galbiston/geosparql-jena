@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype;
+package implementation;
 
 import implementation.support.DistanceUnitsEnum;
 import implementation.support.GeoSerialisationEnum;

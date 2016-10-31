@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype;
+package implementation;
 
 import implementation.support.DistanceUnitsEnum;
-import static implementation.datatype.WKTDatatype.DEFAULT_SRS_URI;
+import static implementation.WKTDatatype.DEFAULT_SRS_URI;
 import java.util.HashMap;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;

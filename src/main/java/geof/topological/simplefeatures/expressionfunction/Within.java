@@ -5,7 +5,7 @@
  */
 package geof.topological.simplefeatures.expressionfunction;
 
-import implementation.datatype.GeometryWrapper;
+import implementation.GeometryWrapper;
 import geof.topological.GenericExpressionFunction;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;

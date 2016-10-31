@@ -6,7 +6,7 @@
 package implementation.prototype;
 
 import com.vividsolutions.jts.geom.Geometry;
-import implementation.datatype.WKTDatatype;
+import implementation.WKTDatatype;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.core.Substitute;
