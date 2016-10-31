@@ -62,7 +62,7 @@ public class GMLDatatypeTest {
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point point = geometryFactory.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
-        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisation.GML);
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisationEnum.GML);
 
         String result = instance.unparse(geometry);
 
@@ -91,7 +91,7 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisation.GML);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -117,7 +117,7 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisation.GML);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -143,7 +143,7 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisation.GML);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);

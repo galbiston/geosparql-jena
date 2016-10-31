@@ -88,7 +88,7 @@ public class GMLDatatype extends BaseDatatype {
             Geometry geometry = gmlReader.read(lexicalForm, null);
             XMLDocument xmlDoc = new XMLDocument(lexicalForm);
             String srsURI = xmlDoc.node().getAttributes().getNamedItem("srsName").getNodeValue();
-            GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisation.GML);
+            GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.GML);
             return geom;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
             LOGGER.error("Illegal GML literal: {}", lexicalForm);

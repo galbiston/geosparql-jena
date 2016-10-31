@@ -63,7 +63,7 @@ public class WKTDatatypeTest {
         Point point = geometryFactory.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisation.WKT);
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisationEnum.WKT);
 
         String result = instance.unparse(geometry);
 
@@ -89,7 +89,7 @@ public class WKTDatatypeTest {
         Point expGeometry = geometryFactory.createPoint(coord);
         String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -114,7 +114,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -139,7 +139,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -164,7 +164,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -189,7 +189,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -214,7 +214,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisation.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);

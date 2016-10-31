@@ -30,10 +30,10 @@ public class GeometryWrapper {
 
     private final Geometry geometry;
     private final String srsURI;
-    private final GeoSerialisation serialisation;
+    private final GeoSerialisationEnum serialisation;
     private final DistanceUnitsEnum distanceUnits;
 
-    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisation serialisation) {
+    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation) {
         this.geometry = geometry;
         this.srsURI = srsURI;
         this.serialisation = serialisation;
@@ -42,7 +42,7 @@ public class GeometryWrapper {
         this.distanceUnits = CRSRegistry.extractCRSDistanceUnits(crs);
     }
 
-    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisation serialisation, DistanceUnitsEnum distanceUnits) {
+    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation, DistanceUnitsEnum distanceUnits) {
         this.geometry = geometry;
         this.srsURI = srsURI;
         this.serialisation = serialisation;
@@ -98,7 +98,7 @@ public class GeometryWrapper {
         return srsURI;
     }
 
-    public GeoSerialisation getSerialisation() {
+    public GeoSerialisationEnum getSerialisation() {
         return serialisation;
     }
 

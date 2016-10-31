@@ -114,7 +114,7 @@ public class WKTDatatype extends BaseDatatype {
 
             WKTReader wktReader = new WKTReader();
             Geometry geom = wktReader.read(wktLiteral);
-            geometry = new GeometryWrapper(geom, srsURI, GeoSerialisation.WKT);
+            geometry = new GeometryWrapper(geom, srsURI, GeoSerialisationEnum.WKT);
 
         } catch (ParseException ex) {
             LOGGER.error("Illegal WKT literal: {}", lexicalForm);

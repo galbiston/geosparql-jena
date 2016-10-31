@@ -14,10 +14,10 @@ import org.apache.jena.datatypes.DatatypeFormatException;
  */
 public class GeoDatatype {
 
-    public static final String unparse(Geometry geometry, GeoSerialisation serialisation) {
+    public static final String unparse(Geometry geometry, GeoSerialisationEnum serialisation) {
 
         String result;
-        if (serialisation.equals(GeoSerialisation.WKT)) {
+        if (serialisation.equals(GeoSerialisationEnum.WKT)) {
             WKTDatatype datatype = WKTDatatype.theWKTDatatype;
             result = datatype.unparse(geometry);
         } else {
