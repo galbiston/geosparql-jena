@@ -60,7 +60,7 @@ public class BufferFilterFuncTest {
     }
 
     /**
-     * Test of exec method, of class BufferFilterFunc.
+     * Test of exec method, of class Buffer.
      */
     @Test
     public void testExec() {
@@ -73,7 +73,7 @@ public class BufferFilterFuncTest {
                 + " }";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.BUFFER_NAME), geof.nontopo.BufferFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.BUFFER_NAME), geof.nontopological.filterfunction.Buffer.class);
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
 

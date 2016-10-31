@@ -5,6 +5,10 @@
  */
 package main;
 
+import functionregistry.NonTopological;
+import functionregistry.RCC8;
+import functionregistry.SimpleFeatures;
+import functionregistry.Egenhofer;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -46,16 +50,16 @@ public class Main {
         final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
         final FunctionRegistry filterRegistry = FunctionRegistry.get(ARQ.getContext());
 
-        NonTopoFunctionsRegistry.loadFiltFunctions(filterRegistry);
+        NonTopological.loadFiltFunctions(filterRegistry);
 
-        SimpleFeaturesFunctionRegistry.loadPropFunctions(propertyRegistry);
-        SimpleFeaturesFunctionRegistry.loadFiltFunctions(filterRegistry);
+        SimpleFeatures.loadPropFunctions(propertyRegistry);
+        SimpleFeatures.loadFiltFunctions(filterRegistry);
 
-        EgenhoferFunctionsRegistry.loadPropFunctions(propertyRegistry);
-        EgenhoferFunctionsRegistry.loadFiltFunctions(filterRegistry);
+        Egenhofer.loadPropFunctions(propertyRegistry);
+        Egenhofer.loadFiltFunctions(filterRegistry);
 
-        RCC8FunctionsRegistry.loadPropFunctions(propertyRegistry);
-        RCC8FunctionsRegistry.loadFiltFunctions(filterRegistry);
+        RCC8.loadPropFunctions(propertyRegistry);
+        RCC8.loadFiltFunctions(filterRegistry);
 
     }
 
@@ -71,19 +75,19 @@ public class Main {
         final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
         final FunctionRegistry filterRegistry = FunctionRegistry.get(ARQ.getContext());
 
-        NonTopoFunctionsRegistry.loadFiltFunctions(filterRegistry);
+        NonTopological.loadFiltFunctions(filterRegistry);
 
-        SimpleFeaturesFunctionRegistry.loadPropFunctions(propertyRegistry);
-        SimpleFeaturesFunctionRegistry.loadFiltFunctions(filterRegistry);
-        SimpleFeaturesFunctionRegistry.loadQueryRewriteFunctions(propertyRegistry);
+        SimpleFeatures.loadPropFunctions(propertyRegistry);
+        SimpleFeatures.loadFiltFunctions(filterRegistry);
+        SimpleFeatures.loadQueryRewriteFunctions(propertyRegistry);
 
-        EgenhoferFunctionsRegistry.loadPropFunctions(propertyRegistry);
-        EgenhoferFunctionsRegistry.loadFiltFunctions(filterRegistry);
-        EgenhoferFunctionsRegistry.loadQueryRewriteFunctions(propertyRegistry);
+        Egenhofer.loadPropFunctions(propertyRegistry);
+        Egenhofer.loadFiltFunctions(filterRegistry);
+        Egenhofer.loadQueryRewriteFunctions(propertyRegistry);
 
-        RCC8FunctionsRegistry.loadPropFunctions(propertyRegistry);
-        RCC8FunctionsRegistry.loadFiltFunctions(filterRegistry);
-        RCC8FunctionsRegistry.loadQueryRewriteFunctions(propertyRegistry);
+        RCC8.loadPropFunctions(propertyRegistry);
+        RCC8.loadFiltFunctions(filterRegistry);
+        RCC8.loadQueryRewriteFunctions(propertyRegistry);
 
     }
 

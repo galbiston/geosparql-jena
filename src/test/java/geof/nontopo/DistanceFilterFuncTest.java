@@ -56,7 +56,7 @@ public class DistanceFilterFuncTest {
     }
 
     /**
-     * Test of exec method, of class DistanceFilterFunc.
+     * Test of exec method, of class Distance.
      */
     @Test
     public void testExec() {
@@ -74,7 +74,7 @@ public class DistanceFilterFuncTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.DISTANCE_NAME), geof.nontopo.DistanceFilterFunc.class);
+        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.DISTANCE_NAME), geof.nontopological.filterfunction.Distance.class);
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();

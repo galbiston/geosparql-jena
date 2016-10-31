@@ -15,7 +15,7 @@ import org.opengis.referencing.operation.TransformException;
  *
  * @author haozhechen
  */
-public class Equal extends GenericFilterFunction {
+public class Equals extends GenericFilterFunction {
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {

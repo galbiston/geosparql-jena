@@ -72,13 +72,13 @@ public class Vocabulary {
     public static final String EH_INSIDE_NAME = "ehInside";
     public static final String EH_OVERLAP_NAME = "ehOverlap";
     public static final String EH_MEET_NAME = "ehMeet";
-    public static final String EH_COVEREDBY_NAME = "ehCoveredBy";
+    public static final String EH_COVERED_BY_NAME = "ehCoveredBy";
 
     //RCC8 Topological function names:
     public static final String RCC_EQUALS_NAME = "rcc8eq";
     public static final String RCC_DISCONNECTED_NAME = "rcc8dc";
-    public static final String RCC_EXTCONNECTED_NAME = "rcc8ec";
-    public static final String RCC_PARTOVERLAP_NAME = "rcc8po";
+    public static final String RCC_EXTERNALLY_CONNECTED_NAME = "rcc8ec";
+    public static final String RCC_PARTIALLY_OVERLAPPING_NAME = "rcc8po";
     public static final String RCC_TANPROPERPARTINVERSE_NAME = "rcc8ppi";
     public static final String RCC_TANPROPERPART_NAME = "rcc8pp";
     public static final String RCC_NTANPROPERPART_NAME = "rcc8ntpp";
