@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.simplefeatures.expressionfunction.Within;
+import geof.topological.simplefeatures.expressionfunction.sfWithinEF;
 import implementation.support.Vocabulary;
 
 /**
@@ -54,7 +54,7 @@ public class SFWithinQRGmlGeometryToFeature extends PropertyFunctionBase {
         Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
-        Expr expr = new Within(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new sfWithinEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         bp.add(NodeVarHasGML_SUB);
         bp.add(FeaHasGeom_OBJ);

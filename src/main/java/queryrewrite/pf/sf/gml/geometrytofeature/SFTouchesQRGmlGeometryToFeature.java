@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.simplefeatures.expressionfunction.Touches;
+import geof.topological.simplefeatures.expressionfunction.sfTouchesEF;
 import implementation.support.Vocabulary;
 
 /**
@@ -54,7 +54,7 @@ public class SFTouchesQRGmlGeometryToFeature extends PropertyFunctionBase {
         Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
-        Expr expr = new Touches(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new sfTouchesEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         bp.add(NodeVarHasGML_SUB);
         bp.add(FeaHasGeom_OBJ);

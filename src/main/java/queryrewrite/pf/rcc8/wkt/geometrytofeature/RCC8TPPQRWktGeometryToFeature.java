@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.rcc8.expressionfunction.TangentialProperPart;
+import geof.topological.rcc8.expressionfunction.rccTangentialProperPartEF;
 import implementation.support.Vocabulary;
 
 /**
@@ -54,7 +54,7 @@ public class RCC8TPPQRWktGeometryToFeature extends PropertyFunctionBase {
         Triple GeomHasWKT_OBJ = new Triple(GeomVar_OBJ, Vocabulary.WKT_PRO.asNode(), WKTVar_OBJ);
 
         //Spefify the Expr Function type here:
-        Expr expr = new TangentialProperPart(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));
+        Expr expr = new rccTangentialProperPartEF(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));
 
         bp.add(NodeVarHasWKT_SUB);
         bp.add(FeaHasGeom_OBJ);

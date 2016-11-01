@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.rcc8.expressionfunction.Disconnected;
+import geof.topological.rcc8.expressionfunction.rccDisconnectedEF;
 import implementation.support.Vocabulary;
 
 /**
@@ -54,7 +54,7 @@ public class RCC8DCQRWktFeatureToGeometry extends PropertyFunctionBase {
         Triple GeomHasWKT_SUB = new Triple(GeomVar_SUB, Vocabulary.WKT_PRO.asNode(), WKTVar_SUB);
 
         //Spefify the Expr Function type here:
-        Expr expr = new Disconnected(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));
+        Expr expr = new rccDisconnectedEF(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));
 
         bp.add(FeaHasGeom_SUB);
         bp.add(GeomHasWKT_SUB);

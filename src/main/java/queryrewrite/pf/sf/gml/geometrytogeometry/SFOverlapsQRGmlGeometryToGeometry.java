@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.simplefeatures.expressionfunction.Overlaps;
+import geof.topological.simplefeatures.expressionfunction.sfOverlapsEF;
 import implementation.support.Vocabulary;
 
 /**
@@ -51,7 +51,7 @@ public class SFOverlapsQRGmlGeometryToGeometry extends PropertyFunctionBase {
         Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
-        Expr expr = new Overlaps(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new sfOverlapsEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         bp.add(NodeVarHasGML_SUB);
         bp.add(NodeVarHasGML_OBJ);

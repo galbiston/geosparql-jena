@@ -6,11 +6,20 @@
 package implementation.functionregistry;
 
 import geof.topological.rcc8.filterfunction.*;
+import geof.topological.rcc8.propertyfunction.*;
 import static implementation.functionregistry.FunctionLoader.addFilterFunction;
 import static implementation.functionregistry.FunctionLoader.addPropertyFunction;
+import implementation.support.Vocabulary;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
-import implementation.support.Vocabulary;
+import queryrewrite.pf.rcc8.gml.featuretofeature.*;
+import queryrewrite.pf.rcc8.gml.featuretogeometry.*;
+import queryrewrite.pf.rcc8.gml.geometrytofeature.*;
+import queryrewrite.pf.rcc8.gml.geometrytogeometry.*;
+import queryrewrite.pf.rcc8.wkt.featuretofeature.*;
+import queryrewrite.pf.rcc8.wkt.featuretogeometry.*;
+import queryrewrite.pf.rcc8.wkt.geometrytofeature.*;
+import queryrewrite.pf.rcc8.wkt.geometrytogeometry.*;
 
 /**
  *
@@ -29,14 +38,14 @@ public class RCC8 {
     public static void loadPropFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, geof.topological.rcc8.propertyfunction.Disconnected.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, geof.topological.rcc8.propertyfunction.Equals.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, geof.topological.rcc8.propertyfunction.ExternallyConnected.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, geof.topological.rcc8.propertyfunction.NonTangentalProperPartInverse.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, geof.topological.rcc8.propertyfunction.NonTangentalProperPart.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, geof.topological.rcc8.propertyfunction.PartiallyOverlapping.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, geof.topological.rcc8.propertyfunction.TangentalProperPartInverse.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, geof.topological.rcc8.propertyfunction.TangentalProperPart.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, rccDisconnectedPF.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, rccEqualsPF.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, rccExternallyConnectedPF.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, rccNonTangentalProperPartInversePF.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, rccNonTangentalProperPartPF.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, rccPartiallyOverlappingPF.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, rccTangentalProperPartInversePF.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, rccTangentalProperPartPF.class);
     }
 
     /**
@@ -49,84 +58,84 @@ public class RCC8 {
     public static void loadQueryRewriteFunctions(PropertyFunctionRegistry registry) {
 
         // WKT feature to feature query rewrite functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, queryrewrite.pf.rcc8.wkt.featuretofeature.RCC8DCQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, queryrewrite.pf.rcc8.wkt.featuretofeature.RCC8EQQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, queryrewrite.pf.rcc8.wkt.featuretofeature.RCC8ECQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.wkt.featuretofeature.RCC8NTPPIQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, queryrewrite.pf.rcc8.wkt.featuretofeature.RCC8NTPPQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, queryrewrite.pf.rcc8.wkt.featuretofeature.RCC8POQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.wkt.featuretofeature.RCC8TPPIQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, queryrewrite.pf.rcc8.wkt.featuretofeature.RCC8TPPQRWktFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, RCC8DCQRWktFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, RCC8EQQRWktFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, RCC8ECQRWktFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, RCC8NTPPIQRWktFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, RCC8NTPPQRWktFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, RCC8POQRWktFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, RCC8TPPIQRWktFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, RCC8TPPQRWktFeatureToFeature.class);
 
         // WKT feature to geometry query rewrite functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, queryrewrite.pf.rcc8.wkt.featuretogeometry.RCC8DCQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, queryrewrite.pf.rcc8.wkt.featuretogeometry.RCC8EQQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, queryrewrite.pf.rcc8.wkt.featuretogeometry.RCC8ECQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.wkt.featuretogeometry.RCC8NTPPIQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, queryrewrite.pf.rcc8.wkt.featuretogeometry.RCC8NTPPQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, queryrewrite.pf.rcc8.wkt.featuretogeometry.RCC8POQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.wkt.featuretogeometry.RCC8TPPIQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, queryrewrite.pf.rcc8.wkt.featuretogeometry.RCC8TPPQRWktFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, RCC8DCQRWktFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, RCC8EQQRWktFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, RCC8ECQRWktFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, RCC8NTPPIQRWktFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, RCC8NTPPQRWktFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, RCC8POQRWktFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, RCC8TPPIQRWktFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, RCC8TPPQRWktFeatureToGeometry.class);
 
         // WKT geometry to feature query rewrite functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, queryrewrite.pf.rcc8.wkt.geometrytofeature.RCC8DCQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, queryrewrite.pf.rcc8.wkt.geometrytofeature.RCC8EQQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, queryrewrite.pf.rcc8.wkt.geometrytofeature.RCC8ECQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.wkt.geometrytofeature.RCC8NTPPIQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, queryrewrite.pf.rcc8.wkt.geometrytofeature.RCC8NTPPQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, queryrewrite.pf.rcc8.wkt.geometrytofeature.RCC8POQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.wkt.geometrytofeature.RCC8TPPIQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, queryrewrite.pf.rcc8.wkt.geometrytofeature.RCC8TPPQRWktGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, RCC8DCQRWktGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, RCC8EQQRWktGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, RCC8ECQRWktGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, RCC8NTPPIQRWktGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, RCC8NTPPQRWktGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, RCC8POQRWktGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, RCC8TPPIQRWktGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, RCC8TPPQRWktGeometryToFeature.class);
 
         // WKT geometry to geometry query rewrite functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, queryrewrite.pf.rcc8.wkt.geometrytogeometry.RCC8DCQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, queryrewrite.pf.rcc8.wkt.geometrytogeometry.RCC8EQQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, queryrewrite.pf.rcc8.wkt.geometrytogeometry.RCC8ECQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.wkt.geometrytogeometry.RCC8NTPPIQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, queryrewrite.pf.rcc8.wkt.geometrytogeometry.RCC8NTPPQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, queryrewrite.pf.rcc8.wkt.geometrytogeometry.RCC8POQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.wkt.geometrytogeometry.RCC8TPPIQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, queryrewrite.pf.rcc8.wkt.geometrytogeometry.RCC8TPPQRWktGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, RCC8DCQRWktGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, RCC8EQQRWktGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, RCC8ECQRWktGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, RCC8NTPPIQRWktGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, RCC8NTPPQRWktGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, RCC8POQRWktGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, RCC8TPPIQRWktGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, RCC8TPPQRWktGeometryToGeometry.class);
 
         // GML feature to feature query rewrite functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, queryrewrite.pf.rcc8.gml.featuretofeature.RCC8DCQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, queryrewrite.pf.rcc8.gml.featuretofeature.RCC8EQQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, queryrewrite.pf.rcc8.gml.featuretofeature.RCC8ECQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.gml.featuretofeature.RCC8NTPPIQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, queryrewrite.pf.rcc8.gml.featuretofeature.RCC8NTPPQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, queryrewrite.pf.rcc8.gml.featuretofeature.RCC8POQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.gml.featuretofeature.RCC8TPPIQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, queryrewrite.pf.rcc8.gml.featuretofeature.RCC8TPPQRGmlFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, RCC8DCQRGmlFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, RCC8EQQRGmlFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, RCC8ECQRGmlFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, RCC8NTPPIQRGmlFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, RCC8NTPPQRGmlFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, RCC8POQRGmlFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, RCC8TPPIQRGmlFeatureToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, RCC8TPPQRGmlFeatureToFeature.class);
 
         // GML feature to geometry query rewrite functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, queryrewrite.pf.rcc8.gml.featuretogeometry.RCC8DCQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, queryrewrite.pf.rcc8.gml.featuretogeometry.RCC8EQQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, queryrewrite.pf.rcc8.gml.featuretogeometry.RCC8ECQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.gml.featuretogeometry.RCC8NTPPIQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, queryrewrite.pf.rcc8.gml.featuretogeometry.RCC8NTPPQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, queryrewrite.pf.rcc8.gml.featuretogeometry.RCC8POQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.gml.featuretogeometry.RCC8TPPIQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, queryrewrite.pf.rcc8.gml.featuretogeometry.RCC8TPPQRGmlFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, RCC8DCQRGmlFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, RCC8EQQRGmlFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, RCC8ECQRGmlFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, RCC8NTPPIQRGmlFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, RCC8NTPPQRGmlFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, RCC8POQRGmlFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, RCC8TPPIQRGmlFeatureToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, RCC8TPPQRGmlFeatureToGeometry.class);
 
         // GML geometry to feature query rewrite functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, queryrewrite.pf.rcc8.gml.geometrytofeature.RCC8DCQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, queryrewrite.pf.rcc8.gml.geometrytofeature.RCC8EQQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, queryrewrite.pf.rcc8.gml.geometrytofeature.RCC8ECQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.gml.geometrytofeature.RCC8NTPPIQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, queryrewrite.pf.rcc8.gml.geometrytofeature.RCC8NTPPQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, queryrewrite.pf.rcc8.gml.geometrytofeature.RCC8POQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.gml.geometrytofeature.RCC8TPPIQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, queryrewrite.pf.rcc8.gml.geometrytofeature.RCC8TPPQRGmlGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, RCC8DCQRGmlGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, RCC8EQQRGmlGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, RCC8ECQRGmlGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, RCC8NTPPIQRGmlGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, RCC8NTPPQRGmlGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, RCC8POQRGmlGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, RCC8TPPIQRGmlGeometryToFeature.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, RCC8TPPQRGmlGeometryToFeature.class);
 
         // GML geometry to geometry query rewrite functions
-        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, queryrewrite.pf.rcc8.gml.geometrytogeometry.RCC8DCQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, queryrewrite.pf.rcc8.gml.geometrytogeometry.RCC8EQQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, queryrewrite.pf.rcc8.gml.geometrytogeometry.RCC8ECQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.gml.geometrytogeometry.RCC8NTPPIQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, queryrewrite.pf.rcc8.gml.geometrytogeometry.RCC8NTPPQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, queryrewrite.pf.rcc8.gml.geometrytogeometry.RCC8POQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, queryrewrite.pf.rcc8.gml.geometrytogeometry.RCC8TPPIQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, queryrewrite.pf.rcc8.gml.geometrytogeometry.RCC8TPPQRGmlGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, RCC8DCQRGmlGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EQUALS_NAME, RCC8EQQRGmlGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, RCC8ECQRGmlGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, RCC8NTPPIQRGmlGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, RCC8NTPPQRGmlGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, RCC8POQRGmlGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, RCC8TPPIQRGmlGeometryToGeometry.class);
+        addPropertyFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, RCC8TPPQRGmlGeometryToGeometry.class);
 
     }
 
@@ -139,14 +148,14 @@ public class RCC8 {
     public static void loadFiltFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions
-        addFilterFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, Disconnected.class);
-        addFilterFunction(registry, Vocabulary.RCC_EQUALS_NAME, Equals.class);
-        addFilterFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, ExternallyConnected.class);
-        addFilterFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, NonTangentialProperPartInverse.class);
-        addFilterFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, NonTangentialProperPart.class);
-        addFilterFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, PartiallyOverlapping.class);
-        addFilterFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, TangentialProperPartInverse.class);
-        addFilterFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, TangentialProperPart.class);
+        addFilterFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, rccDisconnectedFF.class);
+        addFilterFunction(registry, Vocabulary.RCC_EQUALS_NAME, rccEqualsFF.class);
+        addFilterFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, rccExternallyConnectedFF.class);
+        addFilterFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, rccNonTangentialProperPartInverseFF.class);
+        addFilterFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, rccNonTangentialProperPartFF.class);
+        addFilterFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, rccPartiallyOverlappingFF.class);
+        addFilterFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, rccTangentialProperPartInverseFF.class);
+        addFilterFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, rccTangentialProperPartFF.class);
     }
 
 }

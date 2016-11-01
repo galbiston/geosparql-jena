@@ -21,7 +21,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
-import geof.topological.rcc8.expressionfunction.TangentialProperPart;
+import geof.topological.rcc8.expressionfunction.rccTangentialProperPartEF;
 import implementation.support.Vocabulary;
 
 /**
@@ -54,7 +54,7 @@ public class RCC8TPPQRGmlFeatureToGeometry extends PropertyFunctionBase {
         Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
 
         //Spefify the Expr Function type here:
-        Expr expr = new TangentialProperPart(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
+        Expr expr = new rccTangentialProperPartEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 
         bp.add(FeaHasGeom_SUB);
         bp.add(GeomHasGML_SUB);
