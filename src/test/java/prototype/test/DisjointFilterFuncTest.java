@@ -5,6 +5,8 @@
  */
 package prototype.test;
 
+import geof.topological.simplefeatures.filterfunction.sfDisjointFF;
+import implementation.support.Prefixes;
 import implementation.support.RDFDataLocation;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -27,7 +29,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import implementation.support.Prefixes;
 
 /**
  *
@@ -82,7 +83,7 @@ public class DisjointFilterFuncTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        FunctionRegistry.get().put("http://www.opengis.net/def/function/geosparql/sfDisjoint", geof.topo.sf.SFDisjointFilterFunc.class);
+        FunctionRegistry.get().put("http://www.opengis.net/def/function/geosparql/sfDisjoint", sfDisjointFF.class);
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), INF_MODEL)) {
             ResultSet rs = qExec.execSelect();

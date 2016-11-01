@@ -7,8 +7,8 @@ package implementation;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
-import implementation.support.DistanceUnitsEnum;
 import implementation.support.GeoSerialisationEnum;
+import implementation.support.UnitsOfMeasure;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
@@ -35,7 +35,7 @@ public class GeometryWrapper {
     private final String srsURI;
     private final GeoSerialisationEnum serialisation;
     private final CoordinateReferenceSystem crs;
-    private final DistanceUnitsEnum distanceUnits;
+    private final UnitsOfMeasure unitsOfMeasure;
 
     public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation) {
         this.geometry = geometry;
@@ -43,7 +43,7 @@ public class GeometryWrapper {
         this.serialisation = serialisation;
 
         this.crs = CRSRegistry.addCRS(srsURI);
-        this.distanceUnits = CRSRegistry.getDistanceUnits(srsURI);
+        this.unitsOfMeasure = UnitRegistry.addUnits(srsURI, crs);
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
@@ -52,7 +52,7 @@ public class GeometryWrapper {
         this.srsURI = geometryWrapper.srsURI;
         this.serialisation = geometryWrapper.serialisation;
         this.crs = geometryWrapper.crs;
-        this.distanceUnits = geometryWrapper.distanceUnits;
+        this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
     }
 
     public GeometryWrapper checkCRS(GeometryWrapper sourceCRSGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -96,11 +96,9 @@ public class GeometryWrapper {
         return serialisation;
     }
 
-    public GeometryWrapper buffer(double distance, DistanceUnitsEnum targetDistanceUnits) {
+    public GeometryWrapper buffer(double distance, String targetDistanceUnitsURI) {
 
-        if (!distanceUnits.equals(targetDistanceUnits)) {
-            distance = UomConverter.conversion(distance, distanceUnits, targetDistanceUnits);
-        }
+        distance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, unitsOfMeasure);
 
         Geometry geo = this.geometry.buffer(distance);
         return new GeometryWrapper(geo, srsURI, serialisation);
@@ -120,15 +118,13 @@ public class GeometryWrapper {
         return new GeometryWrapper(geo, srsURI, serialisation);
     }
 
-    public double distance(GeometryWrapper targetGeometry, DistanceUnitsEnum targetDistanceUnits) throws FactoryException, MismatchedDimensionException, TransformException {
+    public double distance(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
 
         double distance = this.geometry.distance(transformedGeometry.getGeometry());
 
-        if (!distanceUnits.equals(targetDistanceUnits)) {
-            distance = UomConverter.conversion(distance, distanceUnits, targetDistanceUnits);
-        }
+        distance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, unitsOfMeasure);
 
         return distance;
     }
@@ -230,13 +226,38 @@ public class GeometryWrapper {
         return this.geometry.within(transformedGeometry.getGeometry());
     }
 
+    public NodeValue getResultNode() {
+
+        String lexicalForm = DatatypeSelector.unparse(geometry, serialisation);
+        return NodeValue.makeNodeString(lexicalForm);
+    }
+
+    public static final GeometryWrapper extract(NodeValue nodeValue) throws DatatypeFormatException {
+
+        try {
+            Node node = nodeValue.asNode();
+
+            String dataTypeURI = node.getLiteralDatatypeURI();
+            String lexicalForm = node.getLiteralLexicalForm();
+
+            GeometryWrapper geometry = DatatypeSelector.parse(lexicalForm, dataTypeURI);
+            return geometry;
+
+        } catch (DatatypeFormatException ex) {
+            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", ex);
+            throw ex;
+        }
+
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 17 * hash + Objects.hashCode(this.geometry);
-        hash = 17 * hash + Objects.hashCode(this.srsURI);
-        hash = 17 * hash + Objects.hashCode(this.serialisation);
-        hash = 17 * hash + Objects.hashCode(this.distanceUnits);
+        hash = 89 * hash + Objects.hashCode(this.geometry);
+        hash = 89 * hash + Objects.hashCode(this.srsURI);
+        hash = 89 * hash + Objects.hashCode(this.serialisation);
+        hash = 89 * hash + Objects.hashCode(this.crs);
+        hash = 89 * hash + Objects.hashCode(this.unitsOfMeasure);
         return hash;
     }
 
@@ -261,36 +282,15 @@ public class GeometryWrapper {
         if (this.serialisation != other.serialisation) {
             return false;
         }
-        return this.distanceUnits == other.distanceUnits;
+        if (!Objects.equals(this.crs, other.crs)) {
+            return false;
+        }
+        return Objects.equals(this.unitsOfMeasure, other.unitsOfMeasure);
     }
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", distanceUnits=" + distanceUnits + '}';
-    }
-
-    public NodeValue getResultNode() {
-
-        String lexicalForm = DatatypeSelector.unparse(geometry, serialisation);
-        return NodeValue.makeNodeString(lexicalForm);
-    }
-
-    public static final GeometryWrapper extract(NodeValue nodeValue) throws DatatypeFormatException {
-
-        try {
-            Node node = nodeValue.asNode();
-
-            String dataTypeURI = node.getLiteralDatatypeURI();
-            String lexicalForm = node.getLiteralLexicalForm();
-
-            GeometryWrapper geometry = DatatypeSelector.parse(lexicalForm, dataTypeURI);
-            return geometry;
-
-        } catch (DatatypeFormatException ex) {
-            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", ex);
-            throw ex;
-        }
-
+        return "GeometryWrapper{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + '}';
     }
 
 }

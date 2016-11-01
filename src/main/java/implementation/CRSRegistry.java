@@ -6,7 +6,6 @@
 package implementation;
 
 import static implementation.datatype.WKTDatatype.DEFAULT_SRS_URI;
-import implementation.support.DistanceUnitsEnum;
 import java.util.HashMap;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
@@ -22,7 +21,6 @@ public class CRSRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CRSRegistry.class);
     private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
-    private static final HashMap<String, DistanceUnitsEnum> DISTANCE_UNITS_REGISTRY = new HashMap<>();
 
     static {
         addCRS(DEFAULT_SRS_URI);
@@ -36,11 +34,10 @@ public class CRSRegistry {
             try {
                 crs = CRS.decode(srsURI);
                 CRS_REGISTRY.put(srsURI, crs);
-                DistanceUnitsEnum units = extractCRSDistanceUnits(crs);
-                DISTANCE_UNITS_REGISTRY.put(srsURI, units);
+                UnitRegistry.addUnits(srsURI, crs);
 
             } catch (FactoryException ex) {
-                LOGGER.error("CRS Parse Error: {} {}", DEFAULT_SRS_URI, ex.getMessage());
+                LOGGER.error("CRS Parse Error: {} {}", srsURI, ex.getMessage());
             }
         } else {
             crs = CRS_REGISTRY.get(srsURI);
@@ -50,26 +47,9 @@ public class CRSRegistry {
 
     public static final CoordinateReferenceSystem getCRS(String srsURI) {
 
-        addCRS(srsURI);
-        return CRS_REGISTRY.get(srsURI);
-    }
-
-    public static final DistanceUnitsEnum getDistanceUnits(String srsURI) {
-
-        addCRS(srsURI);
-        return DISTANCE_UNITS_REGISTRY.get(srsURI);
-    }
-
-    private static DistanceUnitsEnum extractCRSDistanceUnits(CoordinateReferenceSystem crs) {
-
-        //TODO Extract units from WKT string.
-        String wktMetadata = crs.toWKT();
-
-        String units;
-
-        DistanceUnitsEnum distanceUnits = UomConverter.extract(units);
-
-        return distanceUnits;
+        CoordinateReferenceSystem crs = addCRS(srsURI);
+        UnitRegistry.addUnits(srsURI, crs);
+        return crs;
     }
 
 }

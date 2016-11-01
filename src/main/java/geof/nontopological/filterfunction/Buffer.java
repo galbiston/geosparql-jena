@@ -5,9 +5,7 @@
  */
 package geof.nontopological.filterfunction;
 
-import implementation.support.DistanceUnitsEnum;
 import implementation.GeometryWrapper;
-import implementation.UomConverter;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -34,9 +32,7 @@ public class Buffer extends FunctionBase3 {
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
 
             //Obtain the target distance units
-            DistanceUnitsEnum targetDistanceUnits = UomConverter.extract(v3);
-
-            GeometryWrapper buffer = geometry.buffer(radius, targetDistanceUnits);
+            GeometryWrapper buffer = geometry.buffer(radius, v3.asNode().getLiteralLexicalForm());
 
             return buffer.getResultNode();
         } catch (DatatypeFormatException dfx) {

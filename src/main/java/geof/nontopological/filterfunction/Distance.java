@@ -5,9 +5,7 @@
  */
 package geof.nontopological.filterfunction;
 
-import implementation.support.DistanceUnitsEnum;
 import implementation.GeometryWrapper;
-import implementation.UomConverter;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -33,9 +31,7 @@ public class Distance extends FunctionBase3 {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
-            DistanceUnitsEnum distanceUnits = UomConverter.extract(v3);
-
-            double distance = geometry1.distance(geometry2, distanceUnits);
+            double distance = geometry1.distance(geometry2, v3.asNode().getLiteralLexicalForm());
 
             return NodeValue.makeDouble(distance);
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
