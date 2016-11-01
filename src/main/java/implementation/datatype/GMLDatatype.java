@@ -5,19 +5,19 @@
  */
 package implementation.datatype;
 
-import implementation.support.GeoSerialisationEnum;
 import com.jcabi.xml.XMLDocument;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.gml2.GMLReader;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
 import implementation.GeometryWrapper;
+import implementation.support.GeoSerialisationEnum;
+import static implementation.support.Prefixes.GEO_URI;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static implementation.support.Prefixes.GEO_URI;
 
 /**
  *
