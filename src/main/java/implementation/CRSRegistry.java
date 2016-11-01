@@ -5,7 +5,7 @@
  */
 package implementation;
 
-import static implementation.WKTDatatype.DEFAULT_SRS_URI;
+import static implementation.datatype.WKTDatatype.DEFAULT_SRS_URI;
 import implementation.support.DistanceUnitsEnum;
 import java.util.HashMap;
 import org.geotools.referencing.CRS;

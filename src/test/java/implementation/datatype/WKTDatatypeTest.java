@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package datatype;
+package implementation.datatype;
 
 import implementation.support.GeoSerialisationEnum;
-import implementation.WKTDatatype;
+import implementation.datatype.WKTDatatype;
 import implementation.GeometryWrapper;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;

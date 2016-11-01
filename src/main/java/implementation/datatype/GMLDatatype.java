@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation;
+package implementation.datatype;
 
 import implementation.support.GeoSerialisationEnum;
 import com.jcabi.xml.XMLDocument;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.gml2.GMLReader;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
+import implementation.GeometryWrapper;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.jena.datatypes.BaseDatatype;
