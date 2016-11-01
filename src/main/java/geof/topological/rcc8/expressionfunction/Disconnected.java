@@ -7,6 +7,7 @@ package geof.topological.rcc8.expressionfunction;
 
 import implementation.GeometryWrapper;
 import geof.topological.GenericExpressionFunction;
+import implementation.intersectionpattern.RCC8IntersectionPattern;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -31,6 +32,6 @@ public class Disconnected extends GenericExpressionFunction {
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, "FFTFFTTTT");
+        return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.DISCONNECTED);
     }
 }

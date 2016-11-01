@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package geof.topological.egenhofer.expressionfunction;
+package geof.topological.rcc8.expressionfunction;
 
 import geof.topological.GenericExpressionFunction;
 import implementation.GeometryWrapper;
-import implementation.intersectionpattern.EgenhoferIntersectionPattern;
+import implementation.intersectionpattern.RCC8IntersectionPattern;
 import implementation.support.Vocabulary;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -19,20 +19,19 @@ import org.opengis.referencing.operation.TransformException;
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class Equals extends GenericExpressionFunction {
+public class NonTangentialProperPart extends GenericExpressionFunction {
 
-    public Equals(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.EH_EQUALS_SYMBOL);
+    public NonTangentialProperPart(Expr expr1, Expr expr2) {
+        super(expr1, expr2, Vocabulary.RCC_NTANPROPERPART_SYMBOL);
     }
 
     @Override
     public Expr copy(Expr arg1, Expr arg2) {
-        return new Equals(arg1, arg2);
+        return new NonTangentialProperPart(arg1, arg2);
     }
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.EQUALS);
+        return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.NON_TANGENTIAL_PROPER_PART);
     }
-
 }

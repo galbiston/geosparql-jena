@@ -17,7 +17,7 @@ public class NonTangentalProperPartInverse extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new geof.topological.rcc8.expressionfunction.NonTangentalProperPartInverse(expr1, expr2);
+        return new geof.topological.rcc8.expressionfunction.NonTangentialProperPartInverse(expr1, expr2);
     }
 
 }

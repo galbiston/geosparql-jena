@@ -142,11 +142,11 @@ public class RCC8 {
         addFilterFunction(registry, Vocabulary.RCC_DISCONNECTED_NAME, Disconnected.class);
         addFilterFunction(registry, Vocabulary.RCC_EQUALS_NAME, Equals.class);
         addFilterFunction(registry, Vocabulary.RCC_EXTERNALLY_CONNECTED_NAME, ExternallyConnected.class);
-        addFilterFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, NonTangentalProperPartInverse.class);
-        addFilterFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, NonTangentalProperPart.class);
+        addFilterFunction(registry, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME, NonTangentialProperPartInverse.class);
+        addFilterFunction(registry, Vocabulary.RCC_NTANPROPERPART_NAME, NonTangentialProperPart.class);
         addFilterFunction(registry, Vocabulary.RCC_PARTIALLY_OVERLAPPING_NAME, PartiallyOverlapping.class);
-        addFilterFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, TangentalProperPartInverse.class);
-        addFilterFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, TangentalProperPart.class);
+        addFilterFunction(registry, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME, TangentialProperPartInverse.class);
+        addFilterFunction(registry, Vocabulary.RCC_TANPROPERPART_NAME, TangentialProperPart.class);
     }
 
 }

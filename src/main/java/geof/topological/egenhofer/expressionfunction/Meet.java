@@ -8,6 +8,7 @@ package geof.topological.egenhofer.expressionfunction;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import geof.topological.GenericExpressionFunction;
 import implementation.GeometryWrapper;
+import implementation.intersectionpattern.EgenhoferIntersectionPattern;
 import implementation.support.Vocabulary;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -34,7 +35,7 @@ public class Meet extends GenericExpressionFunction {
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         IntersectionMatrix matrix = sourceGeometry.relate(targetGeometry);
-        return matrix.matches("FT*******") || matrix.matches("F**T*****") || matrix.matches("F***T****");
+        return matrix.matches(EgenhoferIntersectionPattern.MEET1) || matrix.matches(EgenhoferIntersectionPattern.MEET2) || matrix.matches(EgenhoferIntersectionPattern.MEET3);
 
         //TODO Reduce DE-9IM to just ensure the interiors don't overlap
         //See http://docs.geotools.org/stable/userguide/library/jts/dim9.html

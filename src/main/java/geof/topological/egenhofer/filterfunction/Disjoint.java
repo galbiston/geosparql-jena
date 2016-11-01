@@ -5,8 +5,9 @@
  */
 package geof.topological.egenhofer.filterfunction;
 
-import implementation.GeometryWrapper;
 import geof.topological.GenericFilterFunction;
+import implementation.GeometryWrapper;
+import implementation.intersectionpattern.EgenhoferIntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -20,7 +21,7 @@ public class Disjoint extends GenericFilterFunction {
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, "FF*FF****");
+        return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.DISJOINT);
     }
 
 }

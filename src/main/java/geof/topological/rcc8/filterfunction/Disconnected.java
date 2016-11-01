@@ -5,8 +5,9 @@
  */
 package geof.topological.rcc8.filterfunction;
 
-import implementation.GeometryWrapper;
 import geof.topological.GenericFilterFunction;
+import implementation.GeometryWrapper;
+import implementation.intersectionpattern.RCC8IntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -21,7 +22,7 @@ public class Disconnected extends GenericFilterFunction {
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, "FFTFFTTTT");
+        return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.DISCONNECTED);
     }
 
 }

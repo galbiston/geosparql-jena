@@ -5,23 +5,24 @@
  */
 package geof.topological.rcc8.filterfunction;
 
-import implementation.GeometryWrapper;
 import geof.topological.GenericFilterFunction;
+import implementation.GeometryWrapper;
+import implementation.intersectionpattern.RCC8IntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 
 /**
- * RCC8TPPI means tangential proper part inverse
+ * RCC8NTPPI means non-tangential proper part inverse
  *
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class TangentalProperPartInverse extends GenericFilterFunction {
+public class NonTangentialProperPartInverse extends GenericFilterFunction {
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, "TTTFTTFFT");
+        return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.NON_TANGENTIAL_PROPER_PART_INVERSE);
     }
 
 }

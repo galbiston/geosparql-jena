@@ -17,7 +17,7 @@ public class TangentalProperPart extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new geof.topological.rcc8.expressionfunction.TangentalProperPart(expr1, expr2);
+        return new geof.topological.rcc8.expressionfunction.TangentialProperPart(expr1, expr2);
     }
 
 }

@@ -3,34 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package geof.topological.rcc8.expressionfunction;
+package geof.topological.rcc8.filterfunction;
 
+import geof.topological.GenericFilterFunction;
 import implementation.GeometryWrapper;
-import geof.topological.GenericExpressionFunction;
-import org.apache.jena.sparql.expr.Expr;
+import implementation.intersectionpattern.RCC8IntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
-import implementation.support.Vocabulary;
 
 /**
+ * RCC8TPPI means tangential proper part inverse
  *
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class TangentalProperPart extends GenericExpressionFunction {
-
-    public TangentalProperPart(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.RCC_TANPROPERPART_SYMBOL);
-    }
-
-    @Override
-    public Expr copy(Expr arg1, Expr arg2) {
-        return new TangentalProperPart(arg1, arg2);
-    }
+public class TangentialProperPartInverse extends GenericFilterFunction {
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, "TFFTTFTTT");
+        return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.TANGENTIAL_PROPER_PART_INVERSE);
     }
+
 }

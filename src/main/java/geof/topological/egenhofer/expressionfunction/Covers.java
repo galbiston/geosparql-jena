@@ -5,13 +5,14 @@
  */
 package geof.topological.egenhofer.expressionfunction;
 
-import implementation.GeometryWrapper;
 import geof.topological.GenericExpressionFunction;
+import implementation.GeometryWrapper;
+import implementation.intersectionpattern.EgenhoferIntersectionPattern;
+import implementation.support.Vocabulary;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
-import implementation.support.Vocabulary;
 
 /**
  *
@@ -31,7 +32,7 @@ public class Covers extends GenericExpressionFunction {
 
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, "T*TFT*FF*");
+        return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.COVERS);
     }
 
 }
