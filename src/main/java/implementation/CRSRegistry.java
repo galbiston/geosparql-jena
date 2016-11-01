@@ -5,8 +5,8 @@
  */
 package implementation;
 
-import implementation.support.DistanceUnitsEnum;
 import static implementation.WKTDatatype.DEFAULT_SRS_URI;
+import implementation.support.DistanceUnitsEnum;
 import java.util.HashMap;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
@@ -28,12 +28,13 @@ public class CRSRegistry {
         addCRS(DEFAULT_SRS_URI);
     }
 
-    public static final void addCRS(String srsURI) {
+    public static final CoordinateReferenceSystem addCRS(String srsURI) {
 
+        CoordinateReferenceSystem crs = null;
         if (!CRS_REGISTRY.containsKey(srsURI)) {
 
             try {
-                CoordinateReferenceSystem crs = CRS.decode(srsURI);
+                crs = CRS.decode(srsURI);
                 CRS_REGISTRY.put(srsURI, crs);
                 DistanceUnitsEnum units = extractCRSDistanceUnits(crs);
                 DISTANCE_UNITS_REGISTRY.put(srsURI, units);
@@ -41,7 +42,10 @@ public class CRSRegistry {
             } catch (FactoryException ex) {
                 LOGGER.error("CRS Parse Error: {} {}", DEFAULT_SRS_URI, ex.getMessage());
             }
+        } else {
+            crs = CRS_REGISTRY.get(srsURI);
         }
+        return crs;
     }
 
     public static final CoordinateReferenceSystem getCRS(String srsURI) {
@@ -56,7 +60,7 @@ public class CRSRegistry {
         return DISTANCE_UNITS_REGISTRY.get(srsURI);
     }
 
-    private static final DistanceUnitsEnum extractCRSDistanceUnits(CoordinateReferenceSystem crs) {
+    private static DistanceUnitsEnum extractCRSDistanceUnits(CoordinateReferenceSystem crs) {
 
         //TODO Extract units from WKT string.
         String wktMetadata = crs.toWKT();

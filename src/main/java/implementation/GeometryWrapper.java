@@ -5,10 +5,10 @@
  */
 package implementation;
 
-import implementation.support.DistanceUnitsEnum;
-import implementation.support.GeoSerialisationEnum;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
+import implementation.support.DistanceUnitsEnum;
+import implementation.support.GeoSerialisationEnum;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
@@ -34,6 +34,7 @@ public class GeometryWrapper {
     private final Geometry geometry;
     private final String srsURI;
     private final GeoSerialisationEnum serialisation;
+    private final CoordinateReferenceSystem crs;
     private final DistanceUnitsEnum distanceUnits;
 
     public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation) {
@@ -41,7 +42,7 @@ public class GeometryWrapper {
         this.srsURI = srsURI;
         this.serialisation = serialisation;
 
-        CRSRegistry.addCRS(srsURI);
+        this.crs = CRSRegistry.addCRS(srsURI);
         this.distanceUnits = CRSRegistry.getDistanceUnits(srsURI);
     }
 
@@ -50,8 +51,8 @@ public class GeometryWrapper {
         this.geometry = geometryWrapper.geometry;
         this.srsURI = geometryWrapper.srsURI;
         this.serialisation = geometryWrapper.serialisation;
+        this.crs = geometryWrapper.crs;
         this.distanceUnits = geometryWrapper.distanceUnits;
-
     }
 
     public GeometryWrapper checkCRS(GeometryWrapper sourceCRSGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -60,11 +61,10 @@ public class GeometryWrapper {
         try {
             if (!srsURI.equals(sourceCRSGeometry.srsURI)) {
                 CoordinateReferenceSystem sourceCRS = sourceCRSGeometry.getCRS();
-                CoordinateReferenceSystem targetCRS = getCRS();
 
                 Geometry sourceGeometry = sourceCRSGeometry.geometry;
 
-                MathTransform transform = CRS.findMathTransform(sourceCRS, targetCRS, false);
+                MathTransform transform = CRS.findMathTransform(sourceCRS, crs, false);
                 Geometry targetGeometry = JTS.transform(sourceGeometry, transform);
 
                 transformedCRSGeometry = new GeometryWrapper(targetGeometry, srsURI, serialisation);
@@ -81,7 +81,7 @@ public class GeometryWrapper {
     }
 
     public CoordinateReferenceSystem getCRS() {
-        return CRSRegistry.getCRS(srsURI);
+        return crs;
     }
 
     public Geometry getGeometry() {
@@ -146,7 +146,6 @@ public class GeometryWrapper {
     }
 
     public String getSRID() {
-        CoordinateReferenceSystem crs = CRSRegistry.getCRS(srsURI);
         return CRS.toSRS(crs);
     }
 
