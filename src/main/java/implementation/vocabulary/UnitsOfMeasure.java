@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.support;
+package implementation.vocabulary;
 
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
@@ -15,7 +15,7 @@ import javax.measure.unit.Unit;
  *
  * @author Gregory Albiston
  */
-public class UnitsOfMeasureVocabulary {
+public class UnitsOfMeasure {
 
     //Units Of Measurement URI
     public static final String METRE_URI = "http://www.opengis.net/def/uom/OGC/1.0/metre";

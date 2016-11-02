@@ -22,7 +22,8 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.simplefeatures.expressionfunction.sfTouchesEF;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -49,10 +50,10 @@ public class SFTouchesQRGmlFeatureToFeature extends PropertyFunctionBase {
 
         BasicPattern bp = new BasicPattern();
 
-        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Vocabulary.GEOM_PRO.asNode(), GeomVar_SUB);
-        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GEOM_PRO.asNode(), GeomVar_OBJ);
-        Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
-        Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
+        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Geo.HAS_GEOMETRY_PRO.asNode(), GeomVar_SUB);
+        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Geo.HAS_GEOMETRY_PRO.asNode(), GeomVar_OBJ);
+        Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Geo.AS_GML_PRO.asNode(), GMLVar_SUB);
+        Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Geo.AS_GML_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
         Expr expr = new sfTouchesEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));

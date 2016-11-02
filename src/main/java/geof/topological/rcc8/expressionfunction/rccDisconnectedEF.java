@@ -12,7 +12,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
 
 /**
  *
@@ -22,7 +22,7 @@ import implementation.support.Vocabulary;
 public class rccDisconnectedEF extends GenericExpressionFunction {
 
     public rccDisconnectedEF(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.RCC_DISCONNECTED_SYMBOL);
+        super(expr1, expr2, General.RCC_DISCONNECTED_SYMBOL);
     }
 
     @Override

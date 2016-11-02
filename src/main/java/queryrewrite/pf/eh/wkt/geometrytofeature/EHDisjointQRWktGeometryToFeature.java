@@ -22,7 +22,8 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.egenhofer.expressionfunction.ehDisjointEF;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -48,10 +49,10 @@ public class EHDisjointQRWktGeometryToFeature extends PropertyFunctionBase {
 
         BasicPattern bp = new BasicPattern();
 
-        Triple NodeVarHasWKT_SUB = new Triple(nodeVar_SUB, Vocabulary.WKT_PRO.asNode(), WKTVar_SUB);
+        Triple NodeVarHasWKT_SUB = new Triple(nodeVar_SUB, Geo.AS_WKT_PRO.asNode(), WKTVar_SUB);
 
-        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GEOM_PRO.asNode(), GeomVar_OBJ);
-        Triple GeomHasWKT_OBJ = new Triple(GeomVar_OBJ, Vocabulary.WKT_PRO.asNode(), WKTVar_OBJ);
+        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Geo.HAS_GEOMETRY_PRO.asNode(), GeomVar_OBJ);
+        Triple GeomHasWKT_OBJ = new Triple(GeomVar_OBJ, Geo.AS_WKT_PRO.asNode(), WKTVar_OBJ);
 
         //Spefify the Expr Function type here:
         Expr expr = new ehDisjointEF(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));

@@ -22,7 +22,8 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.simplefeatures.expressionfunction.sfIntersectsEF;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -48,10 +49,10 @@ public class SFIntersectsQRWktFeatureToGeometry extends PropertyFunctionBase {
 
         BasicPattern bp = new BasicPattern();
 
-        Triple NodeVarHasWKT_OBJ = new Triple(nodeVar_OBJ, Vocabulary.WKT_PRO.asNode(), WKTVar_OBJ);
+        Triple NodeVarHasWKT_OBJ = new Triple(nodeVar_OBJ, Geo.AS_WKT_PRO.asNode(), WKTVar_OBJ);
 
-        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Vocabulary.GEOM_PRO.asNode(), GeomVar_SUB);
-        Triple GeomHasWKT_SUB = new Triple(GeomVar_SUB, Vocabulary.WKT_PRO.asNode(), WKTVar_SUB);
+        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Geo.HAS_GEOMETRY_PRO.asNode(), GeomVar_SUB);
+        Triple GeomHasWKT_SUB = new Triple(GeomVar_SUB, Geo.AS_WKT_PRO.asNode(), WKTVar_SUB);
 
         //Spefify the Expr Function type here:
         Expr expr = new sfIntersectsEF(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));

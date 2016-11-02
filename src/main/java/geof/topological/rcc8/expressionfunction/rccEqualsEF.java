@@ -8,7 +8,7 @@ package geof.topological.rcc8.expressionfunction;
 import geof.topological.GenericExpressionFunction;
 import implementation.GeometryWrapper;
 import implementation.intersectionpattern.RCC8IntersectionPattern;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -22,7 +22,7 @@ import org.opengis.referencing.operation.TransformException;
 public class rccEqualsEF extends GenericExpressionFunction {
 
     public rccEqualsEF(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.SF_CONTAINS_SYMBOL);
+        super(expr1, expr2, General.SF_CONTAINS_SYMBOL);
     }
 
     @Override

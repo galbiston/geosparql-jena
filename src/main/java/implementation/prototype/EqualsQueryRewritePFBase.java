@@ -25,7 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static implementation.prototype.EqualsQueryRewritePF.hiddenVariableCount;
 import geof.topological.simplefeatures.expressionfunction.sfEqualsEF;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -57,13 +58,13 @@ public class EqualsQueryRewritePFBase extends PropertyFunctionBase {
 
         BasicPattern bp = new BasicPattern();
 
-        Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
-        Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
+        Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Geo.AS_GML_PRO.asNode(), GMLVar_SUB);
+        Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Geo.AS_GML_PRO.asNode(), GMLVar_OBJ);
 
-        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Vocabulary.GEOMEXACT_PRO.asNode(), GeomVar_SUB);
-        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GEOMEXACT_PRO.asNode(), GeomVar_OBJ);
-        Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
-        Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
+        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, General.GEOMEXACT_PRO.asNode(), GeomVar_SUB);
+        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, General.GEOMEXACT_PRO.asNode(), GeomVar_OBJ);
+        Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Geo.AS_GML_PRO.asNode(), GMLVar_SUB);
+        Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Geo.AS_GML_PRO.asNode(), GMLVar_OBJ);
 
         Expr expr = new sfEqualsEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));
 

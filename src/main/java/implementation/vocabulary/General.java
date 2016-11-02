@@ -3,25 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.support;
+package implementation.vocabulary;
 
+import static implementation.support.Prefixes.NTU_URI;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
-import static implementation.support.Prefixes.GEO_URI;
-import static implementation.support.Prefixes.GML_URI;
-import static implementation.support.Prefixes.NTU_URI;
 
 /**
  *
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class Vocabulary {
+public class General {
 
-    //Property
-    public static final Property GML_PRO = ResourceFactory.createProperty(GML_URI + "asGML");
-    public static final Property WKT_PRO = ResourceFactory.createProperty(GEO_URI + "asWKT");
-    public static final Property GEOM_PRO = ResourceFactory.createProperty(GEO_URI + "hasGeometry");
     public static final Property GEOMEXACT_PRO = ResourceFactory.createProperty(NTU_URI + "hasExactGeometry");
     public static final Property GEOMPOINT_PRO = ResourceFactory.createProperty(NTU_URI + "hasPointGeometry");
 

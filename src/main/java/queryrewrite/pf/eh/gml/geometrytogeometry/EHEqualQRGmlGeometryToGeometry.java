@@ -22,7 +22,8 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.egenhofer.expressionfunction.ehEqualsEF;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -47,8 +48,8 @@ public class EHEqualQRGmlGeometryToGeometry extends PropertyFunctionBase {
 
         BasicPattern bp = new BasicPattern();
 
-        Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
-        Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
+        Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Geo.AS_GML_PRO.asNode(), GMLVar_SUB);
+        Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Geo.AS_GML_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
         Expr expr = new ehEqualsEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));

@@ -8,7 +8,7 @@ package implementation.functionregistry;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import implementation.support.Prefixes;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
 
 /**
  *
@@ -18,13 +18,13 @@ public class FunctionLoader {
 
     public static void addPropertyFunction(PropertyFunctionRegistry registry, String functionName, Class<?> funcClass) {
 
-        String uri = Vocabulary.getFunctionURI(Prefixes.GEO_URI, functionName);
+        String uri = General.getFunctionURI(Prefixes.GEO_URI, functionName);
         registry.put(uri, funcClass);
     }
 
     public static void addFilterFunction(FunctionRegistry registry, String functionName, Class<?> funcClass) {
 
-        String uri = Vocabulary.getFunctionURI(Prefixes.GEOF_URI, functionName);
+        String uri = General.getFunctionURI(Prefixes.GEOF_URI, functionName);
         registry.put(uri, funcClass);
     }
 

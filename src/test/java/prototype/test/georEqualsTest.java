@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import implementation.support.Prefixes;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
 
 /**
  *
@@ -74,7 +74,7 @@ public class georEqualsTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put(Vocabulary.getFunctionURI(Prefixes.GEO_URI, Vocabulary.SF_EQUALS_NAME), implementation.prototype.georEquals.class);
+        PropertyFunctionRegistry.get().put(General.getFunctionURI(Prefixes.GEO_URI, General.SF_EQUALS_NAME), implementation.prototype.georEquals.class);
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();
 

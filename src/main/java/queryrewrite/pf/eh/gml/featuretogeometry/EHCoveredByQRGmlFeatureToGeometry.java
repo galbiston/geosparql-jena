@@ -22,7 +22,8 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.egenhofer.expressionfunction.ehCoveredByEF;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -48,10 +49,10 @@ public class EHCoveredByQRGmlFeatureToGeometry extends PropertyFunctionBase {
 
         BasicPattern bp = new BasicPattern();
 
-        Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
+        Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Geo.AS_GML_PRO.asNode(), GMLVar_OBJ);
 
-        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Vocabulary.GEOMEXACT_PRO.asNode(), GeomVar_SUB);
-        Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
+        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, General.GEOMEXACT_PRO.asNode(), GeomVar_SUB);
+        Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Geo.AS_GML_PRO.asNode(), GMLVar_SUB);
 
         //Spefify the Expr Function type here:
         Expr expr = new ehCoveredByEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));

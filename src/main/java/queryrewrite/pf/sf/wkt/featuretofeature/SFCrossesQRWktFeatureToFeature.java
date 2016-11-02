@@ -22,7 +22,8 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.simplefeatures.expressionfunction.sfCrossesEF;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -49,10 +50,10 @@ public class SFCrossesQRWktFeatureToFeature extends PropertyFunctionBase {
 
         BasicPattern bp = new BasicPattern();
 
-        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Vocabulary.GEOM_PRO.asNode(), GeomVar_SUB);
-        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GEOM_PRO.asNode(), GeomVar_OBJ);
-        Triple GeomHasWKT_SUB = new Triple(GeomVar_SUB, Vocabulary.WKT_PRO.asNode(), WKTVar_SUB);
-        Triple GeomHasWKT_OBJ = new Triple(GeomVar_OBJ, Vocabulary.WKT_PRO.asNode(), WKTVar_OBJ);
+        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Geo.HAS_GEOMETRY_PRO.asNode(), GeomVar_SUB);
+        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Geo.HAS_GEOMETRY_PRO.asNode(), GeomVar_OBJ);
+        Triple GeomHasWKT_SUB = new Triple(GeomVar_SUB, Geo.AS_WKT_PRO.asNode(), WKTVar_SUB);
+        Triple GeomHasWKT_OBJ = new Triple(GeomVar_OBJ, Geo.AS_WKT_PRO.asNode(), WKTVar_OBJ);
 
         //Spefify the Expr Function type here:
         Expr expr = new sfCrossesEF(new ExprVar(WKTVar_SUB.getName()), new ExprVar(WKTVar_OBJ.getName()));

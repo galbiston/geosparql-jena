@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import implementation.support.Prefixes;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
 
 /**
  *
@@ -74,7 +74,7 @@ public class DistanceFilterFuncTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        FunctionRegistry.get().put(Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.DISTANCE_NAME), geof.nontopological.filterfunction.Distance.class);
+        FunctionRegistry.get().put(General.getFunctionURI(Prefixes.GEOF_URI, General.DISTANCE_NAME), geof.nontopological.filterfunction.Distance.class);
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();

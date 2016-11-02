@@ -11,7 +11,7 @@ import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
 
 /**
  *
@@ -21,7 +21,7 @@ import implementation.support.Vocabulary;
 public class sfWithinEF extends GenericExpressionFunction {
 
     public sfWithinEF(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.SF_WITHIN_SYMBOL);
+        super(expr1, expr2, General.SF_WITHIN_SYMBOL);
     }
 
     @Override

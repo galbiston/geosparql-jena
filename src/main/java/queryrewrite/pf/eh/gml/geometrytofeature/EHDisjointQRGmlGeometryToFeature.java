@@ -22,7 +22,8 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.egenhofer.expressionfunction.ehDisjointEF;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -48,10 +49,10 @@ public class EHDisjointQRGmlGeometryToFeature extends PropertyFunctionBase {
 
         BasicPattern bp = new BasicPattern();
 
-        Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Vocabulary.GML_PRO.asNode(), GMLVar_SUB);
+        Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Geo.AS_GML_PRO.asNode(), GMLVar_SUB);
 
-        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Vocabulary.GEOMEXACT_PRO.asNode(), GeomVar_OBJ);
-        Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Vocabulary.GML_PRO.asNode(), GMLVar_OBJ);
+        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, General.GEOMEXACT_PRO.asNode(), GeomVar_OBJ);
+        Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Geo.AS_GML_PRO.asNode(), GMLVar_OBJ);
 
         //Spefify the Expr Function type here:
         Expr expr = new ehDisjointEF(new ExprVar(GMLVar_SUB.getName()), new ExprVar(GMLVar_OBJ.getName()));

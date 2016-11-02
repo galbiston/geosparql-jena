@@ -7,7 +7,7 @@ package implementation.functionregistry;
 
 import org.apache.jena.sparql.function.FunctionRegistry;
 import implementation.support.Prefixes;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
 
 /**
  *
@@ -26,16 +26,16 @@ public class NonTopological {
     public static void loadFiltFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.BOUNDARY_NAME), geof.nontopological.filterfunction.Boundary.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.BUFFER_NAME), geof.nontopological.filterfunction.Buffer.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.CONVEXHULL_NAME), geof.nontopological.filterfunction.ConvexHull.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.DIFFERENCE_NAME), geof.nontopological.filterfunction.Difference.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.DISTANCE_NAME), geof.nontopological.filterfunction.Distance.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.ENVELOPE_NAME), geof.nontopological.filterfunction.Envelop.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.GETSRID_NAME), geof.nontopological.filterfunction.GetSRID.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.INTERSECTION_NAME), geof.nontopological.filterfunction.Intersection.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.SYMDIFFERENCE_NAME), geof.nontopological.filterfunction.SymmetricDifference.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Prefixes.GEOF_URI, Vocabulary.UNION_NAME), geof.nontopological.filterfunction.Union.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.BOUNDARY_NAME), geof.nontopological.filterfunction.Boundary.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.BUFFER_NAME), geof.nontopological.filterfunction.Buffer.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.CONVEXHULL_NAME), geof.nontopological.filterfunction.ConvexHull.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.DIFFERENCE_NAME), geof.nontopological.filterfunction.Difference.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.DISTANCE_NAME), geof.nontopological.filterfunction.Distance.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.ENVELOPE_NAME), geof.nontopological.filterfunction.Envelop.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.GETSRID_NAME), geof.nontopological.filterfunction.GetSRID.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.INTERSECTION_NAME), geof.nontopological.filterfunction.Intersection.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.SYMDIFFERENCE_NAME), geof.nontopological.filterfunction.SymmetricDifference.class);
+        addFiltFunc(registry, General.getFunctionURI(Prefixes.GEOF_URI, General.UNION_NAME), geof.nontopological.filterfunction.Union.class);
 
     }
 

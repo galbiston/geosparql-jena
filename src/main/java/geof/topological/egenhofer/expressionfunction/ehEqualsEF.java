@@ -8,7 +8,7 @@ package geof.topological.egenhofer.expressionfunction;
 import geof.topological.GenericExpressionFunction;
 import implementation.GeometryWrapper;
 import implementation.intersectionpattern.EgenhoferIntersectionPattern;
-import implementation.support.Vocabulary;
+import implementation.vocabulary.General;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -22,7 +22,7 @@ import org.opengis.referencing.operation.TransformException;
 public class ehEqualsEF extends GenericExpressionFunction {
 
     public ehEqualsEF(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Vocabulary.EH_EQUALS_SYMBOL);
+        super(expr1, expr2, General.EH_EQUALS_SYMBOL);
     }
 
     @Override

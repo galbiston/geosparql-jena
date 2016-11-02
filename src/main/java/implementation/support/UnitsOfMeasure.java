@@ -65,16 +65,16 @@ public class UnitsOfMeasure {
         boolean isDistanceProjected;
         Unit distanceUnit;
         switch (distanceUnitURI) {
-            case UnitsOfMeasureVocabulary.METRE_URI:
-                distanceUnit = UnitsOfMeasureVocabulary.METRE_UNIT;
+            case implementation.vocabulary.UnitsOfMeasure.METRE_URI:
+                distanceUnit = implementation.vocabulary.UnitsOfMeasure.METRE_UNIT;
                 isDistanceProjected = true;
                 break;
-            case UnitsOfMeasureVocabulary.RADIAN_URI:
-                distanceUnit = UnitsOfMeasureVocabulary.RADIAN_UNIT;
+            case implementation.vocabulary.UnitsOfMeasure.RADIAN_URI:
+                distanceUnit = implementation.vocabulary.UnitsOfMeasure.RADIAN_UNIT;
                 isDistanceProjected = false;
                 break;
-            case UnitsOfMeasureVocabulary.DEGREE_URI:
-                distanceUnit = UnitsOfMeasureVocabulary.DEGREE_UNIT;
+            case implementation.vocabulary.UnitsOfMeasure.DEGREE_URI:
+                distanceUnit = implementation.vocabulary.UnitsOfMeasure.DEGREE_UNIT;
                 isDistanceProjected = false;
                 break;
             default:
