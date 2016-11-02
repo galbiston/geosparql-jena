@@ -42,7 +42,7 @@ dependencies {
     compile group: 'com.jcabi', name: 'jcabi-xml', version: '0.17.2'
 
     //Apache Jena EXCLUDE its log part
-    compile (group: 'org.apache.jena', name: 'apache-jena', version: '3.1.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
+    compile (group: 'org.apache.jena', name: 'apache-jena-libs', version: '3.1.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
 
     //Logging Framework
     compile group:'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
