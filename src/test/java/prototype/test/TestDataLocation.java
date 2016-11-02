@@ -22,6 +22,11 @@ public class TestDataLocation {
     public static final String SAMPLE_WKT = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/sampleWKT.rdf";
 
     /**
+     * Empty Data - test for empty geometry and default SRID return
+     */
+    public static final String SAMPLE_WKT_EMPTY = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/emptyDatasetWKT.rdf";
+
+    /**
      * ITN data - middle
      */
     public static final String ITNDATA = "/Users/haozhechen/NetBeansProjects/GeoSPARQL/src/main/resources/dataset/itn.rdf";

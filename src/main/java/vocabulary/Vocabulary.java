@@ -24,6 +24,7 @@ public class Vocabulary {
     //Property
     public static final Property GML_PRO = ResourceFactory.createProperty(GML_URI + "asGML");
     public static final Property WKT_PRO = ResourceFactory.createProperty(GEO_URI + "asWKT");
+    public static final Property SERIALIZATION_PRO = ResourceFactory.createProperty(GEO_URI + "hasSerialization");
     public static final Property GEOM_PRO = ResourceFactory.createProperty(GEO_URI + "hasGeometry");
     public static final Property GEOMEXACT_PRO = ResourceFactory.createProperty(NTU_URI + "hasExactGeometry");
     public static final Property GEOMPOINT_PRO = ResourceFactory.createProperty(NTU_URI + "hasPointGeometry");

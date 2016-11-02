@@ -16,13 +16,13 @@ import vocabulary.Vocabulary;
 public class EgenhoferFunctionsRegistry {
 
     /**
-     * This method loads all the Egenhofer Topological Property Functions as
-     * well as the Query Rewrite Property Functions
+     * This method loads all the Egenhofer Topological Property Functions
+     * without the query rewrite support
      *
      * @param registry - the PropertyFunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadPropFunctions(PropertyFunctionRegistry registry) {
+    public static void loadTopologyFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
         addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), geof.topopf.eh.EHContainsPropertyFunc.class);
@@ -36,93 +36,86 @@ public class EgenhoferFunctionsRegistry {
     }
 
     /**
-     * This method loads all the Egenhofer Query Rewrite Property Functions
+     * This method loads all the Egenhofer Query Rewrite Feature to Feature
+     * Property Functions
      * <br> Notice These functions must be used with the inference model
      *
      * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadQueryRewriteFunctions(PropertyFunctionRegistry registry) {
+    public static void loadQueryRewriteFeatureToFeatureFuncs(PropertyFunctionRegistry registry) {
 
-        // WKT feature to feature query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.wkt.featuretofeature.EHContainsQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.wkt.featuretofeature.EHCoveredByQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.wkt.featuretofeature.EHCoversQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.wkt.featuretofeature.EHDisjointQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.wkt.featuretofeature.EHEqualQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.wkt.featuretofeature.EHInsideQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.wkt.featuretofeature.EHMeetQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.wkt.featuretofeature.EHOverlapQRWktFeatureToFeature.class);
+        // feature to feature query rewrite functions
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.featuretofeature.EHContainsQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.featuretofeature.EHCoveredByQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.featuretofeature.EHCoversQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.featuretofeature.EHDisjointQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.featuretofeature.EHEqualQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.featuretofeature.EHInsideQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.featuretofeature.EHMeetQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.featuretofeature.EHOverlapQueryRewriteFeatureToFeature.class);
+    }
 
-        // WKT feature to geometry query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.wkt.featuretogeometry.EHContainsQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.wkt.featuretogeometry.EHCoveredByQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.wkt.featuretogeometry.EHCoversQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.wkt.featuretogeometry.EHDisjointQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.wkt.featuretogeometry.EHEqualQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.wkt.featuretogeometry.EHInsideQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.wkt.featuretogeometry.EHMeetQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.wkt.featuretogeometry.EHOverlapQRWktFeatureToGeometry.class);
+    /**
+     * This method loads all the Egenhofer Query Rewrite Feature to Geometry
+     * Property Functions
+     * <br> Notice These functions must be used with the inference model
+     *
+     * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
+     */
+    @SuppressWarnings("deprecation")
+    public static void loadQueryRewriteFeatureToGeometryFuncs(PropertyFunctionRegistry registry) {
 
-        // WKT geometry to feature query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.wkt.geometrytofeature.EHContainsQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.wkt.geometrytofeature.EHCoveredByQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.wkt.geometrytofeature.EHCoversQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.wkt.geometrytofeature.EHDisjointQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.wkt.geometrytofeature.EHEqualQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.wkt.geometrytofeature.EHInsideQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.wkt.geometrytofeature.EHMeetQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.wkt.geometrytofeature.EHOverlapQRWktGeometryToFeature.class);
+        // feature to geometry query rewrite functions
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.featuretogeometry.EHContainsQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.featuretogeometry.EHCoveredByQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.featuretogeometry.EHCoversQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.featuretogeometry.EHDisjointQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.featuretogeometry.EHEqualQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.featuretogeometry.EHInsideQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.featuretogeometry.EHMeetQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.featuretogeometry.EHOverlapQueryRewriteFeatureToGeometry.class);
+    }
 
-        // WKT geometry to geometry query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.wkt.geometrytogeometry.EHContainsQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.wkt.geometrytogeometry.EHCoveredByQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.wkt.geometrytogeometry.EHCoversQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.wkt.geometrytogeometry.EHDisjointQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.wkt.geometrytogeometry.EHEqualQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.wkt.geometrytogeometry.EHInsideQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.wkt.geometrytogeometry.EHMeetQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.wkt.geometrytogeometry.EHOverlapQRWktGeometryToGeometry.class);
+    /**
+     * This method loads all the Egenhofer Query Rewrite Geometry to Feature
+     * Property Functions
+     * <br> Notice These functions must be used with the inference model
+     *
+     * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
+     */
+    @SuppressWarnings("deprecation")
+    public static void loadQueryRewriteGeometryToFeatureFuncs(PropertyFunctionRegistry registry) {
 
-        // GML feature to feature query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.gml.featuretofeature.EHContainsQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.gml.featuretofeature.EHCoveredByQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.gml.featuretofeature.EHCoversQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.gml.featuretofeature.EHDisjointQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.gml.featuretofeature.EHEqualQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.gml.featuretofeature.EHInsideQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.gml.featuretofeature.EHMeetQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.gml.featuretofeature.EHOverlapQRGmlFeatureToFeature.class);
+        // geometry to feature query rewrite functions
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.geometrytofeature.EHContainsQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.geometrytofeature.EHCoveredByQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.geometrytofeature.EHCoversQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.geometrytofeature.EHDisjointQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.geometrytofeature.EHEqualQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.geometrytofeature.EHInsideQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.geometrytofeature.EHMeetQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.geometrytofeature.EHOverlapQueryRewriteGeometryToFeature.class);
+    }
 
-        // GML feature to geometry query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.gml.featuretogeometry.EHContainsQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.gml.featuretogeometry.EHCoveredByQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.gml.featuretogeometry.EHCoversQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.gml.featuretogeometry.EHDisjointQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.gml.featuretogeometry.EHEqualQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.gml.featuretogeometry.EHInsideQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.gml.featuretogeometry.EHMeetQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.gml.featuretogeometry.EHOverlapQRGmlFeatureToGeometry.class);
-
-        // GML geometry to feature query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.gml.geometrytofeature.EHContainsQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.gml.geometrytofeature.EHCoveredByQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.gml.geometrytofeature.EHCoversQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.gml.geometrytofeature.EHDisjointQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.gml.geometrytofeature.EHEqualQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.gml.geometrytofeature.EHInsideQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.gml.geometrytofeature.EHMeetQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.gml.geometrytofeature.EHOverlapQRGmlGeometryToFeature.class);
-
-        // GML geometry to geometry query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.gml.geometrytogeometry.EHContainsQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.gml.geometrytogeometry.EHCoveredByQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.gml.geometrytogeometry.EHCoversQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.gml.geometrytogeometry.EHDisjointQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.gml.geometrytogeometry.EHEqualQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.gml.geometrytogeometry.EHInsideQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.gml.geometrytogeometry.EHMeetQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.gml.geometrytogeometry.EHOverlapQRGmlGeometryToGeometry.class);
+    /**
+     * This method loads all the Egenhofer Query Rewrite Geometry to Geometry
+     * Property Functions
+     * <br> Notice These functions must be used with the inference model
+     *
+     * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
+     */
+    @SuppressWarnings("deprecation")
+    public static void loadQueryRewriteGeometryToGeometryFuncs(PropertyFunctionRegistry registry) {
+        // geometry to geometry query rewrite functions
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_CONTAINS_NAME), queryrewrite.pf.eh.geometrytogeometry.EHContainsQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVEREDBY_NAME), queryrewrite.pf.eh.geometrytogeometry.EHCoveredByQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_COVERS_NAME), queryrewrite.pf.eh.geometrytogeometry.EHCoversQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_DISJOINT_NAME), queryrewrite.pf.eh.geometrytogeometry.EHDisjointQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_EQUALS_NAME), queryrewrite.pf.eh.geometrytogeometry.EHEqualQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_INSIDE_NAME), queryrewrite.pf.eh.geometrytogeometry.EHInsideQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_MEET_NAME), queryrewrite.pf.eh.geometrytogeometry.EHMeetQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.EH_OVERLAP_NAME), queryrewrite.pf.eh.geometrytogeometry.EHOverlapQueryRewriteGeometryToGeometry.class);
     }
 
     /**

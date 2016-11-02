@@ -10,11 +10,11 @@
    <rdfs:Class rdf:about="http://ntu.ac.uk/ont/geo#PlaceOfInterest">
       <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#Feature"/>
    </rdfs:Class>
-   <rdf:Property rdf:about="ntu:hasExactGeometry">
+   <rdf:Property rdf:about="http://ntu.ac.uk/ont/geo#hasExactGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>
-   <rdf:Property rdf:about="ntu:hasPointGeometry">
+   <rdf:Property rdf:about="http://ntu.ac.uk/ont/geo#hasPointGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>

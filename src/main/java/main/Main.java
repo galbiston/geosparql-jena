@@ -38,60 +38,73 @@ public class Main {
     private static int QUERYCOUNT = 1;
 
     /**
-     * Initialize all the GeoSPARQL property and filter functions.
-     * <br>Use this for standard GeoSPARQL setup
+     * Initialize all the GeoSPARQL topology and filter functions.
+     *
+     *
+     * @param topologyResistryLevel Use the public enum class
+     * TopologyRegistryLevel to set the scope of the query.
+     *
+     * <br> -DEFAULT: set the topology functions without query rewrite support.
+     * <br> -FEATURE_TO_FEATURE: set the topology functions with the feature to
+     * feature query rewrite support.
+     * <br> -FEATURE_TO_GEOMETRY: set the topology functions with the feature to
+     * geometry query rewrite support.
+     * <br> -GEOMETRY_TO_FEATURE: set the topology functions with the geometry
+     * to feature query rewrite support.
+     * <br> -GEOMETRY_TO_GEOMETRY: set the topology functions with the geometry
+     * to geometry query rewrite support.
      */
-    public static void init() {
+    public static void init(TopologyRegistryLevel topologyResistryLevel) {
 
-        final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-        final FunctionRegistry filterRegistry = FunctionRegistry.get(ARQ.getContext());
+        PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
+        FunctionRegistry filterRegistry = FunctionRegistry.get(ARQ.getContext());
 
+        /**
+         * Register all the filter functions first.
+         */
         NonTopoFunctionsRegistry.loadFiltFunctions(filterRegistry);
-
-        SimpleFeaturesFunctionRegistry.loadPropFunctions(propertyRegistry);
         SimpleFeaturesFunctionRegistry.loadFiltFunctions(filterRegistry);
-
-        EgenhoferFunctionsRegistry.loadPropFunctions(propertyRegistry);
+        RCC8FunctionsRegistry.loadFiltFunctions(filterRegistry);
         EgenhoferFunctionsRegistry.loadFiltFunctions(filterRegistry);
 
-        RCC8FunctionsRegistry.loadPropFunctions(propertyRegistry);
-        RCC8FunctionsRegistry.loadFiltFunctions(filterRegistry);
-
-    }
-
-    /**
-     * Initialize all the GeoSPARQL property and filter functions as well as the
-     * query rewrite functions.
-     * <br>Use this for fully GeoSPARQL functionality, need to be used with
-     * inference model
-     * <br>
-     */
-    public static void initWithQueryRewriteFunctions() {
-
-        final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-        final FunctionRegistry filterRegistry = FunctionRegistry.get(ARQ.getContext());
-
-        NonTopoFunctionsRegistry.loadFiltFunctions(filterRegistry);
-
-        SimpleFeaturesFunctionRegistry.loadPropFunctions(propertyRegistry);
-        SimpleFeaturesFunctionRegistry.loadFiltFunctions(filterRegistry);
-        SimpleFeaturesFunctionRegistry.loadQueryRewriteFunctions(propertyRegistry);
-
-        EgenhoferFunctionsRegistry.loadPropFunctions(propertyRegistry);
-        EgenhoferFunctionsRegistry.loadFiltFunctions(filterRegistry);
-        EgenhoferFunctionsRegistry.loadQueryRewriteFunctions(propertyRegistry);
-
-        RCC8FunctionsRegistry.loadPropFunctions(propertyRegistry);
-        RCC8FunctionsRegistry.loadFiltFunctions(filterRegistry);
-        RCC8FunctionsRegistry.loadQueryRewriteFunctions(propertyRegistry);
+        switch (topologyResistryLevel) {
+            case DEFAULT:
+                SimpleFeaturesFunctionRegistry.loadTopologyFunctions(propertyRegistry);
+                RCC8FunctionsRegistry.loadTopologyFunctions(propertyRegistry);
+                EgenhoferFunctionsRegistry.loadTopologyFunctions(propertyRegistry);
+                break;
+            case FEATURE_TO_FEATURE:
+                SimpleFeaturesFunctionRegistry.loadQueryRewriteFeatureToFeatureFuncs(propertyRegistry);
+                RCC8FunctionsRegistry.loadQueryRewriteFeatureToFeatureFuncs(propertyRegistry);
+                EgenhoferFunctionsRegistry.loadQueryRewriteFeatureToFeatureFuncs(propertyRegistry);
+                break;
+            case FEATURE_TO_GEOMETRY:
+                SimpleFeaturesFunctionRegistry.loadQueryRewriteFeatureToGeometryFuncs(propertyRegistry);
+                RCC8FunctionsRegistry.loadQueryRewriteFeatureToGeometryFuncs(propertyRegistry);
+                EgenhoferFunctionsRegistry.loadQueryRewriteFeatureToGeometryFuncs(propertyRegistry);
+                break;
+            case GEOMETRY_TO_FEATURE:
+                SimpleFeaturesFunctionRegistry.loadQueryRewriteGeometryToFeatureFuncs(propertyRegistry);
+                RCC8FunctionsRegistry.loadQueryRewriteGeometryToFeatureFuncs(propertyRegistry);
+                EgenhoferFunctionsRegistry.loadQueryRewriteGeometryToFeatureFuncs(propertyRegistry);
+                break;
+            case GEOMETRY_TO_GEOMETRY:
+                SimpleFeaturesFunctionRegistry.loadQueryRewriteGeometryToGeometryFuncs(propertyRegistry);
+                RCC8FunctionsRegistry.loadQueryRewriteGeometryToGeometryFuncs(propertyRegistry);
+                EgenhoferFunctionsRegistry.loadQueryRewriteGeometryToGeometryFuncs(propertyRegistry);
+                break;
+            default:
+                LOGGER.warn("No resistry level has been specified, the query rewrite extension will be assumed to be abandoned.");
+                SimpleFeaturesFunctionRegistry.loadTopologyFunctions(propertyRegistry);
+                RCC8FunctionsRegistry.loadTopologyFunctions(propertyRegistry);
+                EgenhoferFunctionsRegistry.loadTopologyFunctions(propertyRegistry);
+                break;
+        }
 
     }
 
     public static void main(String[] args) {
-        //realworldQuery();
-        //sampleQuery();
-        initWithQueryRewriteFunctions();
-        //PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfEquals", prototype.SFEqualsQRPropertyFunc.class);
+        init(TopologyRegistryLevel.GEOMETRY_TO_FEATURE);
 
         MODEL = ModelFactory.createDefaultModel();
         Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
@@ -102,9 +115,10 @@ public class Main {
         INF_MODEL.prepare();
 
         //Find a spatial location with a given name.
-        String Q1 = "SELECT ?wkt WHERE{"
-                + "ntu:A geo:hasGeometry ?geom ."
-                + "?geom geo:asWKT ?wkt ."
+        String Q1 = "SELECT ?place WHERE{"
+                + "?place geo:hasGeometry ?bGeom . "
+                + "ntu:A geo:hasGeometry ?aGeom ."
+                + "?aGeom geo:sfEquals ?place . "
                 + "}";
 
         evaluateQueryWithInfModel(Q1);
@@ -112,7 +126,7 @@ public class Main {
 
     public static void realworldQuery() {
 
-        init();
+        init(TopologyRegistryLevel.DEFAULT);
 
         long startTime = System.nanoTime();
         MODEL = makeModel(RDFDataLocation.GEODATA);
@@ -259,7 +273,7 @@ public class Main {
 
     public static void sampleQuery() {
 
-        init();
+        init(TopologyRegistryLevel.DEFAULT);
 
         long startTime = System.nanoTime();
         MODEL = makeModel(RDFDataLocation.SAMPLE_WKT);

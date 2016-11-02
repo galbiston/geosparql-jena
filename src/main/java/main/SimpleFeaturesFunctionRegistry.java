@@ -17,12 +17,12 @@ public class SimpleFeaturesFunctionRegistry {
 
     /**
      * This method loads all the Simple Feature Topological Property Functions
-     * as well as the Query Rewrite Property Functions
+     * without the query rewrite support
      *
      * @param registry - the PropertyFunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadPropFunctions(PropertyFunctionRegistry registry) {
+    public static void loadTopologyFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
         addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), geof.topopf.sf.SFContainsPropertyFunc.class);
@@ -36,93 +36,83 @@ public class SimpleFeaturesFunctionRegistry {
     }
 
     /**
-     * This method loads all the Simple Feature Query Rewrite Property Functions
+     * This method loads all the Simple Feature Query Rewrite Feature To Feature
+     * Property Functions
      * <br> Notice These functions must be used with the inference model
      *
      * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadQueryRewriteFunctions(PropertyFunctionRegistry registry) {
+    public static void loadQueryRewriteFeatureToFeatureFuncs(PropertyFunctionRegistry registry) {
+        // feature to feature query rewrite functions
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.featuretofeature.SFContainsQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.featuretofeature.SFCrossesQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.featuretofeature.SFDisjointQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.featuretofeature.SFEqualsQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.featuretofeature.SFIntersectsQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.featuretofeature.SFOverlapsQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.featuretofeature.SFTouchesQueryRewriteFeatureToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.featuretofeature.SFWithinQueryRewriteFeatureToFeature.class);
+    }
 
-        // WKT feature to feature query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.wkt.featuretofeature.SFContainsQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.wkt.featuretofeature.SFCrossesQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.wkt.featuretofeature.SFDisjointQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.wkt.featuretofeature.SFEqualsQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.wkt.featuretofeature.SFIntersectsQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.wkt.featuretofeature.SFOverlapsQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.wkt.featuretofeature.SFTouchesQRWktFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.wkt.featuretofeature.SFWithinQRWktFeatureToFeature.class);
+    /**
+     * This method loads all the Simple Feature Query Rewrite Feature To
+     * Geometry Property Functions
+     * <br> Notice These functions must be used with the inference model
+     *
+     * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
+     */
+    @SuppressWarnings("deprecation")
+    public static void loadQueryRewriteFeatureToGeometryFuncs(PropertyFunctionRegistry registry) {
+        // feature to geometry query rewrite functions
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.featuretogeometry.SFContainsQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.featuretogeometry.SFCrossesQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.featuretogeometry.SFDisjointQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.featuretogeometry.SFEqualsQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.featuretogeometry.SFIntersectsQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.featuretogeometry.SFOverlapsQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.featuretogeometry.SFTouchesQueryRewriteFeatureToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.featuretogeometry.SFWithinQueryRewriteFeatureToGeometry.class);
+    }
 
-        // WKT feature to geometry query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.wkt.featuretogeometry.SFContainsQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.wkt.featuretogeometry.SFCrossesQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.wkt.featuretogeometry.SFDisjointQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.wkt.featuretogeometry.SFEqualsQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.wkt.featuretogeometry.SFIntersectsQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.wkt.featuretogeometry.SFOverlapsQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.wkt.featuretogeometry.SFTouchesQRWktFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.wkt.featuretogeometry.SFWithinQRWktFeatureToGeometry.class);
+    /**
+     * This method loads all the Simple Feature Query Rewrite Geometry To
+     * Feature Property Functions
+     * <br> Notice These functions must be used with the inference model
+     *
+     * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
+     */
+    @SuppressWarnings("deprecation")
+    public static void loadQueryRewriteGeometryToFeatureFuncs(PropertyFunctionRegistry registry) {
+        // geometry to feature query rewrite functions
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.geometrytofeature.SFContainsQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.geometrytofeature.SFCrossesQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.geometrytofeature.SFDisjointQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.geometrytofeature.SFEqualsQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.geometrytofeature.SFIntersectsQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.geometrytofeature.SFOverlapsQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.geometrytofeature.SFTouchesQueryRewriteGeometryToFeature.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.geometrytofeature.SFWithinQueryRewriteGeometryToFeature.class);
+    }
 
-        // WKT geometry to feature query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.wkt.geometrytofeature.SFContainsQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.wkt.geometrytofeature.SFCrossesQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.wkt.geometrytofeature.SFDisjointQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.wkt.geometrytofeature.SFEqualsQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.wkt.geometrytofeature.SFIntersectsQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.wkt.geometrytofeature.SFOverlapsQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.wkt.geometrytofeature.SFTouchesQRWktGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.wkt.geometrytofeature.SFWithinQRWktGeometryToFeature.class);
-
-        // WKT geometry to geometry query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.wkt.geometrytogeometry.SFContainsQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.wkt.geometrytogeometry.SFCrossesQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.wkt.geometrytogeometry.SFDisjointQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.wkt.geometrytogeometry.SFEqualsQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.wkt.geometrytogeometry.SFIntersectsQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.wkt.geometrytogeometry.SFOverlapsQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.wkt.geometrytogeometry.SFTouchesQRWktGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.wkt.geometrytogeometry.SFWithinQRWktGeometryToGeometry.class);
-
-        // GML feature to feature query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.gml.featuretofeature.SFContainsQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.gml.featuretofeature.SFCrossesQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.gml.featuretofeature.SFDisjointQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.gml.featuretofeature.SFEqualsQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.gml.featuretofeature.SFIntersectsQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.gml.featuretofeature.SFOverlapsQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.gml.featuretofeature.SFTouchesQRGmlFeatureToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.gml.featuretofeature.SFWithinQRGmlFeatureToFeature.class);
-
-        // GML feature to geometry query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.gml.featuretogeometry.SFContainsQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.gml.featuretogeometry.SFCrossesQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.gml.featuretogeometry.SFDisjointQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.gml.featuretogeometry.SFEqualsQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.gml.featuretogeometry.SFIntersectsQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.gml.featuretogeometry.SFOverlapsQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.gml.featuretogeometry.SFTouchesQRGmlFeatureToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.gml.featuretogeometry.SFWithinQRGmlFeatureToGeometry.class);
-
-        // GML geometry to feature query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.gml.geometrytofeature.SFContainsQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.gml.geometrytofeature.SFCrossesQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.gml.geometrytofeature.SFDisjointQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.gml.geometrytofeature.SFEqualsQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.gml.geometrytofeature.SFIntersectsQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.gml.geometrytofeature.SFOverlapsQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.gml.geometrytofeature.SFTouchesQRGmlGeometryToFeature.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.gml.geometrytofeature.SFWithinQRGmlGeometryToFeature.class);
-
-        // GML geometry to geometry query rewrite functions
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.gml.geometrytogeometry.SFContainsQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.gml.geometrytogeometry.SFCrossesQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.gml.geometrytogeometry.SFDisjointQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.gml.geometrytogeometry.SFEqualsQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.gml.geometrytogeometry.SFIntersectsQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.gml.geometrytogeometry.SFOverlapsQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.gml.geometrytogeometry.SFTouchesQRGmlGeometryToGeometry.class);
-        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.gml.geometrytogeometry.SFWithinQRGmlGeometryToGeometry.class);
+    /**
+     * This method loads all the Simple Feature Query Rewrite Geometry To
+     * Geometry Property Functions
+     * <br> Notice These functions must be used with the inference model
+     *
+     * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
+     */
+    @SuppressWarnings("deprecation")
+    public static void loadQueryRewriteGeometryToGeometryFuncs(PropertyFunctionRegistry registry) {
+        // geometry to geometry query rewrite functions
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CONTAINS_NAME), queryrewrite.pf.sf.geometrytogeometry.SFContainsQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_CROSSES_NAME), queryrewrite.pf.sf.geometrytogeometry.SFCrossesQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_DISJOINT_NAME), queryrewrite.pf.sf.geometrytogeometry.SFDisjointQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_EQUALS_NAME), queryrewrite.pf.sf.geometrytogeometry.SFEqualsQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_INTERSECTS_NAME), queryrewrite.pf.sf.geometrytogeometry.SFIntersectsQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_OVERLAPS_NAME), queryrewrite.pf.sf.geometrytogeometry.SFOverlapsQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_TOUCHES_NAME), queryrewrite.pf.sf.geometrytogeometry.SFTouchesQueryRewriteGeometryToGeometry.class);
+        addPropFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.SF_WITHIN_NAME), queryrewrite.pf.sf.geometrytogeometry.SFWithinQueryRewriteGeometryToGeometry.class);
     }
 
     /**
