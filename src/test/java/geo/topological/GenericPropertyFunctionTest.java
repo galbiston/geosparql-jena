@@ -53,8 +53,8 @@ public class GenericPropertyFunctionTest {
      * Test of execEvaluated method, of class GenericPropertyFunction.
      */
     @Test
-    public void testExecTemp() {
-        System.out.println("execTemp");
+    public void testExecFeatTemp() {
+        System.out.println("execFeatTemp");
 
         //TODO Fix assert or remove. Debug purposes only.
         RegistryLoader.load();
@@ -68,6 +68,36 @@ public class GenericPropertyFunctionTest {
         InfModel infModel = ModelFactory.createInfModel(reasoner, model);
 
         String queryString = "PREFIX geo: <http://www.opengis.net/ont/geosparql#> PREFIX my: <http://example.org/ApplicationSchema#> SELECT ?f WHERE { ?f geo:sfOverlaps my:A }";
+
+        QueryExecution qe = QueryExecutionFactory.create(queryString, infModel);
+
+        ResultSet rs = qe.execSelect();
+
+        String result = ResultSetFormatter.asText(rs);
+
+        System.out.println(result);
+
+    }
+
+    /**
+     * Test of execEvaluated method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testExecGeoTemp() {
+        System.out.println("execGeoTemp");
+
+        //TODO Fix assert or remove. Debug purposes only.
+        RegistryLoader.load();
+
+        Model model = ModelFactory.createDefaultModel();
+        model.setNsPrefixes(Prefixes.get());
+        model.read(RDFDataLocation.GEOSPARQL_SAMPLE);
+
+        Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
+        reasoner.setParameter(ReasonerVocabulary.PROPsetRDFSLevel, ReasonerVocabulary.RDFS_DEFAULT);
+        InfModel infModel = ModelFactory.createInfModel(reasoner, model);
+
+        String queryString = "PREFIX geo: <http://www.opengis.net/ont/geosparql#> PREFIX my: <http://example.org/ApplicationSchema#> SELECT ?g WHERE { ?g geo:sfOverlaps my:AExactGeom }";
 
         QueryExecution qe = QueryExecutionFactory.create(queryString, infModel);
 
