@@ -33,13 +33,7 @@ public class CRSRegistry {
                 + "  AXIS[\"Geodetic latitude\", NORTH], \n"
                 + "  AUTHORITY[\"OGC\",\"84\"]]";
 
-        try {
-            CoordinateReferenceSystem crs = CRS.parseWKT(default_CRS_WKT);
-            CRS_REGISTRY.put(DEFAULT_WKT_CRS_URI, crs);
-            UnitRegistry.addUnits(DEFAULT_WKT_CRS_URI, crs);
-        } catch (FactoryException ex) {
-            LOGGER.error("Error registering default CRS: {}", ex.getMessage());
-        }
+        addCRS(DEFAULT_WKT_CRS_URI, default_CRS_WKT);
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
@@ -49,6 +43,25 @@ public class CRSRegistry {
 
             try {
                 crs = CRS.decode(srsURI);
+                CRS_REGISTRY.put(srsURI, crs);
+                UnitRegistry.addUnits(srsURI, crs);
+
+            } catch (FactoryException ex) {
+                LOGGER.error("CRS Parse Error: {} {}", srsURI, ex.getMessage());
+            }
+        } else {
+            crs = CRS_REGISTRY.get(srsURI);
+        }
+        return crs;
+    }
+
+    public static final CoordinateReferenceSystem addCRS(String srsURI, String wktString) {
+
+        CoordinateReferenceSystem crs = null;
+        if (!CRS_REGISTRY.containsKey(srsURI)) {
+
+            try {
+                crs = CRS.parseWKT(wktString);
                 CRS_REGISTRY.put(srsURI, crs);
                 UnitRegistry.addUnits(srsURI, crs);
 
