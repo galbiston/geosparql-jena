@@ -5,6 +5,7 @@
  */
 package implementation.functionregistry;
 
+import geof.nontopological.queryfunctions.*;
 import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;
 
@@ -22,19 +23,19 @@ public class NonTopological {
      * @param registry - the FunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadFiltFunctions(FunctionRegistry registry) {
+    public static void loadFilterFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions
-        registry.put(Geof.BOUNDARY_NAME, geof.nontopological.filterfunction.Boundary.class);
-        registry.put(Geof.BUFFER_NAME, geof.nontopological.filterfunction.Buffer.class);
-        registry.put(Geof.CONVEXHULL_NAME, geof.nontopological.filterfunction.ConvexHull.class);
-        registry.put(Geof.DIFFERENCE_NAME, geof.nontopological.filterfunction.Difference.class);
-        registry.put(Geof.DISTANCE_NAME, geof.nontopological.filterfunction.Distance.class);
-        registry.put(Geof.ENVELOPE_NAME, geof.nontopological.filterfunction.Envelop.class);
-        registry.put(Geof.GETSRID_NAME, geof.nontopological.filterfunction.GetSRID.class);
-        registry.put(Geof.INTERSECTION_NAME, geof.nontopological.filterfunction.Intersection.class);
-        registry.put(Geof.SYMDIFFERENCE_NAME, geof.nontopological.filterfunction.SymmetricDifference.class);
-        registry.put(Geof.UNION_NAME, geof.nontopological.filterfunction.Union.class);
+        registry.put(Geof.BOUNDARY_NAME, Boundary.class);
+        registry.put(Geof.BUFFER_NAME, Buffer.class);
+        registry.put(Geof.CONVEXHULL_NAME, ConvexHull.class);
+        registry.put(Geof.DIFFERENCE_NAME, Difference.class);
+        registry.put(Geof.DISTANCE_NAME, Distance.class);
+        registry.put(Geof.ENVELOPE_NAME, Envelop.class);
+        registry.put(Geof.GETSRID_NAME, GetSRID.class);
+        registry.put(Geof.INTERSECTION_NAME, Intersection.class);
+        registry.put(Geof.SYMDIFFERENCE_NAME, SymmetricDifference.class);
+        registry.put(Geof.UNION_NAME, Union.class);
 
     }
 }
