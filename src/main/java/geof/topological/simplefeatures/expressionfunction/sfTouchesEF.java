@@ -21,7 +21,7 @@ import org.opengis.referencing.operation.TransformException;
 public class sfTouchesEF extends GenericExpressionFunction {
 
     public sfTouchesEF(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Geof.SF_OVERLAPS);
+        super(expr1, expr2, Geof.SF_TOUCHES);
     }
 
     @Override

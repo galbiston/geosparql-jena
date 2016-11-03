@@ -22,7 +22,7 @@ import org.opengis.referencing.operation.TransformException;
 public class rccEqualsEF extends GenericExpressionFunction {
 
     public rccEqualsEF(Expr expr1, Expr expr2) {
-        super(expr1, expr2, Geof.SF_CONTAINS);
+        super(expr1, expr2, Geof.RCC_EQUALS);
     }
 
     @Override
