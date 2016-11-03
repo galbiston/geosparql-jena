@@ -5,7 +5,8 @@ Issues
 - topological filter functions required?
 - sfOverlaps correct in JTS? Or fault in geosparqlSample.rdf?
 - CRS conversion between geometries correct? Particularly custom defined CRS84.
-- Compliance Tests.
+- Compliance Tests - structure but need tests. Repetition of loading.
+- Project Documents - implementation challenges and draft paper.
 
 Custom Function Ideas
 - Geodatic distance: function available in GeoTools under JTS wrapper.
