@@ -41,4 +41,8 @@ public class RDFDataLocation {
      * GeoSPARQL schema
      */
     public static final String SCHEMA = RDFDataLocation.class.getClassLoader().getResource("schema/geosparql_vocab_all.rdf").toString();
+    /**
+     * GeoSPARQL schema
+     */
+    public static final String GEOSPARQL_SAMPLE = RDFDataLocation.class.getClassLoader().getResource("dataset/geosparqlSample.rdf").toString();
 }

@@ -22,6 +22,7 @@ import org.apache.jena.sparql.engine.main.QC;
 import org.apache.jena.sparql.expr.Expr;
 import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PFuncSimple;
+import org.apache.jena.sparql.sse.SSE;
 import org.apache.jena.vocabulary.RDF;
 
 /**
@@ -49,7 +50,13 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             Op opEnd = OpUnion.create(geometryGeometry, assertedStatement);
 
             Op opFinal = OpUnion.create(opMiddle, opEnd);
-            //SSE.write(opFinal);
+            //opFinal = OpUnion.create(featureFeature, featureGeometry);
+            //opFinal = featureFeature;
+
+            //BasicPattern bp = new BasicPattern();
+            //bp.add(new Triple(subject, RDF.type.asNode(), Geo.FEATURE_NODE));
+            //opFinal = new OpBGP(bp);
+            SSE.write(opFinal);
 
             return QC.execute(opFinal, binding, execCxt);
         }
