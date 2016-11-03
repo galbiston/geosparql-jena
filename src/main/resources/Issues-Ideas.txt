@@ -1,0 +1,13 @@
+
+Issues
+- axis order when parsing and unparsing.
+- check unit of measure.
+- topological filter functions required?
+- query rewrite in property functions correct?
+- CRS conversion between geometries correct? Particularly custom defined CRS84.
+- Compliance Tests.
+
+Custom Function Ideas
+- Geodatic distance: function available in GeoTools under JTS wrapper.
+- Shortest path: along touching linestrings and defined nodes/edges.
+
