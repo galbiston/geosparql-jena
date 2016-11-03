@@ -79,7 +79,7 @@ public class SFContainsPropertyFuncTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put(Geo.SF_CONTAINS_NAME, geof.topological.simplefeatures.propertyfunction.sfContainsPF.class);
+        PropertyFunctionRegistry.get().put(Geo.SF_CONTAINS_NAME, geo.topological.simplefeatures.sfContainsPF.class);
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();

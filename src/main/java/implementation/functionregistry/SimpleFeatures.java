@@ -5,8 +5,8 @@
  */
 package implementation.functionregistry;
 
+import geo.topological.simplefeatures.*;
 import geof.topological.simplefeatures.expressionfunction.*;
-import geof.topological.simplefeatures.propertyfunction.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;

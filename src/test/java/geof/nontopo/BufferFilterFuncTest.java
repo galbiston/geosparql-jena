@@ -73,7 +73,7 @@ public class BufferFilterFuncTest {
                 + " }";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
-        FunctionRegistry.get().put(Geof.BUFFER_NAME, geof.nontopological.filterfunction.Buffer.class);
+        FunctionRegistry.get().put(Geof.BUFFER_NAME, geof.nontopological.queryfunctions.Buffer.class);
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
 

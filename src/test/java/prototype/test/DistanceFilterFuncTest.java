@@ -74,7 +74,7 @@ public class DistanceFilterFuncTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        FunctionRegistry.get().put("http://example/f#distance", geof.nontopological.filterfunction.Distance.class);
+        FunctionRegistry.get().put("http://example/f#distance", geof.nontopological.queryfunctions.Distance.class);
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();
