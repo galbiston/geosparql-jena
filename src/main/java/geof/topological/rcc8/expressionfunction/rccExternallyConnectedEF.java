@@ -8,7 +8,7 @@ package geof.topological.rcc8.expressionfunction;
 import geof.topological.GenericExpressionFunction;
 import implementation.GeometryWrapper;
 import implementation.intersectionpattern.RCC8IntersectionPattern;
-import implementation.vocabulary.General;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -22,7 +22,7 @@ import org.opengis.referencing.operation.TransformException;
 public class rccExternallyConnectedEF extends GenericExpressionFunction {
 
     public rccExternallyConnectedEF(Expr expr1, Expr expr2) {
-        super(expr1, expr2, General.RCC_EXTCONNECTED_SYMBOL);
+        super(expr1, expr2, Geof.RCC_EXTERNALLY_CONNECTED);
     }
 
     @Override

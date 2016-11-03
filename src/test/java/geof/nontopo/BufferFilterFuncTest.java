@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import implementation.support.Prefixes;
-import implementation.vocabulary.General;
+import implementation.vocabulary.Geof;
 
 /**
  *
@@ -73,7 +73,7 @@ public class BufferFilterFuncTest {
                 + " }";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
-        FunctionRegistry.get().put(General.getFunctionURI(Prefixes.GEOF_URI, General.BUFFER_NAME), geof.nontopological.filterfunction.Buffer.class);
+        FunctionRegistry.get().put(Geof.BUFFER_NAME, geof.nontopological.filterfunction.Buffer.class);
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
 

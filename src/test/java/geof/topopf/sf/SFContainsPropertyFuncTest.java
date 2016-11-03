@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import implementation.support.RDFDataLocation;
 import implementation.support.Prefixes;
-import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
 
 /**
  *
@@ -79,7 +79,7 @@ public class SFContainsPropertyFuncTest {
 
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
-        PropertyFunctionRegistry.get().put(General.getFunctionURI(Prefixes.GEO_URI, General.SF_CONTAINS_NAME), geof.topological.simplefeatures.propertyfunction.sfContainsPF.class);
+        PropertyFunctionRegistry.get().put(Geo.SF_CONTAINS_NAME, geof.topological.simplefeatures.propertyfunction.sfContainsPF.class);
 
         try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), MODEL)) {
             ResultSet rs = qExec.execSelect();

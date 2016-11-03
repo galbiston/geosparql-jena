@@ -5,13 +5,13 @@
  */
 package geof.topological.simplefeatures.expressionfunction;
 
-import implementation.GeometryWrapper;
 import geof.topological.GenericExpressionFunction;
+import implementation.GeometryWrapper;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
-import implementation.vocabulary.General;
 
 /**
  *
@@ -21,7 +21,7 @@ import implementation.vocabulary.General;
 public class sfOverlapsEF extends GenericExpressionFunction {
 
     public sfOverlapsEF(Expr expr1, Expr expr2) {
-        super(expr1, expr2, General.SF_OVERLAPS_SYMBOL);
+        super(expr1, expr2, Geof.SF_OVERLAPS);
     }
 
     @Override

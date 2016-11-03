@@ -5,11 +5,12 @@
  */
 package main;
 
-import implementation.support.RDFDataLocation;
+import implementation.functionregistry.Egenhofer;
 import implementation.functionregistry.NonTopological;
 import implementation.functionregistry.RCC8;
 import implementation.functionregistry.SimpleFeatures;
-import implementation.functionregistry.Egenhofer;
+import implementation.support.Prefixes;
+import implementation.support.RDFDataLocation;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -28,7 +29,6 @@ import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.ReasonerVocabulary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import implementation.support.Prefixes;
 
 /**
  *
@@ -53,14 +53,14 @@ public class Main {
 
         NonTopological.loadFiltFunctions(filterRegistry);
 
-        SimpleFeatures.loadPropFunctions(propertyRegistry);
-        SimpleFeatures.loadFiltFunctions(filterRegistry);
+        SimpleFeatures.loadPropertyFunctions(propertyRegistry);
+        SimpleFeatures.loadExpressionFunctions(filterRegistry);
 
-        Egenhofer.loadPropFunctions(propertyRegistry);
-        Egenhofer.loadFiltFunctions(filterRegistry);
+        Egenhofer.loadPropertyFunctions(propertyRegistry);
+        Egenhofer.loadExpressionFunctions(filterRegistry);
 
-        RCC8.loadPropFunctions(propertyRegistry);
-        RCC8.loadFiltFunctions(filterRegistry);
+        RCC8.loadPropertyFunctions(propertyRegistry);
+        RCC8.loadExpressionFunctions(filterRegistry);
 
     }
 
@@ -78,17 +78,14 @@ public class Main {
 
         NonTopological.loadFiltFunctions(filterRegistry);
 
-        SimpleFeatures.loadPropFunctions(propertyRegistry);
-        SimpleFeatures.loadFiltFunctions(filterRegistry);
-        SimpleFeatures.loadQueryRewriteFunctions(propertyRegistry);
+        SimpleFeatures.loadPropertyFunctions(propertyRegistry);
+        SimpleFeatures.loadExpressionFunctions(filterRegistry);
 
-        Egenhofer.loadPropFunctions(propertyRegistry);
-        Egenhofer.loadFiltFunctions(filterRegistry);
-        Egenhofer.loadQueryRewriteFunctions(propertyRegistry);
+        Egenhofer.loadPropertyFunctions(propertyRegistry);
+        Egenhofer.loadExpressionFunctions(filterRegistry);
 
-        RCC8.loadPropFunctions(propertyRegistry);
-        RCC8.loadFiltFunctions(filterRegistry);
-        RCC8.loadQueryRewriteFunctions(propertyRegistry);
+        RCC8.loadPropertyFunctions(propertyRegistry);
+        RCC8.loadExpressionFunctions(filterRegistry);
 
     }
 

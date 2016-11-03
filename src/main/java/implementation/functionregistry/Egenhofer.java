@@ -5,21 +5,12 @@
  */
 package implementation.functionregistry;
 
-import geof.topological.egenhofer.filterfunction.*;
+import geof.topological.egenhofer.expressionfunction.*;
 import geof.topological.egenhofer.propertyfunction.*;
-import static implementation.functionregistry.FunctionLoader.addFilterFunction;
-import static implementation.functionregistry.FunctionLoader.addPropertyFunction;
-import implementation.vocabulary.General;
+import implementation.vocabulary.Geo;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
-import queryrewrite.pf.eh.gml.featuretofeature.*;
-import queryrewrite.pf.eh.gml.featuretogeometry.*;
-import queryrewrite.pf.eh.gml.geometrytofeature.*;
-import queryrewrite.pf.eh.gml.geometrytogeometry.*;
-import queryrewrite.pf.eh.wkt.featuretofeature.*;
-import queryrewrite.pf.eh.wkt.featuretogeometry.*;
-import queryrewrite.pf.eh.wkt.geometrytofeature.*;
-import queryrewrite.pf.eh.wkt.geometrytogeometry.*;
 
 /**
  *
@@ -35,107 +26,17 @@ public class Egenhofer {
      * @param registry - the PropertyFunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadPropFunctions(PropertyFunctionRegistry registry) {
+    public static void loadPropertyFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, ehContainsPF.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, ehCoveredByPF.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, ehCoversPF.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, ehDisjointPF.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, ehEqualsPF.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, ehInsidePF.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, ehMeetPF.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, ehOverlapPF.class);
-    }
-
-    /**
-     * This method loads all the Egenhofer Query Rewrite Property Functions
-     * <br> Notice These functions must be used with the inference model
-     *
-     * @param registry - the Query Rewrite PropertyFunctionRegistry to be used
-     */
-    @SuppressWarnings("deprecation")
-    public static void loadQueryRewriteFunctions(PropertyFunctionRegistry registry) {
-
-        // WKT feature to feature query rewrite functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, EHContainsQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, EHCoveredByQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, EHCoversQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, EHDisjointQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, EHEqualQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, EHInsideQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, EHMeetQRWktFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, EHOverlapQRWktFeatureToFeature.class);
-
-        // WKT feature to geometry query rewrite functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, EHContainsQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, EHCoveredByQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, EHCoversQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, EHDisjointQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, EHEqualQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, EHInsideQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, EHMeetQRWktFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, EHOverlapQRWktFeatureToGeometry.class);
-
-        // WKT geometry to feature query rewrite functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, EHContainsQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, EHCoveredByQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, EHCoversQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, EHDisjointQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, EHEqualQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, EHInsideQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, EHMeetQRWktGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, EHOverlapQRWktGeometryToFeature.class);
-
-        // WKT geometry to geometry query rewrite functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, EHContainsQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, EHCoveredByQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, EHCoversQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, EHDisjointQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, EHEqualQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, EHInsideQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, EHMeetQRWktGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, EHOverlapQRWktGeometryToGeometry.class);
-
-        // GML feature to feature query rewrite functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, EHContainsQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, EHCoveredByQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, EHCoversQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, EHDisjointQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, EHEqualQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, EHInsideQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, EHMeetQRGmlFeatureToFeature.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, EHOverlapQRGmlFeatureToFeature.class);
-
-        // GML feature to geometry query rewrite functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, EHContainsQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, EHCoveredByQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, EHCoversQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, EHDisjointQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, EHEqualQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, EHInsideQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, EHMeetQRGmlFeatureToGeometry.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, EHOverlapQRGmlFeatureToGeometry.class);
-
-        // GML geometry to feature query rewrite functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, EHContainsQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, EHCoveredByQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, EHCoversQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, EHDisjointQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, EHEqualQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, EHInsideQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, EHMeetQRGmlGeometryToFeature.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, EHOverlapQRGmlGeometryToFeature.class);
-
-        // GML geometry to geometry query rewrite functions
-        addPropertyFunction(registry, General.EH_CONTAINS_NAME, EHContainsQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_COVERED_BY_NAME, EHCoveredByQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_COVERS_NAME, EHCoversQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_DISJOINT_NAME, EHDisjointQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_EQUALS_NAME, EHEqualQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_INSIDE_NAME, EHInsideQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_MEET_NAME, EHMeetQRGmlGeometryToGeometry.class);
-        addPropertyFunction(registry, General.EH_OVERLAP_NAME, EHOverlapQRGmlGeometryToGeometry.class);
+        registry.put(Geo.EH_CONTAINS_NAME, ehContainsPF.class);
+        registry.put(Geo.EH_COVERED_BY_NAME, ehCoveredByPF.class);
+        registry.put(Geo.EH_COVERS_NAME, ehCoversPF.class);
+        registry.put(Geo.EH_DISJOINT_NAME, ehDisjointPF.class);
+        registry.put(Geo.EH_EQUALS_NAME, ehEqualsPF.class);
+        registry.put(Geo.EH_INSIDE_NAME, ehInsidePF.class);
+        registry.put(Geo.EH_MEET_NAME, ehMeetPF.class);
+        registry.put(Geo.EH_OVERLAP_NAME, ehOverlapPF.class);
     }
 
     /**
@@ -144,17 +45,37 @@ public class Egenhofer {
      * @param registry - the FunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
+    public static void loadExpressionFunctions(FunctionRegistry registry) {
+
+        // Simple Feature Filter Functions
+        registry.put(Geof.EH_CONTAINS, ehContainsEF.class);
+        registry.put(Geof.EH_COVERED_BY, ehCoveredByEF.class);
+        registry.put(Geof.EH_COVERS, ehCoversEF.class);
+        registry.put(Geof.EH_DISJOINT, ehDisjointEF.class);
+        registry.put(Geof.EH_EQUALS, ehEqualsEF.class);
+        registry.put(Geof.EH_INSIDE, ehInsideEF.class);
+        registry.put(Geof.EH_MEET, ehMeetEF.class);
+        registry.put(Geof.EH_OVERLAP, ehOverlapEF.class);
+    }
+
+    /**
+     * This method loads all the Egenhofer Topological Filter Functions
+     *
+     * @param registry - the FunctionRegistry to be used
+     */
+    /*
+    @SuppressWarnings("deprecation")
     public static void loadFiltFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions
-        addFilterFunction(registry, General.EH_CONTAINS_NAME, ehContainsFF.class);
-        addFilterFunction(registry, General.EH_COVERED_BY_NAME, ehCoveredByFF.class);
-        addFilterFunction(registry, General.EH_COVERS_NAME, ehCoversFF.class);
-        addFilterFunction(registry, General.EH_DISJOINT_NAME, ehDisjointFF.class);
-        addFilterFunction(registry, General.EH_EQUALS_NAME, ehEqualsFF.class);
-        addFilterFunction(registry, General.EH_INSIDE_NAME, ehInsideFF.class);
-        addFilterFunction(registry, General.EH_MEET_NAME, ehMeetFF.class);
-        addFilterFunction(registry, General.EH_OVERLAP_NAME, ehOverlapFF.class);
+        registry.put(Geof.EH_CONTAINS, ehContainsFF.class);
+        registry.put(Geof.EH_COVERED_BY, ehCoveredByFF.class);
+        registry.put(Geof.EH_COVERS, ehCoversFF.class);
+        registry.put(Geof.EH_DISJOINT, ehDisjointFF.class);
+        registry.put(Geof.EH_EQUALS, ehEqualsFF.class);
+        registry.put(Geof.EH_INSIDE, ehInsideFF.class);
+        registry.put(Geof.EH_MEET, ehMeetFF.class);
+        registry.put(Geof.EH_OVERLAP, ehOverlapFF.class);
     }
-
+     */
 }
