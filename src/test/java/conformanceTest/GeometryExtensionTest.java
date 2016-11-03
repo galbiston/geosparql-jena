@@ -7,13 +7,13 @@ package conformanceTest;
 
 import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
 import static conformanceTest.ConformanceTestSuite.initModels;
-import static main.Main.init;
+import implementation.functionregistry.RegistryLoader;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * A.3Conformance Class: Geometry Extension (serialization, version)
- * Conformance Class URI: /conf/geometry-extension.
+ * A.3Conformance Class: Geometry Extension (serialization, version) Conformance
+ * Class URI: /conf/geometry-extension.
  */
 public class GeometryExtensionTest {
 
@@ -25,7 +25,7 @@ public class GeometryExtensionTest {
         /**
          * Initialize all the GeoSPARQL functionalities
          */
-        init();
+        RegistryLoader.load();
 
         /**
          * Initialize all the models
@@ -34,17 +34,16 @@ public class GeometryExtensionTest {
     }
 
     /**
-     * A.3.1 Tests for all Serializations
-     * A.3.1.1 /conf/geometry-extension/geometry-class
+     * A.3.1 Tests for all Serializations A.3.1.1
+     * /conf/geometry-extension/geometry-class
      *
-     * Requirement: /req/geometry-extension/geometry-class
-     * Implementations shall allow the RDFS class geo:Geometry to be used in
-     * SPARQL graph patterns.
+     * Requirement: /req/geometry-extension/geometry-class Implementations shall
+     * allow the RDFS class geo:Geometry to be used in SPARQL graph patterns.
      *
      * a.) Test purpose: check conformance with this requirement
      *
-     * b.) Test method: verify that queries involving geo:Geometry return
-     * the correct result on a test dataset.
+     * b.) Test method: verify that queries involving geo:Geometry return the
+     * correct result on a test dataset.
      *
      * c.) Reference: Clause 8.2.1 Req 7 d.) Test Type: Capabilities
      */
@@ -58,14 +57,14 @@ public class GeometryExtensionTest {
     /**
      * A.3.1.2 /conf/geometry-extension/feature-properties
      *
-     * Requirement: /req/geometry-extension/feature-properties
-     * Implementations shall allow the properties geo:hasGeometry and
-     * geo:hasDefaultGeometry to be used in SPARQL graph patterns.
+     * Requirement: /req/geometry-extension/feature-properties Implementations
+     * shall allow the properties geo:hasGeometry and geo:hasDefaultGeometry to
+     * be used in SPARQL graph patterns.
      *
      * a.) Test purpose: check conformance with this requirement
      *
-     * b.) Test method: Verify that queries involving these properties
-     * return the correct result for a test dataset.
+     * b.) Test method: Verify that queries involving these properties return
+     * the correct result for a test dataset.
      *
      * c.) Reference: Clause 8.3 Req 8
      *
@@ -81,16 +80,15 @@ public class GeometryExtensionTest {
     /**
      * A.3.1.3 /conf/geometry-extension/geometry-properties
      *
-     * Requirement: /req/geometry-extension/geometry-properties
-     * Implementations shall allow the properties geo:dimension,
-     * geo:coordinateDimension, geo:spatialDimension, geo:isEmpty,
-     * geo:isSimple, geo:hasSerialization to be used in SPARQL graph
-     * patterns.
+     * Requirement: /req/geometry-extension/geometry-properties Implementations
+     * shall allow the properties geo:dimension, geo:coordinateDimension,
+     * geo:spatialDimension, geo:isEmpty, geo:isSimple, geo:hasSerialization to
+     * be used in SPARQL graph patterns.
      *
      * a.) Test purpose: check conformance with this requirement
      *
-     * b.) Test method: Verify that queries involving these properties
-     * return the correct result for a test dataset.
+     * b.) Test method: Verify that queries involving these properties return
+     * the correct result for a test dataset.
      *
      * c.) Reference: Clause 8.4 Req 9
      *
@@ -106,23 +104,21 @@ public class GeometryExtensionTest {
     /**
      * A.3.1.4 /conf/geometry-extension/query-functions
      *
-     * Requirement: /req/geometry-extension/query-functions
-     * Implementations shall support geof:distance, geof:buffer,
-     * geof:convexHull, geof:intersection, geof:union, geof:difference,
-     * geof:symDifference, geof:envelope and geof:boundary as SPARQL
-     * extension functions, consistent with the definitions of the
-     * corresponding functions (distance, buffer, convexHull, intersection,
-     * difference, symDifference, envelope and boundary respectively) in
-     * Simple Features [ISO 19125-1].
+     * Requirement: /req/geometry-extension/query-functions Implementations
+     * shall support geof:distance, geof:buffer, geof:convexHull,
+     * geof:intersection, geof:union, geof:difference, geof:symDifference,
+     * geof:envelope and geof:boundary as SPARQL extension functions, consistent
+     * with the definitions of the corresponding functions (distance, buffer,
+     * convexHull, intersection, difference, symDifference, envelope and
+     * boundary respectively) in Simple Features [ISO 19125-1].
      *
      * a.) Test purpose: check conformance with this requirement
      *
-     * b.) Test method: Verify that a set of SPARQL queries involving each
-     * of the following functions returns the correct result for a test
-     * dataset when using the specified serialization and version:
-     * geof:distance, geof:buffer, geof:convexHull, geof:intersection,
-     * geof:union, geof:difference, geof:symDifference, geof:envelope and
-     * geof:boundary.
+     * b.) Test method: Verify that a set of SPARQL queries involving each of
+     * the following functions returns the correct result for a test dataset
+     * when using the specified serialization and version: geof:distance,
+     * geof:buffer, geof:convexHull, geof:intersection, geof:union,
+     * geof:difference, geof:symDifference, geof:envelope and geof:boundary.
      *
      * c.) Reference: Clause 8.7 Req 19
      *
@@ -138,15 +134,14 @@ public class GeometryExtensionTest {
     /**
      * A.3.1.5 /conf/geometry-extension/srid-function
      *
-     * Requirement: /req/geometry-extension/srid-function
-     * Implementations shall support geof:getSRID as a SPARQL extension
-     * function.
+     * Requirement: /req/geometry-extension/srid-function Implementations shall
+     * support geof:getSRID as a SPARQL extension function.
      *
      * a.) Test purpose: check conformance with this requirement
      *
-     * b.) Test method: Verify that a SPARQL query involving the
-     * geof:getSRID function returns the correct result for a test dataset
-     * when using the specified serialization and version.
+     * b.) Test method: Verify that a SPARQL query involving the geof:getSRID
+     * function returns the correct result for a test dataset when using the
+     * specified serialization and version.
      *
      * c.) Reference: Clause 8.7 Req 20
      *
@@ -160,17 +155,15 @@ public class GeometryExtensionTest {
     }
 
     /**
-     * A.3.2 serialization = WKT
-     * A.3.2.1 /conf/geometry-extension/wkt-literal
+     * A.3.2 serialization = WKT A.3.2.1 /conf/geometry-extension/wkt-literal
      *
-     * Requirement: /req/geometry-extension/wkt-literal
-     * All RDFS Literals of type geo:wktLiteral shall consist of an optional
-     * URI identifying the coordinate reference system followed by Simple
-     * Features Well Known Text (WKT) describing a geometric value, Valid
-     * geo:wktLiterals are formed by concatenating a valid, absolute URI as
-     * defined in [RFC 2396], one or more spaces (Unicode U+0020 character)
-     * as a separator, and a WKT string as defined in Simple Features [ISO
-     * 19125-1].
+     * Requirement: /req/geometry-extension/wkt-literal All RDFS Literals of
+     * type geo:wktLiteral shall consist of an optional URI identifying the
+     * coordinate reference system followed by Simple Features Well Known Text
+     * (WKT) describing a geometric value, Valid geo:wktLiterals are formed by
+     * concatenating a valid, absolute URI as defined in [RFC 2396], one or more
+     * spaces (Unicode U+0020 character) as a separator, and a WKT string as
+     * defined in Simple Features [ISO 19125-1].
      *
      * a.) Test purpose: check conformance with this requirement
      *
@@ -191,10 +184,10 @@ public class GeometryExtensionTest {
     /**
      * A.3.2.2 /conf/geometry-extension/wkt-literal-default-srs
      *
-     * Requirement: /req/geometry-extension/wkt-literal-default-srs
-     * The URI <http://www.opengis.net/def/crs/OGC/1.3/CRS84> shall be
-     * assumed as the spatial reference system for geo:wktLiterals that do
-     * not specify an explicit spatial reference system URI.
+     * Requirement: /req/geometry-extension/wkt-literal-default-srs The URI
+     * <http://www.opengis.net/def/crs/OGC/1.3/CRS84> shall be assumed as the
+     * spatial reference system for geo:wktLiterals that do not specify an
+     * explicit spatial reference system URI.
      *
      * a.) Test purpose: check conformance with this requirement
      *
@@ -216,9 +209,9 @@ public class GeometryExtensionTest {
     /**
      * A.3.2.3 /conf/geometry-extension/wkt-axis-order
      *
-     * Requirement: /req/geometry-extension/wkt-axis-order
-     * Coordinate tuples within geo:wktLiterals shall be interpreted using
-     * the axis order defined in the spatial reference system used.
+     * Requirement: /req/geometry-extension/wkt-axis-order Coordinate tuples
+     * within geo:wktLiterals shall be interpreted using the axis order defined
+     * in the spatial reference system used.
      *
      * a.) Test purpose: check conformance with this requirement
      *
@@ -239,9 +232,8 @@ public class GeometryExtensionTest {
     /**
      * A.3.2.4 /conf/geometry-extension/wkt-literal-empty
      *
-     * Requirement: /req/geometry-extension/wkt-literal-empty
-     * An empty RDFS Literal of type geo:wktLiteral shall be interpreted as
-     * an empty geometry.
+     * Requirement: /req/geometry-extension/wkt-literal-empty An empty RDFS
+     * Literal of type geo:wktLiteral shall be interpreted as an empty geometry.
      *
      * a.) Test purpose: check conformance with this requirement
      *
@@ -283,13 +275,11 @@ public class GeometryExtensionTest {
     }
 
     /**
-     * A.3.3 serialization = GML
-     * A.3.3.1 /conf/geometry-extension/gml-literal
+     * A.3.3 serialization = GML A.3.3.1 /conf/geometry-extension/gml-literal
      *
-     * Requirement: /req/geometry-extension/gml-literal
-     * All geo:gmlLiterals shall consist of a valid element from the GML
-     * schema that implements a subtype of GM_Object as defined in [OGC
-     * 07-036].
+     * Requirement: /req/geometry-extension/gml-literal All geo:gmlLiterals
+     * shall consist of a valid element from the GML schema that implements a
+     * subtype of GM_Object as defined in [OGC 07-036].
      *
      * a.) Test purpose: check conformance with this requirement
      *
@@ -310,8 +300,8 @@ public class GeometryExtensionTest {
     /**
      * A.3.3.2 /conf/geometry-extension/gml-literal-empty
      *
-     * Requirement: /req/geometry-extension/gml-literal-empty
-     * An empty geo:gmlLiteral shall be interpreted as an empty geometry.
+     * Requirement: /req/geometry-extension/gml-literal-empty An empty
+     * geo:gmlLiteral shall be interpreted as an empty geometry.
      *
      * a.) Test purpose: check conformance with this requirement
      *
@@ -332,8 +322,8 @@ public class GeometryExtensionTest {
     /**
      * A.3.3.3 /conf/geometry-extension/gml-profile
      *
-     * Requirement: /req/geometry-extension/gml-profile
-     * Implementations shall document supported GML profiles.
+     * Requirement: /req/geometry-extension/gml-profile Implementations shall
+     * document supported GML profiles.
      *
      * a.) Test purpose: check conformance with this requirement
      *

@@ -7,7 +7,7 @@ package conformanceTest;
 
 import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
 import static conformanceTest.ConformanceTestSuite.initModels;
-import static main.Main.init;
+import implementation.functionregistry.RegistryLoader;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class TopologyVocabularyExtensionTest {
         /**
          * Initialize all the GeoSPARQL functionalities
          */
-        init();
+        RegistryLoader.load();
 
         /**
          * Initialize all the models
@@ -34,19 +34,18 @@ public class TopologyVocabularyExtensionTest {
     }
 
     /**
-     * A.2.1 relation_family = Simple Features
-     * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
+     * A.2.1 relation_family = Simple Features A.2.1.1
+     * /conf/topology-vocab-extension/sf-spatial-relations
      *
      * Requirement: /req/topology-vocab-extension/sf-spatial-relations
-     * Implementations shall allow the properties geo:sfEquals,
-     * geo:sfDisjoint, geo:sfIntersects, geo:sfTouches, geo:sfCrosses,
-     * geo:sfWithin, geo:sfContains, geo:sfOverlaps to be used in SPARQL
-     * graph patterns.
+     * Implementations shall allow the properties geo:sfEquals, geo:sfDisjoint,
+     * geo:sfIntersects, geo:sfTouches, geo:sfCrosses, geo:sfWithin,
+     * geo:sfContains, geo:sfOverlaps to be used in SPARQL graph patterns.
      *
      * a.) Test purpose: check conformance with this requirement
      *
-     * b.) Test method: Verify that queries involving these properties
-     * return the correct result for a test dataset.
+     * b.) Test method: Verify that queries involving these properties return
+     * the correct result for a test dataset.
      *
      * c.) Reference: Clause 7.2 Req 4
      *
@@ -60,19 +59,18 @@ public class TopologyVocabularyExtensionTest {
     }
 
     /**
-     * A.2.2 relation_family = Egenhofer
-     * A.2.2.1 /conf/topology-vocab-extension/eh-spatial-relations
+     * A.2.2 relation_family = Egenhofer A.2.2.1
+     * /conf/topology-vocab-extension/eh-spatial-relations
      *
      * Requirement: /req/topology-vocab-extension/eh-spatial-relations
-     * Implementations shall allow the properties geo:ehEquals,
-     * geo:ehDisjoint, geo:ehMeet, geo:ehOverlap, geo:ehCovers,
-     * geo:ehCoveredBy, geo:ehInside, geo:ehContains to be used in SPARQL
-     * graph patterns.
+     * Implementations shall allow the properties geo:ehEquals, geo:ehDisjoint,
+     * geo:ehMeet, geo:ehOverlap, geo:ehCovers, geo:ehCoveredBy, geo:ehInside,
+     * geo:ehContains to be used in SPARQL graph patterns.
      *
      * a.) Test purpose: check conformance with this requirement
      *
-     * b.) Test method: Verify that queries involving these properties
-     * return the correct result for a test dataset.
+     * b.) Test method: Verify that queries involving these properties return
+     * the correct result for a test dataset.
      *
      * c.) Reference: Clause 7.3 Req 5
      *
@@ -86,8 +84,8 @@ public class TopologyVocabularyExtensionTest {
     }
 
     /**
-     * A.2.3 relation_family = RCC8
-     * A.2.3.1 /conf/topology-vocab-extension/rcc8-spatial-relations
+     * A.2.3 relation_family = RCC8 A.2.3.1
+     * /conf/topology-vocab-extension/rcc8-spatial-relations
      *
      * Requirement: /req/topology-vocab-extension/rcc8-spatial-relations
      * Implementations shall allow the properties geo:rcc8eq, geo:rcc8dc,
@@ -96,8 +94,8 @@ public class TopologyVocabularyExtensionTest {
      *
      * a.) Test purpose: check conformance with this requirement
      *
-     * b.) Test method: Verify that queries involving these properties
-     * return the correct result for a test dataset
+     * b.) Test method: Verify that queries involving these properties return
+     * the correct result for a test dataset
      *
      * c.) Reference: Clause 7.4 Req 6
      *

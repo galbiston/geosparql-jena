@@ -5,15 +5,9 @@
  */
 package main;
 
-import geof.topological.RelateFF;
-import implementation.functionregistry.Egenhofer;
-import implementation.functionregistry.NonTopological;
-import implementation.functionregistry.RCC8;
-import implementation.functionregistry.SimpleFeatures;
+import implementation.functionregistry.RegistryLoader;
 import implementation.support.Prefixes;
 import implementation.support.RDFDataLocation;
-import implementation.vocabulary.Geo;
-import org.apache.jena.query.ARQ;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -25,8 +19,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
-import org.apache.jena.sparql.function.FunctionRegistry;
-import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.ReasonerVocabulary;
 import org.slf4j.Logger;
@@ -44,62 +36,13 @@ public class Main {
     private static InfModel INF_MODEL;
     private static int QUERYCOUNT = 1;
 
-    /**
-     * Initialize all the GeoSPARQL property and filter functions.
-     * <br>Use this for standard GeoSPARQL setup
-     */
-    public static void init() {
-
-        final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-        final FunctionRegistry functionRegistry = FunctionRegistry.get(ARQ.getContext());
-
-        NonTopological.loadFilterFunctions(functionRegistry);
-        functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
-
-        SimpleFeatures.loadPropertyFunctions(propertyRegistry);
-        SimpleFeatures.loadExpressionFunctions(functionRegistry);
-
-        Egenhofer.loadPropertyFunctions(propertyRegistry);
-        Egenhofer.loadExpressionFunctions(functionRegistry);
-
-        RCC8.loadPropertyFunctions(propertyRegistry);
-        RCC8.loadExpressionFunctions(functionRegistry);
-
-    }
-
-    /**
-     * Initialize all the GeoSPARQL property and filter functions as well as the
-     * query rewrite functions.
-     * <br>Use this for fully GeoSPARQL functionality, need to be used with
-     * inference model
-     * <br>
-     */
-    public static void initWithQueryRewriteFunctions() {
-
-        final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-        final FunctionRegistry functionRegistry = FunctionRegistry.get(ARQ.getContext());
-
-        NonTopological.loadFilterFunctions(functionRegistry);
-        functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
-
-        SimpleFeatures.loadPropertyFunctions(propertyRegistry);
-        SimpleFeatures.loadExpressionFunctions(functionRegistry);
-
-        Egenhofer.loadPropertyFunctions(propertyRegistry);
-        Egenhofer.loadExpressionFunctions(functionRegistry);
-
-        RCC8.loadPropertyFunctions(propertyRegistry);
-        RCC8.loadExpressionFunctions(functionRegistry);
-
-    }
-
     public static void main(String[] args) {
 
         LOGGER.info("GeoSPARQL Started");
 
         //realworldQuery();
         //sampleQuery();
-        initWithQueryRewriteFunctions();
+        RegistryLoader.load();
         //PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfEquals", prototype.SFEqualsQRPropertyFunc.class);
 
         MODEL = ModelFactory.createDefaultModel();
@@ -123,7 +66,7 @@ public class Main {
 
     public static void realworldQuery() {
 
-        init();
+        RegistryLoader.load();
 
         long startTime = System.nanoTime();
         MODEL = makeModel(RDFDataLocation.GEODATA);
@@ -270,7 +213,7 @@ public class Main {
 
     public static void sampleQuery() {
 
-        init();
+        RegistryLoader.load();
 
         long startTime = System.nanoTime();
         MODEL = makeModel(RDFDataLocation.SAMPLE_WKT);
