@@ -5,12 +5,14 @@
  */
 package main;
 
+import geof.topological.RelateFF;
 import implementation.functionregistry.Egenhofer;
 import implementation.functionregistry.NonTopological;
 import implementation.functionregistry.RCC8;
 import implementation.functionregistry.SimpleFeatures;
 import implementation.support.Prefixes;
 import implementation.support.RDFDataLocation;
+import implementation.vocabulary.Geo;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -49,18 +51,19 @@ public class Main {
     public static void init() {
 
         final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-        final FunctionRegistry filterRegistry = FunctionRegistry.get(ARQ.getContext());
+        final FunctionRegistry functionRegistry = FunctionRegistry.get(ARQ.getContext());
 
-        NonTopological.loadFiltFunctions(filterRegistry);
+        NonTopological.loadFilterFunctions(functionRegistry);
+        functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
 
         SimpleFeatures.loadPropertyFunctions(propertyRegistry);
-        SimpleFeatures.loadExpressionFunctions(filterRegistry);
+        SimpleFeatures.loadExpressionFunctions(functionRegistry);
 
         Egenhofer.loadPropertyFunctions(propertyRegistry);
-        Egenhofer.loadExpressionFunctions(filterRegistry);
+        Egenhofer.loadExpressionFunctions(functionRegistry);
 
         RCC8.loadPropertyFunctions(propertyRegistry);
-        RCC8.loadExpressionFunctions(filterRegistry);
+        RCC8.loadExpressionFunctions(functionRegistry);
 
     }
 
@@ -74,18 +77,19 @@ public class Main {
     public static void initWithQueryRewriteFunctions() {
 
         final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-        final FunctionRegistry filterRegistry = FunctionRegistry.get(ARQ.getContext());
+        final FunctionRegistry functionRegistry = FunctionRegistry.get(ARQ.getContext());
 
-        NonTopological.loadFiltFunctions(filterRegistry);
+        NonTopological.loadFilterFunctions(functionRegistry);
+        functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
 
         SimpleFeatures.loadPropertyFunctions(propertyRegistry);
-        SimpleFeatures.loadExpressionFunctions(filterRegistry);
+        SimpleFeatures.loadExpressionFunctions(functionRegistry);
 
         Egenhofer.loadPropertyFunctions(propertyRegistry);
-        Egenhofer.loadExpressionFunctions(filterRegistry);
+        Egenhofer.loadExpressionFunctions(functionRegistry);
 
         RCC8.loadPropertyFunctions(propertyRegistry);
-        RCC8.loadExpressionFunctions(filterRegistry);
+        RCC8.loadExpressionFunctions(functionRegistry);
 
     }
 
