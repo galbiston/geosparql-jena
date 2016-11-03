@@ -3,7 +3,7 @@ Issues
 - axis order when parsing and unparsing.
 - check unit of measure.
 - topological filter functions required?
-- query rewrite in property functions correct?
+- sfOverlaps correct in JTS? Or fault in geosparqlSample.rdf?
 - CRS conversion between geometries correct? Particularly custom defined CRS84.
 - Compliance Tests.
 
