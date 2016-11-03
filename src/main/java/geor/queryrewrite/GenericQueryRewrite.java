@@ -40,6 +40,7 @@ public class GenericQueryRewrite extends PFuncSimple {
 
         //TODO Check if this is four unions or two nested unions? Does it make a difference?
         Op opFinal = OpUnion.create(opLeft, opRight);
+        //SSE.write(opFinal);
 
         // Use the default, optimizing query engine.
         return QC.execute(opFinal, binding, execCxt);
