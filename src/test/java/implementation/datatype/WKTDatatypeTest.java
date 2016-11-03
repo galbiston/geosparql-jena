@@ -90,7 +90,7 @@ public class WKTDatatypeTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
-        String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
+        String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 
@@ -115,7 +115,7 @@ public class WKTDatatypeTest {
         Coordinate coord = new Coordinate(-88.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
+        String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 
@@ -215,7 +215,7 @@ public class WKTDatatypeTest {
         Coordinate coord = new Coordinate(33.95, -88.38);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSURI = WKTDatatype.DEFAULT_SRS_URI;
+        String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
 

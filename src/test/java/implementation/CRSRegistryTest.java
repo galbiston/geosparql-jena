@@ -5,6 +5,7 @@
  */
 package implementation;
 
+import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
 import java.lang.reflect.Type;
 import javax.measure.Measure;
 import javax.measure.quantity.Angle;
@@ -73,6 +74,33 @@ public class CRSRegistryTest {
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getCRS method, of class CRSRegistry.
+     */
+    @Test
+    public void testGetDefaultWKTCRS() {
+        try {
+            System.out.println("getDefaultWKTCRS");
+            String srsURI = DEFAULT_WKT_CRS_URI;
+
+            String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
+                    + "  DATUM[\"World Geodetic System 1984\", \n"
+                    + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
+                    + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
+                    + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
+                    + "  UNIT[\"degree\", 0.017453292519943295], \n"
+                    + "  AXIS[\"Geodetic longitude\", EAST], \n"
+                    + "  AXIS[\"Geodetic latitude\", NORTH], \n"
+                    + "  AUTHORITY[\"OGC\",\"84\"]]";
+
+            CoordinateReferenceSystem expResult = CRS.parseWKT(default_CRS_WKT);
+            CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
+            assertEquals(expResult, result);
+        } catch (FactoryException ex) {
+            System.out.println("Default WKT CRS error: " + ex.getMessage());
+        }
     }
 
     @Test

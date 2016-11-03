@@ -42,7 +42,7 @@ public class WKTDatatype extends BaseDatatype {
     /**
      * Default SRS Name as GeoSPARQL Standard.
      */
-    public static final String DEFAULT_SRS_URI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+    public static final String DEFAULT_WKT_CRS_URI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
     /**
      * private constructor - single global instance.
@@ -111,7 +111,7 @@ public class WKTDatatype extends BaseDatatype {
                 wktLiteral = lexicalForm.substring(endSRS + 1);
 
             } else {
-                srsURI = DEFAULT_SRS_URI;
+                srsURI = DEFAULT_WKT_CRS_URI;
                 wktLiteral = lexicalForm;
             }
 

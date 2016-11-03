@@ -5,7 +5,7 @@
  */
 package implementation;
 
-import static implementation.datatype.WKTDatatype.DEFAULT_SRS_URI;
+import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
 import java.util.HashMap;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
@@ -23,7 +23,23 @@ public class CRSRegistry {
     private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
 
     static {
-        addCRS(DEFAULT_SRS_URI);
+        String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
+                + "  DATUM[\"World Geodetic System 1984\", \n"
+                + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
+                + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
+                + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
+                + "  UNIT[\"degree\", 0.017453292519943295], \n"
+                + "  AXIS[\"Geodetic longitude\", EAST], \n"
+                + "  AXIS[\"Geodetic latitude\", NORTH], \n"
+                + "  AUTHORITY[\"OGC\",\"84\"]]";
+
+        try {
+            CoordinateReferenceSystem crs = CRS.parseWKT(default_CRS_WKT);
+            CRS_REGISTRY.put(DEFAULT_WKT_CRS_URI, crs);
+            UnitRegistry.addUnits(DEFAULT_WKT_CRS_URI, crs);
+        } catch (FactoryException ex) {
+            LOGGER.error("Error registering default CRS: {}", ex.getMessage());
+        }
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
