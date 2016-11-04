@@ -67,7 +67,7 @@ public class WKTDatatype extends BaseDatatype {
 
         WKTWriter wktWriter = new WKTWriter();
         wktWriter.setFormatted(true);
-        String wkt = wktWriter.write(geom.getGeometry());
+        String wkt = wktWriter.write(geom.getParsingGeometry());
         String wktLiteral = "<" + geom.getSrsURI() + "> " + wkt;
 
         return wktLiteral;

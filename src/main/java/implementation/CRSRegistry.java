@@ -37,6 +37,7 @@ public class CRSRegistry {
                 + "  AXIS[\"Geodetic latitude\", NORTH], \n"
                 + "  AUTHORITY[\"OGC\"," + Integer.MAX_VALUE + "]]";
 
+        //TODO Replace with DefaultGeographicCRS.WGS84?? HAs axis in lon, lat. Returns 4326 on EPSG.
         addCRS(DEFAULT_WKT_CRS_URI, default_CRS_WKT);
         SRID_REGISTRY.put(DEFAULT_WKT_CRS_URI, Integer.MAX_VALUE);  //Overwrite the looked up SRSID to
     }

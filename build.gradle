@@ -36,6 +36,8 @@ dependencies {
     ext.geoToolsVersion = '16.0'
     compile group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
     compile group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
+    compile group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion
+    compile group: 'org.geotools', name: 'gt-main', version: geoToolsVersion
 
     compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
 

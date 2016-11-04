@@ -40,13 +40,15 @@ public class GeometryWrapper {
 
     //TODO Handling of axis order. CRS.decode(crs, true) actually affects the x,y order??
     public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation) {
-        this.geometry = geometry;
+
         this.srsURI = srsURI;
         this.serialisation = serialisation;
 
         this.crs = CRSRegistry.addCRS(srsURI);
         this.unitsOfMeasure = CRSRegistry.getUnits(srsURI);
         this.sridInt = CRSRegistry.getSRID(srsURI);
+
+        this.geometry = GeometryReverse.check(geometry, crs);
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
@@ -93,8 +95,8 @@ public class GeometryWrapper {
         return geometry;
     }
 
-    public Geometry getOutputGeometry() {
-        return geometry;
+    public Geometry getParsingGeometry() {
+        return GeometryReverse.check(geometry, crs);
     }
 
     public String getSrsURI() {
