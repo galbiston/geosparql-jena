@@ -36,6 +36,7 @@ public class GeometryWrapper {
     private final GeoSerialisationEnum serialisation;
     private final CoordinateReferenceSystem crs;
     private final UnitsOfMeasure unitsOfMeasure;
+    private final Integer sridInt;
 
     //TODO Handling of axis order. CRS.decode(crs, true) actually affects the x,y order??
     public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation) {
@@ -44,7 +45,8 @@ public class GeometryWrapper {
         this.serialisation = serialisation;
 
         this.crs = CRSRegistry.addCRS(srsURI);
-        this.unitsOfMeasure = UnitRegistry.addUnits(srsURI, crs);
+        this.unitsOfMeasure = CRSRegistry.getUnits(srsURI);
+        this.sridInt = CRSRegistry.getSRID(srsURI);
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
@@ -52,15 +54,17 @@ public class GeometryWrapper {
         this.geometry = geometryWrapper.geometry;
         this.srsURI = geometryWrapper.srsURI;
         this.serialisation = geometryWrapper.serialisation;
+
         this.crs = geometryWrapper.crs;
         this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
+        this.sridInt = geometryWrapper.sridInt;
     }
 
     public GeometryWrapper checkCRS(GeometryWrapper sourceCRSGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedCRSGeometry;
         try {
-            if (!srsURI.equals(sourceCRSGeometry.srsURI)) {
+            if (!sridInt.equals(sourceCRSGeometry.sridInt)) {
                 CoordinateReferenceSystem sourceCRS = sourceCRSGeometry.getCRS();
 
                 Geometry sourceGeometry = sourceCRSGeometry.geometry;

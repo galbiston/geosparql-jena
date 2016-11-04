@@ -6,6 +6,7 @@
 package implementation;
 
 import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
+import implementation.support.UnitsOfMeasure;
 import java.util.HashMap;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
@@ -20,7 +21,10 @@ import org.slf4j.LoggerFactory;
 public class CRSRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CRSRegistry.class);
+
     private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
+    private static final HashMap<String, UnitsOfMeasure> UNITS_REGISTRY = new HashMap<>();
+    private static final HashMap<String, Integer> SRID_REGISTRY = new HashMap<>();
 
     static {
         String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
@@ -31,9 +35,10 @@ public class CRSRegistry {
                 + "  UNIT[\"degree\", 0.017453292519943295], \n"
                 + "  AXIS[\"Geodetic longitude\", EAST], \n"
                 + "  AXIS[\"Geodetic latitude\", NORTH], \n"
-                + "  AUTHORITY[\"OGC\",\"84\"]]";
+                + "  AUTHORITY[\"OGC\"," + Integer.MAX_VALUE + "]]";
 
         addCRS(DEFAULT_WKT_CRS_URI, default_CRS_WKT);
+        SRID_REGISTRY.put(DEFAULT_WKT_CRS_URI, Integer.MAX_VALUE);  //Overwrite the looked up SRSID to
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
@@ -44,7 +49,11 @@ public class CRSRegistry {
             try {
                 crs = CRS.decode(srsURI);
                 CRS_REGISTRY.put(srsURI, crs);
-                UnitRegistry.addUnits(srsURI, crs);
+
+                UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
+                UNITS_REGISTRY.put(srsURI, unitsOfMeasure);
+
+                SRID_REGISTRY.put(srsURI, CRS.lookupEpsgCode(crs, true));
 
             } catch (FactoryException ex) {
                 LOGGER.error("CRS Parse Error: {} {}", srsURI, ex.getMessage());
@@ -62,8 +71,13 @@ public class CRSRegistry {
 
             try {
                 crs = CRS.parseWKT(wktString);
+
                 CRS_REGISTRY.put(srsURI, crs);
-                UnitRegistry.addUnits(srsURI, crs);
+
+                UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
+                UNITS_REGISTRY.put(srsURI, unitsOfMeasure);
+
+                SRID_REGISTRY.put(srsURI, CRS.lookupEpsgCode(crs, true));
 
             } catch (FactoryException ex) {
                 LOGGER.error("CRS Parse Error: {} {}", srsURI, ex.getMessage());
@@ -77,8 +91,22 @@ public class CRSRegistry {
     public static final CoordinateReferenceSystem getCRS(String srsURI) {
 
         CoordinateReferenceSystem crs = addCRS(srsURI);
-        UnitRegistry.addUnits(srsURI, crs);
         return crs;
+    }
+
+    public static final UnitsOfMeasure getUnits(String srsURI) {
+
+        addCRS(srsURI);
+        return UNITS_REGISTRY.get(srsURI);
+    }
+
+    /**
+     * SRID tracked as an integer to allow faster comparison of CRS.
+     */
+    public static final Integer getSRID(String srsURI) {
+
+        addCRS(srsURI);
+        return SRID_REGISTRY.get(srsURI);
     }
 
 }

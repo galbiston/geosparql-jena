@@ -93,10 +93,11 @@ public class CRSRegistryTest {
                     + "  UNIT[\"degree\", 0.017453292519943295], \n"
                     + "  AXIS[\"Geodetic longitude\", EAST], \n"
                     + "  AXIS[\"Geodetic latitude\", NORTH], \n"
-                    + "  AUTHORITY[\"OGC\",\"84\"]]";
+                    + "  AUTHORITY[\"OGC\"," + Integer.MAX_VALUE + "]]";
 
             CoordinateReferenceSystem expResult = CRS.parseWKT(default_CRS_WKT);
             CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
+
             assertEquals(expResult, result);
         } catch (FactoryException ex) {
             System.out.println("Default WKT CRS error: " + ex.getMessage());
