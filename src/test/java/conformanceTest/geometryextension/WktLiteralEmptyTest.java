@@ -5,6 +5,7 @@
  */
 package conformanceTest.geometryextension;
 
+import conformanceTest.RDFDataLocation;
 import java.util.ArrayList;
 import static main.Main.init;
 import main.TopologyRegistryLevel;
@@ -14,7 +15,6 @@ import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.QuerySolutionMap;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -27,7 +27,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import prototype.test.TestDataLocation;
 import vocabulary.Prefixes;
 
 /**
@@ -57,10 +56,10 @@ public class WktLiteralEmptyTest {
     public static Model DEFAULT_WKT_MODEL;
 
     /**
-     * Inference WKT model enables the import with the GeoSPARQL ontology as an
-     * OWL reasoner, use this model to get the fully compliance of GeoSPARQL.
+     * This negative model facilitates the test for empty geometries and the WKT
+     * literal without a specified SRID.
      */
-    public static InfModel INF_WKT_MODEL;
+    public static Model TEST_WKT_MODEL;
 
     @BeforeClass
     public static void setUpClass() {
@@ -78,8 +77,8 @@ public class WktLiteralEmptyTest {
          */
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
-        INF_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        INF_WKT_MODEL.read(TestDataLocation.SAMPLE_WKT_EMPTY);
+        TEST_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
+        TEST_WKT_MODEL.read(RDFDataLocation.SAMPLE_WKT_EMPTY);
     }
 
     @AfterClass
@@ -114,7 +113,7 @@ public class WktLiteralEmptyTest {
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
         query.setNsPrefixes(Prefixes.get());
 
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
+        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), TEST_WKT_MODEL)) {
             ResultSet results = qexec.execSelect();
             while (results.hasNext()) {
                 QuerySolution solution = results.nextSolution();

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:geo="http://www.opengis.net/ont/geosparql#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:ntu="http://ntu.ac.uk/ont/geo#"
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:sf="http://www.opengis.net/ont/sf#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#">
+   
+   <rdfs:Class rdf:about="http://ntu.ac.uk/ont/geo#PlaceOfInterest">
+      <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#Feature"/>
+   </rdfs:Class>
+   <rdf:Property rdf:about="ntu:hasExactGeometry">
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
+   </rdf:Property>
+   <rdf:Property rdf:about="ntu:hasPointGeometry">
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
+      <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
+   </rdf:Property>
+
+<!-- 
+This test captures the data instance from Annex A from GeoSPARQL standard as
+reference while adds extra imformation for the purpose of GeoSPARQL conformance 
+test.
+
+@Author Haozhe Chen
+-->
+    
+<!-- Instance Below -->
+<!-- Empty Geometry -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#A">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#AExactGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">empty</ntu:name>
+</ntu:PlaceOfInterest>
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#AExactGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isSimple>
+    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"></geo:asWKT>
+</sf:Point>
+
+<!-- Empty Geometry -->
+<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#B">
+    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#BExactGeom"/>
+    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">empty</ntu:name>
+</ntu:PlaceOfInterest>
+<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#BExactGeom">
+    <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
+    <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
+    <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>
+    <geo:isEmpty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</geo:isEmpty>
+    <geo:isSimple rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</geo:isSimple>
+    <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[Point(-83.4 34.4)]]></geo:asWKT>
+</sf:Point>
+
+</rdf:RDF>
