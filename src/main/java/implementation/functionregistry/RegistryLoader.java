@@ -14,6 +14,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 /**
  *
  * @author Greg
+ * @author haozhechen
  */
 public class RegistryLoader {
 
@@ -30,13 +31,13 @@ public class RegistryLoader {
         functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
 
         SimpleFeatures.loadPropertyFunctions(propertyRegistry);
-        SimpleFeatures.loadExpressionFunctions(functionRegistry);
+        SimpleFeatures.loadFilterFunctions(functionRegistry);
 
         Egenhofer.loadPropertyFunctions(propertyRegistry);
-        Egenhofer.loadExpressionFunctions(functionRegistry);
+        Egenhofer.loadFilterFunctions(functionRegistry);
 
         RCC8.loadPropertyFunctions(propertyRegistry);
-        RCC8.loadExpressionFunctions(functionRegistry);
+        RCC8.loadFilterFunctions(functionRegistry);
 
     }
 

@@ -6,7 +6,7 @@
 package implementation.functionregistry;
 
 import geo.topological.egenhofer.*;
-import geof.topological.egenhofer.expressionfunction.*;
+import geof.topological.egenhofer.filterfunction.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;
@@ -45,27 +45,7 @@ public class Egenhofer {
      * @param registry - the FunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadExpressionFunctions(FunctionRegistry registry) {
-
-        // Simple Feature Filter Functions
-        registry.put(Geof.EH_CONTAINS, ehContainsEF.class);
-        registry.put(Geof.EH_COVERED_BY, ehCoveredByEF.class);
-        registry.put(Geof.EH_COVERS, ehCoversEF.class);
-        registry.put(Geof.EH_DISJOINT, ehDisjointEF.class);
-        registry.put(Geof.EH_EQUALS, ehEqualsEF.class);
-        registry.put(Geof.EH_INSIDE, ehInsideEF.class);
-        registry.put(Geof.EH_MEET, ehMeetEF.class);
-        registry.put(Geof.EH_OVERLAP, ehOverlapEF.class);
-    }
-
-    /**
-     * This method loads all the Egenhofer Topological Filter Functions
-     *
-     * @param registry - the FunctionRegistry to be used
-     */
-    /*
-    @SuppressWarnings("deprecation")
-    public static void loadFiltFunctions(FunctionRegistry registry) {
+    public static void loadFilterFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions
         registry.put(Geof.EH_CONTAINS, ehContainsFF.class);
@@ -77,5 +57,4 @@ public class Egenhofer {
         registry.put(Geof.EH_MEET, ehMeetFF.class);
         registry.put(Geof.EH_OVERLAP, ehOverlapFF.class);
     }
-     */
 }

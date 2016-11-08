@@ -6,7 +6,7 @@
 package implementation.functionregistry;
 
 import geo.topological.simplefeatures.*;
-import geof.topological.simplefeatures.expressionfunction.*;
+import geof.topological.simplefeatures.filterfunction.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;
@@ -45,27 +45,7 @@ public class SimpleFeatures {
      * @param registry - the FunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadExpressionFunctions(FunctionRegistry registry) {
-
-        // Simple Feature Filter Functions
-        registry.put(Geof.SF_CONTAINS, sfContainsEF.class);
-        registry.put(Geof.SF_CROSSES, sfCrossesEF.class);
-        registry.put(Geof.SF_DISJOINT, sfDisjointEF.class);
-        registry.put(Geof.SF_EQUALS, sfEqualsEF.class);
-        registry.put(Geof.SF_INTERSECTS, sfIntersectsEF.class);
-        registry.put(Geof.SF_OVERLAPS, sfOverlapsEF.class);
-        registry.put(Geof.SF_TOUCHES, sfTouchesEF.class);
-        registry.put(Geof.SF_WITHIN, sfWithinEF.class);
-    }
-
-    /**
-     * This method loads all the Simple Feature Topological Filter Functions
-     *
-     * @param registry - the FunctionRegistry to be used
-     */
-    /*
-    @SuppressWarnings("deprecation")
-    public static void loadFiltFunctions(FunctionRegistry registry) {
+    public static void loadFilterFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions
         registry.put(Geof.SF_CONTAINS, sfContainsFF.class);
@@ -77,5 +57,4 @@ public class SimpleFeatures {
         registry.put(Geof.SF_TOUCHES, sfTouchesFF.class);
         registry.put(Geof.SF_WITHIN, sfWithinFF.class);
     }
-     */
 }
