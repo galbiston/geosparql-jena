@@ -87,7 +87,6 @@ public class GeneralDatatype {
              * If the lexicalForm contains XML tag "gml", which will indicate
              * this is a GML literal.
              */
-            LOGGER.info("The GML input: {}", lexicalForm);
             isGML = true;
             RDFDatatype gmlDatatype = GmlDatatype.theGmlDatatype;
             Geometry geometry = (Geometry) gmlDatatype.parse(lexicalForm);
@@ -98,7 +97,6 @@ public class GeneralDatatype {
              * literal cannot be recognized from this step, an error will be
              * thrown.
              */
-            LOGGER.info("The XML input: {}", lexicalForm);
             isGML = false;
             RDFDatatype wktDatatype = WktDatatype.theWktDatatype;
             Geometry geometry = (Geometry) wktDatatype.parse(lexicalForm);

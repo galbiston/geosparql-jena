@@ -6,6 +6,7 @@
 package vocabulary;
 
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
 /**
@@ -28,6 +29,10 @@ public class Vocabulary {
     public static final Property GEOM_PRO = ResourceFactory.createProperty(GEO_URI + "hasGeometry");
     public static final Property GEOMEXACT_PRO = ResourceFactory.createProperty(NTU_URI + "hasExactGeometry");
     public static final Property GEOMPOINT_PRO = ResourceFactory.createProperty(NTU_URI + "hasPointGeometry");
+
+    //Resource
+    public static final Resource GEOMETRY_RES = ResourceFactory.createResource(GEO_URI + "Geometry");
+    public static final Resource FEATURE_RES = ResourceFactory.createResource(GEO_URI + "Feature");
 
     //Units Of Measurement URI
     public static final String METRE_URI = "http://www.opengis.net/def/uom/OGC/1.0/metre";
@@ -91,8 +96,8 @@ public class Vocabulary {
     public static final String RCC_DISCONNECTED_NAME = "rcc8dc";
     public static final String RCC_EXTCONNECTED_NAME = "rcc8ec";
     public static final String RCC_PARTOVERLAP_NAME = "rcc8po";
-    public static final String RCC_TANPROPERPARTINVERSE_NAME = "rcc8ppi";
-    public static final String RCC_TANPROPERPART_NAME = "rcc8pp";
+    public static final String RCC_TANPROPERPARTINVERSE_NAME = "rcc8tppi";
+    public static final String RCC_TANPROPERPART_NAME = "rcc8tpp";
     public static final String RCC_NTANPROPERPART_NAME = "rcc8ntpp";
     public static final String RCC_NTANPROPERPARTINVERSE_NAME = "rcc8ntppi";
 

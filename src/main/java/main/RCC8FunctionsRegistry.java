@@ -124,14 +124,14 @@ public class RCC8FunctionsRegistry {
     public static void loadFiltFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.RCC_DISCONNECTED_NAME), geof.topo.rcc8.RCC8DCFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.RCC_EQUALS_NAME), geof.topo.rcc8.RCC8EQFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.RCC_EXTCONNECTED_NAME), geof.topo.rcc8.RCC8ECFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME), geof.topo.rcc8.RCC8NTPPIFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.RCC_NTANPROPERPART_NAME), geof.topo.rcc8.RCC8NTPPFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.RCC_PARTOVERLAP_NAME), geof.topo.rcc8.RCC8POFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME), geof.topo.rcc8.RCC8TPPIFilterFunc.class);
-        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEO_URI, Vocabulary.RCC_TANPROPERPART_NAME), geof.topo.rcc8.RCC8TPPFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RCC_DISCONNECTED_NAME), geof.topo.rcc8.RCC8DCFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RCC_EQUALS_NAME), geof.topo.rcc8.RCC8EQFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RCC_EXTCONNECTED_NAME), geof.topo.rcc8.RCC8ECFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RCC_NTANPROPERPARTINVERSE_NAME), geof.topo.rcc8.RCC8NTPPIFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RCC_NTANPROPERPART_NAME), geof.topo.rcc8.RCC8NTPPFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RCC_PARTOVERLAP_NAME), geof.topo.rcc8.RCC8POFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RCC_TANPROPERPARTINVERSE_NAME), geof.topo.rcc8.RCC8TPPIFilterFunc.class);
+        addFiltFunc(registry, Vocabulary.getFunctionURI(Vocabulary.GEOF_URI, Vocabulary.RCC_TANPROPERPART_NAME), geof.topo.rcc8.RCC8TPPFilterFunc.class);
     }
 
     private static void addPropFunc(PropertyFunctionRegistry registry, String uri, Class<?> funcClass) {
