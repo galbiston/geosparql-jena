@@ -5,18 +5,20 @@
  */
 package geo.topological.simplefeatures;
 
-import geo.topological.BasePropertyFunction;
+import geo.topological.GenericPropertyFunction;
+import geof.topological.simplefeatures.expressionfunction.sfEqualsEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
-public class sfEqualsPF extends BasePropertyFunction {
+public class sfEqualsPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new sfEqualsEF(expr1, expr2);
     }
 
 }

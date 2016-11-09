@@ -6,9 +6,9 @@
 package conformanceTest.geometryextension;
 
 import conformanceTest.RDFDataLocation;
+import static implementation.functionregistry.RegistryLoader.load;
+import implementation.support.Prefixes;
 import java.util.ArrayList;
-import static main.Main.init;
-import main.TopologyRegistryLevel;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -27,7 +27,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import vocabulary.Prefixes;
 
 /**
  *
@@ -66,7 +65,7 @@ public class WktLiteralEmptyTest {
         /**
          * Initialize all the topology functions.
          */
-        init(TopologyRegistryLevel.DEFAULT);
+        load();
         /**
          * Setup inference model.
          */

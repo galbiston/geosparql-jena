@@ -39,6 +39,7 @@ public class Geo {
     public static final String SF_CONTAINS_NAME = GEO_URI + "sfContains";
     public static final String SF_INTERSECTS_NAME = GEO_URI + "sfIntersects";
     public static final String SF_EQUALS_NAME = GEO_URI + "sfEquals";
+
     public static final String SF_TOUCHES_NAME = GEO_URI + "sfTouches";
     public static final String SF_DISJOINT_NAME = GEO_URI + "sfDisjoint";
     public static final String SF_OVERLAPS_NAME = GEO_URI + "sfOverlaps";
@@ -67,5 +68,4 @@ public class Geo {
 
     //Topological DE-9IM function: relate
     public static final String RELATE_NAME = GEO_URI + "relate";
-
 }

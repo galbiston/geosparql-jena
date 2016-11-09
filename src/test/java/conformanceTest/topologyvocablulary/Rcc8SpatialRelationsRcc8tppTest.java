@@ -6,9 +6,9 @@
 package conformanceTest.topologyvocablulary;
 
 import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import static implementation.functionregistry.RegistryLoader.load;
+import implementation.support.Prefixes;
 import java.util.ArrayList;
-import static main.Main.init;
-import main.TopologyRegistryLevel;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import vocabulary.Prefixes;
 
 /**
  *
@@ -52,7 +51,7 @@ public class Rcc8SpatialRelationsRcc8tppTest {
         /**
          * Initialize all the topology functions.
          */
-        init(TopologyRegistryLevel.DEFAULT);
+        load();
     }
 
     @AfterClass

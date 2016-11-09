@@ -5,8 +5,7 @@
  */
 package conformanceTest.geometryextension;
 
-import static main.Main.init;
-import main.TopologyRegistryLevel;
+import static implementation.functionregistry.RegistryLoader.load;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -38,7 +37,7 @@ public class WktAxisOrderTest {
         /**
          * Initialize all the topology functions.
          */
-        init(TopologyRegistryLevel.DEFAULT);
+        load();
     }
 
     @AfterClass

@@ -5,18 +5,20 @@
  */
 package geo.topological.simplefeatures;
 
-import geo.topological.BasePropertyFunction;
+import geo.topological.GenericPropertyFunction;
+import geof.topological.simplefeatures.expressionfunction.sfDisjointEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
-public class sfDisjointPF extends BasePropertyFunction {
+public class sfDisjointPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new sfDisjointEF(expr1, expr2);
     }
 
 }

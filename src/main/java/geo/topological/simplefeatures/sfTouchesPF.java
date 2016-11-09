@@ -5,18 +5,22 @@
  */
 package geo.topological.simplefeatures;
 
-import geo.topological.BasePropertyFunction;
+import geo.topological.GenericPropertyFunction;
+import geof.topological.simplefeatures.expressionfunction.sfTouchesEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
  * @author haozhechen
+ * <<<<<<< HEAD
+ * @a
+ * uthor Gregory Albiston
  */
-public class sfTouchesPF extends BasePropertyFunction {
+public class sfTouchesPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new sfTouchesEF(expr1, expr2);
     }
 
 }

@@ -5,18 +5,20 @@
  */
 package geo.topological.simplefeatures;
 
-import geo.topological.BasePropertyFunction;
+import geo.topological.GenericPropertyFunction;
+import geof.topological.simplefeatures.expressionfunction.sfWithinEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
  * @author haozhechen
+ * @author Gregory Albiston
  */
-public class sfWithinPF extends BasePropertyFunction {
+public class sfWithinPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new sfWithinEF(expr1, expr2);
     }
 
 }
