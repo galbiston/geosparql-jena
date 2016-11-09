@@ -32,9 +32,14 @@ dependencies {
     //Apache Lucene
     //compile 'org.apache.lucene:lucene-core:6.1.0'
     
-    //Geotools 
-    compile group: 'org.geotools', name: 'gt-shapefile', version: '15.0'
-    compile group: 'org.geotools', name: 'gt-epsg-hsql', version: '15.0'
+    //Geotools: http://docs.geotools.org/latest/userguide.old/library/
+    ext.geoToolsVersion = '16.0'
+    compile group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
+    compile group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
+    compile group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion
+    compile group: 'org.geotools', name: 'gt-main', version: geoToolsVersion
+    
+    compile group: 'com.jcabi', name: 'jcabi-xml', version: '0.17.2'
     
     //JTS suite
     compile 'com.vividsolutions:jts-assembly-distribution:1.14.0'
