@@ -6,6 +6,14 @@
 package implementation.functionregistry;
 
 import geo.topological.egenhofer.*;
+import geof.topological.egenhofer.expressionfunction.ehContainsEF;
+import geof.topological.egenhofer.expressionfunction.ehCoveredByEF;
+import geof.topological.egenhofer.expressionfunction.ehCoversEF;
+import geof.topological.egenhofer.expressionfunction.ehDisjointEF;
+import geof.topological.egenhofer.expressionfunction.ehEqualsEF;
+import geof.topological.egenhofer.expressionfunction.ehInsideEF;
+import geof.topological.egenhofer.expressionfunction.ehMeetEF;
+import geof.topological.egenhofer.expressionfunction.ehOverlapEF;
 import geof.topological.egenhofer.filterfunction.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
@@ -56,5 +64,24 @@ public class Egenhofer {
         registry.put(Geof.EH_INSIDE, ehInsideFF.class);
         registry.put(Geof.EH_MEET, ehMeetFF.class);
         registry.put(Geof.EH_OVERLAP, ehOverlapFF.class);
+    }
+
+    /**
+     * This method loads all the Egenhofer Topological Expression Functions
+     *
+     * @param registry - the FunctionRegistry to be used
+     */
+    @SuppressWarnings("deprecation")
+    public static void loadExpressionFunctions(FunctionRegistry registry) {
+
+        // Simple Feature Filter Functions
+        registry.put(Geof.EH_CONTAINS, ehContainsEF.class);
+        registry.put(Geof.EH_COVERED_BY, ehCoveredByEF.class);
+        registry.put(Geof.EH_COVERS, ehCoversEF.class);
+        registry.put(Geof.EH_DISJOINT, ehDisjointEF.class);
+        registry.put(Geof.EH_EQUALS, ehEqualsEF.class);
+        registry.put(Geof.EH_INSIDE, ehInsideEF.class);
+        registry.put(Geof.EH_MEET, ehMeetEF.class);
+        registry.put(Geof.EH_OVERLAP, ehOverlapEF.class);
     }
 }

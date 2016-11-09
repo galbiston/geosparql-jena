@@ -32,12 +32,15 @@ public class RegistryLoader {
 
         SimpleFeatures.loadPropertyFunctions(propertyRegistry);
         SimpleFeatures.loadFilterFunctions(functionRegistry);
+        //SimpleFeatures.loadExpressionFunctions(functionRegistry);
 
         Egenhofer.loadPropertyFunctions(propertyRegistry);
         Egenhofer.loadFilterFunctions(functionRegistry);
+        //Egenhofer.loadExpressionFunctions(functionRegistry);
 
         RCC8.loadPropertyFunctions(propertyRegistry);
         RCC8.loadFilterFunctions(functionRegistry);
+        //RCC8.loadExpressionFunctions(functionRegistry);
 
     }
 
