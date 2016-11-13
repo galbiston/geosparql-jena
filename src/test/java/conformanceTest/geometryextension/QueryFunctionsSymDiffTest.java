@@ -88,7 +88,7 @@ public class QueryFunctionsSymDiffTest {
         String Q1 = "SELECT ?place WHERE{"
                 + " ?place ntu:hasExactGeometry ?aGeom . "
                 + " ?aGeom geo:asWKT ?aWkt . "
-                + " BIND ( geof:symDifference(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))^^http://www.opengis.net/ont/geosparql#wktLiteral\", \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.3, -83.4 34.3, -83.4 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.3))^^http://www.opengis.net/ont/geosparql#wktLiteral\") AS ?symDifference ) . "
+                + " BIND ( geof:symDifference(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.3, -83.4 34.3, -83.4 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) AS ?symDifference ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?symDifference ))"
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();

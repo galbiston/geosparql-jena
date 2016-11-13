@@ -91,7 +91,7 @@ public class Rcc8QueryFunctionsRcc8dcTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER ( geof:rcc8dc(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.4 34.3, -83.3 34.3, -83.3 34.4, -83.4 34.4, -83.4 34.3))^^http://www.opengis.net/ont/geosparql#wktLiteral\"))"
+                + " FILTER geof:rcc8dc(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.4 34.3, -83.3 34.3, -83.3 34.4, -83.4 34.4, -83.4 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -115,7 +115,7 @@ public class Rcc8QueryFunctionsRcc8dcTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER ( geof:rcc8dc(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))^^http://www.opengis.net/ont/geosparql#wktLiteral\"))"
+                + " FILTER geof:rcc8dc(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);

@@ -75,15 +75,64 @@ public class RelateQueryFunctionTest {
     }
 
     @Test
-    public void positiveTest() {
+    public void pointTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
         this.expectedList.add("http://ntu.ac.uk/ont/geo#A");
 
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfContains \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\" ."
+                + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"T*F**FFF*\") ."
+                + "}";
+        QuerySolutionMap bindings = new QuerySolutionMap();
+        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
+        query.setNsPrefixes(Prefixes.get());
+
+        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
+            ResultSet results = qexec.execSelect();
+            while (results.hasNext()) {
+                QuerySolution solution = results.nextSolution();
+                Resource resource = solution.getResource("?place");
+                this.actualList.add(resource.toString());
+            }
+        }
+        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+    }
+
+    @Test
+    public void lineTest() {
+
+        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
+
+        String Q1 = "SELECT ?place WHERE{"
+                + "?place ntu:hasExactGeometry ?aGeom ."
+                + " ?aGeom geo:asWKT ?aWKT ."
+                + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LineString(-83.4 34.0, -83.3 34.3)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
+                + "}";
+        QuerySolutionMap bindings = new QuerySolutionMap();
+        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
+        query.setNsPrefixes(Prefixes.get());
+
+        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
+            ResultSet results = qexec.execSelect();
+            while (results.hasNext()) {
+                QuerySolution solution = results.nextSolution();
+                Resource resource = solution.getResource("?place");
+                this.actualList.add(resource.toString());
+            }
+        }
+        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+    }
+
+    @Test
+    public void polygonTest() {
+
+        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
+
+        String Q1 = "SELECT ?place WHERE{"
+                + "?place ntu:hasExactGeometry ?aGeom ."
+                + " ?aGeom geo:asWKT ?aWKT ."
+                + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -106,7 +155,7 @@ public class RelateQueryFunctionTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfContains \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\" ."
+                + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -121,5 +170,4 @@ public class RelateQueryFunctionTest {
             }
         }
     }
-
 }

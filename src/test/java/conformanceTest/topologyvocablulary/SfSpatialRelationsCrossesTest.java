@@ -90,7 +90,7 @@ public class SfSpatialRelationsCrossesTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))^^http://www.opengis.net/ont/geosparql#wktLiteral\" ."
+                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -113,7 +113,7 @@ public class SfSpatialRelationsCrossesTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))^^http://www.opengis.net/ont/geosparql#wktLiteral\" ."
+                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -135,7 +135,7 @@ public class SfSpatialRelationsCrossesTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))^^http://www.opengis.net/ont/geosparql#wktLiteral\" ."
+                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);

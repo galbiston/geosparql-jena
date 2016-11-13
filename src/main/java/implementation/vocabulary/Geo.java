@@ -15,11 +15,12 @@ import org.apache.jena.rdf.model.ResourceFactory;
 /**
  *
  * @author Greg
+ * @author haozhechen
  */
 public class Geo {
 
-    public static final Property HAS_SERIALISATION_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasSerialization");
-    public static final Node HAS_SERIALISATION_NODE = HAS_SERIALISATION_PRO.asNode();
+    public static final Property HAS_SERIALIZATION_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasSerialization");
+    public static final Node HAS_SERIALIZATION_NODE = HAS_SERIALIZATION_PRO.asNode();
 
     public static final Property AS_WKT_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "asWKT");
     public static final Property AS_GML_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "asGML");

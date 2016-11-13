@@ -88,7 +88,7 @@ public class SfSpatialRelationsWithinTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\" geo:sfWithin ?aWKT ."
+                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> geo:sfWithin ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -111,7 +111,7 @@ public class SfSpatialRelationsWithinTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\" geo:sfWithin ?aWKT ."
+                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> geo:sfWithin ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);

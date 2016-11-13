@@ -5,11 +5,24 @@
  */
 package conformanceTest.geometrytopology;
 
+import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
 import static implementation.functionregistry.RegistryLoader.load;
+import implementation.support.Prefixes;
+import java.util.ArrayList;
+import org.apache.jena.query.ParameterizedSparqlString;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.QuerySolutionMap;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Resource;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *
@@ -50,12 +63,96 @@ public class SfQueryFunctionsCrossesTest {
     public static void tearDownClass() {
     }
 
+    private ArrayList expectedList;
+    private ArrayList actualList;
+
     @Before
     public void setUp() {
+        this.expectedList = new ArrayList<>();
+        this.actualList = new ArrayList<>();
     }
 
     @After
     public void tearDown() {
+        this.actualList.clear();
+        this.expectedList.clear();
+    }
+
+    @Test
+    public void positiveTest() {
+
+        /**
+         * Cross returns t (TRUE) if the intersection results in a geometry
+         * whose dimension is one less than the maximum dimension of the two
+         * source geometries and the intersection set is interior to both source
+         * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+         * multipoint/linestring, linestring/linestring, linestring/polygon, and
+         * linestring/multipolygon comparisons.
+         */
+        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
+
+        String Q1 = "SELECT ?place WHERE{"
+                + "?place ntu:hasExactGeometry ?aGeom ."
+                + " ?aGeom geo:asWKT ?aWKT ."
+                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
+                + "}";
+        QuerySolutionMap bindings = new QuerySolutionMap();
+        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
+        query.setNsPrefixes(Prefixes.get());
+
+        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
+            ResultSet results = qexec.execSelect();
+            while (results.hasNext()) {
+                QuerySolution solution = results.nextSolution();
+                Resource resource = solution.getResource("?place");
+                this.actualList.add(resource.toString());
+            }
+        }
+        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+    }
+
+    @Test
+    public void negativeTest() {
+
+        String Q1 = "SELECT ?place WHERE{"
+                + "?place ntu:hasExactGeometry ?aGeom ."
+                + " ?aGeom geo:asWKT ?aWKT ."
+                + " FILTER geo:sfCrosses(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
+                + "}";
+        QuerySolutionMap bindings = new QuerySolutionMap();
+        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
+        query.setNsPrefixes(Prefixes.get());
+
+        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
+            ResultSet results = qexec.execSelect();
+            while (results.hasNext()) {
+                QuerySolution solution = results.nextSolution();
+                Resource resource = solution.getResource("?place");
+                assertNull("should be null", resource.toString());
+            }
+        }
+    }
+
+    @Test
+    public void nullTest() {
+
+        String Q1 = "SELECT ?place WHERE{"
+                + "?place ntu:hasExactGeometry ?aGeom ."
+                + " ?aGeom geo:asWKT ?aWKT ."
+                + " FILTER geo:sfCrosses(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
+                + "}";
+        QuerySolutionMap bindings = new QuerySolutionMap();
+        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
+        query.setNsPrefixes(Prefixes.get());
+
+        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
+            ResultSet results = qexec.execSelect();
+            while (results.hasNext()) {
+                QuerySolution solution = results.nextSolution();
+                Resource resource = solution.getResource("?place");
+                assertNull("should be null", resource.toString());
+            }
+        }
     }
 
 }

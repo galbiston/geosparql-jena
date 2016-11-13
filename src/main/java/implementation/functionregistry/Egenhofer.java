@@ -6,14 +6,7 @@
 package implementation.functionregistry;
 
 import geo.topological.egenhofer.*;
-import geof.topological.egenhofer.expressionfunction.ehContainsEF;
-import geof.topological.egenhofer.expressionfunction.ehCoveredByEF;
-import geof.topological.egenhofer.expressionfunction.ehCoversEF;
-import geof.topological.egenhofer.expressionfunction.ehDisjointEF;
-import geof.topological.egenhofer.expressionfunction.ehEqualsEF;
-import geof.topological.egenhofer.expressionfunction.ehInsideEF;
-import geof.topological.egenhofer.expressionfunction.ehMeetEF;
-import geof.topological.egenhofer.expressionfunction.ehOverlapEF;
+import geof.topological.egenhofer.expressionfunction.*;
 import geof.topological.egenhofer.filterfunction.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
@@ -74,7 +67,7 @@ public class Egenhofer {
     @SuppressWarnings("deprecation")
     public static void loadExpressionFunctions(FunctionRegistry registry) {
 
-        // Simple Feature Filter Functions
+        // Simple Feature Expression Functions
         registry.put(Geof.EH_CONTAINS, ehContainsEF.class);
         registry.put(Geof.EH_COVERED_BY, ehCoveredByEF.class);
         registry.put(Geof.EH_COVERS, ehCoversEF.class);

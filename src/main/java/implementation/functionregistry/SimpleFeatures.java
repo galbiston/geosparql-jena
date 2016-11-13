@@ -6,14 +6,7 @@
 package implementation.functionregistry;
 
 import geo.topological.simplefeatures.*;
-import geof.topological.simplefeatures.expressionfunction.sfContainsEF;
-import geof.topological.simplefeatures.expressionfunction.sfCrossesEF;
-import geof.topological.simplefeatures.expressionfunction.sfDisjointEF;
-import geof.topological.simplefeatures.expressionfunction.sfEqualsEF;
-import geof.topological.simplefeatures.expressionfunction.sfIntersectsEF;
-import geof.topological.simplefeatures.expressionfunction.sfOverlapsEF;
-import geof.topological.simplefeatures.expressionfunction.sfTouchesEF;
-import geof.topological.simplefeatures.expressionfunction.sfWithinEF;
+import geof.topological.simplefeatures.expressionfunction.*;
 import geof.topological.simplefeatures.filterfunction.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
@@ -74,7 +67,7 @@ public class SimpleFeatures {
     @SuppressWarnings("deprecation")
     public static void loadExpressionFunctions(FunctionRegistry registry) {
 
-        // Simple Feature Filter Functions
+        // Simple Feature Expression Functions
         registry.put(Geof.SF_CONTAINS, sfContainsEF.class);
         registry.put(Geof.SF_CROSSES, sfCrossesEF.class);
         registry.put(Geof.SF_DISJOINT, sfDisjointEF.class);

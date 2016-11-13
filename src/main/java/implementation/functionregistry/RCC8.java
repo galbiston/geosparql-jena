@@ -6,14 +6,7 @@
 package implementation.functionregistry;
 
 import geo.topological.rcc8.*;
-import geof.topological.rcc8.expressionfunction.rccDisconnectedEF;
-import geof.topological.rcc8.expressionfunction.rccEqualsEF;
-import geof.topological.rcc8.expressionfunction.rccExternallyConnectedEF;
-import geof.topological.rcc8.expressionfunction.rccNonTangentialProperPartEF;
-import geof.topological.rcc8.expressionfunction.rccNonTangentialProperPartInverseEF;
-import geof.topological.rcc8.expressionfunction.rccPartiallyOverlappingEF;
-import geof.topological.rcc8.expressionfunction.rccTangentialProperPartEF;
-import geof.topological.rcc8.expressionfunction.rccTangentialProperPartInverseEF;
+import geof.topological.rcc8.expressionfunction.*;
 import geof.topological.rcc8.filterfunction.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
@@ -74,7 +67,7 @@ public class RCC8 {
     @SuppressWarnings("deprecation")
     public static void loadExpressionFunctions(FunctionRegistry registry) {
 
-        // Simple Feature Filter Functions
+        // Simple Feature Expression Functions
         registry.put(Geof.RCC_DISCONNECTED, rccDisconnectedEF.class);
         registry.put(Geof.RCC_EQUALS, rccEqualsEF.class);
         registry.put(Geof.RCC_EXTERNALLY_CONNECTED, rccExternallyConnectedEF.class);

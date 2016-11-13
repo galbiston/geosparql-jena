@@ -6,9 +6,12 @@
 package conformanceTest.geometrytopology;
 
 import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import implementation.datatype.WKTDatatype;
 import static implementation.functionregistry.RegistryLoader.load;
 import implementation.support.Prefixes;
 import java.util.ArrayList;
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -57,6 +60,9 @@ public class EhQueryFunctionsContainsTest {
          * Initialize all the topology functions.
          */
         load();
+        RDFDatatype wkt = WKTDatatype.theWKTDatatype;
+        TypeMapper.getInstance().registerDatatype(wkt);
+
     }
 
     @AfterClass
@@ -91,7 +97,7 @@ public class EhQueryFunctionsContainsTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER ( geof:ehContains(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\"))"
+                + " FILTER geof:ehContains(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -114,7 +120,7 @@ public class EhQueryFunctionsContainsTest {
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ntu:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER ( geof:ehContains(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\"))"
+                + " FILTER geof:ehContains(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);

@@ -37,6 +37,7 @@ public class RelateFF extends FunctionBase3 {
             String compreMatrix = node3.getLiteral().getLexicalForm();
 
             IntersectionMatrix matrix = geometry1.relate(geometry2);
+            System.out.println(matrix);
             boolean result = matrix.matches(compreMatrix);
 
             return NodeValue.makeBoolean(result);

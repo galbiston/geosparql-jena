@@ -88,7 +88,7 @@ public class QueryFunctionsEnvelopeTest {
         String Q1 = "SELECT ?place WHERE{"
                 + " ?place ntu:hasExactGeometry ?aGeom . "
                 + " ?aGeom geo:asWKT ?aWkt . "
-                + " BIND ( geof:envelope(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.3, -83.4 34.1, -83.2 34.3, -83.4 34.5, -83.6 34.3))^^http://www.opengis.net/ont/geosparql#wktLiteral\") AS ?envelope ) . "
+                + " BIND ( geof:envelope(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.3, -83.4 34.1, -83.2 34.3, -83.4 34.5, -83.6 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) AS ?envelope ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?envelope ))"
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();

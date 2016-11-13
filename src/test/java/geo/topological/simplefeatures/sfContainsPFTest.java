@@ -6,6 +6,7 @@
 package geo.topological.simplefeatures;
 
 import conformanceTest.RDFDataLocation;
+import static implementation.functionregistry.RegistryLoader.load;
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -18,7 +19,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
-import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.apache.jena.util.FileManager;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -68,7 +68,8 @@ public class sfContainsPFTest {
 
     @Before
     public void setUp() {
-        PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfContains", geo.topological.simplefeatures.sfContainsPF.class);
+//        PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfContains", geo.topological.simplefeatures.sfContainsPF.class);
+        load();
     }
 
     @After

@@ -89,7 +89,7 @@ public class QueryFunctionsBoundaryTest {
                 + "?place ntu:hasExactGeometry ?aGeom . "
                 + "?aGeom geo:asWKT ?aWkt . "
                 + "BIND ((geof:boundary( ?aWkt)) AS ?aBoundary). "
-                + "BIND ((geof:boundary( \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))^^http://www.opengis.net/ont/geosparql#wktLiteral\")) AS ?bBoundary). "
+                + "BIND ((geof:boundary( \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>)) AS ?bBoundary). "
                 + "FILTER ( geof:sfEquals(?aBoundary, ?bBoundary)) "
                 + " }";
         QuerySolutionMap bindings = new QuerySolutionMap();
