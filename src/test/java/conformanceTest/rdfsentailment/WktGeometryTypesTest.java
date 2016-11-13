@@ -76,10 +76,10 @@ public class WktGeometryTypesTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#FExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#EExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#DExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#CExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
 
         String Q1 = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type sf:Polygon ."

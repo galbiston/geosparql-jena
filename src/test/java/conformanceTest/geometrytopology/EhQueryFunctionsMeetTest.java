@@ -85,10 +85,10 @@ public class EhQueryFunctionsMeetTest {
          * ehMeet has same functionality with sfTouches since they have same
          * intersection matrix.
          */
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
+        this.expectedList.add("http://example.org/ApplicationSchema#E");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:ehMeet(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
@@ -111,7 +111,7 @@ public class EhQueryFunctionsMeetTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:ehMeet(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";

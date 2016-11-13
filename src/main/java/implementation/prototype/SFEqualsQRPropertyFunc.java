@@ -22,7 +22,7 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import geof.topological.simplefeatures.expressionfunction.sfEqualsEF;
-import implementation.vocabulary.NTU;
+import implementation.vocabulary.Example;
 import implementation.vocabulary.Geo;
 
 /**
@@ -55,8 +55,8 @@ public class SFEqualsQRPropertyFunc extends PropertyFunctionBase {
         Triple NodeVarHasGML_SUB = new Triple(nodeVar_SUB, Geo.AS_WKT_PRO.asNode(), GMLVar_SUB);
         Triple NodeVarHasGML_OBJ = new Triple(nodeVar_OBJ, Geo.AS_WKT_PRO.asNode(), GMLVar_OBJ);
 
-        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, NTU.HAS_EXACT_GEOMETRY_PRO.asNode(), GeomVar_SUB);
-        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, NTU.HAS_EXACT_GEOMETRY_PRO.asNode(), GeomVar_OBJ);
+        Triple FeaHasGeom_SUB = new Triple(nodeVar_SUB, Example.HAS_EXACT_GEOMETRY_PRO.asNode(), GeomVar_SUB);
+        Triple FeaHasGeom_OBJ = new Triple(nodeVar_OBJ, Example.HAS_EXACT_GEOMETRY_PRO.asNode(), GeomVar_OBJ);
         Triple GeomHasGML_SUB = new Triple(GeomVar_SUB, Geo.AS_WKT_PRO.asNode(), GMLVar_SUB);
         Triple GeomHasGML_OBJ = new Triple(GeomVar_OBJ, Geo.AS_WKT_PRO.asNode(), GMLVar_OBJ);
 

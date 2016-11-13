@@ -82,10 +82,10 @@ public class EhSpatialRelationsContainsTest {
          * return the same instance while the sfContains will return the same
          * instance.
          */
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " ?aWKT geo:ehContains \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
                 + "}";
@@ -108,7 +108,7 @@ public class EhSpatialRelationsContainsTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " ?aWKT geo:ehContains \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
                 + "}";

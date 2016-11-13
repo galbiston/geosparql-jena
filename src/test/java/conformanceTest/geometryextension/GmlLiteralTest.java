@@ -78,7 +78,7 @@ public class GmlLiteralTest {
         this.expectedList.add("<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>^^http://www.opengis.net/ont/geosparql#gmlLiteral");
 
         String Q1 = "SELECT ?aGML WHERE{"
-                + " ntu:A ntu:hasExactGeometry ?aGeom ."
+                + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();

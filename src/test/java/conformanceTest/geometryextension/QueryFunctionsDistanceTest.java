@@ -83,14 +83,14 @@ public class QueryFunctionsDistanceTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#F");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#F");
+        this.expectedList.add("http://example.org/ApplicationSchema#B");
 
         String Q1 = "SELECT ?place WHERE{ "
-                + "?place ntu:hasExactGeometry ?aGeom . "
+                + "?place ex:hasExactGeometry ?aGeom . "
                 + "?aGeom geo:asWKT ?aWkt . "
-                + "ntu:E ntu:hasExactGeometry ?eGeom . "
+                + "ex:E ex:hasExactGeometry ?eGeom . "
                 + "?eGeom geo:asWKT ?eWkt . "
                 + "FILTER (?eGeom != ?aGeom)"
                 + " }"

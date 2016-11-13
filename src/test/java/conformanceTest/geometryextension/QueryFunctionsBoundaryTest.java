@@ -83,10 +83,10 @@ public class QueryFunctionsBoundaryTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
 
         String Q1 = "SELECT ?place WHERE{ "
-                + "?place ntu:hasExactGeometry ?aGeom . "
+                + "?place ex:hasExactGeometry ?aGeom . "
                 + "?aGeom geo:asWKT ?aWkt . "
                 + "BIND ((geof:boundary( ?aWkt)) AS ?aBoundary). "
                 + "BIND ((geof:boundary( \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>)) AS ?bBoundary). "

@@ -85,10 +85,10 @@ public class Rcc8QueryFunctionsRcc8eqTest {
          * Equal returns t (TRUE) if two geometries of the same type have
          * identical X,Y coordinate values.
          */
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
+        this.expectedList.add("http://example.org/ApplicationSchema#E");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8eq(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
@@ -111,7 +111,7 @@ public class Rcc8QueryFunctionsRcc8eqTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8eq(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.4 34.3, -83.3 34.3, -83.3 34.4, -83.4 34.4, -83.4 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";

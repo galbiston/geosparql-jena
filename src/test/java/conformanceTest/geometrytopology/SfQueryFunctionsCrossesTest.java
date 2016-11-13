@@ -89,10 +89,10 @@ public class SfQueryFunctionsCrossesTest {
          * multipoint/linestring, linestring/linestring, linestring/polygon, and
          * linestring/multipolygon comparisons.
          */
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
+        this.expectedList.add("http://example.org/ApplicationSchema#B");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
                 + "}";
@@ -115,7 +115,7 @@ public class SfQueryFunctionsCrossesTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geo:sfCrosses(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
@@ -137,7 +137,7 @@ public class SfQueryFunctionsCrossesTest {
     public void nullTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geo:sfCrosses(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";

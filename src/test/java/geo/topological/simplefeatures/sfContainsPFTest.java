@@ -83,8 +83,8 @@ public class sfContainsPFTest {
     public void testExpressionFunction() {
 
         String queryString = "SELECT ?place WHERE{"
-                + " ?place ntu:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:sfContains ntu:A ."
+                + " ?place ex:hasExactGeometry ?aGeom ."
+                + " ?aGeom geo:sfContains ex:A ."
                 + "}";
 
         QuerySolutionMap bindings = new QuerySolutionMap();

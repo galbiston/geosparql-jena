@@ -81,10 +81,10 @@ public class Rcc8QueryFunctionsRcc8ntppiTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geo:rcc8ntppi(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.4 34.3, -83.3 34.3, -83.3 34.4, -83.4 34.4, -83.4 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
@@ -107,7 +107,7 @@ public class Rcc8QueryFunctionsRcc8ntppiTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8ntppi(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>)"
                 + "}";

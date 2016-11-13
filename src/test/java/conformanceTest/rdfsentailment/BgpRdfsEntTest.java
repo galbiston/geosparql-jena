@@ -75,12 +75,12 @@ public class BgpRdfsEntTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#F");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#D");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#A");
+        this.expectedList.add("http://example.org/ApplicationSchema#F");
+        this.expectedList.add("http://example.org/ApplicationSchema#E");
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#B");
+        this.expectedList.add("http://example.org/ApplicationSchema#A");
 
         String Q1 = "SELECT ?feature WHERE{"
                 + " ?feature rdf:type geo:Feature ."

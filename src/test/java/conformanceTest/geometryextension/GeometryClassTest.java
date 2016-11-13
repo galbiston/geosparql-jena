@@ -72,16 +72,16 @@ public class GeometryClassTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#BExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#CExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#AExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#FPointGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#EExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#CPointGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#DPointGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#DExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#FExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#EPointGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#AExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#FPointGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#CPointGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#DPointGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#EPointGeom");
 
         String Q1 = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type geo:Geometry ."

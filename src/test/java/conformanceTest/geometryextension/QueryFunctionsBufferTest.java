@@ -83,15 +83,15 @@ public class QueryFunctionsBufferTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#F");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#D");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
+        this.expectedList.add("http://example.org/ApplicationSchema#F");
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#B");
 
         String Q1 = "SELECT ?place WHERE{ "
-                + " ?place ntu:hasExactGeometry ?aGeom . "
+                + " ?place ex:hasExactGeometry ?aGeom . "
                 + " ?aGeom geo:asWKT ?aWkt . "
-                + " ntu:B ntu:hasExactGeometry ?bGeom . "
+                + " ex:B ex:hasExactGeometry ?bGeom . "
                 + " ?bGeom geo:asWKT ?bWkt . "
                 + " BIND( geof:buffer(?bWkt, 0.0000006, uom:metre) AS ?buffer) . "
                 + " FILTER ( geof:sfIntersects(?aWkt, ?buffer) )"
@@ -113,21 +113,21 @@ public class QueryFunctionsBufferTest {
 
     /**
      * The increase of the radius should lead the buffer intersects
-     * with ntu:E as well, compare to the result of positiveTest.
+     * with ex:E as well, compare to the result of positiveTest.
      */
     @Test
     public void anotherPositiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#F");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#D");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
+        this.expectedList.add("http://example.org/ApplicationSchema#F");
+        this.expectedList.add("http://example.org/ApplicationSchema#E");
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#B");
 
         String Q1 = "SELECT ?place WHERE{ "
-                + " ?place ntu:hasExactGeometry ?aGeom . "
+                + " ?place ex:hasExactGeometry ?aGeom . "
                 + " ?aGeom geo:asWKT ?aWkt . "
-                + " ntu:B ntu:hasExactGeometry ?bGeom . "
+                + " ex:B ex:hasExactGeometry ?bGeom . "
                 + " ?bGeom geo:asWKT ?bWkt . "
                 + " BIND( geof:buffer(?bWkt, 0.000001, uom:metre) AS ?buffer) . "
                 + " FILTER ( geof:sfIntersects(?aWkt, ?buffer) )"

@@ -87,10 +87,10 @@ public class SfQueryFunctionsTouchesTest {
          * geometry must be a line string, polygon, multi line string, or
          * multi polygon.
          */
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
+        this.expectedList.add("http://example.org/ApplicationSchema#E");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:sfTouches(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
@@ -113,7 +113,7 @@ public class SfQueryFunctionsTouchesTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:sfTouches(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";

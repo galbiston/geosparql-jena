@@ -74,10 +74,10 @@ public class FeaturePropertiesTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#A");
+        this.expectedList.add("http://example.org/ApplicationSchema#A");
 
         String Q1 = "SELECT ?place WHERE{"
-                + " ntu:A geo:hasGeometry ?aGeom ."
+                + " ex:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "?place geo:hasDefaultGeometry ?Geom ."
                 + " ?Geom geo:asWKT ?WKT ."

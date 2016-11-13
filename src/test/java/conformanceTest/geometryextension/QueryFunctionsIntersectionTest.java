@@ -83,14 +83,14 @@ public class QueryFunctionsIntersectionTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#D");
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
 
         String Q1 = "SELECT ?place WHERE{"
-                + " ntu:C ntu:hasExactGeometry ?cGeom . "
+                + " ex:C ex:hasExactGeometry ?cGeom . "
                 + " ?cGeom geo:asWKT ?cWkt . "
-                + " ntu:D ntu:hasExactGeometry ?eGeom . "
+                + " ex:D ex:hasExactGeometry ?eGeom . "
                 + " ?eGeom geo:asWKT ?eWkt . "
-                + " ?place ntu:hasExactGeometry ?aGeom . "
+                + " ?place ex:hasExactGeometry ?aGeom . "
                 + " ?aGeom geo:asWKT ?aWkt . "
                 + " BIND ( geof:intersection(?eWkt, ?cWkt) AS ?intersection ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?intersection ))"

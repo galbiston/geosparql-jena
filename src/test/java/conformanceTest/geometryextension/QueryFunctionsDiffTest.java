@@ -83,14 +83,14 @@ public class QueryFunctionsDiffTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
+        this.expectedList.add("http://example.org/ApplicationSchema#E");
 
         String Q1 = "SELECT ?place WHERE{"
-                + " ntu:C ntu:hasExactGeometry ?cGeom . "
+                + " ex:C ex:hasExactGeometry ?cGeom . "
                 + " ?cGeom geo:asWKT ?cWkt . "
-                + " ntu:E ntu:hasExactGeometry ?eGeom . "
+                + " ex:E ex:hasExactGeometry ?eGeom . "
                 + " ?eGeom geo:asWKT ?eWkt . "
-                + " ?place ntu:hasExactGeometry ?aGeom . "
+                + " ?place ex:hasExactGeometry ?aGeom . "
                 + " ?aGeom geo:asWKT ?aWkt . "
                 + " BIND ( geof:difference(?eWkt, ?cWkt) AS ?difference ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?difference ))"

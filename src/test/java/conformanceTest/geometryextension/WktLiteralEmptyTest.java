@@ -105,7 +105,7 @@ public class WktLiteralEmptyTest {
         this.expectedList.add("");
 
         String Q1 = "SELECT ?aWKT WHERE{"
-                + " ntu:A ntu:hasExactGeometry ?aGeom ."
+                + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();

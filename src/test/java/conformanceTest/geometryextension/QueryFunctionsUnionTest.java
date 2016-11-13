@@ -83,14 +83,14 @@ public class QueryFunctionsUnionTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
 
         String Q1 = "SELECT ?place WHERE{ "
-                + "ntu:C ntu:hasExactGeometry ?cGeom . "
+                + "ex:C ex:hasExactGeometry ?cGeom . "
                 + "?cGeom geo:asWKT ?cWkt . "
-                + "ntu:D ntu:hasExactGeometry ?eGeom . "
+                + "ex:D ex:hasExactGeometry ?eGeom . "
                 + "?eGeom geo:asWKT ?eWkt . "
-                + "?place ntu:hasExactGeometry ?aGeom . "
+                + "?place ex:hasExactGeometry ?aGeom . "
                 + "?aGeom geo:asWKT ?aWkt . "
                 + "BIND ((geof:union( ?cWkt, ?eWkt )) AS ?union)"
                 + "FILTER ( geof:sfEquals(?aWkt, ?union))"

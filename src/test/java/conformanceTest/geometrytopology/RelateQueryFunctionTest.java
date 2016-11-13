@@ -77,10 +77,10 @@ public class RelateQueryFunctionTest {
     @Test
     public void pointTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#A");
+        this.expectedList.add("http://example.org/ApplicationSchema#A");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"T*F**FFF*\") ."
                 + "}";
@@ -102,10 +102,10 @@ public class RelateQueryFunctionTest {
     @Test
     public void lineTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
+        this.expectedList.add("http://example.org/ApplicationSchema#B");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LineString(-83.4 34.0, -83.3 34.3)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
                 + "}";
@@ -127,10 +127,10 @@ public class RelateQueryFunctionTest {
     @Test
     public void polygonTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
+        this.expectedList.add("http://example.org/ApplicationSchema#E");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
                 + "}";
@@ -153,7 +153,7 @@ public class RelateQueryFunctionTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
                 + "}";

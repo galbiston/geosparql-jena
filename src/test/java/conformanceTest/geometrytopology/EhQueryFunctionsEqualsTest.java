@@ -85,10 +85,10 @@ public class EhQueryFunctionsEqualsTest {
          * Equal returns t (TRUE) if two geometries of the same type have
          * identical X,Y coordinate values.
          */
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#A");
+        this.expectedList.add("http://example.org/ApplicationSchema#A");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:ehEquals(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
@@ -111,7 +111,7 @@ public class EhQueryFunctionsEqualsTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:ehEquals(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";

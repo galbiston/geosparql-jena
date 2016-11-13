@@ -82,7 +82,7 @@ public class WktLiteralTest {
         this.expectedList.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
 
         String Q1 = "SELECT ?aWKT WHERE{"
-                + " ntu:A ntu:hasExactGeometry ?aGeom ."
+                + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();

@@ -5,18 +5,18 @@
  */
 package implementation.vocabulary;
 
-import static implementation.support.Prefixes.NTU_URI;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
+import static implementation.support.Prefixes.EXAMPLE_URI;
 
 /**
  *
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class NTU {
+public class Example {
 
-    public static final Property HAS_EXACT_GEOMETRY_PRO = ResourceFactory.createProperty(NTU_URI + "hasExactGeometry");
-    public static final Property HAS_POINT_GEOMETRY_PRO = ResourceFactory.createProperty(NTU_URI + "hasPointGeometry");
+    public static final Property HAS_EXACT_GEOMETRY_PRO = ResourceFactory.createProperty(EXAMPLE_URI + "hasExactGeometry");
+    public static final Property HAS_POINT_GEOMETRY_PRO = ResourceFactory.createProperty(EXAMPLE_URI + "hasPointGeometry");
 
 }

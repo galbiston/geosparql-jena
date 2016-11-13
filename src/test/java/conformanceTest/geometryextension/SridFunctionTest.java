@@ -78,7 +78,7 @@ public class SridFunctionTest {
         this.expectedList.add("http://www.opengis.net/def/crs/OGC/1.3/CRS84");
 
         String Q1 = "SELECT ((geof:getsrid ( ?aWKT )) AS ?srid) WHERE{"
-                + " ntu:C ntu:hasExactGeometry ?aGeom ."
+                + " ex:C ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();

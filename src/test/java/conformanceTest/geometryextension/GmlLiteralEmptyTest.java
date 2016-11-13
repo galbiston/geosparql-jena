@@ -104,7 +104,7 @@ public class GmlLiteralEmptyTest {
         this.expectedList.add("urn:ogc:def:crs:OGC::CRS84");
 
         String Q1 = "SELECT ((geof:getsrid ( ?aGML )) AS ?srid) WHERE{"
-                + " ntu:B ntu:hasExactGeometry ?aGeom ."
+                + " ex:B ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();

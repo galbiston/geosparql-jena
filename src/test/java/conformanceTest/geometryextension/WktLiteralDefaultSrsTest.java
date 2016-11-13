@@ -107,7 +107,7 @@ public class WktLiteralDefaultSrsTest {
         this.expectedList.add("http://www.opengis.net/def/crs/OGC/1.3/CRS84");
 
         String Q1 = "SELECT ((geof:getsrid ( ?aWKT )) AS ?srid) WHERE{"
-                + " ntu:B ntu:hasExactGeometry ?aGeom ."
+                + " ex:B ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();

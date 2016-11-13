@@ -78,7 +78,7 @@ public class GeometryPropertiesTest {
         this.expectedList.add("true^^http://www.w3.org/2001/XMLSchema#boolean");
 
         String Q1 = "SELECT ?dimension ?coordinateDimension ?spatialDimension ?isEmpty ?isSimple WHERE{"
-                + " ntu:A geo:hasGeometry ?aGeom ."
+                + " ex:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:dimension ?dimension ."
                 + " ?aGeom geo:coordinateDimension ?coordinateDimension ."
                 + " ?aGeom geo:spatialDimension ?spatialDimension ."
