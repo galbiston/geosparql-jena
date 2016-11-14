@@ -109,8 +109,9 @@ public class SfSpatialRelationsContainsTest {
 
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfContains \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
+                + "ex:F ex:hasExactGeometry ?bGeom ."
+                + " ?aGeom geo:sfContains ?bGeom ."
+                + "FILTER ( ?aGeom != ?bGeom )"
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);

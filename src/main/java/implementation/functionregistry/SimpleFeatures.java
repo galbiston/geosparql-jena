@@ -7,10 +7,13 @@ package implementation.functionregistry;
 
 import geo.topological.simplefeatures.*;
 import geof.topological.simplefeatures.expressionfunction.*;
-import geof.topological.simplefeatures.filterfunction.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
-import org.apache.jena.sparql.function.FunctionRegistry;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.jena.sparql.core.Var;
+import org.apache.jena.sparql.expr.ExprVar;
+import org.apache.jena.sparql.function.user.UserDefinedFunctionFactory;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
@@ -41,40 +44,25 @@ public class SimpleFeatures {
     }
 
     /**
-     * This method loads all the Simple Feature Topological Filter Functions
-     *
-     * @param registry - the FunctionRegistry to be used
-     */
-    @SuppressWarnings("deprecation")
-    public static void loadFilterFunctions(FunctionRegistry registry) {
-
-        // Simple Feature Filter Functions
-        registry.put(Geof.SF_CONTAINS, sfContainsFF.class);
-        registry.put(Geof.SF_CROSSES, sfCrossesFF.class);
-        registry.put(Geof.SF_DISJOINT, sfDisjointFF.class);
-        registry.put(Geof.SF_EQUALS, sfEqualsFF.class);
-        registry.put(Geof.SF_INTERSECTS, sfIntersectsFF.class);
-        registry.put(Geof.SF_OVERLAPS, sfOverlapsFF.class);
-        registry.put(Geof.SF_TOUCHES, sfTouchesFF.class);
-        registry.put(Geof.SF_WITHIN, sfWithinFF.class);
-    }
-
-    /**
      * This method loads all the Simple Feature Topological Expression Functions
      *
-     * @param registry - the FunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadExpressionFunctions(FunctionRegistry registry) {
+    public static void loadExpressionFunctions() {
 
-        // Simple Feature Expression Functions
-        registry.put(Geof.SF_CONTAINS, sfContainsEF.class);
-        registry.put(Geof.SF_CROSSES, sfCrossesEF.class);
-        registry.put(Geof.SF_DISJOINT, sfDisjointEF.class);
-        registry.put(Geof.SF_EQUALS, sfEqualsEF.class);
-        registry.put(Geof.SF_INTERSECTS, sfIntersectsEF.class);
-        registry.put(Geof.SF_OVERLAPS, sfOverlapsEF.class);
-        registry.put(Geof.SF_TOUCHES, sfTouchesEF.class);
-        registry.put(Geof.SF_WITHIN, sfWithinEF.class);
+        // Manually create expression function variables
+        List<Var> args = new ArrayList<>();
+        args.add(Var.alloc("left"));
+        args.add(Var.alloc("right"));
+
+        UserDefinedFunctionFactory.getFactory().add(Geof.SF_CONTAINS, new sfContainsEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.SF_CROSSES, new sfCrossesEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.SF_DISJOINT, new sfDisjointEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.SF_EQUALS, new sfEqualsEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.SF_INTERSECTS, new sfIntersectsEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.SF_OVERLAPS, new sfOverlapsEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.SF_TOUCHES, new sfTouchesEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.SF_WITHIN, new sfWithinEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+
     }
 }

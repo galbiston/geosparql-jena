@@ -38,7 +38,7 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
             return NodeValue.FALSE;
         }
     }
-    
+
     protected abstract boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException;
 
 }

@@ -88,9 +88,9 @@ public class SfSpatialRelationsCrossesTest {
         this.expectedList.add("http://example.org/ApplicationSchema#B");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
+                + "?place ex:hasExactGeometry ?aGeom . "
+                + "ex:C ex:hasExactGeometry ?bGeom . "
+                + " ?aWKT geo:sfCrosses ?bGeom ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
