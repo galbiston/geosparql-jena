@@ -239,7 +239,7 @@ public class GeometryWrapper {
 
     public NodeValue getResultNode() {
 
-        String lexicalForm = DatatypeSelector.unparse(geometry, serialisation);
+        String lexicalForm = DatatypeSelector.unparse(this, serialisation);
         return NodeValue.makeNodeString(lexicalForm);
     }
 

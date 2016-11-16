@@ -5,7 +5,6 @@
  */
 package implementation;
 
-import com.vividsolutions.jts.geom.Geometry;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.support.GeoSerialisationEnum;
@@ -17,29 +16,32 @@ import org.apache.jena.datatypes.DatatypeFormatException;
  */
 public class DatatypeSelector {
 
-    public static final String unparse(Geometry geometry, GeoSerialisationEnum serialisation) {
+    public static final String unparse(GeometryWrapper geometryWrapper, GeoSerialisationEnum serialisation) {
 
         String result;
         if (serialisation.equals(GeoSerialisationEnum.WKT)) {
             WKTDatatype datatype = WKTDatatype.theWKTDatatype;
-            result = datatype.unparse(geometry);
+            result = datatype.unparse(geometryWrapper);
         } else {
             GMLDatatype datatype = GMLDatatype.theGMLDatatype;
-            result = datatype.unparse(geometry);
+            result = datatype.unparse(geometryWrapper);
         }
         return result;
     }
 
     public static final GeometryWrapper parse(String lexicalForm, String datatypeURI) throws DatatypeFormatException {
 
-        if (datatypeURI.equals(WKTDatatype.theTypeURI)) {
-            WKTDatatype datatype = WKTDatatype.theWKTDatatype;
-            return datatype.parse(lexicalForm);
-        } else if (datatypeURI.equals(GMLDatatype.theTypeURI)) {
-            GMLDatatype datatype = GMLDatatype.theGMLDatatype;
-            return datatype.parse(lexicalForm);
-        } else {
-            throw new DatatypeFormatException("Literal is not a WKT or GML Literal.");
+        switch (datatypeURI) {
+            case WKTDatatype.theTypeURI: {
+                WKTDatatype datatype = WKTDatatype.theWKTDatatype;
+                return datatype.parse(lexicalForm);
+            }
+            case GMLDatatype.theTypeURI: {
+                GMLDatatype datatype = GMLDatatype.theGMLDatatype;
+                return datatype.parse(lexicalForm);
+            }
+            default:
+                throw new DatatypeFormatException("Literal is not a WKT or GML Literal.");
         }
     }
 
