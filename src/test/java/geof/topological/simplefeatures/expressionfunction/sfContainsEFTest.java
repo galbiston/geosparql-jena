@@ -5,6 +5,7 @@
  */
 package geof.topological.simplefeatures.expressionfunction;
 
+import geof.topological.simplefeatures.sfContainsEF;
 import conformanceTest.RDFDataLocation;
 import implementation.support.Prefixes;
 import implementation.vocabulary.Geof;

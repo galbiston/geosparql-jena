@@ -6,7 +6,7 @@
 package geo.topological.rcc8;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.rcc8.expressionfunction.rccTangentialProperPartEF;
+import geof.topological.rcc8.rccTangentialProperPartEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**

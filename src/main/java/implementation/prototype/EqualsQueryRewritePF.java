@@ -23,7 +23,7 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunction;
 import org.apache.jena.sparql.util.NodeUtils;
-import geof.topological.simplefeatures.expressionfunction.sfEqualsEF;
+import geof.topological.simplefeatures.sfEqualsEF;
 
 /**
  *

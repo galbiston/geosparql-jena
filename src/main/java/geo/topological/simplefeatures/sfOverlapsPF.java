@@ -6,7 +6,7 @@
 package geo.topological.simplefeatures;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.simplefeatures.expressionfunction.sfOverlapsEF;
+import geof.topological.simplefeatures.sfOverlapsEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**

@@ -5,7 +5,7 @@
  */
 package conformanceTest.geometryextension;
 
-import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
 import implementation.support.Prefixes;
 import java.util.ArrayList;
@@ -59,6 +59,7 @@ public class QueryFunctionsBufferTest {
          * Initialize all the topology functions.
          */
         load();
+        initWktModel();
     }
 
     @AfterClass
@@ -96,18 +97,7 @@ public class QueryFunctionsBufferTest {
                 + " BIND( geof:buffer(?bWkt, 0.0000006, uom:metre) AS ?buffer) . "
                 + " FILTER ( geof:sfIntersects(?aWkt, ?buffer) )"
                 + " }";
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
-            ResultSet results = qexec.execSelect();
-            while (results.hasNext()) {
-                QuerySolution solution = results.nextSolution();
-                Resource resource = solution.getResource("?place");
-                this.actualList.add(resource.toString());
-            }
-        }
+        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 

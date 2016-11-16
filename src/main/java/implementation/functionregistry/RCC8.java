@@ -6,7 +6,7 @@
 package implementation.functionregistry;
 
 import geo.topological.rcc8.*;
-import geof.topological.rcc8.expressionfunction.*;
+import geof.topological.rcc8.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
 import java.util.ArrayList;

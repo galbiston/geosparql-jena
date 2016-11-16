@@ -6,7 +6,7 @@
 package implementation.functionregistry;
 
 import geo.topological.simplefeatures.*;
-import geof.topological.simplefeatures.expressionfunction.*;
+import geof.topological.simplefeatures.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
 import java.util.ArrayList;

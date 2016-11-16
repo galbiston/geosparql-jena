@@ -5,17 +5,11 @@
  */
 package conformanceTest.geometryextension;
 
+import static conformanceTest.ConformanceTestSuite.literalQuery;
 import conformanceTest.RDFDataLocation;
 import static implementation.functionregistry.RegistryLoader.load;
-import implementation.support.Prefixes;
 import java.util.ArrayList;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.reasoner.Reasoner;
@@ -60,7 +54,7 @@ public class WktLiteralDefaultSrsTest {
      * This negative model facilitates the test for empty geometries and the WKT
      * literal without a specified SRID.
      */
-    public static Model TEST_WKT_MODEL;
+    public static InfModel TEST_WKT_MODEL;
 
     @BeforeClass
     public static void setUpClass() {
@@ -110,18 +104,7 @@ public class WktLiteralDefaultSrsTest {
                 + " ex:B ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), TEST_WKT_MODEL)) {
-            ResultSet results = qexec.execSelect();
-            while (results.hasNext()) {
-                QuerySolution solution = results.nextSolution();
-                Literal literal = solution.getLiteral("?srid");
-                this.actualList.add(literal.toString());
-            }
-        }
+        this.actualList = literalQuery(Q1, TEST_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 

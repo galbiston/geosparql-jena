@@ -5,7 +5,7 @@
  */
 package implementation.functionregistry;
 
-import geof.nontopological.queryfunctions.*;
+import geof.nontopological.*;
 import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;
 

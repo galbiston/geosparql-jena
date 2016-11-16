@@ -6,7 +6,7 @@
 package implementation.functionregistry;
 
 import geo.topological.egenhofer.*;
-import geof.topological.egenhofer.expressionfunction.*;
+import geof.topological.egenhofer.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
 import java.util.ArrayList;

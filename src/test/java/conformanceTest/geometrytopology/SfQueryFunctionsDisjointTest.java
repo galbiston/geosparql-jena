@@ -5,7 +5,7 @@
  */
 package conformanceTest.geometrytopology;
 
-import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
 import implementation.support.Prefixes;
 import java.util.ArrayList;

@@ -24,7 +24,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static implementation.prototype.EqualsQueryRewritePF.hiddenVariableCount;
-import geof.topological.simplefeatures.expressionfunction.sfEqualsEF;
+import geof.topological.simplefeatures.sfEqualsEF;
 import implementation.vocabulary.Example;
 import implementation.vocabulary.Geo;
 

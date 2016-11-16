@@ -6,7 +6,7 @@
 package geo.topological.simplefeatures;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.simplefeatures.expressionfunction.sfWithinEF;
+import geof.topological.simplefeatures.sfWithinEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
