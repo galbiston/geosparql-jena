@@ -87,7 +87,10 @@ public class UnitsOfMeasure {
         //Done through intermediate step of converting to metres and radians if required.
         Measure<Double, ?> sourceDistance = null;
 
-        if (!isSourceProjected && !isTargetProjected) {
+        if (targetUnit.equals(sourceUnit)) {
+            //Source and Target are the same units
+            sourceDistance = Measure.valueOf(targetDistance, sourceUnit);
+        } else if (!isSourceProjected && !isTargetProjected) {
 
             //Source is Angle and Target is Angle
             //Convert to radians.
