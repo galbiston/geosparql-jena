@@ -56,7 +56,7 @@ public class Main {
         //Find a spatial location with a given name.
         String Q1 = "SELECT ?place WHERE{"
                 + "?place geo:hasGeometry ?bGeom . "
-                + "ntu:A geo:hasGeometry ?aGeom ."
+                + "ex:A geo:hasGeometry ?aGeom ."
                 + "?aGeom geo:sfEquals ?place . "
                 + "}";
 
@@ -224,16 +224,16 @@ public class Main {
 
         //Find a spatial location with a given name.
         String Q1 = "SELECT ?place WHERE{ "
-                + "?place rdf:type ntu:PlaceOfInterest . "
-                + "?place ntu:name \"place1\" . "
+                + "?place rdf:type ex:PlaceOfInterest . "
+                + "?place ex:name \"place1\" . "
                 + " }";
 
         evaluateQuery(Q1);
 
         //Find a spatial name within a given location.
         String Q2 = "SELECT ?place WHERE{ "
-                + "?place rdf:type ntu:PlaceOfInterest . "
-                + "?place ntu:hasExactGeometry ?geom . "
+                + "?place rdf:type ex:PlaceOfInterest . "
+                + "?place ex:hasExactGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
                 + "FILTER (geof:sfContains(?wkt, \"Point(-83.4 34.4)\"^^sf:wktLiteral ))"
                 + " }";
@@ -242,7 +242,7 @@ public class Main {
 
         //Retrive all points within a given area.
         String Q3 = "SELECT ?place WHERE{ "
-                + "?place ntu:hasPointGeometry ?geom . "
+                + "?place ex:hasPointGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
                 + "FILTER (geof:sfWithin(?wkt, \"Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))\"^^sf:wktLiteral ))"
                 + " }";
@@ -251,7 +251,7 @@ public class Main {
 
         //Retrieve all the geometries which intersect a given area.
         String Q4 = "SELECT ?place WHERE{ "
-                + "?place ntu:hasExactGeometry ?geom . "
+                + "?place ex:hasExactGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
                 + "FILTER (geof:sfIntersects(?wkt, \"Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))\"^^sf:wktLiteral ))"
                 + " }";
@@ -260,9 +260,9 @@ public class Main {
 
         //Find all the line strings which cross a given area.
         String Q5 = "SELECT ?placeA WHERE{ "
-                + "?placeA ntu:hasExactGeometry ?geomA . "
+                + "?placeA ex:hasExactGeometry ?geomA . "
                 + "?geomA geo:asWKT ?wktA . "
-                + "ntu:C ntu:hasExactGeometry ?geomC . "
+                + "ex:C ex:hasExactGeometry ?geomC . "
                 + "?geomC geo:asWKT ?wktC . "
                 + "FILTER (geof:sfCrosses(?wktA, ?wktC))"
                 + " }";
@@ -271,9 +271,9 @@ public class Main {
 
         //Retrieve all the geometry pairs within a given distance of each other.
         String Q6 = "SELECT ?placeA ?placeB WHERE{ "
-                + "?placeA ntu:hasExactGeometry ?geomA . "
+                + "?placeA ex:hasExactGeometry ?geomA . "
                 + "?geomA geo:asWKT ?wktA . "
-                + "?placeB ntu:hasExactGeometry ?geomB . "
+                + "?placeB ex:hasExactGeometry ?geomB . "
                 + "?geomB geo:asWKT ?wktB . "
                 + "BIND (geof:distance(?wktA, ?wktB, uom:metre) AS ?dist ) . "
                 + "FILTER( (?dist<500000) && !sameTerm(?geomA, ?geomB) )"
@@ -283,7 +283,7 @@ public class Main {
 
         //Find 2 nearest points to a given location.
         String Q7 = "SELECT ?place WHERE{ "
-                + "?place ntu:hasExactGeometry ?geom . "
+                + "?place ex:hasExactGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
                 + "BIND (geof:distance(?wkt, \"POINT(-83.0 34.0)\"^^sf:wktLiteral, uom:metre ) AS ?dist)"
                 + " }"
@@ -294,9 +294,9 @@ public class Main {
 
         //Find 2 nearest points to a given spatial object.
         String Q8 = "SELECT ?place WHERE{ "
-                + "?place ntu:hasExactGeometry ?geom . "
+                + "?place ex:hasExactGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
-                + "ntu:F ntu:hasExactGeometry ?geomF . "
+                + "ex:F ex:hasExactGeometry ?geomF . "
                 + "?geomF geo:asWKT ?wktF . "
                 + "BIND (geof:distance(?wkt, ?wktF, uom:metre ) AS ?dist)"
                 + " }"
@@ -307,7 +307,7 @@ public class Main {
 
         //Return the portions of any line strings which overlap a given area.
         String Q9 = "SELECT ?overlap WHERE{ "
-                + "?place ntu:hasExactGeometry ?geom . "
+                + "?place ex:hasExactGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
                 + "BIND (geof:intersection(?wkt, \"Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))\"^^sf:wktLiteral) AS ?overlap)"
                 + "FILTER (geof:sfIntersects(?wkt, \"Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))\"^^sf:wktLiteral))"
@@ -317,7 +317,7 @@ public class Main {
 
         //Generate a buffer for a given line string.
         String Q10 = "SELECT (geof:buffer(?wkt, 10, uom:metre) AS ?buf) WHERE{ "
-                + "ntu:B ntu:hasExactGeometry ?geom . "
+                + "ex:B ex:hasExactGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
                 + " }";
 
@@ -325,9 +325,9 @@ public class Main {
 
         //Generate a union for given geometries.
         String Q11 = "SELECT (geof:union(?wktC, ?wktB) AS ?union) WHERE{ "
-                + "ntu:B ntu:hasExactGeometry ?geomB . "
+                + "ex:B ex:hasExactGeometry ?geomB . "
                 + "?geomB geo:asWKT ?wktB . "
-                + "ntu:C ntu:hasExactGeometry ?geomC . "
+                + "ex:C ex:hasExactGeometry ?geomC . "
                 + "?geomC geo:asWKT ?wktC . "
                 + " }";
 
@@ -335,7 +335,7 @@ public class Main {
 
         //Count all spatial objects within a given area.
         String Q12 = "SELECT ?place (COUNT(?geom) AS ?no_objects) WHERE{ "
-                + "?place ntu:hasExactGeometry ?geom . "
+                + "?place ex:hasExactGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
                 + "FILTER (geof:sfWithin(?wkt, \"Polygon((-83.6 34.1, -83.0 34.1, -83.0 34.5, -83.6 34.5, -83.6 34.1))\"^^sf:wktLiteral ))"
                 + " }"
@@ -345,10 +345,10 @@ public class Main {
 
         //Locate points which are further than a certain distance from a given location.
         String Q13 = "SELECT ?place WHERE{ "
-                + "?place ntu:hasExactGeometry ?geom . "
+                + "?place ex:hasExactGeometry ?geom . "
                 + "?geom geo:asWKT ?wkt . "
                 + "FILTER NOT EXISTS {"
-                + "     ntu:A ntu:hasExactGeometry ?geomA . "
+                + "     ex:A ex:hasExactGeometry ?geomA . "
                 + "     ?geomA geo:asWKT ?wktA . "
                 + "     FILTER( geof:distance(?wkt, ?wktA, uom:metre) < 100000)"
                 + "   }"

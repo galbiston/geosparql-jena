@@ -5,10 +5,10 @@
  */
 package implementation;
 
+import com.vividsolutions.jts.geom.Geometry;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.support.GeoSerialisationEnum;
-import com.vividsolutions.jts.geom.Geometry;
 import org.apache.jena.datatypes.DatatypeFormatException;
 
 /**
@@ -32,15 +32,15 @@ public class DatatypeSelector {
 
     public static final GeometryWrapper parse(String lexicalForm, String datatypeURI) throws DatatypeFormatException {
 
-        GeometryWrapper geometry;
         if (datatypeURI.equals(WKTDatatype.theTypeURI)) {
             WKTDatatype datatype = WKTDatatype.theWKTDatatype;
-            geometry = datatype.parse(lexicalForm);
-        } else {
+            return datatype.parse(lexicalForm);
+        } else if (datatypeURI.equals(GMLDatatype.theTypeURI)) {
             GMLDatatype datatype = GMLDatatype.theGMLDatatype;
-            geometry = datatype.parse(lexicalForm);
+            return datatype.parse(lexicalForm);
+        } else {
+            throw new DatatypeFormatException("Literal is not a WKT or GML Literal.");
         }
-        return geometry;
     }
 
 }

@@ -5,17 +5,9 @@
  */
 package conformanceTest.geometryextension;
 
-import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
-import implementation.support.Prefixes;
 import java.util.ArrayList;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Literal;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
@@ -51,6 +43,7 @@ public class GeometryPropertiesTest {
          * Initialize all the topology functions.
          */
         load();
+        initWktModel();
     }
 
     private ArrayList expectedList;
@@ -78,33 +71,14 @@ public class GeometryPropertiesTest {
         this.expectedList.add("true^^http://www.w3.org/2001/XMLSchema#boolean");
 
         String Q1 = "SELECT ?dimension ?coordinateDimension ?spatialDimension ?isEmpty ?isSimple WHERE{"
-                + " ntu:A geo:hasGeometry ?aGeom ."
+                + " ex:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:dimension ?dimension ."
                 + " ?aGeom geo:coordinateDimension ?coordinateDimension ."
                 + " ?aGeom geo:spatialDimension ?spatialDimension ."
                 + " ?aGeom geo:isEmpty ?isEmpty ."
                 + " ?aGeom geo:isSimple ?isSimple ."
                 + "}";
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
-            ResultSet results = qexec.execSelect();
-            while (results.hasNext()) {
-                QuerySolution solution = results.nextSolution();
-                Literal dimension = solution.getLiteral("?dimension");
-                Literal coordinateDimension = solution.getLiteral("?coordinateDimension");
-                Literal spatialDimension = solution.getLiteral("?spatialDimension");
-                Literal isEmpty = solution.getLiteral("?isEmpty");
-                Literal isSimple = solution.getLiteral("?isSimple");
-                this.actualList.add(dimension.toString());
-                this.actualList.add(coordinateDimension.toString());
-                this.actualList.add(spatialDimension.toString());
-                this.actualList.add(isEmpty.toString());
-                this.actualList.add(isSimple.toString());
-            }
-        }
+        this.actualList = literalQuery(Q1, INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 

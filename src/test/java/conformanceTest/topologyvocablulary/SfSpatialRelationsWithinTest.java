@@ -5,7 +5,7 @@
  */
 package conformanceTest.topologyvocablulary;
 
-import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
 import implementation.support.Prefixes;
 import java.util.ArrayList;
@@ -82,13 +82,13 @@ public class SfSpatialRelationsWithinTest {
          * the second geometry, Within tests for the exact opposite result of
          * contains.
          */
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#A");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#A");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\" geo:sfWithin ?aWKT ."
+                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> geo:sfWithin ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -109,9 +109,9 @@ public class SfSpatialRelationsWithinTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\" geo:sfWithin ?aWKT ."
+                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> geo:sfWithin ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);

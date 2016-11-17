@@ -5,7 +5,7 @@
  */
 package conformanceTest.topologyvocablulary;
 
-import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
 import implementation.support.Prefixes;
 import java.util.ArrayList;
@@ -81,17 +81,17 @@ public class SfSpatialRelationsIntersectsTest {
          * Intersects returns t (TRUE) if the intersection does not result in an
          * empty set, Intersects returns the exact opposite result of disjoint.
          */
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#F");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#E");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#D");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#B");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#A");
+        this.expectedList.add("http://example.org/ApplicationSchema#F");
+        this.expectedList.add("http://example.org/ApplicationSchema#E");
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#B");
+        this.expectedList.add("http://example.org/ApplicationSchema#A");
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfIntersects \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))^^http://www.opengis.net/ont/geosparql#wktLiteral\" ."
+                + " ?aWKT geo:sfIntersects \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
@@ -112,9 +112,9 @@ public class SfSpatialRelationsIntersectsTest {
     public void negativeTest() {
 
         String Q1 = "SELECT ?place WHERE{"
-                + "?place ntu:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfIntersects \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)^^http://www.opengis.net/ont/geosparql#wktLiteral\" ."
+                + " ?aWKT geo:sfIntersects \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);

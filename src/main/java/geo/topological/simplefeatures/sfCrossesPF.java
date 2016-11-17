@@ -6,7 +6,7 @@
 package geo.topological.simplefeatures;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.simplefeatures.expressionfunction.sfCrossesEF;
+import geof.topological.simplefeatures.sfCrossesEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**

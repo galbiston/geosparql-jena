@@ -6,7 +6,7 @@
 package geo.topological.egenhofer;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.egenhofer.expressionfunction.ehOverlapEF;
+import geof.topological.egenhofer.ehOverlapEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**

@@ -6,7 +6,7 @@
 package geo.topological.egenhofer;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.egenhofer.expressionfunction.ehCoveredByEF;
+import geof.topological.egenhofer.ehCoveredByEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**

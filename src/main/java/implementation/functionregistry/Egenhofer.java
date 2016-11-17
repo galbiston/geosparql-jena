@@ -6,10 +6,14 @@
 package implementation.functionregistry;
 
 import geo.topological.egenhofer.*;
-import geof.topological.egenhofer.filterfunction.*;
+import geof.topological.egenhofer.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
-import org.apache.jena.sparql.function.FunctionRegistry;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.jena.sparql.core.Var;
+import org.apache.jena.sparql.expr.ExprVar;
+import org.apache.jena.sparql.function.user.UserDefinedFunctionFactory;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
@@ -40,21 +44,25 @@ public class Egenhofer {
     }
 
     /**
-     * This method loads all the Egenhofer Topological Filter Functions
+     * This method loads all the Egenhofer Topological Expression Functions
      *
-     * @param registry - the FunctionRegistry to be used
      */
     @SuppressWarnings("deprecation")
-    public static void loadFilterFunctions(FunctionRegistry registry) {
+    public static void loadExpressionFunctions() {
 
-        // Simple Feature Filter Functions
-        registry.put(Geof.EH_CONTAINS, ehContainsFF.class);
-        registry.put(Geof.EH_COVERED_BY, ehCoveredByFF.class);
-        registry.put(Geof.EH_COVERS, ehCoversFF.class);
-        registry.put(Geof.EH_DISJOINT, ehDisjointFF.class);
-        registry.put(Geof.EH_EQUALS, ehEqualsFF.class);
-        registry.put(Geof.EH_INSIDE, ehInsideFF.class);
-        registry.put(Geof.EH_MEET, ehMeetFF.class);
-        registry.put(Geof.EH_OVERLAP, ehOverlapFF.class);
+        // Manually create expression function variables
+        List<Var> args = new ArrayList<>();
+        args.add(Var.alloc("left"));
+        args.add(Var.alloc("right"));
+
+        UserDefinedFunctionFactory.getFactory().add(Geof.EH_CONTAINS, new ehContainsEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.EH_COVERED_BY, new ehCoveredByEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.EH_COVERS, new ehDisjointEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.EH_DISJOINT, new ehDisjointEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.EH_EQUALS, new ehEqualsEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.EH_INSIDE, new ehInsideEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.EH_MEET, new ehMeetEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        UserDefinedFunctionFactory.getFactory().add(Geof.EH_OVERLAP, new ehOverlapEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+
     }
 }

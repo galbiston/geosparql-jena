@@ -10,8 +10,12 @@ import static implementation.support.Prefixes.GEOF_URI;
 /**
  *
  * @author Greg
+ * @author haozhechen
  */
 public class Geof {
+
+    //Relate function symbol:
+    public static final String RELATE = GEOF_URI + "relate";
 
     //Simple Feature Topological function symbols:
     public static final String SF_CONTAINS = GEOF_URI + "sfContains";

@@ -6,7 +6,7 @@
 package geo.topological.egenhofer;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.egenhofer.expressionfunction.ehDisjointEF;
+import geof.topological.egenhofer.ehDisjointEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**

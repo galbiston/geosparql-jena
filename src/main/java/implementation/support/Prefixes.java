@@ -20,7 +20,7 @@ public class Prefixes {
     public static final String GEOF_URI = "http://www.opengis.net/def/function/geosparql/";
     public static final String GEOR_URI = "http://www.opengis.net/def/rule/geosparql/";
     public static final String GEO_URI = "http://www.opengis.net/ont/geosparql#";
-    public static final String NTU_URI = "http://ntu.ac.uk/ont/geo#";
+    public static final String EXAMPLE_URI = "http://example.org/ApplicationSchema#";
     public static final String XSD_URI = "http://www.w3.org/2001/XMLSchema#";
     public static final String RDF_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     public static final String RDFS_URI = "http://www.w3.org/2000/01/rdf-schema#";
@@ -31,7 +31,7 @@ public class Prefixes {
     public static final Map<String, String> get() {
         Map<String, String> map = new HashMap<>();
         map.put("sf", SF_URI);
-        map.put("ntu", NTU_URI);
+        map.put("ex", EXAMPLE_URI);
         map.put("geo", GEO_URI);
         map.put("geof", GEOF_URI);
         map.put("geor", GEOR_URI);

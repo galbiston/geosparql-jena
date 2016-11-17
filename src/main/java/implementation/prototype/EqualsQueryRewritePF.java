@@ -23,7 +23,7 @@ import org.apache.jena.sparql.expr.ExprVar;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.pfunction.PropertyFunction;
 import org.apache.jena.sparql.util.NodeUtils;
-import geof.topological.simplefeatures.expressionfunction.sfEqualsEF;
+import geof.topological.simplefeatures.sfEqualsEF;
 
 /**
  *
@@ -77,7 +77,7 @@ public class EqualsQueryRewritePF implements PropertyFunction {
 
         BasicPattern bp = new BasicPattern();
         Property gmlProperty = ResourceFactory.createProperty(uri + "asGML");
-        Property geometry = ResourceFactory.createProperty("http://ntu.ac.uk/ont/geo#" + "hasExactGeometry");
+        Property geometry = ResourceFactory.createProperty("http://example.org/ApplicationSchema#" + "hasExactGeometry");
 
         Triple t1 = new Triple(nodeVar1, gmlProperty.asNode(), var1);
         Triple t2 = new Triple(nodeVar2, gmlProperty.asNode(), var2);

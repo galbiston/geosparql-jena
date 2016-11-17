@@ -6,7 +6,7 @@
 package geo.topological.simplefeatures;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.simplefeatures.expressionfunction.sfEqualsEF;
+import geof.topological.simplefeatures.sfEqualsEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**

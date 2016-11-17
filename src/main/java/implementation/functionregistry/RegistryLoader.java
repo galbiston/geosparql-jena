@@ -31,13 +31,15 @@ public class RegistryLoader {
         functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
 
         SimpleFeatures.loadPropertyFunctions(propertyRegistry);
-        SimpleFeatures.loadFilterFunctions(functionRegistry);
+        SimpleFeatures.loadExpressionFunctions();
 
         Egenhofer.loadPropertyFunctions(propertyRegistry);
-        Egenhofer.loadFilterFunctions(functionRegistry);
+        Egenhofer.loadExpressionFunctions();
 
         RCC8.loadPropertyFunctions(propertyRegistry);
-        RCC8.loadFilterFunctions(functionRegistry);
+        RCC8.loadExpressionFunctions();
+
+        Relate.loadRelateFunction(functionRegistry);
 
     }
 

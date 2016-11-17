@@ -5,17 +5,9 @@
  */
 package conformanceTest.geometryextension;
 
-import static conformanceTest.ConformanceTestSuite.INF_GML_MODEL;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
-import implementation.support.Prefixes;
 import java.util.ArrayList;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Literal;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -51,6 +43,7 @@ public class GmlLiteralTest {
          * Initialize all the topology functions.
          */
         load();
+        initGmlModel();
     }
 
     @AfterClass
@@ -78,21 +71,10 @@ public class GmlLiteralTest {
         this.expectedList.add("<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>^^http://www.opengis.net/ont/geosparql#gmlLiteral");
 
         String Q1 = "SELECT ?aGML WHERE{"
-                + " ntu:A ntu:hasExactGeometry ?aGeom ."
+                + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
                 + "}";
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_GML_MODEL)) {
-            ResultSet results = qexec.execSelect();
-            while (results.hasNext()) {
-                QuerySolution solution = results.nextSolution();
-                Literal literal = solution.getLiteral("?aGML");
-                this.actualList.add(literal.toString());
-            }
-        }
+        this.actualList = literalQuery(Q1, INF_GML_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 

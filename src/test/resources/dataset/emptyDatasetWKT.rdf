@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:geo="http://www.opengis.net/ont/geosparql#"
          xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-         xmlns:ntu="http://ntu.ac.uk/ont/geo#"
+         xmlns:ex="http://example.org/ApplicationSchema#"
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
          xmlns:sf="http://www.opengis.net/ont/sf#"
          xmlns:owl="http://www.w3.org/2002/07/owl#">
    
-   <rdfs:Class rdf:about="http://ntu.ac.uk/ont/geo#PlaceOfInterest">
+   <rdfs:Class rdf:about="http://example.org/ApplicationSchema#PlaceOfInterest">
       <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#Feature"/>
    </rdfs:Class>
-   <rdf:Property rdf:about="ntu:hasExactGeometry">
+   <rdf:Property rdf:about="ex:hasExactGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>
-   <rdf:Property rdf:about="ntu:hasPointGeometry">
+   <rdf:Property rdf:about="ex:hasPointGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>
@@ -29,11 +29,11 @@ test.
     
 <!-- Instance Below -->
 <!-- Empty Geometry -->
-<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#A">
-    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#AExactGeom"/>
-    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">empty</ntu:name>
-</ntu:PlaceOfInterest>
-<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#AExactGeom">
+<ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#A">
+    <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#AExactGeom"/>
+    <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">empty</ex:name>
+</ex:PlaceOfInterest>
+<sf:Point rdf:about="http://example.org/ApplicationSchema#AExactGeom">
     <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
     <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
     <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>
@@ -43,11 +43,11 @@ test.
 </sf:Point>
 
 <!-- Empty Geometry -->
-<ntu:PlaceOfInterest rdf:about="http://ntu.ac.uk/ont/geo#B">
-    <ntu:hasExactGeometry rdf:resource="http://ntu.ac.uk/ont/geo#BExactGeom"/>
-    <ntu:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">empty</ntu:name>
-</ntu:PlaceOfInterest>
-<sf:Point rdf:about="http://ntu.ac.uk/ont/geo#BExactGeom">
+<ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#B">
+    <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#BExactGeom"/>
+    <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">empty</ex:name>
+</ex:PlaceOfInterest>
+<sf:Point rdf:about="http://example.org/ApplicationSchema#BExactGeom">
     <geo:dimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:dimension>
     <geo:coordinateDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:coordinateDimension>
     <geo:spatialDimension rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</geo:spatialDimension>

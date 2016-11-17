@@ -5,17 +5,9 @@
  */
 package conformanceTest.geometryextension;
 
-import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
-import implementation.support.Prefixes;
 import java.util.ArrayList;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Resource;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -59,6 +51,7 @@ public class QueryFunctionsUnionTest {
          * Initialize all the topology functions.
          */
         load();
+        initWktModel();
     }
 
     @AfterClass
@@ -83,30 +76,19 @@ public class QueryFunctionsUnionTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#C");
+        this.expectedList.add("http://example.org/ApplicationSchema#C");
 
         String Q1 = "SELECT ?place WHERE{ "
-                + "ntu:C ntu:hasExactGeometry ?cGeom . "
+                + "ex:C ex:hasExactGeometry ?cGeom . "
                 + "?cGeom geo:asWKT ?cWkt . "
-                + "ntu:D ntu:hasExactGeometry ?eGeom . "
+                + "ex:D ex:hasExactGeometry ?eGeom . "
                 + "?eGeom geo:asWKT ?eWkt . "
-                + "?place ntu:hasExactGeometry ?aGeom . "
+                + "?place ex:hasExactGeometry ?aGeom . "
                 + "?aGeom geo:asWKT ?aWkt . "
                 + "BIND ((geof:union( ?cWkt, ?eWkt )) AS ?union)"
                 + "FILTER ( geof:sfEquals(?aWkt, ?union))"
                 + " }";
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
-            ResultSet results = qexec.execSelect();
-            while (results.hasNext()) {
-                QuerySolution solution = results.nextSolution();
-                Resource resource = solution.getResource("?place");
-                this.actualList.add(resource.toString());
-            }
-        }
+        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 

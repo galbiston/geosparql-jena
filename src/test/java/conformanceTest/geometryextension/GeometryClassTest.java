@@ -5,17 +5,9 @@
  */
 package conformanceTest.geometryextension;
 
-import static conformanceTest.ConformanceTestSuite.INF_WKT_MODEL;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
-import implementation.support.Prefixes;
 import java.util.ArrayList;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Resource;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -48,6 +40,7 @@ public class GeometryClassTest {
          * Initialize all the topology functions.
          */
         load();
+        initWktModel();
     }
 
     @AfterClass
@@ -72,32 +65,21 @@ public class GeometryClassTest {
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#BExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#CExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#AExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#FPointGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#EExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#CPointGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#DPointGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#DExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#FExactGeom");
-        this.expectedList.add("http://ntu.ac.uk/ont/geo#EPointGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#AExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#FPointGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#CPointGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#DPointGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#EPointGeom");
 
         String Q1 = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type geo:Geometry ."
                 + "}";
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
-            ResultSet results = qexec.execSelect();
-            while (results.hasNext()) {
-                QuerySolution solution = results.nextSolution();
-                Resource resource = solution.getResource("?geometry");
-                this.actualList.add(resource.toString());
-            }
-        }
+        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 

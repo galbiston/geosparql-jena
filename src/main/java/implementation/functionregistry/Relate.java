@@ -5,6 +5,10 @@
  */
 package implementation.functionregistry;
 
+import geof.topological.RelateFF;
+import implementation.vocabulary.Geof;
+import org.apache.jena.sparql.function.FunctionRegistry;
+
 /**
  *
  * @author haozhechen
@@ -22,4 +26,9 @@ public class Relate {
      *
      * @param registry - the FunctionRegistry to be used
      */
+    @SuppressWarnings("deprecation")
+    public static void loadRelateFunction(FunctionRegistry registry) {
+
+        registry.put(Geof.RELATE, RelateFF.class);
+    }
 }
