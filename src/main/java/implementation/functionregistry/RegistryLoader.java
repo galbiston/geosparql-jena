@@ -6,7 +6,10 @@
 package implementation.functionregistry;
 
 import geof.topological.RelateFF;
+import implementation.datatype.GMLDatatype;
+import implementation.datatype.WKTDatatype;
 import implementation.vocabulary.Geo;
+import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
@@ -40,6 +43,9 @@ public class RegistryLoader {
         RCC8.loadExpressionFunctions();
 
         Relate.loadRelateFunction(functionRegistry);
+
+        TypeMapper.getInstance().registerDatatype(WKTDatatype.theWKTDatatype);
+        TypeMapper.getInstance().registerDatatype(GMLDatatype.theGMLDatatype);
 
     }
 

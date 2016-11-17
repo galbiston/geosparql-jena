@@ -32,7 +32,7 @@ public class Buffer extends FunctionBase3 {
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
 
             //Obtain the target distance units
-            GeometryWrapper buffer = geometry.buffer(radius, v3.asNode().getLiteralLexicalForm());
+            GeometryWrapper buffer = geometry.buffer(radius, v3.asNode().getURI());
 
             return buffer.getResultNode();
         } catch (DatatypeFormatException dfx) {
