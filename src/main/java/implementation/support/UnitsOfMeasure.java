@@ -5,7 +5,9 @@
  */
 package implementation.support;
 
+import implementation.vocabulary.UnitsOfMeasureLookUp;
 import javax.measure.Measure;
+import javax.measure.converter.ConversionException;
 import javax.measure.converter.UnitConverter;
 import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
@@ -55,59 +57,71 @@ public class UnitsOfMeasure {
     //Using Earth mean radius for radian to metre ratio.
     private static final double RADIAN_TO_METRE_RATIO = 6371000.0;
 
-    public static final double conversion(double distance, String distanceUnitURI, UnitsOfMeasure targetUnitsOfMeasure) {
+    /**
+     * Conversion from target distance in units to source Units Of Measure.
+     *
+     * @param targetDistance
+     * @param targetDistanceUnitURI
+     * @param sourceUnitsOfMeasure
+     * @return
+     */
+    public static final double conversion(double targetDistance, String targetDistanceUnitURI, UnitsOfMeasure sourceUnitsOfMeasure) throws ConversionException {
 
-        //TODO Test this properly.
-        Unit targetUnit = targetUnitsOfMeasure.unit;
-        boolean isTargetProjected = targetUnitsOfMeasure.isProjected;
+        Unit sourceUnit = sourceUnitsOfMeasure.unit;
+        boolean isSourceProjected = sourceUnitsOfMeasure.isProjected;
 
-        //Find the which distance type is being obtained.
-        boolean isDistanceProjected;
-        Unit distanceUnit;
-        switch (distanceUnitURI) {
-            case implementation.vocabulary.UnitsOfMeasure.METRE_URI:
-                distanceUnit = implementation.vocabulary.UnitsOfMeasure.METRE_UNIT;
-                isDistanceProjected = true;
-                break;
-            case implementation.vocabulary.UnitsOfMeasure.RADIAN_URI:
-                distanceUnit = implementation.vocabulary.UnitsOfMeasure.RADIAN_UNIT;
-                isDistanceProjected = false;
-                break;
-            case implementation.vocabulary.UnitsOfMeasure.DEGREE_URI:
-                distanceUnit = implementation.vocabulary.UnitsOfMeasure.DEGREE_UNIT;
-                isDistanceProjected = false;
-                break;
-            default:
-                LOGGER.warn("Distance Unit URI Not Supported: {}", distanceUnitURI);
-                LOGGER.warn("Treating as CRS units");
-                distanceUnit = targetUnit;
-                isDistanceProjected = isTargetProjected;
-        }
+        //Find the which type of measure for the distance is being used.
+        boolean isTargetProjected;
+        Unit targetUnit = UnitsOfMeasureLookUp.getUnit(targetDistanceUnitURI);
 
-        Measure<Double, ?> endDist;
-
-        if (isTargetProjected && !isDistanceProjected) {
-
-            //Target is Length and Distance is Angle
-            UnitConverter radsConverter = distanceUnit.getConverterTo(SI.RADIAN);
-            double rads = radsConverter.convert(distance);
-            endDist = Measure.valueOf(rads * RADIAN_TO_METRE_RATIO, SI.METER);
-
-        } else if (!isTargetProjected && isDistanceProjected) {
-
-            //Target is Angle and Distance is Length
-            UnitConverter metresConverter = distanceUnit.getConverterTo(SI.RADIAN);
-            double metres = metresConverter.convert(distance);
-            endDist = Measure.valueOf(metres / RADIAN_TO_METRE_RATIO, SI.RADIAN);
-
+        if (targetUnit != null) {
+            isTargetProjected = UnitsOfMeasureLookUp.isProjected(targetDistanceUnitURI);
         } else {
-
-            //Target and Distance are same type.
-            endDist = Measure.valueOf(distance, distanceUnit);
-
+            LOGGER.warn("Distance Unit URI Not Supported: {}", targetDistanceUnitURI);
+            LOGGER.warn("Treating as same as source CRS units");
+            targetUnit = sourceUnit;
+            isTargetProjected = isSourceProjected;
         }
 
-        return endDist.doubleValue(targetUnit);
+        //Convert the target distance into the source units of measure.
+        //Done through intermediate step of converting to metres and radians if required.
+        Measure<Double, ?> sourceDistance = null;
+
+        if (!isSourceProjected && !isTargetProjected) {
+
+            //Source is Angle and Target is Angle
+            //Convert to radians.
+            UnitConverter radianConverter = targetUnit.getConverterTo(SI.RADIAN);
+            double rads = radianConverter.convert(targetDistance);
+            sourceDistance = Measure.valueOf(rads, SI.RADIAN);
+
+        } else if (isSourceProjected && isTargetProjected) {
+
+            //Source is Length and Target is Length
+            //Convert to metres.
+            UnitConverter metresConverter = targetUnit.getConverterTo(SI.METER);
+            double metres = metresConverter.convert(targetDistance);
+            sourceDistance = Measure.valueOf(metres, SI.METER);
+
+        } else if (!isSourceProjected && isTargetProjected) {
+
+            //Source is Angle and Target is Length
+            //Convert to metres then adjust to radians.
+            UnitConverter metresConverter = targetUnit.getConverterTo(SI.METER);
+            double metres = metresConverter.convert(targetDistance);
+            sourceDistance = Measure.valueOf(metres / RADIAN_TO_METRE_RATIO, SI.RADIAN);
+
+        } else if (isSourceProjected && !isTargetProjected) {
+
+            //Source is Length and Target is Angle
+            //Convert to radians then adjust to metres.
+            UnitConverter radsConverter = targetUnit.getConverterTo(SI.RADIAN);
+            double rads = radsConverter.convert(targetDistance);
+            sourceDistance = Measure.valueOf(rads * RADIAN_TO_METRE_RATIO, SI.METER);
+        }
+
+        //Finally convert back to the source units of measure.
+        return sourceDistance.doubleValue(sourceUnit);
 
     }
 
