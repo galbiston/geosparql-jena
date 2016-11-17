@@ -89,7 +89,7 @@ public class UnitsOfMeasure {
 
         if (targetUnit.equals(sourceUnit)) {
             //Source and Target are the same units
-            sourceDistance = Measure.valueOf(targetDistance, sourceUnit);
+            return targetDistance;
         } else if (!isSourceProjected && !isTargetProjected) {
 
             //Source is Angle and Target is Angle
