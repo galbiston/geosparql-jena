@@ -7,10 +7,13 @@ package implementation;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
+import implementation.datatype.GMLDatatype;
+import implementation.datatype.WKTDatatype;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
+import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.geotools.geometry.jts.JTS;
@@ -237,27 +240,51 @@ public class GeometryWrapper {
         return this.geometry.within(transformedGeometry.getGeometry());
     }
 
-    public NodeValue getResultNode() {
+    public NodeValue getResultNode() throws DatatypeFormatException {
 
-        String lexicalForm = DatatypeSelector.unparse(this, serialisation);
-        return NodeValue.makeNodeString(lexicalForm);
+        RDFDatatype datatype;
+        String lexicalForm;
+
+        switch (serialisation) {
+            case WKT:
+                datatype = WKTDatatype.theWKTDatatype;
+                break;
+            case GML:
+                datatype = GMLDatatype.theGMLDatatype;
+                break;
+            default:
+                throw new DatatypeFormatException("Serilisation is not WKT or GML.");
+        }
+
+        lexicalForm = datatype.unparse(this);
+
+        return NodeValue.makeNode(lexicalForm, datatype);
     }
+
+    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.theWKTDatatype;
+    private static final GMLDatatype GML_DATATYPE = GMLDatatype.theGMLDatatype;
 
     public static final GeometryWrapper extract(NodeValue nodeValue) throws DatatypeFormatException {
 
-        try {
-            Node node = nodeValue.asNode();
+        Node node = nodeValue.asNode();
 
-            String dataTypeURI = node.getLiteralDatatypeURI();
-            String lexicalForm = node.getLiteralLexicalForm();
+        String datatypeURI = node.getLiteralDatatypeURI();
+        String lexicalForm = node.getLiteralLexicalForm();
 
-            GeometryWrapper geometry = DatatypeSelector.parse(lexicalForm, dataTypeURI);
-            return geometry;
+        GeometryWrapper geometry;
 
-        } catch (DatatypeFormatException ex) {
-            LOGGER.error("Illegal Datatype, CANNOT parse to Geometry: {}", ex);
-            throw ex;
+        switch (datatypeURI) {
+            case WKTDatatype.theTypeURI:
+                geometry = WKT_DATATYPE.parse(lexicalForm);
+                break;
+            case GMLDatatype.theTypeURI:
+                geometry = GML_DATATYPE.parse(lexicalForm);
+                break;
+            default:
+                throw new DatatypeFormatException("Literal is not a WKT or GML Literal.");
         }
+
+        return geometry;
 
     }
 
