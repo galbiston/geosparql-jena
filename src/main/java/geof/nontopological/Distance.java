@@ -31,7 +31,7 @@ public class Distance extends FunctionBase3 {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
-            double distance = geometry1.distance(geometry2, v3.asNode().getLiteralLexicalForm());
+            double distance = geometry1.distance(geometry2, v3.asNode().getURI());
 
             return NodeValue.makeDouble(distance);
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
