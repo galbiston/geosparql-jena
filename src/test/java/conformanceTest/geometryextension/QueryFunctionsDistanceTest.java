@@ -77,9 +77,8 @@ public class QueryFunctionsDistanceTest {
     public void positiveTest() {
 
         this.expectedList.add("http://example.org/ApplicationSchema#C");
-        this.expectedList.add("http://example.org/ApplicationSchema#F");
         this.expectedList.add("http://example.org/ApplicationSchema#B");
-
+        this.expectedList.add("http://example.org/ApplicationSchema#F");
         String Q1 = "SELECT ?place WHERE{ "
                 + "?place ex:hasExactGeometry ?aGeom . "
                 + "?aGeom geo:asWKT ?aWkt . "
