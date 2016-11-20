@@ -62,12 +62,19 @@ public class Geo {
     public static final String RCC_DISCONNECTED_NAME = GEO_URI + "rcc8dc";
     public static final String RCC_NTANPROPERPART_NAME = GEO_URI + "rcc8ntpp";
     public static final String RCC_NTANPROPERPARTINVERSE_NAME = GEO_URI + "rcc8ntppi";
-    public static final String RCC_TANPROPERPART_NAME = GEO_URI + "rcc8pp";
-    public static final String RCC_TANPROPERPARTINVERSE_NAME = GEO_URI + "rcc8ppi";
+    public static final String RCC_TANPROPERPART_NAME = GEO_URI + "rcc8tpp";
+    public static final String RCC_TANPROPERPARTINVERSE_NAME = GEO_URI + "rcc8tppi";
     public static final String RCC_EQUALS_NAME = GEO_URI + "rcc8eq";
     public static final String RCC_PARTIALLY_OVERLAPPING_NAME = GEO_URI + "rcc8po";
     public static final String RCC_EXTERNALLY_CONNECTED_NAME = GEO_URI + "rcc8ec";
 
     //Topological DE-9IM function: relate
     public static final String RELATE_NAME = GEO_URI + "relate";
+
+    //Geometry Properties
+    public static final String DIMENSION = "dimension";
+    public static final String COORDINATEDIMENSION = "coordinateDimension";
+    public static final String SPATIALDIMENSION = "spatialDimension";
+    public static final String ISEMPTY = "isEmpty";
+    public static final String ISSIMPLE = "isSimple";
 }

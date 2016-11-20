@@ -74,12 +74,14 @@ public class SpatialObjectClassTest {
     @Test
     public void positiveTest() {
 
+        this.expectedList.add("http://example.org/ApplicationSchema#G");
         this.expectedList.add("http://example.org/ApplicationSchema#F");
         this.expectedList.add("http://example.org/ApplicationSchema#E");
         this.expectedList.add("http://example.org/ApplicationSchema#D");
         this.expectedList.add("http://example.org/ApplicationSchema#C");
         this.expectedList.add("http://example.org/ApplicationSchema#B");
         this.expectedList.add("http://example.org/ApplicationSchema#A");
+        this.expectedList.add("http://example.org/ApplicationSchema#GExactGeom");
         this.expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
         this.expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
         this.expectedList.add("http://example.org/ApplicationSchema#AExactGeom");

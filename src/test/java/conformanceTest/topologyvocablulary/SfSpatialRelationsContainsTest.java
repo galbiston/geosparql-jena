@@ -77,25 +77,14 @@ public class SfSpatialRelationsContainsTest {
         this.expectedList.add("http://example.org/ApplicationSchema#C");
         this.expectedList.add("http://example.org/ApplicationSchema#A");
 
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + "ex:A ex:hasExactGeometry ?bGeom ."
-                + " ?aGeom geo:sfContains ?bGeom ."
-                + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluary("ex:A", "geo:sfContains", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + "ex:F ex:hasExactGeometry ?bGeom ."
-                + " ?aGeom geo:sfContains ?bGeom ."
-                + "FILTER ( ?aGeom != ?bGeom )"
-                + "}";
-        assertFalse("failure - should be false", emptyQuery(Q1, INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:C", "geo:sfContains", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
     }
 
 }

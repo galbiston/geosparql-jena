@@ -74,6 +74,7 @@ public class FeatureClassTest {
     @Test
     public void positiveTest() {
 
+        this.expectedList.add("http://example.org/ApplicationSchema#G");
         this.expectedList.add("http://example.org/ApplicationSchema#F");
         this.expectedList.add("http://example.org/ApplicationSchema#E");
         this.expectedList.add("http://example.org/ApplicationSchema#D");
