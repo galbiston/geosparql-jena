@@ -5,12 +5,11 @@
  */
 package implementation.datatype;
 
-import implementation.support.GeoSerialisationEnum;
-import implementation.datatype.WKTDatatype;
-import implementation.GeometryWrapper;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+import implementation.GeometryWrapper;
+import implementation.support.GeoSerialisationEnum;
 import static org.hamcrest.CoreMatchers.not;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -66,7 +65,7 @@ public class WKTDatatypeTest {
         Point point = geometryFactory.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisationEnum.WKT);
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisationEnum.WKT, 2);
 
         String result = instance.unparse(geometry);
 
@@ -92,7 +91,7 @@ public class WKTDatatypeTest {
         Point expGeometry = geometryFactory.createPoint(coord);
         String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -117,7 +116,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -142,7 +141,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -167,7 +166,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -192,7 +191,7 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -217,12 +216,84 @@ public class WKTDatatypeTest {
 
         String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
 
         assertThat(expResult, not(result));
+    }
+
+    /**
+     * Test of findCoordinateDimension method, of class WKTDatatype.
+     */
+    @Test
+    public void testFindCoordinateDimension0() {
+        System.out.println("findCoordinateDimension0");
+        String lexicalForm = "POINT EMPTY";
+        int expResult = 0;
+        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of findCoordinateDimension method, of class WKTDatatype.
+     */
+    @Test
+    public void testFindCoordinateDimension2() {
+        System.out.println("findCoordinateDimension2");
+        String lexicalForm = "POINT (1 1)";
+        int expResult = 2;
+        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of findCoordinateDimension method, of class WKTDatatype.
+     */
+    @Test
+    public void testFindCoordinateDimension2b() {
+        System.out.println("findCoordinateDimension2b");
+        String lexicalForm = "POINT(1 1)";
+        int expResult = 2;
+        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of findCoordinateDimension method, of class WKTDatatype.
+     */
+    @Test
+    public void testFindCoordinateDimension3() {
+        System.out.println("findCoordinateDimension3");
+        String lexicalForm = "POINT Z (1 1 5)";
+        int expResult = 3;
+        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of findCoordinateDimension method, of class WKTDatatype.
+     */
+    @Test
+    public void testFindCoordinateDimension3b() {
+        System.out.println("findCoordinateDimension3b");
+        String lexicalForm = "POINT M (1 1 60)";
+        int expResult = 3;
+        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of findCoordinateDimension method, of class WKTDatatype.
+     */
+    @Test
+    public void testFindCoordinateDimension4() {
+        System.out.println("findCoordinateDimension4");
+        String lexicalForm = "POINT ZM (1 1 5 60)";
+        int expResult = 4;
+        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
+        assertEquals(expResult, result);
     }
 
 }

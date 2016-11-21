@@ -40,9 +40,10 @@ public class GeometryWrapper {
     private final CoordinateReferenceSystem crs;
     private final UnitsOfMeasure unitsOfMeasure;
     private final Integer sridInt;
+    private final int coordinateDimension;
 
     //TODO Handling of axis order. CRS.decode(crs, true) actually affects the x,y order??
-    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation) {
+    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation, int coordinateDimension) {
 
         this.srsURI = srsURI;
         this.serialisation = serialisation;
@@ -51,7 +52,10 @@ public class GeometryWrapper {
         this.unitsOfMeasure = CRSRegistry.getUnits(srsURI);
         this.sridInt = CRSRegistry.getSRID(srsURI);
 
+        this.coordinateDimension = coordinateDimension;
+
         this.geometry = GeometryReverse.check(geometry, crs);
+
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
@@ -63,6 +67,7 @@ public class GeometryWrapper {
         this.crs = geometryWrapper.crs;
         this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
         this.sridInt = geometryWrapper.sridInt;
+        this.coordinateDimension = geometryWrapper.coordinateDimension;
     }
 
     public GeometryWrapper checkCRS(GeometryWrapper sourceCRSGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -77,7 +82,7 @@ public class GeometryWrapper {
                 MathTransform transform = CRS.findMathTransform(sourceCRS, crs, false);
                 Geometry targetGeometry = JTS.transform(sourceGeometry, transform);
 
-                transformedCRSGeometry = new GeometryWrapper(targetGeometry, srsURI, serialisation);
+                transformedCRSGeometry = new GeometryWrapper(targetGeometry, srsURI, serialisation, coordinateDimension);
             } else {
                 transformedCRSGeometry = new GeometryWrapper(sourceCRSGeometry);
             }
@@ -106,6 +111,10 @@ public class GeometryWrapper {
         return srsURI;
     }
 
+    public int getCoordinateDimension() {
+        return coordinateDimension;
+    }
+
     public GeoSerialisationEnum getSerialisation() {
         return serialisation;
     }
@@ -115,13 +124,13 @@ public class GeometryWrapper {
         distance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, unitsOfMeasure);
 
         Geometry geo = this.geometry.buffer(distance);
-        return new GeometryWrapper(geo, srsURI, serialisation);
+        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
     }
 
     public GeometryWrapper convexHull() {
 
         Geometry geo = this.geometry.convexHull();
-        return new GeometryWrapper(geo, srsURI, serialisation);
+        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
     }
 
     public GeometryWrapper difference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -129,7 +138,7 @@ public class GeometryWrapper {
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
 
         Geometry geo = this.geometry.difference(transformedGeometry.getGeometry());
-        return new GeometryWrapper(geo, srsURI, serialisation);
+        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
     }
 
     public double distance(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -146,13 +155,13 @@ public class GeometryWrapper {
     public GeometryWrapper getBoundary() {
 
         Geometry geo = this.geometry.getBoundary();
-        return new GeometryWrapper(geo, srsURI, serialisation);
+        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
     }
 
     public GeometryWrapper getEnvelope() {
 
         Geometry geo = this.geometry.getEnvelope();
-        return new GeometryWrapper(geo, srsURI, serialisation);
+        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
     }
 
     public String getSRID() {
@@ -163,7 +172,7 @@ public class GeometryWrapper {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
         Geometry geo = this.geometry.intersection(transformedGeometry.getGeometry());
-        return new GeometryWrapper(geo, srsURI, serialisation);
+        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
     }
 
     public IntersectionMatrix relate(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -182,14 +191,14 @@ public class GeometryWrapper {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
         Geometry geo = this.geometry.symDifference(transformedGeometry.getGeometry());
-        return new GeometryWrapper(geo, srsURI, serialisation);
+        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
     }
 
     public GeometryWrapper union(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
         Geometry geo = this.geometry.union(transformedGeometry.getGeometry());
-        return new GeometryWrapper(geo, srsURI, serialisation);
+        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
     }
 
     public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -290,12 +299,14 @@ public class GeometryWrapper {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.geometry);
-        hash = 89 * hash + Objects.hashCode(this.srsURI);
-        hash = 89 * hash + Objects.hashCode(this.serialisation);
-        hash = 89 * hash + Objects.hashCode(this.crs);
-        hash = 89 * hash + Objects.hashCode(this.unitsOfMeasure);
+        int hash = 3;
+        hash = 31 * hash + Objects.hashCode(this.geometry);
+        hash = 31 * hash + Objects.hashCode(this.srsURI);
+        hash = 31 * hash + Objects.hashCode(this.serialisation);
+        hash = 31 * hash + Objects.hashCode(this.crs);
+        hash = 31 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 31 * hash + Objects.hashCode(this.sridInt);
+        hash = 31 * hash + this.coordinateDimension;
         return hash;
     }
 
@@ -311,6 +322,9 @@ public class GeometryWrapper {
             return false;
         }
         final GeometryWrapper other = (GeometryWrapper) obj;
+        if (this.coordinateDimension != other.coordinateDimension) {
+            return false;
+        }
         if (!Objects.equals(this.srsURI, other.srsURI)) {
             return false;
         }
@@ -323,12 +337,15 @@ public class GeometryWrapper {
         if (!Objects.equals(this.crs, other.crs)) {
             return false;
         }
-        return Objects.equals(this.unitsOfMeasure, other.unitsOfMeasure);
+        if (!Objects.equals(this.unitsOfMeasure, other.unitsOfMeasure)) {
+            return false;
+        }
+        return Objects.equals(this.sridInt, other.sridInt);
     }
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + '}';
+        return "GeometryWrapper{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", sridInt=" + sridInt + ", coordinateDimension=" + coordinateDimension + '}';
     }
 
 }
