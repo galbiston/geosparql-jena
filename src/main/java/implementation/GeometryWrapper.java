@@ -270,6 +270,22 @@ public class GeometryWrapper {
         return NodeValue.makeNode(lexicalForm, datatype);
     }
 
+    public int getTopologicalDimension() {
+        return this.geometry.getDimension();
+    }
+
+    public int getCoordinateDimension() {
+        return 2;
+    }
+
+    public boolean isEmpty() {
+        return this.geometry.isEmpty();
+    }
+
+    public boolean isSimple() {
+        return this.geometry.isSimple();
+    }
+
     private static final WKTDatatype WKT_DATATYPE = WKTDatatype.theWKTDatatype;
     private static final GMLDatatype GML_DATATYPE = GMLDatatype.theGMLDatatype;
 

@@ -62,12 +62,30 @@ public class Geo {
     public static final String RCC_DISCONNECTED_NAME = GEO_URI + "rcc8dc";
     public static final String RCC_NTANPROPERPART_NAME = GEO_URI + "rcc8ntpp";
     public static final String RCC_NTANPROPERPARTINVERSE_NAME = GEO_URI + "rcc8ntppi";
-    public static final String RCC_TANPROPERPART_NAME = GEO_URI + "rcc8pp";
-    public static final String RCC_TANPROPERPARTINVERSE_NAME = GEO_URI + "rcc8ppi";
+    public static final String RCC_TANPROPERPART_NAME = GEO_URI + "rcc8tpp";
+    public static final String RCC_TANPROPERPARTINVERSE_NAME = GEO_URI + "rcc8tppi";
     public static final String RCC_EQUALS_NAME = GEO_URI + "rcc8eq";
     public static final String RCC_PARTIALLY_OVERLAPPING_NAME = GEO_URI + "rcc8po";
     public static final String RCC_EXTERNALLY_CONNECTED_NAME = GEO_URI + "rcc8ec";
 
     //Topological DE-9IM function: relate
     public static final String RELATE_NAME = GEO_URI + "relate";
+
+    //Geometry Properties
+    public static final String DIMENSION = GEO_URI + "dimension";
+    public static final String COORDINATE_DIMENSION = GEO_URI + "coordinateDimension";
+    public static final String SPATIAL_DIMENSION = GEO_URI + "spatialDimension";
+    public static final String IS_EMPTY = GEO_URI + "isEmpty";
+    public static final String IS_SIMPLE = GEO_URI + "isSimple";
+
+    public static final Property DIMENSION_RES = ResourceFactory.createProperty(DIMENSION);
+    public static final Node DIMENSION_NODE = DIMENSION_RES.asNode();
+    public static final Property COORDINATE_DIMENSION_RES = ResourceFactory.createProperty(COORDINATE_DIMENSION);
+    public static final Node COORDINATE_DIMENSION_NODE = COORDINATE_DIMENSION_RES.asNode();
+    public static final Property SPATIAL_DIMENSION_RES = ResourceFactory.createProperty(SPATIAL_DIMENSION);
+    public static final Node SPATIAL_DIMENSION_NODE = SPATIAL_DIMENSION_RES.asNode();
+    public static final Property IS_EMPTY_RES = ResourceFactory.createProperty(IS_EMPTY);
+    public static final Node IS_EMPTY_NODE = IS_EMPTY_RES.asNode();
+    public static final Property IS_SIMPLE_RES = ResourceFactory.createProperty(IS_SIMPLE);
+    public static final Node IS_SIMPLE_NODE = IS_SIMPLE_RES.asNode();
 }

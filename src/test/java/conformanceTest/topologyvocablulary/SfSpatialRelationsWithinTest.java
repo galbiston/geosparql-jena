@@ -75,27 +75,20 @@ public class SfSpatialRelationsWithinTest {
          * the second geometry, Within tests for the exact opposite result of
          * contains.
          */
+        this.expectedList.add("http://example.org/ApplicationSchema#G");
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
         this.expectedList.add("http://example.org/ApplicationSchema#C");
         this.expectedList.add("http://example.org/ApplicationSchema#A");
 
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> geo:sfWithin ?aWKT ."
-                + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluary("ex:C", "geo:sfWithin", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> geo:sfWithin ?aWKT ."
-                + "}";
-        assertFalse("failure - should be false", emptyQuery(Q1, INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:A", "geo:sfWithin", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+
     }
 
 }

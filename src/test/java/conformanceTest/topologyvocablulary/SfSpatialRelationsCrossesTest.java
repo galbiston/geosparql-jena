@@ -80,23 +80,13 @@ public class SfSpatialRelationsCrossesTest {
          */
         this.expectedList.add("http://example.org/ApplicationSchema#B");
 
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom . "
-                + "ex:C ex:hasExactGeometry ?bGeom . "
-                + " ?aWKT geo:sfCrosses ?bGeom ."
-                + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluary("ex:C", "geo:sfCrosses", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:sfCrosses \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
-                + "}";
-        assertFalse("failure - should be false", emptyQuery(Q1, INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:F", "geo:sfCrosses", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
     }
 }

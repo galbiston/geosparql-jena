@@ -173,11 +173,20 @@ public class ConformanceTestSuite {
         return query;
     }
 
-    public static String topologyVocabluary(String functionName, String instance) {
+    /**
+     * A helper class for reducing the effort when writing test queries.
+     *
+     * @param instance - the spatial object to be compared.
+     * @param functionName - for example: geo:sfEquals.
+     * @param filter - an extra line for adding SPARQL filters
+     * @return
+     */
+    public static String topologyVocabluary(String instance, String functionName, String filter) {
         String query = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + instance + " ex:hasExactGeometry ?bGeom ."
                 + " ?aGeom " + functionName + " ?bGeom ."
+                + filter
                 + "}";
         return query;
     }

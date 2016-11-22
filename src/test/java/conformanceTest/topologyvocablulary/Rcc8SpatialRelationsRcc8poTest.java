@@ -71,24 +71,15 @@ public class Rcc8SpatialRelationsRcc8poTest {
 
         this.expectedList.add("http://example.org/ApplicationSchema#C");
 
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:rcc8po \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
-                + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluary("ex:F", "geo:rcc8po", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " ?aWKT geo:rcc8po \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.4 34.3, -83.3 34.3, -83.3 34.4, -83.4 34.4, -83.4 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ."
-                + "}";
-        assertFalse("failure - should be false", emptyQuery(Q1, INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:A", "geo:rcc8po", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+
     }
 
 }

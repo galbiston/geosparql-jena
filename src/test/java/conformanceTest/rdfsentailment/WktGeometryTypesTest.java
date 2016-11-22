@@ -69,6 +69,7 @@ public class WktGeometryTypesTest {
     @Test
     public void positiveTest() {
 
+        this.expectedList.add("http://example.org/ApplicationSchema#GExactGeom");
         this.expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
         this.expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
         this.expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
