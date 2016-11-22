@@ -18,6 +18,8 @@ import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -90,12 +92,36 @@ public class GMLDatatype extends BaseDatatype {
         try {
             Geometry geometry = gmlReader.read(lexicalForm, null);
             XMLDocument xmlDoc = new XMLDocument(lexicalForm);
-            String srsURI = xmlDoc.node().getAttributes().getNamedItem("srsName").getNodeValue();
-            GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.GML);
+            NamedNodeMap attributes = xmlDoc.node().getAttributes();
+            String srsURI = findSrsURI(attributes);
+            int coordinateDimension = findCoordinateDimension(attributes);
+
+            GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.GML, coordinateDimension);
             return geom;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
             LOGGER.error("Illegal GML literal: {}", lexicalForm);
             return null;
         }
     }
+
+    public static final String findSrsURI(NamedNodeMap attributes) {
+        return attributes.getNamedItem("srsName").getNodeValue();
+    }
+
+    public static final int findCoordinateDimension(NamedNodeMap attributes) {
+
+        int coordinateDimension;
+
+        Node dimensionNode = attributes.getNamedItem("srsDimension");
+        if (dimensionNode != null) {
+            String nodeValue = dimensionNode.getNodeValue();
+            coordinateDimension = Integer.parseInt(nodeValue);
+
+        } else {
+            coordinateDimension = 2;
+        }
+
+        return coordinateDimension;
+    }
+
 }

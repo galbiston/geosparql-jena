@@ -117,7 +117,9 @@ public class WKTDatatype extends BaseDatatype {
 
             WKTReader wktReader = new WKTReader();
             Geometry geom = wktReader.read(wktLiteral);
-            geometry = new GeometryWrapper(geom, srsURI, GeoSerialisationEnum.WKT);
+
+            int coordinateDimension = findCoordinateDimension(lexicalForm);
+            geometry = new GeometryWrapper(geom, srsURI, GeoSerialisationEnum.WKT, coordinateDimension);
 
         } catch (ParseException ex) {
             LOGGER.error("Illegal WKT literal: {}", lexicalForm);
@@ -125,5 +127,42 @@ public class WKTDatatype extends BaseDatatype {
         }
 
         return geometry;
+    }
+
+    public static final int findCoordinateDimension(String lexicalForm) {
+
+        int coordinateDimension;
+
+        if (lexicalForm.contains(">")) { //Check for SRS URI and remove
+            lexicalForm = lexicalForm.split(">")[1];
+        }
+
+        if (lexicalForm.contains("(")) {
+
+            String[] parts = lexicalForm.split("\\(");
+            String start = parts[0].trim();   //Remove trailing or leading white space, so that only possible for one, the separator, to be left.
+
+            if (start.contains(" ")) {
+
+                String[] shape = start.split(" ");
+                String dimension = shape[1];
+
+                if (dimension.length() == 1) { //Dimension is 3.
+
+                    coordinateDimension = 3;
+
+                } else {  //Then contains M and so dimension is 4.
+                    coordinateDimension = 4;
+                }
+
+            } else {  //There is no separator so the default value of dimension 2 is assumed.
+                coordinateDimension = 2;
+            }
+
+        } else { //No cooridnates so it is empty.
+            coordinateDimension = 0;
+        }
+
+        return coordinateDimension;
     }
 }
