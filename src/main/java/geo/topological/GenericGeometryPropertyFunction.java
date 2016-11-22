@@ -29,7 +29,7 @@ import org.apache.jena.sparql.sse.SSE;
  * @author Gregory Albiston
  * @author haozhechen
  */
-public abstract class GeneticGeometryPropertyFunction extends PFuncSimple {
+public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
     @Override
     public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
