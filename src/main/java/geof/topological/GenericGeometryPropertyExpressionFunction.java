@@ -18,11 +18,11 @@ import org.slf4j.LoggerFactory;
  *
  * @author haozhechen
  */
-public abstract class GenericIntegerExpressionFunction extends ExprFunction1 {
+public abstract class GenericGeometryPropertyExpressionFunction extends ExprFunction1 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenericIntegerExpressionFunction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenericGeometryPropertyExpressionFunction.class);
 
-    public GenericIntegerExpressionFunction(Expr expr, String symbol) {
+    public GenericGeometryPropertyExpressionFunction(Expr expr, String symbol) {
         super(expr, symbol);
     }
 
@@ -31,9 +31,7 @@ public abstract class GenericIntegerExpressionFunction extends ExprFunction1 {
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v);
 
-            int result = integerProperty(geometry);
-
-            return NodeValue.makeInteger(result);
+            return getValue(geometry);
         } catch (DatatypeFormatException | MismatchedDimensionException ex) {
             LOGGER.error("Expression Function Exception: {}", ex.getMessage());
             return NodeValue.nvNothing;
@@ -41,5 +39,6 @@ public abstract class GenericIntegerExpressionFunction extends ExprFunction1 {
 
     }
 
-    protected abstract int integerProperty(GeometryWrapper geometry);
+    protected abstract NodeValue getValue(GeometryWrapper geometry);
+
 }

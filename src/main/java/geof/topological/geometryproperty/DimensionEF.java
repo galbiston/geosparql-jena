@@ -5,29 +5,30 @@
  */
 package geof.topological.geometryproperty;
 
-import geof.topological.GenericIntegerExpressionFunction;
+import geof.topological.GenericGeometryPropertyExpressionFunction;
 import implementation.GeometryWrapper;
 import implementation.vocabulary.Geo;
 import org.apache.jena.sparql.expr.Expr;
+import org.apache.jena.sparql.expr.NodeValue;
 
 /**
  *
  * @author haozhechen
  */
-public class DimensionEF extends GenericIntegerExpressionFunction {
+public class DimensionEF extends GenericGeometryPropertyExpressionFunction {
 
     public DimensionEF(Expr expr) {
         super(expr, Geo.DIMENSION);
     }
 
     @Override
-    protected int integerProperty(GeometryWrapper geometry) {
-        return geometry.getTopologicalDimension();
+    public Expr copy(Expr expr) {
+        return new DimensionEF(expr);
     }
 
     @Override
-    public Expr copy(Expr expr) {
-        return new DimensionEF(expr);
+    protected NodeValue getValue(GeometryWrapper geometry) {
+        return NodeValue.makeInteger(geometry.getTopologicalDimension());
     }
 
 }

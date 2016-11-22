@@ -5,29 +5,30 @@
  */
 package geof.topological.geometryproperty;
 
-import geof.topological.GenericBooleanExpressionFunction;
+import geof.topological.GenericGeometryPropertyExpressionFunction;
 import implementation.GeometryWrapper;
 import implementation.vocabulary.Geo;
 import org.apache.jena.sparql.expr.Expr;
+import org.apache.jena.sparql.expr.NodeValue;
 
 /**
  *
  * @author haozhechen
  */
-public class IsEmptyEF extends GenericBooleanExpressionFunction {
+public class IsEmptyEF extends GenericGeometryPropertyExpressionFunction {
 
     public IsEmptyEF(Expr expr) {
-        super(expr, Geo.ISEMPTY);
-    }
-
-    @Override
-    protected boolean booleanProperty(GeometryWrapper geometry) {
-        return geometry.isEmpty();
+        super(expr, Geo.IS_EMPTY);
     }
 
     @Override
     public Expr copy(Expr expr) {
         return new IsEmptyEF(expr);
+    }
+
+    @Override
+    protected NodeValue getValue(GeometryWrapper geometry) {
+        return NodeValue.makeBoolean(geometry.isEmpty());
     }
 
 }

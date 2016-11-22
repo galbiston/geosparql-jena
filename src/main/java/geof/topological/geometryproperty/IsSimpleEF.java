@@ -5,29 +5,30 @@
  */
 package geof.topological.geometryproperty;
 
-import geof.topological.GenericBooleanExpressionFunction;
+import geof.topological.GenericGeometryPropertyExpressionFunction;
 import implementation.GeometryWrapper;
 import implementation.vocabulary.Geo;
 import org.apache.jena.sparql.expr.Expr;
+import org.apache.jena.sparql.expr.NodeValue;
 
 /**
  *
  * @author haozhechen
  */
-public class IsSimpleEF extends GenericBooleanExpressionFunction {
+public class IsSimpleEF extends GenericGeometryPropertyExpressionFunction {
 
     public IsSimpleEF(Expr expr) {
-        super(expr, Geo.ISSIMPLE);
-    }
-
-    @Override
-    protected boolean booleanProperty(GeometryWrapper geometry) {
-        return geometry.isSimple();
+        super(expr, Geo.IS_SIMPLE);
     }
 
     @Override
     public Expr copy(Expr expr) {
         return new IsSimpleEF(expr);
+    }
+
+    @Override
+    protected NodeValue getValue(GeometryWrapper geometry) {
+        return NodeValue.makeBoolean(geometry.isSimple());
     }
 
 }

@@ -72,9 +72,20 @@ public class Geo {
     public static final String RELATE_NAME = GEO_URI + "relate";
 
     //Geometry Properties
-    public static final String DIMENSION = "dimension";
-    public static final String COORDINATEDIMENSION = "coordinateDimension";
-    public static final String SPATIALDIMENSION = "spatialDimension";
-    public static final String ISEMPTY = "isEmpty";
-    public static final String ISSIMPLE = "isSimple";
+    public static final String DIMENSION = GEO_URI + "dimension";
+    public static final String COORDINATE_DIMENSION = GEO_URI + "coordinateDimension";
+    public static final String SPATIAL_DIMENSION = GEO_URI + "spatialDimension";
+    public static final String IS_EMPTY = GEO_URI + "isEmpty";
+    public static final String IS_SIMPLE = GEO_URI + "isSimple";
+
+    public static final Property DIMENSION_RES = ResourceFactory.createProperty(DIMENSION);
+    public static final Node DIMENSION_NODE = DIMENSION_RES.asNode();
+    public static final Property COORDINATE_DIMENSION_RES = ResourceFactory.createProperty(COORDINATE_DIMENSION);
+    public static final Node COORDINATE_DIMENSION_NODE = COORDINATE_DIMENSION_RES.asNode();
+    public static final Property SPATIAL_DIMENSION_RES = ResourceFactory.createProperty(SPATIAL_DIMENSION);
+    public static final Node SPATIAL_DIMENSION_NODE = SPATIAL_DIMENSION_RES.asNode();
+    public static final Property IS_EMPTY_RES = ResourceFactory.createProperty(IS_EMPTY);
+    public static final Node IS_EMPTY_NODE = IS_EMPTY_RES.asNode();
+    public static final Property IS_SIMPLE_RES = ResourceFactory.createProperty(IS_SIMPLE);
+    public static final Node IS_SIMPLE_NODE = IS_SIMPLE_RES.asNode();
 }
