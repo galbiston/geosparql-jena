@@ -68,7 +68,7 @@ public class GMLDatatypeTest {
         //JTS GMLWriter needs changing to GeoTools writer if possible. Version 3. http://gis.stackexchange.com/questions/3940/how-to-write-gml-with-geotools
         String expResult = "<gml:Point xmlns:gml=\'http://www.opengis.net/ont/gml\' srsName=\'http://www.opengis.net/def/crs/OGC/1.3/CRS84\'><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
@@ -96,7 +96,7 @@ public class GMLDatatypeTest {
         System.out.println("parse");
         String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -124,7 +124,7 @@ public class GMLDatatypeTest {
         System.out.println("parseNotEqual");
         String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -152,7 +152,7 @@ public class GMLDatatypeTest {
         System.out.println("parseNotEqual2");
         String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 

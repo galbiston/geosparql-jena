@@ -62,7 +62,7 @@ public class WKTDatatypeTest {
 
         String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (-83.38 33.95)";
 
-        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+        WKTDatatype instance = WKTDatatype.THE_WKT_DATATYPE;
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
@@ -89,7 +89,7 @@ public class WKTDatatypeTest {
     public void testParseNoSRS() {
         System.out.println("parseNoSRS");
         String lexicalForm = "POINT(-83.38 33.95)";
-        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+        WKTDatatype instance = WKTDatatype.THE_WKT_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -115,7 +115,7 @@ public class WKTDatatypeTest {
     public void testParseNoSRSNotEqual() {
         System.out.println("parseNoSRSNotEqual");
         String lexicalForm = "POINT(-83.38 33.95)";
-        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+        WKTDatatype instance = WKTDatatype.THE_WKT_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -142,7 +142,7 @@ public class WKTDatatypeTest {
     public void testParseNoSRSNotEqual2() {
         System.out.println("parseNoSRSNotEqual2");
         String lexicalForm = "POINT(-83.38 33.95)";
-        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+        WKTDatatype instance = WKTDatatype.THE_WKT_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -169,7 +169,7 @@ public class WKTDatatypeTest {
     public void testParseSRS() {
         System.out.println("parseSRS");
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
-        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+        WKTDatatype instance = WKTDatatype.THE_WKT_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -196,7 +196,7 @@ public class WKTDatatypeTest {
     public void testParseSRSNotEqual() {
         System.out.println("parseSRSNotEqual");
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
-        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+        WKTDatatype instance = WKTDatatype.THE_WKT_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -223,7 +223,7 @@ public class WKTDatatypeTest {
     public void testParseSRSNotEqual2() {
         System.out.println("parseSRSNotEqual2");
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(33.95 -88.38)";
-        WKTDatatype instance = WKTDatatype.theWKTDatatype;
+        WKTDatatype instance = WKTDatatype.THE_WKT_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 

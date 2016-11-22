@@ -252,10 +252,10 @@ public class GeometryWrapper {
 
         switch (serialisation) {
             case WKT:
-                datatype = WKTDatatype.theWKTDatatype;
+                datatype = WKTDatatype.THE_WKT_DATATYPE;
                 break;
             case GML:
-                datatype = GMLDatatype.theGMLDatatype;
+                datatype = GMLDatatype.THE_GML_DATATYPE;
                 break;
             default:
                 throw new DatatypeFormatException("Serilisation is not WKT or GML.");
@@ -286,8 +286,8 @@ public class GeometryWrapper {
         return this.geometry.isSimple();
     }
 
-    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.theWKTDatatype;
-    private static final GMLDatatype GML_DATATYPE = GMLDatatype.theGMLDatatype;
+    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.THE_WKT_DATATYPE;
+    private static final GMLDatatype GML_DATATYPE = GMLDatatype.THE_GML_DATATYPE;
 
     public static final GeometryWrapper extract(NodeValue nodeValue) throws DatatypeFormatException {
 
@@ -299,10 +299,10 @@ public class GeometryWrapper {
         GeometryWrapper geometry;
 
         switch (datatypeURI) {
-            case WKTDatatype.theTypeURI:
+            case WKTDatatype.THE_TYPE_URI:
                 geometry = WKT_DATATYPE.parse(lexicalForm);
                 break;
-            case GMLDatatype.theTypeURI:
+            case GMLDatatype.THE_TYPE_URI:
                 geometry = GML_DATATYPE.parse(lexicalForm);
                 break;
             default:

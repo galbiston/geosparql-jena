@@ -36,12 +36,12 @@ public class GMLDatatype extends BaseDatatype {
     /**
      * The default GML type URI.
      */
-    public static final String theTypeURI = GEO_URI + "gmlLiteral";
+    public static final String THE_TYPE_URI = GEO_URI + "gmlLiteral";
 
     /**
      * A static instance of GMLDatatype.
      */
-    public static final GMLDatatype theGMLDatatype = new GMLDatatype();
+    public static final GMLDatatype THE_GML_DATATYPE = new GMLDatatype();
 
     /**
      * XML element tag "gml" is defined for the convenience of GML generation.
@@ -58,7 +58,7 @@ public class GMLDatatype extends BaseDatatype {
      * private constructor - single global instance.
      */
     public GMLDatatype() {
-        super(theTypeURI);
+        super(THE_TYPE_URI);
     }
 
     /**

@@ -33,12 +33,12 @@ public class WKTDatatype extends BaseDatatype {
     /**
      * The default WKT type URI.
      */
-    public static final String theTypeURI = GEO_URI + "wktLiteral";
+    public static final String THE_TYPE_URI = GEO_URI + "wktLiteral";
 
     /**
      * A static instance of WKTDatatype.
      */
-    public static final WKTDatatype theWKTDatatype = new WKTDatatype();
+    public static final WKTDatatype THE_WKT_DATATYPE = new WKTDatatype();
 
     /**
      * Default SRS Name as GeoSPARQL Standard.
@@ -49,7 +49,7 @@ public class WKTDatatype extends BaseDatatype {
      * private constructor - single global instance.
      */
     private WKTDatatype() {
-        super(theTypeURI);
+        super(THE_TYPE_URI);
     }
 
     /**
