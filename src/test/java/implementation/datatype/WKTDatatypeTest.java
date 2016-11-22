@@ -6,8 +6,12 @@
 package implementation.datatype;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.support.GeoSerialisationEnum;
 import static org.hamcrest.CoreMatchers.not;
@@ -65,11 +69,14 @@ public class WKTDatatypeTest {
         Point point = geometryFactory.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisationEnum.WKT, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
+
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
         String result = instance.unparse(geometry);
 
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
 
         assertEquals(expResult, result);
 
@@ -91,10 +98,12 @@ public class WKTDatatypeTest {
         Point expGeometry = geometryFactory.createPoint(coord);
         String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
-        System.out.println(" Result: " + result);
+        System.out.println("Result: " + result);
 
         assertEquals(expResult, result);
     }
@@ -116,10 +125,12 @@ public class WKTDatatypeTest {
 
         String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
-        System.out.println(" Result: " + result);
+        System.out.println("Result: " + result);
 
         assertThat(expResult, not(result));
     }
@@ -141,10 +152,12 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
-        System.out.println(" Result: " + result);
+        System.out.println("Result: " + result);
 
         assertThat(expResult, not(result));
     }
@@ -166,10 +179,12 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
-        System.out.println(" Result: " + result);
+        System.out.println("Result: " + result);
 
         assertEquals(expResult, result);
     }
@@ -191,10 +206,12 @@ public class WKTDatatypeTest {
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
-        System.out.println(" Result: " + result);
+        System.out.println("Result: " + result);
 
         assertThat(expResult, not(result));
     }
@@ -216,84 +233,251 @@ public class WKTDatatypeTest {
 
         String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
-        System.out.println(" Result: " + result);
+        System.out.println("Result: " + result);
 
         assertThat(expResult, not(result));
     }
 
     /**
-     * Test of findCoordinateDimension method, of class WKTDatatype.
+     * Test of findCoordinateDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
      */
     @Test
-    public void testFindCoordinateDimension0() {
+    public void testFindCoordinateDimension0() throws ParseException {
         System.out.println("findCoordinateDimension0");
         String lexicalForm = "POINT EMPTY";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
         int expResult = 0;
-        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
-        assertEquals(expResult, result);
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getCoordinate());
     }
 
     /**
-     * Test of findCoordinateDimension method, of class WKTDatatype.
+     * Test of findCoordinateDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
      */
     @Test
-    public void testFindCoordinateDimension2() {
+    public void testFindCoordinateDimension2() throws ParseException {
         System.out.println("findCoordinateDimension2");
         String lexicalForm = "POINT (1 1)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
         int expResult = 2;
-        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
-        assertEquals(expResult, result);
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getCoordinate());
     }
 
     /**
-     * Test of findCoordinateDimension method, of class WKTDatatype.
+     * Test of findCoordinateDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
      */
     @Test
-    public void testFindCoordinateDimension2b() {
+    public void testFindCoordinateDimension2b() throws ParseException {
         System.out.println("findCoordinateDimension2b");
         String lexicalForm = "POINT(1 1)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
         int expResult = 2;
-        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
-        assertEquals(expResult, result);
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getCoordinate());
     }
 
     /**
-     * Test of findCoordinateDimension method, of class WKTDatatype.
+     * Test of findCoordinateDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
      */
     @Test
-    public void testFindCoordinateDimension3() {
+    public void testFindCoordinateDimension2c() throws ParseException {
+        System.out.println("findCoordinateDimension2c");
+        String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(1 1)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read("POINT(1 1)");
+
+        int expResult = 2;
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getCoordinate());
+    }
+
+    /**
+     * Test of findCoordinateDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
+     */
+    @Test
+    public void testFindCoordinateDimension3() throws ParseException {
         System.out.println("findCoordinateDimension3");
         String lexicalForm = "POINT Z (1 1 5)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
         int expResult = 3;
-        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
-        assertEquals(expResult, result);
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getCoordinate());
     }
 
     /**
-     * Test of findCoordinateDimension method, of class WKTDatatype.
+     * Test of findCoordinateDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
      */
     @Test
-    public void testFindCoordinateDimension3b() {
+    public void testFindCoordinateDimension3b() throws ParseException {
         System.out.println("findCoordinateDimension3b");
         String lexicalForm = "POINT M (1 1 60)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
         int expResult = 3;
-        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
-        assertEquals(expResult, result);
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getCoordinate());
     }
 
     /**
-     * Test of findCoordinateDimension method, of class WKTDatatype.
+     * Test of findCoordinateDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
      */
     @Test
-    public void testFindCoordinateDimension4() {
+    public void testFindCoordinateDimension4() throws ParseException {
         System.out.println("findCoordinateDimension4");
         String lexicalForm = "POINT ZM (1 1 5 60)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
         int expResult = 4;
-        int result = WKTDatatype.findCoordinateDimension(lexicalForm);
-        assertEquals(expResult, result);
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getCoordinate());
     }
 
+    /**
+     * Test of findSpatialDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
+     */
+    @Test
+    public void testFindSpatialDimension2() throws ParseException {
+        System.out.println("findSpatialDimension2");
+        String lexicalForm = "POINT (1 1)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
+        int expResult = 2;
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getSpatial());
+    }
+
+    /**
+     * Test of findSpatialDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
+     */
+    @Test
+    public void testFindSpatialDimension2b() throws ParseException {
+        System.out.println("findSpatialDimension2b");
+        String lexicalForm = "POINT(1 1)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
+        int expResult = 2;
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getSpatial());
+    }
+
+    /**
+     * Test of findSpatialDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
+     */
+    @Test
+    public void testFindSpatialDimension2c() throws ParseException {
+        System.out.println("findSpatialDimension2c");
+        String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(1 1)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read("POINT(1 1)");
+
+        int expResult = 2;
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getSpatial());
+    }
+
+    /**
+     * Test of findSpatialDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
+     */
+    @Test
+    public void testFindSpatialDimension0() throws ParseException {
+        System.out.println("findSpatialDimension0");
+        String lexicalForm = "POINT EMPTY";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
+        int expResult = 0;
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getSpatial());
+    }
+
+    /**
+     * Test of findSpatialDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
+     */
+    @Test
+    public void testFindSpatialDimension3() throws ParseException {
+        System.out.println("findSpatialDimension3");
+        String lexicalForm = "POINT Z (1 1 5)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
+        int expResult = 3;
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getSpatial());
+    }
+
+    /**
+     * Test of findSpatialDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
+     */
+    @Test
+    public void testFindSpatialDimension3b() throws ParseException {
+        System.out.println("findSpatialDimension3b");
+        String lexicalForm = "POINT M (1 1 60)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
+        int expResult = 2;
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getSpatial());
+    }
+
+    /**
+     * Test of findSpatialDimensions method, of class WKTDatatype.
+     *
+     * @throws com.vividsolutions.jts.io.ParseException
+     */
+    @Test
+    public void testFindSpatialDimension4() throws ParseException {
+        System.out.println("findSpatialDimension4");
+        String lexicalForm = "POINT ZM (1 1 5 60)";
+        WKTReader wktReader = new WKTReader();
+        Geometry geometry = wktReader.read(lexicalForm);
+
+        int expResult = 3;
+        DimensionInfo result = WKTDatatype.extractDimensionInfo(lexicalForm, geometry);
+        assertEquals(expResult, result.getSpatial());
+    }
 }
