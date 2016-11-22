@@ -24,6 +24,7 @@ public class GeometryProperty {
     public static void loadPropertyFunctions(PropertyFunctionRegistry registry) {
 
         registry.put(Geo.DIMENSION, Dimension.class);
+        registry.put(Geo.COORDINATE_DIMENSION, CoordinateDimension.class);
         registry.put(Geo.IS_SIMPLE, IsSimple.class);
         registry.put(Geo.IS_EMPTY, IsEmpty.class);
     }

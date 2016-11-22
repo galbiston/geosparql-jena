@@ -26,7 +26,7 @@ import org.apache.jena.sparql.pfunction.PFuncSimple;
 import org.apache.jena.sparql.sse.SSE;
 
 /**
- *
+ * @author Gregory Albiston
  * @author haozhechen
  */
 public abstract class GeneticGeometryPropertyFunction extends PFuncSimple {

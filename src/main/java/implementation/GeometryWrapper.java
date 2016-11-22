@@ -274,10 +274,6 @@ public class GeometryWrapper {
         return this.geometry.getDimension();
     }
 
-    public int getCoordinateDimension() {
-        return 2;
-    }
-
     public boolean isEmpty() {
         return this.geometry.isEmpty();
     }
