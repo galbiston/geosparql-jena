@@ -5,13 +5,9 @@
  */
 package implementation.datatype;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
-import com.vividsolutions.jts.io.WKTWriter;
-import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
-import implementation.support.GeoSerialisationEnum;
+import implementation.datatype.parsers.ParseException;
+import implementation.datatype.parsers.WKTParser;
 import static implementation.support.Prefixes.GEO_URI;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
@@ -64,14 +60,9 @@ public class WKTDatatype extends BaseDatatype {
     @Override
     public String unparse(Object geometry) {
 
-        GeometryWrapper geom = (GeometryWrapper) geometry;
+        GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
 
-        WKTWriter wktWriter = new WKTWriter();
-        wktWriter.setFormatted(true);
-        String wkt = wktWriter.write(geom.getParsingGeometry());
-        String wktLiteral = "<" + geom.getSrsURI() + "> " + wkt;
-
-        return wktLiteral;
+        return new WKTParser().write(geometryWrapper);
     }
 
     /**
@@ -97,84 +88,12 @@ public class WKTDatatype extends BaseDatatype {
     @Override
     public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
 
-        GeometryWrapper geometryWrapper;
         try {
-
-            String srsURI;
-            String wktLiteral;
-
-            int startSRS = lexicalForm.indexOf("<");
-            int endSRS = lexicalForm.indexOf(">");
-
-            //Check that both chevrons are located and extract SRS name, otherwise default.
-            if (startSRS != -1 && endSRS != -1) {
-                srsURI = lexicalForm.substring(startSRS + 1, endSRS);
-                wktLiteral = lexicalForm.substring(endSRS + 1);
-
-            } else {
-                srsURI = DEFAULT_WKT_CRS_URI;
-                wktLiteral = lexicalForm;
-            }
-
-            WKTReader wktReader = new WKTReader();
-            Geometry geometry = wktReader.read(wktLiteral);
-
-            DimensionInfo dimensionInfo = extractDimensionInfo(lexicalForm, geometry);
-
-            geometryWrapper = new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.WKT, dimensionInfo);
-
+            return new WKTParser().read(lexicalForm);
         } catch (ParseException ex) {
-            LOGGER.error("Illegal WKT literal: {}", lexicalForm);
             throw new DatatypeFormatException("Illegal WKT literal: " + lexicalForm);
         }
 
-        return geometryWrapper;
     }
 
-    public static final DimensionInfo extractDimensionInfo(String lexicalForm, Geometry geometry) {
-
-        int coordinateDimension;
-        int spatialDimension;
-
-        if (lexicalForm.contains(">")) { //Check for SRS URI and remove
-            lexicalForm = lexicalForm.split(">")[1];
-        }
-
-        if (lexicalForm.contains("(")) {
-
-            String[] parts = lexicalForm.split("\\(");
-            String start = parts[0].trim();   //Remove trailing or leading white space, so that only possible for one, the separator, to be left.
-
-            if (start.contains(" ")) {
-
-                String[] shape = start.split(" ");
-                String dimension = shape[1];
-
-                if (dimension.length() == 1) { //Dimension is 3.
-
-                    coordinateDimension = 3;
-
-                    if (dimension.toLowerCase().equals("z")) {  //Contains a Z
-                        spatialDimension = 3;
-                    } else {
-                        spatialDimension = 2;   //Contains a M
-                    }
-
-                } else {  //Then contains M and so dimension is 4.
-                    coordinateDimension = 4;
-                    spatialDimension = 3;
-                }
-
-            } else {  //There is no separator so the default value of dimension 2 is assumed.
-                coordinateDimension = 2;
-                spatialDimension = 2;
-            }
-
-        } else { //No cooridnates so it is empty.
-            coordinateDimension = 0;
-            spatialDimension = 0;
-        }
-
-        return new DimensionInfo(coordinateDimension, spatialDimension, geometry.getDimension());
-    }
 }

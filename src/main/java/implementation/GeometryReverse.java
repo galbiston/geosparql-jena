@@ -68,6 +68,10 @@ public class GeometryReverse {
                 LineString[] lineString = unpackLineString((GeometryCollection) geometry);
                 finalGeometry = factory.createMultiLineString(lineString);
                 break;
+            case "GeometryCollection":
+                Geometry[] geometries = unpackGeometryCollection((GeometryCollection) geometry);
+                finalGeometry = factory.createGeometryCollection(geometries);
+                break;
             default:
                 finalGeometry = geometry;
                 break;
@@ -121,6 +125,19 @@ public class GeometryReverse {
         }
 
         return lineStrings;
+    }
+
+    private static Geometry[] unpackGeometryCollection(GeometryCollection geoCollection) {
+
+        int count = geoCollection.getNumGeometries();
+        Geometry[] geometries = new Geometry[count];
+
+        for (int i = 0; i < count; i++) {
+            Geometry geometry = geoCollection.getGeometryN(i);
+            geometries[i] = reverseGeometry(geometry);
+        }
+
+        return geometries;
     }
 
 }
