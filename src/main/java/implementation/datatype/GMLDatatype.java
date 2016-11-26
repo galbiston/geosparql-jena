@@ -114,6 +114,7 @@ public class GMLDatatype extends BaseDatatype {
 
     public static final DimensionInfo extractDimensionInfo(NamedNodeMap attributes, String srsURI, Geometry geometry) {
 
+        //TODO need confirmation of spatial dimension in the case of coordinate dimension being 3.
         int coordinateDimension;
         int spatialDimension;
 
@@ -122,17 +123,24 @@ public class GMLDatatype extends BaseDatatype {
             String nodeValue = dimensionNode.getNodeValue();
             coordinateDimension = Integer.parseInt(nodeValue);
 
+            switch (coordinateDimension) {
+                case 2:
+                    spatialDimension = coordinateDimension;
+                    break;
+                case 3:  //Retrieve spatialDimension from CRS as could be 2 or 3.
+                    CoordinateReferenceSystem crs = CRSRegistry.getCRS(srsURI);
+                    spatialDimension = crs.getCoordinateSystem().getDimension();
+                    break;
+                default:
+                    spatialDimension = 3;
+                    break;
+            }
+
         } else {  //srsDimension attribute is missing so extract from the srsURI.
 
             CoordinateReferenceSystem crs = CRSRegistry.getCRS(srsURI);
             coordinateDimension = crs.getCoordinateSystem().getDimension();
-        }
-
-        //TODO Need to handle case where coordiante dimension is 3 but no z coordinate.
-        if (coordinateDimension < 4) {
-            spatialDimension = coordinateDimension;
-        } else {
-            spatialDimension = 3;
+            spatialDimension = coordinateDimension;  //Spatial dimension considered to be same as coordinate dimension.
         }
 
         return new DimensionInfo(coordinateDimension, spatialDimension, geometry.getDimension());
