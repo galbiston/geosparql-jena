@@ -65,8 +65,8 @@ public class GeometryPropertiesTest {
     public void positiveTest() {
 
         this.expectedList.add("0^^http://www.w3.org/2001/XMLSchema#integer");
-        this.expectedList.add("0^^http://www.w3.org/2001/XMLSchema#integer");
-        this.expectedList.add("0^^http://www.w3.org/2001/XMLSchema#integer");
+        this.expectedList.add("2^^http://www.w3.org/2001/XMLSchema#integer");
+        this.expectedList.add("2^^http://www.w3.org/2001/XMLSchema#integer");
         this.expectedList.add("false^^http://www.w3.org/2001/XMLSchema#boolean");
         this.expectedList.add("true^^http://www.w3.org/2001/XMLSchema#boolean");
 

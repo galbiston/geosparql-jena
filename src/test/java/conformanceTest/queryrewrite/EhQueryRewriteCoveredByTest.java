@@ -5,10 +5,15 @@
  */
 package conformanceTest.queryrewrite;
 
+import static conformanceTest.ConformanceTestSuite.*;
+import static implementation.functionregistry.RegistryLoader.load;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *
@@ -39,18 +44,57 @@ public class EhQueryRewriteCoveredByTest {
 
     @BeforeClass
     public static void setUpClass() {
+        /**
+         * Initialize all the topology functions.
+         */
+        load();
+        initWktModel();
     }
 
     @AfterClass
     public static void tearDownClass() {
     }
 
+    private ArrayList expectedList;
+    private ArrayList actualList;
+
     @Before
     public void setUp() {
+        this.expectedList = new ArrayList<>();
+        this.actualList = new ArrayList<>();
     }
 
     @After
     public void tearDown() {
+        this.actualList.clear();
+        this.expectedList.clear();
+    }
+
+    @Test
+    public void featureFeatureTest() {
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
+        this.expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
+
+        this.actualList = resourceQuery(featureFeatureQueryRewriteQuery("ex:C", "geo:ehCoveredBy"), INF_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+    }
+
+    @Test
+    public void featureGeometryTest() {
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
+        this.expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
+
+        this.actualList = resourceQuery(featureGeometryQueryRewriteQuery("ex:C", "geo:ehCoveredBy"), INF_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+
+    }
+
+    @Test
+    public void geometryFeatureTest() {
+        this.expectedList.add("http://example.org/ApplicationSchema#D");
+
+        this.actualList = resourceQuery(geometryFeatureQueryRewriteQuery("ex:C", "geo:ehCoveredBy"), INF_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
 }

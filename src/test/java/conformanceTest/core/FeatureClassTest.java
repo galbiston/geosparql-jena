@@ -49,6 +49,7 @@ public class FeatureClassTest {
          * Initialize all the topology functions.
          */
         load();
+        initWktModel();
     }
 
     @AfterClass

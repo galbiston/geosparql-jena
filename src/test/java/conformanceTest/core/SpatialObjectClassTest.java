@@ -50,6 +50,7 @@ public class SpatialObjectClassTest {
          * Initialize all the topology functions.
          */
         load();
+        initWktModel();
     }
 
     @AfterClass
@@ -82,17 +83,12 @@ public class SpatialObjectClassTest {
         this.expectedList.add("http://example.org/ApplicationSchema#B");
         this.expectedList.add("http://example.org/ApplicationSchema#A");
         this.expectedList.add("http://example.org/ApplicationSchema#GExactGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#AExactGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#FPointGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#CPointGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#DPointGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
         this.expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
-        this.expectedList.add("http://example.org/ApplicationSchema#EPointGeom");
-
+        this.expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
+        this.expectedList.add("http://example.org/ApplicationSchema#AExactGeom");
         String Q1 = "SELECT ?feature WHERE{"
                 + " ?feature rdf:type geo:SpatialObject ."
                 + "}";

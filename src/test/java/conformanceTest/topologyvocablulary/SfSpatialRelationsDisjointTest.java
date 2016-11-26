@@ -80,14 +80,14 @@ public class SfSpatialRelationsDisjointTest {
         this.expectedList.add("http://example.org/ApplicationSchema#D");
         this.expectedList.add("http://example.org/ApplicationSchema#B");
 
-        this.actualList = resourceQuery(topologyVocabluary("ex:A", "geo:sfDisjoint", ""), INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfDisjoint", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:C", "geo:sfDisjoint", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluaryQuery("ex:C", "geo:sfDisjoint", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
     }
 
 }

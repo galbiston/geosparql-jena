@@ -97,6 +97,13 @@ public class ConformanceTestSuite {
 
     }
 
+    /**
+     * Use query iterator to query resources, i.e: http://this/is/resource#A.
+     *
+     * @param queryString - query
+     * @param queryModel - Use InfModel to get the full reasoner support
+     * @return - the returned result list
+     */
     public static ArrayList resourceQuery(String queryString, InfModel queryModel) {
         ArrayList resultList = new ArrayList();
         QuerySolutionMap bindings = new QuerySolutionMap();
@@ -111,6 +118,7 @@ public class ConformanceTestSuite {
                 while (varIterator.hasNext()) {
                     String varName = (String) varIterator.next();
                     Resource resource = solution.getResource(varName);
+                    System.out.println("this.expectedList.add(\"" + resource.toString() + "\");");
                     resultList.add(resource.toString());
                 }
             }
@@ -118,6 +126,13 @@ public class ConformanceTestSuite {
         return resultList;
     }
 
+    /**
+     * Use query iterator to query literals, i.e: WKT or GML.
+     *
+     * @param queryString - query
+     * @param queryModel - Use InfModel to get the full reasoner support
+     * @return - the returned result list
+     */
     public static ArrayList literalQuery(String queryString, InfModel queryModel) {
         ArrayList resultList = new ArrayList();
         QuerySolutionMap bindings = new QuerySolutionMap();
@@ -164,6 +179,14 @@ public class ConformanceTestSuite {
         return hasResult;
     }
 
+    /**
+     *
+     * A helper class for reducing the effort when writing test queries.
+     *
+     * @param functionName - for example: geof:sfEquals.
+     * @param geometry - for example: POINT(-83.4 34.4)
+     * @return - the final query string
+     */
     public static String geometryTopologyQuery(String functionName, String geometry) {
         String query = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
@@ -179,14 +202,37 @@ public class ConformanceTestSuite {
      * @param instance - the spatial object to be compared.
      * @param functionName - for example: geo:sfEquals.
      * @param filter - an extra line for adding SPARQL filters
-     * @return
+     * @return - the final query string
      */
-    public static String topologyVocabluary(String instance, String functionName, String filter) {
+    public static String topologyVocabluaryQuery(String instance, String functionName, String filter) {
         String query = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
+                + "?place ex:hasExactGeometry ?aGeom . "
                 + instance + " ex:hasExactGeometry ?bGeom ."
                 + " ?aGeom " + functionName + " ?bGeom ."
                 + filter
+                + "}";
+        return query;
+    }
+
+    public static String featureFeatureQueryRewriteQuery(String instance, String functionName) {
+        String query = "SELECT ?place WHERE{"
+                + "?place " + functionName + " " + instance + " . "
+                + "}";
+        return query;
+    }
+
+    public static String geometryFeatureQueryRewriteQuery(String instance, String functionName) {
+        String query = "SELECT ?place WHERE{"
+                + "?place ex:hasExactGeometry ?aGeom . "
+                + "?aGeom " + functionName + " " + instance + " . "
+                + "}";
+        return query;
+    }
+
+    public static String featureGeometryQueryRewriteQuery(String instance, String functionName) {
+        String query = "SELECT ?place WHERE{"
+                + instance + " ex:hasExactGeometry ?bGeom . "
+                + "?place " + functionName + " ?bGeom . "
                 + "}";
         return query;
     }

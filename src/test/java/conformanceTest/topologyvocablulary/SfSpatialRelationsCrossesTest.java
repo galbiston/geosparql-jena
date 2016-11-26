@@ -80,13 +80,13 @@ public class SfSpatialRelationsCrossesTest {
          */
         this.expectedList.add("http://example.org/ApplicationSchema#B");
 
-        this.actualList = resourceQuery(topologyVocabluary("ex:C", "geo:sfCrosses", ""), INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfCrosses", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:F", "geo:sfCrosses", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluaryQuery("ex:F", "geo:sfCrosses", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
     }
 }

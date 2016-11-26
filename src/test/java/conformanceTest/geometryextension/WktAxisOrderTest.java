@@ -5,7 +5,7 @@
  */
 package conformanceTest.geometryextension;
 
-import static conformanceTest.ConformanceTestSuite.initWktModel;
+import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
 import org.junit.After;
 import org.junit.AfterClass;

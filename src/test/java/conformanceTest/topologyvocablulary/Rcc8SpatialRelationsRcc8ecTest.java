@@ -74,14 +74,14 @@ public class Rcc8SpatialRelationsRcc8ecTest {
          */
         this.expectedList.add("http://example.org/ApplicationSchema#E");
 
-        this.actualList = resourceQuery(topologyVocabluary("ex:C", "geo:rcc8ec", ""), INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:rcc8ec", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:A", "geo:rcc8ec", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluaryQuery("ex:A", "geo:rcc8ec", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
 
     }
 

@@ -51,6 +51,7 @@ public class SparqlProtocolTest {
          * Initialize all the topology functions.
          */
         load();
+        initWktModel();
     }
 
     @AfterClass

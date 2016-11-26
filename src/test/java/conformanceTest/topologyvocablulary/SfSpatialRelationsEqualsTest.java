@@ -76,14 +76,14 @@ public class SfSpatialRelationsEqualsTest {
          */
         this.expectedList.add("http://example.org/ApplicationSchema#A");
 
-        this.actualList = resourceQuery(topologyVocabluary("ex:A", "geo:sfEquals", ""), INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfEquals", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:A", "geo:sfEquals", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluaryQuery("ex:A", "geo:sfEquals", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
 
     }
 

@@ -75,16 +75,17 @@ public class EhSpatialRelationsInsideTest {
          * return the compared instance itself while the sfWithin will return
          * it.
          */
+        this.expectedList.add("http://example.org/ApplicationSchema#G");
         this.expectedList.add("http://example.org/ApplicationSchema#A");
 
-        this.actualList = resourceQuery(topologyVocabluary("ex:C", "geo:ehInside", ""), INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehInside", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        assertFalse("failure - should be false", emptyQuery(topologyVocabluary("ex:A", "geo:ehInside", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+        assertFalse("failure - should be false", emptyQuery(topologyVocabluaryQuery("ex:A", "geo:ehInside", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
 
     }
 

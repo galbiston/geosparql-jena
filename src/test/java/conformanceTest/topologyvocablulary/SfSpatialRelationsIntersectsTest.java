@@ -82,7 +82,7 @@ public class SfSpatialRelationsIntersectsTest {
         this.expectedList.add("http://example.org/ApplicationSchema#B");
         this.expectedList.add("http://example.org/ApplicationSchema#A");
 
-        this.actualList = resourceQuery(topologyVocabluary("ex:C", "geo:sfIntersects", ""), INF_WKT_MODEL);
+        this.actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfIntersects", ""), INF_WKT_MODEL);
         assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
     }
 

@@ -81,11 +81,12 @@ public class GetDimensionTest {
      */
     @Test
     public void testGet() {
-        String Q1 = "SELECT ?dimension ?empty ?simple WHERE{"
+        String Q1 = "SELECT ?dimension ?empty ?simple ?cd WHERE{"
                 + " ex:B ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:dimension ?dimension ."
                 + " ?aGeom geo:isEmpty ?empty ."
                 + " ?aGeom geo:isSimple ?simple ."
+                + " ?aGeom geo:coordinateDimension ?cd . "
                 + "}";
 
         QuerySolutionMap bindings = new QuerySolutionMap();
