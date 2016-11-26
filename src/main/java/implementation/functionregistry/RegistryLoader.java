@@ -46,8 +46,8 @@ public class RegistryLoader {
 
         GeometryProperty.loadPropertyFunctions(propertyRegistry);
 
-        TypeMapper.getInstance().registerDatatype(WKTDatatype.theWKTDatatype);
-        TypeMapper.getInstance().registerDatatype(GMLDatatype.theGMLDatatype);
+        TypeMapper.getInstance().registerDatatype(WKTDatatype.THE_WKT_DATATYPE);
+        TypeMapper.getInstance().registerDatatype(GMLDatatype.THE_GML_DATATYPE);
 
     }
 

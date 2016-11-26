@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package geo.topological.geometrypeoperty.propertyfunction;
+package geo.topological.geometryproperty;
 
 import conformanceTest.RDFDataLocation;
 import static implementation.functionregistry.RegistryLoader.load;

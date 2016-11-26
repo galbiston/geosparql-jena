@@ -5,7 +5,10 @@
  */
 package implementation.functionregistry;
 
-import geo.topological.geometrypeoperty.*;
+import geo.topological.geometryproperty.IsSimple;
+import geo.topological.geometryproperty.Dimension;
+import geo.topological.geometryproperty.IsEmpty;
+import geo.topological.geometryproperty.CoordinateDimension;
 import implementation.vocabulary.Geo;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 

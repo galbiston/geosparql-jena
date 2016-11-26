@@ -40,10 +40,10 @@ public class GeometryWrapper {
     private final CoordinateReferenceSystem crs;
     private final UnitsOfMeasure unitsOfMeasure;
     private final Integer sridInt;
-    private final int coordinateDimension;
+    private final DimensionInfo dimensionInfo;
 
     //TODO Handling of axis order. CRS.decode(crs, true) actually affects the x,y order??
-    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation, int coordinateDimension) {
+    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation, DimensionInfo dimensionInfo) {
 
         this.srsURI = srsURI;
         this.serialisation = serialisation;
@@ -52,7 +52,7 @@ public class GeometryWrapper {
         this.unitsOfMeasure = CRSRegistry.getUnits(srsURI);
         this.sridInt = CRSRegistry.getSRID(srsURI);
 
-        this.coordinateDimension = coordinateDimension;
+        this.dimensionInfo = dimensionInfo;
 
         this.geometry = GeometryReverse.check(geometry, crs);
 
@@ -67,7 +67,7 @@ public class GeometryWrapper {
         this.crs = geometryWrapper.crs;
         this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
         this.sridInt = geometryWrapper.sridInt;
-        this.coordinateDimension = geometryWrapper.coordinateDimension;
+        this.dimensionInfo = geometryWrapper.dimensionInfo;
     }
 
     public GeometryWrapper checkCRS(GeometryWrapper sourceCRSGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -82,7 +82,7 @@ public class GeometryWrapper {
                 MathTransform transform = CRS.findMathTransform(sourceCRS, crs, false);
                 Geometry targetGeometry = JTS.transform(sourceGeometry, transform);
 
-                transformedCRSGeometry = new GeometryWrapper(targetGeometry, srsURI, serialisation, coordinateDimension);
+                transformedCRSGeometry = new GeometryWrapper(targetGeometry, srsURI, serialisation, dimensionInfo);
             } else {
                 transformedCRSGeometry = new GeometryWrapper(sourceCRSGeometry);
             }
@@ -111,10 +111,6 @@ public class GeometryWrapper {
         return srsURI;
     }
 
-    public int getCoordinateDimension() {
-        return coordinateDimension;
-    }
-
     public GeoSerialisationEnum getSerialisation() {
         return serialisation;
     }
@@ -124,13 +120,13 @@ public class GeometryWrapper {
         distance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, unitsOfMeasure);
 
         Geometry geo = this.geometry.buffer(distance);
-        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
+        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public GeometryWrapper convexHull() {
 
         Geometry geo = this.geometry.convexHull();
-        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
+        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public GeometryWrapper difference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -138,7 +134,7 @@ public class GeometryWrapper {
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
 
         Geometry geo = this.geometry.difference(transformedGeometry.getGeometry());
-        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
+        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public double distance(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -155,13 +151,13 @@ public class GeometryWrapper {
     public GeometryWrapper getBoundary() {
 
         Geometry geo = this.geometry.getBoundary();
-        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
+        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public GeometryWrapper getEnvelope() {
 
         Geometry geo = this.geometry.getEnvelope();
-        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
+        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public String getSRID() {
@@ -172,7 +168,7 @@ public class GeometryWrapper {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
         Geometry geo = this.geometry.intersection(transformedGeometry.getGeometry());
-        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
+        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public IntersectionMatrix relate(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -191,14 +187,14 @@ public class GeometryWrapper {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
         Geometry geo = this.geometry.symDifference(transformedGeometry.getGeometry());
-        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
+        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public GeometryWrapper union(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
         Geometry geo = this.geometry.union(transformedGeometry.getGeometry());
-        return new GeometryWrapper(geo, srsURI, serialisation, coordinateDimension);
+        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -256,10 +252,10 @@ public class GeometryWrapper {
 
         switch (serialisation) {
             case WKT:
-                datatype = WKTDatatype.theWKTDatatype;
+                datatype = WKTDatatype.THE_WKT_DATATYPE;
                 break;
             case GML:
-                datatype = GMLDatatype.theGMLDatatype;
+                datatype = GMLDatatype.THE_GML_DATATYPE;
                 break;
             default:
                 throw new DatatypeFormatException("Serilisation is not WKT or GML.");
@@ -270,8 +266,16 @@ public class GeometryWrapper {
         return NodeValue.makeNode(lexicalForm, datatype);
     }
 
+    public int getCoordinateDimension() {
+        return dimensionInfo.getCoordinate();
+    }
+
+    public int getSpatialDimension() {
+        return dimensionInfo.getSpatial();
+    }
+
     public int getTopologicalDimension() {
-        return this.geometry.getDimension();
+        return dimensionInfo.getTopological();
     }
 
     public boolean isEmpty() {
@@ -282,8 +286,8 @@ public class GeometryWrapper {
         return this.geometry.isSimple();
     }
 
-    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.theWKTDatatype;
-    private static final GMLDatatype GML_DATATYPE = GMLDatatype.theGMLDatatype;
+    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.THE_WKT_DATATYPE;
+    private static final GMLDatatype GML_DATATYPE = GMLDatatype.THE_GML_DATATYPE;
 
     public static final GeometryWrapper extract(NodeValue nodeValue) throws DatatypeFormatException {
 
@@ -295,10 +299,10 @@ public class GeometryWrapper {
         GeometryWrapper geometry;
 
         switch (datatypeURI) {
-            case WKTDatatype.theTypeURI:
+            case WKTDatatype.THE_TYPE_URI:
                 geometry = WKT_DATATYPE.parse(lexicalForm);
                 break;
-            case GMLDatatype.theTypeURI:
+            case GMLDatatype.THE_TYPE_URI:
                 geometry = GML_DATATYPE.parse(lexicalForm);
                 break;
             default:
@@ -312,13 +316,13 @@ public class GeometryWrapper {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 31 * hash + Objects.hashCode(this.geometry);
-        hash = 31 * hash + Objects.hashCode(this.srsURI);
-        hash = 31 * hash + Objects.hashCode(this.serialisation);
-        hash = 31 * hash + Objects.hashCode(this.crs);
-        hash = 31 * hash + Objects.hashCode(this.unitsOfMeasure);
-        hash = 31 * hash + Objects.hashCode(this.sridInt);
-        hash = 31 * hash + this.coordinateDimension;
+        hash = 59 * hash + Objects.hashCode(this.geometry);
+        hash = 59 * hash + Objects.hashCode(this.srsURI);
+        hash = 59 * hash + Objects.hashCode(this.serialisation);
+        hash = 59 * hash + Objects.hashCode(this.crs);
+        hash = 59 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 59 * hash + Objects.hashCode(this.sridInt);
+        hash = 59 * hash + Objects.hashCode(this.dimensionInfo);
         return hash;
     }
 
@@ -334,9 +338,6 @@ public class GeometryWrapper {
             return false;
         }
         final GeometryWrapper other = (GeometryWrapper) obj;
-        if (this.coordinateDimension != other.coordinateDimension) {
-            return false;
-        }
         if (!Objects.equals(this.srsURI, other.srsURI)) {
             return false;
         }
@@ -352,12 +353,15 @@ public class GeometryWrapper {
         if (!Objects.equals(this.unitsOfMeasure, other.unitsOfMeasure)) {
             return false;
         }
-        return Objects.equals(this.sridInt, other.sridInt);
+        if (!Objects.equals(this.sridInt, other.sridInt)) {
+            return false;
+        }
+        return Objects.equals(this.dimensionInfo, other.dimensionInfo);
     }
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", sridInt=" + sridInt + ", coordinateDimension=" + coordinateDimension + '}';
+        return "GeometryWrapper{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", sridInt=" + sridInt + ", dimensionInfo=" + dimensionInfo + '}';
     }
 
 }

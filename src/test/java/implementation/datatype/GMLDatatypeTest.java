@@ -8,10 +8,15 @@ package implementation.datatype;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.io.gml2.GMLReader;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.support.GeoSerialisationEnum;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
 import static org.hamcrest.CoreMatchers.not;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -62,13 +68,16 @@ public class GMLDatatypeTest {
         //JTS GMLWriter needs changing to GeoTools writer if possible. Version 3. http://gis.stackexchange.com/questions/3940/how-to-write-gml-with-geotools
         String expResult = "<gml:Point xmlns:gml=\'http://www.opengis.net/ont/gml\' srsName=\'http://www.opengis.net/def/crs/OGC/1.3/CRS84\'><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point point = geometryFactory.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
-        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisationEnum.GML, 2);
+
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 2);
+
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoSerialisationEnum.GML, dimensionInfo);
 
         String result = instance.unparse(geometry);
 
@@ -87,7 +96,7 @@ public class GMLDatatypeTest {
         System.out.println("parse");
         String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -97,7 +106,9 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 2);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -113,7 +124,7 @@ public class GMLDatatypeTest {
         System.out.println("parseNotEqual");
         String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -123,7 +134,9 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 2);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -139,7 +152,7 @@ public class GMLDatatypeTest {
         System.out.println("parseNotEqual2");
         String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.theGMLDatatype;
+        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -149,7 +162,9 @@ public class GMLDatatypeTest {
 
         String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML, 2);
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 2);
+
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoSerialisationEnum.GML, dimensionInfo);
 
         System.out.println("Expected: " + expResult);
         System.out.println(" Result: " + result);
@@ -176,30 +191,94 @@ public class GMLDatatypeTest {
 
     /**
      * Test of findCoordinateDimension method, of class GMLDatatype.
+     *
+     * @throws org.xml.sax.SAXException
+     * @throws java.io.IOException
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     @Test
-    public void testFindCoordinateDimension2() {
+    public void testFindCoordinateDimension2() throws SAXException, IOException, ParserConfigurationException {
         System.out.println("findCoordinateDimension2");
-        XML xml = new XMLDocument("<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>");
+        String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
+        XML xml = new XMLDocument(lexicalForm);
         NamedNodeMap attributes = xml.node().getAttributes();
+        String srsName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+        GMLReader gmlReader = new GMLReader();
+        Geometry geometry = gmlReader.read(lexicalForm, null);
 
         int expResult = 2;
-        int result = GMLDatatype.findCoordinateDimension(attributes);
-        assertEquals(expResult, result);
+        DimensionInfo result = GMLDatatype.extractDimensionInfo(attributes, srsName, geometry);
+        assertEquals(expResult, result.getCoordinate());
     }
 
     /**
      * Test of findCoordinateDimension method, of class GMLDatatype.
+     *
+     * @throws org.xml.sax.SAXException
+     * @throws java.io.IOException
+     * @throws javax.xml.parsers.ParserConfigurationException
      */
     @Test
-    public void testFindCoordinateDimension3() {
+    public void testFindCoordinateDimension3() throws SAXException, IOException, ParserConfigurationException {
         System.out.println("findCoordinateDimension3");
-        XML xml = new XMLDocument("<gml:Point srsDimension=\"3\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95 10.0</gml:pos></gml:Point>");
-        NamedNodeMap attributes = xml.node().getAttributes();;
+        String lexicalForm = "<gml:Point srsDimension=\"3\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95 10.0</gml:pos></gml:Point>";
+        XML xml = new XMLDocument(lexicalForm);
+        NamedNodeMap attributes = xml.node().getAttributes();
+        String srsName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+        GMLReader gmlReader = new GMLReader();
+        Geometry geometry = gmlReader.read(lexicalForm, null);
 
         int expResult = 3;
-        int result = GMLDatatype.findCoordinateDimension(attributes);
-        assertEquals(expResult, result);
+        DimensionInfo result = GMLDatatype.extractDimensionInfo(attributes, srsName, geometry);
+        assertEquals(expResult, result.getCoordinate());
+    }
+
+    /**
+     * Test of findSpatialDimension method, of class GMLDatatype.
+     *
+     * @throws org.xml.sax.SAXException
+     * @throws java.io.IOException
+     * @throws javax.xml.parsers.ParserConfigurationException
+     */
+    @Test
+    public void testFindSpatialDimension2() throws SAXException, IOException, ParserConfigurationException {
+        System.out.println("findSpatialDimension2");
+        String lexicalForm = "<gml:Point srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
+        XML xml = new XMLDocument(lexicalForm);
+        NamedNodeMap attributes = xml.node().getAttributes();
+        String srsName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+        GMLReader gmlReader = new GMLReader();
+        Geometry geometry = gmlReader.read(lexicalForm, null);
+
+        int expResult = 2;
+        DimensionInfo result = GMLDatatype.extractDimensionInfo(attributes, srsName, geometry);
+        assertEquals(expResult, result.getSpatial());
+    }
+
+    /**
+     * Test of findSpatialDimension method, of class GMLDatatype.
+     *
+     * @throws org.xml.sax.SAXException
+     * @throws java.io.IOException
+     * @throws javax.xml.parsers.ParserConfigurationException
+     */
+    @Test
+    public void testFindSpatialDimension3() throws SAXException, IOException, ParserConfigurationException {
+        System.out.println("findSpatialDimension3");
+        String lexicalForm = "<gml:Point srsDimension=\"3\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.38 33.95 10.0</gml:pos></gml:Point>";
+        XML xml = new XMLDocument(lexicalForm);
+        NamedNodeMap attributes = xml.node().getAttributes();
+        String srsName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+        GMLReader gmlReader = new GMLReader();
+        Geometry geometry = gmlReader.read(lexicalForm, null);
+
+        int expResult = 3;
+        DimensionInfo result = GMLDatatype.extractDimensionInfo(attributes, srsName, geometry);
+        assertEquals(expResult, result.getSpatial());
     }
 
 }

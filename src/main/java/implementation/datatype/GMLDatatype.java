@@ -9,6 +9,8 @@ import com.jcabi.xml.XMLDocument;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.gml2.GMLReader;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
+import implementation.CRSRegistry;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.support.GeoSerialisationEnum;
 import static implementation.support.Prefixes.GEO_URI;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
@@ -33,12 +36,12 @@ public class GMLDatatype extends BaseDatatype {
     /**
      * The default GML type URI.
      */
-    public static final String theTypeURI = GEO_URI + "gmlLiteral";
+    public static final String THE_TYPE_URI = GEO_URI + "gmlLiteral";
 
     /**
      * A static instance of GMLDatatype.
      */
-    public static final GMLDatatype theGMLDatatype = new GMLDatatype();
+    public static final GMLDatatype THE_GML_DATATYPE = new GMLDatatype();
 
     /**
      * XML element tag "gml" is defined for the convenience of GML generation.
@@ -55,7 +58,7 @@ public class GMLDatatype extends BaseDatatype {
      * private constructor - single global instance.
      */
     public GMLDatatype() {
-        super(theTypeURI);
+        super(THE_TYPE_URI);
     }
 
     /**
@@ -94,9 +97,10 @@ public class GMLDatatype extends BaseDatatype {
             XMLDocument xmlDoc = new XMLDocument(lexicalForm);
             NamedNodeMap attributes = xmlDoc.node().getAttributes();
             String srsURI = findSrsURI(attributes);
-            int coordinateDimension = findCoordinateDimension(attributes);
 
-            GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.GML, coordinateDimension);
+            DimensionInfo dimensionInfo = extractDimensionInfo(attributes, srsURI, geometry);
+
+            GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.GML, dimensionInfo);
             return geom;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
             LOGGER.error("Illegal GML literal: {}", lexicalForm);
@@ -108,20 +112,30 @@ public class GMLDatatype extends BaseDatatype {
         return attributes.getNamedItem("srsName").getNodeValue();
     }
 
-    public static final int findCoordinateDimension(NamedNodeMap attributes) {
+    public static final DimensionInfo extractDimensionInfo(NamedNodeMap attributes, String srsURI, Geometry geometry) {
 
         int coordinateDimension;
+        int spatialDimension;
 
         Node dimensionNode = attributes.getNamedItem("srsDimension");
         if (dimensionNode != null) {
             String nodeValue = dimensionNode.getNodeValue();
             coordinateDimension = Integer.parseInt(nodeValue);
 
-        } else {
-            coordinateDimension = 2;
+        } else {  //srsDimension attribute is missing so extract from the srsURI.
+
+            CoordinateReferenceSystem crs = CRSRegistry.getCRS(srsURI);
+            coordinateDimension = crs.getCoordinateSystem().getDimension();
         }
 
-        return coordinateDimension;
+        //TODO Need to handle case where coordiante dimension is 3 but no z coordinate.
+        if (coordinateDimension < 4) {
+            spatialDimension = coordinateDimension;
+        } else {
+            spatialDimension = 3;
+        }
+
+        return new DimensionInfo(coordinateDimension, spatialDimension, geometry.getDimension());
     }
 
 }
