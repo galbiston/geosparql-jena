@@ -5,10 +5,7 @@
  */
 package implementation.functionregistry;
 
-import geo.topological.geometryproperty.IsSimple;
-import geo.topological.geometryproperty.Dimension;
-import geo.topological.geometryproperty.IsEmpty;
-import geo.topological.geometryproperty.CoordinateDimension;
+import geo.topological.geometryproperty.*;
 import implementation.vocabulary.Geo;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
@@ -28,6 +25,7 @@ public class GeometryProperty {
 
         registry.put(Geo.DIMENSION, Dimension.class);
         registry.put(Geo.COORDINATE_DIMENSION, CoordinateDimension.class);
+        registry.put(Geo.SPATIAL_DIMENSION, SpatialDimension.class);
         registry.put(Geo.IS_SIMPLE, IsSimple.class);
         registry.put(Geo.IS_EMPTY, IsEmpty.class);
     }
