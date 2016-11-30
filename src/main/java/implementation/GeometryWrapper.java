@@ -7,6 +7,7 @@ package implementation;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
+import implementation.DimensionInfo.Dimensions;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.support.GeoSerialisationEnum;
@@ -276,6 +277,10 @@ public class GeometryWrapper {
 
     public int getTopologicalDimension() {
         return dimensionInfo.getTopological();
+    }
+
+    public Dimensions getDimensions() {
+        return dimensionInfo.getDimensions();
     }
 
     public boolean isEmpty() {

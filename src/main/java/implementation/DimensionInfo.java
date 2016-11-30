@@ -14,11 +14,29 @@ public class DimensionInfo {
     private final int coordinate;
     private final int spatial;
     private final int topological;
+    private final Dimensions dimensions;
+
+    public enum Dimensions {
+        XY, XYZ, XYZM, XYM
+    };
 
     public DimensionInfo(int coordinate, int spatial, int topological) {
         this.coordinate = coordinate;
         this.spatial = spatial;
         this.topological = topological;
+        this.dimensions = findDimensions();
+    }
+
+    private Dimensions findDimensions() {
+        if (coordinate == 2 && spatial == 2) {
+            return Dimensions.XY;
+        } else if (coordinate == 3 && spatial == 3) {
+            return Dimensions.XYZ;
+        } else if (coordinate == 3 && spatial == 2) {
+            return Dimensions.XYM;
+        } else {
+            return Dimensions.XYZM;
+        }
     }
 
     public int getCoordinate() {
@@ -31,6 +49,10 @@ public class DimensionInfo {
 
     public int getTopological() {
         return topological;
+    }
+
+    public Dimensions getDimensions() {
+        return dimensions;
     }
 
     @Override

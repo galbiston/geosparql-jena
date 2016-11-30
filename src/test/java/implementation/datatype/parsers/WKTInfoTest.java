@@ -182,8 +182,53 @@ public class WKTInfoTest {
      * Test of extract method, of class WKTInfo.
      */
     @Test
-    public void testExtractPoint() {
-        System.out.println("extractPoint");
+    public void testExtractPoint2() {
+        System.out.println("extractPoint2");
+        String wktText = "POINT (11.0 12.0)";
+        WKTInfo expResult = new WKTInfo("point", "", "(11.0 12.0)");
+        WKTInfo result = WKTInfo.extract(wktText);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extract method, of class WKTInfo.
+     */
+    @Test
+    public void testExtractPoint3() {
+        System.out.println("extractPoint3");
+        String wktText = "POINT Z (11.0 12.0 8.0)";
+        WKTInfo expResult = new WKTInfo("point", "z", "(11.0 12.0 8.0)");
+        WKTInfo result = WKTInfo.extract(wktText);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extract method, of class WKTInfo.
+     */
+    @Test
+    public void testExtractPoint3b() {
+        System.out.println("extractPoint3b");
+        String wktText = "POINT M (11.0 12.0 5.0)";
+        WKTInfo expResult = new WKTInfo("point", "m", "(11.0 12.0 5.0)");
+        WKTInfo result = WKTInfo.extract(wktText);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extract method, of class WKTInfo.
+     */
+    @Test
+    public void testExtractPoint4() {
+        System.out.println("extractPoint4");
         String wktText = "POINT ZM (11.0 12.0 8.0 5.0)";
         WKTInfo expResult = new WKTInfo("point", "zm", "(11.0 12.0 8.0 5.0)");
         WKTInfo result = WKTInfo.extract(wktText);
