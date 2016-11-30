@@ -15,7 +15,7 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import implementation.DimensionInfo;
-import implementation.DimensionInfo.Dimensions;
+import implementation.DimensionInfo.CoordinateSequenceDimensions;
 import implementation.GeometryWrapper;
 import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
 import implementation.support.GeoSerialisationEnum;
@@ -80,7 +80,7 @@ public class WKTParser {
         sb.append(" ");
 
         Geometry geometry = geometryWrapper.getParsingGeometry();
-        Dimensions dimensions = geometryWrapper.getDimensions();
+        CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
         String wktText = expand(geometry, dimensions);
 
         sb.append(wktText);
@@ -88,7 +88,7 @@ public class WKTParser {
         return sb.toString();
     }
 
-    private static String expand(final Geometry geometry, final Dimensions dimensions) {
+    private static String expand(final Geometry geometry, final CoordinateSequenceDimensions dimensions) {
 
         String wktString = "";
         String dimensionString = convertDimensions(dimensions);
@@ -266,7 +266,7 @@ public class WKTParser {
         return sb.toString();
     }
 
-    private static String buildGeometryCollection(final GeometryCollection geometryCollection, final Dimensions dimensions) {
+    private static String buildGeometryCollection(final GeometryCollection geometryCollection, final CoordinateSequenceDimensions dimensions) {
 
         StringBuilder sb = new StringBuilder("GEOMETRYCOLLECTION");
 
@@ -294,7 +294,7 @@ public class WKTParser {
         return sb.toString();
     }
 
-    private static String convertDimensions(final Dimensions dimensions) {
+    private static String convertDimensions(final CoordinateSequenceDimensions dimensions) {
 
         switch (dimensions) {
             case XYZ:

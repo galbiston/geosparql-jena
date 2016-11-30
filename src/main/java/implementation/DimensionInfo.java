@@ -14,9 +14,9 @@ public class DimensionInfo {
     private final int coordinate;
     private final int spatial;
     private final int topological;
-    private final Dimensions dimensions;
+    private final CoordinateSequenceDimensions coordinateSequenceDimensions;
 
-    public enum Dimensions {
+    public enum CoordinateSequenceDimensions {
         XY, XYZ, XYZM, XYM
     };
 
@@ -24,18 +24,18 @@ public class DimensionInfo {
         this.coordinate = coordinate;
         this.spatial = spatial;
         this.topological = topological;
-        this.dimensions = findDimensions();
+        this.coordinateSequenceDimensions = findCoordinateSequenceDimensions();
     }
 
-    private Dimensions findDimensions() {
+    private CoordinateSequenceDimensions findCoordinateSequenceDimensions() {
         if (coordinate == 2 && spatial == 2) {
-            return Dimensions.XY;
+            return CoordinateSequenceDimensions.XY;
         } else if (coordinate == 3 && spatial == 3) {
-            return Dimensions.XYZ;
+            return CoordinateSequenceDimensions.XYZ;
         } else if (coordinate == 3 && spatial == 2) {
-            return Dimensions.XYM;
+            return CoordinateSequenceDimensions.XYM;
         } else {
-            return Dimensions.XYZM;
+            return CoordinateSequenceDimensions.XYZM;
         }
     }
 
@@ -51,8 +51,8 @@ public class DimensionInfo {
         return topological;
     }
 
-    public Dimensions getDimensions() {
-        return dimensions;
+    public CoordinateSequenceDimensions getDimensions() {
+        return coordinateSequenceDimensions;
     }
 
     @Override
