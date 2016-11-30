@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype.parsers;
+package implementation.datatype.parsers.wkt;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -11,6 +11,9 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 import implementation.DimensionInfo;
+import implementation.jts.CustomCoordinateSequence;
+import implementation.jts.CustomCoordinateSequenceFactory;
+import implementation.datatype.parsers.ParseException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -18,19 +21,19 @@ import java.util.Objects;
  *
  * @author Greg
  */
-public class WKTInfo {
+public class WKTGeometryBuilder {
 
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
 
     private final CustomCoordinateSequence.Dimensions dimensions;
     private final Geometry geometry;
 
-    public WKTInfo(String shape, String dimension, String coordinates) {
+    public WKTGeometryBuilder(String shape, String dimension, String coordinates) {
         this.dimensions = convertDimensions(dimension);
         this.geometry = buildGeometry(shape, coordinates);
     }
 
-    private CustomCoordinateSequence.Dimensions convertDimensions(String dimensionsString) {
+    private static CustomCoordinateSequence.Dimensions convertDimensions(String dimensionsString) {
 
         CustomCoordinateSequence.Dimensions dims;
         switch (dimensionsString) {
@@ -134,7 +137,7 @@ public class WKTInfo {
         Geometry[] geometries = new Geometry[partCoordinates.length];
 
         for (int i = 0; i < partCoordinates.length; i++) {
-            WKTInfo partWKTInfo = extract(partCoordinates[i]);
+            WKTGeometryBuilder partWKTInfo = extract(partCoordinates[i]);
             geometries[i] = partWKTInfo.geometry;
         }
         return GEOMETRY_FACTORY.createGeometryCollection(geometries);
@@ -209,7 +212,7 @@ public class WKTInfo {
 
     }
 
-    public static WKTInfo extract(String wktText) {
+    public static WKTGeometryBuilder extract(String wktText) {
         wktText = wktText.trim();
         wktText = wktText.toLowerCase();
 
@@ -233,7 +236,7 @@ public class WKTInfo {
             dimension = "";
         }
 
-        return new WKTInfo(shape, dimension, coordinates);
+        return new WKTGeometryBuilder(shape, dimension, coordinates);
     }
 
     @Override
@@ -255,7 +258,7 @@ public class WKTInfo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final WKTInfo other = (WKTInfo) obj;
+        final WKTGeometryBuilder other = (WKTGeometryBuilder) obj;
         if (this.dimensions != other.dimensions) {
             return false;
         }

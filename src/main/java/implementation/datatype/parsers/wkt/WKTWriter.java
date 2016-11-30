@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype.parsers;
+package implementation.datatype.parsers.wkt;
 
 import com.vividsolutions.jts.geom.CoordinateSequence;
 import com.vividsolutions.jts.geom.Geometry;
@@ -15,64 +15,16 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import implementation.DimensionInfo;
-import implementation.DimensionInfo.CoordinateSequenceDimensions;
 import implementation.GeometryWrapper;
-import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
-import implementation.support.GeoSerialisationEnum;
+import implementation.jts.CustomCoordinateSequence;
 
 /**
  *
  * @author Greg
  */
-public class WKTParser {
+public class WKTWriter {
 
-    public GeometryWrapper read(String wktLiteral) throws ParseException {
-
-        WktTextSRS wktTextSRS = extractTextSRS(wktLiteral);
-
-        WKTInfo wktInfo = WKTInfo.extract(wktTextSRS.wktText);
-
-        Geometry geometry = wktInfo.getGeometry();
-        DimensionInfo dimensionInfo = wktInfo.getDimensionInfo();
-
-        return new GeometryWrapper(geometry, wktTextSRS.srsURI, GeoSerialisationEnum.WKT, dimensionInfo);
-
-    }
-
-    private WktTextSRS extractTextSRS(String wktLiteral) {
-
-        String srsURI;
-        String wktText;
-
-        int startSRS = wktLiteral.indexOf("<");
-        int endSRS = wktLiteral.indexOf(">");
-
-        //Check that both chevrons are located and extract SRS name, otherwise default.
-        if (startSRS != -1 && endSRS != -1) {
-            srsURI = wktLiteral.substring(startSRS + 1, endSRS);
-            wktText = wktLiteral.substring(endSRS + 1);
-
-        } else {
-            srsURI = DEFAULT_WKT_CRS_URI;
-            wktText = wktLiteral;
-        }
-
-        return (new WktTextSRS(wktText, srsURI));
-    }
-
-    private class WktTextSRS {
-
-        private final String wktText;
-        private final String srsURI;
-
-        public WktTextSRS(String wktText, String srsURI) {
-            this.wktText = wktText;
-            this.srsURI = srsURI;
-        }
-
-    }
-
-    public final String write(GeometryWrapper geometryWrapper) {
+    public static final String write(GeometryWrapper geometryWrapper) {
 
         StringBuilder sb = new StringBuilder();
 
@@ -80,7 +32,7 @@ public class WKTParser {
         sb.append(" ");
 
         Geometry geometry = geometryWrapper.getParsingGeometry();
-        CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
+        DimensionInfo.CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
         String wktText = expand(geometry, dimensions);
 
         sb.append(wktText);
@@ -88,7 +40,7 @@ public class WKTParser {
         return sb.toString();
     }
 
-    private static String expand(final Geometry geometry, final CoordinateSequenceDimensions dimensions) {
+    private static String expand(final Geometry geometry, final DimensionInfo.CoordinateSequenceDimensions dimensions) {
 
         String wktString = "";
         String dimensionString = convertDimensions(dimensions);
@@ -266,7 +218,7 @@ public class WKTParser {
         return sb.toString();
     }
 
-    private static String buildGeometryCollection(final GeometryCollection geometryCollection, final CoordinateSequenceDimensions dimensions) {
+    private static String buildGeometryCollection(final GeometryCollection geometryCollection, final DimensionInfo.CoordinateSequenceDimensions dimensions) {
 
         StringBuilder sb = new StringBuilder("GEOMETRYCOLLECTION");
 
@@ -294,7 +246,7 @@ public class WKTParser {
         return sb.toString();
     }
 
-    private static String convertDimensions(final CoordinateSequenceDimensions dimensions) {
+    private static String convertDimensions(final DimensionInfo.CoordinateSequenceDimensions dimensions) {
 
         switch (dimensions) {
             case XYZ:

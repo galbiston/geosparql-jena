@@ -7,7 +7,8 @@ package implementation.datatype;
 
 import implementation.GeometryWrapper;
 import implementation.datatype.parsers.ParseException;
-import implementation.datatype.parsers.WKTParser;
+import implementation.datatype.parsers.wkt.WKTReader;
+import implementation.datatype.parsers.wkt.WKTWriter;
 import static implementation.support.Prefixes.GEO_URI;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
@@ -62,7 +63,7 @@ public class WKTDatatype extends BaseDatatype {
 
         GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
 
-        return new WKTParser().write(geometryWrapper);
+        return WKTWriter.write(geometryWrapper);
     }
 
     /**
@@ -89,7 +90,7 @@ public class WKTDatatype extends BaseDatatype {
     public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
 
         try {
-            return new WKTParser().read(lexicalForm);
+            return WKTReader.read(lexicalForm);
         } catch (ParseException ex) {
             throw new DatatypeFormatException("Illegal WKT literal: " + lexicalForm);
         }
