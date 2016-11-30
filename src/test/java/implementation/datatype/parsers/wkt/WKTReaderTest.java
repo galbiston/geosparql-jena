@@ -59,7 +59,7 @@ public class WKTReaderTest {
         System.out.println("readPoint");
         String wktLiteral = "POINT ZM (11.0 12.0 8.0 5.0)";
         WKTReader instance = new WKTReader();
-        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "11.0 12.0 8.0 5.0"));
+        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11.0 12.0 8.0 5.0"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
         GeometryWrapper result = instance.read(wktLiteral);
 
@@ -76,7 +76,7 @@ public class WKTReaderTest {
         System.out.println("readPoint2");
         String wktLiteral = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT ZM (11.0 12.0 8.0 5.0)";
         WKTReader instance = new WKTReader();
-        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "11.0 12.0 8.0 5.0"));
+        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11.0 12.0 8.0 5.0"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
         GeometryWrapper result = instance.read(wktLiteral);
 
@@ -93,7 +93,7 @@ public class WKTReaderTest {
         System.out.println("readLineString");
         String wktLiteral = "LINESTRING ZM (11 12.1 8 5, 3 4 6 2)";
         WKTReader instance = new WKTReader();
-        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "11 12.1 8 5, 3 4 6 2"));
+        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11 12.1 8 5, 3 4 6 2"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 1));
         GeometryWrapper result = instance.read(wktLiteral);
 
@@ -110,7 +110,7 @@ public class WKTReaderTest {
         System.out.println("readPolygon");
         String wktLiteral = "POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1))";
         WKTReader instance = new WKTReader();
-        Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
+        Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 2));
         GeometryWrapper result = instance.read(wktLiteral);
 
@@ -128,8 +128,8 @@ public class WKTReaderTest {
         String wktLiteral = "POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1), (20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1))";
         WKTReader instance = new WKTReader();
 
-        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
-        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1"))};
+        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
+        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1"))};
         Geometry geometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
 
         GeometryWrapper expResult = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 2));
@@ -148,7 +148,7 @@ public class WKTReaderTest {
         System.out.println("readMultiPoint");
         String wktLiteral = "MULTIPOINT ZM ((10 40 0 1), (40 30 0 1), (20 20 0 1), (30 10 0 1))";
         WKTReader instance = new WKTReader();
-        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "10 40 0 1, 40 30 0 1, 20 20 0 1, 30 10 0 1"));
+        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "10 40 0 1, 40 30 0 1, 20 20 0 1, 30 10 0 1"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
         GeometryWrapper result = instance.read(wktLiteral);
 
@@ -167,8 +167,8 @@ public class WKTReaderTest {
         WKTReader instance = new WKTReader();
 
         LineString[] lineStrings = new LineString[2];
-        lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "10 10 0 1, 20 20 0 1, 10 40 0 1"));
-        lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1"));
+        lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "10 10 0 1, 20 20 0 1, 10 40 0 1"));
+        lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1"));
         Geometry geometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
 
         GeometryWrapper expResult = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 1));
@@ -189,9 +189,9 @@ public class WKTReaderTest {
         WKTReader instance = new WKTReader();
 
         Polygon[] polygons = new Polygon[2];
-        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1"));
-        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1"));
-        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1"))};
+        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1"));
+        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1"));
+        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1"))};
         polygons[1] = GEOMETRY_FACTORY.createPolygon(shell, holes);
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
 
@@ -213,8 +213,8 @@ public class WKTReaderTest {
         WKTReader instance = new WKTReader();
 
         Geometry[] geometries = new Geometry[2];
-        geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "4 6 0 1"));
-        geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "4 6 0 1,7 10 0 1"));
+        geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "4 6 0 1"));
+        geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "4 6 0 1,7 10 0 1"));
         Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection(geometries);
 
         GeometryWrapper expResult = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 1));

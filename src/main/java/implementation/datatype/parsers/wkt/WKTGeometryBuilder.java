@@ -11,9 +11,10 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 import implementation.DimensionInfo;
-import implementation.jts.CustomCoordinateSequence;
-import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.datatype.parsers.ParseException;
+import implementation.jts.CustomCoordinateSequence;
+import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import implementation.jts.CustomCoordinateSequenceFactory;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -25,29 +26,29 @@ public class WKTGeometryBuilder {
 
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
 
-    private final CustomCoordinateSequence.Dimensions dimensions;
+    private final CoordinateSequenceDimensions coordinateSequenceDimensions;
     private final Geometry geometry;
 
     public WKTGeometryBuilder(String shape, String dimension, String coordinates) {
-        this.dimensions = convertDimensions(dimension);
+        this.coordinateSequenceDimensions = convertDimensions(dimension);
         this.geometry = buildGeometry(shape, coordinates);
     }
 
-    private static CustomCoordinateSequence.Dimensions convertDimensions(String dimensionsString) {
+    private static CoordinateSequenceDimensions convertDimensions(String dimensionsString) {
 
-        CustomCoordinateSequence.Dimensions dims;
+        CoordinateSequenceDimensions dims;
         switch (dimensionsString) {
             case "zm":
-                dims = CustomCoordinateSequence.Dimensions.XYZM;
+                dims = CoordinateSequenceDimensions.XYZM;
                 break;
             case "z":
-                dims = CustomCoordinateSequence.Dimensions.XYZ;
+                dims = CoordinateSequenceDimensions.XYZ;
                 break;
             case "m":
-                dims = CustomCoordinateSequence.Dimensions.XYM;
+                dims = CoordinateSequenceDimensions.XYM;
                 break;
             default:
-                dims = CustomCoordinateSequence.Dimensions.XY;
+                dims = CoordinateSequenceDimensions.XY;
                 break;
         }
         return dims;
@@ -63,7 +64,7 @@ public class WKTGeometryBuilder {
 
     public int getSpatialDimension() {
 
-        switch (dimensions) {
+        switch (coordinateSequenceDimensions) {
             default:
                 return 2;
             case XYZ:
@@ -74,7 +75,7 @@ public class WKTGeometryBuilder {
 
     public int getCoordinateDimension() {
 
-        switch (dimensions) {
+        switch (coordinateSequenceDimensions) {
             default:
                 return 2;
             case XYZ:
@@ -91,18 +92,18 @@ public class WKTGeometryBuilder {
 
         switch (shape) {
             case "point":
-                CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(dimensions, clean(coordinates));
+                CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
                 geo = GEOMETRY_FACTORY.createPoint(pointSequence);
                 break;
             case "linestring":
-                CustomCoordinateSequence lineSequence = new CustomCoordinateSequence(dimensions, clean(coordinates));
+                CustomCoordinateSequence lineSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
                 geo = GEOMETRY_FACTORY.createLineString(lineSequence);
                 break;
             case "polygon":
                 geo = buildPolygon(coordinates);
                 break;
             case "multipoint":
-                CustomCoordinateSequence multiPointSequence = new CustomCoordinateSequence(dimensions, clean(coordinates));
+                CustomCoordinateSequence multiPointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
                 geo = GEOMETRY_FACTORY.createMultiPoint(multiPointSequence);
                 break;
             case "multilinestring":
@@ -160,12 +161,12 @@ public class WKTGeometryBuilder {
 
         String[] splitCoordinates = splitCoordinates(coordinates);
         if (splitCoordinates.length == 1) { //Polygon without holes.
-            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(dimensions, clean(coordinates));
+            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
             polygon = GEOMETRY_FACTORY.createPolygon(shellSequence);
         } else {    //Polygon with holes
             String shellCoordinates = splitCoordinates[0];
 
-            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(dimensions, clean(shellCoordinates));
+            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(shellCoordinates));
             LinearRing shellLinearRing = GEOMETRY_FACTORY.createLinearRing(shellSequence);
 
             String[] splitHoleCoordinates = Arrays.copyOfRange(splitCoordinates, 1, splitCoordinates.length);
@@ -189,7 +190,7 @@ public class WKTGeometryBuilder {
         LineString[] lineStrings = new LineString[splitCoordinates.length];
 
         for (int i = 0; i < splitCoordinates.length; i++) {
-            CustomCoordinateSequence sequence = new CustomCoordinateSequence(dimensions, clean(splitCoordinates[i]));
+            CustomCoordinateSequence sequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(splitCoordinates[i]));
             LineString lineString = GEOMETRY_FACTORY.createLineString(sequence);
             lineStrings[i] = lineString;
         }
@@ -203,7 +204,7 @@ public class WKTGeometryBuilder {
         LinearRing[] linearRings = new LinearRing[splitCoordinates.length];
 
         for (int i = 0; i < splitCoordinates.length; i++) {
-            CustomCoordinateSequence sequence = new CustomCoordinateSequence(dimensions, clean(splitCoordinates[i]));
+            CustomCoordinateSequence sequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(splitCoordinates[i]));
             LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(sequence);
             linearRings[i] = linearRing;
         }
@@ -242,7 +243,7 @@ public class WKTGeometryBuilder {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.dimensions);
+        hash = 37 * hash + Objects.hashCode(this.coordinateSequenceDimensions);
         hash = 37 * hash + Objects.hashCode(this.geometry);
         return hash;
     }
@@ -259,7 +260,7 @@ public class WKTGeometryBuilder {
             return false;
         }
         final WKTGeometryBuilder other = (WKTGeometryBuilder) obj;
-        if (this.dimensions != other.dimensions) {
+        if (this.coordinateSequenceDimensions != other.coordinateSequenceDimensions) {
             return false;
         }
         return Objects.equals(this.geometry, other.geometry);
@@ -267,7 +268,7 @@ public class WKTGeometryBuilder {
 
     @Override
     public String toString() {
-        return "WKTInfo{" + "dimensions=" + dimensions + ", geometry=" + geometry + '}';
+        return "WKTInfo{" + "dimensions=" + coordinateSequenceDimensions + ", geometry=" + geometry + '}';
     }
 
 }

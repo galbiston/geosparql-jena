@@ -11,7 +11,7 @@ import implementation.datatype.parsers.wkt.WKTGeometryBuilder;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import implementation.DimensionInfo;
-import implementation.jts.CustomCoordinateSequence.Dimensions;
+import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -129,7 +129,7 @@ public class WKTGeometryBuilderTest {
     public void testGetGeometryPoint() {
         System.out.println("getGeometryPoint");
         WKTGeometryBuilder instance = new WKTGeometryBuilder("point", "", "(11.0 12.0)");
-        Geometry expResult = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(Dimensions.XY, "11.0 12.0"));
+        Geometry expResult = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "11.0 12.0"));
         Geometry result = instance.getGeometry();
 
         System.out.println("Expected: " + expResult);
@@ -144,7 +144,7 @@ public class WKTGeometryBuilderTest {
     public void testGetGeometryPointZ() {
         System.out.println("getGeometryPointZ");
         WKTGeometryBuilder instance = new WKTGeometryBuilder("point", "z", "(11.0 12.0 8.0)");
-        Geometry expResult = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(Dimensions.XYZ, "11.0 12.0 8.0"));
+        Geometry expResult = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZ, "11.0 12.0 8.0"));
         Geometry result = instance.getGeometry();
 
         System.out.println("Expected: " + expResult);

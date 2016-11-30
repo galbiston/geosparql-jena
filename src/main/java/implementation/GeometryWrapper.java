@@ -7,9 +7,9 @@ package implementation;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
-import implementation.DimensionInfo.CoordinateSequenceDimensions;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
+import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
 import java.util.Objects;

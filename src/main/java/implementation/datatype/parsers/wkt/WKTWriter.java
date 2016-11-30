@@ -14,9 +14,9 @@ import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
-import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequence;
+import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 
 /**
  *
@@ -32,7 +32,7 @@ public class WKTWriter {
         sb.append(" ");
 
         Geometry geometry = geometryWrapper.getParsingGeometry();
-        DimensionInfo.CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
+        CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
         String wktText = expand(geometry, dimensions);
 
         sb.append(wktText);
@@ -40,7 +40,7 @@ public class WKTWriter {
         return sb.toString();
     }
 
-    private static String expand(final Geometry geometry, final DimensionInfo.CoordinateSequenceDimensions dimensions) {
+    private static String expand(final Geometry geometry, final CoordinateSequenceDimensions dimensions) {
 
         String wktString = "";
         String dimensionString = convertDimensions(dimensions);
@@ -218,7 +218,7 @@ public class WKTWriter {
         return sb.toString();
     }
 
-    private static String buildGeometryCollection(final GeometryCollection geometryCollection, final DimensionInfo.CoordinateSequenceDimensions dimensions) {
+    private static String buildGeometryCollection(final GeometryCollection geometryCollection, final CoordinateSequenceDimensions dimensions) {
 
         StringBuilder sb = new StringBuilder("GEOMETRYCOLLECTION");
 
@@ -246,7 +246,7 @@ public class WKTWriter {
         return sb.toString();
     }
 
-    private static String convertDimensions(final DimensionInfo.CoordinateSequenceDimensions dimensions) {
+    private static String convertDimensions(final CoordinateSequenceDimensions dimensions) {
 
         switch (dimensions) {
             case XYZ:

@@ -57,7 +57,7 @@ public class WKTWriterTest {
     @Test
     public void testWritePoint() {
         System.out.println("writePoint");
-        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "11.0 12.1 8.0 5.0"));
+        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11.0 12.1 8.0 5.0"));
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
@@ -75,7 +75,7 @@ public class WKTWriterTest {
     @Test
     public void testWriteLineString() {
         System.out.println("writeLineString");
-        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "11.0 12.1 8.0 5.0, 3 4 6 2"));
+        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11.0 12.1 8.0 5.0, 3 4 6 2"));
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
@@ -93,7 +93,7 @@ public class WKTWriterTest {
     @Test
     public void testWritePolygon() {
         System.out.println("writePolygon");
-        Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
+        Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
@@ -111,8 +111,8 @@ public class WKTWriterTest {
     @Test
     public void testWritePolygon2() {
         System.out.println("writePolygon2");
-        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
-        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1"))};
+        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
+        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1"))};
         Geometry geometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
@@ -131,7 +131,7 @@ public class WKTWriterTest {
     @Test
     public void testWriteMultiPoint() {
         System.out.println("writeMultiPoint");
-        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "10 40 0 1, 40 30 0 1, 20 20 0 1, 30 10 0 1"));
+        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "10 40 0 1, 40 30 0 1, 20 20 0 1, 30 10 0 1"));
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
@@ -151,8 +151,8 @@ public class WKTWriterTest {
         System.out.println("writeMultiLineString");
 
         LineString[] lineStrings = new LineString[2];
-        lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "10 10 0 1, 20 20 0 1, 10 40 0 1"));
-        lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1"));
+        lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "10 10 0 1, 20 20 0 1, 10 40 0 1"));
+        lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1"));
         Geometry geometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
@@ -173,9 +173,9 @@ public class WKTWriterTest {
         System.out.println("writeMultiPolygon");
 
         Polygon[] polygons = new Polygon[2];
-        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1"));
-        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1"));
-        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1"))};
+        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1"));
+        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1"));
+        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1"))};
         polygons[1] = GEOMETRY_FACTORY.createPolygon(shell, holes);
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
 
@@ -197,8 +197,8 @@ public class WKTWriterTest {
         System.out.println("writeGeometryCollection");
 
         Geometry[] geometries = new Geometry[2];
-        geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "4 6 0 1"));
-        geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.Dimensions.XYZM, "4 6 0 1,7 10 0 1"));
+        geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "4 6 0 1"));
+        geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "4 6 0 1,7 10 0 1"));
         Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection(geometries);
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, WKTDatatype.DEFAULT_WKT_CRS_URI, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));

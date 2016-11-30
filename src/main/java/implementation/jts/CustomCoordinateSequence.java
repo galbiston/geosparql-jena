@@ -25,9 +25,9 @@ public class CustomCoordinateSequence implements CoordinateSequence {
     private final int size;
     private final int coordinateDimension;
     private final int spatialDimension;
-    private final Dimensions dimensions;
+    private final CoordinateSequenceDimensions dimensions;
 
-    public enum Dimensions {
+    public enum CoordinateSequenceDimensions {
         XY, XYZ, XYZM, XYM
     };
 
@@ -39,7 +39,7 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         this.m = new double[size];
         this.coordinateDimension = 4;
         this.spatialDimension = 3;
-        this.dimensions = Dimensions.XYZM;
+        this.dimensions = CoordinateSequenceDimensions.XYZM;
     }
 
     public CustomCoordinateSequence(int size, int dimension) {
@@ -61,19 +61,19 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         //Doesn't handle XYM....
         if (dimension == 4) {
             this.spatialDimension = 3;
-            this.dimensions = Dimensions.XYZM;
+            this.dimensions = CoordinateSequenceDimensions.XYZM;
         } else {
             this.spatialDimension = dimension;
             if (dimension == 2) {
-                this.dimensions = Dimensions.XY;
+                this.dimensions = CoordinateSequenceDimensions.XY;
             } else {
-                this.dimensions = Dimensions.XYZ;
+                this.dimensions = CoordinateSequenceDimensions.XYZ;
             }
 
         }
     }
 
-    public CustomCoordinateSequence(Dimensions dimensions, String sequence) {
+    public CustomCoordinateSequence(CoordinateSequenceDimensions dimensions, String sequence) {
 
         this.dimensions = dimensions;
         if (!sequence.isEmpty()) {
@@ -180,9 +180,9 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         }
 
         if (coordinateDimension == 2) {
-            this.dimensions = Dimensions.XY;
+            this.dimensions = CoordinateSequenceDimensions.XY;
         } else {
-            this.dimensions = Dimensions.XYZ;
+            this.dimensions = CoordinateSequenceDimensions.XYZ;
         }
 
     }
@@ -214,19 +214,19 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         if (!isZPresent && !isMPresent) {
             this.coordinateDimension = 2;
             this.spatialDimension = 2;
-            this.dimensions = Dimensions.XY;
+            this.dimensions = CoordinateSequenceDimensions.XY;
         } else if (isZPresent && !isMPresent) {
             this.coordinateDimension = 3;
             this.spatialDimension = 3;
-            this.dimensions = Dimensions.XYZ;
+            this.dimensions = CoordinateSequenceDimensions.XYZ;
         } else if (!isZPresent && isMPresent) {
             this.coordinateDimension = 3;
             this.spatialDimension = 2;
-            this.dimensions = Dimensions.XYM;
+            this.dimensions = CoordinateSequenceDimensions.XYM;
         } else {
             this.coordinateDimension = 4;
             this.spatialDimension = 3;
-            this.dimensions = Dimensions.XYZM;
+            this.dimensions = CoordinateSequenceDimensions.XYZM;
         }
 
     }
@@ -236,7 +236,7 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         return coordinateDimension;
     }
 
-    public Dimensions getDimensions() {
+    public CoordinateSequenceDimensions getDimensions() {
         return dimensions;
     }
 
@@ -446,6 +446,18 @@ public class CustomCoordinateSequence implements CoordinateSequence {
             return Long.toString(longValue);
         } else {
             return value.toString();
+        }
+    }
+
+    public static final CoordinateSequenceDimensions findCoordinateSequenceDimensions(int coordinateDimension, int spatialDimension) {
+        if (coordinateDimension == 2 && spatialDimension == 2) {
+            return CoordinateSequenceDimensions.XY;
+        } else if (coordinateDimension == 3 && spatialDimension == 3) {
+            return CoordinateSequenceDimensions.XYZ;
+        } else if (coordinateDimension == 3 && spatialDimension == 2) {
+            return CoordinateSequenceDimensions.XYM;
+        } else {
+            return CoordinateSequenceDimensions.XYZM;
         }
     }
 
