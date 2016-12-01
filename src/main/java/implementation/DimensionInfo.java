@@ -5,6 +5,9 @@
  */
 package implementation;
 
+import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import static implementation.jts.CustomCoordinateSequence.findCoordinateSequenceDimensions;
+
 /**
  *
  * @author Gregory Albiston
@@ -14,11 +17,13 @@ public class DimensionInfo {
     private final int coordinate;
     private final int spatial;
     private final int topological;
+    private final CoordinateSequenceDimensions coordinateSequenceDimensions;
 
     public DimensionInfo(int coordinate, int spatial, int topological) {
         this.coordinate = coordinate;
         this.spatial = spatial;
         this.topological = topological;
+        this.coordinateSequenceDimensions = findCoordinateSequenceDimensions(coordinate, spatial);
     }
 
     public int getCoordinate() {
@@ -31,6 +36,10 @@ public class DimensionInfo {
 
     public int getTopological() {
         return topological;
+    }
+
+    public CoordinateSequenceDimensions getDimensions() {
+        return coordinateSequenceDimensions;
     }
 
     @Override

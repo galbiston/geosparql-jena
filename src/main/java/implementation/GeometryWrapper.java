@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
+import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
 import java.util.Objects;
@@ -276,6 +277,10 @@ public class GeometryWrapper {
 
     public int getTopologicalDimension() {
         return dimensionInfo.getTopological();
+    }
+
+    public CoordinateSequenceDimensions getCoordinateSequenceDimensions() {
+        return dimensionInfo.getDimensions();
     }
 
     public boolean isEmpty() {
