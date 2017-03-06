@@ -408,6 +408,27 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         return sb.toString();
     }
 
+    public String toGMLText() {
+        StringBuilder sb = new StringBuilder();
+
+        if (size != 0) {
+            String coordText = getCoordinateText(0);
+            sb.append(coordText);
+
+            for (int i = 1; i < size; i++) {
+
+                sb.append(", ");
+                coordText = getCoordinateText(i);
+                sb.append(coordText);
+            }
+        } else {
+            sb.append("");
+        }
+
+        return sb.toString();
+
+    }
+
     private String getCoordinateText(int index) {
 
         StringBuilder sb = new StringBuilder();
