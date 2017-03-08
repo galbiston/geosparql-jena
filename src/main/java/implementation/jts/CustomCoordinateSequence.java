@@ -417,7 +417,7 @@ public class CustomCoordinateSequence implements CoordinateSequence {
 
             for (int i = 1; i < size; i++) {
 
-                sb.append(", ");
+                sb.append(" ");
                 coordText = getCoordinateText(i);
                 sb.append(coordText);
             }
