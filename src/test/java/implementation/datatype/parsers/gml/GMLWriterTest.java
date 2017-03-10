@@ -171,7 +171,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GeoSerialisationEnum.GML, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:GeometryCollection xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:GeometryMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\" srsDimension=\"2\"><gml:coordinates>4 6</gml:coordinates></gml:Point></gml:GeometryMember><gml:GeometryMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\" srsDimension=\"2\"><gml:coordinates>4 6 7 10</gml:coordinates></gml:LineString></gml:GeometryMember></gml:GeometryCollection>";
+        String expResult = "<gml:GeometryCollection xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\" srsDimension=\"2\"><gml:GeometryMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\" srsDimension=\"2\"><gml:coordinates>4 6</gml:coordinates></gml:Point></gml:GeometryMember><gml:GeometryMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\" srsDimension=\"2\"><gml:coordinates>4 6 7 10</gml:coordinates></gml:LineString></gml:GeometryMember></gml:GeometryCollection>";
 
         System.out.println("Expected: " + expResult);
         System.out.println("  Result: " + result);

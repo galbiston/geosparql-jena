@@ -5,20 +5,18 @@
  */
 package implementation.datatype.parsers.wkt;
 
-import implementation.jts.CustomCoordinateSequence;
-import implementation.jts.CustomCoordinateSequenceFactory;
-import implementation.datatype.parsers.wkt.WKTGeometryBuilder;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import implementation.DimensionInfo;
+import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import implementation.jts.CustomCoordinateSequenceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *

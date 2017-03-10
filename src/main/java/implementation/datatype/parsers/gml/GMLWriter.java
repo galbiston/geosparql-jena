@@ -67,7 +67,7 @@ public class GMLWriter {
                 break;
             case "GeometryCollection":
                 GeometryCollection geometryCollection = (GeometryCollection) geometry;
-                gmlElement = buildGeometryCollection(geometryCollection, dimensions, srsName);
+                gmlElement = buildGeometryCollection(geometryCollection, srsDimension, dimensions, srsName);
                 break;
             default:
                 throw new ParseException("Geometry type not supported: " + geometry.getGeometryType());
@@ -208,11 +208,12 @@ public class GMLWriter {
         return gmlRoot;
     }
 
-    private static Element buildGeometryCollection(final GeometryCollection geometryCollection, final CoordinateSequenceDimensions dimensions, final String srsName) {
+    private static Element buildGeometryCollection(final GeometryCollection geometryCollection, final String dimensionString, final CoordinateSequenceDimensions dimensions, final String srsName) {
 
         Namespace gmlNamespace = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
         Element gmlRoot = new Element(geometryCollection.getGeometryType(), gmlNamespace);
         gmlRoot.setAttribute("srsName", srsName);
+        gmlRoot.setAttribute("srsDimension", dimensionString);
 
         if (!geometryCollection.isEmpty()) {
 
@@ -231,11 +232,15 @@ public class GMLWriter {
         return gmlRoot;
     }
 
-    private static String convertDimensions(final CustomCoordinateSequence.CoordinateSequenceDimensions dimensions) {
+    private static String convertDimensions(final CoordinateSequenceDimensions dimensions) {
 
         switch (dimensions) {
             case XYZ:
                 return 3 + "";
+            case XYZM:
+                return 3 + "";
+            case XYM:
+                return 2 + "";
             default:
                 return 2 + "";
         }
