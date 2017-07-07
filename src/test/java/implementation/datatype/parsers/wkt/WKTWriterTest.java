@@ -5,9 +5,6 @@
  */
 package implementation.datatype.parsers.wkt;
 
-import implementation.jts.CustomCoordinateSequence;
-import implementation.jts.CustomCoordinateSequenceFactory;
-import implementation.datatype.parsers.wkt.WKTWriter;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
@@ -16,6 +13,8 @@ import com.vividsolutions.jts.geom.Polygon;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.datatype.WKTDatatype;
+import implementation.jts.CustomCoordinateSequence;
+import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
 import org.junit.After;
 import org.junit.AfterClass;

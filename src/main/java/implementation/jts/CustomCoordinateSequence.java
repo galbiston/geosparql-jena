@@ -42,6 +42,27 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         this.dimensions = CoordinateSequenceDimensions.XYZM;
     }
 
+    public CustomCoordinateSequence(int size, CoordinateSequenceDimensions dimensions) {
+        this.size = size;
+        this.x = new double[size];
+        this.y = new double[size];
+        this.z = new double[size];
+        this.m = new double[size];
+
+        for (int i = 0; i < size; i++) {
+            this.x[i] = Double.NaN;
+            this.y[i] = Double.NaN;
+            this.z[i] = Double.NaN;
+            this.m[i] = Double.NaN;
+        }
+
+        int[] dims = getDimensionValues(dimensions);
+        this.coordinateDimension = dims[0];
+        this.spatialDimension = dims[1];
+        this.dimensions = dimensions;
+
+    }
+
     public CustomCoordinateSequence(int size, int dimension) {
         this.size = size;
         this.x = new double[size];
@@ -126,25 +147,37 @@ public class CustomCoordinateSequence implements CoordinateSequence {
             this.z = new double[size];
             this.m = new double[size];
         }
+
+        int[] dims = getDimensionValues(dimensions);
+        this.coordinateDimension = dims[0];
+        this.spatialDimension = dims[1];
+
+    }
+
+    private static int[] getDimensionValues(CoordinateSequenceDimensions dimensions) {
+
+        int coordinateDimension;
+        int spatialDimension;
         switch (dimensions) {
             default:
-                this.coordinateDimension = 2;
-                this.spatialDimension = 2;
+                coordinateDimension = 2;
+                spatialDimension = 2;
                 break;
             case XYZ:
-                this.coordinateDimension = 3;
-                this.spatialDimension = 3;
+                coordinateDimension = 3;
+                spatialDimension = 3;
                 break;
             case XYM:
-                this.coordinateDimension = 3;
-                this.spatialDimension = 2;
+                coordinateDimension = 3;
+                spatialDimension = 2;
                 break;
             case XYZM:
-                this.coordinateDimension = 4;
-                this.spatialDimension = 3;
+                coordinateDimension = 4;
+                spatialDimension = 3;
                 break;
         }
 
+        return new int[]{coordinateDimension, spatialDimension};
     }
 
     public CustomCoordinateSequence(Coordinate[] coordinates) {
@@ -162,27 +195,17 @@ public class CustomCoordinateSequence implements CoordinateSequence {
             this.m[i] = Double.NaN;
         }
 
-        //Check whether Z coordinateDimension is in use - m cannot be in use.
-        boolean isZPresent = false;
-        for (int i = 0; i < size; i++) {
-            if (this.z[i] != Double.NaN) {
-                isZPresent = true;
-                break;
-            }
-        }
+        //Check whether Z coordinateDimension is in use - m cannot be in use with "jts.geom.Coordinate".
+        boolean isZPresent = checkDimensionality(this.z);
 
         if (isZPresent) {
             this.coordinateDimension = 3;
             this.spatialDimension = 3;
+            this.dimensions = CoordinateSequenceDimensions.XYZ;
         } else {
             this.coordinateDimension = 2;
             this.spatialDimension = 2;
-        }
-
-        if (coordinateDimension == 2) {
             this.dimensions = CoordinateSequenceDimensions.XY;
-        } else {
-            this.dimensions = CoordinateSequenceDimensions.XYZ;
         }
 
     }
@@ -195,21 +218,9 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         this.size = x.length;
 
         //Check the dimensionality
-        boolean isZPresent = false;
-        for (int i = 0; i < size; i++) {
-            if (this.z[i] != Double.NaN) {
-                isZPresent = true;
-                break;
-            }
-        }
+        boolean isZPresent = checkDimensionality(this.z);
 
-        boolean isMPresent = false;
-        for (int i = 0; i < size; i++) {
-            if (this.z[i] != Double.NaN) {
-                isMPresent = true;
-                break;
-            }
-        }
+        boolean isMPresent = checkDimensionality(this.m);
 
         if (!isZPresent && !isMPresent) {
             this.coordinateDimension = 2;
@@ -227,6 +238,16 @@ public class CustomCoordinateSequence implements CoordinateSequence {
             this.coordinateDimension = 4;
             this.spatialDimension = 3;
             this.dimensions = CoordinateSequenceDimensions.XYZM;
+        }
+
+    }
+
+    private boolean checkDimensionality(double[] dim) {
+
+        if (dim.length > 0) {
+            return !Double.isNaN(dim[0]);
+        } else {
+            return false;
         }
 
     }
@@ -459,6 +480,12 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         return sb.toString();
     }
 
+    /**
+     * Reduce precision if decimal places are zero.
+     *
+     * @param value
+     * @return
+     */
     private String minimise(Double value) {
 
         long longValue = value.longValue();

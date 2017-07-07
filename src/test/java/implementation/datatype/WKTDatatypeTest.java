@@ -10,6 +10,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
+import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
 import static org.hamcrest.CoreMatchers.not;
 import org.junit.After;
@@ -50,6 +51,8 @@ public class WKTDatatypeTest {
     public void tearDown() {
     }
 
+    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
+
     /**
      * Test of unparse method, of class WKTDatatype.
      */
@@ -61,9 +64,8 @@ public class WKTDatatypeTest {
 
         WKTDatatype instance = WKTDatatype.THE_WKT_DATATYPE;
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
-        Point point = geometryFactory.createPoint(coord);
+        Point point = GEOMETRY_FACTORY.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);

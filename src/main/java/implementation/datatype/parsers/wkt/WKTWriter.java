@@ -83,6 +83,7 @@ public class WKTWriter {
     }
 
     private static String buildWKT(final String geometryType, final CoordinateSequence coordSeq, final String dimensionString) {
+
         CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) coordSeq;
         String wktText = coordSequence.toWKTText();
 

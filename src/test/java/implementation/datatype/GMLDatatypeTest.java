@@ -14,6 +14,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.gml2.GMLReader;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
+import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,6 +59,8 @@ public class GMLDatatypeTest {
     public void tearDown() {
     }
 
+    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
+
     /**
      * Test of unparse method, of class GMLDatatype.
      */
@@ -70,9 +73,8 @@ public class GMLDatatypeTest {
 
         GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
-        Point point = geometryFactory.createPoint(coord);
+        Point point = GEOMETRY_FACTORY.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 2);
