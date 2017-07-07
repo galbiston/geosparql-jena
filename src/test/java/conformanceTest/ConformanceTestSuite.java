@@ -104,8 +104,8 @@ public class ConformanceTestSuite {
      * @param queryModel - Use InfModel to get the full reasoner support
      * @return - the returned result list
      */
-    public static ArrayList resourceQuery(String queryString, InfModel queryModel) {
-        ArrayList resultList = new ArrayList();
+    public static ArrayList<String> resourceQuery(String queryString, InfModel queryModel) {
+        ArrayList<String> resultList = new ArrayList<>();
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
@@ -133,8 +133,8 @@ public class ConformanceTestSuite {
      * @param queryModel - Use InfModel to get the full reasoner support
      * @return - the returned result list
      */
-    public static ArrayList literalQuery(String queryString, InfModel queryModel) {
-        ArrayList resultList = new ArrayList();
+    public static ArrayList<String> literalQuery(String queryString, InfModel queryModel) {
+        ArrayList<String> resultList = new ArrayList<>();
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
