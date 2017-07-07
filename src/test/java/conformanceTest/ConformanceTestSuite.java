@@ -66,14 +66,15 @@ public class ConformanceTestSuite {
          * Setup inference model.
          */
         DEFAULT_WKT_MODEL = ModelFactory.createDefaultModel();
-        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
+        DEFAULT_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT);
+
         /**
          * The use of OWL reasoner can bind schema with existing test data.
          */
+        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         INF_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        INF_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT);
 
     }
 
@@ -86,14 +87,15 @@ public class ConformanceTestSuite {
          * Setup inference model.
          */
         DEFAULT_GML_MODEL = ModelFactory.createDefaultModel();
-        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
+        DEFAULT_GML_MODEL.read(RDFDataLocationTest.SAMPLE_GML);
+
         /**
          * The use of OWL reasoner can bind schema with existing test data.
          */
+        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         INF_GML_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_GML_MODEL);
-        INF_GML_MODEL.read(RDFDataLocationTest.SAMPLE_GML);
 
     }
 
