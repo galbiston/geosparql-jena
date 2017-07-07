@@ -16,7 +16,6 @@ import org.geotools.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,30 +49,31 @@ public class CRSRegistryTest {
 
     /**
      * Test of addCRS method, of class CRSRegistry.
+     *
+     * @throws org.opengis.referencing.FactoryException
      */
     @Test
-    public void testAddCRS() {
+    public void testAddCRS() throws FactoryException {
         System.out.println("addCRS");
-        String srsURI = "";
-        CoordinateReferenceSystem expResult = null;
+        String srsURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
+        CoordinateReferenceSystem expResult = CRS.decode(srsURI);
         CoordinateReferenceSystem result = CRSRegistry.addCRS(srsURI);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of getCRS method, of class CRSRegistry.
+     *
+     * @throws org.opengis.referencing.FactoryException
      */
     @Test
-    public void testGetCRS() {
+    public void testGetCRS() throws FactoryException {
         System.out.println("getCRS");
-        String srsURI = "";
-        CoordinateReferenceSystem expResult = null;
+        String srsURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
+        CoordinateReferenceSystem expResult = CRS.decode(srsURI);
+
         CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
