@@ -21,9 +21,9 @@ public class GetSRID extends FunctionBase1 {
     public NodeValue exec(NodeValue v) {
 
         try {
-            GeometryWrapper geometry = GeometryWrapper.extract(v);
+            GeometryWrapper geometryWrapper = GeometryWrapper.extract(v);
 
-            String srid = geometry.getSRID();
+            String srid = geometryWrapper.getSRID();
 
             return NodeValue.makeNodeString(srid);
         } catch (DatatypeFormatException dfx) {

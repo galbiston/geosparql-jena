@@ -24,22 +24,20 @@ public class CRSRegistry {
 
     private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
     private static final HashMap<String, UnitsOfMeasure> UNITS_REGISTRY = new HashMap<>();
-    private static final HashMap<String, Integer> SRID_REGISTRY = new HashMap<>();
 
     static {
         String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
-                + "  DATUM[\"World Geodetic System 1984\", \n"
+                + "  DATUM[\"WGS_1984\", \n"
                 + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
                 + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
                 + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
                 + "  UNIT[\"degree\", 0.017453292519943295], \n"
                 + "  AXIS[\"Geodetic longitude\", EAST], \n"
                 + "  AXIS[\"Geodetic latitude\", NORTH], \n"
-                + "  AUTHORITY[\"OGC\"," + Integer.MAX_VALUE + "]]";
+                + "  AUTHORITY[\"OGC\", 4326]]";
 
         //TODO Replace with DefaultGeographicCRS.WGS84?? HAs axis in lon, lat. Returns 4326 on EPSG.
         addCRS(DEFAULT_WKT_CRS_URI, default_CRS_WKT);
-        SRID_REGISTRY.put(DEFAULT_WKT_CRS_URI, Integer.MAX_VALUE);  //Overwrite the looked up SRSID to
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
@@ -53,8 +51,6 @@ public class CRSRegistry {
 
                 UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
                 UNITS_REGISTRY.put(srsURI, unitsOfMeasure);
-
-                SRID_REGISTRY.put(srsURI, CRS.lookupEpsgCode(crs, true));
 
             } catch (FactoryException ex) {
                 LOGGER.error("CRS Parse Error: {} {}", srsURI, ex.getMessage());
@@ -78,8 +74,6 @@ public class CRSRegistry {
                 UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
                 UNITS_REGISTRY.put(srsURI, unitsOfMeasure);
 
-                SRID_REGISTRY.put(srsURI, CRS.lookupEpsgCode(crs, true));
-
             } catch (FactoryException ex) {
                 LOGGER.error("CRS Parse Error: {} {}", srsURI, ex.getMessage());
             }
@@ -99,15 +93,6 @@ public class CRSRegistry {
 
         addCRS(srsURI);
         return UNITS_REGISTRY.get(srsURI);
-    }
-
-    /**
-     * SRID tracked as an integer to allow faster comparison of CRS.
-     */
-    public static final Integer getSRID(String srsURI) {
-
-        addCRS(srsURI);
-        return SRID_REGISTRY.get(srsURI);
     }
 
 }

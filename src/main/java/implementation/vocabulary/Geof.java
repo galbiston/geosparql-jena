@@ -57,6 +57,6 @@ public class Geof {
     public static final String DIFFERENCE_NAME = GEOF_URI + "difference";
     public static final String BOUNDARY_NAME = GEOF_URI + "boundary";
     public static final String CONVEXHULL_NAME = GEOF_URI + "convexHull";
-    public static final String GETSRID_NAME = GEOF_URI + "getsrid";
+    public static final String GETSRID_NAME = GEOF_URI + "getSRID";
 
 }

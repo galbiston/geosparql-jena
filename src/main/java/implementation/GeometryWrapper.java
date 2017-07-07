@@ -40,7 +40,6 @@ public class GeometryWrapper {
     private final GeoSerialisationEnum serialisation;
     private final CoordinateReferenceSystem crs;
     private final UnitsOfMeasure unitsOfMeasure;
-    private final Integer sridInt;
     private final DimensionInfo dimensionInfo;
 
     //TODO Handling of axis order. CRS.decode(crs, true) actually affects the x,y order??
@@ -51,7 +50,6 @@ public class GeometryWrapper {
 
         this.crs = CRSRegistry.addCRS(srsURI);
         this.unitsOfMeasure = CRSRegistry.getUnits(srsURI);
-        this.sridInt = CRSRegistry.getSRID(srsURI);
 
         this.dimensionInfo = dimensionInfo;
 
@@ -67,7 +65,6 @@ public class GeometryWrapper {
 
         this.crs = geometryWrapper.crs;
         this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
-        this.sridInt = geometryWrapper.sridInt;
         this.dimensionInfo = geometryWrapper.dimensionInfo;
     }
 
@@ -75,7 +72,7 @@ public class GeometryWrapper {
 
         GeometryWrapper transformedCRSGeometry;
         try {
-            if (!sridInt.equals(sourceCRSGeometry.sridInt)) {
+            if (!srsURI.equals(sourceCRSGeometry.srsURI)) {
                 CoordinateReferenceSystem sourceCRS = sourceCRSGeometry.getCRS();
 
                 Geometry sourceGeometry = sourceCRSGeometry.geometry;
@@ -85,7 +82,7 @@ public class GeometryWrapper {
 
                 transformedCRSGeometry = new GeometryWrapper(targetGeometry, srsURI, serialisation, dimensionInfo);
             } else {
-                transformedCRSGeometry = new GeometryWrapper(sourceCRSGeometry);
+                transformedCRSGeometry = sourceCRSGeometry;
             }
 
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
@@ -109,6 +106,16 @@ public class GeometryWrapper {
     }
 
     public String getSrsURI() {
+        return srsURI;
+    }
+
+    /**
+     * getSRID used in GeoSPARQL Standard page 22 to refer to srsURI. i.e.
+     * getSrsURI and getSRID are the same.
+     *
+     * @return
+     */
+    public String getSRID() {
         return srsURI;
     }
 
@@ -159,10 +166,6 @@ public class GeometryWrapper {
 
         Geometry geo = this.geometry.getEnvelope();
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
-    }
-
-    public String getSRID() {
-        return CRS.toSRS(crs);
     }
 
     public GeometryWrapper intersection(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -320,14 +323,13 @@ public class GeometryWrapper {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.geometry);
-        hash = 59 * hash + Objects.hashCode(this.srsURI);
-        hash = 59 * hash + Objects.hashCode(this.serialisation);
-        hash = 59 * hash + Objects.hashCode(this.crs);
-        hash = 59 * hash + Objects.hashCode(this.unitsOfMeasure);
-        hash = 59 * hash + Objects.hashCode(this.sridInt);
-        hash = 59 * hash + Objects.hashCode(this.dimensionInfo);
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.geometry);
+        hash = 79 * hash + Objects.hashCode(this.srsURI);
+        hash = 79 * hash + Objects.hashCode(this.serialisation);
+        hash = 79 * hash + Objects.hashCode(this.crs);
+        hash = 79 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 79 * hash + Objects.hashCode(this.dimensionInfo);
         return hash;
     }
 
@@ -358,15 +360,12 @@ public class GeometryWrapper {
         if (!Objects.equals(this.unitsOfMeasure, other.unitsOfMeasure)) {
             return false;
         }
-        if (!Objects.equals(this.sridInt, other.sridInt)) {
-            return false;
-        }
         return Objects.equals(this.dimensionInfo, other.dimensionInfo);
     }
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", sridInt=" + sridInt + ", dimensionInfo=" + dimensionInfo + '}';
+        return "GeometryWrapper{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", dimensionInfo=" + dimensionInfo + '}';
     }
 
 }

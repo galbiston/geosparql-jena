@@ -8,7 +8,8 @@ package conformanceTest.geometryextension;
 import static conformanceTest.ConformanceTestSuite.literalQuery;
 import conformanceTest.RDFDataLocation;
 import static implementation.functionregistry.RegistryLoader.load;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -28,16 +29,16 @@ import org.junit.Test;
  *
  * A.3.2.2 /conf/geometry-extension/wkt-literal-default-srs
  *
- * Requirement: /req/geometry-extension/wkt-literal-default-srs
- * The URI <http://www.opengis.net/def/crs/OGC/1.3/CRS84> shall be
- * assumed as the spatial reference system for geo:wktLiterals that do
- * not specify an explicit spatial reference system URI.
+ * Requirement: /req/geometry-extension/wkt-literal-default-srs The URI
+ * <http://www.opengis.net/def/crs/OGC/1.3/CRS84> shall be assumed as the
+ * spatial reference system for geo:wktLiterals that do not specify an explicit
+ * spatial reference system URI.
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: verify that queries involving geo:wktLiteral values
- * without an explicit encoded spatial reference system URI return the
- * correct result for a test dataset.
+ * b.) Test method: verify that queries involving geo:wktLiteral values without
+ * an explicit encoded spatial reference system URI return the correct result
+ * for a test dataset.
  *
  * c.) Reference: Clause 8.5.1 Req 11
  *
@@ -80,32 +81,27 @@ public class WktLiteralDefaultSrsTest {
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://www.opengis.net/def/crs/OGC/1.3/CRS84");
+        List<String> expectedList = Arrays.asList("http://www.opengis.net/def/crs/OGC/1.3/CRS84");
 
-        String Q1 = "SELECT ((geof:getsrid ( ?aWKT )) AS ?srid) WHERE{"
+        String Q1 = "SELECT ((geof:getSRID( ?aWKT )) AS ?srid) WHERE{"
                 + " ex:B ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        this.actualList = literalQuery(Q1, TEST_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        List<String> actualList = literalQuery(Q1, TEST_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", expectedList, actualList);
     }
 
 }
