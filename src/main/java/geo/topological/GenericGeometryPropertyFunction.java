@@ -36,6 +36,7 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
         Op opFinal;
 
+        //TODO only checking that the subject is bound when the subject or both could be bound/unbound.
         if (object.isVariable()) {
             opFinal = unboundPattern(subject, predicate, object);
         } else {
