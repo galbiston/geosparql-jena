@@ -86,14 +86,14 @@ public class CRSRegistryTest {
             String srsURI = DEFAULT_WKT_CRS_URI;
 
             String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
-                    + "  DATUM[\"World Geodetic System 1984\", \n"
+                    + "  DATUM[\"WGS_1984\", \n"
                     + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
                     + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
                     + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
                     + "  UNIT[\"degree\", 0.017453292519943295], \n"
                     + "  AXIS[\"Geodetic longitude\", EAST], \n"
                     + "  AXIS[\"Geodetic latitude\", NORTH], \n"
-                    + "  AUTHORITY[\"OGC\"," + Integer.MAX_VALUE + "]]";
+                    + "  AUTHORITY[\"OGC\", 4326]]";
 
             CoordinateReferenceSystem expResult = CRS.parseWKT(default_CRS_WKT);
             CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
