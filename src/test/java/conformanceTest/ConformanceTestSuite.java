@@ -118,7 +118,7 @@ public class ConformanceTestSuite {
                 while (varIterator.hasNext()) {
                     String varName = (String) varIterator.next();
                     Resource resource = solution.getResource(varName);
-                    System.out.println("this.expectedList.add(\"" + resource.toString() + "\");");
+                    //System.out.println("this.expectedList.add(\"" + resource.toString() + "\");");
                     resultList.add(resource.toString());
                 }
             }
