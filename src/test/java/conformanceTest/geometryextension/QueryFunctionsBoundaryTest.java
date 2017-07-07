@@ -7,7 +7,8 @@ package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -21,23 +22,21 @@ import org.junit.Test;
  *
  * A.3.1.4 /conf/geometry-extension/query-functions
  *
- * Requirement: /req/geometry-extension/query-functions
- * Implementations shall support geof:distance, geof:buffer,
- * geof:convexHull, geof:intersection, geof:union, geof:difference,
- * geof:symDifference, geof:envelope and geof:boundary as SPARQL
- * extension functions, consistent with the definitions of the
- * corresponding functions (distance, buffer, convexHull, intersection,
- * difference, symDifference, envelope and boundary respectively) in
- * Simple Features [ISO 19125-1].
+ * Requirement: /req/geometry-extension/query-functions Implementations shall
+ * support geof:distance, geof:buffer, geof:convexHull, geof:intersection,
+ * geof:union, geof:difference, geof:symDifference, geof:envelope and
+ * geof:boundary as SPARQL extension functions, consistent with the definitions
+ * of the corresponding functions (distance, buffer, convexHull, intersection,
+ * difference, symDifference, envelope and boundary respectively) in Simple
+ * Features [ISO 19125-1].
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: Verify that a set of SPARQL queries involving each
- * of the following functions returns the correct result for a test
- * dataset when using the specified serialization and version:
- * geof:distance, geof:buffer, geof:convexHull, geof:intersection,
- * geof:union, geof:difference, geof:symDifference, geof:envelope and
- * geof:boundary.
+ * b.) Test method: Verify that a set of SPARQL queries involving each of the
+ * following functions returns the correct result for a test dataset when using
+ * the specified serialization and version: geof:distance, geof:buffer,
+ * geof:convexHull, geof:intersection, geof:union, geof:difference,
+ * geof:symDifference, geof:envelope and geof:boundary.
  *
  * c.) Reference: Clause 8.7 Req 19
  *
@@ -58,25 +57,18 @@ public class QueryFunctionsBoundaryTest {
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
     }
 
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        List<String> expectedList = Arrays.asList("http://example.org/ApplicationSchema#C");
 
         String Q1 = "SELECT ?place WHERE{ "
                 + "?place ex:hasExactGeometry ?aGeom . "
@@ -85,8 +77,8 @@ public class QueryFunctionsBoundaryTest {
                 + "BIND ((geof:boundary( \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>)) AS ?bBoundary). "
                 + "FILTER ( geof:sfEquals(?aBoundary, ?bBoundary)) "
                 + " }";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", expectedList, actualList);
     }
 
 }

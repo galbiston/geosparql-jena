@@ -7,6 +7,9 @@ package implementation.datatype.parsers.wkt;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 import implementation.DimensionInfo;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
@@ -374,4 +377,120 @@ public class WKTGeometryBuilderTest {
         System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of buildPointEmpty method, of class WKTGeometryBuilder.
+     */
+    @Test
+    public void testBuildPointEmpty() {
+        System.out.println("buildPointEmpty");
+        WKTGeometryBuilder instance = WKTGeometryBuilder.extract("POINT EMPTY");
+        Geometry result = instance.getGeometry();
+
+        CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "");
+        Geometry expResult = GEOMETRY_FACTORY.createPoint(pointSequence);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildLineStringEmpty method, of class WKTGeometryBuilder.
+     */
+    @Test
+    public void testBuildLineStringEmpty() {
+        System.out.println("buildLineEmpty");
+        WKTGeometryBuilder instance = WKTGeometryBuilder.extract("LINESTRING EMPTY");
+        Geometry result = instance.getGeometry();
+
+        CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "");
+        Geometry expResult = GEOMETRY_FACTORY.createLineString(pointSequence);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildPolygonEmpty method, of class WKTGeometryBuilder.
+     */
+    @Test
+    public void testBuildPolygonEmpty() {
+        System.out.println("buildPolygonEmpty");
+        WKTGeometryBuilder instance = WKTGeometryBuilder.extract("POLYGON EMPTY");
+        Geometry result = instance.getGeometry();
+
+        CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "");
+        Geometry expResult = GEOMETRY_FACTORY.createPolygon(pointSequence);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildMultiPointEmpty method, of class WKTGeometryBuilder.
+     */
+    @Test
+    public void testBuildMultiPointEmpty() {
+        System.out.println("buildMultiPointEmpty");
+        WKTGeometryBuilder instance = WKTGeometryBuilder.extract("MULTIPOINT EMPTY");
+        Geometry result = instance.getGeometry();
+
+        Geometry expResult = GEOMETRY_FACTORY.createMultiPoint(new Point[0]);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildMultiLineString method, of class WKTGeometryBuilder.
+     */
+    @Test
+    public void testBuildMultiLineStringEmpty() {
+        System.out.println("buildMultiLineStringEmpty");
+        WKTGeometryBuilder instance = WKTGeometryBuilder.extract("MULTILINESTRING EMPTY");
+        Geometry result = instance.getGeometry();
+
+        Geometry expResult = GEOMETRY_FACTORY.createMultiLineString(new LineString[0]);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildMultiPolygonEmpty method, of class WKTGeometryBuilder.
+     */
+    @Test
+    public void testBuildMultiPolygonEmpty() {
+        System.out.println("buildMultiPolygonEmpty");
+        WKTGeometryBuilder instance = WKTGeometryBuilder.extract("MULTIPOLYGON EMPTY");
+        Geometry result = instance.getGeometry();
+
+        Geometry expResult = GEOMETRY_FACTORY.createMultiPolygon(new Polygon[0]);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildGeometryCollectionEmpty method, of class WKTGeometryBuilder.
+     */
+    @Test
+    public void testBuildGeometryCollectionEmpty() {
+        System.out.println("buildGeometryCollectionEmpty");
+        WKTGeometryBuilder instance = WKTGeometryBuilder.extract("GEOMETRYCOLLECTION EMPTY");
+        Geometry result = instance.getGeometry();
+
+        Geometry expResult = GEOMETRY_FACTORY.createGeometryCollection(new Geometry[0]);
+
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
 }

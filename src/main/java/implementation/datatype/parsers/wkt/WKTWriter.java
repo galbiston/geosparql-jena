@@ -50,6 +50,7 @@ public class WKTWriter {
                 wktString = buildWKT("POINT", point.getCoordinateSequence(), dimensionString);
                 break;
             case "LineString":
+            case "LinearRing":
                 LineString lineString = (LineString) geometry;
                 wktString = buildWKT("LINESTRING", lineString.getCoordinateSequence(), dimensionString);
                 break;

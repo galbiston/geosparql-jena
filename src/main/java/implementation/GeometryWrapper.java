@@ -262,7 +262,7 @@ public class GeometryWrapper {
                 datatype = GMLDatatype.THE_GML_DATATYPE;
                 break;
             default:
-                throw new DatatypeFormatException("Serilisation is not WKT or GML.");
+                throw new DatatypeFormatException("Serialisation is not WKT or GML.");
         }
 
         lexicalForm = datatype.unparse(this);

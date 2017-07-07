@@ -99,6 +99,10 @@ public class WKTGeometryBuilder {
                 CustomCoordinateSequence lineSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
                 geo = GEOMETRY_FACTORY.createLineString(lineSequence);
                 break;
+            case "linearring":
+                CustomCoordinateSequence linearSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                geo = GEOMETRY_FACTORY.createLinearRing(linearSequence);
+                break;
             case "polygon":
                 geo = buildPolygon(coordinates);
                 break;
@@ -107,9 +111,7 @@ public class WKTGeometryBuilder {
                 geo = GEOMETRY_FACTORY.createMultiPoint(multiPointSequence);
                 break;
             case "multilinestring":
-                String[] splitCoordinates = splitCoordinates(coordinates);
-                LineString[] lineStrings = splitLineStrings(splitCoordinates);
-                geo = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
+                geo = buildMultiLineString(coordinates);
                 break;
             case "multipolygon":
                 geo = buildMultiPolygon(coordinates);
@@ -129,8 +131,12 @@ public class WKTGeometryBuilder {
     }
 
     private Geometry buildGeometryCollection(String coordinates) throws ParseException {
-        //Split coordinates
 
+        if (coordinates.isEmpty()) {
+            return GEOMETRY_FACTORY.createGeometryCollection(new Geometry[0]);
+        }
+
+        //Split coordinates
         String tidied = coordinates.substring(1, coordinates.length() - 1);
         tidied = tidied.replaceAll("[\\ ]?,[\\ ]?", ","); //Remove spaces around commas
         String[] partCoordinates = tidied.split("\\),(?=[^\\(])"); //Split whenever there is a ), but not ),(
@@ -144,7 +150,23 @@ public class WKTGeometryBuilder {
         return GEOMETRY_FACTORY.createGeometryCollection(geometries);
     }
 
+    private Geometry buildMultiLineString(String coordinates) {
+
+        if (coordinates.isEmpty()) {
+            return GEOMETRY_FACTORY.createMultiLineString(new LineString[0]);
+        }
+
+        String[] splitCoordinates = splitCoordinates(coordinates);
+        LineString[] lineStrings = splitLineStrings(splitCoordinates);
+        return GEOMETRY_FACTORY.createMultiLineString(lineStrings);
+    }
+
     private Geometry buildMultiPolygon(String coordinates) {
+
+        if (coordinates.isEmpty()) {
+            return GEOMETRY_FACTORY.createMultiPolygon(new Polygon[0]);
+        }
+
         String trimmed = coordinates.replace(")) ,", ")),");
         String[] multiCoordinates = trimmed.split("\\)\\),");
         Polygon[] polygons = new Polygon[multiCoordinates.length];
@@ -219,21 +241,21 @@ public class WKTGeometryBuilder {
         String dimension = "";
         String coordinates = "";
 
-        if (!wktText.isEmpty()) {
+        if (!wktText.equals("")) {
 
             wktText = wktText.trim();
             wktText = wktText.toLowerCase();
 
-            int coordinatesStart = wktText.indexOf("(");
+            String[] parts = wktText.split("\\(", 2);
 
-            coordinates = wktText.substring(coordinatesStart);
-
-            //Check for "empty" keyword and remove.
-            if (coordinates.equals("empty")) {
-                coordinates = "";
+            String remainder;
+            if (parts.length == 1) { //Check for "empty" keyword and remove.
+                remainder = parts[0].replace("empty", "").trim();
+            } else {
+                int coordinatesStart = wktText.indexOf("(");
+                coordinates = wktText.substring(coordinatesStart);
+                remainder = parts[0].trim();
             }
-
-            String remainder = wktText.substring(0, coordinatesStart).trim();
 
             int firstSpace = remainder.indexOf(" ");
 
