@@ -7,7 +7,8 @@ package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.*;
 import static implementation.functionregistry.RegistryLoader.load;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -21,14 +22,14 @@ import org.junit.Test;
  *
  * A.3.1.2 /conf/geometry-extension/feature-properties
  *
- * Requirement: /req/geometry-extension/feature-properties
- * Implementations shall allow the properties geo:hasGeometry and
- * geo:hasDefaultGeometry to be used in SPARQL graph patterns.
+ * Requirement: /req/geometry-extension/feature-properties Implementations shall
+ * allow the properties geo:hasGeometry and geo:hasDefaultGeometry to be used in
+ * SPARQL graph patterns.
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: Verify that queries involving these properties
- * return the correct result for a test dataset.
+ * b.) Test method: Verify that queries involving these properties return the
+ * correct result for a test dataset.
  *
  * c.) Reference: Clause 8.3 Req 8
  *
@@ -49,35 +50,40 @@ public class FeaturePropertiesTest {
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
-    public void positiveTest() {
+    public void testHasGeometry() {
 
-        this.expectedList.add("http://example.org/ApplicationSchema#A");
+        List<String> expectedList = Arrays.asList("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
 
-        String Q1 = "SELECT ?place WHERE{"
+        String Q1 = "SELECT ?aWKT WHERE{"
                 + " ex:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + "?place geo:hasDefaultGeometry ?Geom ."
-                + " ?Geom geo:asWKT ?WKT ."
-                + "?WKT geo:sfEquals ?aWKT ."
                 + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        List<String> actualList = literalQuery(Q1, INF_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", expectedList, actualList);
+    }
+
+    @Test
+    public void testHasDefaultGeometry() {
+
+        List<String> expectedList = Arrays.asList("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+
+        String Q1 = "SELECT ?aWKT WHERE{"
+                + " ex:A geo:hasDefaultGeometry ?aGeom ."
+                + " ?aGeom geo:asWKT ?aWKT ."
+                + "}";
+        List<String> actualList = literalQuery(Q1, INF_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", expectedList, actualList);
     }
 
 }
