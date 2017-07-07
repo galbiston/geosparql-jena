@@ -128,7 +128,7 @@ public class WKTGeometryBuilder {
         return unclean.replace(")", "").replace("(", "").trim();
     }
 
-    private Geometry buildGeometryCollection(String coordinates) {
+    private Geometry buildGeometryCollection(String coordinates) throws ParseException {
         //Split coordinates
 
         String tidied = coordinates.substring(1, coordinates.length() - 1);
@@ -213,13 +213,20 @@ public class WKTGeometryBuilder {
 
     }
 
-    public static WKTGeometryBuilder extract(String wktText) {
+    public static WKTGeometryBuilder extract(String wktText) throws ParseException {
+
+        if (wktText.isEmpty()) {
+            throw new ParseException("WKT string is empty.");
+        }
+
         wktText = wktText.trim();
         wktText = wktText.toLowerCase();
 
         int coordinatesStart = wktText.indexOf("(");
+
         String coordinates = wktText.substring(coordinatesStart);
 
+        //Check for "empty" keyword and remove.
         if (coordinates.equals("empty")) {
             coordinates = "";
         }
