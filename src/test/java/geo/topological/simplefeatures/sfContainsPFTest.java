@@ -5,7 +5,7 @@
  */
 package geo.topological.simplefeatures;
 
-import conformanceTest.RDFDataLocation;
+import conformanceTest.RDFDataLocationTest;
 import static implementation.functionregistry.RegistryLoader.load;
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -59,7 +59,7 @@ public class sfContainsPFTest {
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         INF_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        INF_WKT_MODEL.read(RDFDataLocation.SAMPLE_WKT);
+        INF_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT);
     }
 
     @AfterClass

@@ -6,7 +6,7 @@
 package geof.topological.simplefeatures;
 
 import geof.topological.simplefeatures.sfContainsEF;
-import conformanceTest.RDFDataLocation;
+import conformanceTest.RDFDataLocationTest;
 import implementation.support.Prefixes;
 import implementation.vocabulary.Geof;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class sfContainsEFTest {
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         INF_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        INF_WKT_MODEL.read(RDFDataLocation.SAMPLE_WKT);
+        INF_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT);
 
     }
 

@@ -6,7 +6,7 @@
 package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import conformanceTest.RDFDataLocation;
+import conformanceTest.RDFDataLocationTest;
 import static implementation.functionregistry.RegistryLoader.load;
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.Model;
@@ -16,10 +16,10 @@ import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.util.FileManager;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -27,13 +27,13 @@ import org.junit.Test;
  *
  * * A.3.3.2 /conf/geometry-extension/gml-literal-empty
  *
- * Requirement: /req/geometry-extension/gml-literal-empty
- * An empty geo:gmlLiteral shall be interpreted as an empty geometry.
+ * Requirement: /req/geometry-extension/gml-literal-empty An empty
+ * geo:gmlLiteral shall be interpreted as an empty geometry.
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: verify that queries involving empty geo:gmlLiteral
- * values return the correct result for a test dataset.
+ * b.) Test method: verify that queries involving empty geo:gmlLiteral values
+ * return the correct result for a test dataset.
  *
  * c.) Reference: Clause 8.6.1 Req 16
  *
@@ -69,7 +69,7 @@ public class GmlLiteralEmptyTest {
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         TEST_GML_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_GML_MODEL);
-        TEST_GML_MODEL.read(RDFDataLocation.SAMPLE_GML_EMPTY);
+        TEST_GML_MODEL.read(RDFDataLocationTest.SAMPLE_GML_EMPTY);
     }
 
     @AfterClass

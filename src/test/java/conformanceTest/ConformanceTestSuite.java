@@ -73,7 +73,7 @@ public class ConformanceTestSuite {
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         INF_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        INF_WKT_MODEL.read(RDFDataLocation.SAMPLE_WKT);
+        INF_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT);
 
     }
 
@@ -93,7 +93,7 @@ public class ConformanceTestSuite {
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         INF_GML_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_GML_MODEL);
-        INF_GML_MODEL.read(RDFDataLocation.SAMPLE_GML);
+        INF_GML_MODEL.read(RDFDataLocationTest.SAMPLE_GML);
 
     }
 
