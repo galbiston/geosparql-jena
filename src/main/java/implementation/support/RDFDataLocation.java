@@ -13,27 +13,16 @@ package implementation.support;
 public class RDFDataLocation {
 
     /**
-     * Sample Data - small and quick
-     */
-    public static final String SAMPLE = RDFDataLocation.class.getClassLoader().getResource("dataset/testSample.rdf").toString();
-
-    /**
      * Sample Data in WKT - small and quick
+     *
+     * @deprecated
      */
     public static final String SAMPLE_WKT = RDFDataLocation.class.getClassLoader().getResource("dataset/sampleWKT.rdf").toString();
 
     /**
-     * ITN data - middle
-     */
-    public static final String ITNDATA = RDFDataLocation.class.getClassLoader().getResource("dataset/itn.rdf").toString();
-
-    /**
-     * Topological data - large
-     */
-    public static final String TOPODATA = RDFDataLocation.class.getClassLoader().getResource("dataset/topo.rdf").toString();
-
-    /**
      * Linked geodata - extremely large
+     *
+     * @deprecated
      */
     public static final String GEODATA = RDFDataLocation.class.getClassLoader().getResource("dataset/linkedgeodata.nt").toString();
 
@@ -41,8 +30,5 @@ public class RDFDataLocation {
      * GeoSPARQL schema
      */
     public static final String SCHEMA = RDFDataLocation.class.getClassLoader().getResource("schema/geosparql_vocab_all.rdf").toString();
-    /**
-     * GeoSPARQL schema
-     */
-    public static final String GEOSPARQL_SAMPLE = RDFDataLocation.class.getClassLoader().getResource("dataset/geosparqlSample.rdf").toString();
+
 }
