@@ -215,33 +215,35 @@ public class WKTGeometryBuilder {
 
     public static WKTGeometryBuilder extract(String wktText) throws ParseException {
 
-        if (wktText.isEmpty()) {
-            throw new ParseException("WKT string is empty.");
-        }
+        String shape = "point";
+        String dimension = "";
+        String coordinates = "";
 
-        wktText = wktText.trim();
-        wktText = wktText.toLowerCase();
+        if (!wktText.isEmpty()) {
 
-        int coordinatesStart = wktText.indexOf("(");
+            wktText = wktText.trim();
+            wktText = wktText.toLowerCase();
 
-        String coordinates = wktText.substring(coordinatesStart);
+            int coordinatesStart = wktText.indexOf("(");
 
-        //Check for "empty" keyword and remove.
-        if (coordinates.equals("empty")) {
-            coordinates = "";
-        }
+            coordinates = wktText.substring(coordinatesStart);
 
-        String remainder = wktText.substring(0, coordinatesStart).trim();
+            //Check for "empty" keyword and remove.
+            if (coordinates.equals("empty")) {
+                coordinates = "";
+            }
 
-        int firstSpace = remainder.indexOf(" ");
-        String shape;
-        String dimension;
-        if (firstSpace != -1) {
-            shape = remainder.substring(0, firstSpace);
-            dimension = remainder.substring(firstSpace + 1);
-        } else {
-            shape = remainder;
-            dimension = "";
+            String remainder = wktText.substring(0, coordinatesStart).trim();
+
+            int firstSpace = remainder.indexOf(" ");
+
+            if (firstSpace != -1) {
+                shape = remainder.substring(0, firstSpace);
+                dimension = remainder.substring(firstSpace + 1);
+            } else {
+                shape = remainder;
+                //dimension = ""; //Dimension already set to empty, but kept as a reminder.
+            }
         }
 
         return new WKTGeometryBuilder(shape, dimension, coordinates);

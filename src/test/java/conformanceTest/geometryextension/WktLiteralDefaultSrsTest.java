@@ -6,7 +6,7 @@
 package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.literalQuery;
-import conformanceTest.RDFDataLocation;
+import conformanceTest.RDFDataLocationTest;
 import static implementation.functionregistry.RegistryLoader.load;
 import java.util.Arrays;
 import java.util.List;
@@ -18,10 +18,10 @@ import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.util.FileManager;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -74,7 +74,7 @@ public class WktLiteralDefaultSrsTest {
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         TEST_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        TEST_WKT_MODEL.read(RDFDataLocation.SAMPLE_WKT_EMPTY);
+        TEST_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT_EMPTY);
     }
 
     @AfterClass

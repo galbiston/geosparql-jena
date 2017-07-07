@@ -6,9 +6,10 @@
 package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.literalQuery;
-import conformanceTest.RDFDataLocation;
+import conformanceTest.RDFDataLocationTest;
 import static implementation.functionregistry.RegistryLoader.load;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -28,14 +29,13 @@ import org.junit.Test;
  *
  * A.3.2.4 /conf/geometry-extension/wkt-literal-empty
  *
- * Requirement: /req/geometry-extension/wkt-literal-empty
- * An empty RDFS Literal of type geo:wktLiteral shall be interpreted as
- * an empty geometry.
+ * Requirement: /req/geometry-extension/wkt-literal-empty An empty RDFS Literal
+ * of type geo:wktLiteral shall be interpreted as an empty geometry.
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: verify that queries involving empty geo:wktLiteral
- * values return the correct result for a test dataset.
+ * b.) Test method: verify that queries involving empty geo:wktLiteral values
+ * return the correct result for a test dataset.
  *
  * c.) Reference: Clause 8.5.1 Req 13
  *
@@ -71,39 +71,47 @@ public class WktLiteralEmptyTest {
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
         TEST_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        TEST_WKT_MODEL.read(RDFDataLocation.SAMPLE_WKT_EMPTY);
+        TEST_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT_EMPTY);
     }
 
     @AfterClass
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
-    public void positiveTest() {
+    public void geometryPositiveTest() {
 
-        this.expectedList.add("");
+        List<String> expectedList = Arrays.asList("true^^http://www.w3.org/2001/XMLSchema#boolean");
 
         String Q1 = "SELECT ?aWKT WHERE{"
-                + " ex:A ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
+                + " ex:A ex:hasExactGeometry ?geom ."
+                + " ?geom geo:isEmpty ?aWKT ."
                 + "}";
-        this.actualList = literalQuery(Q1, TEST_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        List<String> actualList = literalQuery(Q1, TEST_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", expectedList, actualList);
+    }
+
+    @Test
+    public void geometryNegativeTest() {
+
+        List<String> expectedList = Arrays.asList("false^^http://www.w3.org/2001/XMLSchema#boolean");
+
+        String Q1 = "SELECT ?aWKT WHERE{"
+                + " ex:B ex:hasExactGeometry ?geom ."
+                + " ?geom geo:isEmpty ?aWKT ."
+                + "}";
+        List<String> actualList = literalQuery(Q1, TEST_WKT_MODEL);
+        assertEquals("failure - result arrays list not same", expectedList, actualList);
     }
 
 }
