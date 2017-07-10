@@ -77,4 +77,8 @@ public class DimensionInfo {
         return "DimensionInfo{" + "coordinate=" + coordinate + ", spatial=" + spatial + ", topological=" + topological + '}';
     }
 
+    public static DimensionInfo xyPoint() {
+        return new DimensionInfo(2, 2, 0);
+    }
+
 }
