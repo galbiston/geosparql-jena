@@ -65,6 +65,7 @@ public class UnitsOfMeasure {
      * @param sourceUnitsOfMeasure
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static final double conversion(double targetDistance, String targetDistanceUnitURI, UnitsOfMeasure sourceUnitsOfMeasure) throws ConversionException {
 
         Unit sourceUnit = sourceUnitsOfMeasure.unit;
