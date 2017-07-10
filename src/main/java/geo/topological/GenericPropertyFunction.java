@@ -80,8 +80,8 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         bp.add(new Triple(subject, RDF.type.asNode(), Geo.FEATURE_NODE));
         bp.add(new Triple(object, RDF.type.asNode(), Geo.FEATURE_NODE));
 
-        bp.add(new Triple(subject, Geo.HAS_GEOMETRY_NODE, subjectGeometryVar));
-        bp.add(new Triple(object, Geo.HAS_GEOMETRY_NODE, objectGeometryVar));
+        bp.add(new Triple(subject, Geo.HAS_DEFAULT_GEOMETRY_NODE, subjectGeometryVar));
+        bp.add(new Triple(object, Geo.HAS_DEFAULT_GEOMETRY_NODE, objectGeometryVar));
 
         bp.add(new Triple(subjectGeometryVar, Geo.HAS_SERIALIZATION_NODE, subjectLiteralVar));
         bp.add(new Triple(objectGeometryVar, Geo.HAS_SERIALIZATION_NODE, objectLiteralVar));
@@ -103,7 +103,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         bp.add(new Triple(subject, RDF.type.asNode(), Geo.FEATURE_NODE));
         bp.add(new Triple(object, RDF.type.asNode(), Geo.GEOMETRY_NODE));
 
-        bp.add(new Triple(subject, Geo.HAS_GEOMETRY_NODE, subjectGeometryVar));
+        bp.add(new Triple(subject, Geo.HAS_DEFAULT_GEOMETRY_NODE, subjectGeometryVar));
 
         bp.add(new Triple(subjectGeometryVar, Geo.HAS_SERIALIZATION_NODE, subjectLiteralVar));
         bp.add(new Triple(object, Geo.HAS_SERIALIZATION_NODE, objectLiteralVar));
@@ -125,7 +125,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         bp.add(new Triple(subject, RDF.type.asNode(), Geo.GEOMETRY_NODE));
         bp.add(new Triple(object, RDF.type.asNode(), Geo.FEATURE_NODE));
 
-        bp.add(new Triple(object, Geo.HAS_GEOMETRY_NODE, objectGeometryVar));
+        bp.add(new Triple(object, Geo.HAS_DEFAULT_GEOMETRY_NODE, objectGeometryVar));
 
         bp.add(new Triple(subject, Geo.HAS_SERIALIZATION_NODE, subjectLiteralVar));
         bp.add(new Triple(objectGeometryVar, Geo.HAS_SERIALIZATION_NODE, objectLiteralVar));
