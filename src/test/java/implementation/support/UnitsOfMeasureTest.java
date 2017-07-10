@@ -120,7 +120,7 @@ public class UnitsOfMeasureTest {
         String targetDistanceUnitURI = "http://www.opengis.net/def/uom/OGC/1.0/degree";
         CoordinateReferenceSystem crs;
 
-        crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/4326");  //WHS84 degrees non-projected
+        crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/4326");  //WGS84 degrees non-projected
 
         UnitsOfMeasure sourceUnitsOfMeasure = new UnitsOfMeasure(crs);
         double expResult = 100.0;
@@ -164,7 +164,7 @@ public class UnitsOfMeasureTest {
         String targetDistanceUnitURI = "http://www.opengis.net/def/uom/OGC/1.0/degree";
         CoordinateReferenceSystem crs;
 
-        crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/27700");  //OSGB netres projected
+        crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/27700");  //OSGB metres projected
 
         UnitsOfMeasure sourceUnitsOfMeasure = new UnitsOfMeasure(crs);
 
