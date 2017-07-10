@@ -5,7 +5,6 @@
  */
 package implementation;
 
-import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
 import implementation.support.UnitsOfMeasure;
 import java.util.HashMap;
 import org.geotools.referencing.CRS;
@@ -25,6 +24,16 @@ public class CRSRegistry {
     private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
     private static final HashMap<String, UnitsOfMeasure> UNITS_REGISTRY = new HashMap<>();
 
+    /**
+     * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
+     * reversed.
+     */
+    public static final String DEFAULT_WKT_CRS = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+    public static final String OSGB_CRS = "http://www.opengis.net/def/crs/EPSG/0/27700";
+
+    public static final String WGS84_CRS = "http://www.opengis.net/def/crs/EPSG/0/4326";
+
     static {
         String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
                 + "  DATUM[\"WGS_1984\", \n"
@@ -37,7 +46,7 @@ public class CRSRegistry {
                 + "  AUTHORITY[\"OGC\", 4326]]";
 
         //TODO Replace with DefaultGeographicCRS.WGS84?? HAs axis in lon, lat. Returns 4326 on EPSG.
-        addCRS(DEFAULT_WKT_CRS_URI, default_CRS_WKT);
+        addCRS(DEFAULT_WKT_CRS, default_CRS_WKT);
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
@@ -93,18 +102,6 @@ public class CRSRegistry {
 
         addCRS(srsURI);
         return UNITS_REGISTRY.get(srsURI);
-    }
-
-    public static final String wktDefaultCRS() {
-        return "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
-    }
-
-    public static final String osgbCRS() {
-        return "http://www.opengis.net/def/crs/EPSG/0/27700";
-    }
-
-    public static final String wgs84CRS() {
-        return "http://www.opengis.net/def/crs/EPSG/0/4326";
     }
 
 }

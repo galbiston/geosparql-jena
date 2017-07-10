@@ -68,6 +68,16 @@ public class GeometryWrapper {
         this.dimensionInfo = geometryWrapper.dimensionInfo;
     }
 
+    /**
+     * Transforms, if necessary, the provided GeometryWrapper according to the
+     * current GeometryWrapper CRS.
+     *
+     * @param sourceCRSGeometry
+     * @return
+     * @throws FactoryException
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     */
     public GeometryWrapper checkCRS(GeometryWrapper sourceCRSGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedCRSGeometry;
@@ -75,7 +85,7 @@ public class GeometryWrapper {
             if (!srsURI.equals(sourceCRSGeometry.srsURI)) {
                 CoordinateReferenceSystem sourceCRS = sourceCRSGeometry.getCRS();
 
-                Geometry sourceGeometry = sourceCRSGeometry.geometry;
+                Geometry sourceGeometry = sourceCRSGeometry.getParsingGeometry();  //Retreive the original coordinate order according to the CRS.
 
                 MathTransform transform = CRS.findMathTransform(sourceCRS, crs, false);
                 Geometry targetGeometry = JTS.transform(sourceGeometry, transform);

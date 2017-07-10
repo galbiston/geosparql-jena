@@ -5,7 +5,6 @@
  */
 package implementation.datatype;
 
-import implementation.CRSRegistry;
 import implementation.GeometryWrapper;
 import implementation.datatype.parsers.ParseException;
 import implementation.datatype.parsers.wkt.WKTReader;
@@ -37,11 +36,6 @@ public class WKTDatatype extends BaseDatatype {
      * A static instance of WKTDatatype.
      */
     public static final WKTDatatype THE_WKT_DATATYPE = new WKTDatatype();
-
-    /**
-     * Default SRS Name as GeoSPARQL Standard.
-     */
-    public static final String DEFAULT_WKT_CRS_URI = CRSRegistry.wktDefaultCRS();
 
     /**
      * private constructor - single global instance.

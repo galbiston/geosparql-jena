@@ -14,7 +14,6 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
-import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
 import org.geotools.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -210,7 +209,7 @@ public class GeometryReverseTest {
         WKTReader reader = new WKTReader();
         try {
             LineString geometry = (LineString) reader.read("LINESTRING(0 0, 2 0, 5 0)");
-            CoordinateReferenceSystem crs = CRSRegistry.getCRS(DEFAULT_WKT_CRS_URI);
+            CoordinateReferenceSystem crs = CRSRegistry.getCRS(CRSRegistry.DEFAULT_WKT_CRS);
             Geometry expResult = reader.read("LINESTRING(0 0, 2 0, 5 0)");
             Geometry result = GeometryReverse.check(geometry, crs);
 

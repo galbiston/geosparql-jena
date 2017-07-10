@@ -5,7 +5,7 @@
  */
 package implementation.datatype.parsers.wkt;
 
-import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
+import implementation.CRSRegistry;
 
 /**
  *
@@ -26,7 +26,7 @@ public class WKTTextSRS {
             wktText = wktLiteral.substring(endSRS + 1);
 
         } else {
-            srsURI = DEFAULT_WKT_CRS_URI;
+            srsURI = CRSRegistry.DEFAULT_WKT_CRS;
             wktText = wktLiteral;
         }
     }

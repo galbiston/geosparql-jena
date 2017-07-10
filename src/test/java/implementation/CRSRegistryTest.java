@@ -5,7 +5,6 @@
  */
 package implementation;
 
-import static implementation.datatype.WKTDatatype.DEFAULT_WKT_CRS_URI;
 import java.lang.reflect.Type;
 import javax.measure.Measure;
 import javax.measure.quantity.Angle;
@@ -83,7 +82,7 @@ public class CRSRegistryTest {
     public void testGetDefaultWKTCRS() {
         try {
             System.out.println("getDefaultWKTCRS");
-            String srsURI = DEFAULT_WKT_CRS_URI;
+            String srsURI = CRSRegistry.DEFAULT_WKT_CRS;
 
             String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
                     + "  DATUM[\"WGS_1984\", \n"

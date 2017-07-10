@@ -20,6 +20,13 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  */
 public class GeometryReverse {
 
+    /**
+     * Checks the CRS for y,x and reverses the supplied geometry coordinates.
+     *
+     * @param geometry
+     * @param crs
+     * @return
+     */
     public static final Geometry check(Geometry geometry, CoordinateReferenceSystem crs) {
 
         Geometry finalGeometry;
@@ -31,6 +38,13 @@ public class GeometryReverse {
         return finalGeometry;
     }
 
+    /**
+     * Reverses coordinate order of the supplied geometry and produces a new
+     * geometry.
+     *
+     * @param geometry
+     * @return
+     */
     private static Geometry reverseGeometry(Geometry geometry) {
 
         GeometryFactory factory = geometry.getFactory();

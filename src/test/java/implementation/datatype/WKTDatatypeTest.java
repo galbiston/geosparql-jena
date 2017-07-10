@@ -8,6 +8,7 @@ package implementation.datatype;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+import implementation.CRSRegistry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequenceFactory;
@@ -95,7 +96,7 @@ public class WKTDatatypeTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
-        String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
+        String expSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
 
@@ -122,7 +123,7 @@ public class WKTDatatypeTest {
         Coordinate coord = new Coordinate(-88.38, 33.95);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
+        String expSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
 
@@ -230,7 +231,7 @@ public class WKTDatatypeTest {
         Coordinate coord = new Coordinate(33.95, -88.38);
         Point expGeometry = geometryFactory.createPoint(coord);
 
-        String expSRSURI = WKTDatatype.DEFAULT_WKT_CRS_URI;
+        String expSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
 
