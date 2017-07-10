@@ -95,4 +95,16 @@ public class CRSRegistry {
         return UNITS_REGISTRY.get(srsURI);
     }
 
+    public static final String wktDefaultCRS() {
+        return "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+    }
+
+    public static final String osgbCRS() {
+        return "http://www.opengis.net/def/crs/EPSG/0/27700";
+    }
+
+    public static final String wgs84CRS() {
+        return "http://www.opengis.net/def/crs/EPSG/0/4326";
+    }
+
 }

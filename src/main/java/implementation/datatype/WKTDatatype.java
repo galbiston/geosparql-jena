@@ -5,6 +5,7 @@
  */
 package implementation.datatype;
 
+import implementation.CRSRegistry;
 import implementation.GeometryWrapper;
 import implementation.datatype.parsers.ParseException;
 import implementation.datatype.parsers.wkt.WKTReader;
@@ -40,7 +41,7 @@ public class WKTDatatype extends BaseDatatype {
     /**
      * Default SRS Name as GeoSPARQL Standard.
      */
-    public static final String DEFAULT_WKT_CRS_URI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+    public static final String DEFAULT_WKT_CRS_URI = CRSRegistry.wktDefaultCRS();
 
     /**
      * private constructor - single global instance.
