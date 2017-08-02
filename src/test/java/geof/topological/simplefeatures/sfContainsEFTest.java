@@ -42,7 +42,7 @@ public class sfContainsEFTest {
      * Inference WKT model enables the import with the GeoSPARQL ontology as an
      * OWL reasoner, use this model to get the fully compliance of GeoSPARQL.
      */
-    public static InfModel INF_WKT_MODEL;
+    public static InfModel infModel;
 
     public sfContainsEFTest() {
     }
@@ -61,8 +61,8 @@ public class sfContainsEFTest {
          */
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
-        INF_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        INF_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT);
+        infModel = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
+        infModel.read(RDFDataLocationTest.SAMPLE_WKT);
 
     }
 
@@ -93,7 +93,7 @@ public class sfContainsEFTest {
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
         query.setNsPrefixes(Prefixes.get());
 
-        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
+        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), infModel)) {
             ResultSet rs = qExec.execSelect();
             ResultSetFormatter.out(rs);
         }

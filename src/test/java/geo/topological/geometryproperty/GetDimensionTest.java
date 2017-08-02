@@ -6,7 +6,7 @@
 package geo.topological.geometryproperty;
 
 import conformanceTest.RDFDataLocationTest;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -41,7 +41,7 @@ public class GetDimensionTest {
      * Inference WKT model enables the import with the GeoSPARQL ontology as an
      * OWL reasoner, use this model to get the fully compliance of GeoSPARQL.
      */
-    public static InfModel INF_WKT_MODEL;
+    public static InfModel infModel;
 
     public GetDimensionTest() {
     }
@@ -59,8 +59,8 @@ public class GetDimensionTest {
          */
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
-        INF_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        INF_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT);
+        infModel = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
+        infModel.read(RDFDataLocationTest.SAMPLE_WKT);
     }
 
     @AfterClass
@@ -69,7 +69,7 @@ public class GetDimensionTest {
 
     @Before
     public void setUp() {
-        load();
+        RegistryLoader.load();
     }
 
     @After
@@ -94,7 +94,7 @@ public class GetDimensionTest {
         ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
         query.setNsPrefixes(Prefixes.get());
 
-        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), INF_WKT_MODEL)) {
+        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), infModel)) {
             ResultSet rs = qExec.execSelect();
             ResultSetFormatter.out(rs);
         }

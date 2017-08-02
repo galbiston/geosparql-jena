@@ -6,8 +6,9 @@
 package conformanceTest.queryrewrite;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.ArrayList;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -21,19 +22,19 @@ import org.junit.Test;
  *
  * A.6.3.1 /conf/query-rewrite-extension/rcc8-query-rewrite
  *
- * Requirement: /req/query-rewrite-extension/rcc8-query-rewrite
- * Basic graph pattern matching shall use the semantics defined by the
- * RIF Core Entailment Regime [W3C SPARQL Entailment] for the RIF rules
- * [W3C RIF Core] geor:rcc8eq, geor:rcc8dc, geor:rcc8ec, geor:rcc8po,
- * geor:rcc8tppi, geor:rcc8tpp, geor:rcc8ntpp, geor:rcc8ntppi.
+ * Requirement: /req/query-rewrite-extension/rcc8-query-rewrite Basic graph
+ * pattern matching shall use the semantics defined by the RIF Core Entailment
+ * Regime [W3C SPARQL Entailment] for the RIF rules [W3C RIF Core] geor:rcc8eq,
+ * geor:rcc8dc, geor:rcc8ec, geor:rcc8po, geor:rcc8tppi, geor:rcc8tpp,
+ * geor:rcc8ntpp, geor:rcc8ntppi.
  *
  * a.) Test purpose: check conformance with this requirement
  *
  * b.) Test method: Verify that queries involving the following query
- * transformation rules return the correct result for a test dataset
- * when using the specified serialization and version: geor:rcc8eq,
- * geor:rcc8dc, geor:rcc8ec, geor:rcc8po, geor:rcc8tppi, geor:rcc8tpp,
- * geor:rcc8ntpp, geor:rcc8ntppi.
+ * transformation rules return the correct result for a test dataset when using
+ * the specified serialization and version: geor:rcc8eq, geor:rcc8dc,
+ * geor:rcc8ec, geor:rcc8po, geor:rcc8tppi, geor:rcc8tpp, geor:rcc8ntpp,
+ * geor:rcc8ntppi.
  *
  * c.) Reference: Clause 11.4 Req 30
  *
@@ -46,58 +47,57 @@ public class Rcc8QueryRewriteRcc8poTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
-        this.expectedList.add("http://example.org/ApplicationSchema#C");
-        this.expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#C");
+        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        this.actualList = resourceQuery(featureFeatureQueryRewriteQuery("ex:F", "geo:rcc8po"), INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(featureFeatureQueryRewriteQuery("ex:F", "geo:rcc8po"), infModel);
+        assertEquals(expectedList, actualList);
 
     }
 
     @Test
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
-        this.expectedList.add("http://example.org/ApplicationSchema#C");
-        this.expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#C");
+        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        this.actualList = resourceQuery(featureGeometryQueryRewriteQuery("ex:F", "geo:rcc8po"), INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(featureGeometryQueryRewriteQuery("ex:F", "geo:rcc8po"), infModel);
+        assertEquals(expectedList, actualList);
 
     }
 
     @Test
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
-        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#C");
 
-        this.actualList = resourceQuery(geometryFeatureQueryRewriteQuery("ex:F", "geo:rcc8po"), INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(geometryFeatureQueryRewriteQuery("ex:F", "geo:rcc8po"), infModel);
+        assertEquals(expectedList, actualList);
 
     }
 

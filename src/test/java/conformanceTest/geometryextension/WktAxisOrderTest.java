@@ -6,7 +6,8 @@
 package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,14 +19,14 @@ import org.junit.BeforeClass;
  *
  * A.3.2.3 /conf/geometry-extension/wkt-axis-order
  *
- * Requirement: /req/geometry-extension/wkt-axis-order
- * Coordinate tuples within geo:wktLiterals shall be interpreted using
- * the axis order defined in the spatial reference system used.
+ * Requirement: /req/geometry-extension/wkt-axis-order Coordinate tuples within
+ * geo:wktLiterals shall be interpreted using the axis order defined in the
+ * spatial reference system used.
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: verify that queries involving geo:wktLiteral values
- * return the correct result for a test dataset.
+ * b.) Test method: verify that queries involving geo:wktLiteral values return
+ * the correct result for a test dataset.
  *
  * c.) Reference: Clause 8.5.1 Req 12
  *
@@ -38,9 +39,10 @@ public class WktAxisOrderTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {

@@ -6,8 +6,9 @@
 package conformanceTest.topologyvocablulary;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.ArrayList;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -23,15 +24,14 @@ import org.junit.Test;
  * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
  *
  * Requirement: /req/topology-vocab-extension/sf-spatial-relations
- * Implementations shall allow the properties geo:sfEquals,
- * geo:sfDisjoint, geo:sfIntersects, geo:sfTouches, geo:sfCrosses,
- * geo:sfWithin, geo:sfContains, geo:sfOverlaps to be used in SPARQL
- * graph patterns.
+ * Implementations shall allow the properties geo:sfEquals, geo:sfDisjoint,
+ * geo:sfIntersects, geo:sfTouches, geo:sfCrosses, geo:sfWithin, geo:sfContains,
+ * geo:sfOverlaps to be used in SPARQL graph patterns.
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: Verify that queries involving these properties
- * return the correct result for a test dataset.
+ * b.) Test method: Verify that queries involving these properties return the
+ * correct result for a test dataset.
  *
  * c.) Reference: Clause 7.2 Req 4
  *
@@ -44,27 +44,23 @@ public class SfSpatialRelationsTouchesTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
@@ -73,19 +69,20 @@ public class SfSpatialRelationsTouchesTest {
         /**
          * Touch returns t (TRUE) if none of the points common to both
          * geometries intersect the interiors of both geometries, At least one
-         * geometry must be a line string, polygon, multi line string, or
-         * multi polygon.
+         * geometry must be a line string, polygon, multi line string, or multi
+         * polygon.
          */
-        this.expectedList.add("http://example.org/ApplicationSchema#E");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#E");
 
-        this.actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfTouches", ""), INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfTouches", ""), infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        assertFalse("failure - should be false", emptyQuery(topologyVocabluaryQuery("ex:A", "geo:sfTouches", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+        assertFalse(emptyQuery(topologyVocabluaryQuery("ex:A", "geo:sfTouches", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

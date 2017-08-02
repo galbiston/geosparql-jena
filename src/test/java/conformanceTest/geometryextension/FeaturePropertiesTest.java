@@ -6,9 +6,10 @@
 package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -42,9 +43,10 @@ public class FeaturePropertiesTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -69,8 +71,8 @@ public class FeaturePropertiesTest {
                 + " ex:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        List<String> actualList = literalQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = literalQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -82,8 +84,8 @@ public class FeaturePropertiesTest {
                 + " ex:A geo:hasDefaultGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        List<String> actualList = literalQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = literalQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
 }

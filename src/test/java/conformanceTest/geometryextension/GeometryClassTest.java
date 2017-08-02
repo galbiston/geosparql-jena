@@ -6,9 +6,10 @@
 package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -39,9 +40,10 @@ public class GeometryClassTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -73,9 +75,9 @@ public class GeometryClassTest {
         String Q1 = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type geo:Geometry ."
                 + "}ORDER BY ?geometry";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
+        List<String> actualList = resourceQuery(Q1, infModel);
 
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        assertEquals(expectedList, actualList);
     }
 
 }

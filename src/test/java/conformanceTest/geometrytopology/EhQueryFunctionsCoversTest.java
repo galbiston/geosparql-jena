@@ -6,10 +6,11 @@
 package conformanceTest.geometrytopology;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -49,9 +50,10 @@ public class EhQueryFunctionsCoversTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -77,7 +79,7 @@ public class EhQueryFunctionsCoversTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:ehCovers(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
                 + "}";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
+        List<String> actualList = resourceQuery(Q1, infModel);
         assertEquals(expectedList, actualList);
     }
 
@@ -91,7 +93,7 @@ public class EhQueryFunctionsCoversTest {
                 + "}";
 
         List<String> expectedList = new ArrayList<>();
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
+        List<String> actualList = resourceQuery(Q1, infModel);
         assertEquals(expectedList, actualList);
     }
 

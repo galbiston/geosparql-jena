@@ -6,8 +6,9 @@
 package conformanceTest.geometrytopology;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.ArrayList;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -24,18 +25,17 @@ import org.junit.Test;
  *
  * Requirement: /req/geometry-topology-extension/rcc8-query-functions
  * Implementations shall support geof:rcc8eq, geof:rcc8dc, geof:rcc8ec,
- * geof:rcc8po, geof:rcc8tppi, geof:rcc8tpp, geof:rcc8ntpp,
- * geof:rcc8ntppi as SPARQL extension functions, consistent with their
- * corresponding DE-9IM intersection patterns, as defined by Simple
- * Features [ISO 19125-1].
+ * geof:rcc8po, geof:rcc8tppi, geof:rcc8tpp, geof:rcc8ntpp, geof:rcc8ntppi as
+ * SPARQL extension functions, consistent with their corresponding DE-9IM
+ * intersection patterns, as defined by Simple Features [ISO 19125-1].
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: Verify that a set of SPARQL queries involving each
- * of the following functions returns the correct result for a test
- * dataset when using the specified serialization and version:
- * geof:rcc8eq, geof:rcc8dc, geof:rcc8ec, geof:rcc8po, geof:rcc8tppi,
- * geof:rcc8tpp, geof:rcc8ntpp, geof:rcc8ntppi.
+ * b.) Test method: Verify that a set of SPARQL queries involving each of the
+ * following functions returns the correct result for a test dataset when using
+ * the specified serialization and version: geof:rcc8eq, geof:rcc8dc,
+ * geof:rcc8ec, geof:rcc8po, geof:rcc8tppi, geof:rcc8tpp, geof:rcc8ntpp,
+ * geof:rcc8ntppi.
  *
  * c.) Reference: Clause 9.5 Req 24
  *
@@ -48,41 +48,38 @@ public class Rcc8QueryFunctionsRcc8tppiTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("http://example.org/ApplicationSchema#C");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#C");
 
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8tppi(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -93,7 +90,7 @@ public class Rcc8QueryFunctionsRcc8tppiTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8tppi(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.4 34.3, -83.3 34.3, -83.3 34.4, -83.4 34.4, -83.4 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
-        assertFalse("failure - should be false", emptyQuery(Q1, INF_WKT_MODEL));
+        assertFalse(emptyQuery(Q1, infModel));
     }
 
 }

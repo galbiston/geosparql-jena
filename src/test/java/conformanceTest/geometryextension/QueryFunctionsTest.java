@@ -6,9 +6,10 @@
 package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -49,9 +50,10 @@ public class QueryFunctionsTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -77,8 +79,8 @@ public class QueryFunctionsTest {
                 + "BIND ((geof:boundary( \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>)) AS ?bBoundary). "
                 + "FILTER ( geof:sfEquals(?aBoundary, ?bBoundary)) "
                 + " }";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -94,8 +96,8 @@ public class QueryFunctionsTest {
                 + " BIND( geof:buffer(?bWkt, 1000, uom:metre) AS ?buffer) . "
                 + " FILTER ( geof:sfIntersects(?aWkt, ?buffer) )"
                 + " }ORDER BY ?place";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     /**
@@ -115,8 +117,8 @@ public class QueryFunctionsTest {
                 + " BIND( geof:buffer(?bWkt, 10000, uom:metre) AS ?buffer) . "
                 + " FILTER ( geof:sfIntersects(?aWkt, ?buffer) )"
                 + " }ORDER BY ?place";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -130,8 +132,8 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:convexHull(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.3, -83.4 34.3, -83.6 34.2, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) AS ?convexHull ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?convexHull ))"
                 + "}";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -149,8 +151,8 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:difference(?eWkt, ?cWkt) AS ?difference ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?difference ))"
                 + "}";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -167,8 +169,8 @@ public class QueryFunctionsTest {
                 + " }"
                 + "ORDER BY ASC (geof:distance(?eWkt, ?aWkt, uom:metre))"
                 + "LIMIT 3";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -182,8 +184,8 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:envelope(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.3, -83.4 34.1, -83.2 34.3, -83.4 34.5, -83.6 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) AS ?envelope ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?envelope ))"
                 + "}";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -201,8 +203,8 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:intersection(?eWkt, ?cWkt) AS ?intersection ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?intersection ))"
                 + "}";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -216,8 +218,8 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:symDifference(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.3, -83.4 34.3, -83.4 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) AS ?symDifference ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?symDifference ))"
                 + "}";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -235,8 +237,8 @@ public class QueryFunctionsTest {
                 + "BIND ((geof:union( ?cWkt, ?eWkt )) AS ?union)"
                 + "FILTER ( geof:sfEquals(?aWkt, ?union))"
                 + " }";
-        List<String> actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", expectedList, actualList);
+        List<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
 }

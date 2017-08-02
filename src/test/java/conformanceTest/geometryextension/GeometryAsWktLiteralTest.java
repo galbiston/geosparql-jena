@@ -6,8 +6,9 @@
 package conformanceTest.geometryextension;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.ArrayList;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -21,14 +22,13 @@ import org.junit.Test;
  *
  * A.3.2.5 /conf/geometry-extension/geometry-as-wkt-literal
  *
- * Requirement: /req/geometry-extension/geometry-as-wkt-literal
- * Implementations shall allow the RDF property geo:asWKT to be used in
- * SPARQL graph patterns.
+ * Requirement: /req/geometry-extension/geometry-as-wkt-literal Implementations
+ * shall allow the RDF property geo:asWKT to be used in SPARQL graph patterns.
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: verify that queries involving the geo:asWKT property
- * return the correct result for a test dataset.
+ * b.) Test method: verify that queries involving the geo:asWKT property return
+ * the correct result for a test dataset.
  *
  * c.) Reference: Clause 8.5.2 Req 14
  *
@@ -41,40 +41,38 @@ public class GeometryAsWktLiteralTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
     public void positiveTest() {
 
-        this.expectedList.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
 
         String Q1 = "SELECT ?aWKT WHERE{"
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        this.actualList = literalQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = literalQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
 }

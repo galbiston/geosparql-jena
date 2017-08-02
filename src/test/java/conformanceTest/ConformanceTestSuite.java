@@ -6,6 +6,7 @@
 package conformanceTest;
 
 import implementation.support.Prefixes;
+import implementation.support.RDFDataLocation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -21,7 +22,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
-import org.apache.jena.util.FileManager;
+import org.apache.jena.riot.RDFDataMgr;
 
 /**
  *
@@ -30,73 +31,73 @@ import org.apache.jena.util.FileManager;
 public class ConformanceTestSuite {
 
     /**
-     * Default WKT model - with no inference support.
+     * This method initialize test models, need to be called before query
+     * execution.
+     *
+     * @param dataFilePath
+     * @return
      */
-    public static Model DEFAULT_WKT_MODEL;
+    public static InfModel initModel(String dataFilePath) {
 
-    /**
-     * Inference WKT model enables the import with the GeoSPARQL ontology as an
-     * OWL reasoner, use this model to get the fully compliance of GeoSPARQL.
-     */
-    public static InfModel INF_WKT_MODEL;
-
-    /**
-     * Default GML model - with no inference support.
-     */
-    public static Model DEFAULT_GML_MODEL;
-
-    /**
-     * Inference GML model enables the import with the GeoSPARQL ontology as an
-     * OWL reasoner, use this model to get the fully compliance of GeoSPARQL.
-     */
-    public static InfModel INF_GML_MODEL;
-
-    /**
-     * This negative model facilitates the test for empty geometries and the GML
-     * literal without a specified SRID.
-     */
-    public static Model TEST_GML_MODEL;
-
-    /**
-     * This method initialize all the WKT test models, need to be called before
-     * query execution.
-     */
-    public static void initWktModel() {
         /**
-         * Setup inference model.
+         * Load data
          */
-        DEFAULT_WKT_MODEL = ModelFactory.createDefaultModel();
-        DEFAULT_WKT_MODEL.read(RDFDataLocationTest.SAMPLE_WKT);
+        Model model = RDFDataMgr.loadModel(dataFilePath);
 
         /**
          * The use of OWL reasoner can bind schema with existing test data.
          */
-        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
+        Model schema = RDFDataMgr.loadModel(RDFDataLocation.GEOSPARQL_SCHEMA);
+
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
-        INF_WKT_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
 
+        /**
+         * Setup inference model.
+         */
+        InfModel infModel = ModelFactory.createInfModel(reasoner, model);
+
+        return infModel;
+    }
+
+    /**
+     * This method initialize all the WKT test models, need to be called before
+     * query execution.
+     *
+     * @return
+     */
+    public static InfModel initWktModel() {
+        return initModel(RDFDataLocationTest.SAMPLE_WKT);
+    }
+
+    /**
+     * This method initialize all the empty WKT test models, need to be called
+     * before query execution.
+     *
+     * @return
+     */
+    public static InfModel initWktEmptyModel() {
+        return initModel(RDFDataLocationTest.SAMPLE_WKT_EMPTY);
     }
 
     /**
      * This method initialize all the GML test models, need to be called before
      * query execution.
+     *
+     * @return
      */
-    public static void initGmlModel() {
-        /**
-         * Setup inference model.
-         */
-        DEFAULT_GML_MODEL = ModelFactory.createDefaultModel();
-        DEFAULT_GML_MODEL.read(RDFDataLocationTest.SAMPLE_GML);
+    public static InfModel initGmlModel() {
+        return initModel(RDFDataLocationTest.SAMPLE_GML);
+    }
 
-        /**
-         * The use of OWL reasoner can bind schema with existing test data.
-         */
-        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
-        Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
-        reasoner = reasoner.bindSchema(schema);
-        INF_GML_MODEL = ModelFactory.createInfModel(reasoner, DEFAULT_GML_MODEL);
-
+    /**
+     * This method initialize all the empty GML test models, need to be called
+     * before query execution.
+     *
+     * @return
+     */
+    public static InfModel initGmlEmptyModel() {
+        return initModel(RDFDataLocationTest.SAMPLE_GML_EMPTY);
     }
 
     /**

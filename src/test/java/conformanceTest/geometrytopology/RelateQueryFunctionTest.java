@@ -6,8 +6,9 @@
 package conformanceTest.geometrytopology;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.ArrayList;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -23,15 +24,14 @@ import org.junit.Test;
  * A.4.1.1 /conf/geometry-topology-extension/relate-query-function
  *
  * Requirement: /req/geometry-topology-extension/relate-query-function
- * Implementations shall support geof:relate as a SPARQL extension
- * function, consistent with the relate operator defined in Simple
- * Features [ISO 19125-1].
+ * Implementations shall support geof:relate as a SPARQL extension function,
+ * consistent with the relate operator defined in Simple Features [ISO 19125-1].
  *
  * a.) Test purpose: check conformance with this requirement
  *
  * b.) Test method: Verify that a set of SPARQL queries involving the
- * geof:relate function returns the correct result for a test dataset
- * when using the specified serialization and version.
+ * geof:relate function returns the correct result for a test dataset when using
+ * the specified serialization and version.
  *
  * c.) Reference: Clause 9.2 Req 21
  *
@@ -44,69 +44,68 @@ public class RelateQueryFunctionTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
     public void pointTest() {
 
-        this.expectedList.add("http://example.org/ApplicationSchema#A");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#A");
 
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"T*F**FFF*\") ."
                 + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
     public void lineTest() {
 
-        this.expectedList.add("http://example.org/ApplicationSchema#B");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#B");
 
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LineString(-83.4 34.0, -83.3 34.3)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
                 + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
     public void polygonTest() {
 
-        this.expectedList.add("http://example.org/ApplicationSchema#E");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#E");
 
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
                 + "}";
-        this.actualList = resourceQuery(Q1, INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(Q1, infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
@@ -117,6 +116,6 @@ public class RelateQueryFunctionTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
                 + "}";
-        assertFalse("failure - should be false", emptyQuery(Q1, INF_WKT_MODEL));
+        assertFalse(emptyQuery(Q1, infModel));
     }
 }

@@ -6,8 +6,9 @@
 package conformanceTest.topologyvocablulary;
 
 import static conformanceTest.ConformanceTestSuite.*;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import java.util.ArrayList;
+import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -23,15 +24,14 @@ import org.junit.Test;
  * A.2.2.1 /conf/topology-vocab-extension/eh-spatial-relations
  *
  * Requirement: /req/topology-vocab-extension/eh-spatial-relations
- * Implementations shall allow the properties geo:ehEquals,
- * geo:ehDisjoint, geo:ehMeet, geo:ehOverlap, geo:ehCovers,
- * geo:ehCoveredBy, geo:ehInside, geo:ehContains to be used in SPARQL
- * graph patterns.
+ * Implementations shall allow the properties geo:ehEquals, geo:ehDisjoint,
+ * geo:ehMeet, geo:ehOverlap, geo:ehCovers, geo:ehCoveredBy, geo:ehInside,
+ * geo:ehContains to be used in SPARQL graph patterns.
  *
  * a.) Test purpose: check conformance with this requirement
  *
- * b.) Test method: Verify that queries involving these properties
- * return the correct result for a test dataset.
+ * b.) Test method: Verify that queries involving these properties return the
+ * correct result for a test dataset.
  *
  * c.) Reference: Clause 7.3 Req 5
  *
@@ -44,27 +44,23 @@ public class EhSpatialRelationsInsideTest {
         /**
          * Initialize all the topology functions.
          */
-        load();
-        initWktModel();
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
+    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
     }
 
-    private ArrayList expectedList;
-    private ArrayList actualList;
-
     @Before
     public void setUp() {
-        this.expectedList = new ArrayList<>();
-        this.actualList = new ArrayList<>();
+
     }
 
     @After
     public void tearDown() {
-        this.actualList.clear();
-        this.expectedList.clear();
+
     }
 
     @Test
@@ -75,17 +71,18 @@ public class EhSpatialRelationsInsideTest {
          * return the compared instance itself while the sfWithin will return
          * it.
          */
-        this.expectedList.add("http://example.org/ApplicationSchema#G");
-        this.expectedList.add("http://example.org/ApplicationSchema#A");
+        ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#G");
+        expectedList.add("http://example.org/ApplicationSchema#A");
 
-        this.actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehInside", ""), INF_WKT_MODEL);
-        assertEquals("failure - result arrays list not same", this.expectedList, this.actualList);
+        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehInside", ""), infModel);
+        assertEquals(expectedList, actualList);
     }
 
     @Test
     public void negativeTest() {
 
-        assertFalse("failure - should be false", emptyQuery(topologyVocabluaryQuery("ex:A", "geo:ehInside", "FILTER ( ?aGeom != ?bGeom )"), INF_WKT_MODEL));
+        assertFalse(emptyQuery(topologyVocabluaryQuery("ex:A", "geo:ehInside", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

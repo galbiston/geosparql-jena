@@ -104,6 +104,7 @@ public class CRSRegistryTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testCRS() {
         System.out.println("extractCRSDistanceUnits");
 
