@@ -13,7 +13,6 @@ import implementation.CRSRegistry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.support.GeoSerialisationEnum;
-import static implementation.support.Prefixes.GEO_PREFIX;
 import static implementation.support.Prefixes.GEO_URI;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,12 +37,6 @@ public class GMLDatatype extends BaseDatatype {
      * The default GML type URI.
      */
     public static final String THE_TYPE_URI = GEO_URI + "gmlLiteral";
-
-    /**
-     * The default GML type URI prefix. Workaround for when a prefixed literal
-     * is passed in and not provided with full URI by Apache Jena.
-     */
-    public static final String THE_TYPE_URI_PREFIX = GEO_PREFIX + ":gmlLiteral";
 
     /**
      * A static instance of GMLDatatype.

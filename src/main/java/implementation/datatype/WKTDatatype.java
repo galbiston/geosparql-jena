@@ -9,7 +9,6 @@ import implementation.GeometryWrapper;
 import implementation.datatype.parsers.ParseException;
 import implementation.datatype.parsers.wkt.WKTReader;
 import implementation.datatype.parsers.wkt.WKTWriter;
-import static implementation.support.Prefixes.GEO_PREFIX;
 import static implementation.support.Prefixes.GEO_URI;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
@@ -32,12 +31,6 @@ public class WKTDatatype extends BaseDatatype {
      * The default WKT type URI.
      */
     public static final String THE_TYPE_URI = GEO_URI + "wktLiteral";
-
-    /**
-     * The default WKT type URI prefix. Workaround for when a prefixed literal
-     * is passed in and not provided with full URI by Apache Jena.
-     */
-    public static final String THE_TYPE_URI_PREFIX = GEO_PREFIX + ":wktLiteral";
 
     /**
      * A static instance of WKTDatatype.
