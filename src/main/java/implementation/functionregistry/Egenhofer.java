@@ -29,7 +29,6 @@ public class Egenhofer {
      *
      * @param registry - the PropertyFunctionRegistry to be used
      */
-    @SuppressWarnings("deprecation")
     public static void loadPropertyFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
@@ -47,7 +46,6 @@ public class Egenhofer {
      * This method loads all the Egenhofer Topological Expression Functions
      *
      */
-    @SuppressWarnings("deprecation")
     public static void loadExpressionFunctions() {
 
         // Manually create expression function variables

@@ -34,7 +34,7 @@ public abstract class GenericGeometryPropertyExpressionFunction extends ExprFunc
             return getValue(geometry);
         } catch (DatatypeFormatException | MismatchedDimensionException ex) {
             LOGGER.error("Expression Function Exception: {}", ex.getMessage());
-            return NodeValue.nvNothing;
+            return Expr.NONE.getConstant();
         }
 
     }

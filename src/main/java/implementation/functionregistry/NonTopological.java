@@ -22,7 +22,6 @@ public class NonTopological {
      *
      * @param registry - the FunctionRegistry to be used
      */
-    @SuppressWarnings("deprecation")
     public static void loadFilterFunctions(FunctionRegistry registry) {
 
         // Simple Feature Filter Functions

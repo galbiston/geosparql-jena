@@ -26,7 +26,6 @@ public class Relate {
      *
      * @param registry - the FunctionRegistry to be used
      */
-    @SuppressWarnings("deprecation")
     public static void loadRelateFunction(FunctionRegistry registry) {
 
         registry.put(Geof.RELATE, RelateFF.class);

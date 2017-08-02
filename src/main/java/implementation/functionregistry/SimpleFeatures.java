@@ -29,7 +29,6 @@ public class SimpleFeatures {
      *
      * @param registry - the PropertyFunctionRegistry to be used
      */
-    @SuppressWarnings("deprecation")
     public static void loadPropertyFunctions(PropertyFunctionRegistry registry) {
 
         // Simple Feature Topological Property Functions
@@ -47,7 +46,6 @@ public class SimpleFeatures {
      * This method loads all the Simple Feature Topological Expression Functions
      *
      */
-    @SuppressWarnings("deprecation")
     public static void loadExpressionFunctions() {
 
         // Manually create expression function variables
@@ -58,14 +56,16 @@ public class SimpleFeatures {
         String leftName = args.get(0).getName();
         String rightName = args.get(1).getName();
 
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_CONTAINS, new sfContainsEF(new ExprVar(leftName), new ExprVar(rightName)), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_CROSSES, new sfCrossesEF(new ExprVar(leftName), new ExprVar(rightName)), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_DISJOINT, new sfDisjointEF(new ExprVar(leftName), new ExprVar(rightName)), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_EQUALS, new sfEqualsEF(new ExprVar(leftName), new ExprVar(rightName)), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_INTERSECTS, new sfIntersectsEF(new ExprVar(leftName), new ExprVar(rightName)), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_OVERLAPS, new sfOverlapsEF(new ExprVar(leftName), new ExprVar(rightName)), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_TOUCHES, new sfTouchesEF(new ExprVar(leftName), new ExprVar(rightName)), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_WITHIN, new sfWithinEF(new ExprVar(leftName), new ExprVar(rightName)), args);
+        UserDefinedFunctionFactory factory = UserDefinedFunctionFactory.getFactory();
+
+        factory.add(Geof.SF_CONTAINS, new sfContainsEF(new ExprVar(leftName), new ExprVar(rightName)), args);
+        factory.add(Geof.SF_CROSSES, new sfCrossesEF(new ExprVar(leftName), new ExprVar(rightName)), args);
+        factory.add(Geof.SF_DISJOINT, new sfDisjointEF(new ExprVar(leftName), new ExprVar(rightName)), args);
+        factory.add(Geof.SF_EQUALS, new sfEqualsEF(new ExprVar(leftName), new ExprVar(rightName)), args);
+        factory.add(Geof.SF_INTERSECTS, new sfIntersectsEF(new ExprVar(leftName), new ExprVar(rightName)), args);
+        factory.add(Geof.SF_OVERLAPS, new sfOverlapsEF(new ExprVar(leftName), new ExprVar(rightName)), args);
+        factory.add(Geof.SF_TOUCHES, new sfTouchesEF(new ExprVar(leftName), new ExprVar(rightName)), args);
+        factory.add(Geof.SF_WITHIN, new sfWithinEF(new ExprVar(leftName), new ExprVar(rightName)), args);
 
     }
 }

@@ -20,7 +20,6 @@ public class GeometryProperty {
      *
      * @param registry - the PropertyFunctionRegistry to be used
      */
-    @SuppressWarnings("deprecation")
     public static void loadPropertyFunctions(PropertyFunctionRegistry registry) {
 
         registry.put(Geo.DIMENSION, Dimension.class);
