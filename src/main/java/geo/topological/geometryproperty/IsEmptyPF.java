@@ -13,7 +13,7 @@ import org.apache.jena.sparql.expr.Expr;
  *
  * @author haozhechen
  */
-public class IsEmpty extends GenericGeometryPropertyFunction {
+public class IsEmptyPF extends GenericGeometryPropertyFunction {
 
     @Override
     protected Expr propFunc(Expr expr) {

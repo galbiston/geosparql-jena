@@ -6,18 +6,18 @@
 package geo.topological.geometryproperty;
 
 import geo.topological.GenericGeometryPropertyFunction;
-import geof.topological.geometryproperty.IsSimpleEF;
+import geof.topological.geometryproperty.SpatialDimensionEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
  * @author haozhechen
  */
-public class IsSimple extends GenericGeometryPropertyFunction {
+public class SpatialDimensionPF extends GenericGeometryPropertyFunction {
 
     @Override
     protected Expr propFunc(Expr expr) {
-        return new IsSimpleEF(expr);
+        return new SpatialDimensionEF(expr);
     }
 
 }

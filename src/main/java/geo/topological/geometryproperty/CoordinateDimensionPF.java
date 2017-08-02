@@ -6,18 +6,18 @@
 package geo.topological.geometryproperty;
 
 import geo.topological.GenericGeometryPropertyFunction;
-import geof.topological.geometryproperty.DimensionEF;
+import geof.topological.geometryproperty.CoordinateDimensionEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
  * @author haozhechen
  */
-public class Dimension extends GenericGeometryPropertyFunction {
+public class CoordinateDimensionPF extends GenericGeometryPropertyFunction {
 
     @Override
     protected Expr propFunc(Expr expr) {
-        return new DimensionEF(expr);
+        return new CoordinateDimensionEF(expr);
     }
 
 }
