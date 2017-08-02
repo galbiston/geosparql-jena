@@ -5,15 +5,11 @@
  */
 package implementation.functionregistry;
 
-import geo.topological.rcc8.*;
-import geof.topological.rcc8.*;
+import geo.topological.rcc8.PF.*;
+import geof.topological.rcc8.FF.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.jena.sparql.core.Var;
-import org.apache.jena.sparql.expr.ExprVar;
-import org.apache.jena.sparql.function.user.UserDefinedFunctionFactory;
+import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
@@ -45,22 +41,18 @@ public class RCC8 {
     /**
      * This method loads all the RCC8 Topological Expression Functions
      *
+     * @param functionRegistry
      */
-    public static void loadExpressionFunctions() {
+    public static void loadFilterFunctions(FunctionRegistry functionRegistry) {
 
-        // Manually create expression function variables
-        List<Var> args = new ArrayList<>();
-        args.add(Var.alloc("left"));
-        args.add(Var.alloc("right"));
-
-        UserDefinedFunctionFactory.getFactory().add(Geof.RCC_DISCONNECTED, new rccDisconnectedEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.RCC_EQUALS, new rccEqualsEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.RCC_EXTERNALLY_CONNECTED, new rccExternallyConnectedEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.RCC_NON_TANGENTIAL_PROPER_PART_INVERSE, new rccNonTangentialProperPartInverseEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.RCC_NON_TANGENTIAL_PROPER_PART, new rccNonTangentialProperPartEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.RCC_PARTIALLY_OVERLAPPING, new rccPartiallyOverlappingEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.RCC_TANGENTIAL_PROPER_PART_INVERSE, new rccTangentialProperPartInverseEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
-        UserDefinedFunctionFactory.getFactory().add(Geof.RCC_TANGENTIAL_PROPER_PART, new rccTangentialProperPartEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
+        functionRegistry.put(Geof.RCC_DISCONNECTED, rccDisconnectedFF.class);
+        functionRegistry.put(Geof.RCC_EQUALS, rccEqualsFF.class);
+        functionRegistry.put(Geof.RCC_EXTERNALLY_CONNECTED, rccExternallyConnectedFF.class);
+        functionRegistry.put(Geof.RCC_NON_TANGENTIAL_PROPER_PART_INVERSE, rccNonTangentialProperPartInverseFF.class);
+        functionRegistry.put(Geof.RCC_NON_TANGENTIAL_PROPER_PART, rccNonTangentialProperPartFF.class);
+        functionRegistry.put(Geof.RCC_PARTIALLY_OVERLAPPING, rccPartiallyOverlappingFF.class);
+        functionRegistry.put(Geof.RCC_TANGENTIAL_PROPER_PART_INVERSE, rccTangentialProperPartInverseFF.class);
+        functionRegistry.put(Geof.RCC_TANGENTIAL_PROPER_PART, rccTangentialProperPartFF.class);
 
     }
 }

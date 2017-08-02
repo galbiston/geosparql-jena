@@ -5,7 +5,16 @@
  */
 package implementation.functionregistry;
 
-import geof.nontopological.*;
+import geof.nontopological.FF.IntersectionFF;
+import geof.nontopological.FF.GetSRIDFF;
+import geof.nontopological.FF.BufferFF;
+import geof.nontopological.FF.EnvelopFF;
+import geof.nontopological.FF.BoundaryFF;
+import geof.nontopological.FF.UnionFF;
+import geof.nontopological.FF.DifferenceFF;
+import geof.nontopological.FF.DistanceFF;
+import geof.nontopological.FF.ConvexHullFF;
+import geof.nontopological.FF.SymmetricDifferenceFF;
 import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;
 

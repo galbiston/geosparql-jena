@@ -27,20 +27,20 @@ public class RegistryLoader {
      */
     public static void load() {
 
-        final PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-        final FunctionRegistry functionRegistry = FunctionRegistry.get(ARQ.getContext());
+        PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
+        FunctionRegistry functionRegistry = FunctionRegistry.get(ARQ.getContext());
 
         NonTopological.loadFilterFunctions(functionRegistry);
         functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
 
         SimpleFeatures.loadPropertyFunctions(propertyRegistry);
-        SimpleFeatures.loadExpressionFunctions();
+        SimpleFeatures.loadFilterFunctions(functionRegistry);
 
         Egenhofer.loadPropertyFunctions(propertyRegistry);
-        Egenhofer.loadExpressionFunctions();
+        Egenhofer.loadFilterFunctions(functionRegistry);
 
         RCC8.loadPropertyFunctions(propertyRegistry);
-        RCC8.loadExpressionFunctions();
+        RCC8.loadFilterFunctions(functionRegistry);
 
         Relate.loadRelateFunction(functionRegistry);
 
