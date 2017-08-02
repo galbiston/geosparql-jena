@@ -19,7 +19,7 @@ import org.apache.jena.sparql.function.FunctionBase3;
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class Buffer extends FunctionBase3 {
+public class BufferFF extends FunctionBase3 {
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {

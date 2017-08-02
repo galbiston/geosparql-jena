@@ -18,7 +18,7 @@ import org.opengis.referencing.operation.TransformException;
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class Intersection extends FunctionBase2 {
+public class DifferenceFF extends FunctionBase2 {
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
@@ -27,9 +27,8 @@ public class Intersection extends FunctionBase2 {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
-            GeometryWrapper intersection = geometry1.intersection(geometry2);
-
-            return intersection.getResultNode();
+            GeometryWrapper difference = geometry1.difference(geometry2);
+            return difference.getResultNode();
 
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
             return NodeValue.nvEmptyString;

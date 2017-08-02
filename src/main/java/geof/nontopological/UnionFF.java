@@ -18,7 +18,7 @@ import org.opengis.referencing.operation.TransformException;
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class Union extends FunctionBase2 {
+public class UnionFF extends FunctionBase2 {
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {

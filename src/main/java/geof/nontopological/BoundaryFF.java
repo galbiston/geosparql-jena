@@ -15,20 +15,18 @@ import org.apache.jena.sparql.function.FunctionBase1;
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class Envelop extends FunctionBase1 {
+public class BoundaryFF extends FunctionBase1 {
 
     @Override
     public NodeValue exec(NodeValue v) {
 
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v);
-            GeometryWrapper envelope = geometry.getEnvelope();
-            return envelope.getResultNode();
+            GeometryWrapper boundary = geometry.getBoundary();
+            return boundary.getResultNode();
 
         } catch (DatatypeFormatException dfx) {
             return NodeValue.nvEmptyString;
         }
-
     }
-
 }

@@ -15,21 +15,20 @@ import org.apache.jena.sparql.function.FunctionBase1;
  * @author haozhechen
  * @author Gregory Albiston
  */
-public class ConvexHull extends FunctionBase1 {
+public class GetSRIDFF extends FunctionBase1 {
 
     @Override
     public NodeValue exec(NodeValue v) {
 
         try {
-            GeometryWrapper geometry = GeometryWrapper.extract(v);
+            GeometryWrapper geometryWrapper = GeometryWrapper.extract(v);
 
-            GeometryWrapper convexHull = geometry.convexHull();
-            return convexHull.getResultNode();
+            String srid = geometryWrapper.getSRID();
 
+            return NodeValue.makeNodeString(srid);
         } catch (DatatypeFormatException dfx) {
             return NodeValue.nvEmptyString;
         }
-
     }
 
 }
