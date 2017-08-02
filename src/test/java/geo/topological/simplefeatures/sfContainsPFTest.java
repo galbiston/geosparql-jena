@@ -6,7 +6,7 @@
 package geo.topological.simplefeatures;
 
 import conformanceTest.RDFDataLocationTest;
-import static implementation.functionregistry.RegistryLoader.load;
+import implementation.functionregistry.RegistryLoader;
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -68,8 +68,7 @@ public class sfContainsPFTest {
 
     @Before
     public void setUp() {
-//        PropertyFunctionRegistry.get().put("http://www.opengis.net/ont/geosparql#sfContains", geo.topological.simplefeatures.sfContainsPF.class);
-        load();
+        RegistryLoader.load();
     }
 
     @After

@@ -5,12 +5,9 @@
  */
 package geof.topological.simplefeatures;
 
-import geof.topological.simplefeatures.sfContainsEF;
 import conformanceTest.RDFDataLocationTest;
+import implementation.functionregistry.RegistryLoader;
 import implementation.support.Prefixes;
-import implementation.vocabulary.Geof;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -22,9 +19,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
-import org.apache.jena.sparql.core.Var;
-import org.apache.jena.sparql.expr.ExprVar;
-import org.apache.jena.sparql.function.user.UserDefinedFunctionFactory;
 import org.apache.jena.sparql.lang.sparql_11.ParseException;
 import org.apache.jena.util.FileManager;
 import org.junit.After;
@@ -55,6 +49,8 @@ public class sfContainsEFTest {
 
     @BeforeClass
     public static void setUpClass() {
+
+        RegistryLoader.load();
         /**
          * Setup inference model.
          */
@@ -76,11 +72,6 @@ public class sfContainsEFTest {
 
     @Before
     public void setUp() throws ParseException {
-        List<Var> args = new ArrayList<>();
-        args.add(Var.alloc("left"));
-        args.add(Var.alloc("right"));
-
-        UserDefinedFunctionFactory.getFactory().add(Geof.SF_CONTAINS, new sfContainsEF(new ExprVar(args.get(0).getName()), new ExprVar(args.get(1).getName())), args);
 
     }
 
