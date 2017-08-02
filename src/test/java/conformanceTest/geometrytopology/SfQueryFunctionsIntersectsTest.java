@@ -77,6 +77,7 @@ public class SfQueryFunctionsIntersectsTest {
          * empty set, Intersects returns the exact opposite result of disjoint.
          */
         ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#G");
         expectedList.add("http://example.org/ApplicationSchema#F");
         expectedList.add("http://example.org/ApplicationSchema#E");
         expectedList.add("http://example.org/ApplicationSchema#D");
@@ -90,6 +91,7 @@ public class SfQueryFunctionsIntersectsTest {
                 + " FILTER geof:sfIntersects(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
         ArrayList actualList = resourceQuery(Q1, infModel);
+
         assertEquals(expectedList, actualList);
     }
 
