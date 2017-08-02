@@ -318,9 +318,11 @@ public class GeometryWrapper {
 
         switch (datatypeURI) {
             case WKTDatatype.THE_TYPE_URI:
+            case WKTDatatype.THE_TYPE_URI_PREFIX:
                 geometry = WKT_DATATYPE.parse(lexicalForm);
                 break;
             case GMLDatatype.THE_TYPE_URI:
+            case GMLDatatype.THE_TYPE_URI_PREFIX:
                 geometry = GML_DATATYPE.parse(lexicalForm);
                 break;
             default:

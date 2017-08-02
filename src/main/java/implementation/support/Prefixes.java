@@ -28,11 +28,13 @@ public class Prefixes {
     public static final String LGD_URI = "http://linkedgeodata.org/ontology/";
     public static final String LGDG_URI = "http://linkedgeodata.org/geometry/";
 
+    public static final String GEO_PREFIX = "geo";
+
     public static final Map<String, String> get() {
         Map<String, String> map = new HashMap<>();
         map.put("sf", SF_URI);
         map.put("ex", EXAMPLE_URI);
-        map.put("geo", GEO_URI);
+        map.put(GEO_PREFIX, GEO_URI);
         map.put("geof", GEOF_URI);
         map.put("geor", GEOR_URI);
         map.put("xsd", XSD_URI);
