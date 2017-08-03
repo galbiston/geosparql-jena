@@ -44,7 +44,6 @@ public class GeometryWrapper {
     private final UnitsOfMeasure unitsOfMeasure;
     private final DimensionInfo dimensionInfo;
 
-    //TODO Handling of axis order. CRS.decode(crs, true) actually affects the x,y order??
     public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation, DimensionInfo dimensionInfo) {
 
         this.srsURI = srsURI;
