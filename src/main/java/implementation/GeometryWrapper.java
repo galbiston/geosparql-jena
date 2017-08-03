@@ -16,6 +16,7 @@ import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
@@ -313,7 +314,14 @@ public class GeometryWrapper {
 
         String datatypeURI = node.getLiteralDatatypeURI();
         String lexicalForm = node.getLiteralLexicalForm();
+        return extract(lexicalForm, datatypeURI);
+    }
 
+    public static final GeometryWrapper extract(Literal geometryLiteral) throws DatatypeFormatException {
+        return extract(geometryLiteral.getLexicalForm(), geometryLiteral.getDatatypeURI());
+    }
+
+    private static GeometryWrapper extract(String lexicalForm, String datatypeURI) throws DatatypeFormatException {
         GeometryWrapper geometry;
 
         switch (datatypeURI) {
