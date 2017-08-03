@@ -29,7 +29,7 @@ public class IntersectionFF extends FunctionBase2 {
 
             GeometryWrapper intersection = geometry1.intersection(geometry2);
 
-            return intersection.getResultNode();
+            return intersection.asNode();
 
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
             return NodeValue.nvEmptyString;

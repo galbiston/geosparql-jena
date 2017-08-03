@@ -24,7 +24,7 @@ public class ConvexHullFF extends FunctionBase1 {
             GeometryWrapper geometry = GeometryWrapper.extract(v);
 
             GeometryWrapper convexHull = geometry.convexHull();
-            return convexHull.getResultNode();
+            return convexHull.asNode();
 
         } catch (DatatypeFormatException dfx) {
             return NodeValue.nvEmptyString;

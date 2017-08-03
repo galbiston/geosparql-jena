@@ -28,7 +28,7 @@ public class SymmetricDifferenceFF extends FunctionBase2 {
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
             GeometryWrapper difference = geometry1.symDifference(geometry2);
-            return difference.getResultNode();
+            return difference.asNode();
 
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
             return NodeValue.nvEmptyString;

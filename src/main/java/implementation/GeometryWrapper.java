@@ -17,6 +17,7 @@ import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
@@ -260,10 +261,15 @@ public class GeometryWrapper {
         return this.geometry.within(transformedGeometry.getGeometry());
     }
 
-    public NodeValue getResultNode() throws DatatypeFormatException {
+    public NodeValue asNode() throws DatatypeFormatException {
+
+        Literal literal = asLiteral();
+        return NodeValue.makeNode(literal.getLexicalForm(), literal.getDatatype());
+    }
+
+    public Literal asLiteral() throws DatatypeFormatException {
 
         RDFDatatype datatype;
-        String lexicalForm;
 
         switch (serialisation) {
             case WKT:
@@ -276,9 +282,8 @@ public class GeometryWrapper {
                 throw new DatatypeFormatException("Serialisation is not WKT or GML.");
         }
 
-        lexicalForm = datatype.unparse(this);
-
-        return NodeValue.makeNode(lexicalForm, datatype);
+        String lexicalForm = datatype.unparse(this);
+        return ResourceFactory.createTypedLiteral(lexicalForm, datatype);
     }
 
     public int getCoordinateDimension() {

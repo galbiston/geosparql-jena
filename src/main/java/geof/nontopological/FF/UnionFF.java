@@ -28,7 +28,7 @@ public class UnionFF extends FunctionBase2 {
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
 
             GeometryWrapper union = geometry1.union(geometry2);
-            return union.getResultNode();
+            return union.asNode();
 
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
             return NodeValue.nvEmptyString;

@@ -34,7 +34,7 @@ public class BufferFF extends FunctionBase3 {
             //Obtain the target distance units
             GeometryWrapper buffer = geometry.buffer(radius, v3.asNode().getURI());
 
-            return buffer.getResultNode();
+            return buffer.asNode();
         } catch (DatatypeFormatException dfx) {
             return NodeValue.nvEmptyString;
         }

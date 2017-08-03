@@ -23,7 +23,7 @@ public class BoundaryFF extends FunctionBase1 {
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v);
             GeometryWrapper boundary = geometry.getBoundary();
-            return boundary.getResultNode();
+            return boundary.asNode();
 
         } catch (DatatypeFormatException dfx) {
             return NodeValue.nvEmptyString;

@@ -23,7 +23,7 @@ public class EnvelopFF extends FunctionBase1 {
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v);
             GeometryWrapper envelope = geometry.getEnvelope();
-            return envelope.getResultNode();
+            return envelope.asNode();
 
         } catch (DatatypeFormatException dfx) {
             return NodeValue.nvEmptyString;
