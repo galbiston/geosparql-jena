@@ -79,7 +79,7 @@ public class GeometryReverse {
                 finalGeometry = factory.createMultiPolygon(polygons);
                 break;
             case "MultiLineString":
-                LineString[] lineString = unpackLineString((GeometryCollection) geometry);
+                LineString[] lineString = unpackLineStrings((GeometryCollection) geometry);
                 finalGeometry = factory.createMultiLineString(lineString);
                 break;
             case "GeometryCollection":
@@ -124,7 +124,7 @@ public class GeometryReverse {
         return polygons;
     }
 
-    private static LineString[] unpackLineString(GeometryCollection geoCollection) {
+    private static LineString[] unpackLineStrings(GeometryCollection geoCollection) {
 
         GeometryFactory factory = geoCollection.getFactory();
 
