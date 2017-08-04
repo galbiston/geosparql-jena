@@ -42,7 +42,6 @@ dependencies {
     compile (group: 'org.apache.jena', name: 'apache-jena-libs', version: '3.4.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
 
     //Logging Framework
-    testRuntime group:'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 
     //JUnit Testing
