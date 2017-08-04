@@ -5,7 +5,7 @@
  */
 package conformance_test.rdfs_entailment_extension;
 
-import implementation.functionregistry.RegistryLoader;
+import implementation.function_registry.RegistryLoader;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

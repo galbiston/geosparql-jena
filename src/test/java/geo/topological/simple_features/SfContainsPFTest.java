@@ -6,7 +6,7 @@
 package geo.topological.simple_features;
 
 import static conformance_test.ConformanceTestSuite.initWktModel;
-import implementation.functionregistry.RegistryLoader;
+import implementation.function_registry.RegistryLoader;
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;

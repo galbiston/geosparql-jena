@@ -6,7 +6,7 @@
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.functionregistry.RegistryLoader;
+import implementation.function_registry.RegistryLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

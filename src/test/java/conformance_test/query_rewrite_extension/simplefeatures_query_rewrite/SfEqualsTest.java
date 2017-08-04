@@ -6,7 +6,7 @@
 package conformance_test.query_rewrite_extension.simplefeatures_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.functionregistry.RegistryLoader;
+import implementation.function_registry.RegistryLoader;
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;

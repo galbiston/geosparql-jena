@@ -6,7 +6,7 @@
 package conformance_test.core;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.functionregistry.RegistryLoader;
+import implementation.function_registry.RegistryLoader;
 import implementation.support.Prefixes;
 import java.util.ArrayList;
 import org.apache.jena.query.ParameterizedSparqlString;

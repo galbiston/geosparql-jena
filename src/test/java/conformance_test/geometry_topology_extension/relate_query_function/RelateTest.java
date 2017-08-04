@@ -6,7 +6,7 @@
 package conformance_test.geometry_topology_extension.relate_query_function;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.functionregistry.RegistryLoader;
+import implementation.function_registry.RegistryLoader;
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;

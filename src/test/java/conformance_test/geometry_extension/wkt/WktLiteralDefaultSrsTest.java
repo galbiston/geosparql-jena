@@ -7,7 +7,7 @@ package conformance_test.geometry_extension.wkt;
 
 import static conformance_test.ConformanceTestSuite.initWktEmptyModel;
 import static conformance_test.ConformanceTestSuite.literalQuery;
-import implementation.functionregistry.RegistryLoader;
+import implementation.function_registry.RegistryLoader;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
