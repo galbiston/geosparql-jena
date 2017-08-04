@@ -13,7 +13,6 @@ import com.vividsolutions.jts.geom.Polygon;
 import implementation.CRSRegistry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
-import implementation.datatype.WKTDatatype;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
