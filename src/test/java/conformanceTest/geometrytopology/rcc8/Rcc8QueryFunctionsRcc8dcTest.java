@@ -75,6 +75,7 @@ public class Rcc8QueryFunctionsRcc8dcTest {
          * is an empty set.
          */
         ArrayList<String> expectedList = new ArrayList<>();
+        expectedList.add("http://example.org/ApplicationSchema#G");
         expectedList.add("http://example.org/ApplicationSchema#F");
         expectedList.add("http://example.org/ApplicationSchema#E");
 
