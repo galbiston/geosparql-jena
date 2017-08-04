@@ -5,7 +5,7 @@
  */
 package geo.topological.geometryproperty;
 
-import conformanceTest.RDFDataLocationTest;
+import static conformanceTest.ConformanceTestSuite.initWktModel;
 import implementation.functionregistry.RegistryLoader;
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -16,10 +16,6 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.reasoner.Reasoner;
-import org.apache.jena.reasoner.ReasonerRegistry;
-import org.apache.jena.util.FileManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -48,19 +44,8 @@ public class GetDimensionTest {
 
     @BeforeClass
     public static void setUpClass() {
-
-        /**
-         * Setup inference model.
-         */
-        DEFAULT_WKT_MODEL = ModelFactory.createDefaultModel();
-        Model schema = FileManager.get().loadModel("http://schemas.opengis.net/geosparql/1.0/geosparql_vocab_all.rdf");
-        /**
-         * The use of OWL reasoner can bind schema with existing test data.
-         */
-        Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
-        reasoner = reasoner.bindSchema(schema);
-        infModel = ModelFactory.createInfModel(reasoner, DEFAULT_WKT_MODEL);
-        infModel.read(RDFDataLocationTest.SAMPLE_WKT);
+        RegistryLoader.load();
+        infModel = initWktModel();
     }
 
     @AfterClass
@@ -69,7 +54,6 @@ public class GetDimensionTest {
 
     @Before
     public void setUp() {
-        RegistryLoader.load();
     }
 
     @After
