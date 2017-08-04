@@ -5,12 +5,15 @@
  */
 package implementation;
 
+import implementation.datatype.WKTDatatype;
+import implementation.support.GeoSerialisationEnum;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -44,14 +47,37 @@ public class GeometryUtilTest {
      * Test of pointsToLineString method, of class GeometryUtil.
      */
     @Test
-    public void testPointsToLineString() {
+    public void testPointsToLineString_List() {
         System.out.println("pointsToLineString");
-        List<Literal> points = null;
-        Literal expResult = null;
+
+        List<Literal> points = new ArrayList<>();
+        points.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (11.0 12.0)", WKTDatatype.THE_WKT_DATATYPE));
+        points.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (8.0 5.0)", WKTDatatype.THE_WKT_DATATYPE));
+        points.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (3.0 1.0)", WKTDatatype.THE_WKT_DATATYPE));
+
+        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5, 3 1)", WKTDatatype.THE_WKT_DATATYPE);
         Literal result = GeometryUtil.pointsToLineString(points);
+
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of pointsToLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testPointsToLineString_List_GeoSerialisationEnum() {
+        System.out.println("pointsToLineString");
+
+        GeoSerialisationEnum geoSerialisationEnum = GeoSerialisationEnum.WKT;
+        List<Literal> points = new ArrayList<>();
+        points.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (11.0 12.0)", WKTDatatype.THE_WKT_DATATYPE));
+        points.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (8.0 5.0)", WKTDatatype.THE_WKT_DATATYPE));
+        points.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (3.0 1.0)", WKTDatatype.THE_WKT_DATATYPE));
+
+        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5, 3 1)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal result = GeometryUtil.pointsToLineString(points, geoSerialisationEnum);
+
+        assertEquals(expResult, result);
     }
 
 }
