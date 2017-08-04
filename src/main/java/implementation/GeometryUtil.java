@@ -22,7 +22,26 @@ public class GeometryUtil {
 
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 
+    /**
+     * Converts points to WKT LineString.<br>
+     * Assumed that all Points have the same characteristics.
+     *
+     * @param points
+     * @return
+     */
     public static final Literal pointsToLineString(List<Literal> points) {
+        return pointsToLineString(points, GeoSerialisationEnum.WKT);
+    }
+
+    /**
+     * Converts points to LineString according to provided Serialisation.<br>
+     * Assumed that all Points have the same characteristics.
+     *
+     * @param points
+     * @param geoSerialisationEnum
+     * @return
+     */
+    public static final Literal pointsToLineString(List<Literal> points, GeoSerialisationEnum geoSerialisationEnum) {
 
         List<Coordinate> coordsList = new ArrayList<>(points.size() * 4); //Set size to maximum possible. i.e. 4 coordinate per Point.
 
@@ -42,12 +61,12 @@ public class GeometryUtil {
             Coordinate[] coordinates = new Coordinate[coordsList.size()];
             coordinates = coordsList.toArray(coordinates);
             LineString lineString = geomFactory.createLineString(coordinates);
-            result = new GeometryWrapper(lineString, geom.getSrsURI(), geom.getSerialisation(), new DimensionInfo(geom.getCoordinateDimension(), geom.getSpatialDimension(), lineString.getDimension()));
+            result = new GeometryWrapper(lineString, geom.getSrsURI(), geoSerialisationEnum, new DimensionInfo(geom.getCoordinateDimension(), geom.getSpatialDimension(), lineString.getDimension()));
         } else {
 
             Coordinate[] coordinates = new Coordinate[coordsList.size()];
             LineString lineString = GEOMETRY_FACTORY.createLineString(coordinates);
-            result = new GeometryWrapper(lineString, "", GeoSerialisationEnum.WKT, new DimensionInfo(2, 2, 1));
+            result = new GeometryWrapper(lineString, "", geoSerialisationEnum, new DimensionInfo(2, 2, 1));
         }
 
         return result.asLiteral();
