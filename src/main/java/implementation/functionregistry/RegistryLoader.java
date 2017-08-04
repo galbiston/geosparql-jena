@@ -10,7 +10,6 @@ import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.vocabulary.Geo;
 import org.apache.jena.datatypes.TypeMapper;
-import org.apache.jena.query.ARQ;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
@@ -27,8 +26,8 @@ public class RegistryLoader {
      */
     public static void load() {
 
-        PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.chooseRegistry(ARQ.getContext());
-        FunctionRegistry functionRegistry = FunctionRegistry.get(ARQ.getContext());
+        PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
+        FunctionRegistry functionRegistry = FunctionRegistry.get();
 
         NonTopological.loadFilterFunctions(functionRegistry);
         functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
