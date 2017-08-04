@@ -11,7 +11,8 @@ package implementation.intersectionpattern;
  */
 public class EgenhoferIntersectionPattern {
 
-    public static final String EQUALS = "TFFFTFFFT";
+    public static final String EQUALS = "T*F**FFF*";
+    //Pattern "TFFFTFFFT" stated in GeoSPARQL 11-052r4 p. 9 but incorrect.
 
     public static final String DISJOINT = "FF*FF****";
 
