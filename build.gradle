@@ -43,6 +43,7 @@ dependencies {
 
     //Logging Framework
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
     //JUnit Testing
     testCompile group: 'junit', name: 'junit', version: '4.12'
