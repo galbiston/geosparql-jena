@@ -15,7 +15,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -69,7 +68,6 @@ public class Rcc8QueryFunctionsRcc8ntppiTest {
     }
 
     @Test
-    @Ignore
     public void positiveTest() {
 
         ArrayList<String> expectedList = new ArrayList<>();
