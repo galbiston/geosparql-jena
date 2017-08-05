@@ -70,19 +70,19 @@ public class SfOverlapsTest {
          * (TRUE) if their intersection set results in a geometry different from
          * both but of the same dimension.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#F");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#F");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfOverlaps", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfOverlaps", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfOverlaps", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfOverlaps", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

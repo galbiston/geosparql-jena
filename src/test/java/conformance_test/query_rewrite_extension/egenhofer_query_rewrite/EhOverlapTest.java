@@ -69,40 +69,40 @@ public class EhOverlapTest {
     @Test
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#F");
-        expectedList.add("http://example.org/ApplicationSchema#B");
-        expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#F");
+        expResult.add("http://example.org/ApplicationSchema#B");
+        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#BExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
+        assertEquals(expResult, result);
 
     }
 
     @Test
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#F");
-        expectedList.add("http://example.org/ApplicationSchema#B");
-        expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#F");
+        expResult.add("http://example.org/ApplicationSchema#B");
+        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#BExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureGeometryQuery("ex:C", "geo:ehOverlap"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:ehOverlap"), infModel);
+        assertEquals(expResult, result);
 
     }
 
     @Test
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#F");
-        expectedList.add("http://example.org/ApplicationSchema#B");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#F");
+        expResult.add("http://example.org/ApplicationSchema#B");
 
-        ArrayList<String> actualList = resourceQuery(geometryFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
+        assertEquals(expResult, result);
 
     }
 

@@ -69,23 +69,23 @@ public class SfIntersectsTest {
          * Intersects returns t (TRUE) if the intersection does not result in an
          * empty set, Intersects returns the exact opposite result of disjoint.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#G");
-        expectedList.add("http://example.org/ApplicationSchema#F");
-        expectedList.add("http://example.org/ApplicationSchema#E");
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#B");
-        expectedList.add("http://example.org/ApplicationSchema#A");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#G");
+        expResult.add("http://example.org/ApplicationSchema#F");
+        expResult.add("http://example.org/ApplicationSchema#E");
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#B");
+        expResult.add("http://example.org/ApplicationSchema#A");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfIntersects", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfIntersects", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        String Q1 = "SELECT ?place WHERE{"
+        String queryString = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + "ex:E ex:hasExactGeometry ?bGeom . "
                 + "ex:C ex:hasExactGeometry ?cGeom ."
@@ -93,9 +93,9 @@ public class SfIntersectsTest {
                 + "FILTER ( ?aGeom != ?cGeom ) . "
                 + "FILTER ( ?aGeom != ?bGeom ) . "
                 + "}";
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(Q1, infModel));
+        assertEquals(expResult, resourceQuery(queryString, infModel));
     }
 
 }

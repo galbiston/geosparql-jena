@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import org.junit.Ignore;
 
 /**
  *
@@ -63,18 +62,17 @@ public class GeometryAsGmlLiteralTest {
     }
 
     @Test
-    @Ignore
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>^^http://www.opengis.net/ont/geosparql#gmlLiteral");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>^^http://www.opengis.net/ont/geosparql#gmlLiteral");
 
-        String Q1 = "SELECT ?aGML WHERE{"
+        String queryString = "SELECT ?aGML WHERE{"
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
                 + "}";
-        ArrayList<String> actualList = literalQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = literalQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
 }

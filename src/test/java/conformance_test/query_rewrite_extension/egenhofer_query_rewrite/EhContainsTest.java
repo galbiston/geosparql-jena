@@ -68,32 +68,32 @@ public class EhContainsTest {
 
     @Test
     public void featureFeatureTest() {
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureFeatureQuery("ex:A", "geo:ehContains"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:A", "geo:ehContains"), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void featureGeometryTest() {
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureGeometryQuery("ex:A", "geo:ehContains"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:A", "geo:ehContains"), infModel);
+        assertEquals(expResult, result);
 
     }
 
     @Test
     public void geometryFeatureTest() {
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> actualList = resourceQuery(geometryFeatureQuery("ex:A", "geo:ehContains"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:A", "geo:ehContains"), infModel);
+        assertEquals(expResult, result);
     }
 
 }

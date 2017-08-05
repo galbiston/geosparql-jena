@@ -69,19 +69,19 @@ public class Rcc8eqTest {
          * Equal returns t (TRUE) if two geometries of the same type have
          * identical X,Y coordinate values.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#F");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#F");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:F", "geo:rcc8eq", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:F", "geo:rcc8eq", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:rcc8eq", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:rcc8eq", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

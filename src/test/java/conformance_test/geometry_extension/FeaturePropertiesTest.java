@@ -65,27 +65,27 @@ public class FeaturePropertiesTest {
     @Test
     public void testHasGeometry() {
 
-        List<String> expectedList = Arrays.asList("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        List<String> expResult = Arrays.asList("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
 
-        String Q1 = "SELECT ?aWKT WHERE{"
+        String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        List<String> actualList = literalQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        List<String> result = literalQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void testHasDefaultGeometry() {
 
-        List<String> expectedList = Arrays.asList("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        List<String> expResult = Arrays.asList("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
 
-        String Q1 = "SELECT ?aWKT WHERE{"
+        String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:A geo:hasDefaultGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        List<String> actualList = literalQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        List<String> result = literalQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
 }

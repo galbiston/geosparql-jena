@@ -69,19 +69,19 @@ public class EhMeetTest {
          * ehMeet has same functionality with sfTouches since they have same
          * intersection matrix.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#E");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#E");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehMeet", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehMeet", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:ehMeet", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:ehMeet", "FILTER ( ?aGeom != ?bGeom )"), infModel));
     }
 
 }

@@ -75,19 +75,19 @@ public class EhContainsTest {
          * return the same instance while the sfContains will return the same
          * instance.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> actualList = resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-83.4 34.4)"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-83.4 34.4)"), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-86.4 31.4)"), infModel));
+        assertEquals(expResult, resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-86.4 31.4)"), infModel));
     }
 
 }

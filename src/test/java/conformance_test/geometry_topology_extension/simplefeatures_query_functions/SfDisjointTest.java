@@ -74,33 +74,33 @@ public class SfDisjointTest {
          * Disjoint returns t (TRUE) if the intersection of the two geometries
          * is an empty set.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#G");
-        expectedList.add("http://example.org/ApplicationSchema#F");
-        expectedList.add("http://example.org/ApplicationSchema#E");
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#B");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#G");
+        expResult.add("http://example.org/ApplicationSchema#F");
+        expResult.add("http://example.org/ApplicationSchema#E");
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#B");
 
-        String Q1 = "SELECT ?place WHERE{"
+        String queryString = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:sfDisjoint(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
-        ArrayList<String> actualList = resourceQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        String Q1 = "SELECT ?place WHERE{"
+        String queryString = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:sfDisjoint(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(Q1, infModel));
+        assertEquals(expResult, resourceQuery(queryString, infModel));
     }
 
 }

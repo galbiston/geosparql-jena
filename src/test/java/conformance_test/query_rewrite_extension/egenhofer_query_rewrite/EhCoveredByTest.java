@@ -68,32 +68,32 @@ public class EhCoveredByTest {
 
     @Test
     public void featureFeatureTest() {
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureFeatureQuery("ex:C", "geo:ehCoveredBy"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:ehCoveredBy"), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void featureGeometryTest() {
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureGeometryQuery("ex:C", "geo:ehCoveredBy"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:ehCoveredBy"), infModel);
+        assertEquals(expResult, result);
 
     }
 
     @Test
     public void geometryFeatureTest() {
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#D");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#D");
 
-        ArrayList<String> actualList = resourceQuery(geometryFeatureQuery("ex:C", "geo:ehCoveredBy"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:ehCoveredBy"), infModel);
+        assertEquals(expResult, result);
     }
 
 }

@@ -60,14 +60,14 @@ public class GeometryPropertiesTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("0^^http://www.w3.org/2001/XMLSchema#integer");
-        expectedList.add("2^^http://www.w3.org/2001/XMLSchema#integer");
-        expectedList.add("2^^http://www.w3.org/2001/XMLSchema#integer");
-        expectedList.add("false^^http://www.w3.org/2001/XMLSchema#boolean");
-        expectedList.add("true^^http://www.w3.org/2001/XMLSchema#boolean");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("0^^http://www.w3.org/2001/XMLSchema#integer");
+        expResult.add("2^^http://www.w3.org/2001/XMLSchema#integer");
+        expResult.add("2^^http://www.w3.org/2001/XMLSchema#integer");
+        expResult.add("false^^http://www.w3.org/2001/XMLSchema#boolean");
+        expResult.add("true^^http://www.w3.org/2001/XMLSchema#boolean");
 
-        String Q1 = "SELECT ?dimension ?coordinateDimension ?spatialDimension ?isEmpty ?isSimple WHERE{"
+        String queryString = "SELECT ?dimension ?coordinateDimension ?spatialDimension ?isEmpty ?isSimple WHERE{"
                 + " ex:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:dimension ?dimension ."
                 + " ?aGeom geo:coordinateDimension ?coordinateDimension ."
@@ -75,8 +75,8 @@ public class GeometryPropertiesTest {
                 + " ?aGeom geo:isEmpty ?isEmpty ."
                 + " ?aGeom geo:isSimple ?isSimple ."
                 + "}";
-        ArrayList<String> actualList = literalQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = literalQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
 }

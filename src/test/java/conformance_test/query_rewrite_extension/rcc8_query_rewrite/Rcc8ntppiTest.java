@@ -69,35 +69,35 @@ public class Rcc8ntppiTest {
     @Test
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureFeatureQuery("ex:G", "geo:rcc8ntppi"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:G", "geo:rcc8ntppi"), infModel);
+        assertEquals(expResult, result);
 
     }
 
     @Test
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureGeometryQuery("ex:G", "geo:rcc8ntppi"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:G", "geo:rcc8ntppi"), infModel);
+        assertEquals(expResult, result);
 
     }
 
     @Test
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> actualList = resourceQuery(geometryFeatureQuery("ex:G", "geo:rcc8ntppi"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:G", "geo:rcc8ntppi"), infModel);
+        assertEquals(expResult, result);
 
     }
 

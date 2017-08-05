@@ -65,19 +65,19 @@ public class EhCoveredByTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#D");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#D");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehCoveredBy", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehCoveredBy", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:E", "geo:ehCoveredBy", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:E", "geo:ehCoveredBy", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

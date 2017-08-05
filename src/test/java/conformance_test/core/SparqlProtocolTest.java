@@ -73,27 +73,27 @@ public class SparqlProtocolTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
 
-        String Q1 = "SELECT ?aWKT WHERE{"
+        String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
+        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
 
-        ArrayList<String> actualList = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
 
         try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), infModel)) {
             ResultSet results = qexec.execSelect();
             while (results.hasNext()) {
                 QuerySolution solution = results.nextSolution();
                 Literal literal = solution.getLiteral("?aWKT");
-                actualList.add(literal.toString());
+                result.add(literal.toString());
             }
         }
-        assertEquals(expectedList, actualList);
+        assertEquals(expResult, result);
     }
 }

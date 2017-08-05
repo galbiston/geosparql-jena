@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import org.junit.Ignore;
 
 /**
  *
@@ -64,18 +63,17 @@ public class GmlLiteralEmptyTest {
     }
 
     @Test
-    @Ignore
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("urn:ogc:def:crs:OGC::CRS84");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("urn:ogc:def:crs:OGC::CRS84");
 
-        String Q1 = "SELECT ((geof:getsrid ( ?aGML )) AS ?srid) WHERE{"
+        String queryString = "SELECT ((geof:getsrid ( ?aGML )) AS ?srid) WHERE{"
                 + " ex:B ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
                 + "}";
-        ArrayList<String> actualList = literalQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = literalQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
 }

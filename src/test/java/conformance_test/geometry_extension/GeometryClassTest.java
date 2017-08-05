@@ -62,22 +62,22 @@ public class GeometryClassTest {
     @Test
     public void positiveTest() {
 
-        List<String> expectedList = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
 
-        expectedList.add("http://example.org/ApplicationSchema#AExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#GExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#AExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#BExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#EExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#GExactGeom");
 
-        String Q1 = "SELECT ?geometry WHERE{"
+        String queryString = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type geo:Geometry ."
                 + "}ORDER BY ?geometry";
-        List<String> actualList = resourceQuery(Q1, infModel);
+        List<String> result = resourceQuery(queryString, infModel);
 
-        assertEquals(expectedList, actualList);
+        assertEquals(expResult, result);
     }
 
 }

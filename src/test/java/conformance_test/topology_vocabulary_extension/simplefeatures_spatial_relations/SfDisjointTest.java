@@ -69,23 +69,23 @@ public class SfDisjointTest {
          * Disjoint returns t (TRUE) if the intersection of the two geometries
          * is an empty set.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#G");
-        expectedList.add("http://example.org/ApplicationSchema#F");
-        expectedList.add("http://example.org/ApplicationSchema#E");
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#B");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#G");
+        expResult.add("http://example.org/ApplicationSchema#F");
+        expResult.add("http://example.org/ApplicationSchema#E");
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#B");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfDisjoint", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfDisjoint", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfDisjoint", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfDisjoint", "FILTER ( ?aGeom != ?bGeom )"), infModel));
     }
 
 }

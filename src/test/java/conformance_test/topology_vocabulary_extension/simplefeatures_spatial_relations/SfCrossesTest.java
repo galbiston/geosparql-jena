@@ -73,18 +73,18 @@ public class SfCrossesTest {
          * multipoint/linestring, linestring/linestring, linestring/polygon, and
          * linestring/multipolygon comparisons.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#B");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#B");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfCrosses", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfCrosses", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:F", "geo:sfCrosses", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:F", "geo:sfCrosses", "FILTER ( ?aGeom != ?bGeom )"), infModel));
     }
 }

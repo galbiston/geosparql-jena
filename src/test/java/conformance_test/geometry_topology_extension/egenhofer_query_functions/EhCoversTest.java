@@ -72,29 +72,29 @@ public class EhCoversTest {
     @Test
     public void positiveTest() {
 
-        List<String> expectedList = Arrays.asList("http://example.org/ApplicationSchema#D");
+        List<String> expResult = Arrays.asList("http://example.org/ApplicationSchema#D");
 
-        String Q1 = "SELECT ?place WHERE{"
+        String queryString = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:ehCovers(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
                 + "}";
-        List<String> actualList = resourceQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        List<String> result = resourceQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        String Q1 = "SELECT ?place WHERE{"
+        String queryString = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:ehCovers(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
                 + "}";
 
-        List<String> expectedList = new ArrayList<>();
-        List<String> actualList = resourceQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        List<String> expResult = new ArrayList<>();
+        List<String> result = resourceQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
 }

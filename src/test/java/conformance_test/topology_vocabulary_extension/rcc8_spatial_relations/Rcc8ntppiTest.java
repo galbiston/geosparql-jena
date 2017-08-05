@@ -65,19 +65,19 @@ public class Rcc8ntppiTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:G", "geo:rcc8ntppi", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:G", "geo:rcc8ntppi", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:E", "geo:rcc8ntppi", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:E", "geo:rcc8ntppi", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

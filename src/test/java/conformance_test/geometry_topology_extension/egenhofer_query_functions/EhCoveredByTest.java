@@ -70,19 +70,19 @@ public class EhCoveredByTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#D");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#D");
 
-        ArrayList<String> actualList = resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))"), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Point(-86.4 31.4)"), infModel));
+        assertEquals(expResult, resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Point(-86.4 31.4)"), infModel));
     }
 
 }

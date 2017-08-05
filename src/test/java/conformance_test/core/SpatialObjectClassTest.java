@@ -73,39 +73,39 @@ public class SpatialObjectClassTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#G");
-        expectedList.add("http://example.org/ApplicationSchema#F");
-        expectedList.add("http://example.org/ApplicationSchema#E");
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#B");
-        expectedList.add("http://example.org/ApplicationSchema#A");
-        expectedList.add("http://example.org/ApplicationSchema#GExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#BExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#AExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#G");
+        expResult.add("http://example.org/ApplicationSchema#F");
+        expResult.add("http://example.org/ApplicationSchema#E");
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#B");
+        expResult.add("http://example.org/ApplicationSchema#A");
+        expResult.add("http://example.org/ApplicationSchema#GExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#EExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#BExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#AExactGeom");
 
-        String Q1 = "SELECT ?feature WHERE{"
+        String queryString = "SELECT ?feature WHERE{"
                 + " ?feature rdf:type geo:SpatialObject ."
                 + "}";
         QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
+        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
 
-        ArrayList<String> actualList = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
 
         try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), infModel)) {
             ResultSet results = qexec.execSelect();
             while (results.hasNext()) {
                 QuerySolution solution = results.nextSolution();
                 Resource resource = solution.getResource("?feature");
-                actualList.add(resource.toString());
+                result.add(resource.toString());
             }
         }
-        assertEquals(expectedList, actualList);
+        assertEquals(expResult, result);
     }
 }

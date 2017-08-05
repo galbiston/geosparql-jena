@@ -66,19 +66,19 @@ public class WktGeometryTypesTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#GExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#FExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#EExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#GExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#EExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        String Q1 = "SELECT ?geometry WHERE{"
+        String queryString = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type sf:Polygon ."
                 + "}";
-        ArrayList<String> actualList = resourceQuery(Q1, infModel);
+        ArrayList<String> result = resourceQuery(queryString, infModel);
 
-        assertEquals(expectedList, actualList);
+        assertEquals(expResult, result);
     }
 
 }

@@ -70,15 +70,15 @@ public class SridFunctionTest {
     @Test
     public void positiveTest() {
 
-        List<String> expectedList = Arrays.asList("http://www.opengis.net/def/crs/OGC/1.3/CRS84");
+        List<String> expResult = Arrays.asList("http://www.opengis.net/def/crs/OGC/1.3/CRS84");
 
-        String Q1 = "SELECT ((geof:getSRID ( ?aWKT )) AS ?srid) WHERE{"
+        String queryString = "SELECT ((geof:getSRID ( ?aWKT )) AS ?srid) WHERE{"
                 + " ex:C ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        List<String> actualList = literalQuery(Q1, infModel);
+        List<String> result = literalQuery(queryString, infModel);
 
-        assertEquals(expectedList, actualList);
+        assertEquals(expResult, result);
     }
 
 }

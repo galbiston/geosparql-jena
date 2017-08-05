@@ -70,19 +70,19 @@ public class EhContainsTest {
          * return the same instance while the sfContains will return the same
          * instance.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:ehContains", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:ehContains", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehContains", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehContains", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

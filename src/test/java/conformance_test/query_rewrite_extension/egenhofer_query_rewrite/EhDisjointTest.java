@@ -70,9 +70,9 @@ public class EhDisjointTest {
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        ArrayList<String> actualList = resourceQuery(featureFeatureQuery("ex:C", "geo:ehDisjoint"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> expResult = new ArrayList<>();
+        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:ehDisjoint"), infModel);
+        assertEquals(expResult, result);
 
     }
 
@@ -80,9 +80,9 @@ public class EhDisjointTest {
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        ArrayList<String> actualList = resourceQuery(featureGeometryQuery("ex:C", "geo:ehDisjoint"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> expResult = new ArrayList<>();
+        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:ehDisjoint"), infModel);
+        assertEquals(expResult, result);
 
     }
 
@@ -90,9 +90,9 @@ public class EhDisjointTest {
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        ArrayList<String> actualList = resourceQuery(geometryFeatureQuery("ex:C", "geo:ehDisjoint"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> expResult = new ArrayList<>();
+        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:ehDisjoint"), infModel);
+        assertEquals(expResult, result);
 
     }
 

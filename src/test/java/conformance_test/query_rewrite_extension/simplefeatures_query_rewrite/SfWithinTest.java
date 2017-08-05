@@ -69,50 +69,50 @@ public class SfWithinTest {
     @Test
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#G");
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#A");
-        expectedList.add("http://example.org/ApplicationSchema#GExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#AExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#G");
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#A");
+        expResult.add("http://example.org/ApplicationSchema#GExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#AExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureFeatureQuery("ex:C", "geo:sfWithin"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:sfWithin"), infModel);
+        assertEquals(expResult, result);
 
     }
 
     @Test
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#G");
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#A");
-        expectedList.add("http://example.org/ApplicationSchema#GExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#DExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#CExactGeom");
-        expectedList.add("http://example.org/ApplicationSchema#AExactGeom");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#G");
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#A");
+        expResult.add("http://example.org/ApplicationSchema#GExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#AExactGeom");
 
-        ArrayList<String> actualList = resourceQuery(featureGeometryQuery("ex:C", "geo:sfWithin"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:sfWithin"), infModel);
+        assertEquals(expResult, result);
 
     }
 
     @Test
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#G");
-        expectedList.add("http://example.org/ApplicationSchema#D");
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#A");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#G");
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#A");
 
-        ArrayList<String> actualList = resourceQuery(geometryFeatureQuery("ex:C", "geo:sfWithin"), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:sfWithin"), infModel);
+        assertEquals(expResult, result);
 
     }
 

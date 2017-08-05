@@ -78,27 +78,27 @@ public class WktLiteralEmptyTest {
     @Test
     public void geometryPositiveTest() {
 
-        List<String> expectedList = Arrays.asList("true^^http://www.w3.org/2001/XMLSchema#boolean");
+        List<String> expResult = Arrays.asList("true^^http://www.w3.org/2001/XMLSchema#boolean");
 
-        String Q1 = "SELECT ?aWKT WHERE{"
+        String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:A ex:hasExactGeometry ?geom ."
                 + " ?geom geo:isEmpty ?aWKT ."
                 + "}";
-        List<String> actualList = literalQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        List<String> result = literalQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void geometryNegativeTest() {
 
-        List<String> expectedList = Arrays.asList("false^^http://www.w3.org/2001/XMLSchema#boolean");
+        List<String> expResult = Arrays.asList("false^^http://www.w3.org/2001/XMLSchema#boolean");
 
-        String Q1 = "SELECT ?aWKT WHERE{"
+        String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:B ex:hasExactGeometry ?geom ."
                 + " ?geom geo:isEmpty ?aWKT ."
                 + "}";
-        List<String> actualList = literalQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        List<String> result = literalQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
 }

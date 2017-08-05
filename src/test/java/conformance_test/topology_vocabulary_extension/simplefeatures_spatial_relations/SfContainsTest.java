@@ -69,20 +69,20 @@ public class SfContainsTest {
          * Contains returns t (TRUE) if the second geometry is completely
          * contained by the first geometry.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#C");
-        expectedList.add("http://example.org/ApplicationSchema#A");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#A");
 
-        ArrayList<String> actualList = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfContains", ""), infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfContains", ""), infModel);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
+        ArrayList<String> expResult = new ArrayList<>();
 
-        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfContains", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfContains", "FILTER ( ?aGeom != ?bGeom )"), infModel));
     }
 
 }

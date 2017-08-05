@@ -72,32 +72,32 @@ public class Rcc8ecTest {
         /**
          * rcc8ec has similar functionality with sfTouches and ehMeet.
          */
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("http://example.org/ApplicationSchema#E");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/ApplicationSchema#E");
 
-        String Q1 = "SELECT ?place WHERE{"
+        String queryString = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8ec(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
-        ArrayList<String> actualList = resourceQuery(Q1, infModel);
+        ArrayList<String> result = resourceQuery(queryString, infModel);
 
-        assertEquals(expectedList, actualList);
+        assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        String Q1 = "SELECT ?place WHERE{"
+        String queryString = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8ec(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((83.2 34.3, 83.0 34.3, 83.0 34.3, 83.2 34.3, 83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        ArrayList<String> actualList = resourceQuery(Q1, infModel);
+        ArrayList<String> expResult = new ArrayList<>();
+        ArrayList<String> result = resourceQuery(queryString, infModel);
 
-        assertEquals(expectedList, actualList);
+        assertEquals(expResult, result);
     }
 
 }

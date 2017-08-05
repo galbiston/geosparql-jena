@@ -64,15 +64,15 @@ public class GeometryAsWktLiteralTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expectedList = new ArrayList<>();
-        expectedList.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        ArrayList<String> expResult = new ArrayList<>();
+        expResult.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
 
-        String Q1 = "SELECT ?aWKT WHERE{"
+        String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        ArrayList<String> actualList = literalQuery(Q1, infModel);
-        assertEquals(expectedList, actualList);
+        ArrayList<String> result = literalQuery(queryString, infModel);
+        assertEquals(expResult, result);
     }
 
 }
