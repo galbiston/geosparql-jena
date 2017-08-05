@@ -25,28 +25,28 @@ repositories {
 dependencies {
 
     //Apache Lucene
-    //compile 'org.apache.lucene:lucene-core:6.1.0'
+    //implementation 'org.apache.lucene:lucene-core:6.1.0'
 
     //Geotools: http://docs.geotools.org/latest/userguide.old/library/
     ext.geoToolsVersion = '17.2'
-    compile group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
-    compile group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
-    compile group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion
-    compile group: 'org.geotools', name: 'gt-main', version: geoToolsVersion
+    implementation group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
+    implementation group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
+    implementation group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion
+    implementation group: 'org.geotools', name: 'gt-main', version: geoToolsVersion
 
-    compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
+    api group: 'com.vividsolutions', name: 'jts', version: '1.13'
 
-    compile group: 'com.jcabi', name: 'jcabi-xml', version: '0.19'
+    implementation group: 'com.jcabi', name: 'jcabi-xml', version: '0.19'
 
     //Apache Jena EXCLUDE its log part
-    compile (group: 'org.apache.jena', name: 'apache-jena-libs', version: '3.4.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
+    api (group: 'org.apache.jena', name: 'apache-jena-libs', version: '3.4.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
 
     //Logging Framework
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
     //JUnit Testing
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 
