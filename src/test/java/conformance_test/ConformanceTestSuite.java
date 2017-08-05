@@ -162,8 +162,8 @@ public class ConformanceTestSuite {
      * @param queryModel - Use InfModel to get the full reasoner support
      * @return - the returned result list
      */
-    public static ArrayList<String> literalQuery(String queryString, InfModel queryModel) {
-        ArrayList<String> resultList = new ArrayList<>();
+    public static ArrayList<Literal> literalQuery(String queryString, InfModel queryModel) {
+        ArrayList<Literal> resultList = new ArrayList<>();
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
@@ -176,7 +176,7 @@ public class ConformanceTestSuite {
                 while (varIterator.hasNext()) {
                     String varName = (String) varIterator.next();
                     Literal literal = solution.getLiteral(varName);
-                    resultList.add(literal.toString());
+                    resultList.add(literal);
                 }
             }
         }

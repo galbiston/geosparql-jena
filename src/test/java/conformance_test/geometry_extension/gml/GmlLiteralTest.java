@@ -6,9 +6,12 @@
 package conformance_test.geometry_extension.gml;
 
 import static conformance_test.ConformanceTestSuite.*;
+import implementation.datatype.GMLDatatype;
 import implementation.function_registry.RegistryLoader;
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -65,14 +68,14 @@ public class GmlLiteralTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>^^http://www.opengis.net/ont/geosparql#gmlLiteral");
+        ArrayList<Literal> expResult = new ArrayList<>();
+        expResult.add(ResourceFactory.createTypedLiteral("<gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>", GMLDatatype.THE_GML_DATATYPE));
 
         String queryString = "SELECT ?aGML WHERE{"
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
                 + "}";
-        ArrayList<String> result = literalQuery(queryString, infModel);
+        ArrayList<Literal> result = literalQuery(queryString, infModel);
 
         System.out.println("Exp: " + expResult);
         System.out.println("Res: " + result);

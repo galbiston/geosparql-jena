@@ -6,15 +6,18 @@
 package conformance_test.geometry_extension.wkt;
 
 import static conformance_test.ConformanceTestSuite.*;
+import implementation.datatype.WKTDatatype;
 import implementation.function_registry.RegistryLoader;
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -68,14 +71,14 @@ public class WktLiteralTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        ArrayList<Literal> expResult = new ArrayList<>();
+        expResult.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)", WKTDatatype.THE_WKT_DATATYPE));
 
         String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        ArrayList<String> result = literalQuery(queryString, infModel);
+        ArrayList<Literal> result = literalQuery(queryString, infModel);
         assertEquals(expResult, result);
     }
 

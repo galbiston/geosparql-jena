@@ -11,13 +11,15 @@ import implementation.function_registry.RegistryLoader;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -78,26 +80,27 @@ public class WktLiteralEmptyTest {
     @Test
     public void geometryPositiveTest() {
 
-        List<String> expResult = Arrays.asList("true^^http://www.w3.org/2001/XMLSchema#boolean");
+        List<Literal> expResult = Arrays.asList(ResourceFactory.createTypedLiteral(true));
 
-        String queryString = "SELECT ?aWKT WHERE{"
+        String queryString = "SELECT ?isEmpty WHERE{"
                 + " ex:A ex:hasExactGeometry ?geom ."
-                + " ?geom geo:isEmpty ?aWKT ."
+                + " ?geom geo:isEmpty ?isEmpty ."
                 + "}";
-        List<String> result = literalQuery(queryString, infModel);
+        List<Literal> result = literalQuery(queryString, infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void geometryNegativeTest() {
 
-        List<String> expResult = Arrays.asList("false^^http://www.w3.org/2001/XMLSchema#boolean");
+        List<Literal> expResult = Arrays.asList(ResourceFactory.createTypedLiteral(false));
 
-        String queryString = "SELECT ?aWKT WHERE{"
+        String queryString = "SELECT ?isEmpty WHERE{"
                 + " ex:B ex:hasExactGeometry ?geom ."
-                + " ?geom geo:isEmpty ?aWKT ."
+                + " ?geom geo:isEmpty ?isEmpty ."
                 + "}";
-        List<String> result = literalQuery(queryString, infModel);
+        List<Literal> result = literalQuery(queryString, infModel);
+
         assertEquals(expResult, result);
     }
 

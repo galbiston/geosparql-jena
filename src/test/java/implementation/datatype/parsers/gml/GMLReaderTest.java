@@ -53,7 +53,7 @@ public class GMLReaderTest {
 
     @Test
     public void testPoint() {
-        GeometryWrapper geo = GMLReader.read("<gml:Point srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4 34.4</gml:coordinates></gml:Point>");
+        GeometryWrapper geo = GMLReader.read("<gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:coordinates>-83.4 34.4</gml:coordinates></gml:Point>");
         Geometry test = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "-83.4 34.4"));
         GeometryWrapper expResult = new GeometryWrapper(test, GML_SRS_NAMESPACE, GeoSerialisationEnum.GML, new DimensionInfo(2, 2, 0));
 
@@ -64,7 +64,7 @@ public class GMLReaderTest {
 
     @Test
     public void testLineString() {
-        GeometryWrapper geo = GMLReader.read("<gml:LineString srsName='urn:ogc:def:crs:EPSG::27700' xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4 34.0 -83.3 34.3</gml:coordinates></gml:LineString>");
+        GeometryWrapper geo = GMLReader.read("<gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:coordinates>-83.4 34.0 -83.3 34.3</gml:coordinates></gml:LineString>");
         Geometry test = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "-83.4 34.0, -83.3 34.3"));
         GeometryWrapper expResult = new GeometryWrapper(test, GML_SRS_NAMESPACE, GeoSerialisationEnum.GML, new DimensionInfo(2, 2, 1));
 

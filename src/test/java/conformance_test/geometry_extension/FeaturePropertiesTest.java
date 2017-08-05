@@ -6,16 +6,19 @@
 package conformance_test.geometry_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
+import implementation.datatype.WKTDatatype;
 import implementation.function_registry.RegistryLoader;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -65,26 +68,30 @@ public class FeaturePropertiesTest {
     @Test
     public void testHasGeometry() {
 
-        List<String> expResult = Arrays.asList("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        List<Literal> expResult = Arrays.asList(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)", WKTDatatype.THE_WKT_DATATYPE));
 
         String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        List<String> result = literalQuery(queryString, infModel);
+        List<Literal> result = literalQuery(queryString, infModel);
+
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
+
         assertEquals(expResult, result);
     }
 
     @Test
     public void testHasDefaultGeometry() {
 
-        List<String> expResult = Arrays.asList("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        List<Literal> expResult = Arrays.asList(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)", WKTDatatype.THE_WKT_DATATYPE));
 
         String queryString = "SELECT ?aWKT WHERE{"
                 + " ex:A geo:hasDefaultGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        List<String> result = literalQuery(queryString, infModel);
+        List<Literal> result = literalQuery(queryString, infModel);
         assertEquals(expResult, result);
     }
 

@@ -9,6 +9,8 @@ import static conformance_test.ConformanceTestSuite.*;
 import implementation.function_registry.RegistryLoader;
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -65,14 +67,19 @@ public class GmlLiteralEmptyTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("urn:ogc:def:crs:OGC::CRS84");
+        ArrayList<Literal> expResult = new ArrayList<>();
+        expResult.add(ResourceFactory.createTypedLiteral("http://www.opengis.net/def/crs/OGC/1.3/CRS84"));
 
-        String queryString = "SELECT ((geof:getsrid ( ?aGML )) AS ?srid) WHERE{"
+        String queryString = "SELECT ?srid WHERE{"
                 + " ex:B ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
+                + "BIND(geof:getSRID( ?aGML ) AS ?srid)"
                 + "}";
-        ArrayList<String> result = literalQuery(queryString, infModel);
+        ArrayList<Literal> result = literalQuery(queryString, infModel);
+
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
+
         assertEquals(expResult, result);
     }
 

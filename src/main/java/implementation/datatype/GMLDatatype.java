@@ -9,8 +9,10 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.gml2.GMLReader;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
+import implementation.CRSRegistry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
+import implementation.datatype.parsers.wkt.WKTGeometryBuilder;
 import implementation.support.GeoSerialisationEnum;
 import static implementation.support.Prefixes.GEO_URI;
 import java.io.IOException;
@@ -78,6 +80,8 @@ public class GMLDatatype extends BaseDatatype {
         //Change emitted Namespace to that in GeoSPARQL standard 11-052r4
         String gmlString = gmlWriter.write(geom.getParsingGeometry());
         gmlString = gmlString.replace("net/gml", "net/ont/gml");
+        gmlString = gmlString.replace("'", "\"");
+
         return (gmlString);
     }
 
@@ -96,35 +100,50 @@ public class GMLDatatype extends BaseDatatype {
             Geometry geometry = gmlReader.read(lexicalForm, null);
             String srsURI = findSrsURI(lexicalForm);
 
-            DimensionInfo dimensionInfo = extractDimensionInfo(srsURI, geometry);
+            DimensionInfo dimensionInfo = extractDimensionInfo(geometry);
 
             GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.GML, dimensionInfo);
             return geom;
         } catch (IOException | ParserConfigurationException | org.xml.sax.SAXException ex) {
-            LOGGER.error("Illegal GML literal: {}", lexicalForm);
+            LOGGER.error("Exception: {} Illegal GML literal: {}", ex.getMessage(), lexicalForm);
             return null;
+        } catch (NullPointerException ex) {
+
+            //Currently handling of empty GML.
+            String srsURI = findSrsURI(lexicalForm);
+            int spaceIndex = lexicalForm.indexOf(" ");
+            String shape = lexicalForm.substring(5, spaceIndex).toLowerCase();
+            WKTGeometryBuilder builder = new WKTGeometryBuilder(shape, "", "");
+            DimensionInfo dimensionInfo = builder.getDimensionInfo();
+            Geometry geometry = builder.getGeometry();
+
+            return new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.GML, dimensionInfo);
         }
     }
 
     public static final String findSrsURI(String lexicalForm) {
 
         //Find srsName attribute
-        String srsName = "srsName=";
-        int start = lexicalForm.indexOf(srsName) + srsName.length();
-        String sub = lexicalForm.substring(start);
+        String srsNameAttribute = "srsName=\"";
+        String srsName;
+        int srsIndex = lexicalForm.indexOf(srsNameAttribute);
 
-        //Find end of first element
-        int closeIndex = sub.indexOf(">");
-        sub = sub.substring(0, closeIndex);
+        if (srsIndex > -1) {
+            int start = srsIndex + srsNameAttribute.length();
+            srsName = lexicalForm.substring(start);
 
-        //Remove both types of quotes
-        sub = sub.replace("'", "");
-        sub = sub.replace("\"", "");
+            //Find end of first element
+            int closeIndex = srsName.indexOf("\"");
+            srsName = srsName.substring(0, closeIndex);
 
-        return sub;
+        } else {
+            srsName = CRSRegistry.DEFAULT_WKT_CRS;
+        }
+
+        return srsName;
     }
 
-    public static final DimensionInfo extractDimensionInfo(String srsURI, Geometry geometry) {
+    public static final DimensionInfo extractDimensionInfo(Geometry geometry) {
 
         Double z = geometry.getCoordinate().z;
         Double nullValue = Coordinate.NULL_ORDINATE;

@@ -34,7 +34,7 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EmptyA</ex:name>
     </ex:PlaceOfInterest>
     <sf:Point rdf:about="http://example.org/ApplicationSchema#AExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point xmlns:gml='http://www.opengis.net/ont/gml'></gml:Point>]]></geo:asGML>
     </sf:Point>
 
     <!-- Empty Geometry -->
@@ -43,7 +43,7 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EmptyB</ex:name>
     </ex:PlaceOfInterest>
     <sf:Point rdf:about="http://example.org/ApplicationSchema#BExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point xmlns:gml='http://www.opengis.net/ont/gml'><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point xmlns:gml='http://www.opengis.net/ont/gml'></gml:Point>]]></geo:asGML>
     </sf:Point>
 
 </rdf:RDF>

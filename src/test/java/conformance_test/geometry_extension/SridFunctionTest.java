@@ -10,12 +10,14 @@ import implementation.function_registry.RegistryLoader;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -70,13 +72,14 @@ public class SridFunctionTest {
     @Test
     public void positiveTest() {
 
-        List<String> expResult = Arrays.asList("http://www.opengis.net/def/crs/OGC/1.3/CRS84");
+        List<Literal> expResult = Arrays.asList(ResourceFactory.createTypedLiteral("http://www.opengis.net/def/crs/OGC/1.3/CRS84"));
 
-        String queryString = "SELECT ((geof:getSRID ( ?aWKT )) AS ?srid) WHERE{"
+        String queryString = "SELECT ?srid WHERE{"
                 + " ex:C ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
+                + "BIND(geof:getSRID ( ?aWKT ) AS ?srid)"
                 + "}";
-        List<String> result = literalQuery(queryString, infModel);
+        List<Literal> result = literalQuery(queryString, infModel);
 
         assertEquals(expResult, result);
     }

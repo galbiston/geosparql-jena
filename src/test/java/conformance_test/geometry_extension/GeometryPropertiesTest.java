@@ -8,12 +8,15 @@ package conformance_test.geometry_extension;
 import static conformance_test.ConformanceTestSuite.*;
 import implementation.function_registry.RegistryLoader;
 import java.util.ArrayList;
+import org.apache.jena.datatypes.xsd.impl.XSDBaseNumericType;
 import org.apache.jena.rdf.model.InfModel;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -60,12 +63,13 @@ public class GeometryPropertiesTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("0^^http://www.w3.org/2001/XMLSchema#integer");
-        expResult.add("2^^http://www.w3.org/2001/XMLSchema#integer");
-        expResult.add("2^^http://www.w3.org/2001/XMLSchema#integer");
-        expResult.add("false^^http://www.w3.org/2001/XMLSchema#boolean");
-        expResult.add("true^^http://www.w3.org/2001/XMLSchema#boolean");
+        ArrayList<Literal> expResult = new ArrayList<>();
+
+        expResult.add(ResourceFactory.createTypedLiteral("0", XSDBaseNumericType.XSDinteger));
+        expResult.add(ResourceFactory.createTypedLiteral("2", XSDBaseNumericType.XSDinteger));
+        expResult.add(ResourceFactory.createTypedLiteral("2", XSDBaseNumericType.XSDinteger));
+        expResult.add(ResourceFactory.createTypedLiteral("false", XSDBaseNumericType.XSDboolean));
+        expResult.add(ResourceFactory.createTypedLiteral("true", XSDBaseNumericType.XSDboolean));
 
         String queryString = "SELECT ?dimension ?coordinateDimension ?spatialDimension ?isEmpty ?isSimple WHERE{"
                 + " ex:A geo:hasGeometry ?aGeom ."
@@ -75,7 +79,11 @@ public class GeometryPropertiesTest {
                 + " ?aGeom geo:isEmpty ?isEmpty ."
                 + " ?aGeom geo:isSimple ?isSimple ."
                 + "}";
-        ArrayList<String> result = literalQuery(queryString, infModel);
+        ArrayList<Literal> result = literalQuery(queryString, infModel);
+
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
+
         assertEquals(expResult, result);
     }
 
