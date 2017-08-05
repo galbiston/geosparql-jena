@@ -5,24 +5,21 @@
  */
 package implementation.datatype;
 
-import com.jcabi.xml.XMLDocument;
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.gml2.GMLReader;
 import com.vividsolutions.jts.io.gml2.GMLWriter;
-import implementation.CRSRegistry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.support.GeoSerialisationEnum;
 import static implementation.support.Prefixes.GEO_URI;
 import java.io.IOException;
+import java.util.Objects;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 
 /**
  *
@@ -76,9 +73,12 @@ public class GMLDatatype extends BaseDatatype {
         String srsName = geom.getSrsURI();
         gmlWriter.setSrsName(srsName);
         gmlWriter.setPrefix(GML_PREFIX);
-        String gml = gmlWriter.write(geom.getParsingGeometry());
+        gmlWriter.setNamespace(true);
 
-        return gml;
+        //Change emitted Namespace to that in GeoSPARQL standard 11-052r4
+        String gmlString = gmlWriter.write(geom.getParsingGeometry());
+        gmlString = gmlString.replace("net/gml", "net/ont/gml");
+        return (gmlString);
     }
 
     /**
@@ -94,11 +94,9 @@ public class GMLDatatype extends BaseDatatype {
         GMLReader gmlReader = new GMLReader();
         try {
             Geometry geometry = gmlReader.read(lexicalForm, null);
-            XMLDocument xmlDoc = new XMLDocument(lexicalForm);
-            NamedNodeMap attributes = xmlDoc.node().getAttributes();
-            String srsURI = findSrsURI(attributes);
+            String srsURI = findSrsURI(lexicalForm);
 
-            DimensionInfo dimensionInfo = extractDimensionInfo(attributes, srsURI, geometry);
+            DimensionInfo dimensionInfo = extractDimensionInfo(srsURI, geometry);
 
             GeometryWrapper geom = new GeometryWrapper(geometry, srsURI, GeoSerialisationEnum.GML, dimensionInfo);
             return geom;
@@ -108,42 +106,33 @@ public class GMLDatatype extends BaseDatatype {
         }
     }
 
-    public static final String findSrsURI(NamedNodeMap attributes) {
-        return attributes.getNamedItem("srsName").getNodeValue();
+    public static final String findSrsURI(String lexicalForm) {
+
+        //Find srsName attribute
+        String srsName = "srsName=";
+        int start = lexicalForm.indexOf(srsName) + srsName.length();
+        String sub = lexicalForm.substring(start);
+
+        //Find end of first element
+        int closeIndex = sub.indexOf(">");
+        sub = sub.substring(0, closeIndex);
+
+        //Remove both types of quotes
+        sub = sub.replace("'", "");
+        sub = sub.replace("\"", "");
+
+        return sub;
     }
 
-    public static final DimensionInfo extractDimensionInfo(NamedNodeMap attributes, String srsURI, Geometry geometry) {
+    public static final DimensionInfo extractDimensionInfo(String srsURI, Geometry geometry) {
 
-        //TODO need confirmation of spatial dimension in the case of coordinate dimension being 3.
-        int coordinateDimension;
-        int spatialDimension;
+        Double z = geometry.getCoordinate().z;
+        Double nullValue = Coordinate.NULL_ORDINATE;
+        int coordinate = (Objects.equals(nullValue, z)) ? 2 : 3;
+        int topological = geometry.getDimension();
 
-        Node dimensionNode = attributes.getNamedItem("srsDimension");
-        if (dimensionNode != null) {
-            String nodeValue = dimensionNode.getNodeValue();
-            coordinateDimension = Integer.parseInt(nodeValue);
-
-            switch (coordinateDimension) {
-                case 2:
-                    spatialDimension = coordinateDimension;
-                    break;
-                case 3:  //Retrieve spatialDimension from CRS as could be 2 or 3.
-                    CoordinateReferenceSystem crs = CRSRegistry.getCRS(srsURI);
-                    spatialDimension = crs.getCoordinateSystem().getDimension();
-                    break;
-                default:
-                    spatialDimension = 3;
-                    break;
-            }
-
-        } else {  //srsDimension attribute is missing so extract from the srsURI.
-
-            CoordinateReferenceSystem crs = CRSRegistry.getCRS(srsURI);
-            coordinateDimension = crs.getCoordinateSystem().getDimension();
-            spatialDimension = coordinateDimension;  //Spatial dimension considered to be same as coordinate dimension.
-        }
-
-        return new DimensionInfo(coordinateDimension, spatialDimension, geometry.getDimension());
+        //Assuming that the spatial and coordinate dimensions are the same. i.e. no linear reference systems.
+        return new DimensionInfo(coordinate, coordinate, topological);
     }
 
 }
