@@ -185,30 +185,6 @@ public class ConformanceTestSuite {
     }
 
     /**
-     * This method test for the empty result return.
-     *
-     * @param queryString
-     * @param queryModel
-     * @return true - if the test has any result<br>false - if there is no
-     * result.
-     */
-    public static boolean emptyQuery(String queryString, InfModel queryModel) {
-        boolean hasResult = true;
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), queryModel)) {
-            ResultSet results = qexec.execSelect();
-            if (!results.hasNext()) {
-                hasResult = false;
-            }
-        }
-
-        return hasResult;
-    }
-
-    /**
      *
      * A helper class for reducing the effort when writing test queries.
      *

@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 /**
  *
@@ -76,7 +75,9 @@ public class Rcc8ntppTest {
     @Test
     public void negativeTest() {
 
-        assertFalse(emptyQuery(topologyVocabluaryQuery("ex:E", "geo:rcc8ntpp", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        ArrayList<String> expectedList = new ArrayList<>();
+
+        assertEquals(expectedList, resourceQuery(topologyVocabluaryQuery("ex:E", "geo:rcc8ntpp", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

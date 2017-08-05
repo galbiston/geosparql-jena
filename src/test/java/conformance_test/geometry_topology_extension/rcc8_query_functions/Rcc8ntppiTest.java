@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 /**
  *
@@ -90,7 +89,9 @@ public class Rcc8ntppiTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8ntppi(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>)"
                 + "}";
-        assertFalse(emptyQuery(Q1, infModel));
+        ArrayList<String> expectedList = new ArrayList<>();
+
+        assertEquals(expectedList, resourceQuery(Q1, infModel));
     }
 
 }

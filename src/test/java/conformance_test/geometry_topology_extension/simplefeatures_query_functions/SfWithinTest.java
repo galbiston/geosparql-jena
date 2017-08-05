@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 /**
  *
@@ -97,7 +96,9 @@ public class SfWithinTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:sfWithin(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
                 + "}";
-        assertFalse(emptyQuery(Q1, infModel));
+        ArrayList<String> expectedList = new ArrayList<>();
+
+        assertEquals(expectedList, resourceQuery(Q1, infModel));
     }
 
 }
