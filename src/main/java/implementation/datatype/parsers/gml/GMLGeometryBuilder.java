@@ -262,10 +262,7 @@ public class GMLGeometryBuilder {
         if (this.coordinateSequenceDimensions != other.coordinateSequenceDimensions) {
             return false;
         }
-        if (!Objects.equals(this.geometry, other.geometry)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.geometry, other.geometry);
     }
 
     @Override
