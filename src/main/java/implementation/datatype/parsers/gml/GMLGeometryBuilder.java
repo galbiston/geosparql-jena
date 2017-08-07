@@ -91,12 +91,10 @@ public class GMLGeometryBuilder {
         Geometry geo;
         switch (shape) {
             case "Point":
-                CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(gmlNode.getFirstChild().getTextContent()));
-                geo = GEOMETRY_FACTORY.createPoint(pointSequence);
-                break;
             case "LineString":
-                CustomCoordinateSequence lineSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(gmlNode.getFirstChild().getTextContent()));
-                geo = GEOMETRY_FACTORY.createLineString(lineSequence);
+                String coordinateString = gmlNode.getFirstChild().getTextContent();
+                CustomCoordinateSequence coordinateSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(coordinateString));
+                geo = buildBasic(shape, coordinateSequence);
                 break;
             case "Polygon":
                 geo = buildPolygon(gmlNode);
@@ -117,6 +115,17 @@ public class GMLGeometryBuilder {
                 throw new ParseException("Geometry shape not supported: " + shape);
         }
         return geo;
+    }
+
+    private Geometry buildBasic(String shape, CustomCoordinateSequence coordinateSequence) {
+        switch (shape) {
+            case "Point":
+                return GEOMETRY_FACTORY.createPoint(coordinateSequence);
+            case "LineString":
+                return GEOMETRY_FACTORY.createLineString(coordinateSequence);
+            default:
+                throw new ParseException("Geometry shape not supported: " + shape);
+        }
     }
 
     private String rebuildCoordinates(String unclean) {
@@ -220,7 +229,9 @@ public class GMLGeometryBuilder {
     public static GMLGeometryBuilder extract(String gmlText) {
 
         XMLDocument xmlDoc = new XMLDocument(gmlText);
-        NamedNodeMap attributes = xmlDoc.node().getFirstChild().getAttributes();
+        Node gmlNode = xmlDoc.node().getFirstChild();
+
+        NamedNodeMap attributes = gmlNode.getAttributes();
         setSrsName(attributes.getNamedItem("srsName").getNodeValue());
 
         Node dimensionNode = attributes.getNamedItem("srsDimension");
@@ -233,8 +244,7 @@ public class GMLGeometryBuilder {
             CoordinateReferenceSystem crs = CRSRegistry.getCRS(getSrsName());
             setSrsDimension(crs.getCoordinateSystem().getDimension());
         }
-        String shape = xmlDoc.node().getFirstChild().getLocalName();
-        Node gmlNode = xmlDoc.node().getFirstChild();
+        String shape = gmlNode.getLocalName();
 
         return new GMLGeometryBuilder(shape, srsDimension, gmlNode);
     }
