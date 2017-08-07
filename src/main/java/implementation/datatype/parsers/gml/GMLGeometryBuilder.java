@@ -26,6 +26,10 @@ import org.w3c.dom.NodeList;
  */
 public class GMLGeometryBuilder {
 
+    /*
+    TODO: decide whether to use instead of GeoTools GMLReader and GMLWriter.
+    TODO: decide whether to replace with GDAL/OGR library for Geometry which supports WKT and GML formats. Doesn't have DE-9IM intersection matrix support though.
+     */
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
 
     private final CustomCoordinateSequence.CoordinateSequenceDimensions coordinateSequenceDimensions;
