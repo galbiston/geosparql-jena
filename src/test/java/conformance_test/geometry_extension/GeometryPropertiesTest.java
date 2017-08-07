@@ -6,7 +6,8 @@
 package conformance_test.geometry_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.function_registry.RegistryLoader;
+import implementation.GeoSPARQLModel;
+
 import java.util.ArrayList;
 import org.apache.jena.datatypes.xsd.impl.XSDBaseNumericType;
 import org.apache.jena.rdf.model.InfModel;
@@ -45,7 +46,7 @@ public class GeometryPropertiesTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
     private static InfModel infModel;

@@ -6,8 +6,9 @@
 package conformance_test.geometry_extension.wkt;
 
 import static conformance_test.ConformanceTestSuite.*;
+import implementation.GeoSPARQLModel;
 import implementation.datatype.WKTDatatype;
-import implementation.function_registry.RegistryLoader;
+
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
@@ -49,7 +50,7 @@ public class WktLiteralTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
     private static InfModel infModel;

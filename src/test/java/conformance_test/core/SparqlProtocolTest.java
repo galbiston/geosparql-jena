@@ -6,7 +6,8 @@
 package conformance_test.core;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.function_registry.RegistryLoader;
+import implementation.GeoSPARQLModel;
+
 import implementation.support.Prefixes;
 import java.util.ArrayList;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -50,7 +51,7 @@ public class SparqlProtocolTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
 

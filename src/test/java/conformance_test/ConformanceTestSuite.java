@@ -5,8 +5,8 @@
  */
 package conformance_test;
 
+import implementation.GeoSPARQLModel;
 import implementation.support.Prefixes;
-import implementation.support.RDFDataLocation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -17,12 +17,7 @@ import org.apache.jena.query.QuerySolutionMap;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.reasoner.Reasoner;
-import org.apache.jena.reasoner.ReasonerRegistry;
-import org.apache.jena.riot.RDFDataMgr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,43 +30,13 @@ public class ConformanceTestSuite {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConformanceTestSuite.class);
 
     /**
-     * This method initialize test models, need to be called before query
-     * execution.
-     *
-     * @param dataFilePath
-     * @return
-     */
-    public static InfModel initModel(String dataFilePath) {
-
-        /**
-         * Load data
-         */
-        Model model = RDFDataMgr.loadModel(dataFilePath);
-
-        /**
-         * The use of OWL reasoner can bind schema with existing test data.
-         */
-        Model schema = RDFDataMgr.loadModel(RDFDataLocation.GEOSPARQL_SCHEMA);
-
-        Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
-        reasoner = reasoner.bindSchema(schema);
-
-        /**
-         * Setup inference model.
-         */
-        InfModel infModel = ModelFactory.createInfModel(reasoner, model);
-
-        return infModel;
-    }
-
-    /**
      * This method initialize all the WKT test models, need to be called before
      * query execution.
      *
      * @return
      */
     public static InfModel initWktModel() {
-        return initModel(RDFDataLocationTest.SAMPLE_WKT);
+        return GeoSPARQLModel.prepare(RDFDataLocationTest.SAMPLE_WKT);
     }
 
     /**
@@ -81,7 +46,7 @@ public class ConformanceTestSuite {
      * @return
      */
     public static InfModel initWktEmptyModel() {
-        return initModel(RDFDataLocationTest.SAMPLE_WKT_EMPTY);
+        return GeoSPARQLModel.prepare(RDFDataLocationTest.SAMPLE_WKT_EMPTY);
     }
 
     /**
@@ -91,7 +56,7 @@ public class ConformanceTestSuite {
      * @return
      */
     public static InfModel initGmlModel() {
-        return initModel(RDFDataLocationTest.SAMPLE_GML);
+        return GeoSPARQLModel.prepare(RDFDataLocationTest.SAMPLE_GML);
     }
 
     /**
@@ -101,7 +66,7 @@ public class ConformanceTestSuite {
      * @return
      */
     public static InfModel initGmlEmptyModel() {
-        return initModel(RDFDataLocationTest.SAMPLE_GML_EMPTY);
+        return GeoSPARQLModel.prepare(RDFDataLocationTest.SAMPLE_GML_EMPTY);
     }
 
     /**

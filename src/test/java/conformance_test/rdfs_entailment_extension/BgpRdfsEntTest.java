@@ -6,7 +6,8 @@
 package conformance_test.rdfs_entailment_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.function_registry.RegistryLoader;
+import implementation.GeoSPARQLModel;
+
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
@@ -43,7 +44,7 @@ public class BgpRdfsEntTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
     private static InfModel infModel;

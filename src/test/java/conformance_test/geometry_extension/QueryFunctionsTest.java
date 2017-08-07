@@ -6,7 +6,8 @@
 package conformance_test.geometry_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.function_registry.RegistryLoader;
+import implementation.GeoSPARQLModel;
+
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -50,7 +51,7 @@ public class QueryFunctionsTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
     private static InfModel infModel;

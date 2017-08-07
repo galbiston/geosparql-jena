@@ -6,7 +6,6 @@
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.function_registry.RegistryLoader;
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
@@ -48,7 +47,7 @@ public class EhContainsTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        //RegistryLoader.load();
         infModel = initWktModel();
     }
     private static InfModel infModel;

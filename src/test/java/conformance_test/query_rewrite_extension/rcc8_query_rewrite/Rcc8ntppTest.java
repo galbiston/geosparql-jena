@@ -6,7 +6,8 @@
 package conformance_test.query_rewrite_extension.rcc8_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.function_registry.RegistryLoader;
+import implementation.GeoSPARQLModel;
+
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
@@ -47,7 +48,7 @@ public class Rcc8ntppTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
     private static InfModel infModel;

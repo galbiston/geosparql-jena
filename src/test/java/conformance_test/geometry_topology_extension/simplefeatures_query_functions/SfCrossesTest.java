@@ -6,7 +6,8 @@
 package conformance_test.geometry_topology_extension.simplefeatures_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.function_registry.RegistryLoader;
+import implementation.GeoSPARQLModel;
+
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
@@ -48,7 +49,7 @@ public class SfCrossesTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
     private static InfModel infModel;

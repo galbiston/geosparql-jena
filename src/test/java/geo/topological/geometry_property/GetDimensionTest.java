@@ -6,7 +6,8 @@
 package geo.topological.geometry_property;
 
 import static conformance_test.ConformanceTestSuite.initWktModel;
-import implementation.function_registry.RegistryLoader;
+import implementation.GeoSPARQLModel;
+
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -44,7 +45,7 @@ public class GetDimensionTest {
 
     @BeforeClass
     public static void setUpClass() {
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
 

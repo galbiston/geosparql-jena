@@ -6,7 +6,8 @@
 package geof.topological.simple_features;
 
 import static conformance_test.ConformanceTestSuite.initWktModel;
-import implementation.function_registry.RegistryLoader;
+import implementation.GeoSPARQLModel;
+
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -45,7 +46,7 @@ public class SfContainsEFTest {
 
     @BeforeClass
     public static void setUpClass() {
-        RegistryLoader.load();
+        
         infModel = initWktModel();
     }
 

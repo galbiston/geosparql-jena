@@ -6,8 +6,9 @@
 package conformance_test.geometry_extension.gml;
 
 import static conformance_test.ConformanceTestSuite.*;
+import implementation.GeoSPARQLModel;
 import implementation.datatype.GMLDatatype;
-import implementation.function_registry.RegistryLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -45,7 +46,7 @@ public class GeometryAsGmlLiteralTest {
         /**
          * Initialize all the topology functions.
          */
-        RegistryLoader.load();
+        
         infModel = initGmlModel();
     }
 
