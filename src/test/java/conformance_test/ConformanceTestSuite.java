@@ -114,7 +114,7 @@ public class ConformanceTestSuite {
         try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), queryModel)) {
             return qexec.execAsk();
         } catch (RuntimeException ex) {
-            LOGGER.error("Exeception: {} {}", ex.getMessage(), query.toString());
+            LOGGER.error("Exception: {} {}", ex.getMessage(), query.toString());
             return null;
         }
 
