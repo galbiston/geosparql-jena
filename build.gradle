@@ -49,17 +49,10 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
-apply plugin: 'maven-publish'
 group = 'org.ntu'
-version = '0.9.1'
+version = '0.9.3'
 
-jar{
-    manifest {
-        attributes('Implementation-Title': project.name,
-                   'Implementation-Version': project.version)
-    }
-}
-
+apply plugin: 'maven-publish'
 publishing {
     publications {
         mavenJava(MavenPublication) {
