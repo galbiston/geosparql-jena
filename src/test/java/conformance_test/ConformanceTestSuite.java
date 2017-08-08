@@ -7,6 +7,7 @@ package conformance_test;
 
 import implementation.GeoSPARQLModel;
 import implementation.support.Prefixes;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -30,13 +31,34 @@ public class ConformanceTestSuite {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConformanceTestSuite.class);
 
     /**
+     * Sample Data in WKT - small and quick
+     */
+    public static final String SAMPLE_WKT = "dataset/sampleWKT.rdf";
+
+    /**
+     * Empty WKT Data - test for empty geometry and default SRID return
+     */
+    public static final String SAMPLE_WKT_EMPTY = "dataset/sampleWKTEmpty.rdf";
+
+    /**
+     * Sample Data in GML - small and quick
+     */
+    public static final String SAMPLE_GML = "dataset/sampleGML.rdf";
+
+    /**
+     * Empty GML Data - test for empty geometry and default SRID return
+     */
+    public static final String SAMPLE_GML_EMPTY = "dataset/sampleGMLEmpty.rdf";
+
+    /**
      * This method initialize all the WKT test models, need to be called before
      * query execution.
      *
      * @return
      */
     public static InfModel initWktModel() {
-        return GeoSPARQLModel.prepare(RDFDataLocationTest.SAMPLE_WKT);
+        InputStream inputStream = getInputStream(SAMPLE_WKT);
+        return GeoSPARQLModel.prepare(inputStream);
     }
 
     /**
@@ -46,7 +68,8 @@ public class ConformanceTestSuite {
      * @return
      */
     public static InfModel initWktEmptyModel() {
-        return GeoSPARQLModel.prepare(RDFDataLocationTest.SAMPLE_WKT_EMPTY);
+        InputStream inputStream = getInputStream(SAMPLE_WKT_EMPTY);
+        return GeoSPARQLModel.prepare(inputStream);
     }
 
     /**
@@ -56,7 +79,8 @@ public class ConformanceTestSuite {
      * @return
      */
     public static InfModel initGmlModel() {
-        return GeoSPARQLModel.prepare(RDFDataLocationTest.SAMPLE_GML);
+        InputStream inputStream = getInputStream(SAMPLE_GML);
+        return GeoSPARQLModel.prepare(inputStream);
     }
 
     /**
@@ -66,7 +90,12 @@ public class ConformanceTestSuite {
      * @return
      */
     public static InfModel initGmlEmptyModel() {
-        return GeoSPARQLModel.prepare(RDFDataLocationTest.SAMPLE_GML_EMPTY);
+        InputStream inputStream = getInputStream(SAMPLE_GML_EMPTY);
+        return GeoSPARQLModel.prepare(inputStream);
+    }
+
+    private static InputStream getInputStream(String filepath) {
+        return ConformanceTestSuite.class.getClassLoader().getResourceAsStream(filepath);
     }
 
     /**
