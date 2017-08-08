@@ -22,7 +22,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
-import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
@@ -81,15 +80,16 @@ public class GeoSPARQLModel {
     /**
      * Prepare a model for GeoSPARQL usage from file.
      *
-     * @param dataFilePath
+     * @param inputStream
      * @return
      */
-    public static InfModel prepare(String dataFilePath) {
+    public static InfModel prepare(InputStream inputStream) {
 
         /**
          * Load data
          */
-        Model model = RDFDataMgr.loadModel(dataFilePath);
+        Model model = ModelFactory.createDefaultModel();
+        model.read(inputStream, null);
 
         return GeoSPARQLModel.prepare(model);
 
