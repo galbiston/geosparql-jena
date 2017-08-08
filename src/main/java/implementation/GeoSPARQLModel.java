@@ -15,6 +15,7 @@ import implementation.function_registry.RCC8;
 import implementation.function_registry.Relate;
 import implementation.function_registry.SimpleFeatures;
 import implementation.vocabulary.Geo;
+import java.io.InputStream;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
@@ -34,7 +35,7 @@ public class GeoSPARQLModel {
     /**
      * GeoSPARQL schema
      */
-    public static final String GEOSPARQL_SCHEMA = GeoSPARQLModel.class.getClassLoader().getResource("schema/geosparql_vocab_all.rdf").toString();
+    private static final String GEOSPARQL_SCHEMA = "schema/geosparql_vocab_all.rdf";
     private static Boolean isFunctionsRegistered = false;
 
     /**
@@ -63,9 +64,13 @@ public class GeoSPARQLModel {
         /*
          * The use of OWL reasoner can bind schema with existing test data.
          */
-        Model schema = RDFDataMgr.loadModel(GEOSPARQL_SCHEMA);
+        InputStream inputStream = GeoSPARQLModel.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA);
+        Model schema = ModelFactory.createDefaultModel();
+        schema.read(inputStream, null);
+
         Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
         reasoner = reasoner.bindSchema(schema);
+
         /*
          * Setup inference model.
          */
