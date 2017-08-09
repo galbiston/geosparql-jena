@@ -15,12 +15,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.rdf.model.Literal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Greg Albiston
  */
 public class GeometryUtil {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GeometryUtil.class);
 
     private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
 
@@ -45,6 +49,13 @@ public class GeometryUtil {
      */
     public static final Literal pointsToLineString(List<Literal> points, GeoSerialisationEnum geoSerialisationEnum) {
 
+        //Check if the LineString only has one coordinate and copy: LineString must have two points.
+        if (points.size() == 1) {
+            Literal point = points.get(0);
+            points.add(point);
+            LOGGER.warn("LineString with 1 point - copying to 2: {} {}", points, geoSerialisationEnum);
+        }
+        
         List<Coordinate> coordsList = new ArrayList<>(points.size() * 4); //Set size to maximum possible. i.e. 4 coordinate per Point.
 
         GeometryWrapper result;
