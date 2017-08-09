@@ -5,6 +5,7 @@
  */
 package implementation.vocabulary;
 
+import implementation.support.UnitsOfMeasure;
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
@@ -35,6 +36,10 @@ public class UnitsOfMeasureLookUp {
 
     public static final String UNITY_URI = "http://www.opengis.net/def/uom/OGC/1.0/unity";
 
+    public enum UnitType {
+        METRE, DEGREE, GRIDSPACING, RADIAN, UNITY
+    };
+
     //TODO Add additional measure distances such as kilometres and miles.
     public static final Unit getUnit(String unitURI) {
 
@@ -55,6 +60,23 @@ public class UnitsOfMeasureLookUp {
                 unit = null;
         }
         return unit;
+    }
+
+    public static final String getUnitURI(UnitsOfMeasure unitOfMeasure) {
+
+        String unitURI;
+        Unit unit = unitOfMeasure.getUnit();
+        if (unit.equals(METRE_UNIT)) {
+            unitURI = METRE_URI;
+        } else if (unit.equals(RADIAN_UNIT)) {
+            unitURI = RADIAN_URI;
+        } else if (unit.equals(DEGREE_UNIT)) {
+            unitURI = DEGREE_URI;
+        } else {
+            unitURI = "";
+        }
+
+        return unitURI;
     }
 
     public static final Boolean isProjected(String unitURI) {

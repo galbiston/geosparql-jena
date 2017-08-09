@@ -154,7 +154,7 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of getSerialisation method, of class GeometryWrapper.
+     * Test of getGeoSerialisation method, of class GeometryWrapper.
      */
     @Test
     public void testGetSerialisation() {
@@ -164,7 +164,7 @@ public class GeometryWrapperTest {
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         GeoSerialisationEnum expResult = GeoSerialisationEnum.WKT;
-        GeoSerialisationEnum result = instance.getSerialisation();
+        GeoSerialisationEnum result = instance.getGeoSerialisation();
         assertEquals(expResult, result);
     }
 

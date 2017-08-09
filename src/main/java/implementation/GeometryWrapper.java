@@ -12,6 +12,7 @@ import implementation.datatype.WKTDatatype;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
+import implementation.vocabulary.UnitsOfMeasureLookUp;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
@@ -133,7 +134,7 @@ public class GeometryWrapper {
         return srsURI;
     }
 
-    public GeoSerialisationEnum getSerialisation() {
+    public GeoSerialisationEnum getGeoSerialisation() {
         return serialisation;
     }
 
@@ -157,6 +158,23 @@ public class GeometryWrapper {
 
         Geometry geo = this.geometry.difference(transformedGeometry.getGeometry());
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
+    }
+
+    /**
+     * Distance defaulting to metres.
+     *
+     * @param targetGeometry
+     * @return
+     * @throws FactoryException
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     */
+    public double distance(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+        return distance(targetGeometry, UnitsOfMeasureLookUp.METRE_URI);
+    }
+
+    public double distance(GeometryWrapper targetGeometry, UnitsOfMeasure unitsOfMeasure) throws FactoryException, MismatchedDimensionException, TransformException {
+        return distance(targetGeometry, UnitsOfMeasureLookUp.getUnitURI(unitsOfMeasure));
     }
 
     public double distance(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -302,6 +320,18 @@ public class GeometryWrapper {
 
     public CoordinateSequenceDimensions getCoordinateSequenceDimensions() {
         return dimensionInfo.getDimensions();
+    }
+
+    public CoordinateReferenceSystem getCrs() {
+        return crs;
+    }
+
+    public UnitsOfMeasure getUnitsOfMeasure() {
+        return unitsOfMeasure;
+    }
+
+    public DimensionInfo getDimensionInfo() {
+        return dimensionInfo;
     }
 
     public boolean isEmpty() {

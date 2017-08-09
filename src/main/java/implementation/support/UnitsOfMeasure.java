@@ -38,7 +38,6 @@ public class UnitsOfMeasure {
         this.axisOrder = CRS.getAxisOrder(crs);
         this.isProjected = !(CRS.getProjectedCRS(crs) == null);
         this.unit = CRS.getHorizontalCRS(crs).getCoordinateSystem().getAxis(0).getUnit();
-
     }
 
     public boolean isProjected() {
