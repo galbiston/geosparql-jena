@@ -167,6 +167,10 @@ public class GeometryUtil {
         return bestCandidate;
     }
 
+    public static final Integer LEFT_OF_LINE = 1;
+    public static final Integer ON_LINE = 0;
+    public static final Integer RIGHT_OF_LINE = -1;
+
     /**
      * Checks which side (left: 1, right: -1 or on-line: 0) a point on to a
      * straight line, using the cross product.
@@ -189,12 +193,32 @@ public class GeometryUtil {
         double result = ((L1.x - L0.x) * (P.y - L0.y)) - ((L1.y - L0.y) * (P.x - L0.x));
 
         if (result > 0) {
-            return 1;
+            return LEFT_OF_LINE;
         } else if (result < 0) {
-            return -1;
+            return RIGHT_OF_LINE;
         }
 
-        return 0;
+        return ON_LINE;
+    }
+
+    /**
+     * Check whether a point is on left, right or on a line.<br>
+     * The line is broken up into many smaller lines with the nearest to the
+     * point checked.
+     *
+     * @param point
+     * @param line
+     * @return
+     */
+    public static final Integer findSideOfLine(Literal point, Literal line) {
+        //Split the linestring into several linestrings.
+        List<Literal> splitLine = GeometryUtil.splitLineString(line);
+
+        //Select the linestring that is closest to the point.
+        Literal nearestLine = GeometryUtil.selectNearest(point, splitLine);
+
+        //Check which side the point is to the nearest linestring.
+        return GeometryUtil.checkSideLineString(point, nearestLine);
     }
 
 }
