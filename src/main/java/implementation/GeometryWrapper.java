@@ -46,9 +46,12 @@ public class GeometryWrapper {
 
     public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation, DimensionInfo dimensionInfo) {
 
-        this.srsURI = srsURI;
         this.serialisation = serialisation;
 
+        if (srsURI.isEmpty()) {
+            srsURI = CRSRegistry.DEFAULT_WKT_CRS;
+        }
+        this.srsURI = srsURI;
         this.crs = CRSRegistry.addCRS(srsURI);
         this.unitsOfMeasure = CRSRegistry.getUnits(srsURI);
 
