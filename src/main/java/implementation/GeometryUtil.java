@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
+ *
  */
 public class GeometryUtil {
 
@@ -165,6 +165,36 @@ public class GeometryUtil {
         }
 
         return bestCandidate;
+    }
+
+    /**
+     * Checks which side (left: 1, right: -1 or on-line: 0) a point on to a
+     * straight line, using the cross product.
+     *
+     * @param point
+     * @param lineString
+     * @return
+     */
+    public static int checkSideLineString(Literal point, Literal lineString) {
+
+        GeometryWrapper pointGeom = GeometryWrapper.extract(point);
+        GeometryWrapper lineGeom = GeometryWrapper.extract(lineString);
+
+        Coordinate P = pointGeom.getXYGeometry().getCoordinate();
+        Coordinate[] lineCoord = lineGeom.getXYGeometry().getCoordinates();
+
+        Coordinate L0 = lineCoord[0];
+        Coordinate L1 = lineCoord[1];
+
+        double result = ((L1.x - L0.x) * (P.y - L0.y)) - ((L1.y - L0.y) * (P.x - L0.x));
+
+        if (result > 0) {
+            return 1;
+        } else if (result < 0) {
+            return -1;
+        }
+
+        return 0;
     }
 
 }

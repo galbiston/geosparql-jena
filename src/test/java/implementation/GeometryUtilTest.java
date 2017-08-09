@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  */
 public class GeometryUtilTest {
 
@@ -139,6 +139,198 @@ public class GeometryUtilTest {
 
         Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5)", WKTDatatype.THE_WKT_DATATYPE);
         Literal result = GeometryUtil.selectNearest(targetGeometry, candidateGeometries);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_Above_Left_Upwards() {
+        System.out.println("checkSideLineString_Above_Left_Upwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (1.0 2.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (1.0 1.0, 10.0 10.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = 1;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_Below_Right_Upwards() {
+        System.out.println("checkSideLineString_Below_Right_Upwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (3.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (1.0 1.0, 10.0 10.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = -1;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_On_Line_Upwards() {
+        System.out.println("checkSideLineString_On_Line_Upwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (2.0 2.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (1.0 1.0, 10.0 10.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = 0;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_Above_Right_Upwards() {
+        System.out.println("checkSideLineString_Above_Right_Upwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (1.0 3.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (10.0 10.0, 1.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = -1;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_Below_Left_Upwards() {
+        System.out.println("checkSideLineString_Below_Left_Upwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (3.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (10.0 10.0, 1.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = 1;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_On_Line_Upwards_Reverse() {
+        System.out.println("checkSideLineString_On_Line_Upwards_Reverse");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (2.0 2.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (10.0 10.0, 1.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = 0;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_Below_Right_Downwards() {
+        System.out.println("checkSideLineString_Below_Right_Downwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (1.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (1.0 10.0, 10.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = -1;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_Above_Left_Downwards() {
+        System.out.println("checkSideLineString_Above_Left_Downwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (2.0 10.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (1.0 10.0, 10.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = 1;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_On_Line_Downwards() {
+        System.out.println("checkSideLineString_On_Line_Downwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (9.0 2.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (1.0 10.0, 10.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = 0;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_Above_Right_Downwards() {
+        System.out.println("checkSideLineString_Above_Right_Downwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (10.0 5.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (10.0 1.0, 1.0 10.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = -1;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_Below_Left_Downwards() {
+        System.out.println("checkSideLineString_Below_Left_Downwards");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (1.0 1.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (10.0 1.0, 1.0 10.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = 1;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkSideLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testCheckSideLineString_On_Line_Downwards_Reverse() {
+        System.out.println("checkSideLineString_On_Line_Downwards_Reverse");
+
+        Literal point = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (9.0 2.0)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (10.0 1.0, 1.0 10.0)", WKTDatatype.THE_WKT_DATATYPE);
+
+        int expResult = 0;
+        int result = GeometryUtil.checkSideLineString(point, lineString);
 
         assertEquals(expResult, result);
     }
