@@ -11,10 +11,15 @@ import com.vividsolutions.jts.geom.LineString;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
+import implementation.support.UnitsOfMeasure;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import org.apache.jena.rdf.model.Literal;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +60,7 @@ public class GeometryUtil {
             points.add(point);
             LOGGER.warn("LineString with 1 point - copying to 2: {} {}", points, geoSerialisationEnum);
         }
-        
+
         List<Coordinate> coordsList = new ArrayList<>(points.size() * 4); //Set size to maximum possible. i.e. 4 coordinate per Point.
 
         GeometryWrapper result;
@@ -84,4 +89,82 @@ public class GeometryUtil {
 
         return result.asLiteral();
     }
+
+    /**
+     * Split a line string into its constituent straight lines.
+     *
+     * @param lineString
+     * @param geoSerialisationEnum
+     * @return
+     */
+    public static final List<Literal> splitLineString(Literal lineString, GeoSerialisationEnum geoSerialisationEnum) {
+
+        GeometryWrapper geom = GeometryWrapper.extract(lineString);
+
+        List<Literal> parts = new ArrayList<>();
+
+        Coordinate[] coordinates = geom.getParsingGeometry().getCoordinates();
+
+        String srsURI = geom.getSrsURI();
+        DimensionInfo dimensionInfo = geom.getDimensionInfo();
+
+        if (coordinates.length > 1) {
+            int coordEnd = coordinates.length - 1;
+            for (int i = 0; i < coordEnd; i++) {
+                Coordinate[] partCoordinates = Arrays.copyOfRange(coordinates, i, i + 2);
+                LineString newLineString = GEOMETRY_FACTORY.createLineString(partCoordinates);
+                GeometryWrapper part = new GeometryWrapper(newLineString, srsURI, geoSerialisationEnum, dimensionInfo);
+                parts.add(part.asLiteral());
+            }
+        } else {
+            //LineString is either empty or a single line, so return as the result.
+            parts.add(lineString);
+        }
+
+        return parts;
+    }
+
+    /**
+     * Split a line string into its constituent straight lines, using line
+     * string serialisation.
+     *
+     * @param lineString
+     * @return
+     */
+    public static final List<Literal> splitLineString(Literal lineString) {
+        return splitLineString(lineString, GeometryWrapper.extract(lineString).getGeoSerialisation());
+    }
+
+    /**
+     * Find and select the nearest candidate to the target.
+     *
+     * @param targetGeometry
+     * @param candidateGeometries
+     * @return
+     */
+    public static final Literal selectNearest(Literal targetGeometry, Collection<Literal> candidateGeometries) {
+
+        GeometryWrapper target = GeometryWrapper.extract(targetGeometry);
+        UnitsOfMeasure unitsOfmeasure = target.getUnitsOfMeasure();
+
+        Double bestDistance = Double.MAX_VALUE;
+        Literal bestCandidate = null;
+
+        for (Literal candidateGeometry : candidateGeometries) {
+            try {
+                GeometryWrapper candidate = GeometryWrapper.extract(candidateGeometry);
+                Double candidateDistance = target.distance(candidate, unitsOfmeasure);
+                if (candidateDistance < bestDistance) {
+                    bestCandidate = candidateGeometry;
+                    bestDistance = candidateDistance;
+                }
+            } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+                LOGGER.error("{}: Target: {}, Candidate: {}", ex.getMessage(), targetGeometry, candidateGeometry);
+                return null;
+            }
+        }
+
+        return bestCandidate;
+    }
+
 }

@@ -8,6 +8,7 @@ package implementation;
 import implementation.datatype.WKTDatatype;
 import implementation.support.GeoSerialisationEnum;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -76,6 +77,68 @@ public class GeometryUtilTest {
 
         Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5, 3 1)", WKTDatatype.THE_WKT_DATATYPE);
         Literal result = GeometryUtil.pointsToLineString(points, geoSerialisationEnum);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of splitLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testSplitLineString_Literal_GeoSerialisationEnum() {
+        System.out.println("splitLineString");
+
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5, 3 1, 4 6)", WKTDatatype.THE_WKT_DATATYPE);
+        GeoSerialisationEnum geoSerialisationEnum = GeoSerialisationEnum.WKT;
+
+        List<Literal> expResult = new ArrayList<>();
+        expResult.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5)", WKTDatatype.THE_WKT_DATATYPE));
+        expResult.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (8 5, 3 1)", WKTDatatype.THE_WKT_DATATYPE));
+        expResult.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (3 1, 4 6)", WKTDatatype.THE_WKT_DATATYPE));
+
+        List<Literal> result = GeometryUtil.splitLineString(lineString, geoSerialisationEnum);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of splitLineString method, of class GeometryUtil.
+     */
+    @Test
+    public void testSplitLineString_Literal() {
+        System.out.println("splitLineString");
+
+        Literal lineString = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5, 3 1, 4 6)", WKTDatatype.THE_WKT_DATATYPE);
+
+        List<Literal> expResult = new ArrayList<>();
+        expResult.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5)", WKTDatatype.THE_WKT_DATATYPE));
+        expResult.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (8 5, 3 1)", WKTDatatype.THE_WKT_DATATYPE));
+        expResult.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (3 1, 4 6)", WKTDatatype.THE_WKT_DATATYPE));
+
+        List<Literal> result = GeometryUtil.splitLineString(lineString);
+
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of selectNearest method, of class GeometryUtil.
+     */
+    @Test
+    public void testSelectNearest() {
+        System.out.println("selectNearest");
+
+        Literal targetGeometry = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT (11.2 12.1)", WKTDatatype.THE_WKT_DATATYPE);
+
+        Collection<Literal> candidateGeometries = new ArrayList<>();
+        candidateGeometries.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5)", WKTDatatype.THE_WKT_DATATYPE));
+        candidateGeometries.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (8 5, 3 1)", WKTDatatype.THE_WKT_DATATYPE));
+        candidateGeometries.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (3 1, 4 6)", WKTDatatype.THE_WKT_DATATYPE));
+
+        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING (11 12, 8 5)", WKTDatatype.THE_WKT_DATATYPE);
+        Literal result = GeometryUtil.selectNearest(targetGeometry, candidateGeometries);
 
         assertEquals(expResult, result);
     }
