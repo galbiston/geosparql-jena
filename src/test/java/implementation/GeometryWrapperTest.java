@@ -23,7 +23,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  *
- * 
+ *
  */
 public class GeometryWrapperTest {
 
@@ -92,18 +92,18 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of getGeometry method, of class GeometryWrapper.
+     * Test of getXYGeometry method, of class GeometryWrapper.
      */
     @Test
-    public void testGetGeometry() {
-        System.out.println("getGeometry");
+    public void testGetXYGeometry() {
+        System.out.println("getXYGeometry");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = CRSRegistry.WGS84_CRS;
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //Expect the coordinates to be reversed as JTS is x,y and WGS84 is y,x
         Geometry expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
-        Geometry result = instance.getGeometry();
+        Geometry result = instance.getXYGeometry();
         assertEquals(expResult, result);
     }
 
