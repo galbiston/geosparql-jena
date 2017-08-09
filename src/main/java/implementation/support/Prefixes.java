@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  *
- * @author Gregory Albiston
+ * 
  */
 public class Prefixes {
 

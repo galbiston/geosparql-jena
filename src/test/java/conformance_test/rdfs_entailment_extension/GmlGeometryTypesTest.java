@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.5.3.1 /conf/rdfs-entailment-extension/gml-geometry-types
  *

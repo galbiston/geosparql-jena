@@ -23,7 +23,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  *
- * @author Gregory Albiston
+ * 
  */
 public class CRSRegistryTest {
 

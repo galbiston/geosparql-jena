@@ -15,8 +15,8 @@ import implementation.vocabulary.Geof;
 
 /**
  *
- * @author haozhechen
- * @author Gregory Albiston
+ * 
+ * 
  */
 public class SfWithinEF extends GenericExpressionFunction {
 

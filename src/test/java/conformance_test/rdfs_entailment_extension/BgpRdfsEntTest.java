@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.5.1.1 /conf/rdfsentailmentextension/bgp-rdfs-ent
  *

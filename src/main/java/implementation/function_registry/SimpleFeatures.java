@@ -28,8 +28,8 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
  *
- * @author haozhechen
- * @author Gregory Albiston
+ * 
+ * 
  */
 public class SimpleFeatures {
 

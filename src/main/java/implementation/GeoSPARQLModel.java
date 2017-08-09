@@ -27,7 +27,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
  *
- * @author Greg Albiston
+ * 
  */
 public class GeoSPARQLModel {
 

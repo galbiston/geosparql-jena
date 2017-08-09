@@ -9,8 +9,8 @@ import static implementation.support.Prefixes.GEOF_URI;
 
 /**
  *
- * @author Greg
- * @author haozhechen
+ * 
+ * 
  */
 public class Geof {
 

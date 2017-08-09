@@ -12,7 +12,7 @@ import org.apache.jena.sparql.function.FunctionBase2;
 
 /**
  *
- * @author Greg Albiston
+ * 
  */
 public class RccNonTangentialProperPartFF extends FunctionBase2 {
 

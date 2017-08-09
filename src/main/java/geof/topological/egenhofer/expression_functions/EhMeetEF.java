@@ -17,8 +17,8 @@ import org.opengis.referencing.operation.TransformException;
 
 /**
  *
- * @author haozhechen
- * @author Gregory Albiston
+ * 
+ * 
  */
 public class EhMeetEF extends GenericExpressionFunction {
 

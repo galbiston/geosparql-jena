@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.3.1.3 /conf/geometry-extension/geometry-properties
  *

@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.3.1.1 /conf/geometry-extension/geometry-class
  *

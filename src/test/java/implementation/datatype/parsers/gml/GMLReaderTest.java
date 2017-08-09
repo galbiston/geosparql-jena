@@ -24,7 +24,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public class GMLReaderTest {
 

@@ -18,7 +18,7 @@ import org.jdom.output.XMLOutputter;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public class GMLWriter {
 

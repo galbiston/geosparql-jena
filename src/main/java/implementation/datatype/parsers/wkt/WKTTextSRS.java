@@ -9,7 +9,7 @@ import implementation.CRSRegistry;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class WKTTextSRS {
 

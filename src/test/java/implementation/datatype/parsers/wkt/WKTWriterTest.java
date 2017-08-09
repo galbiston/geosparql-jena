@@ -25,7 +25,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class WKTWriterTest {
 

@@ -11,7 +11,7 @@ import com.vividsolutions.jts.geom.CoordinateSequenceFactory;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class CustomCoordinateSequenceFactory implements CoordinateSequenceFactory {
 

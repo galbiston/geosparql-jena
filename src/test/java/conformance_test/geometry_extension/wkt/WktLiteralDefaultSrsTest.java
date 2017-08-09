@@ -23,7 +23,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.3.2.2 /conf/geometry-extension/wkt-literal-default-srs
  *

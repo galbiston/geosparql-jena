@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public class GMLGeometryBuilder {
 

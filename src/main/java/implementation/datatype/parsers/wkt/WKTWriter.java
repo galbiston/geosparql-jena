@@ -20,7 +20,7 @@ import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class WKTWriter {
 

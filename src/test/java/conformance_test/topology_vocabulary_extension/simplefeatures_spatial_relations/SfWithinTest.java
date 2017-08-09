@@ -19,7 +19,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
  *

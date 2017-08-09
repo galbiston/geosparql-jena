@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author haozhechen
- * @author Gregory Albiston
+ * 
+ * 
  */
 public class GMLDatatype extends BaseDatatype {
 

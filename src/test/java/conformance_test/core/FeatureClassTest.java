@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.1.3 /conf/core/feature-class Requirement: /req/core/feature-class
  * Implementations shall allow the RDFS class geo:Feature to be used in SPARQL

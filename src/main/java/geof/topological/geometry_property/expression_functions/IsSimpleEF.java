@@ -13,7 +13,7 @@ import org.apache.jena.sparql.expr.NodeValue;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public class IsSimpleEF extends GenericGeometryPropertyExpressionFunction {
 

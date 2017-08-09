@@ -14,8 +14,8 @@ import org.apache.jena.rdf.model.ResourceFactory;
 
 /**
  *
- * @author Greg
- * @author haozhechen
+ * 
+ * 
  */
 public class Geo {
 

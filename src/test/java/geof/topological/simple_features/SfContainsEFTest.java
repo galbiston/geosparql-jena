@@ -26,7 +26,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public class SfContainsEFTest {
 

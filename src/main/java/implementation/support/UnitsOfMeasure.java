@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  *
  * Based on: http://docs.geotools.org/stable/userguide/library/opengis/unit.html
  *
- * @author Gregory Albiston
+ * 
  */
 public class UnitsOfMeasure {
 

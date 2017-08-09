@@ -11,8 +11,8 @@ import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * @author haozhechen
- * @author Gregory Albiston
+ * 
+ * 
  */
 public class EhInsidePF extends GenericPropertyFunction {
 

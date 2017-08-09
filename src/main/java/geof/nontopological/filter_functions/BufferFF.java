@@ -16,8 +16,8 @@ import org.apache.jena.sparql.function.FunctionBase3;
  * Return type ogc:geomLiteral ogc:geomLiteral can be a string value like
  * "<gml:Point ...>...</gml:Point>"
  *
- * @author haozhechen
- * @author Gregory Albiston
+ * 
+ * 
  */
 public class BufferFF extends FunctionBase3 {
 

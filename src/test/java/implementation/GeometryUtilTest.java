@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Greg Albiston
+ * 
  */
 public class GeometryUtilTest {
 

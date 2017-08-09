@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author Greg Albiston
+ * 
  */
 public class GeometryUtil {
 

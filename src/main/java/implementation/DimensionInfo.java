@@ -10,7 +10,7 @@ import static implementation.jts.CustomCoordinateSequence.findCoordinateSequence
 
 /**
  *
- * @author Gregory Albiston
+ * 
  */
 public class DimensionInfo {
 

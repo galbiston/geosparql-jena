@@ -7,7 +7,7 @@ package implementation.datatype.parsers;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class ParseException extends RuntimeException {
 

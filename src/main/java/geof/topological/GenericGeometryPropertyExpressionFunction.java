@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public abstract class GenericGeometryPropertyExpressionFunction extends ExprFunction1 {
 

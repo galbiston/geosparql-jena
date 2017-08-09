@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.3.1.4 /conf/geometry-extension/query-functions
  *

@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.1.1 /conf/core/sparql-protocol Requirement: /req/core/sparql-protocol
  *

@@ -7,7 +7,7 @@ package implementation.intersection_patterns;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class EgenhoferIntersectionPattern {
 

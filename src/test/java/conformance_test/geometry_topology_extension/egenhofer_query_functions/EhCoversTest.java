@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.4.3.1 /conf/geometry-topology-extension/eh-query-functions
  *

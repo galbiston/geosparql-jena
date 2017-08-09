@@ -20,7 +20,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class WKTGeometryBuilder {
 

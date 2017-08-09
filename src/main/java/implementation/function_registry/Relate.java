@@ -11,8 +11,8 @@ import org.apache.jena.sparql.function.FunctionRegistry;
 
 /**
  *
- * @author haozhechen
- * @author Gregory Albiston
+ * 
+ * 
  */
 public class Relate {
 

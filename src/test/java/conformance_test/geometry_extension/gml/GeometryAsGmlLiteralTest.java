@@ -23,7 +23,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.3.3.4 /conf/geometry-extension/geometry-as-gml-literal
  *

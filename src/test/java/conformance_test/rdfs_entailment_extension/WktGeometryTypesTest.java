@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.5.2.1 /conf/rdfs-entailment-extension/wkt-geometry-types
  *

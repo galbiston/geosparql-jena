@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.1.2 /conf/core/spatial-object-class Requirement:
  * /req/core/spatial-object-class

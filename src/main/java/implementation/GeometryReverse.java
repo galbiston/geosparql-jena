@@ -16,7 +16,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class GeometryReverse {
 

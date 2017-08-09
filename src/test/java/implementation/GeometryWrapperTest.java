@@ -23,7 +23,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  *
- * @author Greg Albiston
+ * 
  */
 public class GeometryWrapperTest {
 

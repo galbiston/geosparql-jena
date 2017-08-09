@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.4.4.1 /conf/geometry-topology-extension/rcc8-query-functions
  *

@@ -7,7 +7,7 @@ package implementation.intersection_patterns;
 
 /**
  *
- * @author Gregory Albiston
+ * 
  */
 public class RCC8IntersectionPattern {
 

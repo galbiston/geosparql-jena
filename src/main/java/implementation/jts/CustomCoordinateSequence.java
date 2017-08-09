@@ -14,7 +14,7 @@ import java.util.Arrays;
  *
  * Based on: OGC 06-103r4 http://www.opengeospatial.org/standards/sfa
  *
- * @author Gregory Albiston
+ * 
  */
 public class CustomCoordinateSequence implements CoordinateSequence {
 

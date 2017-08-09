@@ -19,7 +19,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.2.3.1 /conf/topology-vocab-extension/rcc8-spatial-relations
  *

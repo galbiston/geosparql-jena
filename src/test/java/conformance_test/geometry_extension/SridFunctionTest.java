@@ -22,7 +22,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.3.1.5 /conf/geometry-extension/srid-function
  *

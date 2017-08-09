@@ -19,7 +19,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.4.2.1 /conf/geometry-topology-extension/sf-query-functions
  *

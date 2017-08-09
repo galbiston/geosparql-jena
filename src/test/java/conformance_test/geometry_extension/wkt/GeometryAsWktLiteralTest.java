@@ -22,7 +22,7 @@ import org.junit.Test;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.3.2.5 /conf/geometry-extension/geometry-as-wkt-literal
  *

@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public class GMLDatatypeTest {
 

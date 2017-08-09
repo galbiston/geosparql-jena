@@ -11,7 +11,7 @@ import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public class DimensionPF extends GenericGeometryPropertyFunction {
 

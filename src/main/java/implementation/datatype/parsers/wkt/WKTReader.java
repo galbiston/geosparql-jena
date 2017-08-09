@@ -13,7 +13,7 @@ import implementation.support.GeoSerialisationEnum;
 
 /**
  *
- * @author Greg
+ * 
  */
 public class WKTReader {
 

@@ -15,7 +15,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
  *
- * @author haozhechen
+ * 
  */
 public class GeometryProperty {
 

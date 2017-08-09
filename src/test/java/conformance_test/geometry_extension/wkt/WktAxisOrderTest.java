@@ -16,7 +16,7 @@ import org.junit.BeforeClass;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.3.2.3 /conf/geometry-extension/wkt-axis-order
  *

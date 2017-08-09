@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * @author haozhechen
+ * 
  *
  * A.6.3.1 /conf/query-rewrite-extension/rcc8-query-rewrite
  *

@@ -15,7 +15,7 @@ import javax.measure.unit.Unit;
  * URIs based on: http://www.opengis.net/def/uom/OGC/1.0/ URNs based on:
  * http://portal.opengeospatial.org/files/?artifact_id=21630
  *
- * @author Gregory Albiston
+ * 
  */
 public class UnitsOfMeasureLookUp {
 
