@@ -8,6 +8,8 @@ package implementation;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
+import implementation.jts.CustomCoordinateSequence;
+import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +22,7 @@ import org.apache.jena.rdf.model.Literal;
  */
 public class GeometryUtil {
 
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
+    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
 
     /**
      * Converts points to WKT LineString.<br>
@@ -64,7 +66,7 @@ public class GeometryUtil {
             result = new GeometryWrapper(lineString, geom.getSrsURI(), geoSerialisationEnum, new DimensionInfo(geom.getCoordinateDimension(), geom.getSpatialDimension(), lineString.getDimension()));
         } else {
 
-            Coordinate[] coordinates = new Coordinate[coordsList.size()];
+            CustomCoordinateSequence coordinates = new CustomCoordinateSequence(0, 2);
             LineString lineString = GEOMETRY_FACTORY.createLineString(coordinates);
             result = new GeometryWrapper(lineString, "", geoSerialisationEnum, new DimensionInfo(2, 2, 1));
         }
