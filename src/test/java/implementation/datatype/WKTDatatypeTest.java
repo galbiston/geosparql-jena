@@ -9,9 +9,9 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import implementation.CRSRegistry;
+import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
-import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
 import static org.hamcrest.CoreMatchers.not;
 import org.junit.After;
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
+ *
  */
 public class WKTDatatypeTest {
 
@@ -52,7 +52,7 @@ public class WKTDatatypeTest {
     public void tearDown() {
     }
 
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
+    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     /**
      * Test of unparse method, of class WKTDatatype.
@@ -93,9 +93,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
         String expSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
@@ -119,9 +118,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-88.38, 33.95);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
 
         String expSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
 
@@ -146,9 +144,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
@@ -173,9 +170,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
@@ -200,9 +196,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-88.38, 33.95);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
 
         String expSRSURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
@@ -227,9 +222,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
 
         String expSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
 

@@ -8,10 +8,10 @@ package implementation.datatype.parsers.gml;
 import com.jcabi.xml.XMLDocument;
 import com.vividsolutions.jts.geom.*;
 import implementation.CRSRegistry;
+import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.datatype.parsers.ParseException;
 import implementation.jts.CustomCoordinateSequence;
-import implementation.jts.CustomCoordinateSequenceFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
 
 /**
  *
- * 
+ *
  */
 public class GMLGeometryBuilder {
 
@@ -30,7 +30,7 @@ public class GMLGeometryBuilder {
     TODO: decide whether to use instead of GeoTools GMLReader and GMLWriter.
     TODO: decide whether to replace with GDAL/OGR library for Geometry which supports WKT and GML formats. Doesn't have DE-9IM intersection matrix support though.
      */
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
+    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     private final CustomCoordinateSequence.CoordinateSequenceDimensions coordinateSequenceDimensions;
     private final Geometry geometry;

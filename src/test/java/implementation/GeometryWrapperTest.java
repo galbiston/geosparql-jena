@@ -8,7 +8,6 @@ package implementation;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
 import implementation.vocabulary.UnitsOfMeasureLookUp;
 import org.geotools.referencing.CRS;
@@ -27,7 +26,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  */
 public class GeometryWrapperTest {
 
-    GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
+    GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     public GeometryWrapperTest() {
     }

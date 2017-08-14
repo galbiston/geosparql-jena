@@ -10,9 +10,9 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.gml2.GMLReader;
+import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
-import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * 
+ *
  */
 public class GMLDatatypeTest {
 
@@ -55,7 +55,7 @@ public class GMLDatatypeTest {
     public void tearDown() {
     }
 
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
+    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     /**
      * Test of unparse method, of class GMLDatatype.
@@ -96,9 +96,8 @@ public class GMLDatatypeTest {
         GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-83.38, 33.95);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
 
         String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
@@ -121,9 +120,8 @@ public class GMLDatatypeTest {
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(-88.38, 33.95);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
 
         String expSRSName = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
@@ -147,9 +145,8 @@ public class GMLDatatypeTest {
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
         Coordinate coord = new Coordinate(33.95, -88.38);
-        Point expGeometry = geometryFactory.createPoint(coord);
+        Point expGeometry = GEOMETRY_FACTORY.createPoint(coord);
 
         String expSRSName = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 

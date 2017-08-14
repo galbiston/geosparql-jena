@@ -10,21 +10,21 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
+import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.datatype.parsers.ParseException;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
-import implementation.jts.CustomCoordinateSequenceFactory;
 import java.util.Arrays;
 import java.util.Objects;
 
 /**
  *
- * 
+ *
  */
 public class WKTGeometryBuilder {
 
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
+    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     private final CoordinateSequenceDimensions coordinateSequenceDimensions;
     private final Geometry geometry;

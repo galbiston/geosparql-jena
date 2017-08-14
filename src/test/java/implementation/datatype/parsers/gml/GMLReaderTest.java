@@ -10,10 +10,10 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
+import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequence;
-import implementation.jts.CustomCoordinateSequenceFactory;
 import implementation.support.GeoSerialisationEnum;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,7 +24,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  */
 public class GMLReaderTest {
 
@@ -49,7 +49,7 @@ public class GMLReaderTest {
     public void tearDown() {
     }
 
-    private static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory(new CustomCoordinateSequenceFactory());
+    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     @Test
     public void testPoint() {
