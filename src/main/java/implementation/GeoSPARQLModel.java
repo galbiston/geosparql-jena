@@ -27,7 +27,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
  *
- * 
+ *
  */
 public class GeoSPARQLModel {
 
@@ -55,10 +55,8 @@ public class GeoSPARQLModel {
     public static InfModel prepare(Model model) {
 
         //Register GeoSPARQL functions if required.
-        if (!isFunctionsRegistered) {
-            loadFunctions();
-            isFunctionsRegistered = true;
-        }
+        loadFunctions();
+
 
         /*
          * The use of OWL reasoner can bind schema with existing test data.
@@ -100,20 +98,23 @@ public class GeoSPARQLModel {
      * <br>Use this for standard GeoSPARQL setup
      */
     public static void loadFunctions() {
-        PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
-        FunctionRegistry functionRegistry = FunctionRegistry.get();
-        NonTopological.loadFilterFunctions(functionRegistry);
-        functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
-        SimpleFeatures.loadPropertyFunctions(propertyRegistry);
-        SimpleFeatures.loadFilterFunctions(functionRegistry);
-        Egenhofer.loadPropertyFunctions(propertyRegistry);
-        Egenhofer.loadFilterFunctions(functionRegistry);
-        RCC8.loadPropertyFunctions(propertyRegistry);
-        RCC8.loadFilterFunctions(functionRegistry);
-        Relate.loadRelateFunction(functionRegistry);
-        GeometryProperty.loadPropertyFunctions(propertyRegistry);
-        TypeMapper.getInstance().registerDatatype(WKTDatatype.THE_WKT_DATATYPE);
-        TypeMapper.getInstance().registerDatatype(GMLDatatype.THE_GML_DATATYPE);
+        if (!isFunctionsRegistered) {
+            PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
+            FunctionRegistry functionRegistry = FunctionRegistry.get();
+            NonTopological.loadFilterFunctions(functionRegistry);
+            functionRegistry.put(Geo.RELATE_NAME, RelateFF.class);
+            SimpleFeatures.loadPropertyFunctions(propertyRegistry);
+            SimpleFeatures.loadFilterFunctions(functionRegistry);
+            Egenhofer.loadPropertyFunctions(propertyRegistry);
+            Egenhofer.loadFilterFunctions(functionRegistry);
+            RCC8.loadPropertyFunctions(propertyRegistry);
+            RCC8.loadFilterFunctions(functionRegistry);
+            Relate.loadRelateFunction(functionRegistry);
+            GeometryProperty.loadPropertyFunctions(propertyRegistry);
+            TypeMapper.getInstance().registerDatatype(WKTDatatype.THE_WKT_DATATYPE);
+            TypeMapper.getInstance().registerDatatype(GMLDatatype.THE_GML_DATATYPE);
+            isFunctionsRegistered = true;
+        }
     }
 
 }
