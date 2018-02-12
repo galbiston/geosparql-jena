@@ -13,7 +13,7 @@ import implementation.support.GeoSerialisationEnum;
 
 /**
  *
- * 
+ *
  */
 public class WKTReader {
 
@@ -27,7 +27,6 @@ public class WKTReader {
         DimensionInfo dimensionInfo = wktGeometryBuilder.getDimensionInfo();
 
         return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), GeoSerialisationEnum.WKT, dimensionInfo);
-
     }
 
 }

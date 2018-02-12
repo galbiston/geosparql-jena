@@ -6,9 +6,12 @@
 package implementation;
 
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
+import implementation.datatype.parsers.wkt.WKTReader;
+import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
@@ -60,6 +63,12 @@ public class GeometryWrapper {
 
         this.xyGeometry = GeometryReverse.check(geometry, crs);
 
+    }
+
+    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
+
+    public GeometryWrapper(String srsURI, GeoSerialisationEnum serialisation, DimensionInfo dimensionInfo) {
+        this(GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions())), srsURI, serialisation, dimensionInfo);
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
@@ -386,6 +395,16 @@ public class GeometryWrapper {
 
     }
 
+    public static final GeometryWrapper emptyWKT() {
+        return WKTReader.read("POINT EMPTY");
+    }
+
+    /*
+    //TODO - empty GML GEometryWrapper creation.
+    public static final GeometryWrapper emptyGML() {
+
+    }
+     */
     @Override
     public int hashCode() {
         int hash = 7;

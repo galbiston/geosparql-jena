@@ -8,6 +8,7 @@ package implementation;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import implementation.jts.CustomCoordinateSequence;
 import implementation.support.GeoSerialisationEnum;
 import implementation.vocabulary.UnitsOfMeasureLookUp;
 import org.geotools.referencing.CRS;
@@ -215,6 +216,39 @@ public class GeometryWrapperTest {
         double expResult = 10.0;
         double result = instance.distance(targetGeometry, distanceUnitsURI);
         assertEquals(expResult, result, 0.0);
+    }
+
+    /**
+     * Test of empty WKT GeometryWrapper.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEmptyWKT() throws Exception {
+        System.out.println("emptyWKT");
+        CustomCoordinateSequence sequence = new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions());
+        Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(sequence);
+        String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
+        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
+
+        GeometryWrapper expResult = GeometryWrapper.emptyWKT();
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of empty WKT GeometryWrapper.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testEmptyGeometryWrapper() throws Exception {
+        System.out.println("emptyGeometryWrapper");
+
+        String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
+        GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
+
+        GeometryWrapper expResult = GeometryWrapper.emptyWKT();
+        assertEquals(expResult, result);
     }
 
 }

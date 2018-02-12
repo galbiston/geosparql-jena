@@ -34,6 +34,10 @@ public class WKTGeometryBuilder {
         this.geometry = buildGeometry(shape, coordinates);
     }
 
+    public WKTGeometryBuilder() {
+        this("point", "", "");
+    }
+
     private static CoordinateSequenceDimensions convertDimensions(String dimensionsString) {
 
         CoordinateSequenceDimensions dims;
