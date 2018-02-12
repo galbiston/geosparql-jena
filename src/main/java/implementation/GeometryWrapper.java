@@ -65,8 +65,36 @@ public class GeometryWrapper {
 
     }
 
+    /**
+     * Default to WGS84 and XY coordinate dimensions.
+     *
+     * @param geometry
+     * @param serialisation
+     */
+    public GeometryWrapper(Geometry geometry, GeoSerialisationEnum serialisation) {
+        this(geometry, "", serialisation, DimensionInfo.xyPoint());
+    }
+
+    /**
+     * Default to XY coordinate dimensions.
+     *
+     * @param geometry
+     * @param srsURI
+     * @param serialisation
+     */
+    public GeometryWrapper(Geometry geometry, String srsURI, GeoSerialisationEnum serialisation) {
+        this(geometry, srsURI, serialisation, DimensionInfo.xyPoint());
+    }
+
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
+    /**
+     * Empty geometry with specified parameters.
+     *
+     * @param srsURI
+     * @param serialisation
+     * @param dimensionInfo
+     */
     public GeometryWrapper(String srsURI, GeoSerialisationEnum serialisation, DimensionInfo dimensionInfo) {
         this(GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions())), srsURI, serialisation, dimensionInfo);
     }
