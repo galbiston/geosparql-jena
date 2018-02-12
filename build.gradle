@@ -13,7 +13,7 @@ sourceCompatibility = '1.8'
 
 repositories {
     //Custom Maven Repository
-    //Notice: MUST put this before Maven central otherwise will cause jai-core.jar not find error.
+    //NB: MUST put this before Maven central otherwise will cause jai-core.jar not found error.
     maven {
         url "http://download.osgeo.org/webdav/geotools/"
     }
@@ -28,11 +28,11 @@ dependencies {
     //implementation 'org.apache.lucene:lucene-core:6.1.0'
 
     //Geotools: http://docs.geotools.org/latest/userguide.old/library/
-    ext.geoToolsVersion = '17.2'
-    implementation group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
-    implementation group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
-    implementation group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion
-    implementation group: 'org.geotools', name: 'gt-main', version: geoToolsVersion
+    ext.geoToolsVersion = '18.2'
+    api group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
+    api group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
+    api group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion
+    api group: 'org.geotools', name: 'gt-main', version: geoToolsVersion
 
     api group: 'com.vividsolutions', name: 'jts', version: '1.13'
 
@@ -47,34 +47,37 @@ dependencies {
 
     //JUnit Testing
     testImplementation group: 'junit', name: 'junit', version: '4.12'
-}
-
-group = 'org.ntu'
-version = '0.9.4'
-
-apply plugin: 'maven-publish'
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
     }
-}
 
-build.finalizedBy(publishToMavenLocal)
+    group = 'org.ntu'
+    version = '0.9.5'
 
-//Change xlint:unchecked warnings to errors for more details.
-//Typically caused by ArrayList rather than ArrayList<Type>.
-//Can be suppressed by @SuppressWarning("unchecked") if use of generics is intended.
-/*
-tasks.withType(JavaCompile) {
-options.compilerArgs << "-Xlint:unchecked" << "-Werror"
-}
- */
+    /*
+    //No longer applying the maven-publish and instead using includeBuild command in settings.gradle of dependent project.
+    //Remove if definitely not needed.
+    apply plugin: 'maven-publish'
+    publishing {
+    publications {
+    mavenJava(MavenPublication) {
+    from components.java
+    }
+    }
+    }
 
-//Change xlint:deprecation warnings to errors for more details.
-/*
-tasks.withType(JavaCompile) {
-options.compilerArgs << "-Xlint:deprecation" << "-Werror"
-}
- */
+    build.finalizedBy(publishToMavenLocal)
+     */
+    //Change xlint:unchecked warnings to errors for more details.
+    //Typically caused by ArrayList rather than ArrayList<Type>.
+    //Can be suppressed by @SuppressWarning("unchecked") if use of generics is intended.
+    /*
+    tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Werror"
+    }
+     */
+
+    //Change xlint:deprecation warnings to errors for more details.
+    /*
+    tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:deprecation" << "-Werror"
+    }
+     */
