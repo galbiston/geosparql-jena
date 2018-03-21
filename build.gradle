@@ -28,7 +28,7 @@ dependencies {
     //implementation 'org.apache.lucene:lucene-core:6.1.0'
 
     //Geotools: http://docs.geotools.org/latest/userguide.old/library/
-    ext.geoToolsVersion = '18.2'
+    ext.geoToolsVersion = '19.0'
     api group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
     api group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
     api group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion
@@ -36,10 +36,11 @@ dependencies {
 
     api group: 'com.vividsolutions', name: 'jts', version: '1.13'
 
-    implementation group: 'com.jcabi', name: 'jcabi-xml', version: '0.19'
+    compile group: 'org.jdom', name: 'jdom2', version: '2.0.6'
 
     //Apache Jena EXCLUDE its log part
-    api (group: 'org.apache.jena', name: 'apache-jena-libs', version: '3.4.0') {exclude group: 'org.slf4j', module: 'slf4j-log4j12' }
+    ext.jenaVersion = "3.6.0"
+    api "org.apache.jena:apache-jena-libs:$jenaVersion"
 
     //Logging Framework
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
@@ -47,37 +48,37 @@ dependencies {
 
     //JUnit Testing
     testImplementation group: 'junit', name: 'junit', version: '4.12'
-    }
+}
 
-    group = 'org.ntu'
-    version = '0.9.5'
+group = 'org.ntu'
+version = '0.9.6'
 
-    /*
-    //No longer applying the maven-publish and instead using includeBuild command in settings.gradle of dependent project.
-    //Remove if definitely not needed.
-    apply plugin: 'maven-publish'
-    publishing {
-    publications {
-    mavenJava(MavenPublication) {
-    from components.java
-    }
-    }
-    }
+/*
+//No longer applying the maven-publish and instead using includeBuild command in settings.gradle of dependent project.
+//Remove if definitely not needed.
+apply plugin: 'maven-publish'
+publishing {
+publications {
+mavenJava(MavenPublication) {
+from components.java
+}
+}
+}
 
-    build.finalizedBy(publishToMavenLocal)
-     */
-    //Change xlint:unchecked warnings to errors for more details.
-    //Typically caused by ArrayList rather than ArrayList<Type>.
-    //Can be suppressed by @SuppressWarning("unchecked") if use of generics is intended.
-    /*
-    tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:unchecked" << "-Werror"
-    }
-     */
+build.finalizedBy(publishToMavenLocal)
+ */
+//Change xlint:unchecked warnings to errors for more details.
+//Typically caused by ArrayList rather than ArrayList<Type>.
+//Can be suppressed by @SuppressWarning("unchecked") if use of generics is intended.
+/*
+tasks.withType(JavaCompile) {
+options.compilerArgs << "-Xlint:unchecked" << "-Werror"
+}
+ */
 
-    //Change xlint:deprecation warnings to errors for more details.
-    /*
-    tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:deprecation" << "-Werror"
-    }
-     */
+//Change xlint:deprecation warnings to errors for more details.
+/*
+tasks.withType(JavaCompile) {
+options.compilerArgs << "-Xlint:deprecation" << "-Werror"
+}
+ */
