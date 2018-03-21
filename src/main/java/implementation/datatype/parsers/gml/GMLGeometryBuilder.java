@@ -5,20 +5,24 @@
  */
 package implementation.datatype.parsers.gml;
 
-import com.jcabi.xml.XMLDocument;
 import com.vividsolutions.jts.geom.*;
 import implementation.CRSRegistry;
 import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.datatype.parsers.ParseException;
 import implementation.jts.CustomCoordinateSequence;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -27,93 +31,78 @@ import org.w3c.dom.NodeList;
 public class GMLGeometryBuilder {
 
     /*
-    TODO: decide whether to use instead of GeoTools GMLReader and GMLWriter.
     TODO: decide whether to replace with GDAL/OGR library for Geometry which supports WKT and GML formats. Doesn't have DE-9IM intersection matrix support though.
      */
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
+    //Geometry attributes
     private final CustomCoordinateSequence.CoordinateSequenceDimensions coordinateSequenceDimensions;
     private final Geometry geometry;
+    private final String srsName;
+    private final int srsDimension;
+    private final DimensionInfo dimensionInfo;
 
-    //Geometry attributes
-    private static String srsName;
-    private static int srsDimension;
+    private static final Namespace GML_NAMESPACE = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
 
-    public GMLGeometryBuilder(String shape, int dimension, Node gmlNode) {
-        this.coordinateSequenceDimensions = convertDimensions(dimension);
-        this.geometry = buildGeometry(shape, gmlNode);
-    }
-
-    public static String getSrsName() {
-        return srsName;
-    }
-
-    public static void setSrsName(String srsName) {
-        GMLGeometryBuilder.srsName = srsName;
-    }
-
-    public static int getSrsDimension() {
-        return srsDimension;
-    }
-
-    public static void setSrsDimension(int srsDimension) {
-        GMLGeometryBuilder.srsDimension = srsDimension;
-    }
-
-    private static CustomCoordinateSequence.CoordinateSequenceDimensions convertDimensions(int dimension) {
-
-        CustomCoordinateSequence.CoordinateSequenceDimensions dims;
-        if (dimension == 3) {
-            dims = CustomCoordinateSequence.CoordinateSequenceDimensions.XYZ;
-        } else {
-            dims = CustomCoordinateSequence.CoordinateSequenceDimensions.XY;
-        }
-        return dims;
-    }
-
-    // In this case, the coordinate dimension, spatial dimension, and topological dimension will be same
-    public DimensionInfo getDimensionInfo() {
-        return new DimensionInfo(getDimension(), getDimension(), geometry.getDimension());
-    }
-
-    public int getDimension() {
-
-        switch (coordinateSequenceDimensions) {
-            case XYZ:
-                return 3;
-            default:
-                return 2;
-        }
+    public GMLGeometryBuilder(String shape, Element gmlElement, String srsName, int srsDimension) throws ParseException {
+        this.srsName = srsName;
+        this.srsDimension = srsDimension;
+        this.coordinateSequenceDimensions = convertDimensions(srsDimension);
+        this.geometry = buildGeometry(shape, gmlElement);
+        this.dimensionInfo = new DimensionInfo(srsDimension, srsDimension, geometry.getDimension());
     }
 
     public Geometry getGeometry() {
         return geometry;
     }
 
-    private Geometry buildGeometry(String shape, Node gmlNode) {
+    public String getSrsName() {
+        return srsName;
+    }
+
+    public int getSrsDimension() {
+        return srsDimension;
+    }
+
+    public DimensionInfo getDimensionInfo() {
+        return dimensionInfo;
+    }
+
+    private static CustomCoordinateSequence.CoordinateSequenceDimensions convertDimensions(int dimension) {
+
+        if (dimension == 3) {
+            return CustomCoordinateSequence.CoordinateSequenceDimensions.XYZ;
+        } else {
+            return CustomCoordinateSequence.CoordinateSequenceDimensions.XY;
+        }
+    }
+
+    private Geometry buildGeometry(String shape, Element gmlElement) throws ParseException {
 
         Geometry geo;
         switch (shape) {
             case "Point":
             case "LineString":
-                String coordinateString = gmlNode.getFirstChild().getTextContent();
-                CustomCoordinateSequence coordinateSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(coordinateString));
+                Element coordinates = gmlElement.getChild("coordinates", GML_NAMESPACE);
+                String coordinateString = coordinates.getTextNormalize();
+                String rebuildCoordinates = rebuildCoordinates(coordinateString);
+                CustomCoordinateSequence coordinateSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates);
                 geo = buildBasic(shape, coordinateSequence);
                 break;
             case "Polygon":
-                geo = buildPolygon(gmlNode);
+                geo = buildPolygon(gmlElement);
                 break;
             case "MultiPoint":
-                geo = buildMultiPoint(gmlNode);
+                geo = buildMultiPoint(gmlElement);
                 break;
             case "MultiLineString":
-                geo = buildMultiLineString(gmlNode);
+                geo = buildMultiLineString(gmlElement);
                 break;
             case "MultiPolygon":
-                geo = buildMultiPolygon(gmlNode);
+                geo = buildMultiPolygon(gmlElement);
                 break;
             case "GeometryCollection":
-                geo = buildGeometryCollection(gmlNode);
+                geo = buildGeometryCollection(gmlElement);
                 break;
             default:
                 throw new ParseException("Geometry shape not supported: " + shape);
@@ -121,7 +110,7 @@ public class GMLGeometryBuilder {
         return geo;
     }
 
-    private Geometry buildBasic(String shape, CustomCoordinateSequence coordinateSequence) {
+    private Geometry buildBasic(String shape, CustomCoordinateSequence coordinateSequence) throws ParseException {
         switch (shape) {
             case "Point":
                 return GEOMETRY_FACTORY.createPoint(coordinateSequence);
@@ -133,11 +122,12 @@ public class GMLGeometryBuilder {
     }
 
     private String rebuildCoordinates(String unclean) {
+        //GML uses ' ' to seperate coordinate pairs and ',' as delimiter while WKT and JTS is reverse.
         StringBuilder sb = new StringBuilder("");
         String[] coordinates = unclean.trim().split(" ");
-        int dimension = getSrsDimension();
+
         for (int i = 0; i < coordinates.length; i++) {
-            if ((i + 1) % dimension == 0 && (i + 1) != coordinates.length) {
+            if ((i + 1) % srsDimension == 0 && (i + 1) != coordinates.length) {
                 sb.append(" ").append(coordinates[i]).append(",");
             } else if ((i + 1) == coordinates.length) {
                 sb.append(" ").append(coordinates[i]);
@@ -148,26 +138,44 @@ public class GMLGeometryBuilder {
         return sb.toString();
     }
 
-    private Geometry buildGeometryCollection(Node gmlNode) {
+    private Polygon buildPolygon(Element gmlElement) {
 
-        NodeList nodeList = gmlNode.getChildNodes();
-        Geometry[] geometries = new Geometry[nodeList.getLength()];
+        Polygon polygon;
 
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            String shape = nodeList.item(i).getFirstChild().getLocalName();
-            Node geometryNode = nodeList.item(i).getFirstChild();
-            geometries[i] = buildGeometry(shape, geometryNode);
+        //Exterior shell
+        Element exterior = gmlElement.getChild("Exterior", GML_NAMESPACE);
+        String coordinates = exterior.getChildText("PosList", GML_NAMESPACE);
+        CustomCoordinateSequence exteriorSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(coordinates));
+
+        //Interior shell - that may not be present.
+        List<Element> interiors = gmlElement.getChildren("Interior", GML_NAMESPACE);
+        List<LinearRing> interiorLinearRingList = new ArrayList<>();
+        for (Element interior : interiors) {
+            String interiorCoordinates = interior.getChildText("PosList", GML_NAMESPACE);
+            CustomCoordinateSequence sequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(interiorCoordinates));
+            LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(sequence);
+            interiorLinearRingList.add(linearRing);
         }
 
-        return GEOMETRY_FACTORY.createGeometryCollection(geometries);
+        //Build the polygon depending on whether interior shells were found.
+        if (interiorLinearRingList.isEmpty()) {
+            polygon = GEOMETRY_FACTORY.createPolygon(exteriorSequence);
+        } else {
+            LinearRing exteriorLinearRing = GEOMETRY_FACTORY.createLinearRing(exteriorSequence);
+            LinearRing[] interiorLinerRings = interiorLinearRingList.toArray(new LinearRing[interiorLinearRingList.size()]);
+            polygon = GEOMETRY_FACTORY.createPolygon(exteriorLinearRing, interiorLinerRings);
+        }
+
+        return polygon;
     }
 
-    private Geometry buildMultiPoint(Node gmlNode) {
+    private Geometry buildMultiPoint(Element gmlElement) {
 
-        NodeList nodeList = gmlNode.getChildNodes();
-        Point[] points = new Point[nodeList.getLength()];
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            String coordinates = nodeList.item(i).getTextContent();
+        List<Element> children = gmlElement.getChildren();
+        Point[] points = new Point[children.size()];
+        for (int i = 0; i < children.size(); i++) {
+            Element child = children.get(i);
+            String coordinates = child.getChild("Point", GML_NAMESPACE).getTextNormalize();
             CustomCoordinateSequence sequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(coordinates));
 
             points[i] = GEOMETRY_FACTORY.createPoint(sequence);
@@ -175,12 +183,13 @@ public class GMLGeometryBuilder {
         return GEOMETRY_FACTORY.createMultiPoint(points);
     }
 
-    private Geometry buildMultiLineString(Node gmlNode) {
+    private Geometry buildMultiLineString(Element gmlElement) {
 
-        NodeList nodeList = gmlNode.getChildNodes();
-        LineString[] lineStrings = new LineString[nodeList.getLength()];
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            String coordinates = nodeList.item(i).getTextContent();
+        List<Element> children = gmlElement.getChildren();
+        LineString[] lineStrings = new LineString[children.size()];
+        for (int i = 0; i < children.size(); i++) {
+            Element child = children.get(i);
+            String coordinates = child.getChild("LineString", GML_NAMESPACE).getTextNormalize();
             CustomCoordinateSequence sequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(coordinates));
 
             lineStrings[i] = GEOMETRY_FACTORY.createLineString(sequence);
@@ -188,76 +197,68 @@ public class GMLGeometryBuilder {
         return GEOMETRY_FACTORY.createMultiLineString(lineStrings);
     }
 
-    private Geometry buildMultiPolygon(Node gmlNode) {
+    private Geometry buildMultiPolygon(Element gmlElement) {
 
-        NodeList nodeList = gmlNode.getChildNodes();
-        Polygon[] polygons = new Polygon[nodeList.getLength()];
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node polygonNode = nodeList.item(i).getFirstChild();
-            polygons[i] = buildPolygon(polygonNode);
+        List<Element> children = gmlElement.getChildren();
+        Polygon[] polygons = new Polygon[children.size()];
+        for (int i = 0; i < children.size(); i++) {
+            Element child = children.get(i);
+            polygons[i] = buildPolygon(child.getChild("Polygon", GML_NAMESPACE));
         }
 
         return GEOMETRY_FACTORY.createMultiPolygon(polygons);
     }
 
-    private Polygon buildPolygon(Node gmlNode) {
+    private Geometry buildGeometryCollection(Element gmlElement) {
 
-        Polygon polygon;
+        List<Element> children = gmlElement.getChildren();
+        Geometry[] geometries = new Geometry[children.size()];
 
-        NodeList nodeList = gmlNode.getChildNodes();
+        for (int i = 0; i < children.size(); i++) {
+            Element child = children.get(i);
 
-        if (nodeList.getLength() == 1) {
-            String coordinates = nodeList.item(0).getTextContent();
-            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(coordinates));
-            polygon = GEOMETRY_FACTORY.createPolygon(shellSequence);
-        } else {
-            List<LinearRing> linearList = new ArrayList<>();
-            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(nodeList.item(0).getTextContent()));
-            LinearRing shellLinearRing = GEOMETRY_FACTORY.createLinearRing(shellSequence);
-
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                if (nodeList.item(i).getLocalName().equals("Interior")) {
-                    String coordinates = nodeList.item(i).getTextContent();
-                    CustomCoordinateSequence sequence = new CustomCoordinateSequence(coordinateSequenceDimensions, rebuildCoordinates(coordinates));
-                    LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(sequence);
-                    linearList.add(linearRing);
-                }
+            //Geometry Members
+            for (Element grandChild : child.getChildren()) {
+                String shape = grandChild.getName();
+                geometries[i] = buildGeometry(shape, grandChild);
             }
-            LinearRing[] holesLinearRing = linearList.toArray(new LinearRing[linearList.size()]);
-            polygon = GEOMETRY_FACTORY.createPolygon(shellLinearRing, holesLinearRing);
         }
 
-        return polygon;
+        return GEOMETRY_FACTORY.createGeometryCollection(geometries);
     }
 
-    public static GMLGeometryBuilder extract(String gmlText) {
+    public static GMLGeometryBuilder extract(String gmlText) throws JDOMException, IOException {
 
-        XMLDocument xmlDoc = new XMLDocument(gmlText);
-        Node gmlNode = xmlDoc.node().getFirstChild();
+        SAXBuilder jdomBuilder = new SAXBuilder();
+        InputStream stream = new ByteArrayInputStream(gmlText.getBytes("UTF-8"));
+        Document xmlDoc = jdomBuilder.build(stream);
 
-        NamedNodeMap attributes = gmlNode.getAttributes();
-        setSrsName(attributes.getNamedItem("srsName").getNodeValue());
+        Element gmlElement = xmlDoc.getRootElement();
 
-        Node dimensionNode = attributes.getNamedItem("srsDimension");
-        if (dimensionNode != null) {
-            String nodeValue = dimensionNode.getNodeValue();
-            setSrsDimension(Integer.parseInt(nodeValue));
+        String srsName = gmlElement.getAttributeValue("srsName");
+        String dimension = gmlElement.getAttributeValue("srsDimension");
 
-        } else {  //srsDimension attribute is missing so extract from the srsURI.
-
-            CoordinateReferenceSystem crs = CRSRegistry.getCRS(getSrsName());
-            setSrsDimension(crs.getCoordinateSystem().getDimension());
+        int srsDimension;
+        if (dimension == null) {
+            //srsDimension attribute is missing so extract from the srsURI.
+            CoordinateReferenceSystem crs = CRSRegistry.getCRS(srsName);
+            srsDimension = crs.getCoordinateSystem().getDimension();
+        } else {
+            srsDimension = Integer.parseInt(dimension);
         }
-        String shape = gmlNode.getLocalName();
+        String shape = gmlElement.getName();
 
-        return new GMLGeometryBuilder(shape, srsDimension, gmlNode);
+        return new GMLGeometryBuilder(shape, gmlElement, srsName, srsDimension);
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.coordinateSequenceDimensions);
-        hash = 97 * hash + Objects.hashCode(this.geometry);
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.coordinateSequenceDimensions);
+        hash = 89 * hash + Objects.hashCode(this.geometry);
+        hash = 89 * hash + Objects.hashCode(this.srsName);
+        hash = 89 * hash + this.srsDimension;
+        hash = 89 * hash + Objects.hashCode(this.dimensionInfo);
         return hash;
     }
 
@@ -273,15 +274,24 @@ public class GMLGeometryBuilder {
             return false;
         }
         final GMLGeometryBuilder other = (GMLGeometryBuilder) obj;
+        if (this.srsDimension != other.srsDimension) {
+            return false;
+        }
+        if (!Objects.equals(this.srsName, other.srsName)) {
+            return false;
+        }
         if (this.coordinateSequenceDimensions != other.coordinateSequenceDimensions) {
             return false;
         }
-        return Objects.equals(this.geometry, other.geometry);
+        if (!Objects.equals(this.geometry, other.geometry)) {
+            return false;
+        }
+        return Objects.equals(this.dimensionInfo, other.dimensionInfo);
     }
 
     @Override
     public String toString() {
-        return "GMLInfo{" + "coordinateSequenceDimensions=" + coordinateSequenceDimensions + ", geometry=" + geometry + '}';
+        return "GMLGeometryBuilder{" + "coordinateSequenceDimensions=" + coordinateSequenceDimensions + ", geometry=" + geometry + ", srsName=" + srsName + ", srsDimension=" + srsDimension + ", dimensionInfo=" + dimensionInfo + '}';
     }
 
 }
