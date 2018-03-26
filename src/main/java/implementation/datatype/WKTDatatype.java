@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
- * 
+ *
+ *
  *
  * description: WKTDatatype class allows the URI "geo:gmlLiteral" to be used as
  * a datatype and it will parse that datatype to a JTL Geometry.
@@ -57,7 +57,6 @@ public class WKTDatatype extends BaseDatatype {
     public String unparse(Object geometry) {
 
         GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
-
         return WKTWriter.write(geometryWrapper);
     }
 
@@ -86,8 +85,9 @@ public class WKTDatatype extends BaseDatatype {
 
         try {
             return WKTReader.read(lexicalForm);
-        } catch (ParseException ex) {
-            throw new DatatypeFormatException("Illegal WKT literal: " + lexicalForm);
+        } catch (ParseException | IllegalArgumentException ex) {
+            LOGGER.error("{} - Illegal WKT literal: {} ", ex.getMessage(), lexicalForm);
+            throw new DatatypeFormatException(ex.getMessage() + " - Illegal WKT literal: " + lexicalForm);
         }
 
     }
