@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
+ *
  */
 public class CRSRegistry {
 
@@ -33,6 +33,8 @@ public class CRSRegistry {
     public static final String OSGB_CRS = "http://www.opengis.net/def/crs/EPSG/0/27700";
 
     public static final String WGS84_CRS = "http://www.opengis.net/def/crs/EPSG/0/4326";
+
+    public static final String WGS84_CRS_GEOPSARQL_LEGACY = "http://www.opengis.net/def/crs/EPSG/4326";
 
     static {
         String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
@@ -55,7 +57,12 @@ public class CRSRegistry {
         if (!CRS_REGISTRY.containsKey(srsURI)) {
 
             try {
-                crs = CRS.decode(srsURI);
+                if (srsURI.equals(WGS84_CRS_GEOPSARQL_LEGACY)) {
+                    crs = CRS.decode(WGS84_CRS);
+                    LOGGER.warn("Legacy GeoSPARQL CRS found: {}. Using GeoSPARQL 1.0 URI version {} CRS. Dataset should be updated but no impact on operation.", WGS84_CRS_GEOPSARQL_LEGACY, WGS84_CRS);
+                } else {
+                    crs = CRS.decode(srsURI);
+                }
                 CRS_REGISTRY.put(srsURI, crs);
 
                 UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
