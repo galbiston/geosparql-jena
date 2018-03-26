@@ -10,13 +10,14 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  *
- * 
+ *
  */
 public class GeometryReverse {
 
@@ -67,8 +68,7 @@ public class GeometryReverse {
                 finalGeometry = factory.createMultiPoint(coordinates);
                 break;
             case "Polygon":
-                coordinates = getReversedCoordinates(geometry);
-                finalGeometry = factory.createPolygon(coordinates);
+                finalGeometry = reversePolygon(geometry, factory);
                 break;
             case "Point":
                 coordinates = getReversedCoordinates(geometry);
@@ -107,6 +107,34 @@ public class GeometryReverse {
 
     }
 
+    private static Polygon reversePolygon(Geometry geometry, GeometryFactory factory) {
+
+        Polygon finalGeometry;
+        Polygon polygon = (Polygon) geometry;
+        if (polygon.getNumInteriorRing() == 0) {
+            //There are no interior rings so perform the standard reversal.
+            Coordinate[] coordinates = getReversedCoordinates(geometry);
+            finalGeometry = factory.createPolygon(coordinates);
+        } else {
+
+            LineString exteriorRing = polygon.getExteriorRing();
+            Coordinate[] reversedExteriorCoordinates = getReversedCoordinates(exteriorRing);
+            LinearRing reversedExteriorRing = factory.createLinearRing(reversedExteriorCoordinates);
+
+            LinearRing[] reversedInteriorRings = new LinearRing[polygon.getNumInteriorRing()];
+            for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
+                LineString interiorRing = polygon.getInteriorRingN(i);
+                Coordinate[] reversedInteriorCoordinates = getReversedCoordinates(interiorRing);
+                LinearRing reversedInteriorRing = factory.createLinearRing(reversedInteriorCoordinates);
+                reversedInteriorRings[i] = reversedInteriorRing;
+            }
+
+            finalGeometry = factory.createPolygon(reversedExteriorRing, reversedInteriorRings);
+        }
+
+        return finalGeometry;
+    }
+
     private static Polygon[] unpackPolygons(GeometryCollection geoCollection) {
 
         GeometryFactory factory = geoCollection.getFactory();
@@ -116,8 +144,7 @@ public class GeometryReverse {
 
         for (int i = 0; i < count; i++) {
             Geometry geometry = geoCollection.getGeometryN(i);
-            Coordinate[] coordinates = getReversedCoordinates(geometry);
-            Polygon polygon = factory.createPolygon(coordinates);
+            Polygon polygon = reversePolygon(geometry, factory);
             polygons[i] = polygon;
         }
 

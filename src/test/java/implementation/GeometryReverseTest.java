@@ -26,7 +26,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  *
- * 
+ *
  */
 public class GeometryReverseTest {
 
@@ -51,6 +51,8 @@ public class GeometryReverseTest {
 
     /**
      * Test of check method, of class GeometryReverse.
+     *
+     * @throws org.opengis.referencing.FactoryException
      */
     @Test
     public void testCheckPoint() throws FactoryException {
@@ -76,6 +78,8 @@ public class GeometryReverseTest {
 
     /**
      * Test of check method, of class GeometryReverse.
+     *
+     * @throws org.opengis.referencing.FactoryException
      */
     @Test
     public void testCheckLineString() throws FactoryException {
@@ -101,6 +105,8 @@ public class GeometryReverseTest {
 
     /**
      * Test of check method, of class GeometryReverse.
+     *
+     * @throws org.opengis.referencing.FactoryException
      */
     @Test
     public void testCheckPolygon() throws FactoryException {
@@ -126,6 +132,35 @@ public class GeometryReverseTest {
 
     /**
      * Test of check method, of class GeometryReverse.
+     *
+     * @throws org.opengis.referencing.FactoryException
+     */
+    @Test
+    public void testCheckPolygonHoled() throws FactoryException {
+        System.out.println("checkPolygonHoled");
+
+        WKTReader reader = new WKTReader();
+        try {
+            Polygon geometry = (Polygon) reader.read("POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30))");
+            CoordinateReferenceSystem crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/4326");
+
+            Geometry expResult = reader.read("POLYGON ((10 35, 45 45, 40 15, 20 10, 10 35),(30 20, 35 35, 20 30, 30 20))");
+            Geometry result = GeometryReverse.check(geometry, crs);
+
+            System.out.println("Expected: " + expResult);
+            System.out.println("Result: " + result);
+
+            assertEquals(expResult, result);
+        } catch (ParseException ex) {
+            System.err.println("ParseException: " + ex.getMessage());
+        }
+
+    }
+
+    /**
+     * Test of check method, of class GeometryReverse.
+     *
+     * @throws org.opengis.referencing.FactoryException
      */
     @Test
     public void testCheckMultiPoint() throws FactoryException {
@@ -151,6 +186,8 @@ public class GeometryReverseTest {
 
     /**
      * Test of check method, of class GeometryReverse.
+     *
+     * @throws org.opengis.referencing.FactoryException
      */
     @Test
     public void testCheckMultiPolygon() throws FactoryException {
@@ -176,6 +213,8 @@ public class GeometryReverseTest {
 
     /**
      * Test of check method, of class GeometryReverse.
+     *
+     * @throws org.opengis.referencing.FactoryException
      */
     @Test
     public void testCheckMultiLineString() throws FactoryException {
@@ -223,4 +262,30 @@ public class GeometryReverseTest {
 
     }
 
+    /**
+     * Test of check method, of class GeometryReverse.
+     *
+     * @throws org.opengis.referencing.FactoryException
+     */
+    @Test
+    public void testCheckMultiPolygonHoled() throws FactoryException {
+        System.out.println("checkMultiPolygonHoled");
+
+        WKTReader reader = new WKTReader();
+        try {
+            MultiPolygon geometry = (MultiPolygon) reader.read("MULTIPOLYGON (((35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
+            CoordinateReferenceSystem crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/4326");
+
+            Geometry expResult = reader.read("MULTIPOLYGON (((10 35, 45 45, 40 15, 20 10, 10 35),(30 20, 35 35, 20 30, 30 20)),((5 15, 10 40, 20 10, 10 5, 5 15)))");
+            Geometry result = GeometryReverse.check(geometry, crs);
+
+            System.out.println("Expected: " + expResult);
+            System.out.println("Result: " + result);
+
+            assertEquals(expResult, result);
+        } catch (ParseException ex) {
+            System.err.println("ParseException: " + ex.getMessage());
+        }
+
+    }
 }
