@@ -6,8 +6,6 @@
 package conformance_test.geometry_topology_extension.simplefeatures_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
-
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
@@ -19,7 +17,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.4.2.1 /conf/geometry-topology-extension/sf-query-functions
  *
@@ -49,7 +47,7 @@ public class SfOverlapsTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
