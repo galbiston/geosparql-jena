@@ -203,7 +203,7 @@ public class GeometryWrapper {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
 
-        Geometry geo = this.xyGeometry.difference(transformedGeometry.getXYGeometry());
+        Geometry geo = this.xyGeometry.difference(transformedGeometry.xyGeometry);
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
@@ -228,7 +228,7 @@ public class GeometryWrapper {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
 
-        double distance = this.xyGeometry.distance(transformedGeometry.getXYGeometry());
+        double distance = this.xyGeometry.distance(transformedGeometry.xyGeometry);
 
         distance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, unitsOfMeasure);
 
@@ -250,7 +250,7 @@ public class GeometryWrapper {
     public GeometryWrapper intersection(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        Geometry geo = this.xyGeometry.intersection(transformedGeometry.getXYGeometry());
+        Geometry geo = this.xyGeometry.intersection(transformedGeometry.xyGeometry);
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
@@ -269,63 +269,63 @@ public class GeometryWrapper {
     public GeometryWrapper symDifference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        Geometry geo = this.xyGeometry.symDifference(transformedGeometry.getXYGeometry());
+        Geometry geo = this.xyGeometry.symDifference(transformedGeometry.xyGeometry);
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public GeometryWrapper union(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        Geometry geo = this.xyGeometry.union(transformedGeometry.getXYGeometry());
+        Geometry geo = this.xyGeometry.union(transformedGeometry.xyGeometry);
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        return this.xyGeometry.contains(transformedGeometry.getXYGeometry());
+        return this.xyGeometry.contains(transformedGeometry.xyGeometry);
     }
 
     public boolean crosses(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        return this.xyGeometry.crosses(transformedGeometry.getXYGeometry());
+        return this.xyGeometry.crosses(transformedGeometry.xyGeometry);
     }
 
     public boolean disjoint(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        return this.xyGeometry.disjoint(transformedGeometry.getXYGeometry());
+        return this.xyGeometry.disjoint(transformedGeometry.xyGeometry);
     }
 
     public boolean equals(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        return this.xyGeometry.equals((Geometry) transformedGeometry.getXYGeometry());
+        return this.xyGeometry.equals((Geometry) transformedGeometry.xyGeometry);
     }
 
     public boolean intersects(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        return this.xyGeometry.intersects(transformedGeometry.getXYGeometry());
+        return this.xyGeometry.intersects(transformedGeometry.xyGeometry);
     }
 
     public boolean overlaps(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        return this.xyGeometry.overlaps(transformedGeometry.getXYGeometry());
+        return this.xyGeometry.overlaps(transformedGeometry.xyGeometry);
     }
 
     public boolean touches(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        return this.xyGeometry.touches(transformedGeometry.getXYGeometry());
+        return this.xyGeometry.touches(transformedGeometry.xyGeometry);
     }
 
     public boolean within(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        return this.xyGeometry.within(transformedGeometry.getXYGeometry());
+        return this.xyGeometry.within(transformedGeometry.xyGeometry);
     }
 
     public NodeValue asNode() throws DatatypeFormatException {
