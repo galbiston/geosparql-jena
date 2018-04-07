@@ -24,7 +24,6 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.geotools.geometry.jts.JTS;
-import org.geotools.referencing.CRS;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -165,7 +164,7 @@ public class GeometryWrapper {
 
             Geometry sourceGeometry = sourceGeometryWrapper.getParsingGeometry();  //Retrieve the original coordinate order according to the CRS.
             CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
-            MathTransform transform = CRS.findMathTransform(sourceCRS, targetCRS, false);
+            MathTransform transform = CRSRegistry.getTransform(sourceCRS, targetCRS);
             Geometry transformedGeometry = JTS.transform(sourceGeometry, transform);
 
             transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, sourceGeometryWrapper.getGeoSerialisation(), sourceGeometryWrapper.getDimensionInfo());
