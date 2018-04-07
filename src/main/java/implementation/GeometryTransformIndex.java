@@ -23,13 +23,14 @@ import org.opengis.referencing.operation.TransformException;
  */
 public class GeometryTransformIndex {
 
-    private static final MultiKeyMap<MultiKey, MathTransform> TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap(20));
-    private static final MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap(1000));
+    private static final MultiKeyMap<MultiKey, MathTransform> TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap<>(20));
+    private static final MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(1000));
 
+    @SuppressWarnings("unchecked")
     public static final MathTransform getMathTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {
 
         MathTransform transform;
-        MultiKey key = new MultiKey(sourceCRS, targetCRS);
+        MultiKey key = new MultiKey<>(sourceCRS, targetCRS);
         if (TRANSFORM_REGISTRY.containsKey(key)) {
             transform = TRANSFORM_REGISTRY.get(key);
         } else {
@@ -49,10 +50,11 @@ public class GeometryTransformIndex {
      * @throws MismatchedDimensionException
      * @throws TransformException
      */
+    @SuppressWarnings("unchecked")
     public static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometryWrapper;
-        MultiKey key = new MultiKey(sourceGeometryWrapper, srsURI);
+        MultiKey key = new MultiKey<>(sourceGeometryWrapper, srsURI);
         if (GEOMETRY_TRANSFORM_INDEX.containsKey(key)) {
             transformedGeometryWrapper = GEOMETRY_TRANSFORM_INDEX.get(key);
         } else {

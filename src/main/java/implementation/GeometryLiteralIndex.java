@@ -14,7 +14,7 @@ import org.apache.commons.collections4.map.LRUMap;
  */
 public class GeometryLiteralIndex {
 
-    private static final LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap(10000);
+    private static final LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(10000);
 
     public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader) {
         GeometryWrapper geometryWrapper;
