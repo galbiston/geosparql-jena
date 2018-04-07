@@ -5,9 +5,14 @@
  */
 package implementation.datatype;
 
+import com.vividsolutions.jts.geom.Geometry;
+import implementation.DimensionInfo;
+import implementation.GeometryLiteralIndex;
 import implementation.GeometryWrapper;
-import implementation.parsers.wkt.WKTReader;
+import implementation.parsers.wkt.WKTGeometryBuilder;
+import implementation.parsers.wkt.WKTTextSRS;
 import implementation.parsers.wkt.WKTWriter;
+import implementation.support.GeoSerialisationEnum;
 import static implementation.support.Prefixes.GEO_URI;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
@@ -15,14 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
- *
- *
- *
- * description: WKTDatatype class allows the URI "geo:gmlLiteral" to be used as
- * a datatype and it will parse that datatype to a JTL Geometry.
+ * WKTDatatype class allows the URI "geo:wktLiteral" to be used as a datatype
+ * and it will parse that datatype to a JTS Geometry.
  */
-public class WKTDatatype extends BaseDatatype {
+public class WKTDatatype extends BaseDatatype implements DatatypeReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WKTDatatype.class);
 
@@ -55,8 +56,12 @@ public class WKTDatatype extends BaseDatatype {
     @Override
     public String unparse(Object geometry) {
 
-        GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
-        return WKTWriter.write(geometryWrapper);
+        if (geometry instanceof GeometryWrapper) {
+            GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
+            return WKTWriter.write(geometryWrapper);
+        } else {
+            throw new AssertionError("Object passed to WKTDatatype is not a GeometryWrapper: " + geometry);
+        }
     }
 
     /**
@@ -81,14 +86,24 @@ public class WKTDatatype extends BaseDatatype {
      */
     @Override
     public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
-
         try {
-            return WKTReader.read(lexicalForm);
+            return GeometryLiteralIndex.retrieve(lexicalForm, this);
         } catch (ParseException | IllegalArgumentException ex) {
             LOGGER.error("{} - Illegal WKT literal: {} ", ex.getMessage(), lexicalForm);
             throw new DatatypeFormatException(ex.getMessage() + " - Illegal WKT literal: " + lexicalForm);
         }
+    }
 
+    @Override
+    public GeometryWrapper read(String geometryLiteral) {
+        WKTTextSRS wktTextSRS = new WKTTextSRS(geometryLiteral);
+
+        WKTGeometryBuilder wktGeometryBuilder = WKTGeometryBuilder.extract(wktTextSRS.getWktText());
+
+        Geometry geometry = wktGeometryBuilder.getGeometry();
+        DimensionInfo dimensionInfo = wktGeometryBuilder.getDimensionInfo();
+
+        return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), GeoSerialisationEnum.WKT, dimensionInfo);
     }
 
 }

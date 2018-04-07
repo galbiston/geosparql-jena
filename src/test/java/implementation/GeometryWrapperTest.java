@@ -233,7 +233,7 @@ public class GeometryWrapperTest {
         String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
         GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
-        GeometryWrapper expResult = GeometryWrapper.emptyWKT();
+        GeometryWrapper expResult = GeometryWrapper.EMPTY_WKT;
         assertEquals(expResult, result);
     }
 
@@ -249,7 +249,7 @@ public class GeometryWrapperTest {
         String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
         GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
-        GeometryWrapper expResult = GeometryWrapper.emptyWKT();
+        GeometryWrapper expResult = GeometryWrapper.EMPTY_WKT;
         assertEquals(expResult, result);
     }
 

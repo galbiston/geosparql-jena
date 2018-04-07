@@ -14,6 +14,7 @@ import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequence;
+import implementation.parsers.gml.GMLWriter;
 import implementation.support.GeoSerialisationEnum;
 import org.junit.After;
 import org.junit.AfterClass;

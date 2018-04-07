@@ -5,9 +5,13 @@
  */
 package implementation.datatype;
 
+import com.vividsolutions.jts.geom.Geometry;
+import implementation.DimensionInfo;
+import implementation.GeometryLiteralIndex;
 import implementation.GeometryWrapper;
-import implementation.parsers.gml.GMLReader;
+import implementation.parsers.gml.GMLGeometryBuilder;
 import implementation.parsers.gml.GMLWriter;
+import implementation.support.GeoSerialisationEnum;
 import static implementation.support.Prefixes.GEO_URI;
 import java.io.IOException;
 import org.apache.jena.datatypes.BaseDatatype;
@@ -21,7 +25,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class GMLDatatype extends BaseDatatype {
+public class GMLDatatype extends BaseDatatype implements DatatypeReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GMLDatatype.class);
 
@@ -63,8 +67,12 @@ public class GMLDatatype extends BaseDatatype {
      */
     @Override
     public String unparse(Object geometry) {
-        GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
-        return GMLWriter.write(geometryWrapper);
+        if (geometry instanceof GeometryWrapper) {
+            GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
+            return GMLWriter.write(geometryWrapper);
+        } else {
+            throw new AssertionError("Object passed to GMLDatatype is not a GeometryWrapper: " + geometry);
+        }
     }
 
     /**
@@ -77,11 +85,22 @@ public class GMLDatatype extends BaseDatatype {
      */
     @Override
     public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
+        //Check the Geometry Literal Index to see if been previously read and cached.
+        //DatatypeReader interface used to instruct index on how to obtain the GeometryWrapper.
+        return GeometryLiteralIndex.retrieve(lexicalForm, this);
+    }
+
+    @Override
+    public GeometryWrapper read(String geometryLiteral) {
         try {
-            return GMLReader.read(lexicalForm);
-        } catch (ParseException | IllegalArgumentException | JDOMException | IOException ex) {
-            LOGGER.error("{} - Illegal GML literal: {} ", ex.getMessage(), lexicalForm);
-            throw new DatatypeFormatException("Illegal GML literal:" + lexicalForm);
+            GMLGeometryBuilder gmlGeometryBuilder = GMLGeometryBuilder.extract(geometryLiteral);
+            Geometry geometry = gmlGeometryBuilder.getGeometry();
+            DimensionInfo dimensionInfo = gmlGeometryBuilder.getDimensionInfo();
+
+            return new GeometryWrapper(geometry, gmlGeometryBuilder.getSrsName(), GeoSerialisationEnum.GML, dimensionInfo);
+        } catch (JDOMException | IOException ex) {
+            LOGGER.error("{} - Illegal GML literal: {} ", ex.getMessage(), geometryLiteral);
+            throw new DatatypeFormatException("Illegal GML literal:" + geometryLiteral);
         }
     }
 

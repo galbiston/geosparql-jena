@@ -12,7 +12,6 @@ import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
-import implementation.parsers.wkt.WKTReader;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
 import implementation.vocabulary.UnitsOfMeasureLookUp;
@@ -423,9 +422,7 @@ public class GeometryWrapper {
 
     }
 
-    public static final GeometryWrapper emptyWKT() {
-        return WKTReader.read("POINT EMPTY");
-    }
+    public static final GeometryWrapper EMPTY_WKT = WKTDatatype.THE_WKT_DATATYPE.read("POINT EMPTY");
 
     /*
     //TODO - empty GML GEometryWrapper creation.
