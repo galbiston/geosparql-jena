@@ -6,7 +6,6 @@
 package conformance_test.rdfs_entailment_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.5.2.1 /conf/rdfs-entailment-extension/wkt-geometry-types
  *
@@ -45,7 +44,7 @@ public class WktGeometryTypesTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

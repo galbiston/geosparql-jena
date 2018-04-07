@@ -6,11 +6,7 @@
 package conformance_test.geometry_extension.gml;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 import implementation.datatype.GMLDatatype;
-
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -23,7 +19,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.3.3.4 /conf/geometry-extension/geometry-as-gml-literal
  *
@@ -46,7 +42,7 @@ public class GeometryAsGmlLiteralTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initGmlModel();
     }
 
@@ -69,18 +65,20 @@ public class GeometryAsGmlLiteralTest {
     @Test
     public void positiveTest() {
 
-        List<Literal> expResult = new ArrayList<>();
-        expResult.add(ResourceFactory.createTypedLiteral("<gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>", GMLDatatype.THE_GML_DATATYPE));
+        Literal expLiteral = ResourceFactory.createTypedLiteral("<gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.4 34.4</gml:pos></gml:Point>", GMLDatatype.THE_GML_DATATYPE);
 
         String queryString = "SELECT ?aGML WHERE{"
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
                 + "}";
-        List<Literal> result = literalQuery(queryString, infModel);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        Literal resultLiteral = literalSingleQuery(queryString, infModel);
+        Boolean result = resultLiteral.getLexicalForm().equals(expLiteral.getLexicalForm());
+        Boolean expResult = true;
 
+        //System.out.println("Exp: " + expLiteral);
+        //System.out.println("Res: " + resultLiteral);
+        System.out.println("Test passes when run individually but fails when all tests run. Literal conversion is using LineString instead of Point but unclear why.");
         assertEquals(expResult, result);
     }
 

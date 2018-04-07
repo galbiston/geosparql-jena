@@ -10,10 +10,8 @@ import implementation.GeometryWrapper;
 import implementation.datatype.ParseException;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
-import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
-import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 /**
@@ -22,17 +20,17 @@ import org.jdom2.output.XMLOutputter;
  */
 public class GMLWriter {
 
+    public static final Namespace GML_NAMESPACE = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
+
+    private static final XMLOutputter XML_OUTPUT = new XMLOutputter();
+
     public static String write(GeometryWrapper geometryWrapper) {
 
         Geometry geometry = geometryWrapper.getParsingGeometry();
         CustomCoordinateSequence.CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
         String srsName = geometryWrapper.getSrsURI();
-        //String gmlText = expand(geometry, dimensions, srsName);
-        Document doc = new Document(expand(geometry, dimensions, srsName));
-        XMLOutputter xmlOutput = new XMLOutputter();
-        //set GML output format
-        xmlOutput.setFormat(Format.getCompactFormat().setOmitDeclaration(true));
-        String output = xmlOutput.outputString(doc);
+        Element gmlElement = expand(geometry, dimensions, srsName);
+        String output = XML_OUTPUT.outputString(gmlElement);
         return output;
     }
 
@@ -43,11 +41,11 @@ public class GMLWriter {
         switch (geometry.getGeometryType()) {
             case "Point":
                 Point point = (Point) geometry;
-                gmlElement = buildGML("Point", point.getCoordinateSequence(), srsDimension, srsName);
+                gmlElement = buildPoint(point.getCoordinateSequence(), srsName);
                 break;
             case "LineString":
                 LineString lineString = (LineString) geometry;
-                gmlElement = buildGML("LineString", lineString.getCoordinateSequence(), srsDimension, srsName);
+                gmlElement = buildLineString(lineString.getCoordinateSequence(), srsDimension, srsName);
                 break;
             case "Polygon":
                 Polygon polygon = (Polygon) geometry;
@@ -55,7 +53,7 @@ public class GMLWriter {
                 break;
             case "MultiPoint":
                 MultiPoint multiPoint = (MultiPoint) geometry;
-                gmlElement = buildMultiPoint(multiPoint, srsDimension, srsName);
+                gmlElement = buildMultiPoint(multiPoint, srsName);
                 break;
             case "MultiLineString":
                 MultiLineString multiLineString = (MultiLineString) geometry;
@@ -76,36 +74,68 @@ public class GMLWriter {
         return gmlElement;
     }
 
-    private static Element buildGML(final String geometryType, final CoordinateSequence coordSeq, final String dimensionString, final String srsName) {
+    public static String convertToGMLText(CustomCoordinateSequence coordSequence) {
+        StringBuilder sb = new StringBuilder();
+
+        int size = coordSequence.getSize();
+        if (size != 0) {
+            String coordText = coordSequence.getCoordinateText(0);
+            sb.append(coordText);
+
+            for (int i = 1; i < size; i++) {
+
+                sb.append(" ");
+                coordText = coordSequence.getCoordinateText(i);
+                sb.append(coordText);
+            }
+        } else {
+            sb.append("");
+        }
+
+        return sb.toString();
+
+    }
+
+    private static Element buildPoint(final CoordinateSequence coordSeq, final String srsName) {
         CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) coordSeq;
 
-        Namespace gmlNamespace = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
-        Element gmlRoot = new Element(geometryType, gmlNamespace);
+        Element gmlRoot = new Element("Point", GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
-        gmlRoot.setAttribute("srsDimension", dimensionString);
-        Element coordinates = new Element("coordinates", gmlNamespace);
-        coordinates.addContent(coordSequence.toGMLText());
-        gmlRoot.addContent(coordinates);
+        Element pos = new Element("pos", GML_NAMESPACE);
+        pos.addContent(convertToGMLText(coordSequence));
+        gmlRoot.addContent(pos);
+
+        return gmlRoot;
+    }
+
+    private static Element buildLineString(final CoordinateSequence coordSeq, final String dimensionString, final String srsName) {
+        CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) coordSeq;
+
+        Element gmlRoot = new Element("LineString", GML_NAMESPACE);
+        gmlRoot.setAttribute("srsName", srsName);
+        Element posList = new Element("posList", GML_NAMESPACE);
+        posList.setAttribute("srsDimension", dimensionString);
+        posList.addContent(convertToGMLText(coordSequence));
+        gmlRoot.addContent(posList);
 
         return gmlRoot;
     }
 
     private static Element buildPolygon(final Polygon polygon, final String dimensionString, final String srsName) {
 
-        Namespace gmlNamespace = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
-        Element gmlRoot = new Element(polygon.getGeometryType(), gmlNamespace);
+        Element gmlRoot = new Element(polygon.getGeometryType(), GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
-        gmlRoot.setAttribute("srsDimension", dimensionString);
 
         if (!polygon.isEmpty()) {
             LineString lineString = polygon.getExteriorRing();
             CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) lineString.getCoordinateSequence();
 
             //Find exterior shell
-            Element exterior = new Element("Exterior", gmlNamespace);
-            Element posList = new Element("PosList", gmlNamespace);
-            posList.addContent(coordSequence.toGMLText());
-            exterior.addContent(posList);
+            Element exterior = new Element("exterior", GML_NAMESPACE);
+            Element exteriorPosList = new Element("posList", GML_NAMESPACE);
+            exteriorPosList.setAttribute("srsDimension", dimensionString);
+            exteriorPosList.addContent(convertToGMLText(coordSequence));
+            exterior.addContent(exteriorPosList);
             gmlRoot.addContent(exterior);
 
             //Find inner holes
@@ -113,13 +143,13 @@ public class GMLWriter {
 
             for (int i = 0; i < interiorRings; i++) {
                 //flush all content
-                Element interior = new Element("Interior", gmlNamespace);
-                Element inerPosList = new Element("PosList", gmlNamespace);
-
+                Element interior = new Element("interior", GML_NAMESPACE);
+                Element innerPosList = new Element("posList", GML_NAMESPACE);
+                innerPosList.setAttribute("srsDimension", dimensionString);
                 LineString innerLineString = polygon.getInteriorRingN(i);
                 CustomCoordinateSequence innerCoordSequence = (CustomCoordinateSequence) innerLineString.getCoordinateSequence();
-                inerPosList.addContent(innerCoordSequence.toGMLText());
-                interior.addContent(inerPosList);
+                innerPosList.addContent(convertToGMLText(innerCoordSequence));
+                interior.addContent(innerPosList);
                 gmlRoot.addContent(interior);
             }
 
@@ -129,24 +159,20 @@ public class GMLWriter {
         return gmlRoot;
     }
 
-    private static Element buildMultiPoint(final MultiPoint multiPoint, final String dimensionString, final String srsName) {
+    private static Element buildMultiPoint(final MultiPoint multiPoint, final String srsName) {
 
-        Namespace gmlNamespace = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
-        Element gmlRoot = new Element(multiPoint.getGeometryType(), gmlNamespace);
+        Element gmlRoot = new Element(multiPoint.getGeometryType(), GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
-        gmlRoot.setAttribute("srsDimension", dimensionString);
 
         if (!multiPoint.isEmpty()) {
 
             int geomCount = multiPoint.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
-                Element pointelement = new Element("Point", gmlNamespace);
-                Element pointMember = new Element("PointMember", gmlNamespace);
+                Element pointMember = new Element("PointMember", GML_NAMESPACE);
 
                 Point point = (Point) multiPoint.getGeometryN(i);
-                CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) point.getCoordinateSequence();
-                pointelement.addContent(coordSequence.toGMLText());
-                pointMember.addContent(pointelement);
+                Element pointElement = buildPoint(point.getCoordinateSequence(), srsName);
+                pointMember.addContent(pointElement);
                 gmlRoot.addContent(pointMember);
             }
 
@@ -158,22 +184,18 @@ public class GMLWriter {
 
     private static Element buildMultiLineString(final MultiLineString multiLineString, final String dimensionString, final String srsName) {
 
-        Namespace gmlNamespace = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
-        Element gmlRoot = new Element(multiLineString.getGeometryType(), gmlNamespace);
+        Element gmlRoot = new Element(multiLineString.getGeometryType(), GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
-        gmlRoot.setAttribute("srsDimension", dimensionString);
 
         if (!multiLineString.isEmpty()) {
 
             int geomCount = multiLineString.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
-                Element lineStringelement = new Element("LineString", gmlNamespace);
-                Element lineStringMember = new Element("LineStringMember", gmlNamespace);
+                Element lineStringMember = new Element("LineStringMember", GML_NAMESPACE);
 
                 LineString lineString = (LineString) multiLineString.getGeometryN(i);
-                CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) lineString.getCoordinateSequence();
-                lineStringelement.addContent(coordSequence.toGMLText());
-                lineStringMember.addContent(lineStringelement);
+                Element lineStringElement = buildLineString(lineString.getCoordinateSequence(), dimensionString, srsName);
+                lineStringMember.addContent(lineStringElement);
                 gmlRoot.addContent(lineStringMember);
             }
 
@@ -185,16 +207,14 @@ public class GMLWriter {
 
     private static Element buildMultiPolygon(final MultiPolygon multiPolygon, final String dimensionString, final String srsName) {
 
-        Namespace gmlNamespace = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
-        Element gmlRoot = new Element(multiPolygon.getGeometryType(), gmlNamespace);
+        Element gmlRoot = new Element(multiPolygon.getGeometryType(), GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
-        gmlRoot.setAttribute("srsDimension", dimensionString);
 
         if (!multiPolygon.isEmpty()) {
 
             int geomCount = multiPolygon.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
-                Element polygonMember = new Element("PolygonMember", gmlNamespace);
+                Element polygonMember = new Element("PolygonMember", GML_NAMESPACE);
 
                 Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
 
@@ -210,16 +230,14 @@ public class GMLWriter {
 
     private static Element buildGeometryCollection(final GeometryCollection geometryCollection, final String dimensionString, final CoordinateSequenceDimensions dimensions, final String srsName) {
 
-        Namespace gmlNamespace = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
-        Element gmlRoot = new Element(geometryCollection.getGeometryType(), gmlNamespace);
+        Element gmlRoot = new Element(geometryCollection.getGeometryType(), GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
-        gmlRoot.setAttribute("srsDimension", dimensionString);
 
         if (!geometryCollection.isEmpty()) {
 
             int geomCount = geometryCollection.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
-                Element geometryMember = new Element("GeometryMember", gmlNamespace);
+                Element geometryMember = new Element("GeometryMember", GML_NAMESPACE);
 
                 Geometry geometry = geometryCollection.getGeometryN(i);
                 geometryMember.addContent(expand(geometry, dimensions, srsName));
@@ -236,13 +254,13 @@ public class GMLWriter {
 
         switch (dimensions) {
             case XYZ:
-                return 3 + "";
+                return "3";
             case XYZM:
-                return 3 + "";
+                return "3";
             case XYM:
-                return 2 + "";
+                return "2";
             default:
-                return 2 + "";
+                return "2";
         }
     }
 }

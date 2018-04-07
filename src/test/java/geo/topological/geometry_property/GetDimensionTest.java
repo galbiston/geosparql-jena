@@ -6,8 +6,6 @@
 package geo.topological.geometry_property;
 
 import static conformance_test.ConformanceTestSuite.initWktModel;
-import implementation.GeoSPARQLModel;
-
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -21,11 +19,12 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  *
- * 
+ *
  */
 public class GetDimensionTest {
 
@@ -45,7 +44,7 @@ public class GetDimensionTest {
 
     @BeforeClass
     public static void setUpClass() {
-        
+
         infModel = initWktModel();
     }
 
@@ -64,6 +63,7 @@ public class GetDimensionTest {
     /**
      * Test of get method, of class GetDimension.
      */
+    @Ignore
     @Test
     public void testGet() {
         String Q1 = "SELECT ?dimension ?empty ?simple ?cd WHERE{"

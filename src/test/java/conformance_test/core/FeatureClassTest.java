@@ -6,7 +6,6 @@
 package conformance_test.core;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 
 import implementation.support.Prefixes;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.1.3 /conf/core/feature-class Requirement: /req/core/feature-class
  * Implementations shall allow the RDFS class geo:Feature to be used in SPARQL
@@ -49,7 +48,7 @@ public class FeatureClassTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

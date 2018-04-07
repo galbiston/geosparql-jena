@@ -6,7 +6,6 @@
 package conformance_test.core;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 
 import implementation.support.Prefixes;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.1.1 /conf/core/sparql-protocol Requirement: /req/core/sparql-protocol
  *
@@ -51,7 +50,7 @@ public class SparqlProtocolTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
 

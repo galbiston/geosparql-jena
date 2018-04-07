@@ -17,13 +17,14 @@ import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  *
- * 
+ *
  */
 public class CRSRegistryTest {
 
@@ -103,6 +104,7 @@ public class CRSRegistryTest {
         }
     }
 
+    @Ignore
     @Test
     @SuppressWarnings("unchecked")
     public void testCRS() {

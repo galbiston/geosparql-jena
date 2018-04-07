@@ -6,7 +6,6 @@
 package conformance_test.geometry_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +21,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.3.1.5 /conf/geometry-extension/srid-function
  *
@@ -52,7 +51,7 @@ public class SridFunctionTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

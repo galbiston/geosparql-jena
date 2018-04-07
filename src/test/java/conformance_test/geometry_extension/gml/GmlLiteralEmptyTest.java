@@ -6,9 +6,8 @@
 package conformance_test.geometry_extension.gml;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -21,7 +20,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * * A.3.3.2 /conf/geometry-extension/gml-literal-empty
  *
@@ -44,7 +43,6 @@ public class GmlLiteralEmptyTest {
         /**
          * Initialize all the topology functions.
          */
-        
 
         infModel = initGmlEmptyModel();
     }
@@ -76,11 +74,10 @@ public class GmlLiteralEmptyTest {
                 + " ?aGeom geo:asGML ?aGML ."
                 + "BIND(geof:getSRID( ?aGML ) AS ?srid)"
                 + "}";
-        ArrayList<Literal> result = literalQuery(queryString, infModel);
+        List<Literal> result = literalQuery(queryString, infModel);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

@@ -7,6 +7,7 @@ package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.4.3.1 /conf/geometry-topology-extension/eh-query-functions
  *
@@ -69,17 +70,17 @@ public class EhCoveredByTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#D");
 
-        ArrayList<String> result = resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))"), infModel);
+        List<String> result = resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))"), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
 
         assertEquals(expResult, resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Point(-86.4 31.4)"), infModel));
     }

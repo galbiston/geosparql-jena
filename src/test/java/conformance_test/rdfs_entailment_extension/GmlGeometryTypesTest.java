@@ -5,8 +5,6 @@
  */
 package conformance_test.rdfs_entailment_extension;
 
-import implementation.GeoSPARQLModel;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,7 +12,7 @@ import org.junit.BeforeClass;
 
 /**
  *
- * 
+ *
  *
  * A.5.3.1 /conf/rdfs-entailment-extension/gml-geometry-types
  *
@@ -40,7 +38,7 @@ public class GmlGeometryTypesTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
     }
 
     @AfterClass

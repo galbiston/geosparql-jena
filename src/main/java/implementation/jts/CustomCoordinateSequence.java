@@ -158,6 +158,10 @@ public class CustomCoordinateSequence implements CoordinateSequence {
 
     }
 
+    public int getSize() {
+        return size;
+    }
+
     private static int[] getDimensionValues(CoordinateSequenceDimensions dimensions) {
 
         int coordinateDimension;
@@ -410,51 +414,7 @@ public class CustomCoordinateSequence implements CoordinateSequence {
         return "CustomCoordinateSequence{" + "x=" + Arrays.toString(x) + ", y=" + Arrays.toString(y) + ", z=" + Arrays.toString(z) + ", m=" + Arrays.toString(m) + ", size=" + size + '}';
     }
 
-    public String toWKTText() {
-
-        StringBuilder sb = new StringBuilder();
-
-        if (size != 0) {
-            sb.append("(");
-            String coordText = getCoordinateText(0);
-            sb.append(coordText);
-
-            for (int i = 1; i < size; i++) {
-
-                sb.append(", ");
-                coordText = getCoordinateText(i);
-                sb.append(coordText);
-            }
-            sb.append(")");
-        } else {
-            sb.append("EMPTY");
-        }
-
-        return sb.toString();
-    }
-
-    public String toGMLText() {
-        StringBuilder sb = new StringBuilder();
-
-        if (size != 0) {
-            String coordText = getCoordinateText(0);
-            sb.append(coordText);
-
-            for (int i = 1; i < size; i++) {
-
-                sb.append(" ");
-                coordText = getCoordinateText(i);
-                sb.append(coordText);
-            }
-        } else {
-            sb.append("");
-        }
-
-        return sb.toString();
-
-    }
-
-    private String getCoordinateText(int index) {
+    public String getCoordinateText(int index) {
 
         StringBuilder sb = new StringBuilder();
 

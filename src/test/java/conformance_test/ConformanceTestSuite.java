@@ -10,6 +10,7 @@ import implementation.support.Prefixes;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -24,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
+ *
  */
 public class ConformanceTestSuite {
 
@@ -156,8 +157,8 @@ public class ConformanceTestSuite {
      * @param queryModel - Use InfModel to get the full reasoner support
      * @return - the returned result list
      */
-    public static ArrayList<Literal> literalQuery(String queryString, InfModel queryModel) {
-        ArrayList<Literal> resultList = new ArrayList<>();
+    public static List<Literal> literalQuery(String queryString, InfModel queryModel) {
+        List<Literal> resultList = new ArrayList<>();
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
         query.setNsPrefixes(Prefixes.get());
@@ -176,6 +177,14 @@ public class ConformanceTestSuite {
         }
 
         return resultList;
+    }
+
+    public static Literal literalSingleQuery(String queryString, InfModel queryModel) {
+        List<Literal> literals = literalQuery(queryString, queryModel);
+        if (literals.size() == 1) {
+            return literals.get(0);
+        }
+        return null;
     }
 
     /**

@@ -6,10 +6,7 @@
 package conformance_test.geometry_extension.gml;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 import implementation.datatype.GMLDatatype;
-
-import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -22,7 +19,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * * A.3.3.1 /conf/geometry-extension/gml-literal
  *
@@ -46,7 +43,7 @@ public class GmlLiteralTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initGmlModel();
     }
 
@@ -69,18 +66,19 @@ public class GmlLiteralTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<Literal> expResult = new ArrayList<>();
-        expResult.add(ResourceFactory.createTypedLiteral("<gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>", GMLDatatype.THE_GML_DATATYPE));
+        Literal expLiteral = ResourceFactory.createTypedLiteral("<gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.4 34.4</gml:pos></gml:Point>", GMLDatatype.THE_GML_DATATYPE);
 
         String queryString = "SELECT ?aGML WHERE{"
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asGML ?aGML ."
                 + "}";
-        ArrayList<Literal> result = literalQuery(queryString, infModel);
+        Literal resultLiteral = literalSingleQuery(queryString, infModel);
+        Boolean result = resultLiteral.getLexicalForm().equals(expLiteral.getLexicalForm());
+        Boolean expResult = true;
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        System.out.println("Test passes when run individually but fails when all tests run. Literal conversion is using LineString instead of Point but unclear why.");
         assertEquals(expResult, result);
     }
 

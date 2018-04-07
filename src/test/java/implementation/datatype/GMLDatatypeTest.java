@@ -59,8 +59,7 @@ public class GMLDatatypeTest {
     public void testUnparse() {
         System.out.println("unparse");
 
-        //JTS GMLWriter needs changing to GeoTools writer if possible. Version 3. http://gis.stackexchange.com/questions/3940/how-to-write-gml-with-geotools
-        String expResult = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\">\n  <gml:coordinates>\n    -83.38,33.95 \n  </gml:coordinates>\n</gml:Point>\n";
+        String expResult = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
         GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
@@ -74,9 +73,8 @@ public class GMLDatatypeTest {
 
         String result = instance.unparse(geometry);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -86,7 +84,7 @@ public class GMLDatatypeTest {
     @Test
     public void testParse() {
         System.out.println("parse");
-        String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\">\n  <gml:coordinates>\n    -83.38,33.95 \n  </gml:coordinates>\n</gml:Point>\n";
+        String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
         GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
         GeometryWrapper result = instance.parse(lexicalForm);
@@ -109,7 +107,7 @@ public class GMLDatatypeTest {
     @Test
     public void testParseNotEqual() {
         System.out.println("parseNotEqual");
-        String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\">\n  <gml:coordinates>\n    -83.38,33.95 \n  </gml:coordinates>\n</gml:Point>\n";
+        String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
         GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 
@@ -134,7 +132,7 @@ public class GMLDatatypeTest {
 
     public void testParseNotEqual2() {
         System.out.println("parseNotEqual2");
-        String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\">\n  <gml:coordinates>\n    -83.38,33.95 \n  </gml:coordinates>\n</gml:Point>\n";
+        String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
         GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
 

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype.parsers.wkt;
+package implementation.parsers.wkt;
 
-import implementation.parsers.wkt.WKTGeometryBuilder;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
@@ -59,8 +58,8 @@ public class WKTGeometryBuilderTest {
         DimensionInfo expResult = new DimensionInfo(2, 2, 0);
         DimensionInfo result = instance.getDimensionInfo();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -74,8 +73,8 @@ public class WKTGeometryBuilderTest {
         DimensionInfo expResult = new DimensionInfo(2, 2, 0);
         DimensionInfo result = instance.getDimensionInfo();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -89,8 +88,8 @@ public class WKTGeometryBuilderTest {
         DimensionInfo expResult = new DimensionInfo(3, 3, 0);
         DimensionInfo result = instance.getDimensionInfo();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -104,8 +103,8 @@ public class WKTGeometryBuilderTest {
         DimensionInfo expResult = new DimensionInfo(3, 2, 0);
         DimensionInfo result = instance.getDimensionInfo();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -119,8 +118,8 @@ public class WKTGeometryBuilderTest {
         DimensionInfo expResult = new DimensionInfo(4, 3, 0);
         DimensionInfo result = instance.getDimensionInfo();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -134,8 +133,8 @@ public class WKTGeometryBuilderTest {
         Geometry expResult = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "11.0 12.0"));
         Geometry result = instance.getGeometry();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -149,8 +148,8 @@ public class WKTGeometryBuilderTest {
         Geometry expResult = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZ, "11.0 12.0 8.0"));
         Geometry result = instance.getGeometry();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -164,8 +163,8 @@ public class WKTGeometryBuilderTest {
         int expResult = 2;
         int result = instance.getSpatialDimension();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -179,8 +178,8 @@ public class WKTGeometryBuilderTest {
         int expResult = 2;
         int result = instance.getCoordinateDimension();
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -194,8 +193,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("point", "", "(11.0 12.0)");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -209,8 +208,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("point", "z", "(11.0 12.0 8.0)");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -224,8 +223,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("point", "m", "(11.0 12.0 5.0)");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -239,8 +238,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("point", "zm", "(11.0 12.0 8.0 5.0)");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -254,8 +253,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("polygon", "", "(30 10, 40 40, 20 40, 10 20, 30 10)");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -269,8 +268,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("polygon", "", "(35 10, 45 45, 15 40, 10 20, 35 10),(20 30, 35 35, 30 20, 20 30)");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -284,8 +283,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("linestring", "", "(30 10, 10 30, 40 40)");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -299,8 +298,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("multipoint", "", "((10 40), (40 30), (20 20), (30 10))");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -314,8 +313,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("multipoint", "", "(10 40, 40 30, 20 20, 30 10)");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -329,8 +328,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("multilinestring", "", "((10 10, 20 20, 10 40),(40 40, 30 30, 40 20, 30 10))");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -344,8 +343,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("multipolygon", "", "(((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -359,8 +358,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("multipolygon", "", "(((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20)))");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -374,8 +373,8 @@ public class WKTGeometryBuilderTest {
         WKTGeometryBuilder expResult = new WKTGeometryBuilder("geometrycollection", "", "(POINT(4 6),LINESTRING(4 6,7 10), MULTIPOINT((6 8),(2 3)))");
         WKTGeometryBuilder result = WKTGeometryBuilder.extract(wktText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -391,8 +390,8 @@ public class WKTGeometryBuilderTest {
         CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "");
         Geometry expResult = GEOMETRY_FACTORY.createPoint(pointSequence);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -408,8 +407,8 @@ public class WKTGeometryBuilderTest {
         CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "");
         Geometry expResult = GEOMETRY_FACTORY.createLineString(pointSequence);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -425,8 +424,8 @@ public class WKTGeometryBuilderTest {
         CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "");
         Geometry expResult = GEOMETRY_FACTORY.createPolygon(pointSequence);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -441,8 +440,8 @@ public class WKTGeometryBuilderTest {
 
         Geometry expResult = GEOMETRY_FACTORY.createMultiPoint(new Point[0]);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -457,8 +456,8 @@ public class WKTGeometryBuilderTest {
 
         Geometry expResult = GEOMETRY_FACTORY.createMultiLineString(new LineString[0]);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -473,8 +472,8 @@ public class WKTGeometryBuilderTest {
 
         Geometry expResult = GEOMETRY_FACTORY.createMultiPolygon(new Polygon[0]);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -489,8 +488,8 @@ public class WKTGeometryBuilderTest {
 
         Geometry expResult = GEOMETRY_FACTORY.createGeometryCollection(new Geometry[0]);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 

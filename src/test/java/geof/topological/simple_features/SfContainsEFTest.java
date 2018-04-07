@@ -6,7 +6,6 @@
 package geof.topological.simple_features;
 
 import static conformance_test.ConformanceTestSuite.initWktModel;
-import implementation.GeoSPARQLModel;
 
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -22,11 +21,12 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  *
- * 
+ *
  */
 public class SfContainsEFTest {
 
@@ -46,7 +46,7 @@ public class SfContainsEFTest {
 
     @BeforeClass
     public static void setUpClass() {
-        
+
         infModel = initWktModel();
     }
 
@@ -64,6 +64,7 @@ public class SfContainsEFTest {
     }
 
     @Test
+    @Ignore
     public void testFunction() {
 
         String Q1 = "SELECT ?place WHERE{"

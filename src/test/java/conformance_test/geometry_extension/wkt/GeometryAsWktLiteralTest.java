@@ -6,10 +6,9 @@
 package conformance_test.geometry_extension.wkt;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 import implementation.datatype.WKTDatatype;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -22,7 +21,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.3.2.5 /conf/geometry-extension/geometry-as-wkt-literal
  *
@@ -45,7 +44,7 @@ public class GeometryAsWktLiteralTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
 
@@ -75,7 +74,7 @@ public class GeometryAsWktLiteralTest {
                 + " ex:A ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        ArrayList<Literal> result = literalQuery(queryString, infModel);
+        List<Literal> result = literalQuery(queryString, infModel);
         assertEquals(expResult, result);
     }
 

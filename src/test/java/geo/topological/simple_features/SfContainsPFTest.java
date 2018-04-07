@@ -6,8 +6,6 @@
 package geo.topological.simple_features;
 
 import static conformance_test.ConformanceTestSuite.initWktModel;
-import implementation.GeoSPARQLModel;
-
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -21,11 +19,12 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  *
- * 
+ *
  */
 public class SfContainsPFTest {
 
@@ -45,7 +44,7 @@ public class SfContainsPFTest {
 
     @BeforeClass
     public static void setUpClass() {
-        
+
         infModel = initWktModel();
     }
 
@@ -64,6 +63,7 @@ public class SfContainsPFTest {
     /**
      * Test of expressionFunction method, of class sfContainsPF.
      */
+    @Ignore
     @Test
     public void testExpressionFunction() {
 

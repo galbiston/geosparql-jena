@@ -34,7 +34,7 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceA</ex:name>
     </ex:PlaceOfInterest>
     <sf:Point rdf:about="http://example.org/ApplicationSchema#AExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:coordinates>-83.4,34.4</gml:coordinates></gml:Point>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.4 34.4</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
     <!-- LineString B -->
@@ -43,7 +43,7 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceB</ex:name>
     </ex:PlaceOfInterest>
     <sf:LineString rdf:about="http://example.org/ApplicationSchema#BExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:LineString srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:coordinates>-83.4,34.0 -83.3,34.3</gml:coordinates></gml:LineString>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:LineString srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.4 34.0 -83.3 34.3</gml:pos></gml:LineString>]]></geo:asGML>
     </sf:LineString>
 
 
@@ -55,10 +55,10 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceC</ex:name>
     </ex:PlaceOfInterest>
     <sf:Polygon rdf:about="http://example.org/ApplicationSchema#CExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.6,34.1 -83.2,34.1 -83.2,34.5 -83.6,34.5 -83.6,34.1</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:posList srsDimension="2">-83.6 34.1 -83.2 34.1 -83.2 34.5 -83.6 34.5 -83.6 34.1</gml:posList></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
     <sf:Point rdf:about="http://example.org/ApplicationSchema#CPointGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:coordinates>-83.4,34.3</gml:coordinates></gml:Point>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.4 34.3</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
 
@@ -70,10 +70,10 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceD</ex:name>
     </ex:PlaceOfInterest>
     <sf:Polygon rdf:about="http://example.org/ApplicationSchema#DExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.6,34.1 -83.4,34.1 -83.4,34.3 -83.6,34.3 -83.6,34.1</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:posList srsDimension="2">-83.6 34.1 -83.4 34.1 -83.4 34.3 -83.6 34.3 -83.6 34.1</gml:posList></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
     <sf:Point rdf:about="http://example.org/ApplicationSchema#DPointGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:coordinates>-83.5,34.2</gml:coordinates></gml:Point>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.5 34.2</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
 
@@ -85,10 +85,10 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceE</ex:name>
     </ex:PlaceOfInterest>
     <sf:Polygon rdf:about="http://example.org/ApplicationSchema#EExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.2,34.3 -83.0,34.3 -83.0,34.5 -83.2,34.5 -83.2,34.3</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:posList srsDimension="2">-83.2 34.3 -83.0 34.3 -83.0 34.5 -83.2 34.5 -83.2 34.3</gml:posList></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
     <sf:Point rdf:about="http://example.org/ApplicationSchema#EPointGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:coordinates>-83.1,34.4</gml:coordinates></gml:Point>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.1 34.4</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
 
@@ -100,10 +100,10 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceF</ex:name>
     </ex:PlaceOfInterest>
     <sf:Polygon rdf:about="http://example.org/ApplicationSchema#FExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.3,34.0 -83.1,34.0 -83.1,34.2 -83.3,34.2 -83.3,34.0</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:posList srsDimension="2">-83.3 34.0 -83.1 34.0 -83.1 34.2 -83.3 34.2 -83.3 34.0</gml:posList></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
     <sf:Point rdf:about="http://example.org/ApplicationSchema#FPointGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:coordinates>-83.2,34.1</gml:coordinates></gml:Point>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.2 34.1</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
     <!-- Polygon G -->
@@ -113,10 +113,10 @@ test.
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceG</ex:name>
     </ex:PlaceOfInterest>
     <sf:Polygon rdf:about="http://example.org/ApplicationSchema#GExactGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>-83.55,34.35 -83.45,34.35 -83.45,34.45 -83.55,34.45 -83.55,34.35</gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:outerBoundaryIs><gml:LinearRing><gml:posList srsDimension="2">-83.55 34.35 -83.45 34.35 -83.45 34.45 -83.55 34.45 -83.55 34.35</gml:posList></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
     <sf:Point rdf:about="http://example.org/ApplicationSchema#GPointGeom">
-        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:coordinates>-83.45,34.35</gml:coordinates></gml:Point>]]></geo:asGML>
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.45 34.35</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
 

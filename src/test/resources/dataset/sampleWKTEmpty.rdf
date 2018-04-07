@@ -10,11 +10,11 @@
    <rdfs:Class rdf:about="http://example.org/ApplicationSchema#PlaceOfInterest">
       <rdfs:subClassOf rdf:resource="http://www.opengis.net/ont/geosparql#Feature"/>
    </rdfs:Class>
-   <rdf:Property rdf:about="ex:hasExactGeometry">
+   <rdf:Property rdf:about="http://example.org/ApplicationSchema#hasExactGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>
-   <rdf:Property rdf:about="ex:hasPointGeometry">
+   <rdf:Property rdf:about="http://example.org/ApplicationSchema#hasPointGeometry">
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasGeometry"/>
       <rdfs:subPropertyOf rdf:resource="http://www.opengis.net/ont/geosparql#hasDefaultGeometry"/>
    </rdf:Property>

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype.parsers.wkt;
+package implementation.parsers.wkt;
 
-import implementation.parsers.wkt.WKTWriter;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
@@ -64,8 +63,8 @@ public class WKTWriterTest {
         String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> POINT ZM (11 12.1 8 5)";
         String result = WKTWriter.write(geometryWrapper);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -82,8 +81,8 @@ public class WKTWriterTest {
         String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> LINESTRING ZM (11 12.1 8 5, 3 4 6 2)";
         String result = WKTWriter.write(geometryWrapper);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -100,8 +99,8 @@ public class WKTWriterTest {
         String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -120,8 +119,8 @@ public class WKTWriterTest {
         String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1), (20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -138,8 +137,8 @@ public class WKTWriterTest {
         String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> MULTIPOINT ZM ((10 40 0 1), (40 30 0 1), (20 20 0 1), (30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -160,8 +159,8 @@ public class WKTWriterTest {
         String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> MULTILINESTRING ZM ((10 10 0 1, 20 20 0 1, 10 40 0 1), (40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -184,8 +183,8 @@ public class WKTWriterTest {
         String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> MULTIPOLYGON ZM (((40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1)), ((20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1), (30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1)))";
         String result = WKTWriter.write(geometryWrapper);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -206,8 +205,8 @@ public class WKTWriterTest {
         String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> GEOMETRYCOLLECTION ZM (POINT ZM (4 6 0 1), LINESTRING ZM (4 6 0 1, 7 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 

@@ -20,7 +20,7 @@ import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 
 /**
  *
- * 
+ *
  */
 public class WKTWriter {
 
@@ -79,6 +79,29 @@ public class WKTWriter {
         return wktString;
     }
 
+    public static String convertToWKTText(CustomCoordinateSequence coordSequence) {
+
+        StringBuilder sb = new StringBuilder();
+        int size = coordSequence.getSize();
+        if (size != 0) {
+            sb.append("(");
+            String coordText = coordSequence.getCoordinateText(0);
+            sb.append(coordText);
+
+            for (int i = 1; i < size; i++) {
+
+                sb.append(", ");
+                coordText = coordSequence.getCoordinateText(i);
+                sb.append(coordText);
+            }
+            sb.append(")");
+        } else {
+            sb.append("EMPTY");
+        }
+
+        return sb.toString();
+    }
+
     private static String buildWKT(final String geometryType, final CoordinateSequence coordSeq) {
         return buildWKT(geometryType, coordSeq, "");
     }
@@ -86,7 +109,7 @@ public class WKTWriter {
     private static String buildWKT(final String geometryType, final CoordinateSequence coordSeq, final String dimensionString) {
 
         CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) coordSeq;
-        String wktText = coordSequence.toWKTText();
+        String wktText = convertToWKTText(coordSequence);
 
         StringBuilder sb = new StringBuilder(geometryType);
 
@@ -114,7 +137,7 @@ public class WKTWriter {
             LineString lineString = polygon.getExteriorRing();
             CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) lineString.getCoordinateSequence();
 
-            sb.append(coordSequence.toWKTText());
+            sb.append(convertToWKTText(coordSequence));
 
             //Find inner holes
             int interiorRings = polygon.getNumInteriorRing();
@@ -122,7 +145,7 @@ public class WKTWriter {
                 sb.append(", ");
                 LineString innerLineString = polygon.getInteriorRingN(i);
                 CustomCoordinateSequence innerCoordSequence = (CustomCoordinateSequence) innerLineString.getCoordinateSequence();
-                sb.append(innerCoordSequence.toWKTText());
+                sb.append(convertToWKTText(innerCoordSequence));
             }
 
             sb.append(")");

@@ -75,9 +75,8 @@ public class WKTDatatypeTest {
 
         String result = instance.unparse(geometry);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
-
+        ////System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
 
     }
@@ -101,9 +100,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
-
+        ////System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -127,9 +125,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
-
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertThat(expResult, not(result));
     }
 
@@ -153,9 +150,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
-
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertThat(expResult, not(result));
     }
 
@@ -179,9 +175,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
-
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -205,9 +200,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
-
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertThat(expResult, not(result));
     }
 
@@ -231,9 +225,8 @@ public class WKTDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSURI, GeoSerialisationEnum.WKT, dimensionInfo);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
-
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertThat(expResult, not(result));
     }
 

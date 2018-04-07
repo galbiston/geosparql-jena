@@ -6,7 +6,6 @@
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.4.3.1 /conf/geometry-topology-extension/eh-query-functions
  *
@@ -51,7 +50,7 @@ public class EhCoversTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

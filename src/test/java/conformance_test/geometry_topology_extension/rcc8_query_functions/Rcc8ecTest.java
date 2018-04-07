@@ -6,7 +6,6 @@
 package conformance_test.geometry_topology_extension.rcc8_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.4.4.1 /conf/geometry-topology-extension/rcc8-query-functions
  *
@@ -48,7 +47,7 @@ public class Rcc8ecTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

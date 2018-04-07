@@ -6,9 +6,7 @@
 package conformance_test.geometry_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 import implementation.datatype.WKTDatatype;
-
 import java.util.Arrays;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -23,7 +21,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.3.1.2 /conf/geometry-extension/feature-properties
  *
@@ -47,7 +45,7 @@ public class FeaturePropertiesTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -77,9 +75,8 @@ public class FeaturePropertiesTest {
                 + "}";
         List<Literal> result = literalQuery(queryString, infModel);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

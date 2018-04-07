@@ -6,9 +6,8 @@
 package conformance_test.geometry_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.datatypes.xsd.impl.XSDBaseNumericType;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
@@ -21,7 +20,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.3.1.3 /conf/geometry-extension/geometry-properties
  *
@@ -46,7 +45,7 @@ public class GeometryPropertiesTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -80,11 +79,10 @@ public class GeometryPropertiesTest {
                 + " ?aGeom geo:isEmpty ?isEmpty ."
                 + " ?aGeom geo:isSimple ?isSimple ."
                 + "}";
-        ArrayList<Literal> result = literalQuery(queryString, infModel);
+        List<Literal> result = literalQuery(queryString, infModel);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

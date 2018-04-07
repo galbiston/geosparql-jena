@@ -17,7 +17,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  *
- * 
+ *
  */
 public class UnitsOfMeasureTest {
 
@@ -59,7 +59,7 @@ public class UnitsOfMeasureTest {
         UnitsOfMeasure sourceUnitsOfMeasure = new UnitsOfMeasure(crs);
         double expResult = targetDistance * 6371000;
         double result = UnitsOfMeasure.conversion(targetDistance, targetDistanceUnitURI, sourceUnitsOfMeasure);
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        //System.out.println("Expected: " + expResult + " Result: " + result);
 
         assertEquals(expResult, result, 0.0);
     }
@@ -81,7 +81,7 @@ public class UnitsOfMeasureTest {
         UnitsOfMeasure sourceUnitsOfMeasure = new UnitsOfMeasure(crs);
         double expResult = (targetDistance / 6371000) * RADS_TO_DEGREES;
         double result = UnitsOfMeasure.conversion(targetDistance, targetDistanceUnitURI, sourceUnitsOfMeasure);
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        //System.out.println("Expected: " + expResult + " Result: " + result);
 
         assertEquals(expResult, result, 0.0);
     }
@@ -103,7 +103,7 @@ public class UnitsOfMeasureTest {
         UnitsOfMeasure sourceUnitsOfMeasure = new UnitsOfMeasure(crs);
         double expResult = 100.0;
         double result = UnitsOfMeasure.conversion(targetDistance, targetDistanceUnitURI, sourceUnitsOfMeasure);
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        //System.out.println("Expected: " + expResult + " Result: " + result);
 
         assertEquals(expResult, result, 0.0);
     }
@@ -125,7 +125,7 @@ public class UnitsOfMeasureTest {
         UnitsOfMeasure sourceUnitsOfMeasure = new UnitsOfMeasure(crs);
         double expResult = 100.0;
         double result = UnitsOfMeasure.conversion(targetDistance, targetDistanceUnitURI, sourceUnitsOfMeasure);
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        //System.out.println("Expected: " + expResult + " Result: " + result);
 
         assertEquals(expResult, result, 0.0);
     }
@@ -147,7 +147,7 @@ public class UnitsOfMeasureTest {
         UnitsOfMeasure sourceUnitsOfMeasure = new UnitsOfMeasure(crs);
         double expResult = targetDistance * RADS_TO_DEGREES;
         double result = UnitsOfMeasure.conversion(targetDistance, targetDistanceUnitURI, sourceUnitsOfMeasure);
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        //System.out.println("Expected: " + expResult + " Result: " + result);
 
         assertEquals(expResult, result, 0.0);
     }
@@ -170,7 +170,7 @@ public class UnitsOfMeasureTest {
 
         double expResult = (targetDistance / RADS_TO_DEGREES) * 6371000;
         double result = UnitsOfMeasure.conversion(targetDistance, targetDistanceUnitURI, sourceUnitsOfMeasure);
-        System.out.println("Expected: " + expResult + " Result: " + result);
+        //System.out.println("Expected: " + expResult + " Result: " + result);
 
         assertEquals(expResult, result, 0.0);
     }

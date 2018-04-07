@@ -6,7 +6,6 @@
 package conformance_test.geometry_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.3.1.1 /conf/geometry-extension/geometry-class
  *
@@ -41,7 +40,7 @@ public class GeometryClassTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype.parsers.wkt;
+package implementation.parsers.wkt;
 
-import implementation.parsers.wkt.WKTReader;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
@@ -63,8 +62,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -80,8 +79,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -97,8 +96,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 1));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -114,8 +113,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 2));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -135,8 +134,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 2));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -152,8 +151,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -174,8 +173,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 1));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -198,8 +197,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 2));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -220,8 +219,8 @@ public class WKTReaderTest {
         GeometryWrapper expResult = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 1));
         GeometryWrapper result = instance.read(wktLiteral);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 

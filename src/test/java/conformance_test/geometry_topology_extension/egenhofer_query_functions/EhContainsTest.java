@@ -7,6 +7,7 @@ package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.4.3.1 /conf/geometry-topology-extension/eh-query-functions
  *
@@ -74,19 +75,19 @@ public class EhContainsTest {
          * return the same instance while the sfContains will return the same
          * instance.
          */
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-83.4 34.4)"), infModel);
+        List<String> result = resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-83.4 34.4)"), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
-
-        assertEquals(expResult, resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-86.4 31.4)"), infModel));
+        List<String> expResult = new ArrayList<>();
+        List<String> result = resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-86.4 31.4)"), infModel);
+        assertEquals(expResult, result);
     }
 
 }
