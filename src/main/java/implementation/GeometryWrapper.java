@@ -23,11 +23,9 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
-import org.geotools.geometry.jts.JTS;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,10 +123,10 @@ public class GeometryWrapper {
 
         GeometryWrapper transformedGeometryWrapper;
 
-        if (!srsURI.equals(sourceGeometryWrapper.srsURI)) {
-            transformedGeometryWrapper = convertCRS(sourceGeometryWrapper, srsURI);
-        } else {
+        if (srsURI.equals(sourceGeometryWrapper.srsURI)) {
             transformedGeometryWrapper = sourceGeometryWrapper;
+        } else {
+            transformedGeometryWrapper = GeometryTransformIndex.transform(sourceGeometryWrapper, srsURI);
         }
 
         return transformedGeometryWrapper;
@@ -144,35 +142,7 @@ public class GeometryWrapper {
      * @throws TransformException
      */
     public GeometryWrapper convertCRS(String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
-        return convertCRS(this, srsURI);
-    }
-
-    /**
-     * Convert the geometry wrapper to the provided SRS URI.
-     *
-     * @param sourceGeometryWrapper
-     * @param srsURI
-     * @return
-     * @throws FactoryException
-     * @throws MismatchedDimensionException
-     * @throws TransformException
-     */
-    public static GeometryWrapper convertCRS(GeometryWrapper sourceGeometryWrapper, String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
-        try {
-            GeometryWrapper transformedGeometryWrapper;
-            CoordinateReferenceSystem sourceCRS = sourceGeometryWrapper.getCRS();
-
-            Geometry sourceGeometry = sourceGeometryWrapper.getParsingGeometry();  //Retrieve the original coordinate order according to the CRS.
-            CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
-            MathTransform transform = CRSRegistry.getTransform(sourceCRS, targetCRS);
-            Geometry transformedGeometry = JTS.transform(sourceGeometry, transform);
-
-            transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, sourceGeometryWrapper.getGeoSerialisation(), sourceGeometryWrapper.getDimensionInfo());
-            return transformedGeometryWrapper;
-        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("CRS Check Exception: {}", ex.getMessage());
-            throw ex;
-        }
+        return GeometryTransformIndex.transform(this, srsURI);
     }
 
     public CoordinateReferenceSystem getCRS() {

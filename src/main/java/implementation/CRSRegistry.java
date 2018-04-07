@@ -7,15 +7,9 @@ package implementation;
 
 import implementation.support.UnitsOfMeasure;
 import java.util.HashMap;
-import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.apache.commons.collections4.map.LRUMap;
-import org.apache.commons.collections4.map.MultiKeyMap;
 import org.geotools.referencing.CRS;
-import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +23,6 @@ public class CRSRegistry {
 
     private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
     private static final HashMap<String, UnitsOfMeasure> UNITS_REGISTRY = new HashMap<>();
-    private static final MultiKeyMap<MultiKey, MathTransform> TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap(20));
 
     /**
      * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
@@ -116,19 +109,6 @@ public class CRSRegistry {
 
         addCRS(srsURI);
         return UNITS_REGISTRY.get(srsURI);
-    }
-
-    public static final MathTransform getTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {
-
-        MathTransform transform;
-        MultiKey key = new MultiKey(sourceCRS, targetCRS);
-        if (TRANSFORM_REGISTRY.containsKey(key)) {
-            transform = TRANSFORM_REGISTRY.get(key);
-        } else {
-            transform = CRS.findMathTransform(sourceCRS, targetCRS, false);
-            TRANSFORM_REGISTRY.put(key, transform);
-        }
-        return transform;
     }
 
 }
