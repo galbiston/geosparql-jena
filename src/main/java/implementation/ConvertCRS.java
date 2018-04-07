@@ -26,6 +26,7 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -34,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ConvertCRS {
 
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     /**
      * Converts all geometry literals (WKT or GML) from current CRS to the
