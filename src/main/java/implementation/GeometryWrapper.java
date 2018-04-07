@@ -10,9 +10,9 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
-import implementation.parsers.wkt.WKTReader;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import implementation.parsers.wkt.WKTReader;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
 import implementation.vocabulary.UnitsOfMeasureLookUp;
@@ -42,6 +42,7 @@ public class GeometryWrapper {
     private static final Logger LOGGER = LoggerFactory.getLogger(GeometryWrapper.class);
 
     private final Geometry xyGeometry;
+    private final Geometry parsingGeometry;
     private final String srsURI;
     private final GeoSerialisationEnum serialisation;
     private final CoordinateReferenceSystem crs;
@@ -62,7 +63,7 @@ public class GeometryWrapper {
         this.dimensionInfo = dimensionInfo;
 
         this.xyGeometry = GeometryReverse.check(geometry, crs);
-
+        this.parsingGeometry = geometry;
     }
 
     /**
@@ -102,6 +103,7 @@ public class GeometryWrapper {
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
 
         this.xyGeometry = geometryWrapper.xyGeometry;
+        this.parsingGeometry = geometryWrapper.parsingGeometry;
         this.srsURI = geometryWrapper.srsURI;
         this.serialisation = geometryWrapper.serialisation;
 
@@ -114,35 +116,64 @@ public class GeometryWrapper {
      * Transforms, if necessary, the provided GeometryWrapper according to the
      * current GeometryWrapper CRS.
      *
-     * @param sourceCRSGeometry
+     * @param sourceGeometryWrapper
      * @return
      * @throws FactoryException
      * @throws MismatchedDimensionException
      * @throws TransformException
      */
-    public GeometryWrapper checkCRS(GeometryWrapper sourceCRSGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+    public GeometryWrapper checkCRS(GeometryWrapper sourceGeometryWrapper) throws FactoryException, MismatchedDimensionException, TransformException {
 
-        GeometryWrapper transformedCRSGeometry;
+        GeometryWrapper transformedGeometryWrapper;
+
+        if (!srsURI.equals(sourceGeometryWrapper.srsURI)) {
+            transformedGeometryWrapper = convertCRS(sourceGeometryWrapper, srsURI);
+        } else {
+            transformedGeometryWrapper = sourceGeometryWrapper;
+        }
+
+        return transformedGeometryWrapper;
+    }
+
+    /**
+     * Returns this geometry wrapper converted to the SRS URI.
+     *
+     * @param srsURI
+     * @return
+     * @throws FactoryException
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     */
+    public GeometryWrapper convertCRS(String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+        return convertCRS(this, srsURI);
+    }
+
+    /**
+     * Convert the geometry wrapper to the provided SRS URI.
+     *
+     * @param sourceGeometryWrapper
+     * @param srsURI
+     * @return
+     * @throws FactoryException
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     */
+    public static GeometryWrapper convertCRS(GeometryWrapper sourceGeometryWrapper, String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
         try {
-            if (!srsURI.equals(sourceCRSGeometry.srsURI)) {
-                CoordinateReferenceSystem sourceCRS = sourceCRSGeometry.getCRS();
+            GeometryWrapper transformedGeometryWrapper;
+            CoordinateReferenceSystem sourceCRS = sourceGeometryWrapper.getCRS();
 
-                Geometry sourceGeometry = sourceCRSGeometry.getParsingGeometry();  //Retrieve the original coordinate order according to the CRS.
+            Geometry sourceGeometry = sourceGeometryWrapper.getParsingGeometry();  //Retrieve the original coordinate order according to the CRS.
+            CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
+            MathTransform transform = CRS.findMathTransform(sourceCRS, targetCRS, false);
+            Geometry transformedGeometry = JTS.transform(sourceGeometry, transform);
 
-                MathTransform transform = CRS.findMathTransform(sourceCRS, crs, false);
-                Geometry targetGeometry = JTS.transform(sourceGeometry, transform);
-
-                transformedCRSGeometry = new GeometryWrapper(targetGeometry, srsURI, serialisation, dimensionInfo);
-            } else {
-                transformedCRSGeometry = sourceCRSGeometry;
-            }
-
+            transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, sourceGeometryWrapper.getGeoSerialisation(), sourceGeometryWrapper.getDimensionInfo());
+            return transformedGeometryWrapper;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("CRS Check Exception: {}", ex.getMessage());
             throw ex;
         }
-
-        return transformedCRSGeometry;
     }
 
     public CoordinateReferenceSystem getCRS() {
@@ -164,7 +195,7 @@ public class GeometryWrapper {
      * @return
      */
     public Geometry getParsingGeometry() {
-        return GeometryReverse.check(xyGeometry, crs);
+        return parsingGeometry;
     }
 
     public String getSrsURI() {
@@ -477,7 +508,7 @@ public class GeometryWrapper {
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "geometry=" + xyGeometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", dimensionInfo=" + dimensionInfo + '}';
+        return "GeometryWrapper{" + "xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + ", srsURI=" + srsURI + ", serialisation=" + serialisation + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", dimensionInfo=" + dimensionInfo + '}';
     }
 
 }

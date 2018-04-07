@@ -215,6 +215,8 @@ public class GeometryWrapperTest {
 
         double expResult = 10.0;
         double result = instance.distance(targetGeometry, distanceUnitsURI);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result, 0.0);
     }
 
