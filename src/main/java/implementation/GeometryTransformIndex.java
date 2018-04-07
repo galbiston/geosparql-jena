@@ -24,7 +24,7 @@ import org.opengis.referencing.operation.TransformException;
 public class GeometryTransformIndex {
 
     private static final MultiKeyMap<MultiKey, MathTransform> TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap(20));
-    private static final MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap(100));
+    private static final MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap(1000));
 
     public static final MathTransform getMathTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {
 
