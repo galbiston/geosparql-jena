@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype.parsers.wkt;
+package implementation.parsers.wkt;
 
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
-import implementation.datatype.parsers.ParseException;
+import implementation.datatype.ParseException;
 import implementation.support.GeoSerialisationEnum;
 
 /**

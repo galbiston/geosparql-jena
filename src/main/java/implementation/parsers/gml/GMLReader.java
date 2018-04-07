@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype.parsers.gml;
+package implementation.parsers.gml;
 
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;

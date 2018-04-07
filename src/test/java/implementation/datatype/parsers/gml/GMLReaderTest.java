@@ -5,6 +5,7 @@
  */
 package implementation.datatype.parsers.gml;
 
+import implementation.parsers.gml.GMLReader;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;

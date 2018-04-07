@@ -6,9 +6,8 @@
 package implementation.datatype;
 
 import implementation.GeometryWrapper;
-import implementation.datatype.parsers.ParseException;
-import implementation.datatype.parsers.wkt.WKTReader;
-import implementation.datatype.parsers.wkt.WKTWriter;
+import implementation.parsers.wkt.WKTReader;
+import implementation.parsers.wkt.WKTWriter;
 import static implementation.support.Prefixes.GEO_URI;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;

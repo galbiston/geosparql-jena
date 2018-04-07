@@ -6,9 +6,8 @@
 package implementation.datatype;
 
 import implementation.GeometryWrapper;
-import implementation.datatype.parsers.ParseException;
-import implementation.datatype.parsers.gml.GMLReader;
-import implementation.datatype.parsers.gml.GMLWriter;
+import implementation.parsers.gml.GMLReader;
+import implementation.parsers.gml.GMLWriter;
 import static implementation.support.Prefixes.GEO_URI;
 import java.io.IOException;
 import org.apache.jena.datatypes.BaseDatatype;

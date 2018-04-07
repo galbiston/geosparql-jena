@@ -10,7 +10,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
-import implementation.datatype.parsers.wkt.WKTReader;
+import implementation.parsers.wkt.WKTReader;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.support.GeoSerialisationEnum;

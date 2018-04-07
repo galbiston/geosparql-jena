@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.datatype.parsers.gml;
+package implementation.parsers.gml;
 
 import com.vividsolutions.jts.geom.*;
 import implementation.CRSRegistry;
 import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
-import implementation.datatype.parsers.ParseException;
+import implementation.datatype.ParseException;
 import implementation.jts.CustomCoordinateSequence;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
