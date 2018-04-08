@@ -5,8 +5,9 @@
  */
 package implementation;
 
+import static implementation.GeoSPARQLModel.CRS_REGISTRY_MAX_SIZE;
 import implementation.support.UnitsOfMeasure;
-import java.util.HashMap;
+import org.apache.commons.collections4.map.LRUMap;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -21,8 +22,8 @@ public class CRSRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CRSRegistry.class);
 
-    private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
-    private static final HashMap<String, UnitsOfMeasure> UNITS_REGISTRY = new HashMap<>();
+    private static final LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(CRS_REGISTRY_MAX_SIZE);
+    private static final LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(CRS_REGISTRY_MAX_SIZE);
 
     /**
      * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis

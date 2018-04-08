@@ -6,6 +6,7 @@
 package implementation;
 
 import com.vividsolutions.jts.geom.Geometry;
+import static implementation.GeoSPARQLModel.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.collections4.map.MultiKeyMap;
@@ -16,6 +17,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import static implementation.GeoSPARQLModel.CRS_REGISTRY_MAX_SIZE;
 
 /**
  *
@@ -23,8 +25,8 @@ import org.opengis.referencing.operation.TransformException;
  */
 public class GeometryTransformIndex {
 
-    private static final MultiKeyMap<MultiKey, MathTransform> TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap<>(20));
-    private static final MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(1000));
+    private static final MultiKeyMap<MultiKey, MathTransform> TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap<>(CRS_REGISTRY_MAX_SIZE));
+    private static final MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(GEOMETRY_TRANSFORM_INDEX_MAX_SIZE));
 
     @SuppressWarnings("unchecked")
     public static final MathTransform getMathTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {

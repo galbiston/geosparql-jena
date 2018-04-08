@@ -32,6 +32,12 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 public class GeoSPARQLModel {
 
     /**
+     * Indexing and Registry Sizes
+     */
+    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 50000;
+    public static final Integer CRS_REGISTRY_MAX_SIZE = 20;
+    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 50000;
+    /**
      * GeoSPARQL schema
      */
     private static final String GEOSPARQL_SCHEMA = "schema/geosparql_vocab_all.rdf";
