@@ -5,7 +5,6 @@
  */
 package implementation;
 
-import static implementation.GeoSPARQLSupport.GEOMETRY_LITERAL_INDEX_MAX_SIZE;
 import implementation.datatype.DatatypeReader;
 import org.apache.commons.collections4.map.LRUMap;
 
@@ -15,7 +14,7 @@ import org.apache.commons.collections4.map.LRUMap;
  */
 public class GeometryLiteralIndex {
 
-    private static final LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(GEOMETRY_LITERAL_INDEX_MAX_SIZE);
+    private static final LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(GeoSPARQLSupport.GEOMETRY_LITERAL_INDEX_MAX_SIZE);
 
     public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader) {
         GeometryWrapper geometryWrapper;

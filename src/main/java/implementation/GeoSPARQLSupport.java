@@ -34,8 +34,9 @@ public class GeoSPARQLSupport {
     /**
      * Indexing and Registry Sizes
      */
-    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 50000;
     public static final Integer CRS_REGISTRY_MAX_SIZE = 20;
+    public static final Integer UNIT_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
+    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 50000;
     public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 50000;
     /**
      * GeoSPARQL schema
