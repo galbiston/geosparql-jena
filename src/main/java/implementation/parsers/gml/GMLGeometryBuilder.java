@@ -216,7 +216,7 @@ public class GMLGeometryBuilder {
     }
 
     private Polygon buildPolygon(Element gmlElement) {
-
+        //Following Polygon structure from: http://www.gdal.org/drv_gml.html
         Polygon polygon;
 
         //Exterior shell
