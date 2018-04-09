@@ -163,4 +163,9 @@ public class CRSRegistry implements Serializable {
         LOGGER.info("Reading Units Registry - {}: Completed", unitsRegistryFile);
     }
 
+    public static final void clearAll() {
+        CRS_REGISTRY.clear();
+        UNITS_REGISTRY.clear();
+    }
+
 }

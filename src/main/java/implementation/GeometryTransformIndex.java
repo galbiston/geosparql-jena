@@ -124,4 +124,9 @@ public class GeometryTransformIndex {
         LOGGER.info("Reading Math Transform Registry - {}: Completed", mathTransformRegistryFile);
     }
 
+    public static final void clearAll() {
+        MATH_TRANSFORM_REGISTRY.clear();
+        GEOMETRY_TRANSFORM_INDEX.clear();
+    }
+
 }

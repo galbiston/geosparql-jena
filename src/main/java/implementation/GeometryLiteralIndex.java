@@ -61,4 +61,9 @@ public class GeometryLiteralIndex {
         LOGGER.info("Reading Geometry Literal Index - {}: Completed", geometryLiteralIndexFile);
     }
 
+    public static final void clearAll() {
+        GEOMETRY_LITERAL_INDEX.clear();
+        GEOMETRY_LITERAL_INDEX.clear();
+    }
+
 }

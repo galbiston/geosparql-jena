@@ -131,7 +131,7 @@ public class GeoSPARQLSupport {
         //Only load and setup storage once per filename.
         if (!indexFolder.equals(indexStorageFolder)) {
             loadIndexes(indexFolder);
-            storeShutdownIndexes(indexFolder);
+            storeIndexesAtShutdown(indexFolder);
             indexStorageFolder = indexFolder;
         }
 
@@ -188,7 +188,7 @@ public class GeoSPARQLSupport {
         }
     }
 
-    private static void storeShutdownIndexes(File indexFolder) {
+    private static void storeIndexesAtShutdown(File indexFolder) {
 
         Thread thread = new Thread() {
             @Override
@@ -224,6 +224,12 @@ public class GeoSPARQLSupport {
 
         //Retain the thread in case called again.
         shutdownStorageThread = thread;
+    }
+
+    public static final void clearAllIndexesAndRegistries() {
+        CRSRegistry.clearAll();
+        GeometryLiteralIndex.clearAll();
+        GeometryTransformIndex.clearAll();
     }
 
 }
