@@ -78,7 +78,6 @@ public class GeometryAsGmlLiteralTest {
 
         //System.out.println("Exp: " + expLiteral);
         //System.out.println("Res: " + resultLiteral);
-        System.out.println("Test passes when run individually but fails when all tests run. Literal conversion is using LineString instead of Point but unclear why.");
         assertEquals(expResult, result);
     }
 

@@ -78,7 +78,6 @@ public class GmlLiteralTest {
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        System.out.println("Test passes when run individually but fails when all tests run. Literal conversion is using LineString instead of Point but unclear why.");
         assertEquals(expResult, result);
     }
 

@@ -137,7 +137,7 @@ public class GMLGeometryBuilder {
     }
 
     private Geometry buildGeometry(String shape, Element gmlElement) throws ParseException {
-
+        System.out.println(shape + " - " + gmlElement);
         Geometry geo;
         switch (shape) {
             case "Point":
@@ -181,7 +181,6 @@ public class GMLGeometryBuilder {
     }
 
     private String convertPosList(String originalCoordinates) {
-
         StringBuilder sb = new StringBuilder("");
         String[] coordinates = originalCoordinates.trim().split(" ");
 
@@ -221,20 +220,22 @@ public class GMLGeometryBuilder {
         Polygon polygon;
 
         //Exterior shell
-        Element exterior = gmlElement.getChild("exterior", GML_NAMESPACE);
-        if (exterior == null) {
-            exterior = gmlElement.getChild("outerBoundaryIs", GML_NAMESPACE);
+        Element exteriorElement = gmlElement.getChild("exterior", GML_NAMESPACE);
+        if (exteriorElement == null) {
+            exteriorElement = gmlElement.getChild("outerBoundaryIs", GML_NAMESPACE);
         }
-        CustomCoordinateSequence exteriorSequence = extractPosList(exterior);
+        Element exteriorLinearRingElement = exteriorElement.getChild("LinearRing", GML_NAMESPACE);
+        CustomCoordinateSequence exteriorSequence = extractPosList(exteriorLinearRingElement);
 
         //Interior shell - that may not be present.
-        List<Element> interiors = gmlElement.getChildren("interior", GML_NAMESPACE);
-        if (interiors == null) {
-            interiors = gmlElement.getChildren("innerBoundaryIs", GML_NAMESPACE);
+        List<Element> interiorElements = gmlElement.getChildren("interior", GML_NAMESPACE);
+        if (interiorElements == null) {
+            interiorElements = gmlElement.getChildren("innerBoundaryIs", GML_NAMESPACE);
         }
         List<LinearRing> interiorLinearRingList = new ArrayList<>();
-        for (Element interior : interiors) {
-            CustomCoordinateSequence interiorSequence = extractPosList(interior);
+        for (Element interiorElement : interiorElements) {
+            Element interiorLinearRingElement = interiorElement.getChild("LinearRing", GML_NAMESPACE);
+            CustomCoordinateSequence interiorSequence = extractPosList(interiorLinearRingElement);
             LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(interiorSequence);
             interiorLinearRingList.add(linearRing);
         }
