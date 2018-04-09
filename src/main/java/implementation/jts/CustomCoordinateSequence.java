@@ -8,6 +8,7 @@ package implementation.jts;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateSequence;
 import com.vividsolutions.jts.geom.Envelope;
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Arrays;
  *
  *
  */
-public class CustomCoordinateSequence implements CoordinateSequence {
+public class CustomCoordinateSequence implements CoordinateSequence, Serializable {
 
     private final double[] x;
     private final double[] y;

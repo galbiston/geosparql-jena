@@ -6,6 +6,7 @@
 package implementation.support;
 
 import implementation.vocabulary.UnitsOfMeasureLookUp;
+import java.io.Serializable;
 import javax.measure.Measure;
 import javax.measure.converter.ConversionException;
 import javax.measure.converter.UnitConverter;
@@ -24,9 +25,9 @@ import org.slf4j.LoggerFactory;
  *
  * Based on: http://docs.geotools.org/stable/userguide/library/opengis/unit.html
  *
- * 
+ *
  */
-public class UnitsOfMeasure {
+public class UnitsOfMeasure implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UnitsOfMeasure.class);
 

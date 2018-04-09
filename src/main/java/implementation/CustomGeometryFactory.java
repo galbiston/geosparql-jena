@@ -7,6 +7,7 @@ package implementation;
 
 import com.vividsolutions.jts.geom.GeometryFactory;
 import implementation.jts.CustomCoordinateSequenceFactory;
+import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class CustomGeometryFactory {
+public class CustomGeometryFactory implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomGeometryFactory.class);
 

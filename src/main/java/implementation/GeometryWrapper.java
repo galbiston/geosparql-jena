@@ -15,6 +15,8 @@ import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
 import implementation.vocabulary.UnitsOfMeasureLookUp;
+import java.io.Serializable;
+import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
@@ -33,9 +35,9 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class GeometryWrapper {
+public class GeometryWrapper implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GeometryWrapper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final Geometry xyGeometry;
     private final Geometry parsingGeometry;
@@ -83,7 +85,7 @@ public class GeometryWrapper {
         this(geometry, srsURI, serialisation, DimensionInfo.xyPoint());
     }
 
-    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
+    transient private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     /**
      * Empty geometry with specified parameters.

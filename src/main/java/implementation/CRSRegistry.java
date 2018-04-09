@@ -6,6 +6,14 @@
 package implementation;
 
 import implementation.support.UnitsOfMeasure;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.invoke.MethodHandles;
 import org.apache.commons.collections4.map.LRUMap;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
@@ -17,12 +25,12 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class CRSRegistry {
+public class CRSRegistry implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CRSRegistry.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.CRS_REGISTRY_MAX_SIZE);
-    private static final LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.UNIT_REGISTRY_MAX_SIZE);
+    private static final LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.UNITS_REGISTRY_MAX_SIZE);
 
     /**
      * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
@@ -109,6 +117,50 @@ public class CRSRegistry {
 
         addCRS(srsURI);
         return UNITS_REGISTRY.get(srsURI);
+    }
+
+    public static final void writeCRSRegistry(File crsRegistryFile) {
+        LOGGER.info("Writing CRS Registry - {}: Started", crsRegistryFile);
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(crsRegistryFile))) {
+            objectOutputStream.writeObject(CRS_REGISTRY);
+        } catch (IOException ex) {
+            LOGGER.error("Store CRS Registry exception: {}", ex.getMessage());
+        }
+        LOGGER.info("Writing CRS Registry - {}: Completed", crsRegistryFile);
+    }
+
+    public static final void readCRSRegistry(File crsRegistryFile) {
+        LOGGER.info("Reading CRS Registry - {}: Started", crsRegistryFile);
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(crsRegistryFile))) {
+            @SuppressWarnings("unchecked")
+            LRUMap<String, CoordinateReferenceSystem> crsRegistry = (LRUMap<String, CoordinateReferenceSystem>) objectInputStream.readObject();
+            CRS_REGISTRY.putAll(crsRegistry);
+        } catch (IOException | ClassNotFoundException ex) {
+            LOGGER.error("Read CRS Registry exception: {}", ex.getMessage());
+        }
+        LOGGER.info("Reading CRS Registry - {}: Completed", crsRegistryFile);
+    }
+
+    public static final void writeUnitsRegistry(File unitsRegistryFile) {
+        LOGGER.info("Writing Units Registry - {}: Started", unitsRegistryFile);
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(unitsRegistryFile))) {
+            objectOutputStream.writeObject(UNITS_REGISTRY);
+        } catch (IOException ex) {
+            LOGGER.error("Store Units Registry exception: {}", ex.getMessage());
+        }
+        LOGGER.info("Writing Units Registry - {}: Completed", unitsRegistryFile);
+    }
+
+    public static final void readUnitsRegistry(File unitsRegistryFile) {
+        LOGGER.info("Reading Units Registry - {}: Started", unitsRegistryFile);
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(unitsRegistryFile))) {
+            @SuppressWarnings("unchecked")
+            LRUMap<String, UnitsOfMeasure> unitsRegistry = (LRUMap<String, UnitsOfMeasure>) objectInputStream.readObject();
+            UNITS_REGISTRY.putAll(unitsRegistry);
+        } catch (IOException | ClassNotFoundException ex) {
+            LOGGER.error("Read Units Registry exception: {}", ex.getMessage());
+        }
+        LOGGER.info("Reading Units Registry - {}: Completed", unitsRegistryFile);
     }
 
 }

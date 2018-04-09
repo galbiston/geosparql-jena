@@ -7,12 +7,13 @@ package implementation;
 
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import static implementation.jts.CustomCoordinateSequence.findCoordinateSequenceDimensions;
+import java.io.Serializable;
 
 /**
  *
- * 
+ *
  */
-public class DimensionInfo {
+public class DimensionInfo implements Serializable {
 
     private final int coordinate;
     private final int spatial;

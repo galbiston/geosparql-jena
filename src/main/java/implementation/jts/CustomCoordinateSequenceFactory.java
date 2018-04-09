@@ -8,12 +8,13 @@ package implementation.jts;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateSequence;
 import com.vividsolutions.jts.geom.CoordinateSequenceFactory;
+import java.io.Serializable;
 
 /**
  *
- * 
+ *
  */
-public class CustomCoordinateSequenceFactory implements CoordinateSequenceFactory {
+public class CustomCoordinateSequenceFactory implements CoordinateSequenceFactory, Serializable {
 
     @Override
     public CoordinateSequence create(Coordinate[] coordinates) {

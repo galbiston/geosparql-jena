@@ -7,7 +7,7 @@ package implementation.support;
 
 /**
  *
- * 
+ *
  */
 public enum GeoSerialisationEnum {
 

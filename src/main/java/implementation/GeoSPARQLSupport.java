@@ -15,6 +15,7 @@ import implementation.function_registry.RCC8;
 import implementation.function_registry.Relate;
 import implementation.function_registry.SimpleFeatures;
 import implementation.vocabulary.Geo;
+import java.io.File;
 import java.io.InputStream;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.rdf.model.InfModel;
@@ -35,14 +36,24 @@ public class GeoSPARQLSupport {
      * Indexing and Registry Sizes
      */
     public static final Integer CRS_REGISTRY_MAX_SIZE = 20;
-    public static final Integer UNIT_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
+    public static final Integer UNITS_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
+    public static final Integer MATH_TRANSFORM_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
     public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 50000;
     public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 50000;
+
+    public static final String CRS_REGISTRY_FILENAME = "geo-CRS.registry";
+    public static final String UNITS_REGISTRY_FILENAME = "geo-Units.registry";
+    public static final String MATH_TRANSFORM_REGISTRY_FILENAME = "geo-MathTransform.registry";
+    public static final String GEOMETRY_TRANSFORM_INDEX_FILENAME = "geo-GeometryTransform.index";
+    public static final String GEOMETRY_LITERAL_INDEX_FILENAME = "geo-GeometryLiteral.index";
+
     /**
      * GeoSPARQL schema
      */
     private static final String GEOSPARQL_SCHEMA = "schema/geosparql_vocab_all.rdf";
     private static Boolean isFunctionsRegistered = false;
+    private static File indexStorageFolder = null;
+    private static Thread shutdownStorageThread = null;
 
     /**
      * Prepare an empty model for GeoSPARQL.
@@ -101,10 +112,30 @@ public class GeoSPARQLSupport {
     }
 
     /**
-     * Initialize all the GeoSPARQL property and filter functions.
-     * <br>Use this for standard GeoSPARQL setup
+     * Initialise all GeoSPARQL property and filter functions.
+     * <br>Use this for in memory GeoSPARQL setup.
      */
     public static void loadFunctions() {
+        loadFunctions(null);
+    }
+
+    /**
+     * Initialise all GeoSPARQL property and filter functions. Store any indexes
+     * in the specified folder.
+     * <br>Use this for persisting indexes such as a TDB setup.
+     *
+     * @param indexFolder
+     */
+    public static void loadFunctions(File indexFolder) {
+
+        //Only load and setup storage once per filename.
+        if (!indexFolder.equals(indexStorageFolder)) {
+            loadIndexes(indexFolder);
+            storeShutdownIndexes(indexFolder);
+            indexStorageFolder = indexFolder;
+        }
+
+        //Only register functions once.
         if (!isFunctionsRegistered) {
             PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
             FunctionRegistry functionRegistry = FunctionRegistry.get();
@@ -122,6 +153,77 @@ public class GeoSPARQLSupport {
             TypeMapper.getInstance().registerDatatype(GMLDatatype.THE_GML_DATATYPE);
             isFunctionsRegistered = true;
         }
+    }
+
+    private static void loadIndexes(File indexFolder) {
+
+        //CRS Registry
+        File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
+        if (crsRegistryFile.exists()) {
+            CRSRegistry.readCRSRegistry(crsRegistryFile);
+        }
+
+        //Units Registry
+        File unitsRegistryFile = new File(indexFolder, UNITS_REGISTRY_FILENAME);
+        if (unitsRegistryFile.exists()) {
+            CRSRegistry.readUnitsRegistry(unitsRegistryFile);
+        }
+
+        //Math Transform Registry
+        File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
+        if (mathTransformRegistryFile.exists()) {
+            GeometryTransformIndex.readMathTransformRegistry(mathTransformRegistryFile);
+        }
+
+        //Geometry Transform Index
+        File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
+        if (geometryTransformIndexFile.exists()) {
+            GeometryTransformIndex.readGeometryTransformIndex(geometryTransformIndexFile);
+        }
+
+        //Geometry Literal Index
+        File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
+        if (geometryLiteralIndexFile.exists()) {
+            GeometryLiteralIndex.readGeometryLiteralIndex(geometryLiteralIndexFile);
+        }
+    }
+
+    private static void storeShutdownIndexes(File indexFolder) {
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+
+                //CRS Registry
+                File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
+                CRSRegistry.writeCRSRegistry(crsRegistryFile);
+
+                //Units Registry
+                File unitsRegistryFile = new File(indexFolder, UNITS_REGISTRY_FILENAME);
+                CRSRegistry.writeUnitsRegistry(unitsRegistryFile);
+
+                //Math Transform Registry
+                File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
+                GeometryTransformIndex.writeMathTransformRegistry(mathTransformRegistryFile);
+
+                //Geometry Transform Index
+                File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
+                GeometryTransformIndex.writeGeometryTransformIndex(geometryTransformIndexFile);
+
+                //Geometry Literal Index
+                File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
+                GeometryLiteralIndex.writeGeometryLiteralIndex(geometryLiteralIndexFile);
+            }
+        };
+        Runtime.getRuntime().addShutdownHook(thread);
+
+        //Remove any previous shutdown storage thread.
+        if (shutdownStorageThread != null) {
+            Runtime.getRuntime().removeShutdownHook(shutdownStorageThread);
+        }
+
+        //Retain the thread in case called again.
+        shutdownStorageThread = thread;
     }
 
 }
