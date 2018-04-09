@@ -41,11 +41,11 @@ public class GeoSPARQLSupport {
     public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 50000;
     public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 50000;
 
-    public static final String CRS_REGISTRY_FILENAME = "geo-CRS.registry";
-    public static final String UNITS_REGISTRY_FILENAME = "geo-Units.registry";
-    public static final String MATH_TRANSFORM_REGISTRY_FILENAME = "geo-MathTransform.registry";
-    public static final String GEOMETRY_TRANSFORM_INDEX_FILENAME = "geo-GeometryTransform.index";
-    public static final String GEOMETRY_LITERAL_INDEX_FILENAME = "geo-GeometryLiteral.index";
+    public static final String CRS_REGISTRY_FILENAME = "geosparql-CRS.registry";
+    public static final String UNITS_REGISTRY_FILENAME = "geosparql-Units.registry";
+    public static final String MATH_TRANSFORM_REGISTRY_FILENAME = "geosparql-MathTransform.registry";
+    public static final String GEOMETRY_TRANSFORM_INDEX_FILENAME = "geosparql-GeometryTransform.index";
+    public static final String GEOMETRY_LITERAL_INDEX_FILENAME = "geosparql-GeometryLiteral.index";
 
     /**
      * GeoSPARQL schema
