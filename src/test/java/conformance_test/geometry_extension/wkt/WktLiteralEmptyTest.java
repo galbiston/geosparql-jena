@@ -7,7 +7,7 @@ package conformance_test.geometry_extension.wkt;
 
 import static conformance_test.ConformanceTestSuite.initWktEmptyModel;
 import static conformance_test.ConformanceTestSuite.literalQuery;
-import implementation.GeoSPARQLModel;
+import implementation.GeoSPARQLSupport;
 
 import java.util.Arrays;
 import java.util.List;

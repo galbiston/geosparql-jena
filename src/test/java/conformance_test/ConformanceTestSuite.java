@@ -5,7 +5,7 @@
  */
 package conformance_test;
 
-import implementation.GeoSPARQLModel;
+import implementation.GeoSPARQLSupport;
 import implementation.support.Prefixes;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class ConformanceTestSuite {
      */
     public static InfModel initWktModel() {
         InputStream inputStream = getInputStream(SAMPLE_WKT);
-        return GeoSPARQLModel.prepare(inputStream);
+        return GeoSPARQLSupport.prepare(inputStream);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ConformanceTestSuite {
      */
     public static InfModel initWktEmptyModel() {
         InputStream inputStream = getInputStream(SAMPLE_WKT_EMPTY);
-        return GeoSPARQLModel.prepare(inputStream);
+        return GeoSPARQLSupport.prepare(inputStream);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ConformanceTestSuite {
      */
     public static InfModel initGmlModel() {
         InputStream inputStream = getInputStream(SAMPLE_GML);
-        return GeoSPARQLModel.prepare(inputStream);
+        return GeoSPARQLSupport.prepare(inputStream);
     }
 
     /**
@@ -92,7 +92,7 @@ public class ConformanceTestSuite {
      */
     public static InfModel initGmlEmptyModel() {
         InputStream inputStream = getInputStream(SAMPLE_GML_EMPTY);
-        return GeoSPARQLModel.prepare(inputStream);
+        return GeoSPARQLSupport.prepare(inputStream);
     }
 
     private static InputStream getInputStream(String filepath) {

@@ -29,7 +29,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
  *
  *
  */
-public class GeoSPARQLModel {
+public class GeoSPARQLSupport {
 
     /**
      * Indexing and Registry Sizes
@@ -49,7 +49,7 @@ public class GeoSPARQLModel {
      * @return
      */
     public static InfModel prepare() {
-        return GeoSPARQLModel.prepare(ModelFactory.createDefaultModel());
+        return GeoSPARQLSupport.prepare(ModelFactory.createDefaultModel());
     }
 
     /**
@@ -67,7 +67,7 @@ public class GeoSPARQLModel {
         /*
          * The use of OWL reasoner can bind schema with existing test data.
          */
-        InputStream inputStream = GeoSPARQLModel.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA);
+        InputStream inputStream = GeoSPARQLSupport.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA);
         Model schema = ModelFactory.createDefaultModel();
         schema.read(inputStream, null);
 
@@ -95,7 +95,7 @@ public class GeoSPARQLModel {
         Model model = ModelFactory.createDefaultModel();
         model.read(inputStream, null);
 
-        return GeoSPARQLModel.prepare(model);
+        return GeoSPARQLSupport.prepare(model);
 
     }
 

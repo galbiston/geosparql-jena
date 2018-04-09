@@ -5,7 +5,7 @@
  */
 package implementation;
 
-import static implementation.GeoSPARQLModel.GEOMETRY_LITERAL_INDEX_MAX_SIZE;
+import static implementation.GeoSPARQLSupport.GEOMETRY_LITERAL_INDEX_MAX_SIZE;
 import implementation.datatype.DatatypeReader;
 import org.apache.commons.collections4.map.LRUMap;
 

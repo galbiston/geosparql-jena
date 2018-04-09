@@ -6,7 +6,7 @@
 package conformance_test.geometry_extension.wkt;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLModel;
+import implementation.GeoSPARQLSupport;
 
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;

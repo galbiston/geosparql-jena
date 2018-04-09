@@ -6,7 +6,7 @@
 package implementation;
 
 import com.vividsolutions.jts.geom.Geometry;
-import static implementation.GeoSPARQLModel.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE;
+import static implementation.GeoSPARQLSupport.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.collections4.map.MultiKeyMap;
@@ -17,7 +17,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
-import static implementation.GeoSPARQLModel.CRS_REGISTRY_MAX_SIZE;
+import static implementation.GeoSPARQLSupport.CRS_REGISTRY_MAX_SIZE;
 
 /**
  *

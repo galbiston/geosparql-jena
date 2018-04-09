@@ -5,7 +5,7 @@
  */
 package implementation;
 
-import static implementation.GeoSPARQLModel.CRS_REGISTRY_MAX_SIZE;
+import static implementation.GeoSPARQLSupport.CRS_REGISTRY_MAX_SIZE;
 import implementation.support.UnitsOfMeasure;
 import org.apache.commons.collections4.map.LRUMap;
 import org.geotools.referencing.CRS;
