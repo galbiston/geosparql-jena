@@ -39,13 +39,13 @@ dependencies {
     compile group: 'org.jdom', name: 'jdom2', version: '2.0.6'
 
     //Apache Jena
-    ext.jenaVersion = "3.6.0"
+    ext.jenaVersion = "3.7.0"
     api "org.apache.jena:apache-jena-libs:$jenaVersion"
-    
+
     //Apache Commons Collections
     ext.commonsCollectionsVersion = "4.1"
     implementation "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
-    
+
     //Logging Framework
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
@@ -60,7 +60,7 @@ gradle.projectsEvaluated {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
 }
-    
+
 group = 'org.ntu'
 version = '0.9.6'
 
