@@ -62,7 +62,7 @@ gradle.projectsEvaluated {
 }
 
 group = 'org.ntu'
-version = '0.9.6'
+version = '1.0.0'
 
 /*
 //No longer applying the maven-publish and instead using includeBuild command in settings.gradle of dependent project.
