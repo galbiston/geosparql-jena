@@ -128,11 +128,13 @@ public class GeoSPARQLSupport {
      */
     public static void loadFunctions(File indexFolder) {
 
-        //Only load and setup storage once per filename.
-        if (!indexFolder.equals(indexStorageFolder)) {
-            loadIndexes(indexFolder);
-            storeIndexesAtShutdown(indexFolder);
-            indexStorageFolder = indexFolder;
+        if (indexFolder != null) {
+            //Only load and setup storage once per filename.
+            if (indexStorageFolder == null | !indexFolder.equals(indexStorageFolder)) {
+                loadIndexes(indexFolder);
+                storeIndexesAtShutdown(indexFolder);
+                indexStorageFolder = indexFolder;
+            }
         }
 
         //Only register functions once.
