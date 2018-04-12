@@ -116,7 +116,8 @@ public class CRSRegistry implements Serializable {
     public static final UnitsOfMeasure getUnits(String srsURI) {
 
         addCRS(srsURI);
-        return UNITS_REGISTRY.get(srsURI);
+        UnitsOfMeasure units = UNITS_REGISTRY.get(srsURI);
+        return units;
     }
 
     public static final void writeCRSRegistry(File crsRegistryFile) {
@@ -165,8 +166,8 @@ public class CRSRegistry implements Serializable {
 
     public static final void clearAll() {
         CRS_REGISTRY.clear();
-        addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
         UNITS_REGISTRY.clear();
+        addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
     }
 
 }
