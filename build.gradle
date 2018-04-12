@@ -47,49 +47,53 @@ dependencies {
     implementation "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
 
     //Logging Framework
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    ext.slf4jVersion = "1.7.25"
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
+    implementation "org.slf4j:log4j-over-slf4j:$slf4jVersion"
+
+    ext.logbackVersion = "1.2.3"
+    testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
 
     //JUnit Testing
     testImplementation group: 'junit', name: 'junit', version: '4.12'
-}
-
-
-gradle.projectsEvaluated {
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
-}
 
-group = 'org.ntu'
-version = '1.0.0'
 
-/*
-//No longer applying the maven-publish and instead using includeBuild command in settings.gradle of dependent project.
-//Remove if definitely not needed.
-apply plugin: 'maven-publish'
-publishing {
-publications {
-mavenJava(MavenPublication) {
-from components.java
-}
-}
-}
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+            }
+            }
 
-build.finalizedBy(publishToMavenLocal)
+            group = 'org.ntu'
+            version = '1.0.0'
+
+            /*
+            //No longer applying the maven-publish and instead using includeBuild command in settings.gradle of dependent project.
+                //Remove if definitely not needed.
+            apply plugin: 'maven-publish'
+            publishing {
+                publications {
+                    mavenJava(MavenPublication) {
+                        from components.java
+                        }
+                        }
+                        }
+
+                        build.finalizedBy(publishToMavenLocal)
  */
 //Change xlint:unchecked warnings to errors for more details.
-//Typically caused by ArrayList rather than ArrayList<Type>.
-//Can be suppressed by @SuppressWarning("unchecked") if use of generics is intended.
-/*
-tasks.withType(JavaCompile) {
-options.compilerArgs << "-Xlint:unchecked" << "-Werror"
-}
+                            //Typically caused by ArrayList rather than ArrayList<Type>.
+                        //Can be suppressed by @SuppressWarning("unchecked") if use of generics is intended.
+                        /*
+                        tasks.withType(JavaCompile) {
+                            options.compilerArgs << "-Xlint:unchecked" << "-Werror"
+                            }
  */
 
 //Change xlint:deprecation warnings to errors for more details.
-/*
-tasks.withType(JavaCompile) {
-options.compilerArgs << "-Xlint:deprecation" << "-Werror"
-}
- */
+                                /*
+                            tasks.withType(JavaCompile) {
+                                options.compilerArgs << "-Xlint:deprecation" << "-Werror"
+                                }
+                                */
