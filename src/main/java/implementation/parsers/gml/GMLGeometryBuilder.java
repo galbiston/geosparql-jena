@@ -98,7 +98,7 @@ public class GMLGeometryBuilder {
     private String getSRSName(Element gmlElement) {
         String srsNameURI = gmlElement.getAttributeValue("srsName");
         if (srsNameURI == null) {
-            srsNameURI = CRSRegistry.DEFAULT_WKT_CRS;
+            srsNameURI = CRSRegistry.DEFAULT_WKT_CRS84;
             if (!isSRSNameWarningIssued) {
                 LOGGER.warn("GML Literal with no srsName. Defaulting to CRS84 {} used as WKT default CRS. This warning will be issued once.", srsNameURI);
                 isSRSNameWarningIssued = true;

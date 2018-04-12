@@ -26,7 +26,7 @@ public class WKTTextSRS {
             wktText = wktLiteral.substring(endSRS + 1);
 
         } else {
-            srsURI = CRSRegistry.DEFAULT_WKT_CRS;
+            srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
             wktText = wktLiteral;
         }
     }

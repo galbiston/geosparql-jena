@@ -61,7 +61,7 @@ public class GeometryWrapperTest {
         GeometryWrapper sourceCRSGeometry = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //Only the CRS is important in the instance.
-        String targetSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
+        String targetSRSURI = CRSRegistry.DEFAULT_WKT_CRS84;
         GeometryWrapper instance = new GeometryWrapper(geometry, targetSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //Expecting the coordinates to be reveresed.
@@ -207,7 +207,7 @@ public class GeometryWrapperTest {
         GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 12.0));
-        String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
+        String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS84;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //CRS is in degrees.
@@ -230,7 +230,7 @@ public class GeometryWrapperTest {
         System.out.println("emptyWKT");
         CustomCoordinateSequence sequence = new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions());
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(sequence);
-        String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
+        String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS84;
         GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.EMPTY_WKT;
@@ -246,7 +246,7 @@ public class GeometryWrapperTest {
     public void testEmptyGeometryWrapper() throws Exception {
         System.out.println("emptyGeometryWrapper");
 
-        String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS;
+        String instanceSRSURI = CRSRegistry.DEFAULT_WKT_CRS84;
         GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.EMPTY_WKT;

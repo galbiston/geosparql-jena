@@ -58,9 +58,9 @@ public class WKTWriterTest {
         System.out.println("writePoint");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11.0 12.1 8.0 5.0"));
 
-        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> POINT ZM (11 12.1 8 5)";
+        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS84 + "> POINT ZM (11 12.1 8 5)";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -76,9 +76,9 @@ public class WKTWriterTest {
         System.out.println("writeLineString");
         Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11.0 12.1 8.0 5.0, 3 4 6 2"));
 
-        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> LINESTRING ZM (11 12.1 8 5, 3 4 6 2)";
+        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS84 + "> LINESTRING ZM (11 12.1 8 5, 3 4 6 2)";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -94,9 +94,9 @@ public class WKTWriterTest {
         System.out.println("writePolygon");
         Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
 
-        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1))";
+        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS84 + "> POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -114,9 +114,9 @@ public class WKTWriterTest {
         LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1"))};
         Geometry geometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
 
-        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1), (20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1))";
+        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS84 + "> POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1), (20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -132,9 +132,9 @@ public class WKTWriterTest {
         System.out.println("writeMultiPoint");
         Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "10 40 0 1, 40 30 0 1, 20 20 0 1, 30 10 0 1"));
 
-        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> MULTIPOINT ZM ((10 40 0 1), (40 30 0 1), (20 20 0 1), (30 10 0 1))";
+        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS84 + "> MULTIPOINT ZM ((10 40 0 1), (40 30 0 1), (20 20 0 1), (30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -154,9 +154,9 @@ public class WKTWriterTest {
         lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1"));
         Geometry geometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
 
-        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> MULTILINESTRING ZM ((10 10 0 1, 20 20 0 1, 10 40 0 1), (40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1))";
+        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS84 + "> MULTILINESTRING ZM ((10 10 0 1, 20 20 0 1, 10 40 0 1), (40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -178,9 +178,9 @@ public class WKTWriterTest {
         polygons[1] = GEOMETRY_FACTORY.createPolygon(shell, holes);
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
 
-        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> MULTIPOLYGON ZM (((40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1)), ((20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1), (30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1)))";
+        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS84 + "> MULTIPOLYGON ZM (((40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1)), ((20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1), (30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1)))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -200,9 +200,9 @@ public class WKTWriterTest {
         geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "4 6 0 1,7 10 0 1"));
         Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection(geometries);
 
-        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, CRSRegistry.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS + "> GEOMETRYCOLLECTION ZM (POINT ZM (4 6 0 1), LINESTRING ZM (4 6 0 1, 7 10 0 1))";
+        String expResult = "<" + CRSRegistry.DEFAULT_WKT_CRS84 + "> GEOMETRYCOLLECTION ZM (POINT ZM (4 6 0 1), LINESTRING ZM (4 6 0 1, 7 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);

@@ -83,7 +83,7 @@ public class CRSRegistryTest {
     public void testGetDefaultWKTCRS() {
         try {
             System.out.println("getDefaultWKTCRS");
-            String srsURI = CRSRegistry.DEFAULT_WKT_CRS;
+            String srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
 
             String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
                     + "  DATUM[\"WGS_1984\", \n"

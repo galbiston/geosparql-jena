@@ -36,7 +36,7 @@ public class CRSRegistry implements Serializable {
      * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
      * reversed.
      */
-    public static final String DEFAULT_WKT_CRS = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+    public static final String DEFAULT_WKT_CRS84 = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
     public static final String OSGB_CRS = "http://www.opengis.net/def/crs/EPSG/0/27700";
 
@@ -44,19 +44,19 @@ public class CRSRegistry implements Serializable {
 
     public static final String WGS84_CRS_GEOPSARQL_LEGACY = "http://www.opengis.net/def/crs/EPSG/4326";
 
-    static {
-        String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
-                + "  DATUM[\"WGS_1984\", \n"
-                + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
-                + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
-                + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
-                + "  UNIT[\"degree\", 0.017453292519943295], \n"
-                + "  AXIS[\"Geodetic longitude\", EAST], \n"
-                + "  AXIS[\"Geodetic latitude\", NORTH], \n"
-                + "  AUTHORITY[\"OGC\", 4326]]";
+    public static final String DEFAULT_WKT_CRS84_STRING = "GEOGCS[\"CRS 84\", \n"
+            + "  DATUM[\"WGS_1984\", \n"
+            + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
+            + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
+            + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
+            + "  UNIT[\"degree\", 0.017453292519943295], \n"
+            + "  AXIS[\"Geodetic longitude\", EAST], \n"
+            + "  AXIS[\"Geodetic latitude\", NORTH], \n"
+            + "  AUTHORITY[\"OGC\", 4326]]";
 
-        //TODO Replace with DefaultGeographicCRS.WGS84?? HAs axis in lon, lat. Returns 4326 on EPSG.
-        addCRS(DEFAULT_WKT_CRS, default_CRS_WKT);
+    static {
+        //TODO Replace with DefaultGeographicCRS.WGS84?? Has axis in lon, lat. Returns 4326 on EPSG.
+        addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
@@ -165,6 +165,7 @@ public class CRSRegistry implements Serializable {
 
     public static final void clearAll() {
         CRS_REGISTRY.clear();
+        addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
         UNITS_REGISTRY.clear();
     }
 

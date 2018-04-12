@@ -241,7 +241,7 @@ public class GeometryReverseTest {
         WKTReader reader = new WKTReader();
         try {
             LineString geometry = (LineString) reader.read("LINESTRING(0 0, 2 0, 5 0)");
-            CoordinateReferenceSystem crs = CRSRegistry.getCRS(CRSRegistry.DEFAULT_WKT_CRS);
+            CoordinateReferenceSystem crs = CRSRegistry.getCRS(CRSRegistry.DEFAULT_WKT_CRS84);
             Geometry expResult = reader.read("LINESTRING(0 0, 2 0, 5 0)");
             Geometry result = GeometryReverse.check(geometry, crs);
 

@@ -52,7 +52,7 @@ public class GeometryWrapper implements Serializable {
         this.serialisation = serialisation;
 
         if (srsURI.isEmpty()) {
-            srsURI = CRSRegistry.DEFAULT_WKT_CRS;
+            srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
         }
         this.srsURI = srsURI;
         this.crs = CRSRegistry.addCRS(srsURI);
