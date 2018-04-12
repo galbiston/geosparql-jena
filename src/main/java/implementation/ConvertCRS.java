@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
 public class ConvertCRS {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.THE_WKT_DATATYPE;
-    private static final GMLDatatype GML_DATATYPE = GMLDatatype.THE_GML_DATATYPE;
+    private static final String WKT_DATATYPE_URI = WKTDatatype.THE_WKT_DATATYPE.getURI();
+    private static final String GML_DATATYPE_URI = GMLDatatype.THE_GML_DATATYPE.getURI();
 
     /**
      * Converts all geometry literals (WKT or GML) from current CRS to the
@@ -83,9 +83,9 @@ public class ConvertCRS {
         Literal literal = statement.getLiteral();
 
         RDFDatatype datatype = literal.getDatatype();
-
+        String datatypeURI = datatype.getURI();
         //Check whether a supported geometry literal.
-        if (datatype.equals(WKT_DATATYPE) | datatype.equals(GML_DATATYPE)) {
+        if (datatypeURI.equals(WKT_DATATYPE_URI) | datatypeURI.equals(GML_DATATYPE_URI)) {
             GeometryWrapper originalGeom = GeometryWrapper.extract(literal);
             GeometryWrapper convertedGeom;
             try {
