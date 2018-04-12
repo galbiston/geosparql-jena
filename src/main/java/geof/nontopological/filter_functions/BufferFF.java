@@ -16,8 +16,8 @@ import org.apache.jena.sparql.function.FunctionBase3;
  * Return type ogc:geomLiteral ogc:geomLiteral can be a string value like
  * "<gml:Point ...>...</gml:Point>"
  *
- * 
- * 
+ *
+ *
  */
 public class BufferFF extends FunctionBase3 {
 
@@ -32,7 +32,8 @@ public class BufferFF extends FunctionBase3 {
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
 
             //Obtain the target distance units
-            GeometryWrapper buffer = geometry.buffer(radius, v3.asNode().getURI());
+            String unitsURI = v3.asNode().getURI();
+            GeometryWrapper buffer = geometry.buffer(radius, unitsURI);
 
             return buffer.asNode();
         } catch (DatatypeFormatException dfx) {
