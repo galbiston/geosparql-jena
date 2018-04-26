@@ -6,18 +6,21 @@
 package geo.topological.geometry_property.property_functions;
 
 import geo.topological.GenericGeometryPropertyFunction;
-import geof.topological.geometry_property.expression_functions.IsEmptyEF;
-import org.apache.jena.sparql.expr.Expr;
+import implementation.GeometryWrapper;
+import org.apache.jena.datatypes.xsd.impl.XSDBaseNumericType;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 
 /**
  *
- * 
+ *
  */
 public class IsEmptyPF extends GenericGeometryPropertyFunction {
 
     @Override
-    protected Expr propFunc(Expr expr) {
-        return new IsEmptyEF(expr);
+    protected Literal applyPredicate(GeometryWrapper geometryWrapper) {
+        Boolean isEmpty = geometryWrapper.isEmpty();
+        return ResourceFactory.createTypedLiteral(isEmpty.toString(), XSDBaseNumericType.XSDboolean);
     }
 
 }
