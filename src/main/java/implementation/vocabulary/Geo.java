@@ -19,17 +19,17 @@ import org.apache.jena.rdf.model.ResourceFactory;
  */
 public class Geo {
 
-    public static final Property HAS_SERIALIZATION_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasSerialization");
-    public static final Node HAS_SERIALIZATION_NODE = HAS_SERIALIZATION_PRO.asNode();
+    public static final Property HAS_SERIALIZATION_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasSerialization");
+    public static final Node HAS_SERIALIZATION_NODE = HAS_SERIALIZATION_PROP.asNode();
 
-    public static final Property AS_WKT_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "asWKT");
-    public static final Property AS_GML_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "asGML");
+    public static final Property AS_WKT_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "asWKT");
+    public static final Property AS_GML_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "asGML");
 
-    public static final Property HAS_DEFAULT_GEOMETRY_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasDefaultGeometry");
-    public static final Node HAS_DEFAULT_GEOMETRY_NODE = HAS_DEFAULT_GEOMETRY_PRO.asNode();
+    public static final Property HAS_DEFAULT_GEOMETRY_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasDefaultGeometry");
+    public static final Node HAS_DEFAULT_GEOMETRY_NODE = HAS_DEFAULT_GEOMETRY_PROP.asNode();
 
-    public static final Property HAS_GEOMETRY_PRO = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasGeometry");
-    public static final Node HAS_GEOMETRY_NODE = HAS_GEOMETRY_PRO.asNode();
+    public static final Property HAS_GEOMETRY_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasGeometry");
+    public static final Node HAS_GEOMETRY_NODE = HAS_GEOMETRY_PROP.asNode();
 
     public static final Resource GEOMETRY_RES = ResourceFactory.createResource(Prefixes.GEO_URI + "Geometry");
     public static final Node GEOMETRY_NODE = GEOMETRY_RES.asNode();
