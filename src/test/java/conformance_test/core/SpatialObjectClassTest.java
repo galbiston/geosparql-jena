@@ -6,7 +6,6 @@
 package conformance_test.core;
 
 import static conformance_test.ConformanceTestSuite.*;
-
 import implementation.support.Prefixes;
 import java.util.ArrayList;
 import org.apache.jena.query.ParameterizedSparqlString;
@@ -19,10 +18,10 @@ import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Resource;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -73,14 +72,8 @@ public class SpatialObjectClassTest {
     @Test
     public void positiveTest() {
 
+        System.out.println("spatialObjectClass");
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#E");
-        expResult.add("http://example.org/ApplicationSchema#D");
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#B");
-        expResult.add("http://example.org/ApplicationSchema#A");
         expResult.add("http://example.org/ApplicationSchema#GExactGeom");
         expResult.add("http://example.org/ApplicationSchema#FExactGeom");
         expResult.add("http://example.org/ApplicationSchema#EExactGeom");
@@ -88,6 +81,13 @@ public class SpatialObjectClassTest {
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
         expResult.add("http://example.org/ApplicationSchema#BExactGeom");
         expResult.add("http://example.org/ApplicationSchema#AExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#G");
+        expResult.add("http://example.org/ApplicationSchema#F");
+        expResult.add("http://example.org/ApplicationSchema#E");
+        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/ApplicationSchema#B");
+        expResult.add("http://example.org/ApplicationSchema#A");
 
         String queryString = "SELECT ?feature WHERE{"
                 + " ?feature rdf:type geo:SpatialObject ."
@@ -106,6 +106,9 @@ public class SpatialObjectClassTest {
                 result.add(resource.toString());
             }
         }
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 }

@@ -14,7 +14,6 @@ import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequence;
-import implementation.parsers.gml.GMLWriter;
 import implementation.support.GeoSerialisationEnum;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -91,8 +90,8 @@ public class GMLWriterTest {
         String result = GMLWriter.write(geometryWrapper);
         String expResult = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">30 10 40 40 20 40 10 20 30 10</gml:posList></gml:exterior></gml:Polygon>";
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult.trim(), result.trim());
     }
 
@@ -138,8 +137,8 @@ public class GMLWriterTest {
         String result = GMLWriter.write(geometryWrapper);
         String expResult = "<gml:MultiLineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:LineStringMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList srsDimension=\"2\">10 10 20 20 10 40</gml:posList></gml:LineString></gml:LineStringMember><gml:LineStringMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList srsDimension=\"2\">40 40 30 30 40 20 30 10</gml:posList></gml:LineString></gml:LineStringMember></gml:MultiLineString>";
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult.trim(), result.trim());
     }
 
