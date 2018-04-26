@@ -59,7 +59,7 @@ public class ConformanceTestSuite {
      */
     public static InfModel initWktModel() {
         InputStream inputStream = getInputStream(SAMPLE_WKT);
-        return GeoSPARQLSupport.prepare(inputStream);
+        return GeoSPARQLSupport.prepareRDFS(inputStream);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ConformanceTestSuite {
      */
     public static InfModel initWktEmptyModel() {
         InputStream inputStream = getInputStream(SAMPLE_WKT_EMPTY);
-        return GeoSPARQLSupport.prepare(inputStream);
+        return GeoSPARQLSupport.prepareRDFS(inputStream);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ConformanceTestSuite {
      */
     public static InfModel initGmlModel() {
         InputStream inputStream = getInputStream(SAMPLE_GML);
-        return GeoSPARQLSupport.prepare(inputStream);
+        return GeoSPARQLSupport.prepareRDFS(inputStream);
     }
 
     /**
@@ -92,7 +92,7 @@ public class ConformanceTestSuite {
      */
     public static InfModel initGmlEmptyModel() {
         InputStream inputStream = getInputStream(SAMPLE_GML_EMPTY);
-        return GeoSPARQLSupport.prepare(inputStream);
+        return GeoSPARQLSupport.prepareRDFS(inputStream);
     }
 
     private static InputStream getInputStream(String filepath) {

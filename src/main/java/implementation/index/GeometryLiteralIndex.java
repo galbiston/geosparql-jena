@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class GeometryLiteralIndex {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(GeoSPARQLSupport.GEOMETRY_LITERAL_INDEX_MAX_SIZE);
+    private static LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(GeoSPARQLSupport.GEOMETRY_LITERAL_INDEX_MAX_SIZE);
 
     public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader) {
         GeometryWrapper geometryWrapper;
@@ -63,9 +63,23 @@ public class GeometryLiteralIndex {
         LOGGER.info("Reading Geometry Literal Index - {}: Completed", geometryLiteralIndexFile);
     }
 
+    /**
+     * Empty the Geometry Literal Index.
+     */
     public static final void clearAll() {
         GEOMETRY_LITERAL_INDEX.clear();
+    }
+
+    /**
+     * Changes the max size of the Geometry Literal Index.
+     * <br> The index will be empty after this process.
+     *
+     * @param maxSize
+     */
+    public static final void setIndexMaxSize(Integer maxSize) {
+        LRUMap<String, GeometryWrapper> newGeometryIndex = new LRUMap<>(maxSize);
         GEOMETRY_LITERAL_INDEX.clear();
+        GEOMETRY_LITERAL_INDEX = newGeometryIndex;
     }
 
 }

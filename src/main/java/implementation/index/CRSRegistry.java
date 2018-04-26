@@ -30,8 +30,8 @@ public class CRSRegistry implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.CRS_REGISTRY_MAX_SIZE);
-    private static final LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.UNITS_REGISTRY_MAX_SIZE);
+    private static LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.CRS_REGISTRY_MAX_SIZE);
+    private static LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.UNITS_REGISTRY_MAX_SIZE);
 
     /**
      * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
@@ -57,7 +57,7 @@ public class CRSRegistry implements Serializable {
 
     static {
         //TODO Replace with DefaultGeographicCRS.WGS84?? Has axis in lon, lat. Returns 4326 on EPSG.
-        addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
+        addDefaultWKT_CRS84();
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
@@ -165,10 +165,42 @@ public class CRSRegistry implements Serializable {
         LOGGER.info("Reading Units Registry - {}: Completed", unitsRegistryFile);
     }
 
+    private static final void addDefaultWKT_CRS84() {
+        addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
+    }
+
     public static final void clearAll() {
         CRS_REGISTRY.clear();
         UNITS_REGISTRY.clear();
-        addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
+        addDefaultWKT_CRS84();
+    }
+
+    /**
+     * Changes the max size of the CRS Registry.
+     * <br> The registry will be empty after this process.
+     *
+     * @param maxSize
+     */
+    public static final void setCRSRegistryMaxSize(Integer maxSize) {
+
+        LRUMap<String, CoordinateReferenceSystem> newCRSRegistry = new LRUMap<>(maxSize);
+        CRS_REGISTRY.clear();
+        CRS_REGISTRY = newCRSRegistry;
+        addDefaultWKT_CRS84();
+    }
+
+    /**
+     * Changes the max size of the Units of Measure Registry.
+     * <br> The registry will be empty after this process.
+     *
+     * @param maxSize
+     */
+    public static final void setUnitsRegistryMaxSize(Integer maxSize) {
+
+        LRUMap<String, UnitsOfMeasure> newUnitsRegistry = new LRUMap<>(maxSize);
+        UNITS_REGISTRY.clear();
+        UNITS_REGISTRY = newUnitsRegistry;
+        addDefaultWKT_CRS84();
     }
 
 }

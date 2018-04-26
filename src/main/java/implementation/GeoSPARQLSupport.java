@@ -17,9 +17,12 @@ import implementation.function_registry.SimpleFeatures;
 import implementation.index.CRSRegistry;
 import implementation.index.GeometryLiteralIndex;
 import implementation.index.GeometryTransformIndex;
+import implementation.index.IndexOption;
+import implementation.index.MathTransformRegistry;
 import implementation.vocabulary.Geo;
 import java.io.File;
 import java.io.InputStream;
+import org.apache.commons.io.FileUtils;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
@@ -57,87 +60,172 @@ public class GeoSPARQLSupport {
     private static Boolean isFunctionsRegistered = false;
     private static File indexStorageFolder = null;
     private static Thread shutdownStorageThread = null;
+    private static IndexOption indexOptionEnum = IndexOption.MEMORY;
 
     /**
-     * Prepare an empty model for GeoSPARQL.
+     * Prepare an empty GeoSPARQL model with RDFS reasoning.
+     * <br> In-memory indexing with no storing of indexes applied by default.
+     * This can be changed by calling loadFunctions methods.
      *
      * @return
      */
     public static InfModel prepare() {
-        return GeoSPARQLSupport.prepare(ModelFactory.createDefaultModel());
+        return GeoSPARQLSupport.prepareRDFS(ModelFactory.createDefaultModel());
     }
 
     /**
-     * Prepare a model for GeoSPARQL usage from existing model.
+     * Prepare a GeoSPARQL model from an existing model with RDFS reasoning.
+     * <br> In-memory indexing with no storing of indexes applied by default.
+     * This can be changed by calling loadFunctions methods.
      *
      * @param model
      * @return
      */
-    public static InfModel prepare(Model model) {
+    public static InfModel prepareRDFS(Model model) {
+        return prepare(model, ReasonerRegistry.getRDFSReasoner());
+    }
+
+    /**
+     * Prepare a GeoSPARQL model from an existing model with alternative
+     * Reasoner, e.g. OWL.
+     * <br> In-memory indexing with no storing of indexes applied by default.
+     * This can be changed by calling loadFunctions methods.
+     *
+     * @param model
+     * @param reasoner
+     * @return
+     */
+    public static InfModel prepare(Model model, Reasoner reasoner) {
+        InputStream geosparqlSchemaInputStream = GeoSPARQLSupport.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA);
+        return prepare(model, geosparqlSchemaInputStream, reasoner);
+    }
+
+    /**
+     * Prepare a GeoSPARQL model from file with RDFS reasoning.
+     * <br> In-memory indexing with no storing of indexes applied by default.
+     * This can be changed by calling loadFunctions methods.
+     *
+     * @param inputStream
+     * @return
+     */
+    public static InfModel prepareRDFS(InputStream inputStream) {
+        return GeoSPARQLSupport.prepare(inputStream, ReasonerRegistry.getRDFSReasoner());
+    }
+
+    /**
+     * Prepare a GeoSPARQL model from file with alternative Reasoner, e.g. OWL.
+     * <br> In-memory indexing with no storing of indexes applied by default.
+     * This can be changed by calling loadFunctions methods.
+     *
+     * @param inputStream
+     * @param reasoner
+     * @return
+     */
+    public static InfModel prepare(InputStream inputStream, Reasoner reasoner) {
+        Model model = ModelFactory.createDefaultModel();
+        model.read(inputStream, null);
+
+        return GeoSPARQLSupport.prepare(model, reasoner);
+    }
+
+    /**
+     * Prepare a model from an existing model with alternative GeoSPARQL schema
+     * and Reasoner, e.g. OWL.
+     * <br> In-memory indexing with no storing of indexes applied by default.
+     * This can be changed by calling loadFunctions methods.
+     *
+     * @param model
+     * @param geosparqlSchemaInputStream
+     * @param reasoner
+     * @return
+     */
+    public static InfModel prepare(Model model, InputStream geosparqlSchemaInputStream, Reasoner reasoner) {
 
         //Register GeoSPARQL functions if required.
-        loadFunctions();
+        loadFunctionsMemoryIndex();
 
-
-        /*
-         * The use of OWL reasoner can bind schema with existing test data.
-         */
-        InputStream inputStream = GeoSPARQLSupport.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA);
+        //Load GeoSPARQL Schema
         Model schema = ModelFactory.createDefaultModel();
-        schema.read(inputStream, null);
+        schema.read(geosparqlSchemaInputStream, null);
 
-        Reasoner reasoner = ReasonerRegistry.getOWLReasoner();
+        //Apply the schema to the reasoner.
         reasoner = reasoner.bindSchema(schema);
 
-        /*
-         * Setup inference model.
-         */
+        //Setup inference model.
         InfModel infModel = ModelFactory.createInfModel(reasoner, model);
         return infModel;
     }
 
     /**
-     * Prepare a model for GeoSPARQL usage from file.
-     *
-     * @param inputStream
-     * @return
+     * Initialise all GeoSPARQL property and filter functions with memory
+     * indexing.
+     * <br>Use this for in-memory indexing GeoSPARQL setup.
      */
-    public static InfModel prepare(InputStream inputStream) {
-
-        /**
-         * Load data
-         */
-        Model model = ModelFactory.createDefaultModel();
-        model.read(inputStream, null);
-
-        return GeoSPARQLSupport.prepare(model);
-
+    public static void loadFunctionsMemoryIndex() {
+        loadFunctions(IndexOption.MEMORY, null);
     }
 
     /**
-     * Initialise all GeoSPARQL property and filter functions.
-     * <br>Use this for in memory GeoSPARQL setup.
+     * Initialise all GeoSPARQL property and filter functions with memory
+     * indexing.
+     * <br>Use this for in-memory indexing GeoSPARQL setup but override the
+     * default maximum sizes of indexes and registries.
+     * <br>Any existing in-memory indexes and registries will be emptied.
+     *
+     * @param geometryLiteralIndexMaxSize - default max size: 100,000
+     * @param geometryTransformIndexMaxSize - default max size: 100,000
+     * @param registryMaxSize - default max size: 20
      */
-    public static void loadFunctions() {
-        loadFunctions(null);
+    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer registryMaxSize) {
+        loadFunctions(IndexOption.MEMORY, null);
+        GeometryLiteralIndex.setIndexMaxSize(geometryLiteralIndexMaxSize);
+        GeometryTransformIndex.setIndexMaxSize(geometryTransformIndexMaxSize);
+        CRSRegistry.setCRSRegistryMaxSize(registryMaxSize);
+        CRSRegistry.setUnitsRegistryMaxSize(registryMaxSize);
+        MathTransformRegistry.setRegistryMaxSize(registryMaxSize);
+    }
+
+    /**
+     * Initialise all GeoSPARQL property and filter functions with TDB indexing.
+     * <br>Use this for TDB indexing GeoSPARQL setup.
+     */
+    public static void loadFunctionsTDBIndex() {
+        loadFunctions(IndexOption.TDB, null);
+    }
+
+    /**
+     * Initialise all GeoSPARQL property and filter functions with no indexing.
+     * <br>Use this for no indexing GeoSPARQL setup.
+     * <br>Warning: Any previously setup index folders will be deleted.
+     */
+    public static void loadFunctionsNoIndex() {
+        loadFunctions(IndexOption.NONE, null);
     }
 
     /**
      * Initialise all GeoSPARQL property and filter functions. Store any indexes
      * in the specified folder.
-     * <br>Use this for persisting indexes such as a TDB setup.
+     * <br>Use this for persisting indexes such as a TDB setup or storing memory
+     * indexes to file at shutdown.
+     * <br>Warning: When set to NONE, any previously setup index folders will be
+     * deleted.
      *
+     * @param indexOption
      * @param indexFolder
      */
-    public static void loadFunctions(File indexFolder) {
+    public static void loadFunctions(IndexOption indexOption, File indexFolder) {
 
-        if (indexFolder != null) {
-            //Only load and setup storage once per filename.
-            if (indexStorageFolder == null | !indexFolder.equals(indexStorageFolder)) {
-                loadIndexes(indexFolder);
-                storeIndexesAtShutdown(indexFolder);
-                indexStorageFolder = indexFolder;
-            }
+        indexOptionEnum = indexOption;
+
+        switch (indexOptionEnum) {
+            case MEMORY:
+                setupMemoryIndex(indexFolder);
+                break;
+            case TDB:
+                setupTDBIndex(indexFolder);
+                break;
+            default:
+                setupNoIndex();
         }
 
         //Only register functions once.
@@ -160,7 +248,30 @@ public class GeoSPARQLSupport {
         }
     }
 
-    private static void loadIndexes(File indexFolder) {
+    private static void setupMemoryIndex(File indexFolder) {
+        if (indexFolder != null) {
+            //Only load and setup storage once per filename.
+            if (indexStorageFolder == null | !indexFolder.equals(indexStorageFolder)) {
+                loadMemoryIndexes(indexFolder);
+                storeMemoryIndexesAtShutdown(indexFolder);
+                indexStorageFolder = indexFolder;
+            }
+        }
+    }
+
+    private static void setupTDBIndex(File indexFolder) {
+
+    }
+
+    private static void setupNoIndex() {
+        removeStorageThread();
+        if (indexStorageFolder != null) {
+            FileUtils.deleteQuietly(indexStorageFolder);
+            indexStorageFolder = null;
+        }
+    }
+
+    private static void loadMemoryIndexes(File indexFolder) {
 
         //CRS Registry
         File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
@@ -177,7 +288,7 @@ public class GeoSPARQLSupport {
         //Math Transform Registry
         File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
         if (mathTransformRegistryFile.exists()) {
-            GeometryTransformIndex.readMathTransformRegistry(mathTransformRegistryFile);
+            MathTransformRegistry.readMathTransformRegistry(mathTransformRegistryFile);
         }
 
         //Geometry Transform Index
@@ -193,7 +304,7 @@ public class GeoSPARQLSupport {
         }
     }
 
-    private static void storeIndexesAtShutdown(File indexFolder) {
+    private static void storeMemoryIndexesAtShutdown(File indexFolder) {
 
         Thread thread = new Thread() {
             @Override
@@ -209,7 +320,7 @@ public class GeoSPARQLSupport {
 
                 //Math Transform Registry
                 File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
-                GeometryTransformIndex.writeMathTransformRegistry(mathTransformRegistryFile);
+                MathTransformRegistry.writeMathTransformRegistry(mathTransformRegistryFile);
 
                 //Geometry Transform Index
                 File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
@@ -223,18 +334,27 @@ public class GeoSPARQLSupport {
         Runtime.getRuntime().addShutdownHook(thread);
 
         //Remove any previous shutdown storage thread.
-        if (shutdownStorageThread != null) {
-            Runtime.getRuntime().removeShutdownHook(shutdownStorageThread);
-        }
+        removeStorageThread();
 
         //Retain the thread in case called again.
         shutdownStorageThread = thread;
+    }
+
+    private static void removeStorageThread() {
+        if (shutdownStorageThread != null) {
+            Runtime.getRuntime().removeShutdownHook(shutdownStorageThread);
+        }
     }
 
     public static final void clearAllIndexesAndRegistries() {
         CRSRegistry.clearAll();
         GeometryLiteralIndex.clearAll();
         GeometryTransformIndex.clearAll();
+        MathTransformRegistry.clearAll();
+    }
+
+    public static final IndexOption getIndexOption() {
+        return indexOptionEnum;
     }
 
 }
