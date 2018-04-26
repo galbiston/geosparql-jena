@@ -65,7 +65,8 @@ public class GetDimensionTest {
      */
     @Ignore
     @Test
-    public void testGet() {
+    public void testGetDimension() {
+        System.out.println("Get Dimension");
         String Q1 = "SELECT ?dimension ?empty ?simple ?cd WHERE{"
                 + " ex:B ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:dimension ?dimension ."

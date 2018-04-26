@@ -65,8 +65,8 @@ public class SfContainsPFTest {
      */
     @Ignore
     @Test
-    public void testExpressionFunction() {
-
+    public void testSfContatinsPropertyFunction() {
+        System.out.println("SfContains Property Function");
         String queryString = "SELECT ?place WHERE{"
                 + " ?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:sfContains ex:M ."

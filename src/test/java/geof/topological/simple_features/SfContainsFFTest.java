@@ -6,7 +6,6 @@
 package geof.topological.simple_features;
 
 import static conformance_test.ConformanceTestSuite.initWktModel;
-
 import implementation.support.Prefixes;
 import org.apache.jena.query.ParameterizedSparqlString;
 import org.apache.jena.query.QueryExecution;
@@ -28,7 +27,7 @@ import org.junit.Test;
  *
  *
  */
-public class SfContainsEFTest {
+public class SfContainsFFTest {
 
     /**
      * Default WKT model - with no inference support.
@@ -41,7 +40,7 @@ public class SfContainsEFTest {
      */
     public static InfModel infModel;
 
-    public SfContainsEFTest() {
+    public SfContainsFFTest() {
     }
 
     @BeforeClass
@@ -65,8 +64,8 @@ public class SfContainsEFTest {
 
     @Test
     @Ignore
-    public void testFunction() {
-
+    public void testSfContainFilterFunction() {
+        System.out.println("SfContains Filter Function");
         String Q1 = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."

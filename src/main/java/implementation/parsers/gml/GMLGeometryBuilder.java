@@ -6,10 +6,10 @@
 package implementation.parsers.gml;
 
 import com.vividsolutions.jts.geom.*;
-import implementation.index.CRSRegistry;
 import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.datatype.ParseException;
+import implementation.index.CRSRegistry;
 import implementation.jts.CustomCoordinateSequence;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -137,7 +137,7 @@ public class GMLGeometryBuilder {
     }
 
     private Geometry buildGeometry(String shape, Element gmlElement) throws ParseException {
-        System.out.println(shape + " - " + gmlElement);
+
         Geometry geo;
         switch (shape) {
             case "Point":

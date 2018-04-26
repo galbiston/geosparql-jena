@@ -140,7 +140,7 @@ public class ConformanceTestSuite {
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString);
         query.setNsPrefixes(Prefixes.get());
 
-        LOGGER.info("{}", query.toString());
+        //LOGGER.info("{}", query.toString());
         try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), queryModel)) {
             return qexec.execAsk();
         } catch (RuntimeException ex) {
