@@ -6,6 +6,7 @@
 package geof.nontopological.filter_functions;
 
 import implementation.GeometryWrapper;
+import java.lang.invoke.MethodHandles;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -17,12 +18,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class DistanceFF extends FunctionBase3 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DistanceFF.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
@@ -35,6 +36,7 @@ public class DistanceFF extends FunctionBase3 {
 
             return NodeValue.makeDouble(distance);
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
+            LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, dfx.getMessage());
             return NodeValue.nvZERO;
         }
 
