@@ -6,19 +6,21 @@
 package geo.topological.simplefeatures.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.simplefeatures.expression_functions.SfDisjointEF;
+import geo.topological.GenericExpressionFunction;
+import geof.topological.simplefeatures.filter_functions.SfDisjointFF;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class SfDisjointPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new SfDisjointEF(expr1, expr2);
+        return new GenericExpressionFunction(expr1, expr2, Geof.SF_DISJOINT, new SfDisjointFF());
     }
 
 }

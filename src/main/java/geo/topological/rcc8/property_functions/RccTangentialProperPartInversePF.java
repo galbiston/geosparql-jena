@@ -6,19 +6,21 @@
 package geo.topological.rcc8.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.rcc8.expression_functions.RccNonTangentialProperPartEF;
+import geo.topological.GenericExpressionFunction;
+import geof.topological.rcc8.filter_functions.RccTangentialProperPartInverseFF;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
-public class RccNonTangentalProperPartPF extends GenericPropertyFunction {
+public class RccTangentialProperPartInversePF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new RccNonTangentialProperPartEF(expr1, expr2);
+        return new GenericExpressionFunction(expr1, expr2, Geof.RCC_TANGENTIAL_PROPER_PART_INVERSE, new RccTangentialProperPartInverseFF());
     }
 
 }

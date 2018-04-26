@@ -5,12 +5,12 @@
  */
 package implementation.function_registry;
 
-import geo.topological.rcc8.property_functions.RccTangentalProperPartInversePF;
-import geo.topological.rcc8.property_functions.RccNonTangentalProperPartInversePF;
-import geo.topological.rcc8.property_functions.RccTangentalProperPartPF;
+import geo.topological.rcc8.property_functions.RccTangentialProperPartInversePF;
+import geo.topological.rcc8.property_functions.RccNonTangentialProperPartInversePF;
+import geo.topological.rcc8.property_functions.RccTangentialProperPartPF;
 import geo.topological.rcc8.property_functions.RccDisconnectedPF;
 import geo.topological.rcc8.property_functions.RccPartiallyOverlappingPF;
-import geo.topological.rcc8.property_functions.RccNonTangentalProperPartPF;
+import geo.topological.rcc8.property_functions.RccNonTangentialProperPartPF;
 import geo.topological.rcc8.property_functions.RccExternallyConnectedPF;
 import geo.topological.rcc8.property_functions.RccEqualsPF;
 import geof.topological.rcc8.filter_functions.RccExternallyConnectedFF;
@@ -45,11 +45,11 @@ public class RCC8 {
         registry.put(Geo.RCC_DISCONNECTED_NAME, RccDisconnectedPF.class);
         registry.put(Geo.RCC_EQUALS_NAME, RccEqualsPF.class);
         registry.put(Geo.RCC_EXTERNALLY_CONNECTED_NAME, RccExternallyConnectedPF.class);
-        registry.put(Geo.RCC_NTANPROPERPARTINVERSE_NAME, RccNonTangentalProperPartInversePF.class);
-        registry.put(Geo.RCC_NTANPROPERPART_NAME, RccNonTangentalProperPartPF.class);
+        registry.put(Geo.RCC_NTANPROPERPARTINVERSE_NAME, RccNonTangentialProperPartInversePF.class);
+        registry.put(Geo.RCC_NTANPROPERPART_NAME, RccNonTangentialProperPartPF.class);
         registry.put(Geo.RCC_PARTIALLY_OVERLAPPING_NAME, RccPartiallyOverlappingPF.class);
-        registry.put(Geo.RCC_TANPROPERPARTINVERSE_NAME, RccTangentalProperPartInversePF.class);
-        registry.put(Geo.RCC_TANPROPERPART_NAME, RccTangentalProperPartPF.class);
+        registry.put(Geo.RCC_TANPROPERPARTINVERSE_NAME, RccTangentialProperPartInversePF.class);
+        registry.put(Geo.RCC_TANPROPERPART_NAME, RccTangentialProperPartPF.class);
     }
 
     /**

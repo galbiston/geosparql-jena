@@ -6,18 +6,20 @@
 package geo.topological.egenhofer.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.egenhofer.expression_functions.EhContainsEF;
+import geo.topological.GenericExpressionFunction;
+import geof.topological.egenhofer.filter_functions.EhContainsFF;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class EhContainsPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new EhContainsEF(expr1, expr2);
+        return new GenericExpressionFunction(expr1, expr2, Geof.EH_CONTAINS, new EhContainsFF());
     }
 }

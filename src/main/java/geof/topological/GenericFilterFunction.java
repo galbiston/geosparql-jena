@@ -33,7 +33,7 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
             return NodeValue.makeBoolean(result);
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Expression Function Exception: {}", ex.getMessage());
+            LOGGER.error("Filter Function Exception: {}", ex.getMessage());
             return NodeValue.FALSE;
         }
     }

@@ -6,19 +6,21 @@
 package geo.topological.simplefeatures.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.simplefeatures.expression_functions.SfWithinEF;
+import geo.topological.GenericExpressionFunction;
+import geof.topological.simplefeatures.filter_functions.SfWithinFF;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class SfWithinPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new SfWithinEF(expr1, expr2);
+        return new GenericExpressionFunction(expr1, expr2, Geof.SF_WITHIN, new SfWithinFF());
     }
 
 }

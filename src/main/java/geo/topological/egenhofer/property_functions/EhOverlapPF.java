@@ -6,18 +6,20 @@
 package geo.topological.egenhofer.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.egenhofer.expression_functions.EhOverlapEF;
+import geo.topological.GenericExpressionFunction;
+import geof.topological.egenhofer.filter_functions.EhOverlapFF;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class EhOverlapPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new EhOverlapEF(expr1, expr2);
+        return new GenericExpressionFunction(expr1, expr2, Geof.EH_OVERLAP, new EhOverlapFF());
     }
 }

@@ -6,19 +6,21 @@
 package geo.topological.rcc8.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.rcc8.expression_functions.RccEqualsEF;
+import geo.topological.GenericExpressionFunction;
+import geof.topological.rcc8.filter_functions.RccEqualsFF;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class RccEqualsPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new RccEqualsEF(expr1, expr2);
+        return new GenericExpressionFunction(expr1, expr2, Geof.RCC_EQUALS, new RccEqualsFF());
     }
 
 }

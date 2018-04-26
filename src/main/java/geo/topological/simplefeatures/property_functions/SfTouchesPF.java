@@ -6,21 +6,23 @@
 package geo.topological.simplefeatures.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.simplefeatures.expression_functions.SfTouchesEF;
+import geo.topological.GenericExpressionFunction;
+import geof.topological.simplefeatures.filter_functions.SfTouchesFF;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * 
- * <<<<<<< HEAD
- * @a
+ *
+ * <<<<<<< HEAD @a
+ *
  * uthor Gregory Albiston
  */
 public class SfTouchesPF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new SfTouchesEF(expr1, expr2);
+        return new GenericExpressionFunction(expr1, expr2, Geof.SF_TOUCHES, new SfTouchesFF());
     }
 
 }

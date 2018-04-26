@@ -6,19 +6,21 @@
 package geo.topological.egenhofer.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geof.topological.egenhofer.expression_functions.EhInsideEF;
+import geo.topological.GenericExpressionFunction;
+import geof.topological.egenhofer.filter_functions.EhInsideFF;
+import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class EhInsidePF extends GenericPropertyFunction {
 
     @Override
     protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new EhInsideEF(expr1, expr2);
+        return new GenericExpressionFunction(expr1, expr2, Geof.EH_INSIDE, new EhInsideFF());
     }
 
 }
