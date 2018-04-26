@@ -5,9 +5,6 @@
  */
 package implementation;
 
-import implementation.index.GeometryLiteralIndex;
-import implementation.index.CRSRegistry;
-import implementation.index.GeometryTransformIndex;
 import geof.topological.RelateFF;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
@@ -17,6 +14,9 @@ import implementation.function_registry.NonTopological;
 import implementation.function_registry.RCC8;
 import implementation.function_registry.Relate;
 import implementation.function_registry.SimpleFeatures;
+import implementation.index.CRSRegistry;
+import implementation.index.GeometryLiteralIndex;
+import implementation.index.GeometryTransformIndex;
 import implementation.vocabulary.Geo;
 import java.io.File;
 import java.io.InputStream;
@@ -41,8 +41,8 @@ public class GeoSPARQLSupport {
     public static final Integer CRS_REGISTRY_MAX_SIZE = 20;
     public static final Integer UNITS_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
     public static final Integer MATH_TRANSFORM_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
-    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 50000;
-    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 50000;
+    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 100000;
+    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 100000;
 
     public static final String CRS_REGISTRY_FILENAME = "geosparql-CRS.registry";
     public static final String UNITS_REGISTRY_FILENAME = "geosparql-Units.registry";
