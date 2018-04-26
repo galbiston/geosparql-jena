@@ -6,8 +6,6 @@
 package conformance_test.topology_vocabulary_extension.simplefeatures_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
@@ -19,7 +17,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
  *
@@ -44,7 +42,7 @@ public class SfContainsTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -75,6 +73,8 @@ public class SfContainsTest {
         expResult.add("http://example.org/ApplicationSchema#A");
 
         ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfContains", ""), infModel);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 

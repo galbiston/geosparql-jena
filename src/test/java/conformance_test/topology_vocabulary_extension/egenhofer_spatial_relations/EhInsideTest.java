@@ -6,7 +6,6 @@
 package conformance_test.topology_vocabulary_extension.egenhofer_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
 
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.2.1 /conf/topology-vocab-extension/eh-spatial-relations
  *
@@ -44,7 +43,7 @@ public class EhInsideTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -72,8 +71,8 @@ public class EhInsideTest {
          * it.
          */
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
         expResult.add("http://example.org/ApplicationSchema#A");
+        expResult.add("http://example.org/ApplicationSchema#G");
 
         ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehInside", ""), infModel);
         assertEquals(expResult, result);

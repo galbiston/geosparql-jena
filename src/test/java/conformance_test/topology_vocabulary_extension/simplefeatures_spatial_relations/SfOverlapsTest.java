@@ -6,7 +6,6 @@
 package conformance_test.topology_vocabulary_extension.simplefeatures_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
 
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
  *
@@ -44,7 +43,7 @@ public class SfOverlapsTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

@@ -200,7 +200,7 @@ public class ConformanceTestSuite {
                 + "?place ex:hasExactGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER " + functionName + "(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> " + geometry + "\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
+                + "}ORDER BY ?place";
         return query;
     }
 
@@ -218,14 +218,14 @@ public class ConformanceTestSuite {
                 + instance + " ex:hasExactGeometry ?bGeom ."
                 + " ?aGeom " + functionName + " ?bGeom ."
                 + filter
-                + "}";
+                + "}ORDER BY ?place";
         return query;
     }
 
     public static String featureFeatureQuery(String instance, String functionName) {
         String query = "SELECT ?place WHERE{"
                 + "?place " + functionName + " " + instance + " . "
-                + "}";
+                + "}ORDER BY ?place";
         return query;
     }
 
@@ -233,7 +233,7 @@ public class ConformanceTestSuite {
         String query = "SELECT ?place WHERE{"
                 + "?place ex:hasExactGeometry ?aGeom . "
                 + "?aGeom " + functionName + " " + instance + " . "
-                + "}";
+                + "}ORDER BY ?place";
         return query;
     }
 
@@ -241,7 +241,7 @@ public class ConformanceTestSuite {
         String query = "SELECT ?place WHERE{"
                 + instance + " ex:hasExactGeometry ?bGeom . "
                 + "?place " + functionName + " ?bGeom . "
-                + "}";
+                + "}ORDER BY ?place";
         return query;
     }
 }

@@ -6,7 +6,6 @@
 package conformance_test.topology_vocabulary_extension.rcc8_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
 
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.3.1 /conf/topology-vocab-extension/rcc8-spatial-relations
  *
@@ -44,7 +43,7 @@ public class Rcc8tppTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

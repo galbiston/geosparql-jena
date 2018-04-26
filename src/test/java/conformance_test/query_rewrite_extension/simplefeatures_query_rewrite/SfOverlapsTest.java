@@ -6,20 +6,18 @@
 package conformance_test.query_rewrite_extension.simplefeatures_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.6.1.1 /conf/query-rewrite-extension/sf-query-rewrite
  *
@@ -48,7 +46,7 @@ public class SfOverlapsTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -75,6 +73,8 @@ public class SfOverlapsTest {
         expResult.add("http://example.org/ApplicationSchema#FExactGeom");
 
         ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:sfOverlaps"), infModel);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
 
     }
@@ -87,6 +87,8 @@ public class SfOverlapsTest {
         expResult.add("http://example.org/ApplicationSchema#FExactGeom");
 
         ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:sfOverlaps"), infModel);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
 
     }
@@ -98,6 +100,8 @@ public class SfOverlapsTest {
         expResult.add("http://example.org/ApplicationSchema#F");
 
         ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:sfOverlaps"), infModel);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
 
     }

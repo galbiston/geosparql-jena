@@ -6,10 +6,7 @@
 package geo.topological.rcc8.property_functions;
 
 import geo.topological.GenericPropertyFunction;
-import geo.topological.GenericExpressionFunction;
 import geof.topological.rcc8.filter_functions.RccPartiallyOverlappingFF;
-import implementation.vocabulary.Geof;
-import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
@@ -18,9 +15,8 @@ import org.apache.jena.sparql.expr.Expr;
  */
 public class RccPartiallyOverlappingPF extends GenericPropertyFunction {
 
-    @Override
-    protected Expr expressionFunction(Expr expr1, Expr expr2) {
-        return new GenericExpressionFunction(expr1, expr2, Geof.RCC_PARTIALLY_OVERLAPPING, new RccPartiallyOverlappingFF());
+    public RccPartiallyOverlappingPF() {
+        super(new RccPartiallyOverlappingFF());
     }
 
 }

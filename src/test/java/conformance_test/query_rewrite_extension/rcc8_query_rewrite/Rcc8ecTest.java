@@ -6,7 +6,6 @@
 package conformance_test.query_rewrite_extension.rcc8_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
 
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.6.3.1 /conf/query-rewrite-extension/rcc8-query-rewrite
  *
@@ -48,7 +47,7 @@ public class Rcc8ecTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;

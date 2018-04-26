@@ -6,15 +6,14 @@
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -69,8 +68,8 @@ public class EhContainsTest {
     @Test
     public void featureFeatureTest() {
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#C");
 
         ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:A", "geo:ehContains"), infModel);
         assertEquals(expResult, result);
@@ -79,8 +78,8 @@ public class EhContainsTest {
     @Test
     public void featureGeometryTest() {
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#C");
 
         ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:A", "geo:ehContains"), infModel);
         assertEquals(expResult, result);

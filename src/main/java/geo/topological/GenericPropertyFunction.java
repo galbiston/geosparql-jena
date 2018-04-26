@@ -5,25 +5,34 @@
  */
 package geo.topological;
 
+import geof.topological.GenericFilterFunction;
 import implementation.vocabulary.Geo;
+import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.sparql.algebra.Op;
-import org.apache.jena.sparql.algebra.op.OpBGP;
-import org.apache.jena.sparql.algebra.op.OpFilter;
-import org.apache.jena.sparql.algebra.op.OpUnion;
-import org.apache.jena.sparql.core.BasicPattern;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.shared.PropertyNotFoundException;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
+import org.apache.jena.sparql.engine.binding.BindingFactory;
 import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
-import org.apache.jena.sparql.engine.main.QC;
-import org.apache.jena.sparql.expr.Expr;
-import org.apache.jena.sparql.expr.ExprVar;
+import org.apache.jena.sparql.engine.iterator.QueryIterPlainWrapper;
+import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.pfunction.PFuncSimple;
-import org.apache.jena.sparql.sse.SSE;
 import org.apache.jena.vocabulary.RDF;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -32,145 +41,169 @@ import org.apache.jena.vocabulary.RDF;
  */
 public abstract class GenericPropertyFunction extends PFuncSimple {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private final GenericFilterFunction filterFunction;
+
+    public GenericPropertyFunction(GenericFilterFunction filterFunction) {
+        this.filterFunction = filterFunction;
+    }
+
     @Override
     public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
         if (object.isLiteral()) {
             //These Property Functions do not accept literals as objects so exit quickly.
             return QueryIterNullIterator.create(execCxt);
+        }
+
+        if (subject.isURI() && object.isURI()) {
+            //Both are bound.
+            return bothBound(binding, subject, predicate, object, execCxt);
         } else {
-            /**
-             * Apply all the query rewrite rules.
-             */
-            Op assertedStatement = assertedStatementRule(subject, predicate, object);
-            Op featureFeature = featureFeatureRule(subject, object);
-            Op featureGeometry = featureGeometryRule(subject, object);
-            Op geometryFeature = geometryFeatureRule(subject, object);
-            Op geometryGeometry = geometryGeometryRule(subject, object);
-
-            Op opStart = OpUnion.create(featureFeature, featureGeometry);
-            Op opMiddle = OpUnion.create(opStart, geometryFeature);
-            Op opEnd = OpUnion.create(geometryGeometry, assertedStatement);
-
-            Op opFinal = OpUnion.create(opMiddle, opEnd);
-            SSE.write(opFinal);
-            // Use the default, optimizing query engine.
-            return QC.execute(opFinal, binding, execCxt);
+            return oneBound(binding, subject, predicate, object, execCxt);
         }
 
     }
 
-    protected abstract Expr expressionFunction(Expr expr1, Expr expr2);
+    private QueryIterator bothBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
-    private OpBGP assertedStatementRule(Node subject, Node predicate, Node object) {
+        if (subject.equals(object)) {
+            //The subject and object are the same, so exit.
+            return QueryIterSingleton.create(binding, execCxt);
+        }
 
-        BasicPattern bp = new BasicPattern();
-        bp.add(new Triple(subject, predicate, object));
+        Graph graph = execCxt.getActiveGraph();
+        if (graph.contains(subject, predicate, object)) {
+            //The graph contains the asserted triple, return the current binding.
+            return QueryIterSingleton.create(binding, execCxt);
+        }
 
-        return new OpBGP(bp);
+        Model model = ModelFactory.createModelForGraph(graph);
+        Resource subjectSpatialObject = ResourceFactory.createResource(subject.getURI());
+        Literal subjectGeometryLiteral = retrieveGeometryLiteral(model, subjectSpatialObject);
+        if (subjectGeometryLiteral == null) {
+            //Subject is not a Feature or a Geometry so exit.
+            return QueryIterNullIterator.create(execCxt);
+        }
+
+        Resource objectSpatialObject = ResourceFactory.createResource(object.getURI());
+        Literal objectGeometryLiteral = retrieveGeometryLiteral(model, objectSpatialObject);
+        if (objectGeometryLiteral == null) {
+            //Object is not a Feature or a Geometry so exit.
+            return QueryIterNullIterator.create(execCxt);
+        }
+
+        if (testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral, predicate, true)) {
+            //Filter function test succeded so retain binding.
+            return QueryIterSingleton.create(binding, execCxt);
+        } else {
+            //Filter function test failed so null result.
+            return QueryIterNullIterator.create(execCxt);
+        }
+
     }
 
-    private Op featureFeatureRule(Node subject, Node object) {
+    private QueryIterator oneBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
+        Graph graph = execCxt.getActiveGraph();
+        Model model = ModelFactory.createModelForGraph(graph);
+        Resource boundSpatialObject;
+        Node unboundNode;
+        Boolean isSubjectBound;
+        if (subject.isURI()) {
+            //Subject is bound, object is unbound.
+            boundSpatialObject = ResourceFactory.createResource(subject.getURI());
+            unboundNode = object;
+            isSubjectBound = true;
+        } else {
+            //Object is bound, subject is unbound.
+            boundSpatialObject = ResourceFactory.createResource(object.getURI());
+            unboundNode = subject;
+            isSubjectBound = false;
+        }
 
-        Var subjectGeometryVar = createNewVar();
-        Var objectGeometryVar = createNewVar();
-        Var subjectLiteralVar = createNewVar();
-        Var objectLiteralVar = createNewVar();
+        Literal boundGeometryLiteral = retrieveGeometryLiteral(model, boundSpatialObject);
+        if (boundGeometryLiteral == null) {
+            //Subject is not a Feature or a Geometry so exit.
+            return QueryIterNullIterator.create(execCxt);
+        }
 
-        BasicPattern bp = new BasicPattern();
-        bp.add(new Triple(subject, RDF.type.asNode(), Geo.FEATURE_NODE));
-        bp.add(new Triple(object, RDF.type.asNode(), Geo.FEATURE_NODE));
+        HashMap<Resource, Literal> unboundSpatialObjectLiterals = retrieveGeometryLiterals(model);
 
-        bp.add(new Triple(subject, Geo.HAS_DEFAULT_GEOMETRY_NODE, subjectGeometryVar));
-        bp.add(new Triple(object, Geo.HAS_DEFAULT_GEOMETRY_NODE, objectGeometryVar));
+        //Create result bindings after checking in the index.
+        List<Binding> bindings = createBindings(boundGeometryLiteral, unboundSpatialObjectLiterals, unboundNode, binding, predicate, isSubjectBound);
 
-        bp.add(new Triple(subjectGeometryVar, Geo.HAS_SERIALIZATION_NODE, subjectLiteralVar));
-        bp.add(new Triple(objectGeometryVar, Geo.HAS_SERIALIZATION_NODE, objectLiteralVar));
-
-        OpBGP op = new OpBGP(bp);
-
-        Expr expr = getExpressionFunction(subjectLiteralVar, objectLiteralVar);
-
-        return OpFilter.filter(expr, op);
+        return new QueryIterPlainWrapper(bindings.iterator(), execCxt);
     }
 
-    private Op featureGeometryRule(Node subject, Node object) {
+    /**
+     * Retrieve the default geometry for Feature or Geometry.
+     *
+     * @param model
+     * @param targetSpatialObject
+     * @return
+     */
+    private Literal retrieveGeometryLiteral(Model model, Resource targetSpatialObject) {
 
-        Var subjectGeometryVar = createNewVar();
-        Var subjectLiteralVar = createNewVar();
-        Var objectLiteralVar = createNewVar();
-
-        BasicPattern bp = new BasicPattern();
-        bp.add(new Triple(subject, RDF.type.asNode(), Geo.FEATURE_NODE));
-        bp.add(new Triple(object, RDF.type.asNode(), Geo.GEOMETRY_NODE));
-
-        bp.add(new Triple(subject, Geo.HAS_DEFAULT_GEOMETRY_NODE, subjectGeometryVar));
-
-        bp.add(new Triple(subjectGeometryVar, Geo.HAS_SERIALIZATION_NODE, subjectLiteralVar));
-        bp.add(new Triple(object, Geo.HAS_SERIALIZATION_NODE, objectLiteralVar));
-
-        OpBGP op = new OpBGP(bp);
-
-        Expr expr = getExpressionFunction(subjectLiteralVar, objectLiteralVar);
-
-        return OpFilter.filter(expr, op);
+        try {
+            if (model.contains(targetSpatialObject, RDF.type, Geo.FEATURE_RES)) {
+                Resource geometry = model.getRequiredProperty(targetSpatialObject, Geo.HAS_DEFAULT_GEOMETRY_PROP).getResource();
+                return geometry.getRequiredProperty(Geo.HAS_SERIALIZATION_PROP).getLiteral();
+            } else if (model.contains(targetSpatialObject, RDF.type, Geo.GEOMETRY_RES)) {
+                return model.getRequiredProperty(targetSpatialObject, Geo.HAS_SERIALIZATION_PROP).getLiteral();
+            }
+        } catch (PropertyNotFoundException ex) {
+            LOGGER.error("Property Found Exception: {} for {}", ex.getMessage(), targetSpatialObject);
+        }
+        //Target resource isn't a Feature or Geometry so ignore.
+        return null;
     }
 
-    private Op geometryFeatureRule(Node subject, Node object) {
+    private HashMap<Resource, Literal> retrieveGeometryLiterals(Model model) {
 
-        Var objectGeometryVar = createNewVar();
-        Var subjectLiteralVar = createNewVar();
-        Var objectLiteralVar = createNewVar();
+        //Features
+        ResIterator features = model.listResourcesWithProperty(RDF.type, Geo.FEATURE_RES);
+        HashMap<Resource, Literal> spatialObjectLiterals = buildGeometryLiterals(features, model);
 
-        BasicPattern bp = new BasicPattern();
-        bp.add(new Triple(subject, RDF.type.asNode(), Geo.GEOMETRY_NODE));
-        bp.add(new Triple(object, RDF.type.asNode(), Geo.FEATURE_NODE));
+        //Geometeries
+        ResIterator geometries = model.listResourcesWithProperty(RDF.type, Geo.GEOMETRY_RES);
+        spatialObjectLiterals.putAll(buildGeometryLiterals(geometries, model));
 
-        bp.add(new Triple(object, Geo.HAS_DEFAULT_GEOMETRY_NODE, objectGeometryVar));
-
-        bp.add(new Triple(subject, Geo.HAS_SERIALIZATION_NODE, subjectLiteralVar));
-        bp.add(new Triple(objectGeometryVar, Geo.HAS_SERIALIZATION_NODE, objectLiteralVar));
-
-        OpBGP op = new OpBGP(bp);
-
-        Expr expr = getExpressionFunction(subjectLiteralVar, objectLiteralVar);
-
-        return OpFilter.filter(expr, op);
+        return spatialObjectLiterals;
     }
 
-    private Op geometryGeometryRule(Node subject, Node object) {
+    private HashMap<Resource, Literal> buildGeometryLiterals(ResIterator resIterator, Model model) {
+        HashMap<Resource, Literal> spatialObjectLiterals = new HashMap<>();
 
-        Var subjectLiteralVar = createNewVar();
-        Var objectLiteralVar = createNewVar();
+        while (resIterator.hasNext()) {
+            Resource spatialObject = resIterator.nextResource();
+            Literal geometryLiteral = retrieveGeometryLiteral(model, spatialObject);
+            if (geometryLiteral != null) {
+                spatialObjectLiterals.put(spatialObject, geometryLiteral);
+            }
 
-        BasicPattern bp = new BasicPattern();
-        bp.add(new Triple(subject, RDF.type.asNode(), Geo.GEOMETRY_NODE));
-        bp.add(new Triple(object, RDF.type.asNode(), Geo.GEOMETRY_NODE));
-
-        bp.add(new Triple(subject, Geo.HAS_SERIALIZATION_NODE, subjectLiteralVar));
-        bp.add(new Triple(object, Geo.HAS_SERIALIZATION_NODE, objectLiteralVar));
-
-        OpBGP op = new OpBGP(bp);
-
-        Expr expr = getExpressionFunction(subjectLiteralVar, objectLiteralVar);
-
-        return OpFilter.filter(expr, op);
+        }
+        return spatialObjectLiterals;
     }
 
-    private static int variableCount = 0;
+    private List<Binding> createBindings(Literal boundGeometryLiteral, HashMap<Resource, Literal> unboundSpatialObjectLiterals, Node unboundNode, Binding binding, Node predicate, Boolean isSubjectBound) {
+        List<Binding> bindings = new ArrayList<>();
+        Var unboundVar = Var.alloc(unboundNode.getName());
 
-    // Create a new, hidden, variable.
-    private static Var createNewVar() {
-        variableCount++;
-        String varName = "Var-" + variableCount;
-        return Var.alloc(varName);
+        for (Entry<Resource, Literal> unboundEntry : unboundSpatialObjectLiterals.entrySet()) {
+            Resource spatialObject = unboundEntry.getKey();
+            Literal unboundGeometryLiteral = unboundEntry.getValue();
+
+            if (testFilterFunction(boundGeometryLiteral, unboundGeometryLiteral, predicate, isSubjectBound)) {
+                Binding newBind = BindingFactory.binding(binding, unboundVar, spatialObject.asNode());
+                bindings.add(newBind);
+            }
+        }
+
+        return bindings;
     }
 
-    private Expr getExpressionFunction(Var subjectLiteralVar, Var objectLiteralVar) {
-
-        ExprVar subjectExprVar = new ExprVar(subjectLiteralVar);
-        ExprVar objectExprVar = new ExprVar(objectLiteralVar);
-
-        return expressionFunction(subjectExprVar, objectExprVar);
+    private Boolean testFilterFunction(Literal boundGeometryLiteral, Literal unboundGeometryLiteral, Node predicate, Boolean isSubjectBound) {
+        //TODO pass the filter function and predicate to Query Rewrite Index for checking and storage. Use isSubjectBound to identify how to order in index, i.e. when true use boundGeometryLiteral as last key.
+        return filterFunction.exec(boundGeometryLiteral, unboundGeometryLiteral);
     }
 
 }

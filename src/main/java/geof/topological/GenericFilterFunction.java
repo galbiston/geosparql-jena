@@ -7,6 +7,7 @@ package geof.topological;
 
 import implementation.GeometryWrapper;
 import org.apache.jena.datatypes.DatatypeFormatException;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -35,6 +36,19 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {}", ex.getMessage());
             return NodeValue.FALSE;
+        }
+    }
+
+    public Boolean exec(Literal v1, Literal v2) {
+        try {
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+
+            boolean result = relate(geometry1, geometry2);
+            return result;
+        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
+            LOGGER.error("Filter Function Exception: {}", ex.getMessage());
+            return false;
         }
     }
 

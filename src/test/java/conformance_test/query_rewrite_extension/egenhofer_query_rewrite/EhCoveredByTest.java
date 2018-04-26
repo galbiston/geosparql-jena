@@ -6,7 +6,6 @@
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
 
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.6.2.1 /conf/query-rewrite-extension/eh-query-rewrite
  *
@@ -48,7 +47,7 @@ public class EhCoveredByTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -70,8 +69,8 @@ public class EhCoveredByTest {
     @Test
     public void featureFeatureTest() {
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#D");
         expResult.add("http://example.org/ApplicationSchema#DExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#D");
 
         ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:ehCoveredBy"), infModel);
         assertEquals(expResult, result);
@@ -80,8 +79,8 @@ public class EhCoveredByTest {
     @Test
     public void featureGeometryTest() {
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#D");
         expResult.add("http://example.org/ApplicationSchema#DExactGeom");
+        expResult.add("http://example.org/ApplicationSchema#D");
 
         ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:ehCoveredBy"), infModel);
         assertEquals(expResult, result);
