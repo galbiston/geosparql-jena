@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package geo.topological.geometryproperty.property_functions;
+package geo.topological.geometry_property.property_functions;
 
 import geo.topological.GenericGeometryPropertyFunction;
-import geof.topological.geometry_property.expression_functions.DimensionEF;
+import geof.topological.geometry_property.expression_functions.IsEmptyEF;
 import org.apache.jena.sparql.expr.Expr;
 
 /**
  *
  * 
  */
-public class DimensionPF extends GenericGeometryPropertyFunction {
+public class IsEmptyPF extends GenericGeometryPropertyFunction {
 
     @Override
     protected Expr propFunc(Expr expr) {
-        return new DimensionEF(expr);
+        return new IsEmptyEF(expr);
     }
 
 }

@@ -5,11 +5,11 @@
  */
 package implementation.function_registry;
 
-import geo.topological.geometryproperty.property_functions.DimensionPF;
-import geo.topological.geometryproperty.property_functions.IsSimplePF;
-import geo.topological.geometryproperty.property_functions.IsEmptyPF;
-import geo.topological.geometryproperty.property_functions.CoordinateDimensionPF;
-import geo.topological.geometryproperty.property_functions.SpatialDimensionPF;
+import geo.topological.geometry_property.property_functions.DimensionPF;
+import geo.topological.geometry_property.property_functions.IsSimplePF;
+import geo.topological.geometry_property.property_functions.IsEmptyPF;
+import geo.topological.geometry_property.property_functions.CoordinateDimensionPF;
+import geo.topological.geometry_property.property_functions.SpatialDimensionPF;
 import implementation.vocabulary.Geo;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 

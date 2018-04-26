@@ -27,8 +27,8 @@ import org.apache.jena.vocabulary.RDF;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public abstract class GenericPropertyFunction extends PFuncSimple {
 
