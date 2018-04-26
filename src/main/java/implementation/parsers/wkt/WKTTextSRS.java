@@ -5,7 +5,7 @@
  */
 package implementation.parsers.wkt;
 
-import implementation.CRSRegistry;
+import implementation.index.CRSRegistry;
 
 /**
  *

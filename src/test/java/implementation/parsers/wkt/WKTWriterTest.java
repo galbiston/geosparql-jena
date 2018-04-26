@@ -10,7 +10,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
-import implementation.CRSRegistry;
+import implementation.index.CRSRegistry;
 import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;

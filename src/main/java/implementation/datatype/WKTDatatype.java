@@ -7,7 +7,7 @@ package implementation.datatype;
 
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
-import implementation.GeometryLiteralIndex;
+import implementation.index.GeometryLiteralIndex;
 import implementation.GeometryWrapper;
 import implementation.parsers.wkt.WKTGeometryBuilder;
 import implementation.parsers.wkt.WKTTextSRS;

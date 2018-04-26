@@ -5,6 +5,7 @@
  */
 package implementation;
 
+import implementation.index.CRSRegistry;
 import java.lang.reflect.Type;
 import javax.measure.Measure;
 import javax.measure.quantity.Angle;

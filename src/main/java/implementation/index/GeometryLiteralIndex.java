@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation;
+package implementation.index;
 
+import implementation.GeoSPARQLSupport;
+import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeReader;
 import java.io.File;
 import java.io.FileInputStream;

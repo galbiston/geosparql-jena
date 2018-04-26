@@ -5,6 +5,7 @@
  */
 package implementation;
 
+import implementation.index.CRSRegistry;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;

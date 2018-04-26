@@ -5,6 +5,9 @@
  */
 package implementation;
 
+import implementation.index.GeometryLiteralIndex;
+import implementation.index.CRSRegistry;
+import implementation.index.GeometryTransformIndex;
 import geof.topological.RelateFF;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
