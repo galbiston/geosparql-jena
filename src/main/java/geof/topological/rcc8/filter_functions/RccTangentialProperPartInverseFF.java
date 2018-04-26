@@ -5,26 +5,22 @@
  */
 package geof.topological.rcc8.filter_functions;
 
-import geof.topological.rcc8.expression_functions.RccTangentialProperPartInverseEF;
-import org.apache.jena.sparql.expr.Expr;
-import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.function.FunctionBase2;
+import geof.topological.GenericFilterFunction;
+import implementation.GeometryWrapper;
+import implementation.intersection_patterns.RCC8IntersectionPattern;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
 
 /**
  *
- * 
+ *
  */
-public class RccTangentialProperPartInverseFF extends FunctionBase2 {
+public class RccTangentialProperPartInverseFF extends GenericFilterFunction {
 
     @Override
-    public NodeValue exec(NodeValue v1, NodeValue v2) {
-
-        Expr e1 = v1.getExpr();
-        Expr e2 = v2.getExpr();
-
-        RccTangentialProperPartInverseEF func = new RccTangentialProperPartInverseEF(e1, e2);
-
-        return func.eval(v1, v2);
+    protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+        return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.TANGENTIAL_PROPER_PART_INVERSE);
     }
 
 }
