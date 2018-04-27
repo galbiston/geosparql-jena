@@ -215,36 +215,62 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         return spatialObjectLiterals;
     }
 
-    private List<Binding> createBindings(SpatialObjectGeometryLiteral bound, List<SpatialObjectGeometryLiteral> unbounds, Node boundNode, Node unboundNode, Model model, Binding binding, Property predicate, Boolean isSubjectBound) {
+    /**
+     * Target may be bound or unbound.
+     *
+     * @param target
+     * @param unbounds
+     * @param targetNode
+     * @param unboundNode
+     * @param model
+     * @param binding
+     * @param predicate
+     * @param isTargetSubject
+     * @return
+     */
+    private List<Binding> createBindings(SpatialObjectGeometryLiteral target, List<SpatialObjectGeometryLiteral> unbounds, Node targetNode, Node unboundNode, Model model, Binding binding, Property predicate, Boolean isTargetSubject) {
+
         List<Binding> bindings = new ArrayList<>();
-        Var boundVar = Var.alloc(boundNode.getName());
+        Var targetVar;
+        if (targetNode.isVariable()) {
+            targetVar = Var.alloc(targetNode.getName());
+        } else {
+            targetVar = null;
+        }
         Var unboundVar = Var.alloc(unboundNode.getName());
 
-        Resource boundSpatialObject = bound.getSpatialObject();
-        Literal boundGeometryLiteral = bound.getGeometryLiteral();
+        Resource targetSpatialObject = target.getSpatialObject();
+        Literal targetGeometryLiteral = target.getGeometryLiteral();
 
         for (SpatialObjectGeometryLiteral unbound : unbounds) {
             Resource unboundSpatialObject = unbound.getSpatialObject();
             Literal unboundGeometryLiteral = unbound.getGeometryLiteral();
             boolean isPositiveResult;
 
-            //Check for asserted statement according to whether or not the bound pair are the subject.
-            if (isSubjectBound) {
-                isPositiveResult = model.contains(boundSpatialObject, predicate, unboundSpatialObject);
+            //Check for asserted statement according to whether or not the target pair are the subject.
+            if (isTargetSubject) {
+                isPositiveResult = model.contains(targetSpatialObject, predicate, unboundSpatialObject);
             } else {
-                isPositiveResult = model.contains(unboundSpatialObject, predicate, boundSpatialObject);
+                isPositiveResult = model.contains(unboundSpatialObject, predicate, targetSpatialObject);
             }
             if (!isPositiveResult) {
                 //No asserted statement found.
-                //Test the predicate for the bound and unbound literals.
-                isPositiveResult = testFilterFunction(boundGeometryLiteral, unboundGeometryLiteral, predicate, isSubjectBound);
+                //Test the predicate for the target and unbound literals.
+                isPositiveResult = testFilterFunction(targetGeometryLiteral, unboundGeometryLiteral, predicate, isTargetSubject);
             }
 
             if (isPositiveResult) {
-                //The result is successful so return the binding. Both bound and unbound are used for cases when both are actually unbound.
+                //The result is successful so return the binding.
                 Binding unboundBind = BindingFactory.binding(binding, unboundVar, unboundSpatialObject.asNode());
-                Binding boundBind = BindingFactory.binding(unboundBind, boundVar, boundSpatialObject.asNode());
-                bindings.add(boundBind);
+
+                if (targetVar == null) {
+                    //Target is bound so only unbound is used.
+                    bindings.add(unboundBind);
+                } else {
+                    //Both target and unbound are used for cases when both are actually unbound.
+                    Binding boundBind = BindingFactory.binding(unboundBind, targetVar, targetSpatialObject.asNode());
+                    bindings.add(boundBind);
+                }
             }
         }
 
