@@ -9,14 +9,13 @@ import geof.topological.GenericFilterFunction;
 import implementation.vocabulary.Geo;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -50,15 +49,20 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
     @Override
     public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
-        if (object.isLiteral()) {
-            //These Property Functions do not accept literals as objects so exit quickly.
+        if (object.isLiteral() || subject.isBlank() || object.isBlank()) {
+            //These Property Functions do not accept literals as objects or blank nodes so exit quickly.
             return QueryIterNullIterator.create(execCxt);
         }
 
         if (subject.isURI() && object.isURI()) {
             //Both are bound.
             return bothBound(binding, subject, predicate, object, execCxt);
+        } else if (subject.isVariable() && object.isVariable()) {
+            //Both are unbound.
+            //return bothUnbound(binding, subject, predicate, object, execCxt);
+            return null;
         } else {
+            //One bound and one unbound.
             return oneBound(binding, subject, predicate, object, execCxt);
         }
 
@@ -67,7 +71,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     private QueryIterator bothBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
         if (subject.equals(object)) {
-            //The subject and object are the same, so exit.
+            //The subject and object are the same therefore always true, so exit.
             return QueryIterSingleton.create(binding, execCxt);
         }
 
@@ -79,20 +83,21 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
         Model model = ModelFactory.createModelForGraph(graph);
         Resource subjectSpatialObject = ResourceFactory.createResource(subject.getURI());
-        Literal subjectGeometryLiteral = retrieveGeometryLiteral(model, subjectSpatialObject);
-        if (subjectGeometryLiteral == null) {
+        SpatialObjectGeometryLiteral subjectSpatialLiteral = retrieveGeometryLiteral(model, subjectSpatialObject);
+        if (subjectSpatialLiteral == null) {
             //Subject is not a Feature or a Geometry so exit.
             return QueryIterNullIterator.create(execCxt);
         }
 
         Resource objectSpatialObject = ResourceFactory.createResource(object.getURI());
-        Literal objectGeometryLiteral = retrieveGeometryLiteral(model, objectSpatialObject);
-        if (objectGeometryLiteral == null) {
+        SpatialObjectGeometryLiteral objectSpatialLiteral = retrieveGeometryLiteral(model, objectSpatialObject);
+        if (objectSpatialLiteral == null) {
             //Object is not a Feature or a Geometry so exit.
             return QueryIterNullIterator.create(execCxt);
         }
 
-        if (testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral, predicate, true)) {
+        Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
+        if (testFilterFunction(subjectSpatialLiteral.getGeometryLiteral(), objectSpatialLiteral.getGeometryLiteral(), predicateProp, true)) {
             //Filter function test succeded so retain binding.
             return QueryIterSingleton.create(binding, execCxt);
         } else {
@@ -120,16 +125,17 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             isSubjectBound = false;
         }
 
-        Literal boundGeometryLiteral = retrieveGeometryLiteral(model, boundSpatialObject);
-        if (boundGeometryLiteral == null) {
+        SpatialObjectGeometryLiteral bound = retrieveGeometryLiteral(model, boundSpatialObject);
+        if (bound == null) {
             //Subject is not a Feature or a Geometry so exit.
             return QueryIterNullIterator.create(execCxt);
         }
 
-        HashMap<Resource, Literal> unboundSpatialObjectLiterals = retrieveGeometryLiterals(model);
+        List<SpatialObjectGeometryLiteral> unbounds = retrieveGeometryLiterals(model);
 
         //Create result bindings after checking in the index.
-        List<Binding> bindings = createBindings(boundGeometryLiteral, unboundSpatialObjectLiterals, unboundNode, binding, predicate, isSubjectBound);
+        Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
+        List<Binding> bindings = createBindings(bound, unbounds, unboundNode, model, binding, predicateProp, isSubjectBound);
 
         return new QueryIterPlainWrapper(bindings.iterator(), execCxt);
     }
@@ -141,14 +147,16 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
      * @param targetSpatialObject
      * @return
      */
-    private Literal retrieveGeometryLiteral(Model model, Resource targetSpatialObject) {
+    private SpatialObjectGeometryLiteral retrieveGeometryLiteral(Model model, Resource targetSpatialObject) {
 
         try {
             if (model.contains(targetSpatialObject, RDF.type, Geo.FEATURE_RES)) {
                 Resource geometry = model.getRequiredProperty(targetSpatialObject, Geo.HAS_DEFAULT_GEOMETRY_PROP).getResource();
-                return geometry.getRequiredProperty(Geo.HAS_SERIALIZATION_PROP).getLiteral();
+                Literal geometryLiteral = geometry.getRequiredProperty(Geo.HAS_SERIALIZATION_PROP).getLiteral();
+                return new SpatialObjectGeometryLiteral(targetSpatialObject, geometryLiteral);
             } else if (model.contains(targetSpatialObject, RDF.type, Geo.GEOMETRY_RES)) {
-                return model.getRequiredProperty(targetSpatialObject, Geo.HAS_SERIALIZATION_PROP).getLiteral();
+                Literal geometryLiteral = model.getRequiredProperty(targetSpatialObject, Geo.HAS_SERIALIZATION_PROP).getLiteral();
+                return new SpatialObjectGeometryLiteral(targetSpatialObject, geometryLiteral);
             }
         } catch (PropertyNotFoundException ex) {
             LOGGER.error("Property Found Exception: {} for {}", ex.getMessage(), targetSpatialObject);
@@ -157,43 +165,59 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         return null;
     }
 
-    private HashMap<Resource, Literal> retrieveGeometryLiterals(Model model) {
+    private List<SpatialObjectGeometryLiteral> retrieveGeometryLiterals(Model model) {
 
         //Features
         ResIterator features = model.listResourcesWithProperty(RDF.type, Geo.FEATURE_RES);
-        HashMap<Resource, Literal> spatialObjectLiterals = buildGeometryLiterals(features, model);
+        List<SpatialObjectGeometryLiteral> spatialObjectLiterals = buildGeometryLiterals(features, model);
 
         //Geometeries
         ResIterator geometries = model.listResourcesWithProperty(RDF.type, Geo.GEOMETRY_RES);
-        spatialObjectLiterals.putAll(buildGeometryLiterals(geometries, model));
+        spatialObjectLiterals.addAll(buildGeometryLiterals(geometries, model));
 
         return spatialObjectLiterals;
     }
 
-    private HashMap<Resource, Literal> buildGeometryLiterals(ResIterator resIterator, Model model) {
-        HashMap<Resource, Literal> spatialObjectLiterals = new HashMap<>();
+    private List<SpatialObjectGeometryLiteral> buildGeometryLiterals(ResIterator resIterator, Model model) {
+        List<SpatialObjectGeometryLiteral> spatialObjectLiterals = new ArrayList<>();
 
         while (resIterator.hasNext()) {
             Resource spatialObject = resIterator.nextResource();
-            Literal geometryLiteral = retrieveGeometryLiteral(model, spatialObject);
-            if (geometryLiteral != null) {
-                spatialObjectLiterals.put(spatialObject, geometryLiteral);
+            SpatialObjectGeometryLiteral objectLiteral = retrieveGeometryLiteral(model, spatialObject);
+            if (objectLiteral != null) {
+                spatialObjectLiterals.add(objectLiteral);
             }
-
         }
         return spatialObjectLiterals;
     }
 
-    private List<Binding> createBindings(Literal boundGeometryLiteral, HashMap<Resource, Literal> unboundSpatialObjectLiterals, Node unboundNode, Binding binding, Node predicate, Boolean isSubjectBound) {
+    private List<Binding> createBindings(SpatialObjectGeometryLiteral bound, List<SpatialObjectGeometryLiteral> unbounds, Node unboundNode, Model model, Binding binding, Property predicate, Boolean isSubjectBound) {
         List<Binding> bindings = new ArrayList<>();
         Var unboundVar = Var.alloc(unboundNode.getName());
 
-        for (Entry<Resource, Literal> unboundEntry : unboundSpatialObjectLiterals.entrySet()) {
-            Resource spatialObject = unboundEntry.getKey();
-            Literal unboundGeometryLiteral = unboundEntry.getValue();
+        Resource boundSpatialObject = bound.getSpatialObject();
+        Literal boundGeometryLiteral = bound.getGeometryLiteral();
 
-            if (testFilterFunction(boundGeometryLiteral, unboundGeometryLiteral, predicate, isSubjectBound)) {
-                Binding newBind = BindingFactory.binding(binding, unboundVar, spatialObject.asNode());
+        for (SpatialObjectGeometryLiteral unbound : unbounds) {
+            Resource unboundSpatialObject = unbound.getSpatialObject();
+            Literal unboundGeometryLiteral = unbound.getGeometryLiteral();
+            boolean isPositiveResult;
+
+            //Check for asserted statement according to whether or not the bound pair are the subject.
+            if (isSubjectBound) {
+                isPositiveResult = model.contains(boundSpatialObject, predicate, unboundSpatialObject);
+            } else {
+                isPositiveResult = model.contains(unboundSpatialObject, predicate, boundSpatialObject);
+            }
+            if (!isPositiveResult) {
+                //No asserted statement found.
+                //Test the predicate for the bound and unbound literals.
+                isPositiveResult = testFilterFunction(boundGeometryLiteral, unboundGeometryLiteral, predicate, isSubjectBound);
+            }
+
+            if (isPositiveResult) {
+                //The result is successful so return the binding.
+                Binding newBind = BindingFactory.binding(binding, unboundVar, unboundSpatialObject.asNode());
                 bindings.add(newBind);
             }
         }
@@ -201,7 +225,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         return bindings;
     }
 
-    private Boolean testFilterFunction(Literal boundGeometryLiteral, Literal unboundGeometryLiteral, Node predicate, Boolean isSubjectBound) {
+    private Boolean testFilterFunction(Literal boundGeometryLiteral, Literal unboundGeometryLiteral, Property predicate, Boolean isSubjectBound) {
         //TODO pass the filter function and predicate to Query Rewrite Index for checking and storage. Use isSubjectBound to identify how to order in index, i.e. when true use boundGeometryLiteral as last key.
         return filterFunction.exec(boundGeometryLiteral, unboundGeometryLiteral);
     }
