@@ -6,20 +6,18 @@
 package conformance_test.query_rewrite_extension.simplefeatures_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.6.1.1 /conf/query-rewrite-extension/sf-query-rewrite
  *
@@ -48,7 +46,7 @@ public class SfContainsTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -75,8 +73,9 @@ public class SfContainsTest {
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
         ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:sfContains"), infModel);
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
         assertEquals(expResult, result);
-
     }
 
     @Test
@@ -87,8 +86,9 @@ public class SfContainsTest {
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
         ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:sfContains"), infModel);
+        System.out.println("Expected: " + expResult);
+        System.out.println("Result: " + result);
         assertEquals(expResult, result);
-
     }
 
     @Test
@@ -98,8 +98,9 @@ public class SfContainsTest {
         expResult.add("http://example.org/ApplicationSchema#C");
 
         ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:sfContains"), infModel);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
-
     }
 
 }

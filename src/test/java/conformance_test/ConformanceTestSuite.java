@@ -37,6 +37,11 @@ public class ConformanceTestSuite {
     public static final String SAMPLE_WKT = "dataset/sampleWKT.rdf";
 
     /**
+     * Spatial Relations Data in WKT
+     */
+    public static final String SPATIAL_RELATIONS = "dataset/SpatialRelations.rdf";
+
+    /**
      * Empty WKT Data - test for empty geometry and default SRID return
      */
     public static final String SAMPLE_WKT_EMPTY = "dataset/sampleWKTEmpty.rdf";
@@ -59,6 +64,17 @@ public class ConformanceTestSuite {
      */
     public static InfModel initWktModel() {
         InputStream inputStream = getInputStream(SAMPLE_WKT);
+        return GeoSPARQLSupport.prepareRDFS(inputStream);
+    }
+
+    /**
+     * This method initialize all the WKT spatial relations model, need to be
+     * called before query execution.
+     *
+     * @return
+     */
+    public static InfModel initSpatialRelationsModel() {
+        InputStream inputStream = getInputStream(SPATIAL_RELATIONS);
         return GeoSPARQLSupport.prepareRDFS(inputStream);
     }
 
@@ -95,7 +111,7 @@ public class ConformanceTestSuite {
         return GeoSPARQLSupport.prepareRDFS(inputStream);
     }
 
-    private static InputStream getInputStream(String filepath) {
+    public static InputStream getInputStream(String filepath) {
         return ConformanceTestSuite.class.getClassLoader().getResourceAsStream(filepath);
     }
 
@@ -120,12 +136,19 @@ public class ConformanceTestSuite {
                 while (varIterator.hasNext()) {
                     String varName = (String) varIterator.next();
                     Resource resource = solution.getResource(varName);
-                    //System.out.println("this.expResult.add(\"" + resource.toString() + "\");");
                     resultList.add(resource.toString());
                 }
             }
         }
         return resultList;
+    }
+
+    public static String resourceSingleQuery(String queryString, InfModel queryModel) {
+        ArrayList<String> resources = resourceQuery(queryString, queryModel);
+        if (resources.size() == 1) {
+            return resources.get(0);
+        }
+        return null;
     }
 
     /**

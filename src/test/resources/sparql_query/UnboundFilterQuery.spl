@@ -1,0 +1,9 @@
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+
+SELECT ?geom
+WHERE{
+    <#source#> geo:asWKT ?sourceLit .
+    ?geom geo:asWKT ?targetLit .
+    FILTER(#function#(?sourceLit, ?targetLit)) .
+}ORDER BY ?geom
