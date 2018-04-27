@@ -17,6 +17,8 @@ import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import java.util.Arrays;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -24,6 +26,7 @@ import java.util.Objects;
  */
 public class WKTGeometryBuilder {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(WKTGeometryBuilder.class);
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     private final CoordinateSequenceDimensions coordinateSequenceDimensions;
@@ -90,43 +93,47 @@ public class WKTGeometryBuilder {
         }
     }
 
-    private Geometry buildGeometry(String shape, String coordinates) {
+    private Geometry buildGeometry(String shape, String coordinates) throws ParseException {
 
         Geometry geo;
 
-        switch (shape) {
-            case "point":
-                CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
-                geo = GEOMETRY_FACTORY.createPoint(pointSequence);
-                break;
-            case "linestring":
-                CustomCoordinateSequence lineSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
-                geo = GEOMETRY_FACTORY.createLineString(lineSequence);
-                break;
-            case "linearring":
-                CustomCoordinateSequence linearSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
-                geo = GEOMETRY_FACTORY.createLinearRing(linearSequence);
-                break;
-            case "polygon":
-                geo = buildPolygon(coordinates);
-                break;
-            case "multipoint":
-                CustomCoordinateSequence multiPointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
-                geo = GEOMETRY_FACTORY.createMultiPoint(multiPointSequence);
-                break;
-            case "multilinestring":
-                geo = buildMultiLineString(coordinates);
-                break;
-            case "multipolygon":
-                geo = buildMultiPolygon(coordinates);
-                break;
-            case "geometrycollection":
-                geo = buildGeometryCollection(coordinates);
-                break;
-            default:
-                throw new ParseException("Geometry shape not supported: " + shape);
+        try {
+            switch (shape) {
+                case "point":
+                    CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                    geo = GEOMETRY_FACTORY.createPoint(pointSequence);
+                    break;
+                case "linestring":
+                    CustomCoordinateSequence lineSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                    geo = GEOMETRY_FACTORY.createLineString(lineSequence);
+                    break;
+                case "linearring":
+                    CustomCoordinateSequence linearSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                    geo = GEOMETRY_FACTORY.createLinearRing(linearSequence);
+                    break;
+                case "polygon":
+                    geo = buildPolygon(coordinates);
+                    break;
+                case "multipoint":
+                    CustomCoordinateSequence multiPointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                    geo = GEOMETRY_FACTORY.createMultiPoint(multiPointSequence);
+                    break;
+                case "multilinestring":
+                    geo = buildMultiLineString(coordinates);
+                    break;
+                case "multipolygon":
+                    geo = buildMultiPolygon(coordinates);
+                    break;
+                case "geometrycollection":
+                    geo = buildGeometryCollection(coordinates);
+                    break;
+                default:
+                    throw new ParseException("Geometry shape not supported: " + shape);
+            }
+        } catch (ArrayIndexOutOfBoundsException | ParseException ex) {
+            LOGGER.error("Build WKT Geometry Exception - Shape: {}, Coordinates: {}", shape, coordinates);
+            throw new ParseException(ex.getMessage());
         }
-
         return geo;
     }
 

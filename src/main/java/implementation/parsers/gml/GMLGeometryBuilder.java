@@ -139,31 +139,37 @@ public class GMLGeometryBuilder {
     private Geometry buildGeometry(String shape, Element gmlElement) throws ParseException {
 
         Geometry geo;
-        switch (shape) {
-            case "Point":
-                geo = buildPoint(gmlElement);
-                break;
-            case "LineString":
-                geo = buildLineString(gmlElement);
-                break;
-            case "Polygon":
-                geo = buildPolygon(gmlElement);
-                break;
-            case "MultiPoint":
-                geo = buildMultiPoint(gmlElement);
-                break;
-            case "MultiLineString":
-                geo = buildMultiLineString(gmlElement);
-                break;
-            case "MultiPolygon":
-                geo = buildMultiPolygon(gmlElement);
-                break;
-            case "GeometryCollection":
-                geo = buildGeometryCollection(gmlElement);
-                break;
-            default:
-                throw new ParseException("Geometry shape not supported: " + shape);
+        try {
+            switch (shape) {
+                case "Point":
+                    geo = buildPoint(gmlElement);
+                    break;
+                case "LineString":
+                    geo = buildLineString(gmlElement);
+                    break;
+                case "Polygon":
+                    geo = buildPolygon(gmlElement);
+                    break;
+                case "MultiPoint":
+                    geo = buildMultiPoint(gmlElement);
+                    break;
+                case "MultiLineString":
+                    geo = buildMultiLineString(gmlElement);
+                    break;
+                case "MultiPolygon":
+                    geo = buildMultiPolygon(gmlElement);
+                    break;
+                case "GeometryCollection":
+                    geo = buildGeometryCollection(gmlElement);
+                    break;
+                default:
+                    throw new ParseException("Geometry shape not supported: " + shape);
+            }
+        } catch (ArrayIndexOutOfBoundsException | ParseException ex) {
+            LOGGER.error("Build GML Geometry Exception - Shape: {}, Element: {}", shape, gmlElement);
+            throw new ParseException(ex.getMessage());
         }
+
         return geo;
     }
 
