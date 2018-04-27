@@ -163,6 +163,7 @@ public class GeoSPARQLSupport {
      */
     public static void loadFunctionsMemoryIndex() {
         loadFunctions(IndexOption.MEMORY, null);
+        defaultMemoryIndexMaxSize();
     }
 
     /**
@@ -170,6 +171,10 @@ public class GeoSPARQLSupport {
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup but override the
      * default maximum sizes of indexes and registries.
+     * <br>Registries are small but contain frequently re-used or generally
+     * useful data.
+     * <br>Indexes are large and contain data that may have re-use in specific
+     * contexts.
      * <br>Any existing in-memory indexes and registries will be emptied.
      *
      * @param geometryLiteralIndexMaxSize - default max size: 100,000
@@ -182,9 +187,25 @@ public class GeoSPARQLSupport {
         loadFunctions(IndexOption.MEMORY, null);
         GeometryLiteralIndex.setIndexMaxSize(geometryLiteralIndexMaxSize);
         GeometryTransformIndex.setIndexMaxSize(geometryTransformIndexMaxSize);
-        CRSRegistry.setCRSRegistryMaxSize(crsRegistryMaxSize);
-        CRSRegistry.setUnitsRegistryMaxSize(unitsRegistryMaxSize);
-        MathTransformRegistry.setRegistryMaxSize(mathTransformRegistryMaxSize);
+        setRegistryMaxSize(crsRegistryMaxSize, unitsRegistryMaxSize, mathTransformRegistryMaxSize);
+    }
+
+    /**
+     * Initialise all GeoSPARQL property and filter functions with memory
+     * indexing.
+     * <br>Use this for in-memory indexing GeoSPARQL setup but override the
+     * default maximum sizes of indexes.
+     * <br>Indexes are large and contain data that may have re-use in specific
+     * contexts.
+     * <br>Any existing in-memory indexes will be emptied.
+     *
+     * @param geometryLiteralIndexMaxSize - default max size: 100,000
+     * @param geometryTransformIndexMaxSize - default max size: 100,000
+     */
+    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize) {
+        loadFunctions(IndexOption.MEMORY, null);
+        GeometryLiteralIndex.setIndexMaxSize(geometryLiteralIndexMaxSize);
+        GeometryTransformIndex.setIndexMaxSize(geometryTransformIndexMaxSize);
     }
 
     /**
@@ -262,15 +283,27 @@ public class GeoSPARQLSupport {
     }
 
     private static void setupTDBIndex(File indexFolder) {
-
+        removeMemoryIndexStorageThread();
+        zeroMemoryIndexMaxSize();
     }
 
     private static void setupNoIndex() {
-        removeStorageThread();
+        removeMemoryIndexStorageThread();
+        zeroMemoryIndexMaxSize();
         if (indexStorageFolder != null) {
             FileUtils.deleteQuietly(indexStorageFolder);
             indexStorageFolder = null;
         }
+    }
+
+    private static void zeroMemoryIndexMaxSize() {
+        GeometryLiteralIndex.setIndexMaxSize(0);
+        GeometryTransformIndex.setIndexMaxSize(0);
+    }
+
+    private static void defaultMemoryIndexMaxSize() {
+        GeometryLiteralIndex.setIndexMaxSize(GEOMETRY_LITERAL_INDEX_MAX_SIZE);
+        GeometryTransformIndex.setIndexMaxSize(GEOMETRY_TRANSFORM_INDEX_MAX_SIZE);
     }
 
     private static void loadMemoryIndexes(File indexFolder) {
@@ -336,27 +369,43 @@ public class GeoSPARQLSupport {
         Runtime.getRuntime().addShutdownHook(thread);
 
         //Remove any previous shutdown storage thread.
-        removeStorageThread();
+        removeMemoryIndexStorageThread();
 
         //Retain the thread in case called again.
         shutdownStorageThread = thread;
     }
 
-    private static void removeStorageThread() {
+    private static void removeMemoryIndexStorageThread() {
         if (shutdownStorageThread != null) {
             Runtime.getRuntime().removeShutdownHook(shutdownStorageThread);
         }
     }
 
     public static final void clearAllIndexesAndRegistries() {
-        CRSRegistry.clearAll();
         GeometryLiteralIndex.clearAll();
         GeometryTransformIndex.clearAll();
+        CRSRegistry.clearAll();
         MathTransformRegistry.clearAll();
     }
 
     public static final IndexOption getIndexOption() {
         return indexOptionEnum;
+    }
+
+    /**
+     * Override the default maximum sizes of registries.
+     * <br>Registries are small but contain frequently re-used or generally
+     * useful data.
+     * <br>Any existing in-memory registries will be emptied.
+     *
+     * @param crsRegistryMaxSize - default max size: 20
+     * @param unitsRegistryMaxSize - default max size: 20
+     * @param mathTransformRegistryMaxSize - default max size: 20
+     */
+    public static final void setRegistryMaxSize(Integer crsRegistryMaxSize, Integer unitsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
+        CRSRegistry.setCRSRegistryMaxSize(crsRegistryMaxSize);
+        CRSRegistry.setUnitsRegistryMaxSize(unitsRegistryMaxSize);
+        MathTransformRegistry.setRegistryMaxSize(mathTransformRegistryMaxSize);
     }
 
 }
