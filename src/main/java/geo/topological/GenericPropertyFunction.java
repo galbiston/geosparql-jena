@@ -59,8 +59,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             return bothBound(binding, subject, predicate, object, execCxt);
         } else if (subject.isVariable() && object.isVariable()) {
             //Both are unbound.
-            //return bothUnbound(binding, subject, predicate, object, execCxt);
-            return null;
+            return bothUnbound(binding, subject, predicate, object, execCxt);
         } else {
             //One bound and one unbound.
             return oneBound(binding, subject, predicate, object, execCxt);
@@ -107,20 +106,45 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
     }
 
+    private QueryIterator bothUnbound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
+
+        Graph graph = execCxt.getActiveGraph();
+        Model model = ModelFactory.createModelForGraph(graph);
+
+        Boolean isSubjectBound = true; //For this purpose the subject is considered bound for passing to createBindings.
+
+        //Find all possible SpatialObjects then copy for comparison.
+        List<SpatialObjectGeometryLiteral> bounds = retrieveGeometryLiterals(model);
+        List<SpatialObjectGeometryLiteral> unbounds = new ArrayList<>(bounds);
+
+        //Create result bindings after checking in the index.
+        Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
+        List<Binding> bindings = new ArrayList<>(bounds.size() * unbounds.size()); //Worst case is all are successful.
+        for (SpatialObjectGeometryLiteral bound : bounds) {
+            List<Binding> binds = createBindings(bound, unbounds, subject, object, model, binding, predicateProp, isSubjectBound);
+            bindings.addAll(binds);
+        }
+        return new QueryIterPlainWrapper(bindings.iterator(), execCxt);
+
+    }
+
     private QueryIterator oneBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
         Graph graph = execCxt.getActiveGraph();
         Model model = ModelFactory.createModelForGraph(graph);
         Resource boundSpatialObject;
+        Node boundNode;
         Node unboundNode;
         Boolean isSubjectBound;
         if (subject.isURI()) {
             //Subject is bound, object is unbound.
             boundSpatialObject = ResourceFactory.createResource(subject.getURI());
+            boundNode = subject;
             unboundNode = object;
             isSubjectBound = true;
         } else {
             //Object is bound, subject is unbound.
             boundSpatialObject = ResourceFactory.createResource(object.getURI());
+            boundNode = object;
             unboundNode = subject;
             isSubjectBound = false;
         }
@@ -135,7 +159,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
         //Create result bindings after checking in the index.
         Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
-        List<Binding> bindings = createBindings(bound, unbounds, unboundNode, model, binding, predicateProp, isSubjectBound);
+        List<Binding> bindings = createBindings(bound, unbounds, boundNode, unboundNode, model, binding, predicateProp, isSubjectBound);
 
         return new QueryIterPlainWrapper(bindings.iterator(), execCxt);
     }
@@ -191,8 +215,9 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         return spatialObjectLiterals;
     }
 
-    private List<Binding> createBindings(SpatialObjectGeometryLiteral bound, List<SpatialObjectGeometryLiteral> unbounds, Node unboundNode, Model model, Binding binding, Property predicate, Boolean isSubjectBound) {
+    private List<Binding> createBindings(SpatialObjectGeometryLiteral bound, List<SpatialObjectGeometryLiteral> unbounds, Node boundNode, Node unboundNode, Model model, Binding binding, Property predicate, Boolean isSubjectBound) {
         List<Binding> bindings = new ArrayList<>();
+        Var boundVar = Var.alloc(boundNode.getName());
         Var unboundVar = Var.alloc(unboundNode.getName());
 
         Resource boundSpatialObject = bound.getSpatialObject();
@@ -216,9 +241,10 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             }
 
             if (isPositiveResult) {
-                //The result is successful so return the binding.
-                Binding newBind = BindingFactory.binding(binding, unboundVar, unboundSpatialObject.asNode());
-                bindings.add(newBind);
+                //The result is successful so return the binding. Both bound and unbound are used for cases when both are actually unbound.
+                Binding unboundBind = BindingFactory.binding(binding, unboundVar, unboundSpatialObject.asNode());
+                Binding boundBind = BindingFactory.binding(unboundBind, boundVar, boundSpatialObject.asNode());
+                bindings.add(boundBind);
             }
         }
 
