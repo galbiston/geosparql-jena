@@ -268,8 +268,8 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
                     bindings.add(unboundBind);
                 } else {
                     //Both target and unbound are used for cases when both are actually unbound.
-                    Binding boundBind = BindingFactory.binding(unboundBind, targetVar, targetSpatialObject.asNode());
-                    bindings.add(boundBind);
+                    Binding targetBind = BindingFactory.binding(unboundBind, targetVar, targetSpatialObject.asNode());
+                    bindings.add(targetBind);
                 }
             }
         }
