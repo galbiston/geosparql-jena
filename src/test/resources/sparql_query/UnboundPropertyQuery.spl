@@ -1,0 +1,7 @@
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+
+SELECT ?geom
+WHERE{
+    <#source#> #property# ?geom .
+}ORDER by ?geom
