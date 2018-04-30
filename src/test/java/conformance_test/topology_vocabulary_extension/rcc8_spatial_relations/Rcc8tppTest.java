@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.rcc8_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class Rcc8tppTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,23 +55,70 @@ public class Rcc8tppTest {
 
     }
 
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void positiveTest() {
+    public void rcc8ntppBoundPostiveTest() {
 
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#D");
+        System.out.println("rcc8ntpp Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonH";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonK", "geo:rcc8tpp", "http://example.org/Geometry#PolygonH");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:rcc8tpp", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void negativeTest() {
+    public void rcc8ntppBoundNegativeTest() {
 
+        System.out.println("rcc8ntpp Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8tpp", "http://example.org/Geometry#PolygonL");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void rcc8ntppUnboundPostiveTest() {
+
+        System.out.println("rcc8ntpp Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonK", "geo:rcc8tpp");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:E", "geo:rcc8tpp", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void rcc8ntppUnboundNegativeTest() {
+
+        System.out.println("rcc8ntpp Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:rcc8tpp");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

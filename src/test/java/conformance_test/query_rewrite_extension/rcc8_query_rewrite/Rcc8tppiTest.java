@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.rcc8_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,13 +44,7 @@ public class Rcc8tppiTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,39 +60,93 @@ public class Rcc8tppiTest {
 
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void featureFeatureTest() {
-        System.out.println("Feature Feature Test: ");
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+    public void rcc8tppiBothBoundTest() {
 
-        List<String> result = queryMany(featureFeatureQuery("ex:D", "geo:rcc8tppi"), infModel);
+        System.out.println("rcc8tppi Both Bound");
+        String expResult = "http://example.org/Geometry#PolygonK";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8tppi", "http://example.org/Geometry#PolygonK");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void featureGeometryTest() {
-        System.out.println("Feature Geometry Test: ");
+    public void rcc8tppiUnboundSubjectTest() {
+
+        System.out.println("rcc8tppi Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Geometry#PolygonH");
 
-        List<String> result = queryMany(featureGeometryQuery("ex:D", "geo:rcc8tppi"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:rcc8tppi", "http://example.org/Geometry#PolygonK");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void geometryFeatureTest() {
-        System.out.println("Geometry Geometry Test: ");
+    public void rcc8tppiUnboundObjectTest() {
+
+        System.out.println("rcc8tppi Unbound Object");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Geometry#PolygonK");
 
-        List<String> result = queryMany(geometryFeatureQuery("ex:D", "geo:rcc8tppi"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonH", "geo:rcc8tppi");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
+    }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Ignore
+    @Test
+    public void rcc8tppiBothUnboundTest() {
+
+        System.out.println("rcc8tppi Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:rcc8tppi");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void rcc8tppiAssertTest() {
+
+        System.out.println("rcc8tppi Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:rcc8tppi");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

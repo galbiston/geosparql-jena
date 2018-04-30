@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.rcc8_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class Rcc8ecTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,26 +55,67 @@ public class Rcc8ecTest {
 
     }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
     @Test
-    public void positiveTest() {
+    public void rcc8ecBoundPostiveTest() {
 
-        /**
-         * rcc8ec has similar functionality with sfTouches and ehMeet.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#E");
+        System.out.println("rcc8ec Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonI", "geo:rcc8ec", "http://example.org/Geometry#PolygonJ");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:rcc8ec", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
     @Test
-    public void negativeTest() {
+    public void rcc8ecBoundNegativeTest() {
 
+        System.out.println("rcc8ec Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8ec", "http://example.org/Geometry#PolygonJ");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void rcc8ecUnboundPostiveTest() {
+
+        System.out.println("rcc8ec Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:rcc8ec");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:rcc8ec", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
+    @Test
+    public void rcc8ecUnboundNegativeTest() {
+
+        System.out.println("rcc8ec Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geo:rcc8ec");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

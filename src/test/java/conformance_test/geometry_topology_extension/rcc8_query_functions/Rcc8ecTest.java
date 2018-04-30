@@ -5,10 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.rcc8_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.FilterTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -44,13 +43,7 @@ public class Rcc8ecTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,37 +59,65 @@ public class Rcc8ecTest {
 
     }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
     @Test
-    public void positiveTest() {
+    public void rcc8ecBoundPostiveTest() {
 
-        /**
-         * rcc8ec has similar functionality with sfTouches and ehMeet.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#E");
+        System.out.println("rcc8ec Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonI", "geof:rcc8ec", "http://example.org/Geometry#PolygonJ");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:rcc8ec(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        List<String> result = queryMany(queryString, infModel);
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
     @Test
-    public void negativeTest() {
+    public void rcc8ecBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:rcc8ec(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((83.2 34.3, 83.0 34.3, 83.0 34.3, 83.2 34.3, 83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
+        System.out.println("rcc8ec Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:rcc8ec", "http://example.org/Geometry#PolygonJ");
 
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void rcc8ecUnboundPostiveTest() {
+
+        System.out.println("rcc8ec Unbound Positive");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(queryString, infModel);
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geof:rcc8ec");
 
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
+    @Test
+    public void rcc8ecUnboundNegativeTest() {
+
+        System.out.println("rcc8ec Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geof:rcc8ec");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

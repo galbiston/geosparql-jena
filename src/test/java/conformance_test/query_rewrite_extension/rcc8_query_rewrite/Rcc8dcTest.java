@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.rcc8_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,13 +44,7 @@ public class Rcc8dcTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,34 +60,109 @@ public class Rcc8dcTest {
 
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void featureFeatureTest() {
-        System.out.println("Feature Feature Test: ");
+    public void rcc8dcBothBoundTest() {
 
-        List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:rcc8dc"), infModel);
+        System.out.println("rcc8dc Both Bound");
+        String expResult = "http://example.org/Geometry#PolygonL";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8dc", "http://example.org/Geometry#PolygonL");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void featureGeometryTest() {
-        System.out.println("Feature Geometry Test: ");
+    public void rcc8dcUnboundSubjectTest() {
 
+        System.out.println("rcc8dc Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:rcc8dc"), infModel);
-        assertEquals(expResult, result);
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#G");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#LineStringG");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        expResult.add("http://example.org/Geometry#PolygonK");
 
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:rcc8dc", "http://example.org/Geometry#PolygonL");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void geometryFeatureTest() {
-        System.out.println("Geometry Geometry Test: ");
+    public void rcc8dcUnboundObjectTest() {
 
+        System.out.println("rcc8dc Unbound Object");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:rcc8dc"), infModel);
-        assertEquals(expResult, result);
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#L");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonL");
 
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonH", "geo:rcc8dc");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
+    @Ignore
+    @Test
+    public void rcc8dcBothUnboundTest() {
+
+        System.out.println("rcc8dc Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:rcc8dc");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
+    @Test
+    public void rcc8dcAssertTest() {
+
+        System.out.println("rcc8dc Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:rcc8dc");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

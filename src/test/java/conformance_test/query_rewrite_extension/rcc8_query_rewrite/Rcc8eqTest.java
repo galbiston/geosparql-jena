@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.rcc8_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,13 +44,7 @@ public class Rcc8eqTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,39 +60,93 @@ public class Rcc8eqTest {
 
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void featureFeatureTest() {
-        System.out.println("Feature Feature Test: ");
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+    public void rcc8eqBothBoundTest() {
 
-        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:rcc8eq"), infModel);
+        System.out.println("rcc8eq Both Bound");
+        String expResult = "http://example.org/Geometry#LineStringE";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#LineStringE", "geo:rcc8eq", "http://example.org/Geometry#LineStringE");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void featureGeometryTest() {
-        System.out.println("Feature Geometry Test: ");
+    public void rcc8eqUnboundSubjectTest() {
+
+        System.out.println("rcc8eq Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Geometry#LineStringE");
 
-        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:rcc8eq"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:rcc8eq", "http://example.org/Geometry#LineStringE");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void geometryFeatureTest() {
-        System.out.println("Geometry Geometry Test: ");
+    public void rcc8eqUnboundObjectTest() {
+
+        System.out.println("rcc8eq Unbound Object");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
 
-        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:rcc8eq"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonJ", "geo:rcc8eq");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
+    }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Ignore
+    @Test
+    public void rcc8eqBothUnboundTest() {
+
+        System.out.println("rcc8eq Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:rcc8eq");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void rcc8eqAssertTest() {
+
+        System.out.println("rcc8eq Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:rcc8eq");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

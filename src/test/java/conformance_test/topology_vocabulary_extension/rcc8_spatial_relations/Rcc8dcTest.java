@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.rcc8_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class Rcc8dcTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,30 +55,86 @@ public class Rcc8dcTest {
 
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void positiveTest() {
+    public void rcc8dcBoundPostiveTest() {
 
-        /**
-         * Disjoint returns t (TRUE) if the intersection of the two geometries
-         * is an empty set.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#D");
-        expResult.add("http://example.org/ApplicationSchema#B");
+        System.out.println("rcc8dc Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonL";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8dc", "http://example.org/Geometry#PolygonL");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:E", "geo:rcc8dc", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void negativeTest() {
+    public void rcc8dcBoundNegativeTest() {
 
+        System.out.println("rcc8dc Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8dc", "http://example.org/Geometry#PolygonK");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
+    @Test
+    public void rcc8dcUnboundPostiveTest() {
+
+        System.out.println("rcc8dc Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#L");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonL");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8dc");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:rcc8dc", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
+    @Test
+    public void rcc8dcUnboundNegativeTest() {
+
+        System.out.println("rcc8dc Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#G");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#LineStringG");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geo:rcc8dc");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

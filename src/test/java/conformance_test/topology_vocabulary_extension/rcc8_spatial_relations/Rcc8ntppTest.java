@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.rcc8_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class Rcc8ntppTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,23 +55,66 @@ public class Rcc8ntppTest {
 
     }
 
+    /**
+     * Every point of a is a point of b, but boundaries do not touch.
+     */
     @Test
-    public void positiveTest() {
+    public void rcc8ntppBoundPostiveTest() {
 
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
+        System.out.println("rcc8ntpp Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonL", "geo:rcc8ntpp", "http://example.org/Geometry#PolygonJ");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:rcc8ntpp", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Every point of a is a point of b, but boundaries do not touch.
+     */
     @Test
-    public void negativeTest() {
+    public void rcc8ntppBoundNegativeTest() {
 
+        System.out.println("rcc8ntpp Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonJ", "geo:rcc8ntpp", "http://example.org/Geometry#PolygonK");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of a is a point of b, but boundaries do not touch.
+     */
+    @Test
+    public void rcc8ntppUnboundPostiveTest() {
+
+        System.out.println("rcc8ntpp Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geo:rcc8ntpp");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:E", "geo:rcc8ntpp", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Every point of a is a point of b, but boundaries do not touch.
+     */
+    @Test
+    public void rcc8ntppUnboundNegativeTest() {
+
+        System.out.println("rcc8ntpp Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:rcc8ntpp");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

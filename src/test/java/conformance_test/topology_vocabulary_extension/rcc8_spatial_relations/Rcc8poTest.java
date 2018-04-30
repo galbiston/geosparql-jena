@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.rcc8_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class Rcc8poTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,23 +55,66 @@ public class Rcc8poTest {
 
     }
 
+    /**
+     * Similar to sfOverlaps and ehOverlap.
+     */
     @Test
-    public void positiveTest() {
+    public void ehOverlapBoundPostiveTest() {
 
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        System.out.println("ehOverlap Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonI";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8po", "http://example.org/Geometry#PolygonI");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:F", "geo:rcc8po", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Similar to sfOverlaps and ehOverlap.
+     */
     @Test
-    public void negativeTest() {
+    public void ehOverlapBoundNegativeTest() {
 
+        System.out.println("ehOverlap Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8po", "http://example.org/Geometry#PolygonL");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Similar to sfOverlaps and ehOverlap.
+     */
+    @Test
+    public void ehOverlapUnboundPostiveTest() {
+
+        System.out.println("ehOverlap Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geo:rcc8po");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:rcc8po", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Similar to sfOverlaps and ehOverlap.
+     */
+    @Test
+    public void ehOverlapUnboundNegativeTest() {
+
+        System.out.println("ehOverlap Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geo:rcc8po");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

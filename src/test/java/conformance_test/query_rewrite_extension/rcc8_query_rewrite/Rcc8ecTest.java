@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.rcc8_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,13 +44,7 @@ public class Rcc8ecTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,39 +60,88 @@ public class Rcc8ecTest {
 
     }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
     @Test
-    public void featureFeatureTest() {
-        System.out.println("Feature Feature Test: ");
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#E");
-        expResult.add("http://example.org/ApplicationSchema#EExactGeom");
+    public void rcc8ecBothBoundTest() {
 
-        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:rcc8ec"), infModel);
+        System.out.println("rcc8ec Both Bound");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonI", "geo:rcc8ec", "http://example.org/Geometry#PolygonJ");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
     @Test
-    public void featureGeometryTest() {
-        System.out.println("Feature Geometry Test: ");
+    public void rcc8ecUnboundSubjectTest() {
+
+        System.out.println("rcc8ec Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#E");
-        expResult.add("http://example.org/ApplicationSchema#EExactGeom");
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Geometry#PolygonI");
 
-        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:rcc8ec"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:rcc8ec", "http://example.org/Geometry#PolygonJ");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
     @Test
-    public void geometryFeatureTest() {
-        System.out.println("Geometry Geometry Test: ");
+    public void rcc8ecUnboundObjectTest() {
+
+        System.out.println("rcc8ec Unbound Object");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#E");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
 
-        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:rcc8ec"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonI", "geo:rcc8ec");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
+    }
 
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
+    @Ignore
+    @Test
+    public void rcc8ecBothUnboundTest() {
+
+        System.out.println("rcc8ec Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:rcc8ec");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
+     */
+    @Test
+    public void rcc8ecAssertTest() {
+
+        System.out.println("rcc8ec Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:rcc8ec");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

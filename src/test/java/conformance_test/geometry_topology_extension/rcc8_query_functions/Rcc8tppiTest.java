@@ -5,10 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.rcc8_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.FilterTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -44,13 +43,7 @@ public class Rcc8tppiTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,32 +59,69 @@ public class Rcc8tppiTest {
 
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void positiveTest() {
+    public void rcc8nttpiBoundPostiveTest() {
 
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        System.out.println("rcc8nttpi Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonK";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:rcc8tppi", "http://example.org/Geometry#PolygonK");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:rcc8tppi(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        List<String> result = queryMany(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void negativeTest() {
+    public void rcc8nttpiBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:rcc8tppi(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.4 34.3, -83.3 34.3, -83.3 34.4, -83.4 34.4, -83.4 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
+        System.out.println("rcc8nttpi Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:rcc8tppi", "http://example.org/Geometry#PolygonL");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void rcc8nttpiUnboundPostiveTest() {
+
+        System.out.println("rcc8nttpi Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonK");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geof:rcc8tppi");
 
-        assertEquals(expResult, queryMany(queryString, infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void rcc8nttpiUnboundNegativeTest() {
+
+        System.out.println("rcc8nttpi Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geof:rcc8tppi");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }
