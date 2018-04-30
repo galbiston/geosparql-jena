@@ -68,7 +68,7 @@ public class RelateTest {
     public static final List<String> runRelateQuery(String target, String relation) {
         String queryString = RELATE_QUERY.replace(RELATION_REPLACEMENT, relation).replace(TARGET_REPLACEMENT, target);
         //System.out.println(queryString);
-        return ConformanceTestSuite.resourceQuery(queryString, SPATIAL_RELATIONS_MODEL);
+        return ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
     }
 
     @Test

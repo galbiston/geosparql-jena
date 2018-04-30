@@ -3,5 +3,5 @@ PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
 
 SELECT ?geom
 WHERE{
-    <#source#> #property# ?geom .
+    <#subject#> #property# ?geom .
 }ORDER by ?geom

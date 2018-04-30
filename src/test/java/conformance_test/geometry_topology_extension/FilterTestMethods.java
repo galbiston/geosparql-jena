@@ -18,26 +18,26 @@ public class FilterTestMethods {
 
     private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
 
-    private static final String BOUND_QUERY_FILE = "sparql_query/BoundTargetFilterQuery.spl";
-    private static final String BOUND_QUERY = QueryLoader.read(BOUND_QUERY_FILE);
+    private static final String BOTH_BOUND_QUERY_FILE = "sparql_query/BothBoundFilterQuery.spl";
+    private static final String BOTH_BOUND_QUERY = QueryLoader.read(BOTH_BOUND_QUERY_FILE);
 
-    private static final String UNBOUND_QUERY_FILE = "sparql_query/UnboundTargetFilterQuery.spl";
+    private static final String UNBOUND_QUERY_FILE = "sparql_query/UnboundObjectFilterQuery.spl";
     private static final String UNBOUND_QUERY = QueryLoader.read(UNBOUND_QUERY_FILE);
 
-    private static final String SOURCE_REPLACEMENT = "#source#";
+    private static final String SUBJECT_REPLACEMENT = "#subject#";
     private static final String FUNCTION_NAME_REPLACEMENT = "#function#";
-    private static final String TARGET_REPLACEMENT = "#target#";
+    private static final String OBJECT_REPLACEMENT = "#object#";
 
-    public static final String runBoundQuery(String source, String functionName, String target) {
-        String queryString = BOUND_QUERY.replace(SOURCE_REPLACEMENT, source).replace(FUNCTION_NAME_REPLACEMENT, functionName).replace(TARGET_REPLACEMENT, target);
+    public static final String runBoundQuery(String subject, String functionName, String object) {
+        String queryString = BOTH_BOUND_QUERY.replace(SUBJECT_REPLACEMENT, subject).replace(FUNCTION_NAME_REPLACEMENT, functionName).replace(OBJECT_REPLACEMENT, object);
         //System.out.println(queryString);
-        return ConformanceTestSuite.resourceSingleQuery(queryString, SPATIAL_RELATIONS_MODEL);
+        return ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
     }
 
-    public static final List<String> runUnboundQuery(String source, String functionName) {
-        String queryString = UNBOUND_QUERY.replace(SOURCE_REPLACEMENT, source).replace(FUNCTION_NAME_REPLACEMENT, functionName);
+    public static final List<String> runUnboundQuery(String subject, String functionName) {
+        String queryString = UNBOUND_QUERY.replace(SUBJECT_REPLACEMENT, subject).replace(FUNCTION_NAME_REPLACEMENT, functionName);
         //System.out.println(queryString);
-        return ConformanceTestSuite.resourceQuery(queryString, SPATIAL_RELATIONS_MODEL);
+        return ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
     }
 
 }

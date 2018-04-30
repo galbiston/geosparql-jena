@@ -143,4 +143,32 @@
         <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[]]></geo:asWKT>
     </sf:Point>
 
+    <!-- Asserted statements to check query rewriting. - Not coherent logic. -->
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#X">
+        <geo:sfContains rdf:resource="http://example.org/Feature#Y" />
+        <geo:sfCrosses rdf:resource="http://example.org/Feature#Y" />
+        <geo:sfDisjoint rdf:resource="http://example.org/Feature#Y" />
+        <geo:sfEquals rdf:resource="http://example.org/Feature#Y" />
+        <geo:sfIntersects rdf:resource="http://example.org/Feature#Y" />
+        <geo:sfOverlaps rdf:resource="http://example.org/Feature#Y" />
+        <geo:sfTouches rdf:resource="http://example.org/Feature#Y" />
+        <geo:sfWithin rdf:resource="http://example.org/Feature#Y" />
+        <geo:rcc8eq rdf:resource="http://example.org/Feature#Y" />
+        <geo:rcc8dc rdf:resource="http://example.org/Feature#Y" />
+        <geo:rcc8ec rdf:resource="http://example.org/Feature#Y" />
+        <geo:rcc8po rdf:resource="http://example.org/Feature#Y" />
+        <geo:rcc8tppi rdf:resource="http://example.org/Feature#Y" />
+        <geo:rcc8tpp rdf:resource="http://example.org/Feature#Y" />
+        <geo:rcc8ntpp rdf:resource="http://example.org/Feature#Y" />
+        <geo:rcc8ntppi rdf:resource="http://example.org/Feature#Y" />
+        <geo:ehEquals rdf:resource="http://example.org/Feature#Y" />
+        <geo:ehDisjoint rdf:resource="http://example.org/Feature#Y" />
+        <geo:ehMeet rdf:resource="http://example.org/Feature#Y" />
+        <geo:ehOverlap rdf:resource="http://example.org/Feature#Y" />
+        <geo:ehCovers rdf:resource="http://example.org/Feature#Y" />
+        <geo:ehCoveredBy rdf:resource="http://example.org/Feature#Y" />
+        <geo:ehInside rdf:resource="http://example.org/Feature#Y" />
+        <geo:ehContains rdf:resource="http://example.org/Feature#Y" />
+    </ex:PlaceOfInterest>
+
 </rdf:RDF>

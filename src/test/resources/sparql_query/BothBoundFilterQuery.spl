@@ -1,0 +1,10 @@
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+
+SELECT ?geom
+WHERE{
+    <#subject#> geo:asWKT ?subjectLit .
+    <#object#> geo:asWKT ?objectLit .
+    BIND(<#object#> AS ?geom) .
+    FILTER(#function#(?subjectLit, ?objectLit)) .
+}ORDER by ?geom

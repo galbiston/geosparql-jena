@@ -3,7 +3,7 @@ PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
 
 SELECT ?geom
 WHERE{
-    <#source#> geo:asWKT ?sourceLit .
-    ?geom geo:asWKT ?targetLit .
-    FILTER(#function#(?sourceLit, ?targetLit)) .
+    <#subject#> geo:asWKT ?subjectLit .
+    ?geom geo:asWKT ?objectLit .
+    FILTER(#function#(?subjectLit, ?objectLit)) .
 }ORDER BY ?geom

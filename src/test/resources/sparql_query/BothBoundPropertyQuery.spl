@@ -1,0 +1,8 @@
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+
+SELECT ?geom
+WHERE{
+    <#subject#> #property# <#object#> .
+    BIND(<#object#> AS ?geom) .
+}ORDER by ?geom

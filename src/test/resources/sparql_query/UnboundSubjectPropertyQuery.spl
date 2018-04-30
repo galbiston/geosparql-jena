@@ -3,6 +3,5 @@ PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
 
 SELECT ?geom
 WHERE{
-    <#source#> #property# <#target#> .
-    BIND(<#target#> AS ?geom) .
+    ?geom #property# <#object#> .
 }ORDER by ?geom

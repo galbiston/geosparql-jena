@@ -19,7 +19,6 @@ import org.apache.jena.query.QuerySolutionMap;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -122,7 +121,7 @@ public class ConformanceTestSuite {
      * @param queryModel - Use InfModel to get the full reasoner support
      * @return - the returned result list
      */
-    public static ArrayList<String> resourceQuery(String queryString, InfModel queryModel) {
+    public static List<String> queryMany(String queryString, InfModel queryModel) {
         ArrayList<String> resultList = new ArrayList<>();
         QuerySolutionMap bindings = new QuerySolutionMap();
         ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
@@ -133,18 +132,21 @@ public class ConformanceTestSuite {
             while (results.hasNext()) {
                 QuerySolution solution = results.nextSolution();
                 Iterator varIterator = solution.varNames();
+                List<String> varList = new ArrayList<>();
                 while (varIterator.hasNext()) {
                     String varName = (String) varIterator.next();
-                    Resource resource = solution.getResource(varName);
-                    resultList.add(resource.toString());
+                    varList.add(solution.get(varName).toString());
+
                 }
+                String result = String.join(" ", varList);
+                resultList.add(result);
             }
         }
         return resultList;
     }
 
-    public static String resourceSingleQuery(String queryString, InfModel queryModel) {
-        ArrayList<String> resources = resourceQuery(queryString, queryModel);
+    public static String querySingle(String queryString, InfModel queryModel) {
+        List<String> resources = queryMany(queryString, queryModel);
         if (resources.size() == 1) {
             return resources.get(0);
         }

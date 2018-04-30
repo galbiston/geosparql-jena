@@ -5,21 +5,20 @@
  */
 package conformance_test.query_rewrite_extension.simplefeatures_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.6.1.1 /conf/query-rewrite-extension/sf-query-rewrite
  *
@@ -27,7 +26,7 @@ import static org.junit.Assert.assertEquals;
  * pattern matching shall use the semantics defined by the RIF Core Entailment
  * Regime [W3C SPARQL Entailment] for the RIF rules [W3C RIF Core]
  * geor:sfEquals, geor:sfDisjoint, geor:sfIntersects, geor:sfTouches,
- * geor:sfCrosses, geor:sfWithin, geor:sfContains, geor:sfOverlaps.
+ * geor:sfCrosses, geor:sfWithin, geor:sfEquals, geor:sfOverlaps.
  *
  * a.) Test purpose: check conformance with this requirement
  *
@@ -35,7 +34,7 @@ import static org.junit.Assert.assertEquals;
  * transformation rules return the correct result for a test dataset when using
  * the specified serialization and version: geor:sfEquals, geor:sfDisjoint,
  * geor:sfIntersects, geor:sfTouches, geor:sfCrosses, geor:sfWithin,
- * geor:sfContains and geor:sfOverlaps.
+ * geor:sfEquals and geor:sfOverlaps.
  *
  * c.) Reference: Clause 11.2 Req 28
  *
@@ -45,13 +44,7 @@ public class SfEqualsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -67,39 +60,96 @@ public class SfEqualsTest {
 
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void featureFeatureTest() {
-        System.out.println("Feature Feature Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+    public void sfEqualsBothBoundTest() {
 
-        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:sfEquals"), infModel);
+        System.out.println("sfEquals Both Bound");
+        String expResult = "http://example.org/Geometry#PointC2";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PointC", "geo:sfEquals", "http://example.org/Geometry#PointC2");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void featureGeometryTest() {
-        System.out.println("Feature Geometry Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+    public void sfEqualsUnboundSubjectTest() {
 
-        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:sfEquals"), infModel);
+        System.out.println("sfEquals Unbound Subject");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:sfEquals", "http://example.org/Geometry#PointC");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void geometryFeatureTest() {
-        System.out.println("Geometry Geometry Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+    public void sfEqualsUnboundObjectTest() {
 
-        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:sfEquals"), infModel);
+        System.out.println("sfEquals Unbound Object");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PointC", "geo:sfEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Ignore
+    @Test
+    public void sfEqualsBothUnboundTest() {
+
+        System.out.println("sfEquals Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:sfEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Contains returns t (TRUE) if the second geometry is completely contained
+     * by the first geometry.
+     */
+    @Test
+    public void sfWithinAssertTest() {
+
+        System.out.println("sfWithin Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfWithin");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 }
