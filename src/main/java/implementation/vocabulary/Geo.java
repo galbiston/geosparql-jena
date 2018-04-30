@@ -14,8 +14,8 @@ import org.apache.jena.rdf.model.ResourceFactory;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class Geo {
 
@@ -36,6 +36,9 @@ public class Geo {
 
     public static final Resource FEATURE_RES = ResourceFactory.createResource(Prefixes.GEO_URI + "Feature");
     public static final Node FEATURE_NODE = FEATURE_RES.asNode();
+
+    public static final Resource SPATIAL_OBJECT_RES = ResourceFactory.createResource(Prefixes.GEO_URI + "SpatialObject");
+    public static final Node SPATIAL_OBJECT_NODE = SPATIAL_OBJECT_RES.asNode();
 
     //Simple Feature Topological function names:
     public static final String SF_CONTAINS_NAME = GEO_URI + "sfContains";
