@@ -113,7 +113,7 @@
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceK</ex:name>
     </ex:PlaceOfInterest>
     <sf:Polygon rdf:about="http://example.org/Geometry#PolygonK">
-        <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/EPSG/0/27700> Polygon((35 43, 35 48, 45 48, 45 43, 35 43))]]></geo:asWKT>
+        <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/EPSG/0/27700> Polygon((30 40, 30 48, 45 48, 45 40, 30 40))]]></geo:asWKT>
     </sf:Polygon>
 
     <!-- Point Empty -->
