@@ -34,8 +34,8 @@ public class PropertyTestMethods {
         return ConformanceTestSuite.resourceSingleQuery(queryString, SPATIAL_RELATIONS_MODEL);
     }
 
-    public static final List<String> runUnboundQuery(String subject, String propertyName) {
-        String queryString = UNBOUND_QUERY.replace(SOURCE_REPLACEMENT, subject).replace(PROPERTY_NAME_REPLACEMENT, propertyName);
+    public static final List<String> runUnboundQuery(String source, String propertyName) {
+        String queryString = UNBOUND_QUERY.replace(SOURCE_REPLACEMENT, source).replace(PROPERTY_NAME_REPLACEMENT, propertyName);
         //System.out.println(queryString);
         return ConformanceTestSuite.resourceQuery(queryString, SPATIAL_RELATIONS_MODEL);
     }

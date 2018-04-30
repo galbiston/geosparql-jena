@@ -34,8 +34,8 @@ public class FilterTestMethods {
         return ConformanceTestSuite.resourceSingleQuery(queryString, SPATIAL_RELATIONS_MODEL);
     }
 
-    public static final List<String> runUnboundQuery(String subject, String functionName) {
-        String queryString = UNBOUND_QUERY.replace(SOURCE_REPLACEMENT, subject).replace(FUNCTION_NAME_REPLACEMENT, functionName);
+    public static final List<String> runUnboundQuery(String source, String functionName) {
+        String queryString = UNBOUND_QUERY.replace(SOURCE_REPLACEMENT, source).replace(FUNCTION_NAME_REPLACEMENT, functionName);
         //System.out.println(queryString);
         return ConformanceTestSuite.resourceQuery(queryString, SPATIAL_RELATIONS_MODEL);
     }
