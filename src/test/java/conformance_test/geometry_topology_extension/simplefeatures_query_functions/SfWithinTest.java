@@ -106,7 +106,7 @@ public class SfWithinTest {
         List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geof:sfWithin");
 
         //System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
