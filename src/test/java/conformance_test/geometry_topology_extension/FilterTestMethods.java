@@ -18,10 +18,10 @@ public class FilterTestMethods {
 
     private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
 
-    private static final String BOUND_QUERY_FILE = "sparql_query/BoundFilterQuery.spl";
+    private static final String BOUND_QUERY_FILE = "sparql_query/BoundTargetFilterQuery.spl";
     private static final String BOUND_QUERY = QueryLoader.read(BOUND_QUERY_FILE);
 
-    private static final String UNBOUND_QUERY_FILE = "sparql_query/UnboundFilterQuery.spl";
+    private static final String UNBOUND_QUERY_FILE = "sparql_query/UnboundTargetFilterQuery.spl";
     private static final String UNBOUND_QUERY = QueryLoader.read(UNBOUND_QUERY_FILE);
 
     private static final String SOURCE_REPLACEMENT = "#source#";

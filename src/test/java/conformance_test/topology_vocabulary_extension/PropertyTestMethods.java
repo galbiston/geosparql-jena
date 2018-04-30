@@ -18,10 +18,10 @@ public class PropertyTestMethods {
 
     private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
 
-    private static final String BOUND_QUERY_FILE = "sparql_query/BoundPropertyQuery.spl";
+    private static final String BOUND_QUERY_FILE = "sparql_query/BoundTargetPropertyQuery.spl";
     private static final String BOUND_QUERY = QueryLoader.read(BOUND_QUERY_FILE);
 
-    private static final String UNBOUND_QUERY_FILE = "sparql_query/UnboundPropertyQuery.spl";
+    private static final String UNBOUND_QUERY_FILE = "sparql_query/UnboundTargetPropertyQuery.spl";
     private static final String UNBOUND_QUERY = QueryLoader.read(UNBOUND_QUERY_FILE);
 
     private static final String SOURCE_REPLACEMENT = "#source#";
