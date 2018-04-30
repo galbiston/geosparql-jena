@@ -5,11 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.simplefeatures_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +17,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
  *
@@ -41,13 +39,7 @@ public class SfCrossesTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -63,29 +55,88 @@ public class SfCrossesTest {
 
     }
 
+    /**
+     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
+     */
     @Test
-    public void positiveTest() {
+    public void sfCrossesBoundPostiveTest() {
 
-        /**
-         * Cross returns t (TRUE) if the intersection results in a geometry
-         * whose dimension is one less than the maximum dimension of the two
-         * source geometries and the intersection set is interior to both source
-         * geometries, Cross returns t (TRUE) for only multipoint/polygon,
-         * multipoint/linestring, linestring/linestring, linestring/polygon, and
-         * linestring/multipolygon comparisons.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#B");
+        System.out.println("sfCrosses Bound Positive");
+        String expResult = "http://example.org/Geometry#LineStringE";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#LineStringG", "geo:sfCrosses", "http://example.org/Geometry#LineStringE");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfCrosses", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
+     */
     @Test
-    public void negativeTest() {
+    public void sfCrossesBoundNegativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfCrosses Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#LineStringG", "geo:sfCrosses", "http://example.org/Geometry#LineStringF");
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:F", "geo:sfCrosses", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
+
+    /**
+     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
+     */
+    @Test
+    public void sfCrossesUnboundPostiveTest() {
+
+        System.out.println("sfCrosses Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringG", "geo:sfCrosses");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
+     */
+    @Test
+    public void sfCrossesUnboundNegativeTest() {
+
+        System.out.println("sfCrosses Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringF", "geo:sfCrosses");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
 }

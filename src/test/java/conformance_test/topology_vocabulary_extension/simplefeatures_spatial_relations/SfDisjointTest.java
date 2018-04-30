@@ -5,11 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.simplefeatures_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +17,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
  *
@@ -41,13 +39,7 @@ public class SfDisjointTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -63,30 +55,102 @@ public class SfDisjointTest {
 
     }
 
+    /**
+     * Geometries that do not have a point in common. A set of disconnected
+     * geometries.
+     */
     @Test
-    public void positiveTest() {
+    public void sfDisjointBoundPostiveTest() {
 
-        /**
-         * Disjoint returns t (TRUE) if the intersection of the two geometries
-         * is an empty set.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#E");
-        expResult.add("http://example.org/ApplicationSchema#D");
-        expResult.add("http://example.org/ApplicationSchema#B");
+        System.out.println("sfDisjoint Bound Positive");
+        String expResult = "http://example.org/Geometry#PointC";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:sfDisjoint", "http://example.org/Geometry#PointC");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfDisjoint", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Geometries that do not have a point in common. A set of disconnected
+     * geometries.
+     */
     @Test
-    public void negativeTest() {
+    public void sfDisjointBoundNegativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfDisjoint Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:sfDisjoint", "http://example.org/Geometry#PointA");
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfDisjoint", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Geometries that do not have a point in common. A set of disconnected
+     * geometries.
+     */
+    @Test
+    public void sfDisjointUnboundPostiveTest() {
+
+        System.out.println("sfDisjoint Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Feature#Empty");
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#L");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        expResult.add("http://example.org/Geometry#PointEmpty");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonL");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geo:sfDisjoint");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Geometries that do not have a point in common. A set of disconnected
+     * geometries.
+     */
+    @Test
+    public void sfDisjointUnboundNegativeTest() {
+
+        System.out.println("sfDisjoint Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#A");
+        expResult.add("http://example.org/Feature#B");
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#Empty");
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#G");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#LineStringG");
+        expResult.add("http://example.org/Geometry#PointA");
+        expResult.add("http://example.org/Geometry#PointB");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        expResult.add("http://example.org/Geometry#PointEmpty");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geo:sfDisjoint");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

@@ -5,11 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.simplefeatures_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +17,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
  *
@@ -41,13 +39,7 @@ public class SfEqualsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -63,27 +55,74 @@ public class SfEqualsTest {
 
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void positiveTest() {
+    public void sfEqualsBoundPostiveTest() {
 
-        /**
-         * Equal returns t (TRUE) if two geometries of the same type have
-         * identical X,Y coordinate values.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#A");
+        System.out.println("sfEquals Bound Positive");
+        String expResult = "http://example.org/Geometry#PointC2";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PointC", "geo:sfEquals", "http://example.org/Geometry#PointC2");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfEquals", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void negativeTest() {
+    public void sfEqualsBoundNegativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfEquals Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PointC", "geo:sfEquals", "http://example.org/Geometry#PointA");
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfEquals", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void sfEqualsUnboundPostiveTest() {
+
+        System.out.println("sfEquals Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PointC", "geo:sfEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void sfEqualsUnboundNegativeTest() {
+
+        System.out.println("sfEquals Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geo:sfEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

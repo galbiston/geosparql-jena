@@ -5,11 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.simplefeatures_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +17,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.1.1 /conf/topology-vocab-extension/sf-spatial-relations
  *
@@ -41,13 +39,7 @@ public class SfWithinTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -63,31 +55,74 @@ public class SfWithinTest {
 
     }
 
+    /**
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
+     */
     @Test
-    public void positiveTest() {
+    public void sfWithinBoundPostiveTest() {
 
-        /**
-         * Within returns t (TRUE) if the first geometry is completely within
-         * the second geometry, Within tests for the exact opposite result of
-         * contains.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
-        expResult.add("http://example.org/ApplicationSchema#D");
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#A");
+        System.out.println("sfWithin Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonL", "geo:sfWithin", "http://example.org/Geometry#PolygonJ");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfWithin", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
+     */
     @Test
-    public void negativeTest() {
+    public void sfWithinBoundNegativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfWithin Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:sfWithin", "http://example.org/Geometry#PolygonI");
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfWithin", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
+     */
+    @Test
+    public void sfWithinUnboundPostiveTest() {
+
+        System.out.println("sfContains Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#L");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonL");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geo:sfWithin");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
+     */
+    @Test
+    public void sfWithinUnboundNegativeTest() {
+
+        System.out.println("sfWithin Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:sfWithin");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

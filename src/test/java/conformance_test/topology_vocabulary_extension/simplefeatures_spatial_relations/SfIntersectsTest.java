@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.simplefeatures_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
-
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class SfIntersectsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,40 +55,128 @@ public class SfIntersectsTest {
 
     }
 
+    /**
+     * Intersects returns t (TRUE) if the intersection does not result in an
+     * empty set, Intersects returns the exact opposite result of disjoint.
+     */
     @Test
-    public void positiveTest() {
+    public void sfIntersectsBoundPostiveTest() {
 
-        /**
-         * Intersects returns t (TRUE) if the intersection does not result in an
-         * empty set, Intersects returns the exact opposite result of disjoint.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#E");
-        expResult.add("http://example.org/ApplicationSchema#D");
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#B");
-        expResult.add("http://example.org/ApplicationSchema#A");
+        System.out.println("sfIntersects Bound Positive");
+        String expResult = "http://example.org/Geometry#LineStringE";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PointB", "geo:sfIntersects", "http://example.org/Geometry#LineStringE");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfIntersects", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Intersects returns t (TRUE) if the intersection does not result in an
+     * empty set, Intersects returns the exact opposite result of disjoint.
+     */
     @Test
-    public void negativeTest() {
+    public void sfIntersectsBoundPostiveTest2() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + "ex:E ex:hasExactGeometry ?bGeom . "
-                + "ex:C ex:hasExactGeometry ?cGeom ."
-                + "?place geo:sfIntersects ?bGeom . "
-                + "FILTER ( ?aGeom != ?cGeom ) . "
-                + "FILTER ( ?aGeom != ?bGeom ) . "
-                + "}";
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfIntersects Bound Positive2");
+        String expResult = "http://example.org/Geometry#LineStringE";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#LineStringG", "geo:sfIntersects", "http://example.org/Geometry#LineStringE");
 
-        assertEquals(expResult, resourceQuery(queryString, infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Intersects returns t (TRUE) if the intersection does not result in an
+     * empty set, Intersects returns the exact opposite result of disjoint.
+     */
+    @Test
+    public void sfIntersectsBoundPostiveTest3() {
+
+        System.out.println("sfIntersects Bound Positive3");
+        String expResult = "http://example.org/Geometry#PolygonI";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#LineStringG", "geo:sfIntersects", "http://example.org/Geometry#PolygonI");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Intersects returns t (TRUE) if the intersection does not result in an
+     * empty set, Intersects returns the exact opposite result of disjoint.
+     */
+    @Test
+    public void sfIntersectsBoundNegativeTest() {
+
+        System.out.println("sfIntersects Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PointB", "geo:sfIntersects", "http://example.org/Geometry#LineStringD");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Intersects returns t (TRUE) if the intersection does not result in an
+     * empty set, Intersects returns the exact opposite result of disjoint.
+     */
+    @Test
+    public void sfIntersectsBoundNegativeTest2() {
+
+        System.out.println("sfIntersects Bound Negative2");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#LineStringF", "geo:sfIntersects", "http://example.org/Geometry#LineStringD");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Intersects returns t (TRUE) if the intersection does not result in an
+     * empty set, Intersects returns the exact opposite result of disjoint.
+     */
+    @Test
+    public void sfIntersectsUnboundPostiveTest() {
+
+        System.out.println("sfIntersects Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#G");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#LineStringG");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringG", "geo:sfIntersects");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Intersects returns t (TRUE) if the intersection does not result in an
+     * empty set, Intersects returns the exact opposite result of disjoint.
+     */
+    @Test
+    public void sfIntersectsUnboundNegativeTest() {
+
+        System.out.println("sfIntersects Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringF", "geo:sfIntersects");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

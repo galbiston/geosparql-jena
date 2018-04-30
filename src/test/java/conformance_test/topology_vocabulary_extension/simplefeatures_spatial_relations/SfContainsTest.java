@@ -5,9 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.simplefeatures_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -39,13 +39,7 @@ public class SfContainsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -61,29 +55,94 @@ public class SfContainsTest {
 
     }
 
+    /**
+     * Contains returns t (TRUE) if the second geometry is completely contained
+     * by the first geometry.
+     */
     @Test
-    public void positiveTest() {
+    public void sfContainsBoundPostiveTest() {
 
-        /**
-         * Contains returns t (TRUE) if the second geometry is completely
-         * contained by the first geometry.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#A");
+        System.out.println("sfContains Bound Positive");
+        String expResult = "http://example.org/Geometry#PointA";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:sfContains", "http://example.org/Geometry#PointA");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:A", "geo:sfContains", ""), infModel);
-        //System.out.println("Expected: " + expResult);
-        //System.out.println("Result: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Contains returns t (TRUE) if the second geometry is completely contained
+     * by the first geometry.
+     */
     @Test
-    public void negativeTest() {
+    public void sfContainsBoundPostiveTest2() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfContains Bound Positive2");
+        String expResult = "http://example.org/Geometry#PolygonL";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonJ", "geo:sfContains", "http://example.org/Geometry#PolygonL");
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:C", "geo:sfContains", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Contains returns t (TRUE) if the second geometry is completely contained
+     * by the first geometry. No results expected.
+     */
+    @Test
+    public void sfContainsBoundNegativeTest() {
+
+        System.out.println("sfContains Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:sfContains", "http://example.org/Geometry#PointC");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Contains returns t (TRUE) if the second geometry is completely contained
+     * by the first geometry.
+     */
+    @Test
+    public void sfContainsUnboundPostiveTest() {
+
+        System.out.println("sfContains Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#A");
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#PointA");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geo:sfContains");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Contains returns t (TRUE) if the second geometry is completely contained
+     * by the first geometry. Only itself should be returned.
+     */
+    @Test
+    public void sfContainsUnboundNegativeTest() {
+
+        System.out.println("sfContains Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:sfContains");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }
