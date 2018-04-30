@@ -44,6 +44,15 @@
         <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/EPSG/0/27700> Point(30 20)]]></geo:asWKT>
     </sf:Point>
 
+    <!-- Point C2 -->
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#C2">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PointC2"/>
+        <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceC2</ex:name>
+    </ex:PlaceOfInterest>
+    <sf:Point rdf:about="http://example.org/Geometry#PointC2">
+        <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/EPSG/0/27700> Point(30 20)]]></geo:asWKT>
+    </sf:Point>
+
     <!-- LineString D -->
     <ex:PlaceOfInterest rdf:about="http://example.org/Feature#D">
         <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#LineStringD"/>
@@ -114,6 +123,15 @@
     </ex:PlaceOfInterest>
     <sf:Polygon rdf:about="http://example.org/Geometry#PolygonK">
         <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/EPSG/0/27700> Polygon((30 40, 30 48, 45 48, 45 40, 30 40))]]></geo:asWKT>
+    </sf:Polygon>
+
+    <!-- Polygon L -->
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#L">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PolygonL"/>
+        <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceL</ex:name>
+    </ex:PlaceOfInterest>
+    <sf:Polygon rdf:about="http://example.org/Geometry#PolygonL">
+        <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/EPSG/0/27700> Polygon((145 30, 145 40, 160 40, 160 30, 145 30))]]></geo:asWKT>
     </sf:Polygon>
 
     <!-- Point Empty -->

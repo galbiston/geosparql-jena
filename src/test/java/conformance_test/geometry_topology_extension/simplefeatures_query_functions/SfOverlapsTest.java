@@ -5,9 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.simplefeatures_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.*;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -44,13 +44,7 @@ public class SfOverlapsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,37 +60,73 @@ public class SfOverlapsTest {
 
     }
 
+    /**
+     * Overlap compares two geometries of the same dimension and returns t
+     * (TRUE) if their intersection set results in a geometry different from
+     * both but of the same dimension.
+     */
     @Test
-    public void positiveTest() {
+    public void sfOverlapsBoundPostiveTest() {
 
-        /**
-         * Overlap compares two geometries of the same dimension and returns t
-         * (TRUE) if their intersection set results in a geometry different from
-         * both but of the same dimension.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#F");
+        System.out.println("sfOverlaps Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonI";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:sfOverlaps", "http://example.org/Geometry#PolygonI");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfOverlaps(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Overlap compares two geometries of the same dimension and returns t
+     * (TRUE) if their intersection set results in a geometry different from
+     * both but of the same dimension.
+     */
     @Test
-    public void negativeTest() {
+    public void sfOverlapsBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfOverlaps(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfOverlaps Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:sfOverlaps", "http://example.org/Geometry#LineStringF");
 
-        assertEquals(expResult, resourceQuery(queryString, infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Overlap compares two geometries of the same dimension and returns t
+     * (TRUE) if their intersection set results in a geometry different from
+     * both but of the same dimension.
+     */
+    @Test
+    public void sfOverlapsUnboundPostiveTest() {
+
+        System.out.println("sfOverlaps Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geof:sfOverlaps");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Overlap compares two geometries of the same dimension and returns t
+     * (TRUE) if their intersection set results in a geometry different from
+     * both but of the same dimension.
+     */
+    @Test
+    public void sfOverlapsUnboundNegativeTest() {
+
+        System.out.println("sfOverlaps Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringF", "geof:sfOverlaps");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

@@ -5,9 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.simplefeatures_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.*;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -44,13 +44,7 @@ public class SfCrossesTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,39 +60,86 @@ public class SfCrossesTest {
 
     }
 
+    /**
+     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
+     */
     @Test
-    public void positiveTest() {
+    public void sfCrossesBoundPostiveTest() {
 
-        /**
-         * Cross returns t (TRUE) if the intersection results in a geometry
-         * whose dimension is one less than the maximum dimension of the two
-         * source geometries and the intersection set is interior to both source
-         * geometries, Cross returns t (TRUE) for only multipoint/polygon,
-         * multipoint/linestring, linestring/linestring, linestring/polygon, and
-         * linestring/multipolygon comparisons.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#B");
+        System.out.println("sfCrosses Bound Positive");
+        String expResult = "http://example.org/Geometry#LineStringE";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#LineStringG", "geof:sfCrosses", "http://example.org/Geometry#LineStringE");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfCrosses(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
+     */
     @Test
-    public void negativeTest() {
+    public void sfCrossesBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfCrosses(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.3 34.0, -83.1 34.0, -83.1 34.2, -83.3 34.2, -83.3 34.0))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfCrosses Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#LineStringG", "geof:sfCrosses", "http://example.org/Geometry#LineStringF");
 
-        assertEquals(expResult, resourceQuery(queryString, infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
+
+    /**
+     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
+     */
+    @Test
+    public void sfCrossesUnboundPostiveTest() {
+
+        System.out.println("sfCrosses Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringG", "geof:sfCrosses");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
+     */
+    @Test
+    public void sfCrossesUnboundNegativeTest() {
+
+        System.out.println("sfCrosses Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringF", "geof:sfCrosses");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
 }

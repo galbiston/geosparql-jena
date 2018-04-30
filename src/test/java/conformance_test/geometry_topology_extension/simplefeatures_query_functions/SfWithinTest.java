@@ -5,9 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.simplefeatures_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.*;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -44,13 +44,7 @@ public class SfWithinTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,38 +60,71 @@ public class SfWithinTest {
 
     }
 
+    /**
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
+     */
     @Test
-    public void positiveTest() {
+    public void sfWithinBoundPostiveTest() {
 
-        /**
-         * Within returns t (TRUE) if the first geometry is completely within
-         * the second geometry, Within tests for the exact opposite result of
-         * contains.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#A");
+        System.out.println("sfWithin Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonL", "geof:sfWithin", "http://example.org/Geometry#PolygonJ");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfWithin(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
-                + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
+     */
     @Test
-    public void negativeTest() {
+    public void sfWithinBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfWithin(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
-                + "}";
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfWithin Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:sfWithin", "http://example.org/Geometry#PolygonI");
 
-        assertEquals(expResult, resourceQuery(queryString, infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
+     */
+    @Test
+    public void sfWithinUnboundPostiveTest() {
+
+        System.out.println("sfContains Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonL");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geof:sfWithin");
+
+        //System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
+     */
+    @Test
+    public void sfWithinUnboundNegativeTest() {
+
+        System.out.println("sfWithin Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geof:sfWithin");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

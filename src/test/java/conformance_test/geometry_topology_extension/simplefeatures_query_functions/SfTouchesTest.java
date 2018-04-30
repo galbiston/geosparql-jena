@@ -5,9 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.simplefeatures_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.*;
 import java.util.ArrayList;
-import org.apache.jena.rdf.model.InfModel;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -44,13 +44,7 @@ public class SfTouchesTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,38 +60,90 @@ public class SfTouchesTest {
 
     }
 
+    /**
+     * Touch returns t (TRUE) if none of the points common to both geometries
+     * intersect the interiors of both geometries, At least one geometry must be
+     * a line string, polygon, multi line string, or multi polygon.
+     */
     @Test
-    public void positiveTest() {
+    public void sfTouchesBoundPostiveTest() {
 
-        /**
-         * Touch returns t (TRUE) if none of the points common to both
-         * geometries intersect the interiors of both geometries, At least one
-         * geometry must be a line string, polygon, multi line string, or multi
-         * polygon.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#E");
+        System.out.println("sfTouches Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonI", "geof:sfTouches", "http://example.org/Geometry#PolygonJ");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfTouches(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Touch returns t (TRUE) if none of the points common to both geometries
+     * intersect the interiors of both geometries, At least one geometry must be
+     * a line string, polygon, multi line string, or multi polygon.
+     */
     @Test
-    public void negativeTest() {
+    public void sfTouchesBoundPostiveTest2() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfTouches(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        ArrayList<String> expResult = new ArrayList<>();
+        System.out.println("sfTouches Bound Positive2");
+        String expResult = "http://example.org/Geometry#PointB";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:sfTouches", "http://example.org/Geometry#PointB");
 
-        assertEquals(expResult, resourceQuery(queryString, infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Touch returns t (TRUE) if none of the points common to both geometries
+     * intersect the interiors of both geometries, At least one geometry must be
+     * a line string, polygon, multi line string, or multi polygon.
+     */
+    @Test
+    public void sfTouchesBoundNegativeTest() {
+
+        System.out.println("sfTouches Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:sfTouches", "http://example.org/Geometry#PolygonJ");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Touch returns t (TRUE) if none of the points common to both geometries
+     * intersect the interiors of both geometries, At least one geometry must be
+     * a line string, polygon, multi line string, or multi polygon.
+     */
+    @Test
+    public void sfTouchesUnboundPostiveTest() {
+
+        System.out.println("sfTouches Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geof:sfTouches");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Touch returns t (TRUE) if none of the points common to both geometries
+     * intersect the interiors of both geometries, At least one geometry must be
+     * a line string, polygon, multi line string, or multi polygon.
+     */
+    @Test
+    public void sfTouchesUnboundNegativeTest() {
+
+        System.out.println("sfTouches Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonK", "geof:sfTouches");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

@@ -7,4 +7,4 @@ WHERE{
     <#target#> geo:asWKT ?targetLit .
     BIND(<#target#> AS ?geom) .
     FILTER(#function#(?sourceLit, ?targetLit)) .
-}
+}ORDER by ?geom
