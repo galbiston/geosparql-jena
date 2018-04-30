@@ -5,10 +5,10 @@
  */
 package conformance_test.geometry_topology_extension.relate_query_function;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
+import conformance_test.ConformanceTestSuite;
+import conformance_test.QueryLoader;
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +19,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.4.1.1 /conf/geometry-topology-extension/relate-query-function
  *
@@ -39,15 +39,11 @@ import org.junit.Test;
  */
 public class RelateTest {
 
+    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -63,18 +59,27 @@ public class RelateTest {
 
     }
 
+    private static final String RELATE_QUERY_FILE = "sparql_query/RelateQuery.spl";
+    private static final String RELATE_QUERY = QueryLoader.read(RELATE_QUERY_FILE);
+
+    private static final String RELATION_REPLACEMENT = "#relation#";
+    private static final String TARGET_REPLACEMENT = "#target#";
+
+    public static final List<String> runRelateQuery(String target, String relation) {
+        String queryString = RELATE_QUERY.replace(RELATION_REPLACEMENT, relation).replace(TARGET_REPLACEMENT, target);
+        //System.out.println(queryString);
+        return ConformanceTestSuite.resourceQuery(queryString, SPATIAL_RELATIONS_MODEL);
+    }
+
     @Test
     public void pointTest() {
 
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#A");
+        expResult.add("http://example.org/Geometry#PointA");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"T*F**FFF*\") ."
-                + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        List<String> result = runRelateQuery("\"<http://www.opengis.net/def/crs/EPSG/0/27700> Point(60 60)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>", "\"T*F**FFF*\"");
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -82,14 +87,11 @@ public class RelateTest {
     public void lineTest() {
 
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#B");
+        expResult.add("http://example.org/Geometry#LineStringD");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LineString(-83.4 34.0, -83.3 34.3)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
-                + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        List<String> result = runRelateQuery("\"<http://www.opengis.net/def/crs/EPSG/0/27700> LineString(40 50, 80 50)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>", "\"TFFFTFFFT\"");
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -97,27 +99,11 @@ public class RelateTest {
     public void polygonTest() {
 
         ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#E");
+        expResult.add("http://example.org/Geometry#PolygonH");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
-                + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        List<String> result = runRelateQuery("\"<http://www.opengis.net/def/crs/EPSG/0/27700> Polygon((30 40, 30 70, 90 70, 90 40, 30 40))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>", "\"TFFFTFFFT\"");
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-    }
-
-    @Test
-    public void negativeTest() {
-
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:relate(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"TFFFTFFFT\") ."
-                + "}";
-        ArrayList<String> expResult = new ArrayList<>();
-
-        assertEquals(expResult, resourceQuery(queryString, infModel));
     }
 }
