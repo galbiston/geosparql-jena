@@ -156,8 +156,8 @@ public class SfIntersectsTest {
         expResult.add("http://example.org/Geometry#PolygonI");
         List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringG", "geof:sfIntersects");
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
