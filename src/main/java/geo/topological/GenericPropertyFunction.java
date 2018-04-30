@@ -149,11 +149,11 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             return QueryIterNullIterator.create(execCxt);
         }
 
-        ExtendedIterator<Triple> spatialObjects = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
-        List<Triple> unboundTriples = spatialObjects.toList();
+        ExtendedIterator<Triple> unboundTriples = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
         Var unboundVar = Var.alloc(unboundNode.getName());
         QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
-        for (Triple unboundTriple : unboundTriples) {
+        while (unboundTriples.hasNext()) {
+            Triple unboundTriple = unboundTriples.next();
             Binding newBind = BindingFactory.binding(binding, unboundVar, unboundTriple.getSubject());
             QueryIterator queryIter;
             if (isSubjectBound) {
