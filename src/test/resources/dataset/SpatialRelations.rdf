@@ -107,4 +107,22 @@
         <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/EPSG/0/27700> Polygon((140 15, 140 45, 200 45, 200 15, 140 15))]]></geo:asWKT>
     </sf:Polygon>
 
+    <!-- Polygon K -->
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#K">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PolygonK"/>
+        <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceK</ex:name>
+    </ex:PlaceOfInterest>
+    <sf:Polygon rdf:about="http://example.org/Geometry#PolygonK">
+        <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[<http://www.opengis.net/def/crs/EPSG/0/27700> Polygon((35 43, 35 48, 45 48, 45 43, 35 43))]]></geo:asWKT>
+    </sf:Polygon>
+
+    <!-- Point Empty -->
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#Empty">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PointEmpty"/>
+        <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceEmpty</ex:name>
+    </ex:PlaceOfInterest>
+    <sf:Point rdf:about="http://example.org/Geometry#PointEmpty">
+        <geo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"><![CDATA[]]></geo:asWKT>
+    </sf:Point>
+
 </rdf:RDF>
