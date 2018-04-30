@@ -6,20 +6,19 @@
 package conformance_test.query_rewrite_extension.rcc8_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.6.3.1 /conf/query-rewrite-extension/rcc8-query-rewrite
  *
@@ -48,7 +47,7 @@ public class Rcc8dcTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -71,8 +70,8 @@ public class Rcc8dcTest {
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
 
-        ArrayList<String> expResult = new ArrayList<>();
-        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:rcc8dc"), infModel);
+        List<String> expResult = new ArrayList<>();
+        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:rcc8dc"), infModel);
         assertEquals(expResult, result);
 
     }
@@ -81,8 +80,8 @@ public class Rcc8dcTest {
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
 
-        ArrayList<String> expResult = new ArrayList<>();
-        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:rcc8dc"), infModel);
+        List<String> expResult = new ArrayList<>();
+        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:rcc8dc"), infModel);
         assertEquals(expResult, result);
 
     }
@@ -91,8 +90,8 @@ public class Rcc8dcTest {
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
 
-        ArrayList<String> expResult = new ArrayList<>();
-        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:rcc8dc"), infModel);
+        List<String> expResult = new ArrayList<>();
+        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:rcc8dc"), infModel);
         assertEquals(expResult, result);
 
     }

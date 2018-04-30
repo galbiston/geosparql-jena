@@ -6,15 +6,15 @@
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -68,31 +68,31 @@ public class EhCoversTest {
 
     @Test
     public void featureFeatureTest() {
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:D", "geo:ehCovers"), infModel);
+        List<String> result = queryMany(featureFeatureQuery("ex:D", "geo:ehCovers"), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void featureGeometryTest() {
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:D", "geo:ehCovers"), infModel);
+        List<String> result = queryMany(featureGeometryQuery("ex:D", "geo:ehCovers"), infModel);
         assertEquals(expResult, result);
 
     }
 
     @Test
     public void geometryFeatureTest() {
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:D", "geo:ehCovers"), infModel);
+        List<String> result = queryMany(geometryFeatureQuery("ex:D", "geo:ehCovers"), infModel);
         assertEquals(expResult, result);
     }
 

@@ -78,7 +78,7 @@ public class EhContainsTest {
         List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        List<String> result = resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-83.4 34.4)"), infModel);
+        List<String> result = queryMany(geometryTopologyQuery("geof:ehContains", "Point(-83.4 34.4)"), infModel);
         assertEquals(expResult, result);
     }
 
@@ -86,7 +86,7 @@ public class EhContainsTest {
     public void negativeTest() {
 
         List<String> expResult = new ArrayList<>();
-        List<String> result = resourceQuery(geometryTopologyQuery("geof:ehContains", "Point(-86.4 31.4)"), infModel);
+        List<String> result = queryMany(geometryTopologyQuery("geof:ehContains", "Point(-86.4 31.4)"), infModel);
         assertEquals(expResult, result);
     }
 

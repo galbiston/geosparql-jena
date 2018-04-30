@@ -6,9 +6,8 @@
 package conformance_test.query_rewrite_extension.rcc8_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.6.3.1 /conf/query-rewrite-extension/rcc8-query-rewrite
  *
@@ -48,7 +47,7 @@ public class Rcc8ntppiTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -70,11 +69,11 @@ public class Rcc8ntppiTest {
     @Test
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:G", "geo:rcc8ntppi"), infModel);
+        List<String> result = queryMany(featureFeatureQuery("ex:G", "geo:rcc8ntppi"), infModel);
         assertEquals(expResult, result);
 
     }
@@ -82,11 +81,11 @@ public class Rcc8ntppiTest {
     @Test
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
 
-        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:G", "geo:rcc8ntppi"), infModel);
+        List<String> result = queryMany(featureGeometryQuery("ex:G", "geo:rcc8ntppi"), infModel);
         assertEquals(expResult, result);
 
     }
@@ -94,10 +93,10 @@ public class Rcc8ntppiTest {
     @Test
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:G", "geo:rcc8ntppi"), infModel);
+        List<String> result = queryMany(geometryFeatureQuery("ex:G", "geo:rcc8ntppi"), infModel);
         assertEquals(expResult, result);
 
     }

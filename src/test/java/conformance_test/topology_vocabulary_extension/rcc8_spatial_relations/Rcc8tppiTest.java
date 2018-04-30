@@ -6,9 +6,8 @@
 package conformance_test.topology_vocabulary_extension.rcc8_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.3.1 /conf/topology-vocab-extension/rcc8-spatial-relations
  *
@@ -44,7 +43,7 @@ public class Rcc8tppiTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -66,19 +65,19 @@ public class Rcc8tppiTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:D", "geo:rcc8tppi", ""), infModel);
+        List<String> result = queryMany(topologyVocabluaryQuery("ex:D", "geo:rcc8tppi", ""), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:E", "geo:rcc8tppi", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:E", "geo:rcc8tppi", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

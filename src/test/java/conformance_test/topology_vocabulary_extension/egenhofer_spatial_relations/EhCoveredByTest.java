@@ -6,9 +6,8 @@
 package conformance_test.topology_vocabulary_extension.egenhofer_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.2.1 /conf/topology-vocab-extension/eh-spatial-relations
  *
@@ -44,7 +43,7 @@ public class EhCoveredByTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -66,19 +65,19 @@ public class EhCoveredByTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#D");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehCoveredBy", ""), infModel);
+        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:ehCoveredBy", ""), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:E", "geo:ehCoveredBy", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:E", "geo:ehCoveredBy", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

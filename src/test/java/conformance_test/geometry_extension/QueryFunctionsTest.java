@@ -79,7 +79,7 @@ public class QueryFunctionsTest {
                 + "BIND ((geof:boundary( \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>)) AS ?bBoundary). "
                 + "FILTER ( geof:sfEquals(?aBoundary, ?bBoundary)) "
                 + " }";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -96,7 +96,7 @@ public class QueryFunctionsTest {
                 + " BIND( geof:buffer(?bWkt, 1000, uom:metre) AS ?buffer) . "
                 + " FILTER ( geof:sfIntersects(?aWkt, ?buffer) )"
                 + " }ORDER BY ?place";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -117,7 +117,7 @@ public class QueryFunctionsTest {
                 + " BIND( geof:buffer(?bWkt, 10000, uom:metre) AS ?buffer) . "
                 + " FILTER ( geof:sfIntersects(?aWkt, ?buffer) )"
                 + " }ORDER BY ?place";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -132,7 +132,7 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:convexHull(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.3, -83.4 34.3, -83.6 34.2, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) AS ?convexHull ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?convexHull ))"
                 + "}";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -151,7 +151,7 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:difference(?eWkt, ?cWkt) AS ?difference ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?difference ))"
                 + "}";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -169,7 +169,7 @@ public class QueryFunctionsTest {
                 + " }"
                 + "ORDER BY ASC (geof:distance(?eWkt, ?aWkt, uom:metre))"
                 + "LIMIT 3";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -184,7 +184,7 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:envelope(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.3, -83.4 34.1, -83.2 34.3, -83.4 34.5, -83.6 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) AS ?envelope ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?envelope ))"
                 + "}";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -203,7 +203,7 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:intersection(?eWkt, ?cWkt) AS ?intersection ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?intersection ))"
                 + "}";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -218,7 +218,7 @@ public class QueryFunctionsTest {
                 + " BIND ( geof:symDifference(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.4 34.1, -83.4 34.3, -83.6 34.3, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.3, -83.4 34.3, -83.4 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) AS ?symDifference ) . "
                 + " FILTER ( geof:sfEquals(?aWkt, ?symDifference ))"
                 + "}";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -237,7 +237,7 @@ public class QueryFunctionsTest {
                 + "BIND ((geof:union( ?cWkt, ?eWkt )) AS ?union)"
                 + "FILTER ( geof:sfEquals(?aWkt, ?union))"
                 + " }";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 

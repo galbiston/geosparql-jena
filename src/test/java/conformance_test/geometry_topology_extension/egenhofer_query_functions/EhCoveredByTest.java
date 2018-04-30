@@ -73,7 +73,7 @@ public class EhCoveredByTest {
         List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#D");
 
-        List<String> result = resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))"), infModel);
+        List<String> result = queryMany(geometryTopologyQuery("geof:ehCoveredBy", "Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))"), infModel);
         assertEquals(expResult, result);
     }
 
@@ -82,7 +82,7 @@ public class EhCoveredByTest {
 
         List<String> expResult = new ArrayList<>();
 
-        assertEquals(expResult, resourceQuery(geometryTopologyQuery("geof:ehCoveredBy", "Point(-86.4 31.4)"), infModel));
+        assertEquals(expResult, queryMany(geometryTopologyQuery("geof:ehCoveredBy", "Point(-86.4 31.4)"), infModel));
     }
 
 }

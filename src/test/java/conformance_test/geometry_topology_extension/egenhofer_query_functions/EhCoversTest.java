@@ -79,7 +79,7 @@ public class EhCoversTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:ehCovers(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
                 + "}";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -93,7 +93,7 @@ public class EhCoversTest {
                 + "}";
 
         List<String> expResult = new ArrayList<>();
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 

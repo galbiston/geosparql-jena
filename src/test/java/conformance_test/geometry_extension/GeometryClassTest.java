@@ -75,7 +75,7 @@ public class GeometryClassTest {
         String queryString = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type geo:Geometry ."
                 + "}ORDER BY ?geometry";
-        List<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
 
         assertEquals(expResult, result);
     }

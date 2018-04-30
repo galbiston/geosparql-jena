@@ -6,8 +6,8 @@
 package conformance_test.topology_vocabulary_extension.egenhofer_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -74,20 +74,20 @@ public class EhOverlapTest {
          * therefore ehOverlap's functionality can be seen as a combination of
          * sfCrosses and sfOverlaps.
          */
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#B");
         expResult.add("http://example.org/ApplicationSchema#F");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehOverlap", ""), infModel);
+        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:ehOverlap", ""), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:ehOverlap", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:ehOverlap", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

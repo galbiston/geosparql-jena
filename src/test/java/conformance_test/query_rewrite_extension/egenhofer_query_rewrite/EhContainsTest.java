@@ -7,6 +7,7 @@ package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -67,31 +68,31 @@ public class EhContainsTest {
 
     @Test
     public void featureFeatureTest() {
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:A", "geo:ehContains"), infModel);
+        List<String> result = queryMany(featureFeatureQuery("ex:A", "geo:ehContains"), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void featureGeometryTest() {
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:A", "geo:ehContains"), infModel);
+        List<String> result = queryMany(featureGeometryQuery("ex:A", "geo:ehContains"), infModel);
         assertEquals(expResult, result);
 
     }
 
     @Test
     public void geometryFeatureTest() {
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:A", "geo:ehContains"), infModel);
+        List<String> result = queryMany(geometryFeatureQuery("ex:A", "geo:ehContains"), infModel);
         assertEquals(expResult, result);
     }
 

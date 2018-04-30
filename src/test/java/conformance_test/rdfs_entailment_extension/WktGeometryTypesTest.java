@@ -6,15 +6,15 @@
 package conformance_test.rdfs_entailment_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -66,7 +66,7 @@ public class WktGeometryTypesTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#GExactGeom");
         expResult.add("http://example.org/ApplicationSchema#FExactGeom");
         expResult.add("http://example.org/ApplicationSchema#EExactGeom");
@@ -76,7 +76,7 @@ public class WktGeometryTypesTest {
         String queryString = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type sf:Polygon ."
                 + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
 
         assertEquals(expResult, result);
     }

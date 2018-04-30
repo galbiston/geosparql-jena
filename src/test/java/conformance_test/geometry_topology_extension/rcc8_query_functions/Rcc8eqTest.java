@@ -6,9 +6,8 @@
 package conformance_test.geometry_topology_extension.rcc8_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.4.4.1 /conf/geometry-topology-extension/rcc8-query-functions
  *
@@ -48,7 +47,7 @@ public class Rcc8eqTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -74,7 +73,7 @@ public class Rcc8eqTest {
          * Equal returns t (TRUE) if two geometries of the same type have
          * identical X,Y coordinate values.
          */
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#E");
 
         String queryString = "SELECT ?place WHERE{"
@@ -82,7 +81,7 @@ public class Rcc8eqTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8eq(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.2 34.3, -83.0 34.3, -83.0 34.5, -83.2 34.5, -83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
@@ -94,9 +93,9 @@ public class Rcc8eqTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8eq(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.4 34.3, -83.3 34.3, -83.3 34.4, -83.4 34.4, -83.4 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
 
-        assertEquals(expResult, resourceQuery(queryString, infModel));
+        assertEquals(expResult, queryMany(queryString, infModel));
     }
 
 }

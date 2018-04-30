@@ -6,20 +6,19 @@
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
- * 
+ *
  *
  * A.6.2.1 /conf/query-rewrite-extension/eh-query-rewrite
  *
@@ -48,7 +47,7 @@ public class EhOverlapTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -70,13 +69,13 @@ public class EhOverlapTest {
     @Test
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#F");
         expResult.add("http://example.org/ApplicationSchema#B");
         expResult.add("http://example.org/ApplicationSchema#FExactGeom");
         expResult.add("http://example.org/ApplicationSchema#BExactGeom");
 
-        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
+        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
         assertEquals(expResult, result);
 
     }
@@ -84,13 +83,13 @@ public class EhOverlapTest {
     @Test
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#F");
         expResult.add("http://example.org/ApplicationSchema#B");
         expResult.add("http://example.org/ApplicationSchema#FExactGeom");
         expResult.add("http://example.org/ApplicationSchema#BExactGeom");
 
-        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:ehOverlap"), infModel);
+        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:ehOverlap"), infModel);
         assertEquals(expResult, result);
 
     }
@@ -98,11 +97,11 @@ public class EhOverlapTest {
     @Test
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#F");
         expResult.add("http://example.org/ApplicationSchema#B");
 
-        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
+        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
         assertEquals(expResult, result);
 
     }

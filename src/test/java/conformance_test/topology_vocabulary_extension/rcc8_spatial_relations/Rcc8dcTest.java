@@ -6,9 +6,8 @@
 package conformance_test.topology_vocabulary_extension.rcc8_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.3.1 /conf/topology-vocab-extension/rcc8-spatial-relations
  *
@@ -44,7 +43,7 @@ public class Rcc8dcTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -70,22 +69,22 @@ public class Rcc8dcTest {
          * Disjoint returns t (TRUE) if the intersection of the two geometries
          * is an empty set.
          */
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#G");
         expResult.add("http://example.org/ApplicationSchema#F");
         expResult.add("http://example.org/ApplicationSchema#D");
         expResult.add("http://example.org/ApplicationSchema#B");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:E", "geo:rcc8dc", ""), infModel);
+        List<String> result = queryMany(topologyVocabluaryQuery("ex:E", "geo:rcc8dc", ""), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:rcc8dc", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:rcc8dc", "FILTER ( ?aGeom != ?bGeom )"), infModel));
 
     }
 

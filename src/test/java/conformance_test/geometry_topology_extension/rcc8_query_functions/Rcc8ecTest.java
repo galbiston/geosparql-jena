@@ -6,15 +6,15 @@
 package conformance_test.geometry_topology_extension.rcc8_query_functions;
 
 import static conformance_test.ConformanceTestSuite.*;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -72,7 +72,7 @@ public class Rcc8ecTest {
         /**
          * rcc8ec has similar functionality with sfTouches and ehMeet.
          */
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#E");
 
         String queryString = "SELECT ?place WHERE{"
@@ -80,7 +80,7 @@ public class Rcc8ecTest {
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + " FILTER geof:rcc8ec(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
 
         assertEquals(expResult, result);
     }
@@ -94,8 +94,8 @@ public class Rcc8ecTest {
                 + " FILTER geof:rcc8ec(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((83.2 34.3, 83.0 34.3, 83.0 34.3, 83.2 34.3, 83.2 34.3))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
                 + "}";
 
-        ArrayList<String> expResult = new ArrayList<>();
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        List<String> expResult = new ArrayList<>();
+        List<String> result = queryMany(queryString, infModel);
 
         assertEquals(expResult, result);
     }

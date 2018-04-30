@@ -26,15 +26,15 @@ import org.junit.Test;
  * pattern matching shall use the semantics defined by the RIF Core Entailment
  * Regime [W3C SPARQL Entailment] for the RIF rules [W3C RIF Core]
  * geor:sfEquals, geor:sfDisjoint, geor:sfIntersects, geor:sfTouches,
- * geor:sfCrosses, geor:sfWithin, geor:sfWithin, geor:sfOverlaps.
+ * geor:sfCrosses, geor:sfContains, geor:sfContains, geor:sfOverlaps.
  *
  * a.) Test purpose: check conformance with this requirement
  *
  * b.) Test method: Verify that queries involving the following query
  * transformation rules return the correct result for a test dataset when using
  * the specified serialization and version: geor:sfEquals, geor:sfDisjoint,
- * geor:sfIntersects, geor:sfTouches, geor:sfCrosses, geor:sfWithin,
- * geor:sfWithin and geor:sfOverlaps.
+ * geor:sfIntersects, geor:sfTouches, geor:sfCrosses, geor:sfContains,
+ * geor:sfContains and geor:sfOverlaps.
  *
  * c.) Reference: Clause 11.2 Req 28
  *
@@ -65,11 +65,11 @@ public class SfContainsTest {
      * by the first geometry.
      */
     @Test
-    public void sfWithinBothBoundTest() {
+    public void sfContainsBothBoundTest() {
 
-        System.out.println("sfWithin Both Bound");
+        System.out.println("sfContains Both Bound");
         String expResult = "http://example.org/Geometry#PointA";
-        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonH", "geo:sfWithin", "http://example.org/Geometry#PointA");
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonH", "geo:sfContains", "http://example.org/Geometry#PointA");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -81,16 +81,16 @@ public class SfContainsTest {
      * by the first geometry.
      */
     @Test
-    public void sfWithinUnboundSubjectTest() {
+    public void sfContainsUnboundSubjectTest() {
 
-        System.out.println("sfWithin Unbound Subject");
+        System.out.println("sfContains Unbound Subject");
         List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/Feature#A");
         expResult.add("http://example.org/Feature#H");
         expResult.add("http://example.org/Geometry#PointA");
         expResult.add("http://example.org/Geometry#PolygonH");
 
-        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:sfWithin", "http://example.org/Geometry#PointA");
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:sfContains", "http://example.org/Geometry#PointA");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -102,9 +102,9 @@ public class SfContainsTest {
      * by the first geometry.
      */
     @Test
-    public void sfWithinUnboundObjectTest() {
+    public void sfContainsUnboundObjectTest() {
 
-        System.out.println("sfWithin Unbound Object");
+        System.out.println("sfContains Unbound Object");
         List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/Feature#A");
         expResult.add("http://example.org/Feature#D");
@@ -115,7 +115,7 @@ public class SfContainsTest {
         expResult.add("http://example.org/Geometry#PolygonH");
         expResult.add("http://example.org/Geometry#PolygonK");
 
-        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonH", "geo:sfWithin");
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonH", "geo:sfContains");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -126,15 +126,14 @@ public class SfContainsTest {
      * Contains returns t (TRUE) if the second geometry is completely contained
      * by the first geometry.
      */
-    //Very large result - everything with itself plus those contained.
     @Ignore
     @Test
-    public void sfWithinBothUnboundTest() {
+    public void sfContainsBothUnboundTest() {
 
-        System.out.println("sfWithin Both Unbound");
+        System.out.println("sfContains Both Unbound");
         List<String> expResult = new ArrayList<>();
 
-        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:sfWithin");
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:sfContains");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -146,15 +145,16 @@ public class SfContainsTest {
      * by the first geometry.
      */
     @Test
-    public void sfWithinAssertTest() {
+    public void sfContainsAssertTest() {
 
-        System.out.println("sfWithin Assert Test");
+        System.out.println("sfContains Assert Test");
 
         Boolean expResult = true;
-        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfWithin");
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfContains");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
+
 }

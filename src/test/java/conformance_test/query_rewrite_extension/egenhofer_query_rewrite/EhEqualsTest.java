@@ -6,15 +6,15 @@
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
 import static conformance_test.ConformanceTestSuite.*;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -70,11 +70,11 @@ public class EhEqualsTest {
     @Test
     public void featureFeatureTest() {
         System.out.println("Feature Feature Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(featureFeatureQuery("ex:C", "geo:ehEquals"), infModel);
+        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:ehEquals"), infModel);
         assertEquals(expResult, result);
 
     }
@@ -82,11 +82,11 @@ public class EhEqualsTest {
     @Test
     public void featureGeometryTest() {
         System.out.println("Feature Geometry Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#CExactGeom");
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(featureGeometryQuery("ex:C", "geo:ehEquals"), infModel);
+        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:ehEquals"), infModel);
         assertEquals(expResult, result);
 
     }
@@ -94,10 +94,10 @@ public class EhEqualsTest {
     @Test
     public void geometryFeatureTest() {
         System.out.println("Geometry Geometry Test: ");
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#C");
 
-        ArrayList<String> result = resourceQuery(geometryFeatureQuery("ex:C", "geo:ehEquals"), infModel);
+        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:ehEquals"), infModel);
         assertEquals(expResult, result);
 
     }

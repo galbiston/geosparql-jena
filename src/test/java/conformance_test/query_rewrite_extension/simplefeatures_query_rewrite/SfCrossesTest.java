@@ -100,8 +100,8 @@ public class SfCrossesTest {
 
         List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:sfCrosses", "http://example.org/Geometry#LineStringE");
 
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -125,8 +125,8 @@ public class SfCrossesTest {
 
         List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#LineStringG", "geo:sfCrosses");
 
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

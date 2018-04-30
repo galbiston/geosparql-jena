@@ -6,9 +6,8 @@
 package conformance_test.topology_vocabulary_extension.egenhofer_spatial_relations;
 
 import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.2.2.1 /conf/topology-vocab-extension/eh-spatial-relations
  *
@@ -44,7 +43,7 @@ public class EhMeetTest {
         /**
          * Initialize all the topology functions.
          */
-        
+
         infModel = initWktModel();
     }
     private static InfModel infModel;
@@ -70,19 +69,19 @@ public class EhMeetTest {
          * ehMeet has same functionality with sfTouches since they have same
          * intersection matrix.
          */
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#E");
 
-        ArrayList<String> result = resourceQuery(topologyVocabluaryQuery("ex:C", "geo:ehMeet", ""), infModel);
+        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:ehMeet", ""), infModel);
         assertEquals(expResult, result);
     }
 
     @Test
     public void negativeTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
 
-        assertEquals(expResult, resourceQuery(topologyVocabluaryQuery("ex:A", "geo:ehMeet", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:ehMeet", "FILTER ( ?aGeom != ?bGeom )"), infModel));
     }
 
 }

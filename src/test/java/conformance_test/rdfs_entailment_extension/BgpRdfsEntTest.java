@@ -6,15 +6,15 @@
 package conformance_test.rdfs_entailment_extension;
 
 import static conformance_test.ConformanceTestSuite.*;
-
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -65,7 +65,7 @@ public class BgpRdfsEntTest {
     @Test
     public void positiveTest() {
 
-        ArrayList<String> expResult = new ArrayList<>();
+        List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/ApplicationSchema#G");
         expResult.add("http://example.org/ApplicationSchema#F");
         expResult.add("http://example.org/ApplicationSchema#E");
@@ -77,7 +77,7 @@ public class BgpRdfsEntTest {
         String queryString = "SELECT ?feature WHERE{"
                 + " ?feature rdf:type geo:Feature ."
                 + "}";
-        ArrayList<String> result = resourceQuery(queryString, infModel);
+        List<String> result = queryMany(queryString, infModel);
         assertEquals(expResult, result);
     }
 
