@@ -279,7 +279,13 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
     private Boolean testFilterFunction(Literal boundGeometryLiteral, Literal unboundGeometryLiteral, Property predicate, Boolean isSubjectBound) {
         //TODO pass the filter function and predicate to Query Rewrite Index for checking and storage. Use isSubjectBound to identify how to order in index, i.e. when true use boundGeometryLiteral as last key.
-        return filterFunction.exec(boundGeometryLiteral, unboundGeometryLiteral);
+        Boolean result;
+        if (isSubjectBound) {
+            result = filterFunction.exec(boundGeometryLiteral, unboundGeometryLiteral);
+        } else {
+            result = filterFunction.exec(unboundGeometryLiteral, boundGeometryLiteral);
+        }
+        return result;
     }
 
 }
