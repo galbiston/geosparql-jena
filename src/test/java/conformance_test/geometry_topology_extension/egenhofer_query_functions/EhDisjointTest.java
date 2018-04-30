@@ -5,10 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.FilterTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -45,13 +44,7 @@ public class EhDisjointTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -67,40 +60,84 @@ public class EhDisjointTest {
 
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void positiveTest() {
+    public void ehDisjointBoundPostiveTest() {
 
-        /**
-         * Disjoint returns t (TRUE) if the intersection of the two geometries
-         * is an empty set.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#E");
-        expResult.add("http://example.org/ApplicationSchema#D");
-        expResult.add("http://example.org/ApplicationSchema#B");
+        System.out.println("ehDisjoint Bound Positive");
+        String expResult = "http://example.org/Geometry#PointC";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:ehDisjoint", "http://example.org/Geometry#PointC");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:ehDisjoint(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        List<String> result = queryMany(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void negativeTest() {
+    public void ehDisjointBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:ehDisjoint(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(queryString, infModel);
+        System.out.println("ehDisjoint Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:ehDisjoint", "http://example.org/Geometry#PointA");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
+    @Test
+    public void ehDisjointUnboundPostiveTest() {
+
+        System.out.println("ehDisjoint Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        expResult.add("http://example.org/Geometry#PointEmpty");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonL");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geof:ehDisjoint");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
+    @Test
+    public void ehDisjointUnboundNegativeTest() {
+
+        System.out.println("ehDisjoint Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#LineStringG");
+        expResult.add("http://example.org/Geometry#PointA");
+        expResult.add("http://example.org/Geometry#PointB");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        expResult.add("http://example.org/Geometry#PointEmpty");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geof:ehDisjoint");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 }

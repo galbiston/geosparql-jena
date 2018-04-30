@@ -26,7 +26,7 @@ import org.junit.Test;
  * pattern matching shall use the semantics defined by the RIF Core Entailment
  * Regime [W3C SPARQL Entailment] for the RIF rules [W3C RIF Core]
  * geor:sfEquals, geor:sfDisjoint, geor:sfIntersects, geor:sfTouches,
- * geor:sfCrosses, geor:sfWithin, geor:sfTouches, geor:sfOverlaps.
+ * geor:sfCrosses, geor:sfWithin, geor:sfContains, geor:sfOverlaps.
  *
  * a.) Test purpose: check conformance with this requirement
  *
@@ -34,7 +34,7 @@ import org.junit.Test;
  * transformation rules return the correct result for a test dataset when using
  * the specified serialization and version: geor:sfEquals, geor:sfDisjoint,
  * geor:sfIntersects, geor:sfTouches, geor:sfCrosses, geor:sfWithin,
- * geor:sfTouches and geor:sfOverlaps.
+ * geor:sfContains and geor:sfOverlaps.
  *
  * c.) Reference: Clause 11.2 Req 28
  *
@@ -139,16 +139,17 @@ public class SfTouchesTest {
     }
 
     /**
-     * Contains returns t (TRUE) if the second geometry is completely contained
-     * by the first geometry.
+     * Touch returns t (TRUE) if none of the points common to both geometries
+     * intersect the interiors of both geometries, At least one geometry must be
+     * a line string, polygon, multi line string, or multi polygon.
      */
     @Test
-    public void sfWithinAssertTest() {
+    public void sfTouchesAssertTest() {
 
-        System.out.println("sfWithin Assert Test");
+        System.out.println("sfTouches Assert Test");
 
         Boolean expResult = true;
-        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfWithin");
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfTouches");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

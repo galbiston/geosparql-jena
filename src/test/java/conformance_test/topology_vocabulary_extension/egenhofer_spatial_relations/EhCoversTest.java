@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.egenhofer_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class EhCoversTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,23 +55,70 @@ public class EhCoversTest {
 
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void positiveTest() {
+    public void ehCoversBoundPostiveTest() {
 
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        System.out.println("ehCovers Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonK";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:ehCovers", "http://example.org/Geometry#PolygonK");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:D", "geo:ehCovers", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void negativeTest() {
+    public void ehCoversBoundNegativeTest() {
 
+        System.out.println("ehCovers Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:ehCovers", "http://example.org/Geometry#PointC");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void ehCoversUnboundPostiveTest() {
+
+        System.out.println("ehCovers Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geo:ehCovers");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:E", "geo:ehCovers", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void ehCoversUnboundNegativeTest() {
+
+        System.out.println("ehCovers Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:ehCovers");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

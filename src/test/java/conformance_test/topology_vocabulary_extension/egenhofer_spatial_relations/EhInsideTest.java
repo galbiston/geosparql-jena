@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.egenhofer_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class EhInsideTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,29 +55,69 @@ public class EhInsideTest {
 
     }
 
+    /**
+     * ehInside is slightly different from the sfWithin, which will not return
+     * the same instance while the sfWithin will return the same instance.
+     */
     @Test
-    public void positiveTest() {
+    public void ehInsideBoundPostiveTest() {
 
-        /**
-         * ehInside is slightly different from the sfWithin, which will not
-         * return the compared instance itself while the sfWithin will return
-         * it.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#A");
-        expResult.add("http://example.org/ApplicationSchema#G");
+        System.out.println("ehInside Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonL", "geo:ehInside", "http://example.org/Geometry#PolygonJ");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:ehInside", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * ehInside is slightly different from the sfWithin, which will not return
+     * the same instance while the sfWithin will return the same instance.
+     */
     @Test
-    public void negativeTest() {
+    public void ehInsideBoundNegativeTest() {
 
-        List<String> expResult = new ArrayList<>();
+        System.out.println("ehInside Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:ehInside", "http://example.org/Geometry#PolygonI");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:ehInside", "FILTER ( ?aGeom != ?bGeom )"), infModel));
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
+    /**
+     * ehInside is slightly different from the sfWithin, which will not return
+     * the same instance while the sfWithin will return the same instance.
+     */
+    @Test
+    public void ehInsideUnboundPostiveTest() {
+
+        System.out.println("sfContains Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geo:ehInside");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehInside is slightly different from the sfWithin, which will not return
+     * the same instance while the sfWithin will return the same instance.
+     */
+    @Test
+    public void ehInsideUnboundNegativeTest() {
+
+        System.out.println("ehInside Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:ehInside");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 }

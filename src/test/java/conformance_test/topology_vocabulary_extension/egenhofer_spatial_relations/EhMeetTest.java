@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.egenhofer_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class EhMeetTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,26 +55,86 @@ public class EhMeetTest {
 
     }
 
+    /**
+     * Touch returns t (TRUE) if none of the points common to both geometries
+     * intersect the interiors of both geometries, At least one geometry must be
+     * a line string, polygon, multi line string, or multi polygon.
+     */
     @Test
-    public void positiveTest() {
+    public void ehMeetBoundPostiveTest() {
 
-        /**
-         * ehMeet has same functionality with sfTouches since they have same
-         * intersection matrix.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#E");
+        System.out.println("ehMeet Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonI", "geo:ehMeet", "http://example.org/Geometry#PolygonJ");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:ehMeet", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * ehMeet has same functionality with sfTouches since they have same
+     * intersection matrix.
+     */
     @Test
-    public void negativeTest() {
+    public void ehMeetBoundPostiveTest2() {
 
-        List<String> expResult = new ArrayList<>();
+        System.out.println("ehMeet Bound Positive2");
+        String expResult = "http://example.org/Geometry#PointB";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:ehMeet", "http://example.org/Geometry#PointB");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:ehMeet", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
+    /**
+     * ehMeet has same functionality with sfTouches since they have same
+     * intersection matrix.
+     */
+    @Test
+    public void ehMeetBoundNegativeTest() {
+
+        System.out.println("ehMeet Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geo:ehMeet", "http://example.org/Geometry#PolygonJ");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehMeet has same functionality with sfTouches since they have same
+     * intersection matrix.
+     */
+    @Test
+    public void ehMeetUnboundPostiveTest() {
+
+        System.out.println("ehMeet Unbound Positive");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geo:ehMeet");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehMeet has same functionality with sfTouches since they have same
+     * intersection matrix.
+     */
+    @Test
+    public void ehMeetUnboundNegativeTest() {
+
+        System.out.println("ehMeet Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonK", "geo:ehMeet");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 }

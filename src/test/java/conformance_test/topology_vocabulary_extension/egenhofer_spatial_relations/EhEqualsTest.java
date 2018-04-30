@@ -5,10 +5,9 @@
  */
 package conformance_test.topology_vocabulary_extension.egenhofer_spatial_relations;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.topology_vocabulary_extension.PropertyTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -40,13 +39,7 @@ public class EhEqualsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,27 +55,74 @@ public class EhEqualsTest {
 
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void positiveTest() {
+    public void ehEqualsBoundPostiveTest() {
 
-        /**
-         * Equal returns t (TRUE) if two geometries of the same type have
-         * identical X,Y coordinate values.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        System.out.println("ehEquals Bound Positive");
+        String expResult = "http://example.org/Geometry#PointC2";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PointC", "geo:ehEquals", "http://example.org/Geometry#PointC2");
 
-        List<String> result = queryMany(topologyVocabluaryQuery("ex:C", "geo:ehEquals", ""), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void negativeTest() {
+    public void ehEqualsBoundNegativeTest() {
 
+        System.out.println("ehEquals Bound Negative");
+        String expResult = null;
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PointC", "geo:ehEquals", "http://example.org/Geometry#PointA");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void ehEqualsUnboundPostiveTest() {
+
+        System.out.println("ehEquals Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PointC", "geo:ehEquals");
 
-        assertEquals(expResult, queryMany(topologyVocabluaryQuery("ex:A", "geo:ehEquals", "FILTER ( ?aGeom != ?bGeom )"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void ehEqualsUnboundNegativeTest() {
+
+        System.out.println("ehEquals Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geo:ehEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

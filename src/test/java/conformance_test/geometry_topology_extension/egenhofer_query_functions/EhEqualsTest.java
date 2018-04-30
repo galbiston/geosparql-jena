@@ -5,10 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.FilterTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -45,13 +44,7 @@ public class EhEqualsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -67,35 +60,70 @@ public class EhEqualsTest {
 
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void positiveTest() {
+    public void ehEqualsBoundPostiveTest() {
 
-        /**
-         * Equal returns t (TRUE) if two geometries of the same type have
-         * identical X,Y coordinate values.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#A");
+        System.out.println("ehEquals Bound Positive");
+        String expResult = "http://example.org/Geometry#PointC2";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PointC", "geof:ehEquals", "http://example.org/Geometry#PointC2");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:ehEquals(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
-        List<String> result = queryMany(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void negativeTest() {
+    public void ehEqualsBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:ehEquals(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>) ."
-                + "}";
+        System.out.println("ehEquals Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PointC", "geof:ehEquals", "http://example.org/Geometry#PointA");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void ehEqualsUnboundPostiveTest() {
+
+        System.out.println("ehEquals Unbound Positive");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(queryString, infModel);
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PointC", "geof:ehEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void ehEqualsUnboundNegativeTest() {
+
+        System.out.println("ehEquals Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geof:ehEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

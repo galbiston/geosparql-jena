@@ -5,10 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.FilterTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -45,13 +44,7 @@ public class EhCoveredByTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        //RegistryLoader.load();
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -67,22 +60,69 @@ public class EhCoveredByTest {
 
     }
 
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void positiveTest() {
+    public void ehCoveredByBoundPostiveTest() {
 
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#D");
+        System.out.println("ehCoveredBy Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonH";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonK", "geof:ehCoveredBy", "http://example.org/Geometry#PolygonH");
 
-        List<String> result = queryMany(geometryTopologyQuery("geof:ehCoveredBy", "Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))"), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void negativeTest() {
+    public void ehCoveredByBoundNegativeTest() {
 
+        System.out.println("ehCoveredBy Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:ehCoveredBy", "http://example.org/Geometry#PointC");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void ehCoveredByUnboundPostiveTest() {
+
+        System.out.println("ehCoveredBy Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonH");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonK", "geof:ehCoveredBy");
 
-        assertEquals(expResult, queryMany(geometryTopologyQuery("geof:ehCoveredBy", "Point(-86.4 31.4)"), infModel));
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void ehCoveredByUnboundNegativeTest() {
+
+        System.out.println("ehCoveredBy Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geof:ehCoveredBy");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,14 +44,7 @@ public class EhEqualsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -67,39 +60,97 @@ public class EhEqualsTest {
 
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void featureFeatureTest() {
-        System.out.println("Feature Feature Test: ");
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#C");
+    public void ehEqualsBothBoundTest() {
 
-        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:ehEquals"), infModel);
+        System.out.println("ehEquals Both Bound");
+        String expResult = "http://example.org/Geometry#PointC2";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PointC", "geo:ehEquals", "http://example.org/Geometry#PointC2");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void featureGeometryTest() {
-        System.out.println("Feature Geometry Test: ");
+    public void ehEqualsUnboundSubjectTest() {
+
+        System.out.println("ehEquals Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
 
-        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:ehEquals"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:ehEquals", "http://example.org/Geometry#PointC");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
     @Test
-    public void geometryFeatureTest() {
-        System.out.println("Geometry Geometry Test: ");
+    public void ehEqualsUnboundObjectTest() {
+
+        System.out.println("ehEquals Unbound Object");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
 
-        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:ehEquals"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PointC", "geo:ehEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
+    }
 
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Ignore
+    @Test
+    public void ehEqualsBothUnboundTest() {
+
+        System.out.println("ehEquals Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:ehEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Equal returns t (TRUE) if two geometries of the same type have identical
+     * X,Y coordinate values.
+     */
+    @Test
+    public void ehEqualsAssertTest() {
+
+        System.out.println("ehEquals Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:ehEquals");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

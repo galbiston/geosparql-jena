@@ -26,7 +26,7 @@ import org.junit.Test;
  * pattern matching shall use the semantics defined by the RIF Core Entailment
  * Regime [W3C SPARQL Entailment] for the RIF rules [W3C RIF Core]
  * geor:sfEquals, geor:sfDisjoint, geor:sfIntersects, geor:sfTouches,
- * geor:sfCrosses, geor:sfWithin, geor:sfWithin, geor:sfOverlaps.
+ * geor:sfCrosses, geor:sfWithin, geor:sfContains, geor:sfOverlaps.
  *
  * a.) Test purpose: check conformance with this requirement
  *
@@ -34,7 +34,7 @@ import org.junit.Test;
  * transformation rules return the correct result for a test dataset when using
  * the specified serialization and version: geor:sfEquals, geor:sfDisjoint,
  * geor:sfIntersects, geor:sfTouches, geor:sfCrosses, geor:sfWithin,
- * geor:sfWithin and geor:sfOverlaps.
+ * geor:sfContains and geor:sfOverlaps.
  *
  * c.) Reference: Clause 11.2 Req 28
  *
@@ -137,8 +137,8 @@ public class SfWithinTest {
     }
 
     /**
-     * Contains returns t (TRUE) if the second geometry is completely contained
-     * by the first geometry.
+     * Within returns t (TRUE) if the first geometry is completely within the
+     * second geometry, Within tests for the exact opposite result of contains.
      */
     @Test
     public void sfWithinAssertTest() {

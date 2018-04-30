@@ -26,7 +26,7 @@ import org.junit.Test;
  * pattern matching shall use the semantics defined by the RIF Core Entailment
  * Regime [W3C SPARQL Entailment] for the RIF rules [W3C RIF Core]
  * geor:sfEquals, geor:sfDisjoint, geor:sfIntersects, geor:sfTouches,
- * geor:sfCrosses, geor:sfWithin, geor:sfCrosses, geor:sfOverlaps.
+ * geor:sfCrosses, geor:sfWithin, geor:sfContains, geor:sfOverlaps.
  *
  * a.) Test purpose: check conformance with this requirement
  *
@@ -34,7 +34,7 @@ import org.junit.Test;
  * transformation rules return the correct result for a test dataset when using
  * the specified serialization and version: geor:sfEquals, geor:sfDisjoint,
  * geor:sfIntersects, geor:sfTouches, geor:sfCrosses, geor:sfWithin,
- * geor:sfCrosses and geor:sfOverlaps.
+ * geor:sfContains and geor:sfOverlaps.
  *
  * c.) Reference: Clause 11.2 Req 28
  *
@@ -61,7 +61,7 @@ public class SfCrossesTest {
     }
 
     /**
-     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
      * dimension is one less than the maximum dimension of the two source
      * geometries and the intersection set is interior to both source
      * geometries, Cross returns t (TRUE) for only multipoint/polygon,
@@ -81,7 +81,7 @@ public class SfCrossesTest {
     }
 
     /**
-     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
      * dimension is one less than the maximum dimension of the two source
      * geometries and the intersection set is interior to both source
      * geometries, Cross returns t (TRUE) for only multipoint/polygon,
@@ -100,13 +100,13 @@ public class SfCrossesTest {
 
         List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:sfCrosses", "http://example.org/Geometry#LineStringE");
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
     /**
-     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
      * dimension is one less than the maximum dimension of the two source
      * geometries and the intersection set is interior to both source
      * geometries, Cross returns t (TRUE) for only multipoint/polygon,
@@ -125,13 +125,13 @@ public class SfCrossesTest {
 
         List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#LineStringG", "geo:sfCrosses");
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
     /**
-     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
      * dimension is one less than the maximum dimension of the two source
      * geometries and the intersection set is interior to both source
      * geometries, Cross returns t (TRUE) for only multipoint/polygon,
@@ -153,16 +153,20 @@ public class SfCrossesTest {
     }
 
     /**
-     * Contains returns t (TRUE) if the second geometry is completely contained
-     * by the first geometry.
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
+     * dimension is one less than the maximum dimension of the two source
+     * geometries and the intersection set is interior to both source
+     * geometries, Cross returns t (TRUE) for only multipoint/polygon,
+     * multipoint/linestring, linestring/linestring, linestring/polygon, and
+     * linestring/multipolygon comparisons.
      */
     @Test
-    public void sfWithinAssertTest() {
+    public void sfCrossesAssertTest() {
 
-        System.out.println("sfWithin Assert Test");
+        System.out.println("sfCrosses Assert Test");
 
         Boolean expResult = true;
-        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfWithin");
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfCrosses");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

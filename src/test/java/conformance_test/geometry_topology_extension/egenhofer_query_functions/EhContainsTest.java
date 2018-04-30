@@ -5,10 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.FilterTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -45,13 +44,7 @@ public class EhContainsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        //RegistryLoader.load();
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -67,26 +60,90 @@ public class EhContainsTest {
 
     }
 
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
     @Test
-    public void positiveTest() {
+    public void ehContainsBoundPostiveTest() {
 
-        /**
-         * ehContains is slightly different from the sfContains, which will not
-         * return the same instance while the sfContains will return the same
-         * instance.
-         */
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        System.out.println("ehContains Bound Positive");
+        String expResult = "http://example.org/Geometry#PointA";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:ehContains", "http://example.org/Geometry#PointA");
 
-        List<String> result = queryMany(geometryTopologyQuery("geof:ehContains", "Point(-83.4 34.4)"), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
     @Test
-    public void negativeTest() {
+    public void ehContainsBoundPostiveTest2() {
 
+        System.out.println("ehContains Bound Positive2");
+        String expResult = "http://example.org/Geometry#PolygonL";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonJ", "geof:ehContains", "http://example.org/Geometry#PolygonL");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
+    @Test
+    public void ehContainsBoundNegativeTest() {
+
+        System.out.println("ehContains Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:ehContains", "http://example.org/Geometry#PointC");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
+    @Test
+    public void ehContainsUnboundPostiveTest() {
+
+        System.out.println("ehContains Unbound Positive");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(geometryTopologyQuery("geof:ehContains", "Point(-86.4 31.4)"), infModel);
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#PointA");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geof:ehContains");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
+    @Test
+    public void ehContainsUnboundNegativeTest() {
+
+        System.out.println("ehContains Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geof:ehContains");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

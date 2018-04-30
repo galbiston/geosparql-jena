@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,13 +44,7 @@ public class EhOverlapTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,44 +60,117 @@ public class EhOverlapTest {
 
     }
 
+    /**
+     * ehOverlap is slightly different from sfOverlaps, sfOverlaps compares two
+     * geometries of the same dimension and returns TRUE if their intersection
+     * set results in a geometry different from both but of the same dimension.
+     * However, ehOverlap does not necessarily require the intersection of the
+     * two geometries to be exact same dimension, therefore ehOverlap's
+     * functionality can be seen as a combination of sfCrosses and sfOverlaps.
+     */
     @Test
-    public void featureFeatureTest() {
-        System.out.println("Feature Feature Test: ");
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#B");
-        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#BExactGeom");
+    public void ehOverlapBothBoundTest() {
 
-        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
+        System.out.println("ehOverlap Both Bound");
+        String expResult = "http://example.org/Geometry#PolygonI";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonH", "geo:ehOverlap", "http://example.org/Geometry#PolygonI");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * ehOverlap is slightly different from sfOverlaps, sfOverlaps compares two
+     * geometries of the same dimension and returns TRUE if their intersection
+     * set results in a geometry different from both but of the same dimension.
+     * However, ehOverlap does not necessarily require the intersection of the
+     * two geometries to be exact same dimension, therefore ehOverlap's
+     * functionality can be seen as a combination of sfCrosses and sfOverlaps.
+     */
     @Test
-    public void featureGeometryTest() {
-        System.out.println("Feature Geometry Test: ");
+    public void ehOverlapUnboundSubjectTest() {
+
+        System.out.println("ehOverlap Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#B");
-        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#BExactGeom");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Geometry#PolygonH");
 
-        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:ehOverlap"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:ehOverlap", "http://example.org/Geometry#PolygonI");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * ehOverlap is slightly different from sfOverlaps, sfOverlaps compares two
+     * geometries of the same dimension and returns TRUE if their intersection
+     * set results in a geometry different from both but of the same dimension.
+     * However, ehOverlap does not necessarily require the intersection of the
+     * two geometries to be exact same dimension, therefore ehOverlap's
+     * functionality can be seen as a combination of sfCrosses and sfOverlaps.
+     */
     @Test
-    public void geometryFeatureTest() {
-        System.out.println("Geometry Geometry Test: ");
+    public void ehOverlapUnboundObjectTest() {
+
+        System.out.println("ehOverlap Unbound Object");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#B");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#G");
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#LineStringG");
+        expResult.add("http://example.org/Geometry#PolygonI");
 
-        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:ehOverlap"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonH", "geo:ehOverlap");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
+    }
 
+    /**
+     * ehOverlap is slightly different from sfOverlaps, sfOverlaps compares two
+     * geometries of the same dimension and returns TRUE if their intersection
+     * set results in a geometry different from both but of the same dimension.
+     * However, ehOverlap does not necessarily require the intersection of the
+     * two geometries to be exact same dimension, therefore ehOverlap's
+     * functionality can be seen as a combination of sfCrosses and sfOverlaps.
+     */
+    @Ignore
+    @Test
+    public void ehOverlapBothUnboundTest() {
+
+        System.out.println("ehOverlap Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:ehOverlap");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehOverlap is slightly different from sfOverlaps, sfOverlaps compares two
+     * geometries of the same dimension and returns TRUE if their intersection
+     * set results in a geometry different from both but of the same dimension.
+     * However, ehOverlap does not necessarily require the intersection of the
+     * two geometries to be exact same dimension, therefore ehOverlap's
+     * functionality can be seen as a combination of sfCrosses and sfOverlaps.
+     */
+    @Test
+    public void ehOverlapAssertTest() {
+
+        System.out.println("ehOverlap Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:ehOverlap");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

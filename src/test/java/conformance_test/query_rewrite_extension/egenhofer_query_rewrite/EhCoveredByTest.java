@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,13 +44,7 @@ public class EhCoveredByTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,33 +60,90 @@ public class EhCoveredByTest {
 
     }
 
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void featureFeatureTest() {
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#D");
+    public void ehCoveredByBothBoundTest() {
 
-        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:ehCoveredBy"), infModel);
+        System.out.println("ehCoveredBy Both Bound");
+        String expResult = "http://example.org/Geometry#PolygonH";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonK", "geo:ehCoveredBy", "http://example.org/Geometry#PolygonH");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void featureGeometryTest() {
+    public void ehCoveredByUnboundSubjectTest() {
+
+        System.out.println("ehCoveredBy Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#D");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:ehCoveredBy", "http://example.org/Geometry#PolygonH");
 
-        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:ehCoveredBy"), infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void geometryFeatureTest() {
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#D");
+    public void ehCoveredByUnboundObjectTest() {
 
-        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:ehCoveredBy"), infModel);
+        System.out.println("ehCoveredBy Unbound Object");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonK", "geo:ehCoveredBy");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Ignore
+    @Test
+    public void ehCoveredByBothUnboundTest() {
+
+        System.out.println("ehCoveredBy Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:ehCoveredBy");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of a is a point of b, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void ehCoveredByAssertTest() {
+
+        System.out.println("ehCoveredBy Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:ehCoveredBy");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

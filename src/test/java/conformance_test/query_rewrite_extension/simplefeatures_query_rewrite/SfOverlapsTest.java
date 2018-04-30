@@ -26,7 +26,7 @@ import org.junit.Test;
  * pattern matching shall use the semantics defined by the RIF Core Entailment
  * Regime [W3C SPARQL Entailment] for the RIF rules [W3C RIF Core]
  * geor:sfEquals, geor:sfDisjoint, geor:sfIntersects, geor:sfTouches,
- * geor:sfCrosses, geor:sfWithin, geor:sfOverlaps, geor:sfOverlaps.
+ * geor:sfCrosses, geor:sfWithin, geor:sfContains, geor:sfOverlaps.
  *
  * a.) Test purpose: check conformance with this requirement
  *
@@ -34,7 +34,7 @@ import org.junit.Test;
  * transformation rules return the correct result for a test dataset when using
  * the specified serialization and version: geor:sfEquals, geor:sfDisjoint,
  * geor:sfIntersects, geor:sfTouches, geor:sfCrosses, geor:sfWithin,
- * geor:sfOverlaps and geor:sfOverlaps.
+ * geor:sfContains and geor:sfOverlaps.
  *
  * c.) Reference: Clause 11.2 Req 28
  *
@@ -137,16 +137,17 @@ public class SfOverlapsTest {
     }
 
     /**
-     * Contains returns t (TRUE) if the second geometry is completely contained
-     * by the first geometry.
+     * Overlap compares two geometries of the same dimension and returns t
+     * (TRUE) if their intersection set results in a geometry different from
+     * both but of the same dimension.
      */
     @Test
-    public void sfWithinAssertTest() {
+    public void sfOverlapsAssertTest() {
 
-        System.out.println("sfWithin Assert Test");
+        System.out.println("sfOverlaps Assert Test");
 
         Boolean expResult = true;
-        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfWithin");
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:sfOverlaps");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

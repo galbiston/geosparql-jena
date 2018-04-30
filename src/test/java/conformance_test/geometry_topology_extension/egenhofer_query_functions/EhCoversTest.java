@@ -5,18 +5,15 @@
  */
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
-
+import conformance_test.geometry_topology_extension.FilterTestMethods;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -47,13 +44,7 @@ public class EhCoversTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -69,31 +60,68 @@ public class EhCoversTest {
 
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void positiveTest() {
+    public void ehCoversBoundPostiveTest() {
 
-        List<String> expResult = Arrays.asList("http://example.org/ApplicationSchema#D");
+        System.out.println("ehCovers Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonK";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:ehCovers", "http://example.org/Geometry#PolygonK");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:ehCovers(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Polygon((-83.6 34.1, -83.2 34.1, -83.2 34.5, -83.6 34.5, -83.6 34.1))\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
-                + "}";
-        List<String> result = queryMany(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
     @Test
-    public void negativeTest() {
+    public void ehCoversBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:ehCovers(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
-                + "}";
+        System.out.println("ehCovers Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:ehCovers", "http://example.org/Geometry#PointC");
 
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void ehCoversUnboundPostiveTest() {
+
+        System.out.println("ehCovers Unbound Positive");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(queryString, infModel);
+        expResult.add("http://example.org/Geometry#PolygonK");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geof:ehCovers");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Every point of b is a point of a, and the interiors of the two geometries
+     * have at least one point in common.
+     */
+    @Test
+    public void ehCoversUnboundNegativeTest() {
+
+        System.out.println("ehCovers Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geof:ehCovers");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

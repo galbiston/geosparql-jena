@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,13 +44,7 @@ public class EhContainsTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,33 +60,99 @@ public class EhContainsTest {
 
     }
 
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
     @Test
-    public void featureFeatureTest() {
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#C");
+    public void ehContainsBothBoundTest() {
 
-        List<String> result = queryMany(featureFeatureQuery("ex:A", "geo:ehContains"), infModel);
+        System.out.println("ehContains Both Bound");
+        String expResult = "http://example.org/Geometry#PointA";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonH", "geo:ehContains", "http://example.org/Geometry#PointA");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
     @Test
-    public void featureGeometryTest() {
+    public void ehContainsUnboundSubjectTest() {
+
+        System.out.println("ehContains Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#C");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Geometry#PolygonH");
 
-        List<String> result = queryMany(featureGeometryQuery("ex:A", "geo:ehContains"), infModel);
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:ehContains", "http://example.org/Geometry#PointA");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
     @Test
-    public void geometryFeatureTest() {
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+    public void ehContainsUnboundObjectTest() {
 
-        List<String> result = queryMany(geometryFeatureQuery("ex:A", "geo:ehContains"), infModel);
+        System.out.println("ehContains Unbound Object");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#A");
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#PointA");
+
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonH", "geo:ehContains");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
+    @Ignore
+    @Test
+    public void ehContainsBothUnboundTest() {
+
+        System.out.println("ehContains Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:ehContains");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehContains is slightly different from the sfContains, which will not
+     * return the same instance while the sfContains will return the same
+     * instance.
+     */
+    @Test
+    public void ehContainsAssertTest() {
+
+        System.out.println("ehContains Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:ehContains");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

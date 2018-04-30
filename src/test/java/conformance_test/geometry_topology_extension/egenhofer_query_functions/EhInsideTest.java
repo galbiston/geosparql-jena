@@ -5,10 +5,9 @@
  */
 package conformance_test.geometry_topology_extension.egenhofer_query_functions;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.geometry_topology_extension.FilterTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -45,13 +44,7 @@ public class EhInsideTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -67,37 +60,68 @@ public class EhInsideTest {
 
     }
 
+    /**
+     * ehInside is slightly different from the sfWithin, which will not return
+     * the same instance while the sfWithin will return the same instance.
+     */
     @Test
-    public void positiveTest() {
+    public void ehInsideBoundPostiveTest() {
 
-        /**
-         * ehInside is slightly different from the sfWithin, which will not
-         * return the same instance while the sfWithin will return the same
-         * instance.
-         */
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#C");
+        System.out.println("ehInside Bound Positive");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonL", "geof:ehInside", "http://example.org/Geometry#PolygonJ");
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:ehInside(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
-                + "}";
-        List<String> result = queryMany(queryString, infModel);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * ehInside is slightly different from the sfWithin, which will not return
+     * the same instance while the sfWithin will return the same instance.
+     */
     @Test
-    public void negativeTest() {
+    public void ehInsideBoundNegativeTest() {
 
-        String queryString = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:ehInside(\"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-86.4 31.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral>, ?aWKT) ."
-                + "}";
+        System.out.println("ehInside Bound Negative");
+        String expResult = null;
+        String result = FilterTestMethods.runBoundQuery("http://example.org/Geometry#PolygonH", "geof:ehInside", "http://example.org/Geometry#PolygonI");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * ehInside is slightly different from the sfWithin, which will not return
+     * the same instance while the sfWithin will return the same instance.
+     */
+    @Test
+    public void ehInsideUnboundPostiveTest() {
+
+        System.out.println("sfContains Unbound Positive");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(queryString, infModel);
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonL", "geof:ehInside");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
+    /**
+     * ehInside is slightly different from the sfWithin, which will not return
+     * the same instance while the sfWithin will return the same instance.
+     */
+    @Test
+    public void ehInsideUnboundNegativeTest() {
+
+        System.out.println("ehInside Unbound Negative");
+        List<String> expResult = new ArrayList<>();
+        List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geof:ehInside");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 }

@@ -61,7 +61,7 @@ public class SfCrossesTest {
     }
 
     /**
-     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
      * dimension is one less than the maximum dimension of the two source
      * geometries and the intersection set is interior to both source
      * geometries, Cross returns t (TRUE) for only multipoint/polygon,
@@ -81,7 +81,7 @@ public class SfCrossesTest {
     }
 
     /**
-     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
      * dimension is one less than the maximum dimension of the two source
      * geometries and the intersection set is interior to both source
      * geometries, Cross returns t (TRUE) for only multipoint/polygon,
@@ -101,7 +101,7 @@ public class SfCrossesTest {
     }
 
     /**
-     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
      * dimension is one less than the maximum dimension of the two source
      * geometries and the intersection set is interior to both source
      * geometries, Cross returns t (TRUE) for only multipoint/polygon,
@@ -123,7 +123,7 @@ public class SfCrossesTest {
     }
 
     /**
-     * Cross returns t (TRUE) if the intersection results in a geometry whose
+     * Crosses returns t (TRUE) if the intersection results in a geometry whose
      * dimension is one less than the maximum dimension of the two source
      * geometries and the intersection set is interior to both source
      * geometries, Cross returns t (TRUE) for only multipoint/polygon,

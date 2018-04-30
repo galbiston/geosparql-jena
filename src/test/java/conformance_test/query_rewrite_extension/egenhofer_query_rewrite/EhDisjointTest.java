@@ -5,15 +5,15 @@
  */
 package conformance_test.query_rewrite_extension.egenhofer_query_rewrite;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.query_rewrite_extension.QueryRewriteTestMethods;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -44,13 +44,7 @@ public class EhDisjointTest {
 
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -66,34 +60,126 @@ public class EhDisjointTest {
 
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void featureFeatureTest() {
-        System.out.println("Feature Feature Test: ");
+    public void ehDisjointBothBoundTest() {
 
-        List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(featureFeatureQuery("ex:C", "geo:ehDisjoint"), infModel);
+        System.out.println("ehDisjoint Both Bound");
+        String expResult = "http://example.org/Geometry#PointC";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonH", "geo:ehDisjoint", "http://example.org/Geometry#PointC");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void featureGeometryTest() {
-        System.out.println("Feature Geometry Test: ");
+    public void ehDisjointUnboundSubjectTest() {
 
+        System.out.println("ehDisjoint Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(featureGeometryQuery("ex:C", "geo:ehDisjoint"), infModel);
-        assertEquals(expResult, result);
+        expResult.add("http://example.org/Feature#B");
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#Empty");
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#G");
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Feature#L");
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#LineStringG");
+        expResult.add("http://example.org/Geometry#PointB");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        expResult.add("http://example.org/Geometry#PointEmpty");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        expResult.add("http://example.org/Geometry#PolygonL");
 
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:ehDisjoint", "http://example.org/Geometry#PointA");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
     @Test
-    public void geometryFeatureTest() {
-        System.out.println("Geometry Geometry Test: ");
+    public void ehDisjointUnboundObjectTest() {
 
+        System.out.println("ehDisjoint Unbound Object");
         List<String> expResult = new ArrayList<>();
-        List<String> result = queryMany(geometryFeatureQuery("ex:C", "geo:ehDisjoint"), infModel);
-        assertEquals(expResult, result);
 
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Feature#Empty");
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#L");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        expResult.add("http://example.org/Geometry#PointEmpty");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonL");
+
+        List<String> result = QueryRewriteTestMethods.runUnboundObjectQuery("http://example.org/Geometry#PolygonH", "geo:ehDisjoint");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
+    @Ignore
+    @Test
+    public void ehDisjointBothUnboundTest() {
+
+        System.out.println("ehDisjoint Both Unbound");
+        List<String> expResult = new ArrayList<>();
+
+        List<String> result = QueryRewriteTestMethods.runBothUnboundQuery("geo:ehDisjoint");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Disjoint returns t (TRUE) if the intersection of the two geometries is an
+     * empty set.
+     */
+    @Test
+    public void ehDisjointAssertTest() {
+
+        System.out.println("ehDisjoint Assert Test");
+
+        Boolean expResult = true;
+        Boolean result = QueryRewriteTestMethods.runAssertQuery("geo:ehDisjoint");
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }
