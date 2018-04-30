@@ -93,8 +93,10 @@ public class SfContainsTest {
 
         System.out.println("Unbound Positive");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#LineStringD");
         expResult.add("http://example.org/Geometry#PointA");
-        expResult.add("http://example.org/Geometry#LineStringA");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonK");
         List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geof:sfContains");
 
         //System.out.println("Exp: " + expResult);
@@ -107,6 +109,7 @@ public class SfContainsTest {
 
         System.out.println("Unbound Negative");
         List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonJ");
         List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geof:sfContains");
 
         //System.out.println("Exp: " + expResult);
