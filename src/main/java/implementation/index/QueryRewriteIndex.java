@@ -6,7 +6,6 @@
 package implementation.index;
 
 import geo.topological.GenericPropertyFunction;
-import implementation.GeoSPARQLSupport;
 import java.io.File;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.LRUMap;
@@ -20,7 +19,12 @@ import org.apache.jena.rdf.model.Property;
  */
 public class QueryRewriteIndex {
 
-    private static MultiKeyMap<MultiKey, Boolean> QUERY_REWRITE_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexConfiguration.QUERY_REWRITE_INDEX_MAX_SIZE));
+    private static MultiKeyMap<MultiKey, Boolean> QUERY_REWRITE_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>());
+    private static Boolean IS_INDEX_ACTIVE = true;
+
+    static {
+        setMaxSize(IndexConfiguration.QUERY_REWRITE_INDEX_MAX_SIZE);
+    }
 
     /**
      *
@@ -39,7 +43,9 @@ public class QueryRewriteIndex {
             result = QUERY_REWRITE_INDEX.get(key);
         } else {
             result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
-            QUERY_REWRITE_INDEX.put(key, result);
+            if (IS_INDEX_ACTIVE) {
+                QUERY_REWRITE_INDEX.put(key, result);
+            }
         }
         return result;
     }
@@ -68,6 +74,7 @@ public class QueryRewriteIndex {
         MultiKeyMap<MultiKey, Boolean> newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
         QUERY_REWRITE_INDEX.clear();
         QUERY_REWRITE_INDEX = newQueryRewriteIndex;
+        IS_INDEX_ACTIVE = maxSize != 0;
     }
 
 }

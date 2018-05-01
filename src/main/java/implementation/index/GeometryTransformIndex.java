@@ -6,7 +6,6 @@
 package implementation.index;
 
 import com.vividsolutions.jts.geom.Geometry;
-import implementation.GeoSPARQLSupport;
 import implementation.GeometryWrapper;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,7 +33,12 @@ import org.slf4j.LoggerFactory;
 public class GeometryTransformIndex {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexConfiguration.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE));
+    private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>());
+    private static Boolean IS_INDEX_ACTIVE = true;
+
+    static {
+        setMaxSize(IndexConfiguration.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE);
+    }
 
     /**
      * Convert the geometry wrapper to the provided SRS URI.
@@ -61,7 +65,9 @@ public class GeometryTransformIndex {
             MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
             Geometry transformedGeometry = JTS.transform(sourceGeometry, transform);
             transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, sourceGeometryWrapper.getGeoSerialisation(), sourceGeometryWrapper.getDimensionInfo());
-            GEOMETRY_TRANSFORM_INDEX.put(key, transformedGeometryWrapper);
+            if (IS_INDEX_ACTIVE) {
+                GEOMETRY_TRANSFORM_INDEX.put(key, transformedGeometryWrapper);
+            }
         }
         return transformedGeometryWrapper;
     }
@@ -99,10 +105,10 @@ public class GeometryTransformIndex {
      * @param maxSize
      */
     public static final void setMaxSize(Integer maxSize) {
-
         MultiKeyMap<MultiKey, GeometryWrapper> newGeometryIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
         GEOMETRY_TRANSFORM_INDEX.clear();
         GEOMETRY_TRANSFORM_INDEX = newGeometryIndex;
+        IS_INDEX_ACTIVE = maxSize != 0;
     }
 
 }

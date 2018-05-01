@@ -5,7 +5,6 @@
  */
 package implementation.index;
 
-import implementation.GeoSPARQLSupport;
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeReader;
 import java.io.File;
@@ -26,7 +25,12 @@ import org.slf4j.LoggerFactory;
 public class GeometryLiteralIndex {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(IndexConfiguration.GEOMETRY_LITERAL_INDEX_MAX_SIZE);
+    private static LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>();
+    private static Boolean IS_INDEX_ACTIVE = true;
+
+    static {
+        setMaxSize(IndexConfiguration.GEOMETRY_LITERAL_INDEX_MAX_SIZE);
+    }
 
     public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader) {
         GeometryWrapper geometryWrapper;
@@ -34,7 +38,9 @@ public class GeometryLiteralIndex {
             geometryWrapper = GEOMETRY_LITERAL_INDEX.get(geometryLiteral);
         } else {
             geometryWrapper = datatypeReader.read(geometryLiteral);
-            GEOMETRY_LITERAL_INDEX.put(geometryLiteral, geometryWrapper);
+            if (IS_INDEX_ACTIVE) {
+                GEOMETRY_LITERAL_INDEX.put(geometryLiteral, geometryWrapper);
+            }
         }
 
         return geometryWrapper;
@@ -80,6 +86,7 @@ public class GeometryLiteralIndex {
         LRUMap<String, GeometryWrapper> newGeometryIndex = new LRUMap<>(maxSize);
         GEOMETRY_LITERAL_INDEX.clear();
         GEOMETRY_LITERAL_INDEX = newGeometryIndex;
+        IS_INDEX_ACTIVE = maxSize != 0;
     }
 
 }
