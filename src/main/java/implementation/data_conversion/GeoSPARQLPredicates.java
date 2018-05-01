@@ -31,7 +31,8 @@ public class GeoSPARQLPredicates {
 
     /**
      * Infer and add GeoSPARQL predicates to the model. geo:hasDefaultGeometry,
-     * geo:hasGeometry, geo:asWKT, geo:asGML
+     * geo:hasGeometry, geo:asWKT, geo:asGML. TODO - only geo:hasDefaultGeometry
+     * applied based on single geo:hasGeometry.
      *
      * @param model
      */
