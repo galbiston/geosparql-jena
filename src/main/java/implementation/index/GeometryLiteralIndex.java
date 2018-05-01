@@ -83,10 +83,17 @@ public class GeometryLiteralIndex {
      * @param maxSize
      */
     public static final void setMaxSize(Integer maxSize) {
-        LRUMap<String, GeometryWrapper> newGeometryIndex = new LRUMap<>(maxSize);
+
+        IS_INDEX_ACTIVE = maxSize != 0;
+
+        LRUMap<String, GeometryWrapper> newGeometryIndex;
+        if (IS_INDEX_ACTIVE) {
+            newGeometryIndex = new LRUMap<>(maxSize);
+        } else {
+            newGeometryIndex = new LRUMap<>();
+        }
         GEOMETRY_LITERAL_INDEX.clear();
         GEOMETRY_LITERAL_INDEX = newGeometryIndex;
-        IS_INDEX_ACTIVE = maxSize != 0;
     }
 
 }

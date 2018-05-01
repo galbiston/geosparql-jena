@@ -105,10 +105,17 @@ public class GeometryTransformIndex {
      * @param maxSize
      */
     public static final void setMaxSize(Integer maxSize) {
-        MultiKeyMap<MultiKey, GeometryWrapper> newGeometryIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
+
+        IS_INDEX_ACTIVE = maxSize != 0;
+
+        MultiKeyMap<MultiKey, GeometryWrapper> newGeometryIndex;
+        if (IS_INDEX_ACTIVE) {
+            newGeometryIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
+        } else {
+            newGeometryIndex = MultiKeyMap.multiKeyMap(new LRUMap<>());
+        }
         GEOMETRY_TRANSFORM_INDEX.clear();
         GEOMETRY_TRANSFORM_INDEX = newGeometryIndex;
-        IS_INDEX_ACTIVE = maxSize != 0;
     }
 
 }

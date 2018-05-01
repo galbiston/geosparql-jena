@@ -71,10 +71,16 @@ public class QueryRewriteIndex {
      */
     public static final void setMaxSize(Integer maxSize) {
 
-        MultiKeyMap<MultiKey, Boolean> newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
+        IS_INDEX_ACTIVE = maxSize != 0;
+
+        MultiKeyMap<MultiKey, Boolean> newQueryRewriteIndex;
+        if (IS_INDEX_ACTIVE) {
+            newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
+        } else {
+            newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>());
+        }
         QUERY_REWRITE_INDEX.clear();
         QUERY_REWRITE_INDEX = newQueryRewriteIndex;
-        IS_INDEX_ACTIVE = maxSize != 0;
     }
 
 }
