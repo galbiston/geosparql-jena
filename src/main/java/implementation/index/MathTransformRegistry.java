@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class MathTransformRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static MultiKeyMap<MultiKey, MathTransform> MATH_TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap<>(GeoSPARQLSupport.MATH_TRANSFORM_REGISTRY_MAX_SIZE));
+    private static MultiKeyMap<MultiKey, MathTransform> MATH_TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexConfiguration.MATH_TRANSFORM_REGISTRY_MAX_SIZE));
 
     @SuppressWarnings("unchecked")
     public static final MathTransform getMathTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {

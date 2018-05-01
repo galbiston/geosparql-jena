@@ -30,8 +30,8 @@ public class CRSRegistry implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.CRS_REGISTRY_MAX_SIZE);
-    private static LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(GeoSPARQLSupport.UNITS_REGISTRY_MAX_SIZE);
+    private static LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(IndexConfiguration.CRS_REGISTRY_MAX_SIZE);
+    private static LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(IndexConfiguration.UNITS_REGISTRY_MAX_SIZE);
 
     /**
      * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis

@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 public class GeometryTransformIndex {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(GeoSPARQLSupport.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE));
+    private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexConfiguration.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE));
 
     /**
      * Convert the geometry wrapper to the provided SRS URI.

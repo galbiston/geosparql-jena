@@ -14,16 +14,11 @@ import implementation.function_registry.NonTopological;
 import implementation.function_registry.RCC8;
 import implementation.function_registry.Relate;
 import implementation.function_registry.SimpleFeatures;
-import implementation.index.CRSRegistry;
-import implementation.index.GeometryLiteralIndex;
-import implementation.index.GeometryTransformIndex;
+import implementation.index.IndexConfiguration;
 import implementation.index.IndexOption;
-import implementation.index.MathTransformRegistry;
-import implementation.index.QueryRewriteIndex;
 import implementation.vocabulary.Geo;
 import java.io.File;
 import java.io.InputStream;
-import org.apache.commons.io.FileUtils;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
@@ -40,30 +35,10 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 public class GeoSPARQLSupport {
 
     /**
-     * Indexing and Registry Sizes
-     */
-    public static final Integer CRS_REGISTRY_MAX_SIZE = 20;
-    public static final Integer UNITS_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
-    public static final Integer MATH_TRANSFORM_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
-    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 100000;
-    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 100000;
-    public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE = 100000;
-
-    public static final String CRS_REGISTRY_FILENAME = "geosparql-CRS.registry";
-    public static final String UNITS_REGISTRY_FILENAME = "geosparql-Units.registry";
-    public static final String MATH_TRANSFORM_REGISTRY_FILENAME = "geosparql-MathTransform.registry";
-    public static final String GEOMETRY_TRANSFORM_INDEX_FILENAME = "geosparql-GeometryTransform.index";
-    public static final String GEOMETRY_LITERAL_INDEX_FILENAME = "geosparql-GeometryLiteral.index";
-    public static final String QUERY_REWRITE_INDEX_FILENAME = "geosparql-QueryRewrite.index";
-
-    /**
      * GeoSPARQL schema
      */
     private static final String GEOSPARQL_SCHEMA = "schema/geosparql_vocab_all.rdf";
     private static Boolean isFunctionsRegistered = false;
-    private static File indexStorageFolder = null;
-    private static Thread shutdownStorageThread = null;
-    private static IndexOption indexOptionEnum = IndexOption.MEMORY;
 
     /**
      * Prepare an empty GeoSPARQL model with RDFS reasoning.
@@ -166,7 +141,7 @@ public class GeoSPARQLSupport {
      */
     public static void loadFunctionsMemoryIndex() {
         loadFunctions(IndexOption.MEMORY, null);
-        defaultMemoryIndexMaxSize();
+        IndexConfiguration.defaultMemoryIndexMaxSize();
     }
 
     /**
@@ -189,7 +164,7 @@ public class GeoSPARQLSupport {
      */
     public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize, Integer crsRegistryMaxSize, Integer unitsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
         loadFunctionsMemoryIndex(geometryLiteralIndexMaxSize, geometryTransformIndexMaxSize, queryRewriteIndexMaxSize);
-        setRegistryMaxSize(crsRegistryMaxSize, unitsRegistryMaxSize, mathTransformRegistryMaxSize);
+        IndexConfiguration.setRegistryMaxSize(crsRegistryMaxSize, unitsRegistryMaxSize, mathTransformRegistryMaxSize);
     }
 
     /**
@@ -207,9 +182,7 @@ public class GeoSPARQLSupport {
      */
     public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize) {
         loadFunctions(IndexOption.MEMORY, null);
-        GeometryLiteralIndex.setMaxSize(geometryLiteralIndexMaxSize);
-        GeometryTransformIndex.setMaxSize(geometryTransformIndexMaxSize);
-        QueryRewriteIndex.setMaxSize(queryRewriteIndexMaxSize);
+        IndexConfiguration.setIndexMaxSize(geometryLiteralIndexMaxSize, geometryTransformIndexMaxSize, queryRewriteIndexMaxSize);
     }
 
     /**
@@ -242,18 +215,8 @@ public class GeoSPARQLSupport {
      */
     public static void loadFunctions(IndexOption indexOption, File indexFolder) {
 
-        indexOptionEnum = indexOption;
-
-        switch (indexOptionEnum) {
-            case MEMORY:
-                setupMemoryIndex(indexFolder);
-                break;
-            case TDB:
-                setupTDBIndex(indexFolder);
-                break;
-            default:
-                setupNoIndex();
-        }
+        //Set the configuration for indexing.
+        IndexConfiguration.setConfig(indexOption, indexFolder);
 
         //Only register functions once.
         if (!isFunctionsRegistered) {
@@ -273,156 +236,6 @@ public class GeoSPARQLSupport {
             TypeMapper.getInstance().registerDatatype(GMLDatatype.THE_GML_DATATYPE);
             isFunctionsRegistered = true;
         }
-    }
-
-    private static void setupMemoryIndex(File indexFolder) {
-        if (indexFolder != null) {
-            //Only load and setup storage once per filename.
-            if (indexStorageFolder == null | !indexFolder.equals(indexStorageFolder)) {
-                loadMemoryIndexes(indexFolder);
-                storeMemoryIndexesAtShutdown(indexFolder);
-                indexStorageFolder = indexFolder;
-            }
-        }
-    }
-
-    private static void setupTDBIndex(File indexFolder) {
-        removeMemoryIndexStorageThread();
-        zeroMemoryIndexMaxSize();
-    }
-
-    private static void setupNoIndex() {
-        removeMemoryIndexStorageThread();
-        zeroMemoryIndexMaxSize();
-        if (indexStorageFolder != null) {
-            FileUtils.deleteQuietly(indexStorageFolder);
-            indexStorageFolder = null;
-        }
-    }
-
-    private static void zeroMemoryIndexMaxSize() {
-        GeometryLiteralIndex.setMaxSize(0);
-        GeometryTransformIndex.setMaxSize(0);
-        QueryRewriteIndex.setMaxSize(0);
-    }
-
-    private static void defaultMemoryIndexMaxSize() {
-        GeometryLiteralIndex.setMaxSize(GEOMETRY_LITERAL_INDEX_MAX_SIZE);
-        GeometryTransformIndex.setMaxSize(GEOMETRY_TRANSFORM_INDEX_MAX_SIZE);
-        QueryRewriteIndex.setMaxSize(QUERY_REWRITE_INDEX_MAX_SIZE);
-    }
-
-    private static void loadMemoryIndexes(File indexFolder) {
-
-        //CRS Registry
-        File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
-        if (crsRegistryFile.exists()) {
-            CRSRegistry.readCRSRegistry(crsRegistryFile);
-        }
-
-        //Units Registry
-        File unitsRegistryFile = new File(indexFolder, UNITS_REGISTRY_FILENAME);
-        if (unitsRegistryFile.exists()) {
-            CRSRegistry.readUnitsRegistry(unitsRegistryFile);
-        }
-
-        //Math Transform Registry
-        File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
-        if (mathTransformRegistryFile.exists()) {
-            MathTransformRegistry.read(mathTransformRegistryFile);
-        }
-
-        //Geometry Transform Index
-        File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
-        if (geometryTransformIndexFile.exists()) {
-            GeometryTransformIndex.read(geometryTransformIndexFile);
-        }
-
-        //Geometry Literal Index
-        File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
-        if (geometryLiteralIndexFile.exists()) {
-            GeometryLiteralIndex.read(geometryLiteralIndexFile);
-        }
-
-        //Query Rewrite Index
-        File queryRewriteIndexFile = new File(indexFolder, QUERY_REWRITE_INDEX_FILENAME);
-        if (queryRewriteIndexFile.exists()) {
-            QueryRewriteIndex.read(queryRewriteIndexFile);
-        }
-    }
-
-    private static void storeMemoryIndexesAtShutdown(File indexFolder) {
-
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-
-                //CRS Registry
-                File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
-                CRSRegistry.writeCRSRegistry(crsRegistryFile);
-
-                //Units Registry
-                File unitsRegistryFile = new File(indexFolder, UNITS_REGISTRY_FILENAME);
-                CRSRegistry.writeUnitsRegistry(unitsRegistryFile);
-
-                //Math Transform Registry
-                File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
-                MathTransformRegistry.write(mathTransformRegistryFile);
-
-                //Geometry Transform Index
-                File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
-                GeometryTransformIndex.write(geometryTransformIndexFile);
-
-                //Geometry Literal Index
-                File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
-                GeometryLiteralIndex.write(geometryLiteralIndexFile);
-
-                //Query Rewrite Index
-                File queryRewriteIndex = new File(indexFolder, QUERY_REWRITE_INDEX_FILENAME);
-                QueryRewriteIndex.write(queryRewriteIndex);
-            }
-        };
-        Runtime.getRuntime().addShutdownHook(thread);
-
-        //Remove any previous shutdown storage thread.
-        removeMemoryIndexStorageThread();
-
-        //Retain the thread in case called again.
-        shutdownStorageThread = thread;
-    }
-
-    private static void removeMemoryIndexStorageThread() {
-        if (shutdownStorageThread != null) {
-            Runtime.getRuntime().removeShutdownHook(shutdownStorageThread);
-        }
-    }
-
-    public static final void clearAllIndexesAndRegistries() {
-        GeometryLiteralIndex.clear();
-        GeometryTransformIndex.clear();
-        QueryRewriteIndex.clear();
-        CRSRegistry.clearAll();
-        MathTransformRegistry.clear();
-    }
-
-    public static final IndexOption getIndexOption() {
-        return indexOptionEnum;
-    }
-
-    /**
-     * Override the default maximum sizes of registries.
-     * <br>Registries are small but contain frequently re-used or generally
-     * useful data.
-     * <br>Any existing in-memory registries will be emptied.
-     *
-     * @param crsRegistryMaxSize - default max size: 20
-     * @param unitsRegistryMaxSize - default max size: 20
-     * @param mathTransformRegistryMaxSize - default max size: 20
-     */
-    public static final void setRegistryMaxSize(Integer crsRegistryMaxSize, Integer unitsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
-        CRSRegistry.setCRSRegistryMaxSize(crsRegistryMaxSize);
-        CRSRegistry.setUnitsRegistryMaxSize(unitsRegistryMaxSize);
-        MathTransformRegistry.setRegistryMaxSize(mathTransformRegistryMaxSize);
     }
 
 }

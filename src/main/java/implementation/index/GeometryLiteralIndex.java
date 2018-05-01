@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class GeometryLiteralIndex {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(GeoSPARQLSupport.GEOMETRY_LITERAL_INDEX_MAX_SIZE);
+    private static LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(IndexConfiguration.GEOMETRY_LITERAL_INDEX_MAX_SIZE);
 
     public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader) {
         GeometryWrapper geometryWrapper;

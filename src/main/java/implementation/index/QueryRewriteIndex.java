@@ -20,7 +20,7 @@ import org.apache.jena.rdf.model.Property;
  */
 public class QueryRewriteIndex {
 
-    private static MultiKeyMap<MultiKey, Boolean> QUERY_REWRITE_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(GeoSPARQLSupport.QUERY_REWRITE_INDEX_MAX_SIZE));
+    private static MultiKeyMap<MultiKey, Boolean> QUERY_REWRITE_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexConfiguration.QUERY_REWRITE_INDEX_MAX_SIZE));
 
     /**
      *
