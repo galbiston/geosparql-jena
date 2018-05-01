@@ -6,7 +6,7 @@
 package conformance_test.query_rewrite_extension;
 
 import conformance_test.ConformanceTestSuite;
-import conformance_test.QueryLoader;
+import implementation.QueryLoader;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 
@@ -19,16 +19,16 @@ public class QueryRewriteTestMethods {
     private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
 
     private static final String BOTH_BOUND_QUERY_FILE = "sparql_query/BothBoundPropertyQuery.spl";
-    private static final String BOTH_BOUND_QUERY = QueryLoader.read(BOTH_BOUND_QUERY_FILE);
+    private static final String BOTH_BOUND_QUERY = QueryLoader.readResource(BOTH_BOUND_QUERY_FILE);
 
     private static final String UNBOUND_OBJECT_QUERY_FILE = "sparql_query/UnboundObjectPropertyQuery.spl";
-    private static final String UNBOUND_OBJECT_QUERY = QueryLoader.read(UNBOUND_OBJECT_QUERY_FILE);
+    private static final String UNBOUND_OBJECT_QUERY = QueryLoader.readResource(UNBOUND_OBJECT_QUERY_FILE);
 
     private static final String UNBOUND_SUBJECT_QUERY_FILE = "sparql_query/UnboundSubjectPropertyQuery.spl";
-    private static final String UNBOUND_SUBJECT_QUERY = QueryLoader.read(UNBOUND_SUBJECT_QUERY_FILE);
+    private static final String UNBOUND_SUBJECT_QUERY = QueryLoader.readResource(UNBOUND_SUBJECT_QUERY_FILE);
 
     private static final String BOTH_UNBOUND_QUERY_FILE = "sparql_query/BothUnboundPropertyQuery.spl";
-    private static final String BOTH_UNBOUND_QUERY = QueryLoader.read(BOTH_UNBOUND_QUERY_FILE);
+    private static final String BOTH_UNBOUND_QUERY = QueryLoader.readResource(BOTH_UNBOUND_QUERY_FILE);
 
     private static final String SUBJECT_REPLACEMENT = "#subject#";
     private static final String PROPERTY_NAME_REPLACEMENT = "#property#";

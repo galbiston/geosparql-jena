@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package conformance_test;
+package implementation;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,7 +23,7 @@ public class QueryLoader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryLoader.class);
 
-    public static String read(String queryFilename) {
+    public static String readResource(String queryFilename) {
 
         InputStream input = QueryLoader.class.getClassLoader().getResourceAsStream(queryFilename);
 

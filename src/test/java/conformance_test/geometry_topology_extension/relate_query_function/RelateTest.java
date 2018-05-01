@@ -6,7 +6,7 @@
 package conformance_test.geometry_topology_extension.relate_query_function;
 
 import conformance_test.ConformanceTestSuite;
-import conformance_test.QueryLoader;
+import implementation.QueryLoader;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -60,7 +60,7 @@ public class RelateTest {
     }
 
     private static final String RELATE_QUERY_FILE = "sparql_query/RelateQuery.spl";
-    private static final String RELATE_QUERY = QueryLoader.read(RELATE_QUERY_FILE);
+    private static final String RELATE_QUERY = QueryLoader.readResource(RELATE_QUERY_FILE);
 
     private static final String RELATION_REPLACEMENT = "#relation#";
     private static final String TARGET_REPLACEMENT = "#target#";

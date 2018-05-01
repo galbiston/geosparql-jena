@@ -6,7 +6,7 @@
 package conformance_test.geometry_topology_extension;
 
 import conformance_test.ConformanceTestSuite;
-import conformance_test.QueryLoader;
+import implementation.QueryLoader;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 
@@ -19,10 +19,10 @@ public class FilterTestMethods {
     private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
 
     private static final String BOTH_BOUND_QUERY_FILE = "sparql_query/BothBoundFilterQuery.spl";
-    private static final String BOTH_BOUND_QUERY = QueryLoader.read(BOTH_BOUND_QUERY_FILE);
+    private static final String BOTH_BOUND_QUERY = QueryLoader.readResource(BOTH_BOUND_QUERY_FILE);
 
     private static final String UNBOUND_QUERY_FILE = "sparql_query/UnboundObjectFilterQuery.spl";
-    private static final String UNBOUND_QUERY = QueryLoader.read(UNBOUND_QUERY_FILE);
+    private static final String UNBOUND_QUERY = QueryLoader.readResource(UNBOUND_QUERY_FILE);
 
     private static final String SUBJECT_REPLACEMENT = "#subject#";
     private static final String FUNCTION_NAME_REPLACEMENT = "#function#";
