@@ -182,14 +182,13 @@ public class GeoSPARQLSupport {
      *
      * @param geometryLiteralIndexMaxSize - default max size: 100,000
      * @param geometryTransformIndexMaxSize - default max size: 100,000
+     * @param queryRewriteIndexMaxSize - default max size: 100,000
      * @param crsRegistryMaxSize - default max size: 20
      * @param unitsRegistryMaxSize - default max size: 20
      * @param mathTransformRegistryMaxSize - default max size: 20
      */
-    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer crsRegistryMaxSize, Integer unitsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
-        loadFunctions(IndexOption.MEMORY, null);
-        GeometryLiteralIndex.setMaxSize(geometryLiteralIndexMaxSize);
-        GeometryTransformIndex.setMaxSize(geometryTransformIndexMaxSize);
+    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize, Integer crsRegistryMaxSize, Integer unitsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
+        loadFunctionsMemoryIndex(geometryLiteralIndexMaxSize, geometryTransformIndexMaxSize, queryRewriteIndexMaxSize);
         setRegistryMaxSize(crsRegistryMaxSize, unitsRegistryMaxSize, mathTransformRegistryMaxSize);
     }
 
@@ -204,11 +203,13 @@ public class GeoSPARQLSupport {
      *
      * @param geometryLiteralIndexMaxSize - default max size: 100,000
      * @param geometryTransformIndexMaxSize - default max size: 100,000
+     * @param queryRewriteIndexMaxSize - default max size: 100,000
      */
-    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize) {
+    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize) {
         loadFunctions(IndexOption.MEMORY, null);
         GeometryLiteralIndex.setMaxSize(geometryLiteralIndexMaxSize);
         GeometryTransformIndex.setMaxSize(geometryTransformIndexMaxSize);
+        QueryRewriteIndex.setMaxSize(queryRewriteIndexMaxSize);
     }
 
     /**
