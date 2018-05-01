@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation;
+package implementation.data_conversion;
 
+import implementation.GeometryWrapper;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import java.io.File;
@@ -38,30 +39,10 @@ public class ConvertCRS {
     private static final String WKT_DATATYPE_URI = WKTDatatype.THE_WKT_DATATYPE.getURI();
     private static final String GML_DATATYPE_URI = GMLDatatype.THE_GML_DATATYPE.getURI();
 
-    /**
-     * Converts all geometry literals (WKT or GML) from current CRS to the
-     * specified CRS.
-     *
-     * @param inputFile
-     * @param inputLang
-     * @param outputFile
-     * @param outputLang
-     * @param outputSrsURI
-     */
-    public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang, String outputSrsURI) {
-
-        LOGGER.info("Converting File: {} to {} in srs URI: {} - Started", inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), outputSrsURI);
-
-        Model model = ModelFactory.createDefaultModel();
-        try (FileInputStream inputStream = new FileInputStream(inputFile)) {
-            RDFDataMgr.read(model, inputStream, inputLang);
-        } catch (IOException ex) {
-            LOGGER.error("Input File IO Exception: {} - {}", inputFile.getAbsolutePath(), ex.getMessage());
-        }
-
-        Model outputModel = ModelFactory.createDefaultModel();
+    public static final Model convert(Model inputModel, String outputSrsURI) {
         //Iterate through all statements: convert geometry literals and just add the rest.
-        Iterator<Statement> statementIt = model.listStatements();
+        Model outputModel = ModelFactory.createDefaultModel();
+        Iterator<Statement> statementIt = inputModel.listStatements();
         while (statementIt.hasNext()) {
             Statement statement = statementIt.next();
             RDFNode object = statement.getObject();
@@ -72,11 +53,7 @@ public class ConvertCRS {
                 outputModel.add(statement);
             }
         }
-
-        //Write the output.
-        writeOutputModel(outputModel, outputFile, outputLang, inputFile);
-
-        LOGGER.info("Converting File: {} to {} in srs URI: {} - Completed", inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), outputSrsURI);
+        return outputModel;
     }
 
     private static void handleLiteral(Statement statement, Model outputModel, String outputSrsURI) {
@@ -102,7 +79,36 @@ public class ConvertCRS {
         }
     }
 
-    private static void writeOutputModel(Model outputModel, File outputFile, Lang outputLang, File inputFile) {
+    /**
+     * Converts all geometry literals (WKT or GML) from current CRS to the
+     * specified CRS.
+     *
+     * @param inputFile
+     * @param inputLang
+     * @param outputFile
+     * @param outputLang
+     * @param outputSrsURI
+     */
+    public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang, String outputSrsURI) {
+
+        LOGGER.info("Converting File: {} to {} in srs URI: {} - Started", inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), outputSrsURI);
+
+        Model inputModel = ModelFactory.createDefaultModel();
+        try (FileInputStream inputStream = new FileInputStream(inputFile)) {
+            RDFDataMgr.read(inputModel, inputStream, inputLang);
+        } catch (IOException ex) {
+            LOGGER.error("Input File IO Exception: {} - {}", inputFile.getAbsolutePath(), ex.getMessage());
+        }
+
+        Model outputModel = convert(inputModel, outputSrsURI);
+
+        //Write the output.
+        writeOutputModel(outputModel, outputFile, outputLang, inputFile);
+
+        LOGGER.info("Converting File: {} to {} in srs URI: {} - Completed", inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), outputSrsURI);
+    }
+
+    protected static void writeOutputModel(Model outputModel, File outputFile, Lang outputLang, File inputFile) {
         if (!outputModel.isEmpty()) {
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 RDFDataMgr.write(outputStream, outputModel, outputLang);
