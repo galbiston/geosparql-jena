@@ -238,4 +238,12 @@ public class GeoSPARQLSupport {
         }
     }
 
+    /**
+     * Empty all indexes and registries currently in use.
+     */
+    public static final void clearAllIndexesAndRegistries() {
+        //Convenience method so that setup and clearing in one class.
+        IndexConfiguration.clearAllIndexesAndRegistries();
+    }
+
 }
