@@ -92,7 +92,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
 
         Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
-        if (testFilterFunction(subjectSpatialLiteral.getGeometryLiteral(), objectSpatialLiteral.getGeometryLiteral(), predicateProp, true)) {
+        if (testFilterFunction(subjectSpatialLiteral.getGeometryLiteral(), objectSpatialLiteral.getGeometryLiteral(), predicateProp)) {
             //Filter function test succeded so retain binding.
             return QueryIterSingleton.create(binding, execCxt);
         } else {
@@ -194,14 +194,12 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
     }
 
-    private Boolean testFilterFunction(Literal boundGeometryLiteral, Literal unboundGeometryLiteral, Property predicate, Boolean isSubjectBound) {
+    private Boolean testFilterFunction(Literal subjectGeometryLiteral, Literal objectGeometryLiteral, Property predicate) {
         //TODO pass the filter function and predicate to Query Rewrite Index for checking and storage. Use isSubjectBound to identify how to order in index, i.e. when true use boundGeometryLiteral as last key.
         Boolean result;
-        if (isSubjectBound) {
-            result = filterFunction.exec(boundGeometryLiteral, unboundGeometryLiteral);
-        } else {
-            result = filterFunction.exec(unboundGeometryLiteral, boundGeometryLiteral);
-        }
+
+        result = filterFunction.exec(subjectGeometryLiteral, objectGeometryLiteral);
+
         return result;
     }
 
