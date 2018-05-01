@@ -48,7 +48,7 @@ public class MathTransformRegistry {
         return transform;
     }
 
-    public static final void writeMathTransformRegistry(File mathTransformRegistryFile) {
+    public static final void write(File mathTransformRegistryFile) {
         LOGGER.info("Writing Math Transform Registry - {}: Started", mathTransformRegistryFile);
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(mathTransformRegistryFile))) {
             objectOutputStream.writeObject(MATH_TRANSFORM_REGISTRY);
@@ -58,7 +58,7 @@ public class MathTransformRegistry {
         LOGGER.info("Writing Math Transform Registry - {}: Completed", mathTransformRegistryFile);
     }
 
-    public static final void readMathTransformRegistry(File mathTransformRegistryFile) {
+    public static final void read(File mathTransformRegistryFile) {
         LOGGER.info("Reading Math Transform Registry - {}: Started", mathTransformRegistryFile);
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(mathTransformRegistryFile))) {
             @SuppressWarnings("unchecked")
@@ -70,7 +70,7 @@ public class MathTransformRegistry {
         LOGGER.info("Reading Math Transform Registry - {}: Completed", mathTransformRegistryFile);
     }
 
-    public static final void clearAll() {
+    public static final void clear() {
         MATH_TRANSFORM_REGISTRY.clear();
     }
 

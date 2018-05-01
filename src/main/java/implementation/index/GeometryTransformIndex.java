@@ -66,7 +66,7 @@ public class GeometryTransformIndex {
         return transformedGeometryWrapper;
     }
 
-    public static final void writeGeometryTransformIndex(File geometryTransformIndexFile) {
+    public static final void write(File geometryTransformIndexFile) {
         LOGGER.info("Writing Geometry Transform Index - {}: Started", geometryTransformIndexFile);
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(geometryTransformIndexFile))) {
             objectOutputStream.writeObject(GEOMETRY_TRANSFORM_INDEX);
@@ -76,7 +76,7 @@ public class GeometryTransformIndex {
         LOGGER.info("Writing Geometry Transform Index - {}: Completed", geometryTransformIndexFile);
     }
 
-    public static final void readGeometryTransformIndex(File geometryTransformIndexFile) {
+    public static final void read(File geometryTransformIndexFile) {
         LOGGER.info("Reading Geometry Transform Index - {}: Started", geometryTransformIndexFile);
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(geometryTransformIndexFile))) {
             @SuppressWarnings("unchecked")
@@ -88,7 +88,7 @@ public class GeometryTransformIndex {
         LOGGER.info("Reading Geometry Literal Index - {}: Completed", geometryTransformIndexFile);
     }
 
-    public static final void clearAll() {
+    public static final void clear() {
         GEOMETRY_TRANSFORM_INDEX.clear();
     }
 
@@ -98,7 +98,7 @@ public class GeometryTransformIndex {
      *
      * @param maxSize
      */
-    public static final void setIndexMaxSize(Integer maxSize) {
+    public static final void setMaxSize(Integer maxSize) {
 
         MultiKeyMap<MultiKey, GeometryWrapper> newGeometryIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
         GEOMETRY_TRANSFORM_INDEX.clear();

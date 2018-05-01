@@ -40,7 +40,7 @@ public class GeometryLiteralIndex {
         return geometryWrapper;
     }
 
-    public static final void writeGeometryLiteralIndex(File geometryLiteralIndexFile) {
+    public static final void write(File geometryLiteralIndexFile) {
 
         LOGGER.info("Writing Geometry Literal Index - {}: Started", geometryLiteralIndexFile);
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(geometryLiteralIndexFile))) {
@@ -51,7 +51,7 @@ public class GeometryLiteralIndex {
         LOGGER.info("Writing Geometry Literal Index - {}: Completed", geometryLiteralIndexFile);
     }
 
-    public static final void readGeometryLiteralIndex(File geometryLiteralIndexFile) {
+    public static final void read(File geometryLiteralIndexFile) {
         LOGGER.info("Reading Geometry Literal Index - {}: Started", geometryLiteralIndexFile);
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(geometryLiteralIndexFile))) {
             @SuppressWarnings("unchecked")
@@ -66,7 +66,7 @@ public class GeometryLiteralIndex {
     /**
      * Empty the Geometry Literal Index.
      */
-    public static final void clearAll() {
+    public static final void clear() {
         GEOMETRY_LITERAL_INDEX.clear();
     }
 
@@ -76,7 +76,7 @@ public class GeometryLiteralIndex {
      *
      * @param maxSize
      */
-    public static final void setIndexMaxSize(Integer maxSize) {
+    public static final void setMaxSize(Integer maxSize) {
         LRUMap<String, GeometryWrapper> newGeometryIndex = new LRUMap<>(maxSize);
         GEOMETRY_LITERAL_INDEX.clear();
         GEOMETRY_LITERAL_INDEX = newGeometryIndex;

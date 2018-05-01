@@ -165,7 +165,7 @@ public class CRSRegistry implements Serializable {
         LOGGER.info("Reading Units Registry - {}: Completed", unitsRegistryFile);
     }
 
-    private static final void addDefaultWKT_CRS84() {
+    private static void addDefaultWKT_CRS84() {
         addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
     }
 
