@@ -19,6 +19,7 @@ import implementation.index.GeometryLiteralIndex;
 import implementation.index.GeometryTransformIndex;
 import implementation.index.IndexOption;
 import implementation.index.MathTransformRegistry;
+import implementation.index.QueryRewriteIndex;
 import implementation.vocabulary.Geo;
 import java.io.File;
 import java.io.InputStream;
@@ -46,12 +47,14 @@ public class GeoSPARQLSupport {
     public static final Integer MATH_TRANSFORM_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
     public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 100000;
     public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 100000;
+    public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE = 100000;
 
     public static final String CRS_REGISTRY_FILENAME = "geosparql-CRS.registry";
     public static final String UNITS_REGISTRY_FILENAME = "geosparql-Units.registry";
     public static final String MATH_TRANSFORM_REGISTRY_FILENAME = "geosparql-MathTransform.registry";
     public static final String GEOMETRY_TRANSFORM_INDEX_FILENAME = "geosparql-GeometryTransform.index";
     public static final String GEOMETRY_LITERAL_INDEX_FILENAME = "geosparql-GeometryLiteral.index";
+    public static final String QUERY_REWRITE_INDEX_FILENAME = "geosparql-QueryRewrite.index";
 
     /**
      * GeoSPARQL schema
@@ -185,8 +188,8 @@ public class GeoSPARQLSupport {
      */
     public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer crsRegistryMaxSize, Integer unitsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
         loadFunctions(IndexOption.MEMORY, null);
-        GeometryLiteralIndex.setIndexMaxSize(geometryLiteralIndexMaxSize);
-        GeometryTransformIndex.setIndexMaxSize(geometryTransformIndexMaxSize);
+        GeometryLiteralIndex.setMaxSize(geometryLiteralIndexMaxSize);
+        GeometryTransformIndex.setMaxSize(geometryTransformIndexMaxSize);
         setRegistryMaxSize(crsRegistryMaxSize, unitsRegistryMaxSize, mathTransformRegistryMaxSize);
     }
 
@@ -204,8 +207,8 @@ public class GeoSPARQLSupport {
      */
     public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize) {
         loadFunctions(IndexOption.MEMORY, null);
-        GeometryLiteralIndex.setIndexMaxSize(geometryLiteralIndexMaxSize);
-        GeometryTransformIndex.setIndexMaxSize(geometryTransformIndexMaxSize);
+        GeometryLiteralIndex.setMaxSize(geometryLiteralIndexMaxSize);
+        GeometryTransformIndex.setMaxSize(geometryTransformIndexMaxSize);
     }
 
     /**
@@ -297,13 +300,15 @@ public class GeoSPARQLSupport {
     }
 
     private static void zeroMemoryIndexMaxSize() {
-        GeometryLiteralIndex.setIndexMaxSize(0);
-        GeometryTransformIndex.setIndexMaxSize(0);
+        GeometryLiteralIndex.setMaxSize(0);
+        GeometryTransformIndex.setMaxSize(0);
+        QueryRewriteIndex.setMaxSize(0);
     }
 
     private static void defaultMemoryIndexMaxSize() {
-        GeometryLiteralIndex.setIndexMaxSize(GEOMETRY_LITERAL_INDEX_MAX_SIZE);
-        GeometryTransformIndex.setIndexMaxSize(GEOMETRY_TRANSFORM_INDEX_MAX_SIZE);
+        GeometryLiteralIndex.setMaxSize(GEOMETRY_LITERAL_INDEX_MAX_SIZE);
+        GeometryTransformIndex.setMaxSize(GEOMETRY_TRANSFORM_INDEX_MAX_SIZE);
+        QueryRewriteIndex.setMaxSize(QUERY_REWRITE_INDEX_MAX_SIZE);
     }
 
     private static void loadMemoryIndexes(File indexFolder) {
@@ -323,19 +328,25 @@ public class GeoSPARQLSupport {
         //Math Transform Registry
         File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
         if (mathTransformRegistryFile.exists()) {
-            MathTransformRegistry.readMathTransformRegistry(mathTransformRegistryFile);
+            MathTransformRegistry.read(mathTransformRegistryFile);
         }
 
         //Geometry Transform Index
         File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
         if (geometryTransformIndexFile.exists()) {
-            GeometryTransformIndex.readGeometryTransformIndex(geometryTransformIndexFile);
+            GeometryTransformIndex.read(geometryTransformIndexFile);
         }
 
         //Geometry Literal Index
         File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
         if (geometryLiteralIndexFile.exists()) {
-            GeometryLiteralIndex.readGeometryLiteralIndex(geometryLiteralIndexFile);
+            GeometryLiteralIndex.read(geometryLiteralIndexFile);
+        }
+
+        //Query Rewrite Index
+        File queryRewriteIndexFile = new File(indexFolder, QUERY_REWRITE_INDEX_FILENAME);
+        if (queryRewriteIndexFile.exists()) {
+            QueryRewriteIndex.read(queryRewriteIndexFile);
         }
     }
 
@@ -355,15 +366,19 @@ public class GeoSPARQLSupport {
 
                 //Math Transform Registry
                 File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
-                MathTransformRegistry.writeMathTransformRegistry(mathTransformRegistryFile);
+                MathTransformRegistry.write(mathTransformRegistryFile);
 
                 //Geometry Transform Index
                 File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
-                GeometryTransformIndex.writeGeometryTransformIndex(geometryTransformIndexFile);
+                GeometryTransformIndex.write(geometryTransformIndexFile);
 
                 //Geometry Literal Index
                 File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
-                GeometryLiteralIndex.writeGeometryLiteralIndex(geometryLiteralIndexFile);
+                GeometryLiteralIndex.write(geometryLiteralIndexFile);
+
+                //Query Rewrite Index
+                File queryRewriteIndex = new File(indexFolder, QUERY_REWRITE_INDEX_FILENAME);
+                QueryRewriteIndex.write(queryRewriteIndex);
             }
         };
         Runtime.getRuntime().addShutdownHook(thread);
@@ -382,10 +397,11 @@ public class GeoSPARQLSupport {
     }
 
     public static final void clearAllIndexesAndRegistries() {
-        GeometryLiteralIndex.clearAll();
-        GeometryTransformIndex.clearAll();
+        GeometryLiteralIndex.clear();
+        GeometryTransformIndex.clear();
+        QueryRewriteIndex.clear();
         CRSRegistry.clearAll();
-        MathTransformRegistry.clearAll();
+        MathTransformRegistry.clear();
     }
 
     public static final IndexOption getIndexOption() {

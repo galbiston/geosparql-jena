@@ -6,6 +6,7 @@
 package geo.topological;
 
 import geof.topological.GenericFilterFunction;
+import implementation.index.QueryRewriteIndex;
 import implementation.vocabulary.Geo;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
@@ -91,8 +92,10 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             return QueryIterNullIterator.create(execCxt);
         }
 
+        //Check the QueryRewriteIndex for the result.
         Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
-        if (testFilterFunction(subjectSpatialLiteral.getGeometryLiteral(), objectSpatialLiteral.getGeometryLiteral(), predicateProp)) {
+        Boolean isPositiveResult = QueryRewriteIndex.test(subjectSpatialLiteral.getGeometryLiteral(), predicateProp, objectSpatialLiteral.getGeometryLiteral(), this);
+        if (isPositiveResult) {
             //Filter function test succeded so retain binding.
             return QueryIterSingleton.create(binding, execCxt);
         } else {
@@ -194,13 +197,8 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
     }
 
-    private Boolean testFilterFunction(Literal subjectGeometryLiteral, Literal objectGeometryLiteral, Property predicate) {
-        //TODO pass the filter function and predicate to Query Rewrite Index for checking and storage. Use isSubjectBound to identify how to order in index, i.e. when true use boundGeometryLiteral as last key.
-        Boolean result;
-
-        result = filterFunction.exec(subjectGeometryLiteral, objectGeometryLiteral);
-
-        return result;
+    public Boolean testFilterFunction(Literal subjectGeometryLiteral, Literal objectGeometryLiteral) {
+        return filterFunction.exec(subjectGeometryLiteral, objectGeometryLiteral);
     }
 
 }
