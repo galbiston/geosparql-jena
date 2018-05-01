@@ -6,7 +6,7 @@
 package conformance_test.topology_vocabulary_extension;
 
 import conformance_test.ConformanceTestSuite;
-import implementation.QueryLoader;
+import implementation.support.QueryLoader;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 
