@@ -203,6 +203,22 @@ public class GeoSPARQLSupport {
     }
 
     /**
+     * Provide an IndexOption enum for configuring index. If TDB option is
+     * selected then folder created in current working directory.
+     *
+     * @param indexOption
+     */
+    public static void loadFunctions(IndexOption indexOption) {
+        File indexFolder;
+        if (indexOption.equals(IndexOption.TDB)) {
+            indexFolder = new File("geosparql_indexes");
+        } else {
+            indexFolder = null;
+        }
+        loadFunctions(indexOption, indexFolder);
+    }
+
+    /**
      * Initialise all GeoSPARQL property and filter functions. Store any indexes
      * in the specified folder.
      * <br>Use this for persisting indexes such as a TDB setup or storing memory
