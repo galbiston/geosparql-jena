@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.invoke.MethodHandles;
-import org.apache.commons.codec.binary.Base64;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 import org.apache.commons.collections4.map.LRUMap;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.TxnType;
@@ -173,12 +175,14 @@ public class GeometryLiteralIndex {
         return geometryWrapper;
     }
 
+    private static final Encoder ENCODER = Base64.getEncoder();
+
     private static Literal encodeBase64(GeometryWrapper geometryWrapper) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(baos)) {
             objectOutputStream.writeObject(geometryWrapper);
-            String encodedStr = Base64.encodeBase64String(baos.toByteArray());
+            String encodedStr = ENCODER.encodeToString(baos.toByteArray());
             Literal wrapperString = ResourceFactory.createPlainLiteral(encodedStr);
             baos.close();
             return wrapperString;
@@ -188,9 +192,11 @@ public class GeometryLiteralIndex {
         }
     }
 
+    private static final Decoder DECODER = Base64.getDecoder();
+
     private static GeometryWrapper decodeBase64(String wrapperString) {
 
-        byte[] bytes = Base64.decodeBase64(wrapperString);
+        byte[] bytes = DECODER.decode(wrapperString);
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             @SuppressWarnings("unchecked")
             GeometryWrapper geometryWrapper = (GeometryWrapper) objectInputStream.readObject();
