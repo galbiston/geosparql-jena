@@ -5,13 +5,8 @@
  */
 package conformance_test.geometry_extension;
 
-import static conformance_test.ConformanceTestSuite.*;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.jena.datatypes.xsd.impl.XSDBaseNumericType;
+import conformance_test.ConformanceTestSuite;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
@@ -40,15 +35,11 @@ import org.junit.Test;
  */
 public class GeometryPropertiesTest {
 
+    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @Before
     public void setUp() {
@@ -61,25 +52,79 @@ public class GeometryPropertiesTest {
     }
 
     @Test
-    public void positiveTest() {
+    public void dimensionTest() {
+        System.out.println("Dimension");
+        String expResult = "0^^http://www.w3.org/2001/XMLSchema#integer";
 
-        ArrayList<Literal> expResult = new ArrayList<>();
-
-        expResult.add(ResourceFactory.createTypedLiteral("0", XSDBaseNumericType.XSDinteger));
-        expResult.add(ResourceFactory.createTypedLiteral("2", XSDBaseNumericType.XSDinteger));
-        expResult.add(ResourceFactory.createTypedLiteral("2", XSDBaseNumericType.XSDinteger));
-        expResult.add(ResourceFactory.createTypedLiteral("false", XSDBaseNumericType.XSDboolean));
-        expResult.add(ResourceFactory.createTypedLiteral("true", XSDBaseNumericType.XSDboolean));
-
-        String queryString = "SELECT ?dimension ?coordinateDimension ?spatialDimension ?isEmpty ?isSimple WHERE{"
-                + " ex:A geo:hasGeometry ?aGeom ."
+        String queryString = "SELECT ?dimension WHERE{"
+                + " feat:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:dimension ?dimension ."
+                + "}";
+        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void coordinateDimensionTest() {
+        System.out.println("Coordinate Dimension");
+        String expResult = "2^^http://www.w3.org/2001/XMLSchema#integer";
+
+        String queryString = "SELECT ?coordinateDimension WHERE{"
+                + " feat:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:coordinateDimension ?coordinateDimension ."
+                + "}";
+        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void spatialDimensionTest() {
+        System.out.println("Spatial Dimension");
+        String expResult = "2^^http://www.w3.org/2001/XMLSchema#integer";
+
+        String queryString = "SELECT ?spatialDimension WHERE{"
+                + " feat:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:spatialDimension ?spatialDimension ."
+                + "}";
+        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void isEmptyTest() {
+        System.out.println("Is Empty");
+        String expResult = "false^^http://www.w3.org/2001/XMLSchema#boolean";
+
+        String queryString = "SELECT ?isEmpty WHERE{"
+                + " feat:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:isEmpty ?isEmpty ."
+                + "}";
+        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void isSimpleTest() {
+        System.out.println("Is Simple");
+        String expResult = "true^^http://www.w3.org/2001/XMLSchema#boolean";
+
+        String queryString = "SELECT ?isSimple WHERE{"
+                + " feat:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:isSimple ?isSimple ."
                 + "}";
-        List<Literal> result = literalQuery(queryString, infModel);
+        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
