@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  *
- * 
+ *
  */
 public class Prefixes {
 
@@ -27,11 +27,12 @@ public class Prefixes {
     public static final String UOM_URI = "http://www.opengis.net/def/uom/OGC/1.0/";
     public static final String LGD_URI = "http://linkedgeodata.org/ontology/";
     public static final String LGDG_URI = "http://linkedgeodata.org/geometry/";
+    public static final String FEATURE_URI = "http://example.org/Feature#";
+    public static final String GEOMETRY_URI = "http://example.org/Geometry#";
 
     public static final Map<String, String> get() {
         Map<String, String> map = new HashMap<>();
         map.put("sf", SF_URI);
-        map.put("ex", EXAMPLE_URI);
         map.put("geo", GEO_URI);
         map.put("geof", GEOF_URI);
         map.put("geor", GEOR_URI);
@@ -41,6 +42,9 @@ public class Prefixes {
         map.put("uom", UOM_URI);
         map.put("lgd", LGD_URI);
         map.put("lgdg", LGDG_URI);
+        map.put("ex", EXAMPLE_URI);
+        map.put("feat", FEATURE_URI);
+        map.put("geom", GEOMETRY_URI);
 
         return map;
     }
