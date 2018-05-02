@@ -9,7 +9,10 @@ import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import org.apache.commons.io.FileUtils;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,18 +68,14 @@ public class IndexConfiguration {
     public static void setupNoIndex() {
         removeMemoryIndexStorageThread();
         zeroMemoryIndexMaxSize();
-        if (indexStorageFolder != null) {
-            for (String filename : INDEX_REGISTRY_FILENAMES) {
-                File indexFile = new File(indexStorageFolder, filename);
-                FileUtils.deleteQuietly(indexFile);
-            }
-            indexStorageFolder = null;
-        }
+        clearStoredMemIndexes();
     }
 
     public static void setupTDBIndex(File indexFolder) {
+        indexStorageFolder = indexFolder;
         removeMemoryIndexStorageThread();
         zeroMemoryIndexMaxSize();
+        createTDBIndexes();
     }
 
     public static void setupMemoryIndex(File indexFolder) {
@@ -96,6 +95,31 @@ public class IndexConfiguration {
         QueryRewriteIndex.clear();
         CRSRegistry.clearAll();
         MathTransformRegistry.clear();
+        clearTDBIndexes();
+    }
+
+    private static void clearTDBIndexes() {
+        if (indexStorageFolder != null) {
+            Boolean inUse = TDBFactory.inUseLocation(indexStorageFolder.getAbsolutePath());
+            if (inUse) {
+                GeometryLiteralIndex.clearTDBIndex();
+            }
+        }
+    }
+
+    private static void createTDBIndexes() {
+        Dataset dataset = TDBFactory.createDataset(indexStorageFolder.getAbsolutePath());
+        GeometryLiteralIndex.setupTDBIndex(dataset);
+    }
+
+    private static void clearStoredMemIndexes() {
+        if (indexStorageFolder != null) {
+            for (String filename : INDEX_REGISTRY_FILENAMES) {
+                File indexFile = new File(indexStorageFolder, filename);
+                FileUtils.deleteQuietly(indexFile);
+            }
+            indexStorageFolder = null;
+        }
     }
 
     public static final void setIndexMaxSize(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize) {
@@ -204,6 +228,10 @@ public class IndexConfiguration {
 
     public static final IndexOption getIndexOption() {
         return indexOptionEnum;
+    }
+
+    public static final String createURI(String namespaceURI, String prefix) {
+        return namespaceURI + prefix + "-" + UUID.randomUUID().toString();
     }
 
 }
