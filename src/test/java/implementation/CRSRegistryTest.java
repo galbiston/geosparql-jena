@@ -59,6 +59,9 @@ public class CRSRegistryTest {
         String srsURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
         CoordinateReferenceSystem expResult = CRS.decode(srsURI);
         CoordinateReferenceSystem result = CRSRegistry.addCRS(srsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -72,8 +75,10 @@ public class CRSRegistryTest {
         System.out.println("getCRS");
         String srsURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
         CoordinateReferenceSystem expResult = CRS.decode(srsURI);
-
         CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
+
+//System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -99,6 +104,35 @@ public class CRSRegistryTest {
             CoordinateReferenceSystem expResult = CRS.parseWKT(default_CRS_WKT);
             CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
 
+            //System.out.println("Exp: " + expResult);
+            //System.out.println("Res: " + result);
+            assertEquals(expResult, result);
+        } catch (FactoryException ex) {
+            System.out.println("Default WKT CRS error: " + ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testLookupWKTCRS() {
+        try {
+            System.out.println("lookupWKTCRS");
+            String srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
+
+            String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
+                    + "  DATUM[\"WGS_1984\", \n"
+                    + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
+                    + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
+                    + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
+                    + "  UNIT[\"degree\", 0.017453292519943295], \n"
+                    + "  AXIS[\"Geodetic longitude\", EAST], \n"
+                    + "  AXIS[\"Geodetic latitude\", NORTH], \n"
+                    + "  AUTHORITY[\"OGC\", 4326]]";
+
+            CoordinateReferenceSystem expResult = CRS.parseWKT(default_CRS_WKT);
+            CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
+
+            //System.out.println("Exp: " + expResult);
+            //System.out.println("Res: " + result);
             assertEquals(expResult, result);
         } catch (FactoryException ex) {
             System.out.println("Default WKT CRS error: " + ex.getMessage());
