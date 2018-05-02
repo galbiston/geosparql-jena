@@ -80,8 +80,8 @@ public class GeometryClassTest {
 
         List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
