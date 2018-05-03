@@ -13,7 +13,7 @@ import implementation.parsers.wkt.WKTGeometryBuilder;
 import implementation.parsers.wkt.WKTTextSRS;
 import implementation.parsers.wkt.WKTWriter;
 import implementation.support.GeoSerialisationEnum;
-import static implementation.support.Prefixes.GEO_URI;
+import static implementation.vocabulary.Prefixes.GEO_URI;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;

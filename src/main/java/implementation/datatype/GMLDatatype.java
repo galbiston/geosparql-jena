@@ -12,7 +12,7 @@ import implementation.GeometryWrapper;
 import implementation.parsers.gml.GMLGeometryBuilder;
 import implementation.parsers.gml.GMLWriter;
 import implementation.support.GeoSerialisationEnum;
-import static implementation.support.Prefixes.GEO_URI;
+import static implementation.vocabulary.Prefixes.GEO_URI;
 import java.io.IOException;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
