@@ -45,8 +45,8 @@ public class SfContainsFFTest {
     @Test
     public void testSfContainFilterFunction() {
         System.out.println("SfContains Filter Function");
-        String queryString = "SELECT ?aGeom WHERE{"
-                + " ?aGeom geo:asWKT ?aWKT ."
+        String queryString = "SELECT ?geometry WHERE{"
+                + " ?geometry geo:asWKT ?aWKT ."
                 + " FILTER geof:sfContains(?aWKT, \"<http://www.opengis.net/def/crs/EPSG/0/27700> Point(35 55)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ) ."
                 + "}";
 

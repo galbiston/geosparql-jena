@@ -45,11 +45,11 @@ public class GetDimensionTest {
     public void testGetDimension() {
         System.out.println("Get Dimension");
         String queryString = "SELECT ?dimension ?empty ?simple ?coordinateDimension WHERE{"
-                + " BIND(geom:PointB AS ?aGeom) ."
-                + " ?aGeom geo:dimension ?dimension ."
-                + " ?aGeom geo:isEmpty ?empty ."
-                + " ?aGeom geo:isSimple ?simple ."
-                + " ?aGeom geo:coordinateDimension ?coordinateDimension . "
+                + " BIND(geom:PointB AS ?geometry) ."
+                + " ?geometry geo:dimension ?dimension ."
+                + " ?geometry geo:isEmpty ?empty ."
+                + " ?geometry geo:isSimple ?simple ."
+                + " ?geometry geo:coordinateDimension ?coordinateDimension . "
                 + "}";
 
         String expResult = "0^^http://www.w3.org/2001/XMLSchema#integer false^^http://www.w3.org/2001/XMLSchema#boolean true^^http://www.w3.org/2001/XMLSchema#boolean 2^^http://www.w3.org/2001/XMLSchema#integer";
