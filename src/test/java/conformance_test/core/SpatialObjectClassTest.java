@@ -5,17 +5,10 @@
  */
 package conformance_test.core;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.support.Prefixes;
+import conformance_test.TestQuerySupport;
 import java.util.ArrayList;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Resource;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -44,16 +37,11 @@ import org.junit.Test;
  */
 public class SpatialObjectClassTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -70,45 +58,49 @@ public class SpatialObjectClassTest {
     }
 
     @Test
-    public void positiveTest() {
+    public void spatialObjectClassTest() {
+        System.out.println("Spatial Object Class");
 
-        System.out.println("spatialObjectClass");
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#GExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#EExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#BExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#AExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#G");
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#E");
-        expResult.add("http://example.org/ApplicationSchema#D");
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#B");
-        expResult.add("http://example.org/ApplicationSchema#A");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#A");
+        expResult.add("http://example.org/Feature#B");
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#Empty");
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#G");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Feature#L");
+        expResult.add("http://example.org/Feature#X");
+        expResult.add("http://example.org/Feature#Y");
+        expResult.add("http://example.org/Geometry#LineStringD");
+        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Geometry#LineStringF");
+        expResult.add("http://example.org/Geometry#LineStringG");
+        expResult.add("http://example.org/Geometry#PointA");
+        expResult.add("http://example.org/Geometry#PointB");
+        expResult.add("http://example.org/Geometry#PointC");
+        expResult.add("http://example.org/Geometry#PointC2");
+        expResult.add("http://example.org/Geometry#PointEmpty");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        expResult.add("http://example.org/Geometry#PolygonL");
 
-        String queryString = "SELECT ?feature WHERE{"
-                + " ?feature rdf:type geo:SpatialObject ."
-                + "}";
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
-        query.setNsPrefixes(Prefixes.get());
+        String queryString = "SELECT ?spatialObject WHERE{"
+                + " ?spatialObject rdf:type geo:SpatialObject ."
+                + "}ORDER BY ?spatialObject";
 
-        ArrayList<String> result = new ArrayList<>();
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), infModel)) {
-            ResultSet results = qexec.execSelect();
-            while (results.hasNext()) {
-                QuerySolution solution = results.nextSolution();
-                Resource resource = solution.getResource("?feature");
-                result.add(resource.toString());
-            }
-        }
-
-        //System.out.println("Expected: " + expResult);
-        //System.out.println("Result: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 }

@@ -5,16 +5,12 @@
  */
 package conformance_test.rdfs_entailment_extension;
 
-import static conformance_test.ConformanceTestSuite.*;
-import java.util.ArrayList;
-import java.util.List;
+import conformance_test.TestQuerySupport;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *
@@ -38,15 +34,11 @@ import org.junit.Test;
  */
 public class BgpRdfsEntTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -62,23 +54,5 @@ public class BgpRdfsEntTest {
 
     }
 
-    @Test
-    public void positiveTest() {
-
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#G");
-        expResult.add("http://example.org/ApplicationSchema#F");
-        expResult.add("http://example.org/ApplicationSchema#E");
-        expResult.add("http://example.org/ApplicationSchema#D");
-        expResult.add("http://example.org/ApplicationSchema#C");
-        expResult.add("http://example.org/ApplicationSchema#B");
-        expResult.add("http://example.org/ApplicationSchema#A");
-
-        String queryString = "SELECT ?feature WHERE{"
-                + " ?feature rdf:type geo:Feature ."
-                + "}";
-        List<String> result = queryMany(queryString, infModel);
-        assertEquals(expResult, result);
-    }
-
+    //TODO - RDFS Inferencing
 }

@@ -5,13 +5,10 @@
  */
 package conformance_test.geometry_extension;
 
-import static conformance_test.ConformanceTestSuite.*;
-
-import java.util.Arrays;
+import conformance_test.TestQuerySupport;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -46,15 +43,11 @@ import org.junit.Test;
  */
 public class SridFunctionTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -70,17 +63,22 @@ public class SridFunctionTest {
     }
 
     @Test
-    public void positiveTest() {
+    public void sridFunctionTest() {
+        System.out.println("SRID Function");
 
-        List<Literal> expResult = Arrays.asList(ResourceFactory.createTypedLiteral("http://www.opengis.net/def/crs/OGC/1.3/CRS84"));
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://www.opengis.net/def/crs/EPSG/0/27700");
+        expResult.add("http://www.opengis.net/def/crs/OGC/1.3/CRS84");
 
-        String queryString = "SELECT ?srid WHERE{"
-                + " ex:C ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + "BIND(geof:getSRID ( ?aWKT ) AS ?srid)"
-                + "}";
-        List<Literal> result = literalQuery(queryString, infModel);
+        String queryString = "SELECT DISTINCT ?srid WHERE{"
+                + "?geometry geo:asWKT ?aWKT ."
+                + "BIND(geof:getSRID(?aWKT) AS ?srid)"
+                + "}ORDER BY ?srid";
 
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

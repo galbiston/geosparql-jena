@@ -5,12 +5,8 @@
  */
 package conformance_test.geometry_extension.gml;
 
-import static conformance_test.ConformanceTestSuite.*;
-import java.util.ArrayList;
-import java.util.List;
+import conformance_test.TestQuerySupport;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -38,16 +34,11 @@ import org.junit.Test;
  */
 public class GmlLiteralEmptyTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_GML();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initGmlEmptyModel();
     }
-
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -64,17 +55,29 @@ public class GmlLiteralEmptyTest {
     }
 
     @Test
-    public void positiveTest() {
+    public void emptyCoordinatesTest() {
 
-        ArrayList<Literal> expResult = new ArrayList<>();
-        expResult.add(ResourceFactory.createTypedLiteral("http://www.opengis.net/def/crs/OGC/1.3/CRS84"));
+        String expResult = "true^^http://www.w3.org/2001/XMLSchema#boolean";
 
-        String queryString = "SELECT ?srid WHERE{"
-                + " ex:B ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asGML ?aGML ."
-                + "BIND(geof:getSRID( ?aGML ) AS ?srid)"
+        String queryString = "SELECT ?isEmpty WHERE{"
+                + "geom:PointEmptyA geo:isEmpty ?isEmpty ."
                 + "}";
-        List<Literal> result = literalQuery(queryString, infModel);
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void emptyLiteralTest() {
+
+        String expResult = "true^^http://www.w3.org/2001/XMLSchema#boolean";
+
+        String queryString = "SELECT ?isEmpty WHERE{"
+                + "geom:PointEmptyB geo:isEmpty ?isEmpty ."
+                + "}";
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

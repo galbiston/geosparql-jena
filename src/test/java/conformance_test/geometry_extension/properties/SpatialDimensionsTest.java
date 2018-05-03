@@ -5,7 +5,7 @@
  */
 package conformance_test.geometry_extension.properties;
 
-import conformance_test.ConformanceTestSuite;
+import conformance_test.TestQuerySupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -37,7 +37,7 @@ import org.junit.Test;
  */
 public class SpatialDimensionsTest {
 
-    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
 
     @BeforeClass
     public static void setUpClass() {
@@ -65,7 +65,7 @@ public class SpatialDimensionsTest {
                 + " BIND(feat:A AS ?feature) ."
                 + " ?aGeom geo:spatialDimension \"2\"^^<http://www.w3.org/2001/XMLSchema#integer> ."
                 + "}";
-        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -82,7 +82,7 @@ public class SpatialDimensionsTest {
                 + " feat:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:spatialDimension ?spatialDimension ."
                 + "}";
-        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -113,7 +113,7 @@ public class SpatialDimensionsTest {
                 + " ?feature geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:spatialDimension \"2\"^^<http://www.w3.org/2001/XMLSchema#integer> ."
                 + "}ORDER BY ?feature";
-        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -144,7 +144,7 @@ public class SpatialDimensionsTest {
                 + " ?feature geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:spatialDimension ?spatialDimension ."
                 + "}ORDER BY ?feature";
-        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

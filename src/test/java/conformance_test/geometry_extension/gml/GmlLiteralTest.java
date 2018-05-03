@@ -5,17 +5,12 @@
  */
 package conformance_test.geometry_extension.gml;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.datatype.GMLDatatype;
+import conformance_test.TestQuerySupport;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *
@@ -38,16 +33,11 @@ import org.junit.Test;
  */
 public class GmlLiteralTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_GML();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initGmlModel();
     }
-
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -63,22 +53,5 @@ public class GmlLiteralTest {
 
     }
 
-    @Test
-    public void positiveTest() {
-
-        Literal expLiteral = ResourceFactory.createTypedLiteral("<gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.4 34.4</gml:pos></gml:Point>", GMLDatatype.THE_GML_DATATYPE);
-
-        String queryString = "SELECT ?aGML WHERE{"
-                + " ex:A ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asGML ?aGML ."
-                + "}";
-        Literal resultLiteral = literalSingleQuery(queryString, infModel);
-        Boolean result = resultLiteral.getLexicalForm().equals(expLiteral.getLexicalForm());
-        Boolean expResult = true;
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
+    //TODO - Test for valid elements of subtype schema.
 }

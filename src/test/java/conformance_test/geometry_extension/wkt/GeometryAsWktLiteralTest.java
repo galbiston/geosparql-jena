@@ -5,13 +5,8 @@
  */
 package conformance_test.geometry_extension.wkt;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.datatype.WKTDatatype;
-import java.util.ArrayList;
-import java.util.List;
+import conformance_test.TestQuerySupport;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -39,16 +34,11 @@ import org.junit.Test;
  */
 public class GeometryAsWktLiteralTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -65,16 +55,18 @@ public class GeometryAsWktLiteralTest {
     }
 
     @Test
-    public void positiveTest() {
+    public void asWKTTest() {
+        System.out.println("asWKT");
 
-        ArrayList<Literal> expResult = new ArrayList<>();
-        expResult.add(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)", WKTDatatype.THE_WKT_DATATYPE));
+        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/27700> Point(60 60)^^http://www.opengis.net/ont/geosparql#wktLiteral";
 
         String queryString = "SELECT ?aWKT WHERE{"
-                + " ex:A ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
+                + " geom:PointA geo:asWKT ?aWKT ."
                 + "}";
-        List<Literal> result = literalQuery(queryString, infModel);
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

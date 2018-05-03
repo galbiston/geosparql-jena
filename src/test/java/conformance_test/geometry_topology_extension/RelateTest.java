@@ -5,8 +5,7 @@
  */
 package conformance_test.geometry_topology_extension;
 
-import conformance_test.ConformanceTestSuite;
-import implementation.support.QueryLoader;
+import conformance_test.TestQuerySupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -39,7 +38,7 @@ import org.junit.Test;
  */
 public class RelateTest {
 
-    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
 
     @BeforeClass
     public static void setUpClass() {
@@ -59,16 +58,19 @@ public class RelateTest {
 
     }
 
-    private static final String RELATE_QUERY_FILE = "sparql_query/RelateQuery.spl";
-    private static final String RELATE_QUERY = QueryLoader.readResource(RELATE_QUERY_FILE);
+    private static final String RELATE_QUERY_STRING = "SELECT ?geom\n"
+            + "WHERE{\n"
+            + "    ?geom geo:asWKT ?geomLit .\n"
+            + "    FILTER(geof:relate(?geomLit, #target#, #relation#)) .\n"
+            + "}ORDER by ?geom";
 
     private static final String RELATION_REPLACEMENT = "#relation#";
     private static final String TARGET_REPLACEMENT = "#target#";
 
     public static final List<String> runRelateQuery(String target, String relation) {
-        String queryString = RELATE_QUERY.replace(RELATION_REPLACEMENT, relation).replace(TARGET_REPLACEMENT, target);
+        String queryString = RELATE_QUERY_STRING.replace(RELATION_REPLACEMENT, relation).replace(TARGET_REPLACEMENT, target);
         //System.out.println(queryString);
-        return ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        return TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
     }
 
     @Test

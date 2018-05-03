@@ -5,15 +5,8 @@
  */
 package conformance_test.geometry_extension.wkt;
 
-import static conformance_test.ConformanceTestSuite.initWktEmptyModel;
-import static conformance_test.ConformanceTestSuite.literalQuery;
-import implementation.GeoSPARQLSupport;
-
-import java.util.Arrays;
-import java.util.List;
+import conformance_test.TestQuerySupport;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -23,7 +16,7 @@ import org.junit.Test;
 
 /**
  *
- * 
+ *
  *
  * A.3.2.2 /conf/geometry-extension/wkt-literal-default-srs
  *
@@ -44,16 +37,11 @@ import org.junit.Test;
  */
 public class WktLiteralDefaultSrsTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        
-        infModel = initWktEmptyModel();
     }
-
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -70,15 +58,20 @@ public class WktLiteralDefaultSrsTest {
     }
 
     @Test
-    public void positiveTest() {
+    public void defaultSRIDTest() {
+        System.out.println("Default SRID");
 
-        List<Literal> expResult = Arrays.asList(ResourceFactory.createTypedLiteral("http://www.opengis.net/def/crs/OGC/1.3/CRS84"));
+        String expResult = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
-        String queryString = "SELECT ((geof:getSRID( ?aWKT )) AS ?srid) WHERE{"
-                + " ex:B ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
+        String queryString = "SELECT ?srid WHERE{"
+                + "geom:PointEmpty geo:asWKT ?aWKT ."
+                + "BIND(geof:getSRID (?aWKT) AS ?srid)"
                 + "}";
-        List<Literal> result = literalQuery(queryString, infModel);
+
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

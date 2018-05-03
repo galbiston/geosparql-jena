@@ -5,9 +5,7 @@
  */
 package conformance_test.geometry_extension;
 
-import conformance_test.ConformanceTestSuite;
-import java.util.ArrayList;
-import java.util.List;
+import conformance_test.TestQuerySupport;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -37,7 +35,7 @@ import org.junit.Test;
  */
 public class FeaturePropertiesTest {
 
-    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
 
     @BeforeClass
     public static void setUpClass() {
@@ -66,7 +64,7 @@ public class FeaturePropertiesTest {
                 + " feat:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
@@ -82,39 +80,7 @@ public class FeaturePropertiesTest {
                 + " feat:A geo:hasDefaultGeometry ?aGeom ."
                 + " ?aGeom geo:asWKT ?aWKT ."
                 + "}";
-        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    @Test
-    public void featureClassTest() {
-        System.out.println("Feature Class");
-
-        List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/Feature#A");
-        expResult.add("http://example.org/Feature#B");
-        expResult.add("http://example.org/Feature#C");
-        expResult.add("http://example.org/Feature#C2");
-        expResult.add("http://example.org/Feature#D");
-        expResult.add("http://example.org/Feature#E");
-        expResult.add("http://example.org/Feature#Empty");
-        expResult.add("http://example.org/Feature#F");
-        expResult.add("http://example.org/Feature#G");
-        expResult.add("http://example.org/Feature#H");
-        expResult.add("http://example.org/Feature#I");
-        expResult.add("http://example.org/Feature#J");
-        expResult.add("http://example.org/Feature#K");
-        expResult.add("http://example.org/Feature#L");
-        expResult.add("http://example.org/Feature#X");
-
-        String queryString = "SELECT ?feature WHERE{"
-                + " ?feature rdf:type geo:Feature ."
-                + "}ORDER BY ?feature";
-
-        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
-
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);

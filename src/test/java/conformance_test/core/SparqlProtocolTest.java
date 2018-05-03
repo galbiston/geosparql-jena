@@ -5,24 +5,16 @@
  */
 package conformance_test.core;
 
-import static conformance_test.ConformanceTestSuite.*;
-
-import implementation.support.Prefixes;
+import conformance_test.TestQuerySupport;
 import java.util.ArrayList;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Literal;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -45,16 +37,11 @@ import static org.junit.Assert.assertEquals;
  */
 public class SparqlProtocolTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -71,29 +58,34 @@ public class SparqlProtocolTest {
     }
 
     @Test
-    public void positiveTest() {
+    public void sparqlProtocolTest() {
+        System.out.println("Spatial Object Class");
 
-        ArrayList<String> expResult = new ArrayList<>();
-        expResult.add("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)^^http://www.opengis.net/ont/geosparql#wktLiteral");
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Feature#A");
+        expResult.add("http://example.org/Feature#B");
+        expResult.add("http://example.org/Feature#C");
+        expResult.add("http://example.org/Feature#C2");
+        expResult.add("http://example.org/Feature#D");
+        expResult.add("http://example.org/Feature#E");
+        expResult.add("http://example.org/Feature#Empty");
+        expResult.add("http://example.org/Feature#F");
+        expResult.add("http://example.org/Feature#G");
+        expResult.add("http://example.org/Feature#H");
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#K");
+        expResult.add("http://example.org/Feature#L");
+        expResult.add("http://example.org/Feature#X");
 
-        String queryString = "SELECT ?aWKT WHERE{"
-                + " ex:A ex:hasExactGeometry ?aGeom ."
-                + " ?aGeom geo:asWKT ?aWKT ."
-                + "}";
-        QuerySolutionMap bindings = new QuerySolutionMap();
-        ParameterizedSparqlString query = new ParameterizedSparqlString(queryString, bindings);
-        query.setNsPrefixes(Prefixes.get());
+        String queryString = "SELECT ?place WHERE{"
+                + " ?place a ex:PlaceOfInterest ."
+                + "}ORDER BY ?place";
 
-        ArrayList<String> result = new ArrayList<>();
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
-        try (QueryExecution qexec = QueryExecutionFactory.create(query.asQuery(), infModel)) {
-            ResultSet results = qexec.execSelect();
-            while (results.hasNext()) {
-                QuerySolution solution = results.nextSolution();
-                Literal literal = solution.getLiteral("?aWKT");
-                result.add(literal.toString());
-            }
-        }
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 }

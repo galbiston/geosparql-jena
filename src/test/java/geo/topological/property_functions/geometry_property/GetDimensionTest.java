@@ -5,7 +5,7 @@
  */
 package geo.topological.property_functions.geometry_property;
 
-import conformance_test.ConformanceTestSuite;
+import conformance_test.TestQuerySupport;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -20,7 +20,7 @@ import org.junit.Test;
  */
 public class GetDimensionTest {
 
-    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
 
     @BeforeClass
     public static void setUpClass() {
@@ -53,7 +53,7 @@ public class GetDimensionTest {
                 + "}";
 
         String expResult = "0^^http://www.w3.org/2001/XMLSchema#integer false^^http://www.w3.org/2001/XMLSchema#boolean true^^http://www.w3.org/2001/XMLSchema#boolean 2^^http://www.w3.org/2001/XMLSchema#integer";
-        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

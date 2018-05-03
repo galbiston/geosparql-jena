@@ -5,7 +5,7 @@
  */
 package conformance_test.topology_vocabulary_extension;
 
-import conformance_test.ConformanceTestSuite;
+import conformance_test.TestQuerySupport;
 import implementation.support.QueryLoader;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -16,7 +16,7 @@ import org.apache.jena.rdf.model.InfModel;
  */
 public class PropertyTestMethods {
 
-    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
 
     private static final String BOTH_BOUND_QUERY_FILE = "sparql_query/BothBoundPropertyQuery.spl";
     private static final String BOTH_BOUND_QUERY = QueryLoader.readResource(BOTH_BOUND_QUERY_FILE);
@@ -31,13 +31,13 @@ public class PropertyTestMethods {
     public static final String runBoundQuery(String subject, String propertyName, String object) {
         String queryString = BOTH_BOUND_QUERY.replace(SUBJECT_REPLACEMENT, subject).replace(PROPERTY_NAME_REPLACEMENT, propertyName).replace(OBJECT_REPLACEMENT, object);
         //System.out.println(queryString);
-        return ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+        return TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
     }
 
     public static final List<String> runUnboundQuery(String source, String propertyName) {
         String queryString = UNBOUND_QUERY.replace(SUBJECT_REPLACEMENT, source).replace(PROPERTY_NAME_REPLACEMENT, propertyName);
         //System.out.println(queryString);
-        return ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        return TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
     }
 
 }

@@ -5,9 +5,7 @@
  */
 package conformance_test.geometry_extension.wkt;
 
-import static conformance_test.ConformanceTestSuite.*;
-import implementation.GeoSPARQLSupport;
-
+import conformance_test.TestQuerySupport;
 import org.apache.jena.rdf.model.InfModel;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,7 +14,7 @@ import org.junit.BeforeClass;
 
 /**
  *
- * 
+ *
  *
  * A.3.2.3 /conf/geometry-extension/wkt-axis-order
  *
@@ -35,15 +33,11 @@ import org.junit.BeforeClass;
  */
 public class WktAxisOrderTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-        
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -57,4 +51,5 @@ public class WktAxisOrderTest {
     public void tearDown() {
     }
 
+    //TODO - Axis Order Test
 }

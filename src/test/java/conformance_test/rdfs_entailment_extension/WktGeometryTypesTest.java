@@ -5,7 +5,7 @@
  */
 package conformance_test.rdfs_entailment_extension;
 
-import static conformance_test.ConformanceTestSuite.*;
+import conformance_test.TestQuerySupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -39,15 +39,11 @@ import org.junit.Test;
  */
 public class WktGeometryTypesTest {
 
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
+
     @BeforeClass
     public static void setUpClass() {
-        /**
-         * Initialize all the topology functions.
-         */
-
-        infModel = initWktModel();
     }
-    private static InfModel infModel;
 
     @AfterClass
     public static void tearDownClass() {
@@ -67,17 +63,19 @@ public class WktGeometryTypesTest {
     public void positiveTest() {
 
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/ApplicationSchema#GExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#FExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#EExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#DExactGeom");
-        expResult.add("http://example.org/ApplicationSchema#CExactGeom");
+        expResult.add("http://example.org/Geometry#PolygonH");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonK");
+        expResult.add("http://example.org/Geometry#PolygonL");
 
         String queryString = "SELECT ?geometry WHERE{"
                 + " ?geometry rdf:type sf:Polygon ."
-                + "}";
-        List<String> result = queryMany(queryString, infModel);
+                + "}ORDER BY ?geometry";
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

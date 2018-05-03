@@ -5,7 +5,7 @@
  */
 package conformance_test.geometry_extension.properties;
 
-import conformance_test.ConformanceTestSuite;
+import conformance_test.TestQuerySupport;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
@@ -37,7 +37,7 @@ import org.junit.Test;
  */
 public class IsEmptyTest {
 
-    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
+    private static final InfModel SAMPLE_DATA_MODEL = TestQuerySupport.getSampleData_WKT();
 
     @BeforeClass
     public static void setUpClass() {
@@ -65,7 +65,7 @@ public class IsEmptyTest {
                 + " BIND(feat:Empty AS ?feature) ."
                 + " ?aGeom geo:isEmpty \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> ."
                 + "}";
-        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -83,7 +83,7 @@ public class IsEmptyTest {
                 + " BIND(feat:Empty AS ?feature) ."
                 + " ?aGeom geo:isEmpty \"false\"^^<http://www.w3.org/2001/XMLSchema#boolean> ."
                 + "}";
-        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -100,7 +100,7 @@ public class IsEmptyTest {
                 + " feat:A geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:isEmpty ?isEmpty ."
                 + "}";
-        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
+        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -118,7 +118,7 @@ public class IsEmptyTest {
                 + " ?feature geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:isEmpty \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> ."
                 + "}ORDER BY ?feature";
-        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -149,7 +149,7 @@ public class IsEmptyTest {
                 + " ?feature geo:hasGeometry ?aGeom ."
                 + " ?aGeom geo:isEmpty ?isEmpty ."
                 + "}ORDER BY ?feature";
-        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
+        List<String> result = TestQuerySupport.queryMany(queryString, SAMPLE_DATA_MODEL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
