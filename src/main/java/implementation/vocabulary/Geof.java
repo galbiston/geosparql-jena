@@ -5,7 +5,7 @@
  */
 package implementation.vocabulary;
 
-import static implementation.support.Prefixes.GEOF_URI;
+import static implementation.vocabulary.Prefixes.GEOF_URI;
 
 /**
  *
