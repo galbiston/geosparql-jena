@@ -7,9 +7,9 @@ package implementation.datatype;
 
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
-import implementation.index.GeometryLiteralIndex;
 import implementation.GeometryWrapper;
-import implementation.parsers.gml.GMLGeometryBuilder;
+import implementation.index.GeometryLiteralIndex;
+import implementation.parsers.gml.GMLReader;
 import implementation.parsers.gml.GMLWriter;
 import implementation.support.GeoSerialisationEnum;
 import static implementation.vocabulary.Prefixes.GEO_URI;
@@ -93,11 +93,11 @@ public class GMLDatatype extends BaseDatatype implements DatatypeReader {
     @Override
     public GeometryWrapper read(String geometryLiteral) {
         try {
-            GMLGeometryBuilder gmlGeometryBuilder = GMLGeometryBuilder.extract(geometryLiteral);
-            Geometry geometry = gmlGeometryBuilder.getGeometry();
-            DimensionInfo dimensionInfo = gmlGeometryBuilder.getDimensionInfo();
+            GMLReader gmlReader = GMLReader.extract(geometryLiteral);
+            Geometry geometry = gmlReader.getGeometry();
+            DimensionInfo dimensionInfo = gmlReader.getDimensionInfo();
 
-            return new GeometryWrapper(geometry, gmlGeometryBuilder.getSrsName(), GeoSerialisationEnum.GML, dimensionInfo);
+            return new GeometryWrapper(geometry, gmlReader.getSrsName(), GeoSerialisationEnum.GML, dimensionInfo);
         } catch (JDOMException | IOException ex) {
             LOGGER.error("{} - Illegal GML literal: {} ", ex.getMessage(), geometryLiteral);
             throw new DatatypeFormatException("Illegal GML literal:" + geometryLiteral);

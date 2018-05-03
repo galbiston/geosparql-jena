@@ -24,20 +24,20 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class WKTGeometryBuilder {
+public class WKTReader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WKTGeometryBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WKTReader.class);
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     private final CoordinateSequenceDimensions coordinateSequenceDimensions;
     private final Geometry geometry;
 
-    public WKTGeometryBuilder(String shape, String dimension, String coordinates) {
+    public WKTReader(String shape, String dimension, String coordinates) {
         this.coordinateSequenceDimensions = convertDimensions(dimension);
         this.geometry = buildGeometry(shape, coordinates);
     }
 
-    public WKTGeometryBuilder() {
+    public WKTReader() {
         this("point", "", "");
     }
 
@@ -155,7 +155,7 @@ public class WKTGeometryBuilder {
         Geometry[] geometries = new Geometry[partCoordinates.length];
 
         for (int i = 0; i < partCoordinates.length; i++) {
-            WKTGeometryBuilder partWKTInfo = extract(partCoordinates[i]);
+            WKTReader partWKTInfo = extract(partCoordinates[i]);
             geometries[i] = partWKTInfo.geometry;
         }
         return GEOMETRY_FACTORY.createGeometryCollection(geometries);
@@ -246,7 +246,7 @@ public class WKTGeometryBuilder {
 
     }
 
-    public static WKTGeometryBuilder extract(String wktText) throws ParseException {
+    public static WKTReader extract(String wktText) throws ParseException {
 
         String shape = "point";
         String dimension = "";
@@ -279,7 +279,7 @@ public class WKTGeometryBuilder {
             }
         }
 
-        return new WKTGeometryBuilder(shape, dimension, coordinates);
+        return new WKTReader(shape, dimension, coordinates);
     }
 
     @Override
@@ -301,7 +301,7 @@ public class WKTGeometryBuilder {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final WKTGeometryBuilder other = (WKTGeometryBuilder) obj;
+        final WKTReader other = (WKTReader) obj;
         if (this.coordinateSequenceDimensions != other.coordinateSequenceDimensions) {
             return false;
         }

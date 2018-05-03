@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class GMLGeometryBuilder {
+public class GMLReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -59,7 +59,7 @@ public class GMLGeometryBuilder {
      * @param gmlElement
      * @throws ParseException
      */
-    public GMLGeometryBuilder(Element gmlElement) throws ParseException {
+    public GMLReader(Element gmlElement) throws ParseException {
         this.srsName = getSRSName(gmlElement);
         this.crs = CRSRegistry.getCRS(srsName);
         this.srsDimension = getSRSDimension(gmlElement, crs);
@@ -318,7 +318,7 @@ public class GMLGeometryBuilder {
 
     private static final String EMPTY_GML_TEXT = "<gml:Point xmlns:gml='http://www.opengis.net/ont/gml'></gml:Point>";
 
-    public static GMLGeometryBuilder extract(String gmlText) throws JDOMException, IOException {
+    public static GMLReader extract(String gmlText) throws JDOMException, IOException {
 
         if (gmlText.isEmpty()) {
             gmlText = EMPTY_GML_TEXT;
@@ -330,7 +330,7 @@ public class GMLGeometryBuilder {
 
         Element gmlElement = xmlDoc.getRootElement();
 
-        return new GMLGeometryBuilder(gmlElement);
+        return new GMLReader(gmlElement);
     }
 
     @Override
@@ -356,7 +356,7 @@ public class GMLGeometryBuilder {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final GMLGeometryBuilder other = (GMLGeometryBuilder) obj;
+        final GMLReader other = (GMLReader) obj;
         if (this.srsDimension != other.srsDimension) {
             return false;
         }

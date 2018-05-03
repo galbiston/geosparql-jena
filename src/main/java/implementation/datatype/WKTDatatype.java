@@ -7,9 +7,9 @@ package implementation.datatype;
 
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
-import implementation.index.GeometryLiteralIndex;
 import implementation.GeometryWrapper;
-import implementation.parsers.wkt.WKTGeometryBuilder;
+import implementation.index.GeometryLiteralIndex;
+import implementation.parsers.wkt.WKTReader;
 import implementation.parsers.wkt.WKTTextSRS;
 import implementation.parsers.wkt.WKTWriter;
 import implementation.support.GeoSerialisationEnum;
@@ -98,10 +98,10 @@ public class WKTDatatype extends BaseDatatype implements DatatypeReader {
     public GeometryWrapper read(String geometryLiteral) {
         WKTTextSRS wktTextSRS = new WKTTextSRS(geometryLiteral);
 
-        WKTGeometryBuilder wktGeometryBuilder = WKTGeometryBuilder.extract(wktTextSRS.getWktText());
+        WKTReader wktReader = WKTReader.extract(wktTextSRS.getWktText());
 
-        Geometry geometry = wktGeometryBuilder.getGeometry();
-        DimensionInfo dimensionInfo = wktGeometryBuilder.getDimensionInfo();
+        Geometry geometry = wktReader.getGeometry();
+        DimensionInfo dimensionInfo = wktReader.getDimensionInfo();
 
         return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), GeoSerialisationEnum.WKT, dimensionInfo);
     }
