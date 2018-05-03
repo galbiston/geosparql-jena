@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns:geo="http://www.opengis.net/ont/geosparql#"
          xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-         xmlns:ex="http://example.org/ApplicationSchema#"
+         xmlns:ex="http://example.org/Schema#"
+         xmlns:feat="http://example.org/Feature#"
+         xmlns:geom="http://example.org/Geometry#"
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
          xmlns:sf="http://www.opengis.net/ont/sf#"
@@ -29,95 +31,114 @@ test.
 
     <!-- Instance Below -->
     <!-- Point A -->
-    <ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#A">
-        <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#AExactGeom"/>
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#A">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PointA"/>
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceA</ex:name>
     </ex:PlaceOfInterest>
-    <sf:Point rdf:about="http://example.org/ApplicationSchema#AExactGeom">
+    <sf:Point rdf:about="http://example.org/Geometry#PointA">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.4 34.4</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
     <!-- LineString B -->
-    <ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#B">
-        <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#BExactGeom"/>
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#B">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#LineStringB"/>
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceB</ex:name>
     </ex:PlaceOfInterest>
-    <sf:LineString rdf:about="http://example.org/ApplicationSchema#BExactGeom">
+    <sf:LineString rdf:about="http://example.org/Geometry#LineStringB">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:LineString srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:posList srsDimension="2">-83.4 34.0 -83.3 34.3</gml:posList></gml:LineString>]]></geo:asGML>
     </sf:LineString>
 
 
 
     <!-- Polygon C -->
-    <ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#C">
-        <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#CExactGeom"/>
-        <ex:hasPointGeometry rdf:resource="http://example.org/ApplicationSchema#CPointGeom"/>
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#C">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PolygonC"/>
+        <ex:hasPointGeometry rdf:resource="http://example.org/Geometry#PointC"/>
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceC</ex:name>
     </ex:PlaceOfInterest>
-    <sf:Polygon rdf:about="http://example.org/ApplicationSchema#CExactGeom">
+    <sf:Polygon rdf:about="http://example.org/Geometry#PolygonC">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">-83.6 34.1 -83.2 34.1 -83.2 34.5 -83.6 34.5 -83.6 34.1</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
-    <sf:Point rdf:about="http://example.org/ApplicationSchema#CPointGeom">
+    <sf:Point rdf:about="http://example.org/Geometry#PointC">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.4 34.3</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
 
 
     <!-- Polygon D -->
-    <ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#D">
-        <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#DExactGeom"/>
-        <ex:hasPointGeometry rdf:resource="http://example.org/ApplicationSchema#DPointGeom"/>
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#D">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PolygonD"/>
+        <ex:hasPointGeometry rdf:resource="http://example.org/Geometry#PointD"/>
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceD</ex:name>
     </ex:PlaceOfInterest>
-    <sf:Polygon rdf:about="http://example.org/ApplicationSchema#DExactGeom">
+    <sf:Polygon rdf:about="http://example.org/Geometry#PolygonD">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">-83.6 34.1 -83.4 34.1 -83.4 34.3 -83.6 34.3 -83.6 34.1</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
-    <sf:Point rdf:about="http://example.org/ApplicationSchema#DPointGeom">
+    <sf:Point rdf:about="http://example.org/Geometry#PointD">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.5 34.2</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
 
 
     <!-- Polygon E -->
-    <ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#E">
-        <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#EExactGeom"/>
-        <ex:hasPointGeometry rdf:resource="http://example.org/ApplicationSchema#EPointGeom"/>
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#E">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PolygonE"/>
+        <ex:hasPointGeometry rdf:resource="http://example.org/Geometry#PointE"/>
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceE</ex:name>
     </ex:PlaceOfInterest>
-    <sf:Polygon rdf:about="http://example.org/ApplicationSchema#EExactGeom">
+    <sf:Polygon rdf:about="http://example.org/Geometry#PolygonE">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">-83.2 34.3 -83.0 34.3 -83.0 34.5 -83.2 34.5 -83.2 34.3</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
-    <sf:Point rdf:about="http://example.org/ApplicationSchema#EPointGeom">
+    <sf:Point rdf:about="http://example.org/Geometry#PointE">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.1 34.4</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
 
 
     <!-- Polygon F -->
-    <ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#F">
-        <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#FExactGeom"/>
-        <ex:hasPointGeometry rdf:resource="http://example.org/ApplicationSchema#FPointGeom"/>
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#F">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PolygonF"/>
+        <ex:hasPointGeometry rdf:resource="http://example.org/Geometry#PointF"/>
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceF</ex:name>
     </ex:PlaceOfInterest>
-    <sf:Polygon rdf:about="http://example.org/ApplicationSchema#FExactGeom">
+    <sf:Polygon rdf:about="http://example.org/Geometry#PolygonF">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">-83.3 34.0 -83.1 34.0 -83.1 34.2 -83.3 34.2 -83.3 34.0</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
-    <sf:Point rdf:about="http://example.org/ApplicationSchema#FPointGeom">
+    <sf:Point rdf:about="http://example.org/Geometry#PointF">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.2 34.1</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
     <!-- Polygon G -->
-    <ex:PlaceOfInterest rdf:about="http://example.org/ApplicationSchema#G">
-        <ex:hasExactGeometry rdf:resource="http://example.org/ApplicationSchema#GExactGeom"/>
-        <ex:hasPointGeometry rdf:resource="http://example.org/ApplicationSchema#GPointGeom"/>
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#G">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PolygonG"/>
+        <ex:hasPointGeometry rdf:resource="http://example.org/Geometry#PointG"/>
         <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PlaceG</ex:name>
     </ex:PlaceOfInterest>
-    <sf:Polygon rdf:about="http://example.org/ApplicationSchema#GExactGeom">
+    <sf:Polygon rdf:about="http://example.org/Geometry#PolygonG">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Polygon srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:exterior><gml:LinearRing><gml:posList srsDimension="2">-83.55 34.35 -83.45 34.35 -83.45 34.45 -83.55 34.45 -83.55 34.35</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>]]></geo:asGML>
     </sf:Polygon>
-    <sf:Point rdf:about="http://example.org/ApplicationSchema#GPointGeom">
+    <sf:Point rdf:about="http://example.org/Geometry#PointG">
         <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point srsName="http://www.opengis.net/def/crs/EPSG/0/27700" xmlns:gml="http://www.opengis.net/ont/gml"><gml:pos>-83.45 34.35</gml:pos></gml:Point>]]></geo:asGML>
     </sf:Point>
 
+
+    <!-- Instance Below -->
+    <!-- Empty Geometry A-->
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#EmptyA">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PointEmptyA"/>
+        <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EmptyA</ex:name>
+    </ex:PlaceOfInterest>
+    <sf:Point rdf:about="http://example.org/Geometry#PointEmptyA">
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[<gml:Point xmlns:gml='http://www.opengis.net/ont/gml'></gml:Point>]]></geo:asGML>
+    </sf:Point>
+
+    <!-- Empty Geometry B-->
+    <ex:PlaceOfInterest rdf:about="http://example.org/Feature#EmptyB">
+        <ex:hasExactGeometry rdf:resource="http://example.org/Geometry#PointEmptyB"/>
+        <ex:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EmptyB</ex:name>
+    </ex:PlaceOfInterest>
+    <sf:Point rdf:about="http://example.org/Geometry#PointEmptyB">
+        <geo:asGML rdf:datatype="http://www.opengis.net/ont/geosparql#gmlLiteral"><![CDATA[]]></geo:asGML>
+    </sf:Point>
 
 </rdf:RDF>
