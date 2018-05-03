@@ -316,7 +316,13 @@ public class GMLGeometryBuilder {
         return GEOMETRY_FACTORY.createGeometryCollection(geometries);
     }
 
+    private static final String EMPTY_GML_TEXT = "<gml:Point xmlns:gml='http://www.opengis.net/ont/gml'></gml:Point>";
+
     public static GMLGeometryBuilder extract(String gmlText) throws JDOMException, IOException {
+
+        if (gmlText.isEmpty()) {
+            gmlText = EMPTY_GML_TEXT;
+        }
 
         SAXBuilder jdomBuilder = new SAXBuilder();
         InputStream stream = new ByteArrayInputStream(gmlText.getBytes("UTF-8"));
