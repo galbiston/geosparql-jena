@@ -8,9 +8,9 @@ package implementation.datatype;
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
+import implementation.index.CRSRegistry;
 import implementation.index.GeometryLiteralIndex;
 import implementation.parsers.wkt.WKTReader;
-import implementation.parsers.wkt.WKTTextSRS;
 import implementation.parsers.wkt.WKTWriter;
 import implementation.support.GeoSerialisationEnum;
 import static implementation.vocabulary.Prefixes.GEO_URI;
@@ -104,6 +104,36 @@ public class WKTDatatype extends BaseDatatype implements DatatypeReader {
         DimensionInfo dimensionInfo = wktReader.getDimensionInfo();
 
         return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), GeoSerialisationEnum.WKT, dimensionInfo);
+    }
+
+    private class WKTTextSRS {
+
+        private final String wktText;
+        private final String srsURI;
+
+        public WKTTextSRS(String wktLiteral) {
+            int startSRS = wktLiteral.indexOf("<");
+            int endSRS = wktLiteral.indexOf(">");
+
+            //Check that both chevrons are located and extract SRS name, otherwise default.
+            if (startSRS != -1 && endSRS != -1) {
+                srsURI = wktLiteral.substring(startSRS + 1, endSRS);
+                wktText = wktLiteral.substring(endSRS + 1);
+
+            } else {
+                srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
+                wktText = wktLiteral;
+            }
+        }
+
+        public String getWktText() {
+            return wktText;
+        }
+
+        public String getSrsURI() {
+            return srsURI;
+        }
+
     }
 
 }
