@@ -5,21 +5,13 @@
  */
 package geo.topological.property_functions.geometry_property;
 
-import static conformance_test.ConformanceTestSuite.initWktModel;
-import implementation.support.Prefixes;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
+import conformance_test.ConformanceTestSuite;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Model;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -28,24 +20,10 @@ import org.junit.Test;
  */
 public class GetDimensionTest {
 
-    /**
-     * Default WKT model - with no inference support.
-     */
-    public static Model DEFAULT_WKT_MODEL;
-
-    /**
-     * Inference WKT model enables the import with the GeoSPARQL ontology as an
-     * OWL reasoner, use this model to get the fully compliance of GeoSPARQL.
-     */
-    public static InfModel infModel;
-
-    public GetDimensionTest() {
-    }
+    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
 
     @BeforeClass
     public static void setUpClass() {
-
-        infModel = initWktModel();
     }
 
     @AfterClass
@@ -63,28 +41,22 @@ public class GetDimensionTest {
     /**
      * Test of get method, of class GetDimension.
      */
-    @Ignore
     @Test
     public void testGetDimension() {
         System.out.println("Get Dimension");
-        String Q1 = "SELECT ?dimension ?empty ?simple ?cd WHERE{"
-                + " ex:B ex:hasExactGeometry ?aGeom ."
+        String queryString = "SELECT ?dimension ?empty ?simple ?coordinateDimension WHERE{"
+                + " BIND(geom:PointB AS ?aGeom) ."
                 + " ?aGeom geo:dimension ?dimension ."
                 + " ?aGeom geo:isEmpty ?empty ."
                 + " ?aGeom geo:isSimple ?simple ."
-                + " ?aGeom geo:coordinateDimension ?cd . "
+                + " ?aGeom geo:coordinateDimension ?coordinateDimension . "
                 + "}";
 
-        QuerySolutionMap bindings = new QuerySolutionMap();
+        String expResult = "0^^http://www.w3.org/2001/XMLSchema#integer false^^http://www.w3.org/2001/XMLSchema#boolean true^^http://www.w3.org/2001/XMLSchema#boolean 2^^http://www.w3.org/2001/XMLSchema#integer";
+        String result = ConformanceTestSuite.querySingle(queryString, SPATIAL_RELATIONS_MODEL);
 
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), infModel)) {
-            ResultSet rs = qExec.execSelect();
-            ResultSetFormatter.out(rs);
-        }
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
-
 }

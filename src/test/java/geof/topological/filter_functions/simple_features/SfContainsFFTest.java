@@ -5,22 +5,16 @@
  */
 package geof.topological.filter_functions.simple_features;
 
-import static conformance_test.ConformanceTestSuite.initWktModel;
-import implementation.support.Prefixes;
-import org.apache.jena.query.ParameterizedSparqlString;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QuerySolutionMap;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.query.ResultSetFormatter;
+import conformance_test.ConformanceTestSuite;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.sparql.lang.sparql_11.ParseException;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -29,24 +23,10 @@ import org.junit.Test;
  */
 public class SfContainsFFTest {
 
-    /**
-     * Default WKT model - with no inference support.
-     */
-    public static Model DEFAULT_WKT_MODEL;
-
-    /**
-     * Inference WKT model enables the import with the GeoSPARQL ontology as an
-     * OWL reasoner, use this model to get the fully compliance of GeoSPARQL.
-     */
-    public static InfModel infModel;
-
-    public SfContainsFFTest() {
-    }
+    private static final InfModel SPATIAL_RELATIONS_MODEL = ConformanceTestSuite.initSpatialRelationsModel();
 
     @BeforeClass
     public static void setUpClass() {
-
-        infModel = initWktModel();
     }
 
     @AfterClass
@@ -63,24 +43,19 @@ public class SfContainsFFTest {
     }
 
     @Test
-    @Ignore
     public void testSfContainFilterFunction() {
         System.out.println("SfContains Filter Function");
-        String Q1 = "SELECT ?place WHERE{"
-                + "?place ex:hasExactGeometry ?aGeom ."
+        String queryString = "SELECT ?aGeom WHERE{"
                 + " ?aGeom geo:asWKT ?aWKT ."
-                + " FILTER geof:sfContains(?aWKT, \"<http://www.opengis.net/def/crs/OGC/1.3/CRS84> Point(-83.4 34.4)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ) ."
+                + " FILTER geof:sfContains(?aWKT, \"<http://www.opengis.net/def/crs/EPSG/0/27700> Point(35 55)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> ) ."
                 + "}";
 
-        QuerySolutionMap bindings = new QuerySolutionMap();
+        List<String> expResult = new ArrayList<>();
+        expResult.add("http://example.org/Geometry#PolygonH");
+        List<String> result = ConformanceTestSuite.queryMany(queryString, SPATIAL_RELATIONS_MODEL);
 
-        ParameterizedSparqlString query = new ParameterizedSparqlString(Q1, bindings);
-        query.setNsPrefixes(Prefixes.get());
-
-        try (QueryExecution qExec = QueryExecutionFactory.create(query.asQuery(), infModel)) {
-            ResultSet rs = qExec.execSelect();
-            ResultSetFormatter.out(rs);
-        }
-
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 }
