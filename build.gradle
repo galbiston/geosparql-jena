@@ -56,44 +56,15 @@ dependencies {
 
     //JUnit Testing
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
     }
+}
 
+group = 'org.ntu'
+version = '1.0.0'
 
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-            }
-            }
-
-            group = 'org.ntu'
-            version = '1.0.0'
-
-            /*
-            //No longer applying the maven-publish and instead using includeBuild command in settings.gradle of dependent project.
-                //Remove if definitely not needed.
-            apply plugin: 'maven-publish'
-            publishing {
-                publications {
-                    mavenJava(MavenPublication) {
-                        from components.java
-                        }
-                        }
-                        }
-
-                        build.finalizedBy(publishToMavenLocal)
- */
-//Change xlint:unchecked warnings to errors for more details.
-                            //Typically caused by ArrayList rather than ArrayList<Type>.
-                        //Can be suppressed by @SuppressWarning("unchecked") if use of generics is intended.
-                        /*
-                        tasks.withType(JavaCompile) {
-                            options.compilerArgs << "-Xlint:unchecked" << "-Werror"
-                            }
- */
-
-//Change xlint:deprecation warnings to errors for more details.
-                                /*
-                            tasks.withType(JavaCompile) {
-                                options.compilerArgs << "-Xlint:deprecation" << "-Werror"
-                                }
-                                */
