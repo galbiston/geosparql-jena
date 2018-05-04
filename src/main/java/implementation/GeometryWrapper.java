@@ -10,12 +10,13 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
-import implementation.index.CRSRegistry;
+import implementation.registry.CRSRegistry;
 import implementation.index.GeometryTransformIndex;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.support.GeoSerialisationEnum;
 import implementation.support.UnitsOfMeasure;
+import implementation.vocabulary.CRS_URI;
 import implementation.vocabulary.UnitsOfMeasureLookUp;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
@@ -54,7 +55,7 @@ public class GeometryWrapper implements Serializable {
         this.serialisation = serialisation;
 
         if (srsURI.isEmpty()) {
-            srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
+            srsURI = CRS_URI.DEFAULT_WKT_CRS84;
         }
         this.srsURI = srsURI;
         this.crs = CRSRegistry.addCRS(srsURI);
@@ -114,7 +115,7 @@ public class GeometryWrapper implements Serializable {
 
     /**
      * Transforms, if necessary, the provided GeometryWrapper according to the
-     * current GeometryWrapper CRS.
+ current GeometryWrapper CRS_URI.
      *
      * @param sourceGeometryWrapper
      * @return
@@ -153,7 +154,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Geometry with coordinates in x,y order, regardless of CRS.
+     * Geometry with coordinates in x,y order, regardless of CRS_URI.
      *
      * @return
      */

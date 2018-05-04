@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation;
+package implementation.registry;
 
-import implementation.index.CRSRegistry;
+import implementation.registry.CRSRegistry;
 import java.lang.reflect.Type;
 import javax.measure.Measure;
 import javax.measure.quantity.Angle;
@@ -89,7 +89,7 @@ public class CRSRegistryTest {
     public void testGetDefaultWKTCRS() {
         try {
             System.out.println("getDefaultWKTCRS");
-            String srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
+            String srsURI = implementation.vocabulary.CRS_URI.DEFAULT_WKT_CRS84;
 
             String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
                     + "  DATUM[\"WGS_1984\", \n"
@@ -116,7 +116,7 @@ public class CRSRegistryTest {
     public void testLookupWKTCRS() {
         try {
             System.out.println("lookupWKTCRS");
-            String srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
+            String srsURI = implementation.vocabulary.CRS_URI.DEFAULT_WKT_CRS84;
 
             String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
                     + "  DATUM[\"WGS_1984\", \n"

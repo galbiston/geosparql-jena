@@ -5,6 +5,8 @@
  */
 package implementation.index;
 
+import implementation.registry.MathTransformRegistry;
+import implementation.registry.CRSRegistry;
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.GeometryWrapper;
 import java.io.File;

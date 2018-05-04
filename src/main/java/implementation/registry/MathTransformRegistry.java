@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.index;
+package implementation.registry;
 
 import implementation.GeoSPARQLSupport;
+import implementation.index.IndexConfiguration;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

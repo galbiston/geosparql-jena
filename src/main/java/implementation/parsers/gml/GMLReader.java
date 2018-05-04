@@ -9,8 +9,9 @@ import com.vividsolutions.jts.geom.*;
 import implementation.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.datatype.ParseException;
-import implementation.index.CRSRegistry;
+import implementation.registry.CRSRegistry;
 import implementation.jts.CustomCoordinateSequence;
+import implementation.vocabulary.CRS_URI;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,7 +99,7 @@ public class GMLReader {
     private String getSRSName(Element gmlElement) {
         String srsNameURI = gmlElement.getAttributeValue("srsName");
         if (srsNameURI == null) {
-            srsNameURI = CRSRegistry.DEFAULT_WKT_CRS84;
+            srsNameURI = CRS_URI.DEFAULT_WKT_CRS84;
             if (!isSRSNameWarningIssued) {
                 LOGGER.warn("GML Literal with no srsName. Defaulting to CRS84 {} used as WKT default CRS. This warning will be issued once.", srsNameURI);
                 isSRSNameWarningIssued = true;
@@ -109,7 +110,7 @@ public class GMLReader {
     }
 
     private Integer getSRSDimension(Element gmlElement, CoordinateReferenceSystem crs) {
-        //Get from pos list or CRS.
+        //Get from pos list or CRS_URI.
         Element posList = gmlElement.getChild("posList", GML_NAMESPACE);
         Integer srsDim = null;
         if (posList != null) {
@@ -119,7 +120,7 @@ public class GMLReader {
             }
         }
 
-        //Fall back to CRS coordinate reference system.
+        //Fall back to CRS_URI coordinate reference system.
         if (srsDim == null) {
             srsDim = crs.getCoordinateSystem().getDimension();
         }

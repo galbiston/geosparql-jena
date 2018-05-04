@@ -8,11 +8,12 @@ package implementation.datatype;
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
-import implementation.index.CRSRegistry;
+import implementation.registry.CRSRegistry;
 import implementation.index.GeometryLiteralIndex;
 import implementation.parsers.wkt.WKTReader;
 import implementation.parsers.wkt.WKTWriter;
 import implementation.support.GeoSerialisationEnum;
+import implementation.vocabulary.CRS_URI;
 import static implementation.vocabulary.Prefixes.GEO_URI;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
@@ -121,7 +122,7 @@ public class WKTDatatype extends BaseDatatype implements DatatypeReader {
                 wktText = wktLiteral.substring(endSRS + 1);
 
             } else {
-                srsURI = CRSRegistry.DEFAULT_WKT_CRS84;
+                srsURI = CRS_URI.DEFAULT_WKT_CRS84;
                 wktText = wktLiteral;
             }
         }

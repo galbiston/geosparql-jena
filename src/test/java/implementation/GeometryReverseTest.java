@@ -5,7 +5,7 @@
  */
 package implementation;
 
-import implementation.index.CRSRegistry;
+import implementation.registry.CRSRegistry;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
@@ -242,7 +242,7 @@ public class GeometryReverseTest {
         WKTReader reader = new WKTReader();
         try {
             LineString geometry = (LineString) reader.read("LINESTRING(0 0, 2 0, 5 0)");
-            CoordinateReferenceSystem crs = CRSRegistry.getCRS(CRSRegistry.DEFAULT_WKT_CRS84);
+            CoordinateReferenceSystem crs = CRSRegistry.getCRS(implementation.vocabulary.CRS_URI.DEFAULT_WKT_CRS84);
             Geometry expResult = reader.read("LINESTRING(0 0, 2 0, 5 0)");
             Geometry result = GeometryReverse.check(geometry, crs);
 

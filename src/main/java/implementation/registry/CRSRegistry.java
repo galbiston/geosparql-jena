@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.index;
+package implementation.registry;
 
-import implementation.GeoSPARQLSupport;
+import implementation.index.IndexConfiguration;
 import implementation.support.UnitsOfMeasure;
+import implementation.vocabulary.CRS_URI;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,18 +34,6 @@ public class CRSRegistry implements Serializable {
     private static LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(IndexConfiguration.CRS_REGISTRY_MAX_SIZE);
     private static LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(IndexConfiguration.UNITS_REGISTRY_MAX_SIZE);
 
-    /**
-     * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
-     * reversed.
-     */
-    public static final String DEFAULT_WKT_CRS84 = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
-
-    public static final String OSGB_CRS = "http://www.opengis.net/def/crs/EPSG/0/27700";
-
-    public static final String WGS84_CRS = "http://www.opengis.net/def/crs/EPSG/0/4326";
-
-    public static final String WGS84_CRS_GEOPSARQL_LEGACY = "http://www.opengis.net/def/crs/EPSG/4326";
-
     public static final String DEFAULT_WKT_CRS84_STRING = "GEOGCS[\"CRS 84\", \n"
             + "  DATUM[\"WGS_1984\", \n"
             + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
@@ -66,9 +55,9 @@ public class CRSRegistry implements Serializable {
         if (!CRS_REGISTRY.containsKey(srsURI)) {
 
             try {
-                if (srsURI.equals(WGS84_CRS_GEOPSARQL_LEGACY)) {
-                    crs = CRS.decode(WGS84_CRS);
-                    LOGGER.warn("Legacy GeoSPARQL CRS found: {}. Using GeoSPARQL 1.0 URI version {} CRS. Dataset should be updated but no impact on operation.", WGS84_CRS_GEOPSARQL_LEGACY, WGS84_CRS);
+                if (srsURI.equals(CRS_URI.WGS84_CRS_GEOPSARQL_LEGACY)) {
+                    crs = CRS.decode(CRS_URI.WGS84_CRS);
+                    LOGGER.warn("Legacy GeoSPARQL CRS found: {}. Using GeoSPARQL 1.0 URI version {} CRS. Dataset should be updated but no impact on operation.", CRS_URI.WGS84_CRS_GEOPSARQL_LEGACY, CRS_URI.WGS84_CRS);
                 } else {
                     crs = CRS.decode(srsURI);
                 }
@@ -166,7 +155,7 @@ public class CRSRegistry implements Serializable {
     }
 
     private static void addDefaultWKT_CRS84() {
-        addCRS(DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
+        addCRS(CRS_URI.DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
     }
 
     public static final void clearAll() {
@@ -176,7 +165,7 @@ public class CRSRegistry implements Serializable {
     }
 
     /**
-     * Changes the max size of the CRS Registry.
+     * Changes the max size of the CRS_URI Registry.
      * <br> The registry will be empty after this process.
      *
      * @param maxSize

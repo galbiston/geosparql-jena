@@ -5,6 +5,8 @@
  */
 package implementation.index;
 
+import implementation.registry.MathTransformRegistry;
+import implementation.registry.CRSRegistry;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
