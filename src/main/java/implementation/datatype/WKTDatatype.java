@@ -13,7 +13,7 @@ import implementation.index.GeometryLiteralIndex;
 import implementation.parsers.wkt.WKTReader;
 import implementation.parsers.wkt.WKTWriter;
 import implementation.support.GeoSerialisationEnum;
-import implementation.vocabulary.CRS_URI;
+import implementation.vocabulary.SRS_URI;
 import static implementation.vocabulary.Prefixes.GEO_URI;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
@@ -116,13 +116,13 @@ public class WKTDatatype extends BaseDatatype implements DatatypeReader {
             int startSRS = wktLiteral.indexOf("<");
             int endSRS = wktLiteral.indexOf(">");
 
-            //Check that both chevrons are located and extract SRS name, otherwise default.
+            //Check that both chevrons are located and extract SRS_URI name, otherwise default.
             if (startSRS != -1 && endSRS != -1) {
                 srsURI = wktLiteral.substring(startSRS + 1, endSRS);
                 wktText = wktLiteral.substring(endSRS + 1);
 
             } else {
-                srsURI = CRS_URI.DEFAULT_WKT_CRS84;
+                srsURI = SRS_URI.DEFAULT_WKT_CRS84;
                 wktText = wktLiteral;
             }
         }

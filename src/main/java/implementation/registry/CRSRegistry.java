@@ -6,8 +6,8 @@
 package implementation.registry;
 
 import implementation.index.IndexConfiguration;
-import implementation.support.UnitsOfMeasure;
-import implementation.vocabulary.CRS_URI;
+import implementation.units_of_measure.UnitsOfMeasure;
+import implementation.vocabulary.SRS_URI;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,6 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
+import java.util.Set;
 import org.apache.commons.collections4.map.LRUMap;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeocentricCRS;
@@ -33,7 +34,7 @@ public class CRSRegistry implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(IndexConfiguration.CRS_REGISTRY_MAX_SIZE);
-    private static LRUMap<String, UnitsOfMeasure> UNITS_REGISTRY = new LRUMap<>(IndexConfiguration.UNITS_REGISTRY_MAX_SIZE);
+    private static LRUMap<String, UnitsOfMeasure> UNITS_OF_MEASURE_REGISTRY = new LRUMap<>(IndexConfiguration.CRS_REGISTRY_MAX_SIZE);
 
     public static final String DEFAULT_WKT_CRS84_STRING = "GEOGCS[\"CRS 84\", \n"
             + "  DATUM[\"WGS_1984\", \n"
@@ -56,111 +57,86 @@ public class CRSRegistry implements Serializable {
         return crs;
     }
 
-    public static final UnitsOfMeasure getUnits(String srsURI) {
+    public static final UnitsOfMeasure getUnitsOfMeasure(String srsURI) {
 
         addCRS(srsURI);
-        UnitsOfMeasure units = UNITS_REGISTRY.get(srsURI);
-        return units;
+        return UNITS_OF_MEASURE_REGISTRY.get(srsURI);
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
-
-        CoordinateReferenceSystem crs = null;
-        if (!CRS_REGISTRY.containsKey(srsURI)) {
-
-            try {
-                if (srsURI.equals(CRS_URI.WGS84_CRS_GEOPSARQL_LEGACY)) {
-                    crs = CRS.decode(CRS_URI.WGS84_CRS);
-                    LOGGER.warn("Legacy GeoSPARQL CRS found: {}. Using GeoSPARQL 1.0 URI version {} CRS. Dataset should be updated but no impact on operation.", CRS_URI.WGS84_CRS_GEOPSARQL_LEGACY, CRS_URI.WGS84_CRS);
-                } else {
-                    crs = CRS.decode(srsURI);
-                }
-                CRS_REGISTRY.put(srsURI, crs);
-
-                UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-                UNITS_REGISTRY.put(srsURI, unitsOfMeasure);
-
-            } catch (FactoryException ex) {
-                LOGGER.error("CRS Parse Error: {} {}", srsURI, ex.getMessage());
-            }
-        } else {
-            crs = CRS_REGISTRY.get(srsURI);
-        }
-        return crs;
+        return storeCRS(srsURI, null);
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI, String wktString) {
 
-        CoordinateReferenceSystem crs = null;
-        if (!CRS_REGISTRY.containsKey(srsURI)) {
-
-            try {
-                crs = CRS.parseWKT(wktString);
-
-                CRS_REGISTRY.put(srsURI, crs);
-
-                UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-                UNITS_REGISTRY.put(srsURI, unitsOfMeasure);
-
-            } catch (FactoryException ex) {
-                LOGGER.error("CRS Parse Error: {} {}", srsURI, ex.getMessage());
-            }
-        } else {
-            crs = CRS_REGISTRY.get(srsURI);
+        try {
+            CoordinateReferenceSystem crs = CRS.parseWKT(wktString);
+            return storeCRS(srsURI, crs);
+        } catch (FactoryException ex) {
+            LOGGER.error("Invalid WKT String: {} - {} - {}", srsURI, wktString, ex.getMessage());
+            return null;
         }
-        return crs;
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI, CoordinateReferenceSystem crs) {
+        return storeCRS(srsURI, crs);
+    }
 
-        if (!CRS_REGISTRY.containsKey(srsURI)) {
+    private static CoordinateReferenceSystem storeCRS(String srsURI, CoordinateReferenceSystem crs) {
+
+        if (CRS_REGISTRY.containsKey(srsURI)) {
+            crs = CRS_REGISTRY.get(srsURI);
+        } else {
+
+            //Find the CRS based on the SRS.
+            try {
+                if (srsURI.equals(SRS_URI.WGS84_CRS_GEOPSARQL_LEGACY)) {
+                    crs = CRS.decode(SRS_URI.WGS84_CRS);
+                    LOGGER.warn("Legacy GeoSPARQL CRS found: {}. Using GeoSPARQL 1.0 URI version {} CRS. Dataset should be updated but no impact on operation.", SRS_URI.WGS84_CRS_GEOPSARQL_LEGACY, SRS_URI.WGS84_CRS);
+                } else if (crs == null) {
+                    crs = CRS.decode(srsURI);
+                }
+            } catch (FactoryException ex) {
+                LOGGER.error("SRS URI Unrecongised: {} - {}", srsURI, ex.getMessage());
+                return null;
+            }
 
             CRS_REGISTRY.put(srsURI, crs);
 
             UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-            UNITS_REGISTRY.put(srsURI, unitsOfMeasure);
-        } else {
-            crs = CRS_REGISTRY.get(srsURI);
+            UNITS_OF_MEASURE_REGISTRY.put(srsURI, unitsOfMeasure);
+            UnitsRegistry.addUnit(unitsOfMeasure);
         }
+
         return crs;
     }
 
     private static void addDefaultCRS() {
-        addCRS(CRS_URI.DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
-        addCRS(CRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
+        addCRS(SRS_URI.DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
+        addCRS(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
     }
 
     public static final void clearAll() {
         CRS_REGISTRY.clear();
-        UNITS_REGISTRY.clear();
+        UNITS_OF_MEASURE_REGISTRY.clear();
         addDefaultCRS();
     }
 
     /**
-     * Changes the max size of the CRS_URI Registry.
+     * Changes the max size of the SRS_URI Registry.
      * <br> The registry will be empty after this process.
      *
      * @param maxSize
      */
     public static final void setCRSRegistryMaxSize(Integer maxSize) {
 
-        LRUMap<String, CoordinateReferenceSystem> newCRSRegistry = new LRUMap<>(maxSize);
         CRS_REGISTRY.clear();
+        UNITS_OF_MEASURE_REGISTRY.clear();
+        LRUMap<String, CoordinateReferenceSystem> newCRSRegistry = new LRUMap<>(maxSize);
         CRS_REGISTRY = newCRSRegistry;
-        addDefaultCRS();
-    }
+        LRUMap<String, UnitsOfMeasure> newUnitsOfMeasureRegistry = new LRUMap<>(maxSize);
+        UNITS_OF_MEASURE_REGISTRY = newUnitsOfMeasureRegistry;
 
-    /**
-     * Changes the max size of the Units of Measure Registry.
-     * <br> The registry will be empty after this process.
-     *
-     * @param maxSize
-     */
-    public static final void setUnitsRegistryMaxSize(Integer maxSize) {
-
-        LRUMap<String, UnitsOfMeasure> newUnitsRegistry = new LRUMap<>(maxSize);
-        UNITS_REGISTRY.clear();
-        UNITS_REGISTRY = newUnitsRegistry;
         addDefaultCRS();
     }
 
@@ -168,7 +144,7 @@ public class CRSRegistry implements Serializable {
     public static final void writeCRSRegistry(File crsRegistryFile) {
         LOGGER.info("Writing CRS Registry - {}: Started", crsRegistryFile);
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(crsRegistryFile))) {
-            objectOutputStream.writeObject(CRS_REGISTRY);
+            objectOutputStream.writeObject(CRS_REGISTRY.keySet());
         } catch (IOException ex) {
             LOGGER.error("Store CRS Registry exception: {}", ex.getMessage());
         }
@@ -179,34 +155,15 @@ public class CRSRegistry implements Serializable {
         LOGGER.info("Reading CRS Registry - {}: Started", crsRegistryFile);
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(crsRegistryFile))) {
             @SuppressWarnings("unchecked")
-            LRUMap<String, CoordinateReferenceSystem> crsRegistry = (LRUMap<String, CoordinateReferenceSystem>) objectInputStream.readObject();
-            CRS_REGISTRY.putAll(crsRegistry);
+            Set<String> crsRegistryKeys = (Set<String>) objectInputStream.readObject();
+            for (String key : crsRegistryKeys) {
+                addCRS(key);
+            }
+
         } catch (IOException | ClassNotFoundException ex) {
             LOGGER.error("Read CRS Registry exception: {}", ex.getMessage());
         }
         LOGGER.info("Reading CRS Registry - {}: Completed", crsRegistryFile);
-    }
-
-    public static final void writeUnitsRegistry(File unitsRegistryFile) {
-        LOGGER.info("Writing Units Registry - {}: Started", unitsRegistryFile);
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(unitsRegistryFile))) {
-            objectOutputStream.writeObject(UNITS_REGISTRY);
-        } catch (IOException ex) {
-            LOGGER.error("Store Units Registry exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Writing Units Registry - {}: Completed", unitsRegistryFile);
-    }
-
-    public static final void readUnitsRegistry(File unitsRegistryFile) {
-        LOGGER.info("Reading Units Registry - {}: Started", unitsRegistryFile);
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(unitsRegistryFile))) {
-            @SuppressWarnings("unchecked")
-            LRUMap<String, UnitsOfMeasure> unitsRegistry = (LRUMap<String, UnitsOfMeasure>) objectInputStream.readObject();
-            UNITS_REGISTRY.putAll(unitsRegistry);
-        } catch (IOException | ClassNotFoundException ex) {
-            LOGGER.error("Read Units Registry exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Reading Units Registry - {}: Completed", unitsRegistryFile);
     }
 
 }

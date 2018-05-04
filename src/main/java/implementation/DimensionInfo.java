@@ -82,4 +82,8 @@ public class DimensionInfo implements Serializable {
         return new DimensionInfo(2, 2, 0);
     }
 
+    public static DimensionInfo xyzPoint() {
+        return new DimensionInfo(3, 3, 0);
+    }
+
 }

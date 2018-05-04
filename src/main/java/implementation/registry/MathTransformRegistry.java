@@ -5,7 +5,6 @@
  */
 package implementation.registry;
 
-import implementation.GeoSPARQLSupport;
 import implementation.index.IndexConfiguration;
 import java.io.File;
 import java.io.FileInputStream;

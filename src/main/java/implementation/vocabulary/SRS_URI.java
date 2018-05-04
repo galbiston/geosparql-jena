@@ -13,23 +13,23 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class CRS_URI {
+public class SRS_URI {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     public static final String OSGB_CRS = "http://www.opengis.net/def/crs/EPSG/0/27700";
     /**
-     * Default SRS Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
+     * Default SRS_URI Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
      * reversed.
      */
     public static final String DEFAULT_WKT_CRS84 = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
     /**
-     * Legacy SRS Name used prior to finalisation of GeoSPARQL standard 1.0.
+     * Legacy SRS_URI Name used prior to finalisation of GeoSPARQL standard 1.0.
      */
     public static final String WGS84_CRS_GEOPSARQL_LEGACY = "http://www.opengis.net/def/crs/EPSG/4326";
 
     /**
-     * WGS84 SRS Name used for Latitude, Longitude in Geographic coordinate
+     * WGS84 SRS_URI Name used for Latitude, Longitude in Geographic coordinate
      * reference system with units of radians.
      */
     public static final String WGS84_CRS = "http://www.opengis.net/def/crs/EPSG/0/4326";

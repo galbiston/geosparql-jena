@@ -10,14 +10,15 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
-import implementation.registry.CRSRegistry;
 import implementation.index.GeometryTransformIndex;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import implementation.registry.CRSRegistry;
+import implementation.registry.UnitsRegistry;
 import implementation.support.GeoSerialisationEnum;
-import implementation.support.UnitsOfMeasure;
-import implementation.vocabulary.CRS_URI;
-import implementation.vocabulary.UnitsOfMeasureLookUp;
+import implementation.units_of_measure.UnitsOfMeasure;
+import implementation.vocabulary.SRS_URI;
+import implementation.vocabulary.Unit_URI;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Objects;
@@ -55,11 +56,11 @@ public class GeometryWrapper implements Serializable {
         this.serialisation = serialisation;
 
         if (srsURI.isEmpty()) {
-            srsURI = CRS_URI.DEFAULT_WKT_CRS84;
+            srsURI = SRS_URI.DEFAULT_WKT_CRS84;
         }
         this.srsURI = srsURI;
         this.crs = CRSRegistry.addCRS(srsURI);
-        this.unitsOfMeasure = CRSRegistry.getUnits(srsURI);
+        this.unitsOfMeasure = CRSRegistry.getUnitsOfMeasure(srsURI);
 
         this.dimensionInfo = dimensionInfo;
 
@@ -98,7 +99,17 @@ public class GeometryWrapper implements Serializable {
      * @param dimensionInfo
      */
     public GeometryWrapper(String srsURI, GeoSerialisationEnum serialisation, DimensionInfo dimensionInfo) {
-        this(GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions())), srsURI, serialisation, dimensionInfo);
+        this(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions()), srsURI);
+    }
+
+    /**
+     * Point geometry with specified SRS.
+     *
+     * @param pointCoordinateSequence
+     * @param srsURI
+     */
+    public GeometryWrapper(CustomCoordinateSequence pointCoordinateSequence, String srsURI) {
+        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
@@ -115,7 +126,7 @@ public class GeometryWrapper implements Serializable {
 
     /**
      * Transforms, if necessary, the provided GeometryWrapper according to the
- current GeometryWrapper CRS_URI.
+     * current GeometryWrapper SRS_URI.
      *
      * @param sourceGeometryWrapper
      * @return
@@ -123,7 +134,7 @@ public class GeometryWrapper implements Serializable {
      * @throws MismatchedDimensionException
      * @throws TransformException
      */
-    public GeometryWrapper checkCRS(GeometryWrapper sourceGeometryWrapper) throws FactoryException, MismatchedDimensionException, TransformException {
+    public GeometryWrapper checkTransformCRS(GeometryWrapper sourceGeometryWrapper) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometryWrapper;
 
@@ -137,7 +148,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Returns this geometry wrapper converted to the SRS URI.
+     * Returns this geometry wrapper converted to the SRS_URI URI.
      *
      * @param srsURI
      * @return
@@ -154,7 +165,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Geometry with coordinates in x,y order, regardless of CRS_URI.
+     * Geometry with coordinates in x,y order, regardless of SRS_URI.
      *
      * @return
      */
@@ -189,10 +200,30 @@ public class GeometryWrapper implements Serializable {
         return serialisation;
     }
 
-    public GeometryWrapper buffer(double distance, String targetDistanceUnitsURI) {
-        distance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, unitsOfMeasure);
-        Geometry geo = this.xyGeometry.buffer(distance);
-        return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
+    public GeometryWrapper buffer(double distance, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        //Check whether the source geometry is linear units for cartesian calculation. If not then transform to default GeoCentric CRS GeometryWrapper.
+        GeometryWrapper transformedGeometryWrapper;
+        Boolean isTransformNeeded = !unitsOfMeasure.isLinearUnits();
+        if (isTransformNeeded) {
+            transformedGeometryWrapper = GeometryTransformIndex.transform(this, SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
+        } else {
+            transformedGeometryWrapper = this;
+        }
+
+        //Check whether the units of the distance need converting.
+        double transformedDistance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, transformedGeometryWrapper.unitsOfMeasure.getUnitURI());
+
+        //Buffer the transformed geometry
+        Geometry geo = transformedGeometryWrapper.xyGeometry.buffer(transformedDistance);
+        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(geo, transformedGeometryWrapper.srsURI, transformedGeometryWrapper.serialisation, transformedGeometryWrapper.dimensionInfo);
+
+        //Check whether need to transform back to the original srsURI.
+        if (isTransformNeeded) {
+            return GeometryTransformIndex.transform(bufferedGeometryWrapper, srsURI);
+        } else {
+            return bufferedGeometryWrapper;
+        }
     }
 
     public GeometryWrapper convexHull() {
@@ -201,7 +232,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     public GeometryWrapper difference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry geo = this.xyGeometry.difference(transformedGeometry.xyGeometry);
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
@@ -216,95 +247,117 @@ public class GeometryWrapper implements Serializable {
      * @throws TransformException
      */
     public double distance(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return distance(targetGeometry, UnitsOfMeasureLookUp.METRE_URI);
+        return distance(targetGeometry, Unit_URI.METRE_URI);
     }
 
     public double distance(GeometryWrapper targetGeometry, UnitsOfMeasure unitsOfMeasure) throws FactoryException, MismatchedDimensionException, TransformException {
-        return distance(targetGeometry, UnitsOfMeasureLookUp.getUnitURI(unitsOfMeasure));
+        return distance(targetGeometry, unitsOfMeasure.getUnitURI());
     }
 
     public double distance(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
-        double distance = this.xyGeometry.distance(transformedGeometry.xyGeometry);
-        distance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, unitsOfMeasure);
-        return distance;
+
+        Boolean isUnitsLinear = unitsOfMeasure.isLinearUnits();
+        Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
+
+        GeometryWrapper preparedSourceGeometry;
+        GeometryWrapper preparedTargetGeometry;
+
+        if (isUnitsLinear.equals(isTargetUnitsLinear)) {
+            //Source geometry and target units are both the same. Convert the target geometry if required.
+            preparedSourceGeometry = this;
+            preparedTargetGeometry = checkTransformCRS(targetGeometry);
+        } else if (isTargetUnitsLinear) {
+            //Source geometry is not linear but targets are so convert to linear CRS.
+            preparedSourceGeometry = GeometryTransformIndex.transform(this, SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
+            preparedTargetGeometry = GeometryTransformIndex.transform(targetGeometry, SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
+        } else {
+            //Source geometry is linear but targets are not so convert to nonlinear CRS.
+            preparedSourceGeometry = GeometryTransformIndex.transform(this, SRS_URI.DEFAULT_WKT_CRS84);
+            preparedTargetGeometry = GeometryTransformIndex.transform(targetGeometry, SRS_URI.DEFAULT_WKT_CRS84);
+        }
+
+        double distance = preparedSourceGeometry.xyGeometry.distance(preparedTargetGeometry.xyGeometry);
+        String unitsURI = preparedSourceGeometry.unitsOfMeasure.getUnitURI();
+        double targetDistance = UnitsOfMeasure.conversion(distance, unitsURI, targetDistanceUnitsURI);
+
+        return targetDistance;
     }
 
-    public GeometryWrapper getBoundary() {
+    public GeometryWrapper boundary() {
         Geometry geo = this.xyGeometry.getBoundary();
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
-    public GeometryWrapper getEnvelope() {
+    public GeometryWrapper envelope() {
         Geometry geo = this.xyGeometry.getEnvelope();
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public GeometryWrapper intersection(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry geo = this.xyGeometry.intersection(transformedGeometry.xyGeometry);
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public IntersectionMatrix relate(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return xyGeometry.relate(transformedGeometry.xyGeometry);
     }
 
     public boolean relate(GeometryWrapper targetGeometry, String intersectionPattern) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return xyGeometry.relate(transformedGeometry.xyGeometry, intersectionPattern);
     }
 
     public GeometryWrapper symDifference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry geo = this.xyGeometry.symDifference(transformedGeometry.xyGeometry);
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public GeometryWrapper union(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry geo = this.xyGeometry.union(transformedGeometry.xyGeometry);
         return new GeometryWrapper(geo, srsURI, serialisation, dimensionInfo);
     }
 
     public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.contains(transformedGeometry.xyGeometry);
     }
 
     public boolean crosses(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.crosses(transformedGeometry.xyGeometry);
     }
 
     public boolean disjoint(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.disjoint(transformedGeometry.xyGeometry);
     }
 
     public boolean equals(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.equals((Geometry) transformedGeometry.xyGeometry);
     }
 
     public boolean intersects(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.intersects(transformedGeometry.xyGeometry);
     }
 
     public boolean overlaps(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.overlaps(transformedGeometry.xyGeometry);
     }
 
     public boolean touches(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.touches(transformedGeometry.xyGeometry);
     }
 
     public boolean within(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkCRS(targetGeometry);
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.within(transformedGeometry.xyGeometry);
     }
 

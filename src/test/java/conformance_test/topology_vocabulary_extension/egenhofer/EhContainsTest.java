@@ -139,8 +139,8 @@ public class EhContainsTest {
         List<String> expResult = new ArrayList<>();
         List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:ehContains");
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

@@ -5,13 +5,13 @@
  */
 package implementation;
 
-import implementation.registry.CRSRegistry;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.support.GeoSerialisationEnum;
-import implementation.vocabulary.UnitsOfMeasureLookUp;
+import implementation.vocabulary.SRS_URI;
+import implementation.vocabulary.Unit_URI;
 import org.geotools.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -50,7 +50,7 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of checkCRS method, of class GeometryWrapper.
+     * Test of checkTransformCRS method, of class GeometryWrapper.
      *
      * @throws java.lang.Exception
      */
@@ -58,17 +58,17 @@ public class GeometryWrapperTest {
     public void testCheckCRS() throws Exception {
         System.out.println("checkCRS");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
-        String sourceSRSURI = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String sourceSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper sourceCRSGeometry = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
-        //Only the CRS_URI is important in the instance.
-        String targetSRSURI = implementation.vocabulary.CRS_URI.DEFAULT_WKT_CRS84;
+        //Only the SRS_URI is important in the instance.
+        String targetSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
         GeometryWrapper instance = new GeometryWrapper(geometry, targetSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //Expecting the coordinates to be reveresed.
         Geometry geometryTarget = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         GeometryWrapper expResult = new GeometryWrapper(geometryTarget, targetSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
-        GeometryWrapper result = instance.checkCRS(sourceCRSGeometry);
+        GeometryWrapper result = instance.checkTransformCRS(sourceCRSGeometry);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -84,11 +84,14 @@ public class GeometryWrapperTest {
     public void testGetCRS() throws FactoryException {
         System.out.println("getCRS");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
-        String sourceSRSURI = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String sourceSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         CoordinateReferenceSystem expResult = CRS.decode(sourceSRSURI);
         CoordinateReferenceSystem result = instance.getCRS();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -99,12 +102,15 @@ public class GeometryWrapperTest {
     public void testGetXYGeometry() {
         System.out.println("getXYGeometry");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
-        String sourceSRSURI = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String sourceSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //Expect the coordinates to be reversed as JTS is x,y and WGS84 is y,x
         Geometry expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         Geometry result = instance.getXYGeometry();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -115,12 +121,15 @@ public class GeometryWrapperTest {
     public void testGetParsingGeometry() {
         System.out.println("getParsingGeometry");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
-        String sourceSRSURI = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String sourceSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //Expect coordinates to be same as supplied.
         Geometry expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         Geometry result = instance.getParsingGeometry();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -131,11 +140,14 @@ public class GeometryWrapperTest {
     public void testGetSrsURI() {
         System.out.println("getSrsURI");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
-        String sourceSRSURI = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String sourceSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
-        String expResult = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String expResult = SRS_URI.WGS84_CRS;
         String result = instance.getSrsURI();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -146,11 +158,14 @@ public class GeometryWrapperTest {
     public void testGetSRID() {
         System.out.println("getSRID");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
-        String sourceSRSURI = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String sourceSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
-        String expResult = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String expResult = SRS_URI.WGS84_CRS;
         String result = instance.getSRID();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -161,64 +176,127 @@ public class GeometryWrapperTest {
     public void testGetSerialisation() {
         System.out.println("getSerialisation");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
-        String sourceSRSURI = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String sourceSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         GeoSerialisationEnum expResult = GeoSerialisationEnum.WKT;
         GeoSerialisationEnum result = instance.getGeoSerialisation();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of distance same CRS_URI method, of class GeometryWrapper.
+     * Test of distance same SRS_URI method, of class GeometryWrapper.
      *
      * @throws java.lang.Exception
      */
     @Test
-    public void testDistanceSameCRS() throws Exception {
-        System.out.println("distance");
+    public void testDistanceSameCRSSameUnit() throws Exception {
+        System.out.println("distance, same CRS, same Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
-        String targetSRSURI = implementation.vocabulary.CRS_URI.OSGB_CRS;
+        String targetSRSURI = SRS_URI.OSGB_CRS;
         GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(12.0, 1.0));
-        String instanceSRSURI = implementation.vocabulary.CRS_URI.OSGB_CRS;
+        String instanceSRSURI = SRS_URI.OSGB_CRS;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //CRS is in metres.
-        String distanceUnitsURI = UnitsOfMeasureLookUp.METRE_URI;
+        String distanceUnitsURI = Unit_URI.METRE_URI;
 
         double expResult = 10.0;
         double result = instance.distance(targetGeometry, distanceUnitsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result, 0.0);
     }
 
     /**
-     * Test of distance different CRS_URI method, of class GeometryWrapper.
+     * Test of distance same SRS_URI method, of class GeometryWrapper.
      *
      * @throws java.lang.Exception
      */
     @Test
-    public void testDistanceDifferentCRS() throws Exception {
-        System.out.println("distance");
+    public void testDistanceSameCRSDifferentUnit() throws Exception {
+        System.out.println("distance, same CRS, different Unit");
+
+        Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(385458, 156785)); //LatLon - 51.31, -2.21
+        String targetSRSURI = SRS_URI.OSGB_CRS;
+        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
+
+        Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(487920, 157518)); //LatLon: 51.31, -0.74
+        String instanceSRSURI = SRS_URI.OSGB_CRS;
+        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
+
+        //CRS is in metres.
+        String distanceUnitsURI = Unit_URI.RADIAN_URI;
+
+        double expResult = 0.025656; //Degree: 1.47
+        double result = instance.distance(targetGeometry, distanceUnitsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.000001);
+    }
+
+    /**
+     * Test of distance different SRS_URI method, of class GeometryWrapper.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testDistanceDifferentCRSSameUnit() throws Exception {
+        System.out.println("distance, different CRS, same Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
-        String targetSRSURI = implementation.vocabulary.CRS_URI.WGS84_CRS;
+        String targetSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 12.0));
-        String instanceSRSURI = implementation.vocabulary.CRS_URI.DEFAULT_WKT_CRS84;
+        String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         //CRS is in degrees.
-        String distanceUnitsURI = UnitsOfMeasureLookUp.DEGREE_URI;
+        String distanceUnitsURI = Unit_URI.DEGREE_ANGLE_URI;
 
         double expResult = 10.0;
         double result = instance.distance(targetGeometry, distanceUnitsURI);
+
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result, 0.0);
+    }
+
+    /**
+     * Test of distance different SRS_URI method, of class GeometryWrapper.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testDistanceDifferentCRSDifferentUnit() throws Exception {
+        System.out.println("distance, different CRS, different Unit");
+
+        Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(0.0, 1.0));
+        String targetSRSURI = SRS_URI.WGS84_CRS;
+        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
+
+        Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 0.0));
+        String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
+        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
+
+        //CRS is in degrees.
+        String distanceUnitsURI = Unit_URI.METRE_URI;
+
+        double expResult = 111318; //1.0 degree of longigtude at the equator is approx 111.32km.
+        double result = instance.distance(targetGeometry, distanceUnitsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.1);
     }
 
     /**
@@ -231,10 +309,13 @@ public class GeometryWrapperTest {
         System.out.println("emptyWKT");
         CustomCoordinateSequence sequence = new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions());
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(sequence);
-        String instanceSRSURI = implementation.vocabulary.CRS_URI.DEFAULT_WKT_CRS84;
+        String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
         GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.EMPTY_WKT;
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -247,10 +328,13 @@ public class GeometryWrapperTest {
     public void testEmptyGeometryWrapper() throws Exception {
         System.out.println("emptyGeometryWrapper");
 
-        String instanceSRSURI = implementation.vocabulary.CRS_URI.DEFAULT_WKT_CRS84;
+        String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
         GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.EMPTY_WKT;
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 

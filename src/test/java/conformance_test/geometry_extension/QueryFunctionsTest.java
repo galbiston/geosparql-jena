@@ -153,7 +153,7 @@ public class QueryFunctionsTest {
     public void distanceRadiansTest() {
         System.out.println("Distance Radians Function");
 
-        String expResult = "1.9113E8^^http://www.w3.org/2001/XMLSchema#double";
+        Double expResult = 7.2449E-6;
 
         String queryString = "SELECT ?distance WHERE{ "
                 + "geom:PointA geo:asWKT ?aWkt . "
@@ -161,11 +161,12 @@ public class QueryFunctionsTest {
                 + "BIND( geof:distance(?aWkt, ?bWkt, uom:radian) AS ?distance) . "
                 + "}";
 
-        String result = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
+        String resultString = TestQuerySupport.querySingle(queryString, SAMPLE_DATA_MODEL);
+        Double result = Double.parseDouble(resultString.substring(0, resultString.indexOf("^")));
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
+        assertEquals(expResult, result, 0.0001);
     }
 
     @Test

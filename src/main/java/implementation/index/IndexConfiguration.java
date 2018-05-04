@@ -5,8 +5,8 @@
  */
 package implementation.index;
 
-import implementation.registry.MathTransformRegistry;
 import implementation.registry.CRSRegistry;
+import implementation.registry.MathTransformRegistry;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
@@ -28,7 +28,6 @@ public class IndexConfiguration {
      * Indexing and Registry Sizes
      */
     public static final Integer CRS_REGISTRY_MAX_SIZE = 20;
-    public static final Integer UNITS_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
     public static final Integer MATH_TRANSFORM_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
     public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 100000;
     public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 100000;
@@ -38,12 +37,11 @@ public class IndexConfiguration {
      * Index Storage Filenames
      */
     public static final String CRS_REGISTRY_FILENAME = "geosparql-CRS.registry";
-    public static final String UNITS_REGISTRY_FILENAME = "geosparql-Units.registry";
     public static final String MATH_TRANSFORM_REGISTRY_FILENAME = "geosparql-MathTransform.registry";
     public static final String GEOMETRY_TRANSFORM_INDEX_FILENAME = "geosparql-GeometryTransform.index";
     public static final String GEOMETRY_LITERAL_INDEX_FILENAME = "geosparql-GeometryLiteral.index";
     public static final String QUERY_REWRITE_INDEX_FILENAME = "geosparql-QueryRewrite.index";
-    private static final List<String> INDEX_REGISTRY_FILENAMES = Arrays.asList(CRS_REGISTRY_FILENAME, UNITS_REGISTRY_FILENAME, MATH_TRANSFORM_REGISTRY_FILENAME, GEOMETRY_TRANSFORM_INDEX_FILENAME, GEOMETRY_LITERAL_INDEX_FILENAME, QUERY_REWRITE_INDEX_FILENAME);
+    private static final List<String> INDEX_REGISTRY_FILENAMES = Arrays.asList(CRS_REGISTRY_FILENAME, MATH_TRANSFORM_REGISTRY_FILENAME, GEOMETRY_TRANSFORM_INDEX_FILENAME, GEOMETRY_LITERAL_INDEX_FILENAME, QUERY_REWRITE_INDEX_FILENAME);
     /*
      * Index Configuration Parameters
      */
@@ -137,12 +135,10 @@ public class IndexConfiguration {
      * <br>Any existing in-memory registries will be emptied.
      *
      * @param crsRegistryMaxSize - default max size: 20
-     * @param unitsRegistryMaxSize - default max size: 20
      * @param mathTransformRegistryMaxSize - default max size: 20
      */
-    public static final void setRegistryMaxSize(Integer crsRegistryMaxSize, Integer unitsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
+    public static final void setRegistryMaxSize(Integer crsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
         CRSRegistry.setCRSRegistryMaxSize(crsRegistryMaxSize);
-        CRSRegistry.setUnitsRegistryMaxSize(unitsRegistryMaxSize);
         MathTransformRegistry.setRegistryMaxSize(mathTransformRegistryMaxSize);
     }
 
@@ -152,11 +148,7 @@ public class IndexConfiguration {
         if (crsRegistryFile.exists()) {
             CRSRegistry.readCRSRegistry(crsRegistryFile);
         }
-        //Units Registry
-        File unitsRegistryFile = new File(indexFolder, UNITS_REGISTRY_FILENAME);
-        if (unitsRegistryFile.exists()) {
-            CRSRegistry.readUnitsRegistry(unitsRegistryFile);
-        }
+
         //Math Transform Registry
         File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
         if (mathTransformRegistryFile.exists()) {
@@ -192,9 +184,6 @@ public class IndexConfiguration {
                 //CRS Registry
                 File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
                 CRSRegistry.writeCRSRegistry(crsRegistryFile);
-                //Units Registry
-                File unitsRegistryFile = new File(indexFolder, UNITS_REGISTRY_FILENAME);
-                CRSRegistry.writeUnitsRegistry(unitsRegistryFile);
                 //Math Transform Registry
                 File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
                 MathTransformRegistry.write(mathTransformRegistryFile);

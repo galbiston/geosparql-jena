@@ -5,7 +5,6 @@
  */
 package implementation;
 
-import implementation.registry.CRSRegistry;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
@@ -15,6 +14,8 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
+import implementation.registry.CRSRegistry;
+import implementation.vocabulary.SRS_URI;
 import org.geotools.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -242,7 +243,7 @@ public class GeometryReverseTest {
         WKTReader reader = new WKTReader();
         try {
             LineString geometry = (LineString) reader.read("LINESTRING(0 0, 2 0, 5 0)");
-            CoordinateReferenceSystem crs = CRSRegistry.getCRS(implementation.vocabulary.CRS_URI.DEFAULT_WKT_CRS84);
+            CoordinateReferenceSystem crs = CRSRegistry.getCRS(SRS_URI.DEFAULT_WKT_CRS84);
             Geometry expResult = reader.read("LINESTRING(0 0, 2 0, 5 0)");
             Geometry result = GeometryReverse.check(geometry, crs);
 

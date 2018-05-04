@@ -219,7 +219,11 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
 
     }
 
-    private CustomCoordinateSequence(double[] x, double[] y, double[] z, double[] m) {
+    public static final CustomCoordinateSequence createPoint(double x, double y) {
+        return new CustomCoordinateSequence(new double[]{x}, new double[]{y}, new double[1], new double[1]);
+    }
+
+    public CustomCoordinateSequence(double[] x, double[] y, double[] z, double[] m) {
         this.x = x;
         this.y = y;
         this.z = z;

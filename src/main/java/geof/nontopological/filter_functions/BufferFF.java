@@ -11,6 +11,9 @@ import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +44,7 @@ public class BufferFF extends FunctionBase3 {
             GeometryWrapper buffer = geometry.buffer(radius, unitsURI);
 
             return buffer.asNode();
-        } catch (DatatypeFormatException dfx) {
+        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
             LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, dfx.getMessage());
             return NodeValue.nvEmptyString;
         }
