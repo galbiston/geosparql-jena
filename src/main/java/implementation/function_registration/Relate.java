@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.function_registry;
+package implementation.function_registration;
 
 import geof.topological.RelateFF;
 import implementation.vocabulary.Geof;

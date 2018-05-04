@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.function_registry;
+package implementation.function_registration;
 
 import geo.topological.property_functions.egenhofer.EhOverlapPF;
 import geo.topological.property_functions.egenhofer.EhMeetPF;
