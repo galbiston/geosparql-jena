@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package implementation.vocabulary;
 
 import java.lang.invoke.MethodHandles;
@@ -23,7 +22,22 @@ public class CRS_URI {
      * reversed.
      */
     public static final String DEFAULT_WKT_CRS84 = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+    /**
+     * Legacy SRS Name used prior to finalisation of GeoSPARQL standard 1.0.
+     */
     public static final String WGS84_CRS_GEOPSARQL_LEGACY = "http://www.opengis.net/def/crs/EPSG/4326";
+
+    /**
+     * WGS84 SRS Name used for Latitude, Longitude in Geographic coordinate
+     * reference system with units of radians.
+     */
     public static final String WGS84_CRS = "http://www.opengis.net/def/crs/EPSG/0/4326";
+
+    /**
+     * An alias URI for the default GeoTools Geocentric coordinate reference
+     * system with units of metres.
+     */
+    public static final String GEOTOOLS_GEOCENTRIC_CARTESIAN = "http://example.org/geotools#DefaultGeocentricCartesian";
 
 }

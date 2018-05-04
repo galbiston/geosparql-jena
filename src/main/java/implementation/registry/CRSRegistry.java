@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import org.apache.commons.collections4.map.LRUMap;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.crs.DefaultGeocentricCRS;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
@@ -46,7 +47,20 @@ public class CRSRegistry implements Serializable {
 
     static {
         //TODO Replace with DefaultGeographicCRS.WGS84?? Has axis in lon, lat. Returns 4326 on EPSG.
-        addDefaultWKT_CRS84();
+        addDefaultCRS();
+    }
+
+    public static final CoordinateReferenceSystem getCRS(String srsURI) {
+
+        CoordinateReferenceSystem crs = addCRS(srsURI);
+        return crs;
+    }
+
+    public static final UnitsOfMeasure getUnits(String srsURI) {
+
+        addCRS(srsURI);
+        UnitsOfMeasure units = UNITS_REGISTRY.get(srsURI);
+        return units;
     }
 
     public static final CoordinateReferenceSystem addCRS(String srsURI) {
@@ -97,19 +111,60 @@ public class CRSRegistry implements Serializable {
         return crs;
     }
 
-    public static final CoordinateReferenceSystem getCRS(String srsURI) {
+    public static final CoordinateReferenceSystem addCRS(String srsURI, CoordinateReferenceSystem crs) {
 
-        CoordinateReferenceSystem crs = addCRS(srsURI);
+        if (!CRS_REGISTRY.containsKey(srsURI)) {
+
+            CRS_REGISTRY.put(srsURI, crs);
+
+            UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
+            UNITS_REGISTRY.put(srsURI, unitsOfMeasure);
+        } else {
+            crs = CRS_REGISTRY.get(srsURI);
+        }
         return crs;
     }
 
-    public static final UnitsOfMeasure getUnits(String srsURI) {
-
-        addCRS(srsURI);
-        UnitsOfMeasure units = UNITS_REGISTRY.get(srsURI);
-        return units;
+    private static void addDefaultCRS() {
+        addCRS(CRS_URI.DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
+        addCRS(CRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
     }
 
+    public static final void clearAll() {
+        CRS_REGISTRY.clear();
+        UNITS_REGISTRY.clear();
+        addDefaultCRS();
+    }
+
+    /**
+     * Changes the max size of the CRS_URI Registry.
+     * <br> The registry will be empty after this process.
+     *
+     * @param maxSize
+     */
+    public static final void setCRSRegistryMaxSize(Integer maxSize) {
+
+        LRUMap<String, CoordinateReferenceSystem> newCRSRegistry = new LRUMap<>(maxSize);
+        CRS_REGISTRY.clear();
+        CRS_REGISTRY = newCRSRegistry;
+        addDefaultCRS();
+    }
+
+    /**
+     * Changes the max size of the Units of Measure Registry.
+     * <br> The registry will be empty after this process.
+     *
+     * @param maxSize
+     */
+    public static final void setUnitsRegistryMaxSize(Integer maxSize) {
+
+        LRUMap<String, UnitsOfMeasure> newUnitsRegistry = new LRUMap<>(maxSize);
+        UNITS_REGISTRY.clear();
+        UNITS_REGISTRY = newUnitsRegistry;
+        addDefaultCRS();
+    }
+
+    ///////////////////////////////////////Registry Writing and Reading to File////////////////////////////
     public static final void writeCRSRegistry(File crsRegistryFile) {
         LOGGER.info("Writing CRS Registry - {}: Started", crsRegistryFile);
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(crsRegistryFile))) {
@@ -152,44 +207,6 @@ public class CRSRegistry implements Serializable {
             LOGGER.error("Read Units Registry exception: {}", ex.getMessage());
         }
         LOGGER.info("Reading Units Registry - {}: Completed", unitsRegistryFile);
-    }
-
-    private static void addDefaultWKT_CRS84() {
-        addCRS(CRS_URI.DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
-    }
-
-    public static final void clearAll() {
-        CRS_REGISTRY.clear();
-        UNITS_REGISTRY.clear();
-        addDefaultWKT_CRS84();
-    }
-
-    /**
-     * Changes the max size of the CRS_URI Registry.
-     * <br> The registry will be empty after this process.
-     *
-     * @param maxSize
-     */
-    public static final void setCRSRegistryMaxSize(Integer maxSize) {
-
-        LRUMap<String, CoordinateReferenceSystem> newCRSRegistry = new LRUMap<>(maxSize);
-        CRS_REGISTRY.clear();
-        CRS_REGISTRY = newCRSRegistry;
-        addDefaultWKT_CRS84();
-    }
-
-    /**
-     * Changes the max size of the Units of Measure Registry.
-     * <br> The registry will be empty after this process.
-     *
-     * @param maxSize
-     */
-    public static final void setUnitsRegistryMaxSize(Integer maxSize) {
-
-        LRUMap<String, UnitsOfMeasure> newUnitsRegistry = new LRUMap<>(maxSize);
-        UNITS_REGISTRY.clear();
-        UNITS_REGISTRY = newUnitsRegistry;
-        addDefaultWKT_CRS84();
     }
 
 }
