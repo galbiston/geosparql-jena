@@ -27,8 +27,6 @@ public class IndexConfiguration {
     /*
      * Indexing and Registry Sizes
      */
-    public static final Integer CRS_REGISTRY_MAX_SIZE = 20;
-    public static final Integer MATH_TRANSFORM_REGISTRY_MAX_SIZE = CRS_REGISTRY_MAX_SIZE;
     public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 100000;
     public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 100000;
     public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE = 100000;
@@ -126,20 +124,6 @@ public class IndexConfiguration {
         GeometryLiteralIndex.setMaxSize(geometryLiteralIndexMaxSize);
         GeometryTransformIndex.setMaxSize(geometryTransformIndexMaxSize);
         QueryRewriteIndex.setMaxSize(queryRewriteIndexMaxSize);
-    }
-
-    /**
-     * Override the default maximum sizes of registries.
-     * <br>Registries are small but contain frequently re-used or generally
-     * useful data.
-     * <br>Any existing in-memory registries will be emptied.
-     *
-     * @param crsRegistryMaxSize - default max size: 20
-     * @param mathTransformRegistryMaxSize - default max size: 20
-     */
-    public static final void setRegistryMaxSize(Integer crsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
-        CRSRegistry.setCRSRegistryMaxSize(crsRegistryMaxSize);
-        MathTransformRegistry.setRegistryMaxSize(mathTransformRegistryMaxSize);
     }
 
     private static void loadMemoryIndexes(File indexFolder) {

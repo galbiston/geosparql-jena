@@ -5,7 +5,6 @@
  */
 package implementation.registry;
 
-import implementation.index.IndexConfiguration;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,7 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.invoke.MethodHandles;
 import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.apache.commons.collections4.map.LRUMap;
+import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.geotools.referencing.CRS;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -32,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class MathTransformRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static MultiKeyMap<MultiKey, MathTransform> MATH_TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexConfiguration.MATH_TRANSFORM_REGISTRY_MAX_SIZE));
+    private static final MultiKeyMap<MultiKey, MathTransform> MATH_TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new HashedMap<>());
 
     @SuppressWarnings("unchecked")
     public static final MathTransform getMathTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -72,19 +71,6 @@ public class MathTransformRegistry {
 
     public static final void clear() {
         MATH_TRANSFORM_REGISTRY.clear();
-    }
-
-    /**
-     * Changes the max size of the Math Transform Registry.
-     * <br> The registry will be empty after this process.
-     *
-     * @param maxSize
-     */
-    public static final void setRegistryMaxSize(Integer maxSize) {
-
-        MultiKeyMap<MultiKey, MathTransform> newMathRegistry = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
-        MATH_TRANSFORM_REGISTRY.clear();
-        MATH_TRANSFORM_REGISTRY = newMathRegistry;
     }
 
 }

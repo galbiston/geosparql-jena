@@ -5,7 +5,6 @@
  */
 package implementation.registry;
 
-import implementation.index.IndexConfiguration;
 import implementation.units_of_measure.UnitsOfMeasure;
 import implementation.vocabulary.SRS_URI;
 import java.io.File;
@@ -16,8 +15,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
+import java.util.HashMap;
 import java.util.Set;
-import org.apache.commons.collections4.map.LRUMap;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeocentricCRS;
 import org.opengis.referencing.FactoryException;
@@ -33,8 +32,8 @@ public class CRSRegistry implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static LRUMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new LRUMap<>(IndexConfiguration.CRS_REGISTRY_MAX_SIZE);
-    private static LRUMap<String, UnitsOfMeasure> UNITS_OF_MEASURE_REGISTRY = new LRUMap<>(IndexConfiguration.CRS_REGISTRY_MAX_SIZE);
+    private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
+    private static final HashMap<String, UnitsOfMeasure> UNITS_OF_MEASURE_REGISTRY = new HashMap<>();
 
     public static final String DEFAULT_WKT_CRS84_STRING = "GEOGCS[\"CRS 84\", \n"
             + "  DATUM[\"WGS_1984\", \n"
@@ -119,24 +118,6 @@ public class CRSRegistry implements Serializable {
     public static final void clearAll() {
         CRS_REGISTRY.clear();
         UNITS_OF_MEASURE_REGISTRY.clear();
-        addDefaultCRS();
-    }
-
-    /**
-     * Changes the max size of the SRS_URI Registry.
-     * <br> The registry will be empty after this process.
-     *
-     * @param maxSize
-     */
-    public static final void setCRSRegistryMaxSize(Integer maxSize) {
-
-        CRS_REGISTRY.clear();
-        UNITS_OF_MEASURE_REGISTRY.clear();
-        LRUMap<String, CoordinateReferenceSystem> newCRSRegistry = new LRUMap<>(maxSize);
-        CRS_REGISTRY = newCRSRegistry;
-        LRUMap<String, UnitsOfMeasure> newUnitsOfMeasureRegistry = new LRUMap<>(maxSize);
-        UNITS_OF_MEASURE_REGISTRY = newUnitsOfMeasureRegistry;
-
         addDefaultCRS();
     }
 

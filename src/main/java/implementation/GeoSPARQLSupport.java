@@ -148,28 +148,6 @@ public class GeoSPARQLSupport {
      * Initialise all GeoSPARQL property and filter functions with memory
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup but override the
-     * default maximum sizes of indexes and registries.
-     * <br>Registries are small but contain frequently re-used or generally
-     * useful data.
-     * <br>Indexes are large and contain data that may have re-use in specific
-     * contexts.
-     * <br>Any existing in-memory indexes and registries will be emptied.
-     *
-     * @param geometryLiteralIndexMaxSize - default max size: 100,000
-     * @param geometryTransformIndexMaxSize - default max size: 100,000
-     * @param queryRewriteIndexMaxSize - default max size: 100,000
-     * @param crsRegistryMaxSize - default max size: 20
-     * @param mathTransformRegistryMaxSize - default max size: 20
-     */
-    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize, Integer crsRegistryMaxSize, Integer mathTransformRegistryMaxSize) {
-        loadFunctionsMemoryIndex(geometryLiteralIndexMaxSize, geometryTransformIndexMaxSize, queryRewriteIndexMaxSize);
-        IndexConfiguration.setRegistryMaxSize(crsRegistryMaxSize, mathTransformRegistryMaxSize);
-    }
-
-    /**
-     * Initialise all GeoSPARQL property and filter functions with memory
-     * indexing.
-     * <br>Use this for in-memory indexing GeoSPARQL setup but override the
      * default maximum sizes of indexes.
      * <br>Indexes are large and contain data that may have re-use in specific
      * contexts.
