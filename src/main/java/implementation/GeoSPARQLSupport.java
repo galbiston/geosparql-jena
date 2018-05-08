@@ -239,4 +239,11 @@ public class GeoSPARQLSupport {
         IndexConfiguration.clearAllIndexesAndRegistries();
     }
 
+    /**
+     * Writes the current index and registry to the provided folder.
+     */
+    public static final void writeIndexRegistryToFile(File indexFolder) {
+        IndexConfiguration.writeIndexRegistryToFile(indexFolder);
+    }
+
 }

@@ -165,21 +165,7 @@ public class IndexConfiguration {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                //CRS Registry
-                File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
-                CRSRegistry.writeCRSRegistry(crsRegistryFile);
-                //Math Transform Registry
-                File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
-                MathTransformRegistry.write(mathTransformRegistryFile);
-                //Geometry Transform Index
-                File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
-                GeometryTransformIndex.write(geometryTransformIndexFile);
-                //Geometry Literal Index
-                File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
-                GeometryLiteralIndex.write(geometryLiteralIndexFile);
-                //Query Rewrite Index
-                File queryRewriteIndex = new File(indexFolder, QUERY_REWRITE_INDEX_FILENAME);
-                QueryRewriteIndex.write(queryRewriteIndex);
+                writeIndexRegistryToFile(indexFolder);
             }
         };
         Runtime.getRuntime().addShutdownHook(thread);
@@ -187,6 +173,24 @@ public class IndexConfiguration {
         removeMemoryIndexStorageThread();
         //Retain the thread in case called again.
         shutdownStorageThread = thread;
+    }
+
+    public static void writeIndexRegistryToFile(File indexFolder) {
+        //CRS Registry
+        File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
+        CRSRegistry.writeCRSRegistry(crsRegistryFile);
+        //Math Transform Registry
+        File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
+        MathTransformRegistry.write(mathTransformRegistryFile);
+        //Geometry Transform Index
+        File geometryTransformIndexFile = new File(indexFolder, GEOMETRY_TRANSFORM_INDEX_FILENAME);
+        GeometryTransformIndex.write(geometryTransformIndexFile);
+        //Geometry Literal Index
+        File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
+        GeometryLiteralIndex.write(geometryLiteralIndexFile);
+        //Query Rewrite Index
+        File queryRewriteIndex = new File(indexFolder, QUERY_REWRITE_INDEX_FILENAME);
+        QueryRewriteIndex.write(queryRewriteIndex);
     }
 
     private static void removeMemoryIndexStorageThread() {
