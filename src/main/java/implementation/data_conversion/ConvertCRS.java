@@ -8,12 +8,16 @@ package implementation.data_conversion;
 import implementation.GeometryWrapper;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
+import implementation.support.GeoSerialisationEnum;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
@@ -156,6 +160,47 @@ public class ConvertCRS {
             LOGGER.warn("{} does not exist. {} is not created.", inputFolder.getAbsolutePath(), outputFolder.getAbsolutePath());
         }
         LOGGER.info("Converting Folder {} to {} in srs URI: {} - Completed", inputFolder.getAbsolutePath(), outputFolder.getAbsolutePath(), outputSrsURI);
+    }
+
+    /**
+     * Convert a list of strings representation of literals to another
+     * coordinate reference system.
+     *
+     * @param geometryLiterals
+     * @param outputSrsURI Coordinate reference system URI
+     * @param serialisation
+     * @return
+     */
+    public static final List<String> convertGeometryLiterals(List<String> geometryLiterals, String outputSrsURI, GeoSerialisationEnum serialisation) {
+
+        List<String> outputGeometryLiterals = new ArrayList<>(geometryLiterals.size());
+
+        BaseDatatype datatype;
+        switch (serialisation) {
+            case GML:
+                datatype = GMLDatatype.THE_GML_DATATYPE;
+                break;
+            case WKT:
+                datatype = WKTDatatype.THE_WKT_DATATYPE;
+                break;
+            default:
+                LOGGER.error("Unknown Serialisation: {}", serialisation);
+                throw new AssertionError("Unknown Serialisation: " + serialisation);
+        }
+
+        for (String geometryLiteral : geometryLiterals) {
+            Literal lit = ResourceFactory.createTypedLiteral(geometryLiteral, datatype);
+            GeometryWrapper geometryWrapper = GeometryWrapper.extract(lit);
+            try {
+                GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(outputSrsURI);
+                Literal transformedLit = transformedGeometryWrapper.asLiteral();
+                outputGeometryLiterals.add(transformedLit.getLexicalForm());
+            } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+                LOGGER.error("{} : {} : {}", ex.getMessage(), geometryLiteral, outputSrsURI);
+            }
+        }
+
+        return outputGeometryLiterals;
     }
 
 }
