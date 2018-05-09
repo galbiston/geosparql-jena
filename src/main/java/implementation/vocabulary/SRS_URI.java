@@ -5,18 +5,14 @@
  */
 package implementation.vocabulary;
 
-import java.lang.invoke.MethodHandles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  *
  */
 public class SRS_URI {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     public static final String OSGB_CRS = "http://www.opengis.net/def/crs/EPSG/0/27700";
+    public static final String GREEK_GRID_CRS = "http://www.opengis.net/def/crs/EPSG/0/2100";
     /**
      * Default SRS_URI Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
      * reversed.
