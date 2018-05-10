@@ -5,7 +5,7 @@
  */
 package implementation.registry;
 
-import implementation.units_of_measure.UnitsOfMeasure;
+import implementation.UnitsOfMeasure;
 import implementation.vocabulary.Unit_URI;
 import java.lang.invoke.MethodHandles;
 import java.util.HashMap;

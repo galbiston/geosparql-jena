@@ -16,7 +16,6 @@ import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.registry.CRSRegistry;
 import implementation.registry.UnitsRegistry;
 import implementation.support.GeoSerialisationEnum;
-import implementation.units_of_measure.UnitsOfMeasure;
 import implementation.vocabulary.SRS_URI;
 import implementation.vocabulary.Unit_URI;
 import java.io.Serializable;

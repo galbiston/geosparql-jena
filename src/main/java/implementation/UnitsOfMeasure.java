@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package implementation.units_of_measure;
+package implementation;
 
 import implementation.registry.UnitsRegistry;
 import java.io.Serializable;
@@ -99,6 +99,11 @@ public class UnitsOfMeasure implements Serializable {
         //Convert back to the target units of measure.
         double targetDistance = targetMeasure.doubleValue(targetUnit);
         return targetDistance;
+    }
+
+    @Override
+    public String toString() {
+        return "UnitsOfMeasure{" + "axisOrder=" + axisOrder + ", unit=" + unit + ", unitURI=" + unitURI + ", isLinearUnits=" + isLinearUnits + '}';
     }
 
 }

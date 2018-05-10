@@ -5,7 +5,7 @@
  */
 package implementation.registry;
 
-import implementation.units_of_measure.UnitsOfMeasure;
+import implementation.UnitsOfMeasure;
 import implementation.vocabulary.SRS_URI;
 import java.io.File;
 import java.io.FileInputStream;
