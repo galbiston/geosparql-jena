@@ -7,6 +7,7 @@ package implementation.registry;
 
 import implementation.UnitsOfMeasure;
 import implementation.vocabulary.SRS_URI;
+import static implementation.vocabulary.SRS_URI.EPSG_BASE_CRS_URI;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Set;
 import org.geotools.referencing.CRS;
@@ -145,6 +147,43 @@ public class CRSRegistry implements Serializable {
             LOGGER.error("Read CRS Registry exception: {}", ex.getMessage());
         }
         LOGGER.info("Reading CRS Registry - {}: Completed", crsRegistryFile);
+    }
+
+    private static final String NORTH_UTM_EPSG = EPSG_BASE_CRS_URI + "326";
+    private static final String SOUTH_UTM_EPSG = EPSG_BASE_CRS_URI + "327";
+    private static final DecimalFormat ZONE_FORMATTER = new DecimalFormat("##");
+
+    /**
+     * Find UTM CRS from WGS84 coordinates.<br>
+     * Based on calculation from Stack Overflow.
+     *
+     * @param latitude
+     * @param longitude
+     * @return
+     * @see
+     * <a href="https://stackoverflow.com/questions/176137/java-convert-lat-lon-to-utm">Stack
+     * Overflow question relating to WGS84 to UTM conversion.</a>
+     * @see
+     * <a href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system">Wikipedia
+     * article on UTM.</a>
+     * @see
+     * <a href="http://epsg.io/32600">EPSG for UTM</a>
+     *
+     */
+    public static final String findUTMZoneURIFromWGS84(double latitude, double longitude) {
+        int zone = (int) Math.floor(longitude / 6 + 31);
+        String zoneString = ZONE_FORMATTER.format(zone);
+
+        boolean isNorth = latitude >= 0;
+
+        String epsgURI;
+        if (isNorth) {
+            epsgURI = NORTH_UTM_EPSG + zoneString;
+        } else {
+            epsgURI = SOUTH_UTM_EPSG + zoneString;
+        }
+
+        return epsgURI;
     }
 
 }

@@ -31,9 +31,20 @@ public class SRS_URI {
     public static final String WGS84_CRS = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
     /**
+     * Base part of the EPSG CRS URI. Needs a specific EPSG code adding to it.
+     */
+    public static final String EPSG_BASE_CRS_URI = "http://www.opengis.net/def/crs/EPSG/0/";
+
+    /**
      * An alias URI for the default GeoTools Geocentric coordinate reference
      * system with units of metres.
      */
     public static final String GEOTOOLS_GEOCENTRIC_CARTESIAN = "http://example.org/geotools#DefaultGeocentricCartesian";
+
+    /**
+     * An alias URI for the default GeoTools Geographic coordinate reference
+     * system with units of radians.
+     */
+    public static final String GEOTOOLS_GEOGRAPHIC_WGS84 = "http://example.org/geotools#DefaultGeocentricWGS84";
 
 }

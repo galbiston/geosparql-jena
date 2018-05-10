@@ -6,7 +6,7 @@
 package implementation.parsers.gml;
 
 import com.vividsolutions.jts.geom.*;
-import implementation.CustomGeometryFactory;
+import implementation.jts.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.datatype.ParseException;
 import implementation.registry.CRSRegistry;

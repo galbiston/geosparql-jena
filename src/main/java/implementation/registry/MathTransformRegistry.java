@@ -41,7 +41,7 @@ public class MathTransformRegistry {
         if (MATH_TRANSFORM_REGISTRY.containsKey(key)) {
             transform = MATH_TRANSFORM_REGISTRY.get(key);
         } else {
-            transform = CRS.findMathTransform(sourceCRS, targetCRS, false);
+            transform = CRS.findMathTransform(sourceCRS, targetCRS, true);
             MATH_TRANSFORM_REGISTRY.put(key, transform);
         }
         return transform;

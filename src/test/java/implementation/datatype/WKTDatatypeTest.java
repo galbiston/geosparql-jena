@@ -13,7 +13,7 @@ import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import implementation.registry.CRSRegistry;
-import implementation.CustomGeometryFactory;
+import implementation.jts.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequence;

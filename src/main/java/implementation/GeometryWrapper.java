@@ -5,15 +5,19 @@
  */
 package implementation;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
+import com.vividsolutions.jts.geom.Point;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.index.GeometryTransformIndex;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import implementation.jts.CustomGeometryFactory;
 import implementation.registry.CRSRegistry;
+import implementation.registry.MathTransformRegistry;
 import implementation.registry.UnitsRegistry;
 import implementation.support.GeoSerialisationEnum;
 import implementation.vocabulary.SRS_URI;
@@ -27,9 +31,11 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
+import org.geotools.geometry.jts.JTS;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -205,7 +211,8 @@ public class GeometryWrapper implements Serializable {
         GeometryWrapper transformedGeometryWrapper;
         Boolean isTransformNeeded = !unitsOfMeasure.isLinearUnits();
         if (isTransformNeeded) {
-            transformedGeometryWrapper = GeometryTransformIndex.transform(this, SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
+            String utmURI = findUTMZoneURI();
+            transformedGeometryWrapper = GeometryTransformIndex.transform(this, utmURI);
         } else {
             transformedGeometryWrapper = this;
         }
@@ -214,8 +221,9 @@ public class GeometryWrapper implements Serializable {
         double transformedDistance = UnitsOfMeasure.conversion(distance, targetDistanceUnitsURI, transformedGeometryWrapper.unitsOfMeasure.getUnitURI());
 
         //Buffer the transformed geometry
-        Geometry geo = transformedGeometryWrapper.xyGeometry.buffer(transformedDistance);
-        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(geo, transformedGeometryWrapper.srsURI, transformedGeometryWrapper.serialisation, transformedGeometryWrapper.dimensionInfo);
+        Geometry geometry = transformedGeometryWrapper.xyGeometry.buffer(transformedDistance);
+        DimensionInfo bufferedDimensionInfo = new DimensionInfo(dimensionInfo.getCoordinate(), dimensionInfo.getSpatial(), geometry.getDimension());
+        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(geometry, transformedGeometryWrapper.srsURI, transformedGeometryWrapper.serialisation, bufferedDimensionInfo);
 
         //Check whether need to transform back to the original srsURI.
         if (isTransformNeeded) {
@@ -223,6 +231,21 @@ public class GeometryWrapper implements Serializable {
         } else {
             return bufferedGeometryWrapper;
         }
+    }
+
+    private String findUTMZoneURI() throws FactoryException, MismatchedDimensionException, TransformException {
+
+        //Find a point in the parsing geometry.
+        Coordinate coord = parsingGeometry.getCoordinate();
+        Point point = GEOMETRY_FACTORY.createPoint(coord);
+        //Convert to WGS84.
+        CoordinateReferenceSystem wgs84CRS = CRSRegistry.getCRS(SRS_URI.WGS84_CRS);
+        MathTransform transform = MathTransformRegistry.getMathTransform(crs, wgs84CRS);
+
+        Point wgs84Point = (Point) JTS.transform(point, transform);
+
+        //Find the UTM zone.
+        return CRSRegistry.findUTMZoneURIFromWGS84(wgs84Point.getX(), wgs84Point.getY());
     }
 
     public GeometryWrapper convexHull() {

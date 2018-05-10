@@ -5,10 +5,10 @@
  */
 package implementation.index;
 
-import implementation.registry.MathTransformRegistry;
-import implementation.registry.CRSRegistry;
 import com.vividsolutions.jts.geom.Geometry;
 import implementation.GeometryWrapper;
+import implementation.registry.CRSRegistry;
+import implementation.registry.MathTransformRegistry;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -66,6 +66,7 @@ public class GeometryTransformIndex {
 
             MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
             Geometry transformedGeometry = JTS.transform(sourceGeometry, transform);
+
             transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, sourceGeometryWrapper.getGeoSerialisation(), sourceGeometryWrapper.getDimensionInfo());
             if (IS_INDEX_ACTIVE) {
                 GEOMETRY_TRANSFORM_INDEX.put(key, transformedGeometryWrapper);

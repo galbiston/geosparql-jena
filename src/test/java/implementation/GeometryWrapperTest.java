@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import implementation.jts.CustomCoordinateSequence;
+import implementation.jts.CustomGeometryFactory;
 import implementation.support.GeoSerialisationEnum;
 import implementation.vocabulary.SRS_URI;
 import implementation.vocabulary.Unit_URI;
