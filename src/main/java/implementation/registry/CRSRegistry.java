@@ -47,11 +47,6 @@ public class CRSRegistry implements Serializable {
             + "  AXIS[\"Geodetic latitude\", NORTH], \n"
             + "  AUTHORITY[\"OGC\", 4326]]";
 
-    static {
-        //TODO Replace with DefaultGeographicCRS.WGS84?? Has axis in lon, lat. Returns 4326 on EPSG.
-        addDefaultCRS();
-    }
-
     public static final CoordinateReferenceSystem getCRS(String srsURI) {
 
         CoordinateReferenceSystem crs = addCRS(srsURI);
@@ -85,6 +80,7 @@ public class CRSRegistry implements Serializable {
 
     private static CoordinateReferenceSystem storeCRS(String srsURI, CoordinateReferenceSystem crs) {
 
+        setupDefaultCRS();
         if (CRS_REGISTRY.containsKey(srsURI)) {
             crs = CRS_REGISTRY.get(srsURI);
         } else {
@@ -107,16 +103,23 @@ public class CRSRegistry implements Serializable {
         return crs;
     }
 
-    private static void addDefaultCRS() {
-        addCRS(SRS_URI.DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
-        addCRS(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, DEFAULT_WKT_CRS84_STRING);
-        addCRS(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
+    public static void setupDefaultCRS() {
+        if (CRS_REGISTRY.isEmpty()) {
+            try {
+                CoordinateReferenceSystem crs = CRS.parseWKT(DEFAULT_WKT_CRS84_STRING);
+                CRS_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, crs);
+                CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, crs);
+                CRS_REGISTRY.put(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
+            } catch (FactoryException ex) {
+                LOGGER.error("Invalid WKT String: {} - {}", DEFAULT_WKT_CRS84_STRING, ex.getMessage());
+            }
+        }
     }
 
     public static final void clearAll() {
         CRS_REGISTRY.clear();
         UNITS_OF_MEASURE_REGISTRY.clear();
-        addDefaultCRS();
+        setupDefaultCRS();
     }
 
     ///////////////////////////////////////Registry Writing and Reading to File////////////////////////////
