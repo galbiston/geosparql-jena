@@ -163,7 +163,7 @@ public class ConvertCRS {
     }
 
     /**
-     * Convert a list of strings representation of literals to another
+     * Convert a list of strings representation of geometry literals to another
      * coordinate reference system.
      *
      * @param geometryLiterals
@@ -201,6 +201,42 @@ public class ConvertCRS {
         }
 
         return outputGeometryLiterals;
+    }
+
+    /**
+     * Convert a string representation of a geometry literal to another
+     * coordinate reference system.
+     *
+     * @param geometryLiteral
+     * @param outputSrsURI Coordinate reference system URI
+     * @param serialisation
+     * @return
+     */
+    public static final String convertGeometryLiteral(String geometryLiteral, String outputSrsURI, GeoSerialisationEnum serialisation) {
+
+        BaseDatatype datatype;
+        switch (serialisation) {
+            case GML:
+                datatype = GMLDatatype.THE_GML_DATATYPE;
+                break;
+            case WKT:
+                datatype = WKTDatatype.THE_WKT_DATATYPE;
+                break;
+            default:
+                LOGGER.error("Unknown Serialisation: {}", serialisation);
+                throw new AssertionError("Unknown Serialisation: " + serialisation);
+        }
+
+        Literal lit = ResourceFactory.createTypedLiteral(geometryLiteral, datatype);
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(lit);
+        try {
+            GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(outputSrsURI);
+            Literal transformedLit = transformedGeometryWrapper.asLiteral();
+            return transformedLit.getLexicalForm();
+        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+            LOGGER.error("{} : {} : {}", ex.getMessage(), geometryLiteral, outputSrsURI);
+            return null;
+        }
     }
 
 }
