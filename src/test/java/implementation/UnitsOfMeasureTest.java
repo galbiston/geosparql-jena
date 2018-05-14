@@ -5,7 +5,6 @@
  */
 package implementation;
 
-import implementation.UnitsOfMeasure;
 import org.geotools.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
