@@ -91,12 +91,7 @@ public class CRSRegistry implements Serializable {
 
             //Find the CRS based on the SRS.
             try {
-                if (srsURI.equals(SRS_URI.WGS84_CRS_GEOPSARQL_LEGACY)) {
-                    crs = CRS.decode(SRS_URI.WGS84_CRS);
-                    LOGGER.warn("Legacy GeoSPARQL CRS found: {}. Using GeoSPARQL 1.0 URI version {} CRS. Dataset should be updated but no impact on operation.", SRS_URI.WGS84_CRS_GEOPSARQL_LEGACY, SRS_URI.WGS84_CRS);
-                } else if (crs == null) {
-                    crs = CRS.decode(srsURI);
-                }
+                crs = CRS.decode(srsURI);
             } catch (FactoryException ex) {
                 LOGGER.error("SRS URI Unrecongised: {} - {}", srsURI, ex.getMessage());
                 return null;
@@ -114,6 +109,7 @@ public class CRSRegistry implements Serializable {
 
     private static void addDefaultCRS() {
         addCRS(SRS_URI.DEFAULT_WKT_CRS84, DEFAULT_WKT_CRS84_STRING);
+        addCRS(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, DEFAULT_WKT_CRS84_STRING);
         addCRS(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
     }
 

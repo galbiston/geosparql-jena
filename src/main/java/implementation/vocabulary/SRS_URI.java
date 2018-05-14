@@ -22,7 +22,7 @@ public class SRS_URI {
     /**
      * Legacy SRS_URI Name used prior to finalisation of GeoSPARQL standard 1.0.
      */
-    public static final String WGS84_CRS_GEOPSARQL_LEGACY = "http://www.opengis.net/def/crs/EPSG/4326";
+    public static final String WGS84_CRS_GEOSPARQL_LEGACY = "http://www.opengis.net/def/crs/EPSG/4326";
 
     /**
      * WGS84 SRS_URI Name used for Latitude, Longitude in Geographic coordinate
