@@ -445,7 +445,13 @@ public class GeometryWrapper implements Serializable {
     private static final WKTDatatype WKT_DATATYPE = WKTDatatype.THE_WKT_DATATYPE;
     private static final GMLDatatype GML_DATATYPE = GMLDatatype.THE_GML_DATATYPE;
 
-    public static final GeometryWrapper extract(NodeValue nodeValue) throws DatatypeFormatException {
+    /**
+     * Returns null if invalid node value provided.
+     *
+     * @param nodeValue
+     * @return
+     */
+    public static final GeometryWrapper extract(NodeValue nodeValue) {
 
         if (!nodeValue.isLiteral()) {
             return null;
@@ -457,11 +463,17 @@ public class GeometryWrapper implements Serializable {
         return extract(lexicalForm, datatypeURI);
     }
 
-    public static final GeometryWrapper extract(Literal geometryLiteral) throws DatatypeFormatException {
+    /**
+     * Returns null if invalid literal provided.
+     *
+     * @param geometryLiteral
+     * @return
+     */
+    public static final GeometryWrapper extract(Literal geometryLiteral) {
         return extract(geometryLiteral.getLexicalForm(), geometryLiteral.getDatatypeURI());
     }
 
-    private static GeometryWrapper extract(String lexicalForm, String datatypeURI) throws DatatypeFormatException {
+    private static GeometryWrapper extract(String lexicalForm, String datatypeURI) {
         GeometryWrapper geometry;
 
         switch (datatypeURI) {
