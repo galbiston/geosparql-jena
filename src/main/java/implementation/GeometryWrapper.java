@@ -446,6 +446,11 @@ public class GeometryWrapper implements Serializable {
     private static final GMLDatatype GML_DATATYPE = GMLDatatype.THE_GML_DATATYPE;
 
     public static final GeometryWrapper extract(NodeValue nodeValue) throws DatatypeFormatException {
+
+        if (!nodeValue.isLiteral()) {
+            return null;
+        }
+
         Node node = nodeValue.asNode();
         String datatypeURI = node.getLiteralDatatypeURI();
         String lexicalForm = node.getLiteralLexicalForm();
@@ -467,7 +472,8 @@ public class GeometryWrapper implements Serializable {
                 geometry = GML_DATATYPE.parse(lexicalForm);
                 break;
             default:
-                throw new DatatypeFormatException("Literal is not a WKT or GML Literal.");
+                LOGGER.warn("Literal is not a WKT or GML Literal: {} {}", lexicalForm, datatypeURI);
+                return null;
         }
 
         return geometry;
