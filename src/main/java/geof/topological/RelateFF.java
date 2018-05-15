@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class RelateFF extends FunctionBase3 {
 
@@ -31,13 +31,24 @@ public class RelateFF extends FunctionBase3 {
 
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            if (geometry1 == null) {
+                return NodeValue.FALSE;
+            }
+
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            if (geometry2 == null) {
+                return NodeValue.FALSE;
+            }
 
             Node node3 = v3.asNode();
-            String compreMatrix = node3.getLiteral().getLexicalForm();
+            if (!node3.isLiteral()) {
+                return NodeValue.FALSE;
+            }
+
+            String compareMatrix = node3.getLiteral().getLexicalForm();
 
             IntersectionMatrix matrix = geometry1.relate(geometry2);
-            boolean result = matrix.matches(compreMatrix);
+            boolean result = matrix.matches(compareMatrix);
 
             return NodeValue.makeBoolean(result);
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {

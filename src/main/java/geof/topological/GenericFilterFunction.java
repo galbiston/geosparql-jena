@@ -26,9 +26,17 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
+
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            if (geometry1 == null) {
+                return NodeValue.FALSE;
+            }
+
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            if (geometry2 == null) {
+                return NodeValue.FALSE;
+            }
 
             boolean result = relate(geometry1, geometry2);
 
@@ -42,13 +50,20 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
     public Boolean exec(Literal v1, Literal v2) {
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            if (geometry1 == null) {
+                return Boolean.FALSE;
+            }
+
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            if (geometry2 == null) {
+                return Boolean.FALSE;
+            }
 
             boolean result = relate(geometry1, geometry2);
             return result;
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {}", ex.getMessage());
-            return false;
+            return Boolean.FALSE;
         }
     }
 
