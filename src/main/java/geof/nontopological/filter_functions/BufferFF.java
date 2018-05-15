@@ -7,7 +7,6 @@ package geof.nontopological.filter_functions;
 
 import implementation.GeometryWrapper;
 import java.lang.invoke.MethodHandles;
-import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -34,17 +33,26 @@ public class BufferFF extends FunctionBase3 {
 
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v1);
+            if (geometry == null) {
+                return NodeValue.nvEmptyString;
+            }
 
             //Transfer the parameters as Nodes
+            if (!v2.isDouble()) {
+                return NodeValue.nvEmptyString;
+            }
             Node node2 = v2.asNode();
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
 
             //Obtain the target distance units
-            String unitsURI = v3.asNode().getURI();
+            if (!v3.isIRI()) {
+                return NodeValue.nvEmptyString;
+            }
+            String unitsURI = v3.getNode().getURI();
             GeometryWrapper buffer = geometry.buffer(radius, unitsURI);
 
             return buffer.asNode();
-        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
+        } catch (FactoryException | MismatchedDimensionException | TransformException dfx) {
             LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, dfx.getMessage());
             return NodeValue.nvEmptyString;
         }

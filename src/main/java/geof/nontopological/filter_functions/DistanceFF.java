@@ -7,7 +7,6 @@ package geof.nontopological.filter_functions;
 
 import implementation.GeometryWrapper;
 import java.lang.invoke.MethodHandles;
-import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -30,14 +29,24 @@ public class DistanceFF extends FunctionBase3 {
 
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            if (geometry1 == null) {
+                return NodeValue.nvNaN;
+            }
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            if (geometry2 == null) {
+                return NodeValue.nvNaN;
+            }
+
+            if (!v3.isIRI()) {
+                return NodeValue.nvNaN;
+            }
 
             double distance = geometry1.distance(geometry2, v3.asNode().getURI());
 
             return NodeValue.makeDouble(distance);
-        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
+        } catch (FactoryException | MismatchedDimensionException | TransformException dfx) {
             LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, dfx.getMessage());
-            return NodeValue.nvZERO;
+            return NodeValue.nvNaN;
         }
 
     }

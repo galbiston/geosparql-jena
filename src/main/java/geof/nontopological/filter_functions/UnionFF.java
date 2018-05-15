@@ -7,7 +7,6 @@ package geof.nontopological.filter_functions;
 
 import implementation.GeometryWrapper;
 import java.lang.invoke.MethodHandles;
-import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -30,12 +29,19 @@ public class UnionFF extends FunctionBase2 {
 
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            if (geometry1 == null) {
+                return NodeValue.nvEmptyString;
+            }
+
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            if (geometry2 == null) {
+                return NodeValue.nvEmptyString;
+            }
 
             GeometryWrapper union = geometry1.union(geometry2);
             return union.asNode();
 
-        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException dfx) {
+        } catch (FactoryException | MismatchedDimensionException | TransformException dfx) {
             LOGGER.error("Exception: {}, {}, {}", v1, v2, dfx.getMessage());
             return NodeValue.nvEmptyString;
         }

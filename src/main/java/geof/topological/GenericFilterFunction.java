@@ -6,7 +6,6 @@
 package geof.topological;
 
 import implementation.GeometryWrapper;
-import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -41,7 +40,7 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
             boolean result = relate(geometry1, geometry2);
 
             return NodeValue.makeBoolean(result);
-        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
+        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {}", ex.getMessage());
             return NodeValue.FALSE;
         }
@@ -61,7 +60,7 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
             boolean result = relate(geometry1, geometry2);
             return result;
-        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
+        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {}", ex.getMessage());
             return Boolean.FALSE;
         }

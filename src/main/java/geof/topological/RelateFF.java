@@ -7,7 +7,6 @@ package geof.topological;
 
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import implementation.GeometryWrapper;
-import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -51,7 +50,7 @@ public class RelateFF extends FunctionBase3 {
             boolean result = matrix.matches(compareMatrix);
 
             return NodeValue.makeBoolean(result);
-        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
+        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {}", ex.getMessage());
             return NodeValue.FALSE;
         }

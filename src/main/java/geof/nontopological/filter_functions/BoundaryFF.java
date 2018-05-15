@@ -6,12 +6,8 @@
 package geof.nontopological.filter_functions;
 
 import implementation.GeometryWrapper;
-import java.lang.invoke.MethodHandles;
-import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -20,19 +16,15 @@ import org.slf4j.LoggerFactory;
  */
 public class BoundaryFF extends FunctionBase1 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     @Override
     public NodeValue exec(NodeValue v) {
 
-        try {
-            GeometryWrapper geometry = GeometryWrapper.extract(v);
-            GeometryWrapper boundary = geometry.boundary();
-            return boundary.asNode();
-
-        } catch (DatatypeFormatException dfx) {
-            LOGGER.error("Datatype Format Exception: {}, {}", v, dfx.getMessage());
+        GeometryWrapper geometry = GeometryWrapper.extract(v);
+        if (geometry == null) {
             return NodeValue.nvEmptyString;
         }
+
+        GeometryWrapper boundary = geometry.boundary();
+        return boundary.asNode();
     }
 }
