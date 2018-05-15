@@ -275,13 +275,13 @@ public class WKTWriter {
 
         switch (dimensions) {
             case XYZ:
-                return " Z ";
+                return " Z";
             case XYM:
-                return " M ";
+                return " M";
             case XYZM:
-                return " ZM ";
+                return " ZM";
             default:
-                return " ";
+                return "";
         }
     }
 

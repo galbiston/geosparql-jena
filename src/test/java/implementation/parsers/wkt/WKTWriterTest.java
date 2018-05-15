@@ -10,11 +10,10 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
-import implementation.registry.CRSRegistry;
-import implementation.jts.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequence;
+import implementation.jts.CustomGeometryFactory;
 import implementation.support.GeoSerialisationEnum;
 import implementation.vocabulary.SRS_URI;
 import org.junit.After;
@@ -61,7 +60,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> POINT ZM (11 12.1 8 5)";
+        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> POINT ZM(11 12.1 8 5)";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -79,7 +78,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> LINESTRING ZM (11 12.1 8 5, 3 4 6 2)";
+        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> LINESTRING ZM(11 12.1 8 5, 3 4 6 2)";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -97,7 +96,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1))";
+        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> POLYGON ZM((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -117,7 +116,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> POLYGON ZM ((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1), (20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1))";
+        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> POLYGON ZM((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1), (20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -135,7 +134,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> MULTIPOINT ZM ((10 40 0 1), (40 30 0 1), (20 20 0 1), (30 10 0 1))";
+        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> MULTIPOINT ZM((10 40 0 1), (40 30 0 1), (20 20 0 1), (30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -157,7 +156,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> MULTILINESTRING ZM ((10 10 0 1, 20 20 0 1, 10 40 0 1), (40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1))";
+        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> MULTILINESTRING ZM((10 10 0 1, 20 20 0 1, 10 40 0 1), (40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -181,7 +180,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> MULTIPOLYGON ZM (((40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1)), ((20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1), (30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1)))";
+        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> MULTIPOLYGON ZM(((40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1)), ((20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1), (30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1)))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -203,7 +202,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, GeoSerialisationEnum.WKT, new DimensionInfo(4, 3, 0));
 
-        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> GEOMETRYCOLLECTION ZM (POINT ZM (4 6 0 1), LINESTRING ZM (4 6 0 1, 7 10 0 1))";
+        String expResult = "<" + SRS_URI.DEFAULT_WKT_CRS84 + "> GEOMETRYCOLLECTION ZM(POINT ZM(4 6 0 1), LINESTRING ZM(4 6 0 1, 7 10 0 1))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
