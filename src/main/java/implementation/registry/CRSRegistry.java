@@ -107,9 +107,23 @@ public class CRSRegistry implements Serializable {
         if (CRS_REGISTRY.isEmpty()) {
             try {
                 CoordinateReferenceSystem crs = CRS.parseWKT(DEFAULT_WKT_CRS84_STRING);
+                UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
+                UnitsRegistry.addUnit(unitsOfMeasure);
+
+                //CRS_84
                 CRS_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, crs);
+                UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, unitsOfMeasure);
+
+                //WGS_84 Legacy for CRS_84
                 CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, crs);
+                UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, unitsOfMeasure);
+
+                //Geocentric Cartesian
+                UnitsOfMeasure unitsOfMeasureCartesian = new UnitsOfMeasure(DefaultGeocentricCRS.CARTESIAN);
+                UnitsRegistry.addUnit(unitsOfMeasureCartesian);
                 CRS_REGISTRY.put(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
+                UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, unitsOfMeasureCartesian);
+
             } catch (FactoryException ex) {
                 LOGGER.error("Invalid WKT String: {} - {}", DEFAULT_WKT_CRS84_STRING, ex.getMessage());
             }
