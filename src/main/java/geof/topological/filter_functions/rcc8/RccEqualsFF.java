@@ -8,7 +8,6 @@ package geof.topological.filter_functions.rcc8;
 import geof.topological.GenericFilterFunction;
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeUtil;
-import implementation.intersection_patterns.RCC8IntersectionPattern;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -49,7 +48,7 @@ public class RccEqualsFF extends GenericFilterFunction {
     //Simple Features equals and RCC8 equal intersection patterns are the same, see GeoSPARQL standard page 11.
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.EQUALS);
+        return sourceGeometry.equals(targetGeometry);
     }
 
 }
