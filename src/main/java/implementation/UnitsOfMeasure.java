@@ -7,6 +7,7 @@ package implementation;
 
 import implementation.registry.UnitsRegistry;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.measure.Measure;
 import javax.measure.converter.ConversionException;
 import javax.measure.converter.UnitConverter;
@@ -104,6 +105,40 @@ public class UnitsOfMeasure implements Serializable {
     @Override
     public String toString() {
         return "UnitsOfMeasure{" + "axisOrder=" + axisOrder + ", unit=" + unit + ", unitURI=" + unitURI + ", isLinearUnits=" + isLinearUnits + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.axisOrder);
+        hash = 67 * hash + Objects.hashCode(this.unit);
+        hash = 67 * hash + Objects.hashCode(this.unitURI);
+        hash = 67 * hash + (this.isLinearUnits ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final UnitsOfMeasure other = (UnitsOfMeasure) obj;
+        if (this.isLinearUnits != other.isLinearUnits) {
+            return false;
+        }
+        if (!Objects.equals(this.unitURI, other.unitURI)) {
+            return false;
+        }
+        if (this.axisOrder != other.axisOrder) {
+            return false;
+        }
+        return Objects.equals(this.unit, other.unit);
     }
 
 }
