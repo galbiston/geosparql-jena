@@ -9,6 +9,7 @@ import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeUtil;
 import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.GeometryDatatype;
+import implementation.registry.CRSRegistry;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -107,6 +108,9 @@ public class ConvertData {
             LOGGER.error("Output datatype {} is not a recognised Geometry Literal", outputDatatype);
             return null;
         }
+
+        //Setup Default Cordinate Reference Systems
+        CRSRegistry.setupDefaultCRS();
 
         //Iterate through all statements: convert geometry literals and just add the rest.
         Model outputModel = ModelFactory.createDefaultModel();

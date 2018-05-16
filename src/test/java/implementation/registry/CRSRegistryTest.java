@@ -49,23 +49,6 @@ public class CRSRegistryTest {
     }
 
     /**
-     * Test of addCRS method, of class CRSRegistry.
-     *
-     * @throws org.opengis.referencing.FactoryException
-     */
-    @Test
-    public void testAddCRS() throws FactoryException {
-        System.out.println("addCRS");
-        String srsURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
-        CoordinateReferenceSystem expResult = CRS.decode(srsURI);
-        CoordinateReferenceSystem result = CRSRegistry.addCRS(srsURI);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of getCRS method, of class CRSRegistry.
      *
      * @throws org.opengis.referencing.FactoryException

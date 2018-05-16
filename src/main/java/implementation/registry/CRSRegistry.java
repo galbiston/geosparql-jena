@@ -47,23 +47,17 @@ public class CRSRegistry implements Serializable {
             + "  AXIS[\"Geodetic latitude\", NORTH], \n"
             + "  AUTHORITY[\"OGC\", 4326]]";
 
-    public static final CoordinateReferenceSystem getCRS(String srsURI) {
-
-        CoordinateReferenceSystem crs = addCRS(srsURI);
-        return crs;
-    }
-
     public static final UnitsOfMeasure getUnitsOfMeasure(String srsURI) {
 
-        addCRS(srsURI);
+        getCRS(srsURI);
         return UNITS_OF_MEASURE_REGISTRY.get(srsURI);
     }
 
-    public static final CoordinateReferenceSystem addCRS(String srsURI) {
+    public static final CoordinateReferenceSystem getCRS(String srsURI) {
         return storeCRS(srsURI, null);
     }
 
-    public static final CoordinateReferenceSystem addCRS(String srsURI, String wktString) {
+    public static final CoordinateReferenceSystem getCRS(String srsURI, String wktString) {
 
         try {
             CoordinateReferenceSystem crs = CRS.parseWKT(wktString);
@@ -80,7 +74,6 @@ public class CRSRegistry implements Serializable {
 
     private static CoordinateReferenceSystem storeCRS(String srsURI, CoordinateReferenceSystem crs) {
 
-        setupDefaultCRS();
         if (CRS_REGISTRY.containsKey(srsURI)) {
             crs = CRS_REGISTRY.get(srsURI);
         } else {
@@ -103,30 +96,29 @@ public class CRSRegistry implements Serializable {
         return crs;
     }
 
-    public static void setupDefaultCRS() {
-        if (CRS_REGISTRY.isEmpty()) {
-            try {
-                CoordinateReferenceSystem crs = CRS.parseWKT(DEFAULT_WKT_CRS84_STRING);
-                UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-                UnitsRegistry.addUnit(unitsOfMeasure);
+    public static final void setupDefaultCRS() {
 
-                //CRS_84
-                CRS_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, crs);
-                UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, unitsOfMeasure);
+        try {
+            CoordinateReferenceSystem crs = CRS.parseWKT(DEFAULT_WKT_CRS84_STRING);
+            UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
+            UnitsRegistry.addUnit(unitsOfMeasure);
 
-                //WGS_84 Legacy for CRS_84
-                CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, crs);
-                UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, unitsOfMeasure);
+            //CRS_84
+            CRS_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, crs);
+            UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, unitsOfMeasure);
 
-                //Geocentric Cartesian
-                UnitsOfMeasure unitsOfMeasureCartesian = new UnitsOfMeasure(DefaultGeocentricCRS.CARTESIAN);
-                UnitsRegistry.addUnit(unitsOfMeasureCartesian);
-                CRS_REGISTRY.put(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
-                UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, unitsOfMeasureCartesian);
+            //WGS_84 Legacy for CRS_84
+            CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, crs);
+            UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, unitsOfMeasure);
 
-            } catch (FactoryException ex) {
-                LOGGER.error("Invalid WKT String: {} - {}", DEFAULT_WKT_CRS84_STRING, ex.getMessage());
-            }
+            //Geocentric Cartesian
+            UnitsOfMeasure unitsOfMeasureCartesian = new UnitsOfMeasure(DefaultGeocentricCRS.CARTESIAN);
+            UnitsRegistry.addUnit(unitsOfMeasureCartesian);
+            CRS_REGISTRY.put(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, DefaultGeocentricCRS.CARTESIAN);
+            UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, unitsOfMeasureCartesian);
+
+        } catch (FactoryException ex) {
+            LOGGER.error("Invalid WKT String: {} - {}", DEFAULT_WKT_CRS84_STRING, ex.getMessage());
         }
     }
 
@@ -153,7 +145,7 @@ public class CRSRegistry implements Serializable {
             @SuppressWarnings("unchecked")
             Set<String> crsRegistryKeys = (Set<String>) objectInputStream.readObject();
             for (String key : crsRegistryKeys) {
-                addCRS(key);
+                getCRS(key);
             }
 
         } catch (IOException | ClassNotFoundException ex) {

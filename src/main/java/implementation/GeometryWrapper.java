@@ -24,7 +24,6 @@ import implementation.registry.UnitsRegistry;
 import implementation.vocabulary.SRS_URI;
 import implementation.vocabulary.Unit_URI;
 import java.io.Serializable;
-import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
@@ -37,16 +36,12 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  *
  */
 public class GeometryWrapper implements Serializable {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final Geometry xyGeometry;
     private final Geometry parsingGeometry;
@@ -57,7 +52,7 @@ public class GeometryWrapper implements Serializable {
     private final DimensionInfo dimensionInfo;
 
     public GeometryWrapper(Geometry geometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
-        this(geometry, GeometryReverse.check(geometry, CRSRegistry.addCRS(srsURI)), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, datatypeEnum, dimensionInfo);
+        this(geometry, GeometryReverse.check(geometry, CRSRegistry.getCRS(srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI)), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, datatypeEnum, dimensionInfo);
     }
 
     private GeometryWrapper(Geometry parsingGeometry, Geometry xyGeometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
@@ -497,12 +492,12 @@ public class GeometryWrapper implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 11 * hash + Objects.hashCode(this.parsingGeometry);
-        hash = 11 * hash + Objects.hashCode(this.srsURI);
-        hash = 11 * hash + Objects.hashCode(this.datatypeEnum);
-        hash = 11 * hash + Objects.hashCode(this.crs);
-        hash = 11 * hash + Objects.hashCode(this.unitsOfMeasure);
-        hash = 11 * hash + Objects.hashCode(this.dimensionInfo);
+        hash = 71 * hash + Objects.hashCode(this.parsingGeometry);
+        hash = 71 * hash + Objects.hashCode(this.srsURI);
+        hash = 71 * hash + Objects.hashCode(this.datatypeEnum);
+        hash = 71 * hash + Objects.hashCode(this.crs);
+        hash = 71 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 71 * hash + Objects.hashCode(this.dimensionInfo);
         return hash;
     }
 
@@ -521,10 +516,10 @@ public class GeometryWrapper implements Serializable {
         if (!Objects.equals(this.srsURI, other.srsURI)) {
             return false;
         }
-        if (!Objects.equals(this.parsingGeometry, other.parsingGeometry)) {
+        if (this.datatypeEnum != other.datatypeEnum) {
             return false;
         }
-        if (this.datatypeEnum != other.datatypeEnum) {
+        if (!Objects.equals(this.parsingGeometry, other.parsingGeometry)) {
             return false;
         }
         if (!Objects.equals(this.crs, other.crs)) {

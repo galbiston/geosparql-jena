@@ -16,6 +16,7 @@ import implementation.function_registration.Relate;
 import implementation.function_registration.SimpleFeatures;
 import implementation.index.IndexConfiguration;
 import implementation.index.IndexOption;
+import implementation.registry.CRSRegistry;
 import implementation.vocabulary.Geo;
 import java.io.File;
 import java.io.InputStream;
@@ -213,6 +214,10 @@ public class GeoSPARQLSupport {
 
         //Only register functions once.
         if (!isFunctionsRegistered) {
+
+            //Setup Default Cordinate Reference Systems
+            CRSRegistry.setupDefaultCRS();
+
             PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
             FunctionRegistry functionRegistry = FunctionRegistry.get();
             NonTopological.loadFilterFunctions(functionRegistry);
