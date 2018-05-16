@@ -8,11 +8,15 @@ package implementation;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import implementation.datatype.GMLDatatype;
+import implementation.datatype.WKTDatatype;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomGeometryFactory;
 import implementation.support.GeoSerialisationEnum;
 import implementation.vocabulary.SRS_URI;
 import implementation.vocabulary.Unit_URI;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.geotools.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -303,10 +307,9 @@ public class GeometryWrapperTest {
     /**
      * Test of empty WKT GeometryWrapper.
      *
-     * @throws java.lang.Exception
      */
     @Test
-    public void testEmptyWKT() throws Exception {
+    public void testEmptyWKT() {
         System.out.println("emptyWKT");
         CustomCoordinateSequence sequence = new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions());
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(sequence);
@@ -323,16 +326,54 @@ public class GeometryWrapperTest {
     /**
      * Test of empty WKT GeometryWrapper.
      *
-     * @throws java.lang.Exception
      */
     @Test
-    public void testEmptyGeometryWrapper() throws Exception {
+    public void testEmptyGeometryWrapper() {
         System.out.println("emptyGeometryWrapper");
 
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
         GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoSerialisationEnum.WKT, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.EMPTY_WKT;
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of asLiteral.
+     *
+     */
+    @Test
+    public void testAsLiteral() {
+        System.out.println("asLiteral");
+
+        String lexicalForm = "POINT(-83.38 33.95)";
+        GeometryWrapper instance = WKTDatatype.INSTANCE.parse(lexicalForm);
+
+        Literal result = instance.asLiteral();
+        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> " + lexicalForm, WKTDatatype.INSTANCE);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of asLiteral conversion.
+     *
+     */
+    @Test
+    public void testAsLiteralConversion() {
+        System.out.println("asLiteralConversion");
+
+        String lexicalForm = "POINT(-83.38 33.95)";
+        GeometryWrapper instance = WKTDatatype.INSTANCE.parse(lexicalForm);
+
+        Literal result = instance.asLiteral(GeoSerialisationEnum.GML);
+        String gmlGeometryLiteral = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
+        Literal expResult = ResourceFactory.createTypedLiteral(gmlGeometryLiteral, GMLDatatype.INSTANCE);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

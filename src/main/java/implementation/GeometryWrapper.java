@@ -401,14 +401,18 @@ public class GeometryWrapper implements Serializable {
     }
 
     public Literal asLiteral() throws DatatypeFormatException {
+        return asLiteral(serialisation);
+    }
+
+    public Literal asLiteral(GeoSerialisationEnum outputSerialisation) throws DatatypeFormatException {
         RDFDatatype datatype;
 
-        switch (serialisation) {
+        switch (outputSerialisation) {
             case WKT:
-                datatype = WKTDatatype.THE_WKT_DATATYPE;
+                datatype = WKTDatatype.INSTANCE;
                 break;
             case GML:
-                datatype = GMLDatatype.THE_GML_DATATYPE;
+                datatype = GMLDatatype.INSTANCE;
                 break;
             default:
                 throw new DatatypeFormatException("Serialisation is not WKT or GML.");
@@ -454,8 +458,8 @@ public class GeometryWrapper implements Serializable {
         return this.xyGeometry.isSimple();
     }
 
-    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.THE_WKT_DATATYPE;
-    private static final GMLDatatype GML_DATATYPE = GMLDatatype.THE_GML_DATATYPE;
+    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.INSTANCE;
+    private static final GMLDatatype GML_DATATYPE = GMLDatatype.INSTANCE;
 
     /**
      * Returns null if invalid node value provided.
@@ -489,7 +493,7 @@ public class GeometryWrapper implements Serializable {
         GeometryWrapper geometry;
 
         switch (datatypeURI) {
-            case WKTDatatype.THE_TYPE_URI:
+            case WKTDatatype.URI:
                 geometry = WKT_DATATYPE.parse(lexicalForm);
                 break;
             case GMLDatatype.THE_TYPE_URI:
@@ -503,7 +507,7 @@ public class GeometryWrapper implements Serializable {
         return geometry;
     }
 
-    public static final GeometryWrapper EMPTY_WKT = WKTDatatype.THE_WKT_DATATYPE.read("POINT EMPTY");
+    public static final GeometryWrapper EMPTY_WKT = WKTDatatype.INSTANCE.read("POINT EMPTY");
 
     /*
     //TODO - empty GML GeometryWrapper creation.
