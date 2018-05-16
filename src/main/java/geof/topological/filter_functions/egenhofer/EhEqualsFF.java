@@ -8,7 +8,6 @@ package geof.topological.filter_functions.egenhofer;
 import geof.topological.GenericFilterFunction;
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeUtil;
-import implementation.intersection_patterns.EgenhoferIntersectionPattern;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -46,8 +45,9 @@ public class EhEqualsFF extends GenericFilterFunction {
         }
     }
 
+    //Simple Features and Egenhofer equals intersection patterns are the same, see GeoSPARQL standard page 11.
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.EQUALS);
+        return sourceGeometry.equals(targetGeometry);
     }
 }

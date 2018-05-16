@@ -7,7 +7,6 @@ package geof.topological.filter_functions.egenhofer;
 
 import geof.topological.GenericFilterFunction;
 import implementation.GeometryWrapper;
-import implementation.intersection_patterns.EgenhoferIntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -18,9 +17,10 @@ import org.opengis.referencing.operation.TransformException;
  */
 public class EhDisjointFF extends GenericFilterFunction {
 
+    //Simple Features and Egenhofer disjoint intersection patterns are the same, see GeoSPARQL standard page 11.
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.DISJOINT);
+        return sourceGeometry.disjoint(targetGeometry);
     }
 
 }

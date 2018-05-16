@@ -46,6 +46,7 @@ public class RccEqualsFF extends GenericFilterFunction {
         }
     }
 
+    //Simple Features equals and RCC8 equal intersection patterns are the same, see GeoSPARQL standard page 11.
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.EQUALS);
