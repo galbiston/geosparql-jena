@@ -136,4 +136,9 @@ public class WKTDatatype extends BaseDatatype implements DatatypeReader {
 
     }
 
+    @Override
+    public String toString() {
+        return "WKTDatatype{" + URI + '}';
+    }
+
 }

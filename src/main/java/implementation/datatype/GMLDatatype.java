@@ -45,12 +45,6 @@ public class GMLDatatype extends BaseDatatype implements DatatypeReader {
     public static final String GML_PREFIX = "gml";
 
     /**
-     * The spatial reference system "urn:ogc:def:crs:OGC::CRS84" is returned for
-     * all generated GML literal.
-     */
-    public static final String GML_SRS_NAME = "urn:ogc:def:crs:OGC::CRS84";
-
-    /**
      * private constructor - single global instance.
      */
     public GMLDatatype() {
@@ -102,6 +96,11 @@ public class GMLDatatype extends BaseDatatype implements DatatypeReader {
             LOGGER.error("{} - Illegal GML literal: {} ", ex.getMessage(), geometryLiteral);
             throw new DatatypeFormatException("Illegal GML literal:" + geometryLiteral);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "GMLDatatype{" + URI + '}';
     }
 
 }
