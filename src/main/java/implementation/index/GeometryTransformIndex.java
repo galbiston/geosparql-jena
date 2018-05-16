@@ -67,7 +67,7 @@ public class GeometryTransformIndex {
             MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
             Geometry transformedGeometry = JTS.transform(sourceGeometry, transform);
 
-            transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, sourceGeometryWrapper.getGeoSerialisation(), sourceGeometryWrapper.getDimensionInfo());
+            transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, sourceGeometryWrapper.getGeoDatatypeEnum(), sourceGeometryWrapper.getDimensionInfo());
             if (IS_INDEX_ACTIVE) {
                 GEOMETRY_TRANSFORM_INDEX.put(key, transformedGeometryWrapper);
             }

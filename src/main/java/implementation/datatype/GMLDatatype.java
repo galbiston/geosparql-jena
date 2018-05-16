@@ -11,10 +11,8 @@ import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex;
 import implementation.parsers.gml.GMLReader;
 import implementation.parsers.gml.GMLWriter;
-import implementation.support.GeoSerialisationEnum;
 import static implementation.vocabulary.Prefixes.GEO_URI;
 import java.io.IOException;
-import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.jdom2.JDOMException;
 import org.slf4j.Logger;
@@ -25,7 +23,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class GMLDatatype extends BaseDatatype implements DatatypeReader {
+public class GMLDatatype extends GeometryDatatype {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GMLDatatype.class);
 
@@ -91,7 +89,7 @@ public class GMLDatatype extends BaseDatatype implements DatatypeReader {
             Geometry geometry = gmlReader.getGeometry();
             DimensionInfo dimensionInfo = gmlReader.getDimensionInfo();
 
-            return new GeometryWrapper(geometry, gmlReader.getSrsName(), GeoSerialisationEnum.GML, dimensionInfo);
+            return new GeometryWrapper(geometry, gmlReader.getSrsName(), GeoDatatypeEnum.GML, dimensionInfo);
         } catch (JDOMException | IOException ex) {
             LOGGER.error("{} - Illegal GML literal: {} ", ex.getMessage(), geometryLiteral);
             throw new DatatypeFormatException("Illegal GML literal:" + geometryLiteral);

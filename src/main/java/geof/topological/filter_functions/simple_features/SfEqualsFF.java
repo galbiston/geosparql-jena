@@ -7,8 +7,7 @@ package geof.topological.filter_functions.simple_features;
 
 import geof.topological.GenericFilterFunction;
 import implementation.GeometryWrapper;
-import implementation.datatype.GMLDatatype;
-import implementation.datatype.WKTDatatype;
+import implementation.datatype.DatatypeUtil;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -27,11 +26,8 @@ public class SfEqualsFF extends GenericFilterFunction {
         if (v1.isLiteral() && v2.isLiteral()) {
             if (v1.asString().equals(v2.asString())) {
                 String datatypeURI = v1.getDatatypeURI();
-                if (datatypeURI.equals(WKTDatatype.URI) || datatypeURI.equals(GMLDatatype.URI)) {
-                    return NodeValue.TRUE;
-                } else {
-                    return NodeValue.FALSE;
-                }
+                boolean isGeometryDatatype = DatatypeUtil.checkGeometryDatatypeURI(datatypeURI);
+                return NodeValue.makeBoolean(isGeometryDatatype);
             } else {
                 return super.exec(v1, v2);
             }
@@ -43,11 +39,7 @@ public class SfEqualsFF extends GenericFilterFunction {
     public Boolean exec(Literal v1, Literal v2) {
         if (v1.getLexicalForm().equals(v2.getLexicalForm())) {
             String datatypeURI = v1.getDatatypeURI();
-            if (datatypeURI.equals(WKTDatatype.URI) || datatypeURI.equals(GMLDatatype.URI)) {
-                return Boolean.TRUE;
-            } else {
-                return Boolean.FALSE;
-            }
+            return DatatypeUtil.checkGeometryDatatypeURI(datatypeURI);
         } else {
             return super.exec(v1, v2);
         }

@@ -11,10 +11,8 @@ import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex;
 import implementation.parsers.wkt.WKTReader;
 import implementation.parsers.wkt.WKTWriter;
-import implementation.support.GeoSerialisationEnum;
 import static implementation.vocabulary.Prefixes.GEO_URI;
 import implementation.vocabulary.SRS_URI;
-import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * WKTDatatype class allows the URI "geo:wktLiteral" to be used as a datatype
  * and it will parse that datatype to a JTS Geometry.
  */
-public class WKTDatatype extends BaseDatatype implements DatatypeReader {
+public class WKTDatatype extends GeometryDatatype {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WKTDatatype.class);
 
@@ -103,7 +101,7 @@ public class WKTDatatype extends BaseDatatype implements DatatypeReader {
         Geometry geometry = wktReader.getGeometry();
         DimensionInfo dimensionInfo = wktReader.getDimensionInfo();
 
-        return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), GeoSerialisationEnum.WKT, dimensionInfo);
+        return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), GeoDatatypeEnum.WKT, dimensionInfo);
     }
 
     private class WKTTextSRS {

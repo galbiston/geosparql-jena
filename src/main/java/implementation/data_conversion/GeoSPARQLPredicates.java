@@ -5,7 +5,7 @@
  */
 package implementation.data_conversion;
 
-import static implementation.data_conversion.ConvertCRS.writeOutputModel;
+import static implementation.data_conversion.ConvertData.writeOutputModel;
 import implementation.vocabulary.Geo;
 import java.io.File;
 import java.io.FileInputStream;
