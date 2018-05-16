@@ -47,9 +47,9 @@ public class BoundaryFFTest {
     public void testExec() {
         System.out.println("exec");
         GeoSPARQLSupport.loadFunctionsNoIndex();
-        NodeValue v = NodeValue.makeNode("POLYGON((-77.089005 38.913574, -77.029953 38.913574, -77.029953 38.886321, -77.089005 38.886321, -77.089005 38.913574))", WKTDatatype.THE_WKT_DATATYPE);
+        NodeValue v = NodeValue.makeNode("POLYGON((-77.089005 38.913574, -77.029953 38.913574, -77.029953 38.886321, -77.089005 38.886321, -77.089005 38.913574))", WKTDatatype.INSTANCE);
         BoundaryFF instance = new BoundaryFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING(-77.089005 38.913574, -77.029953 38.913574, -77.029953 38.886321, -77.089005 38.886321, -77.089005 38.913574)", WKTDatatype.THE_WKT_DATATYPE);
+        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING(-77.089005 38.913574, -77.029953 38.913574, -77.029953 38.886321, -77.089005 38.886321, -77.089005 38.913574)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v);
 
         //System.out.println("Exp: " + expResult);
@@ -64,9 +64,9 @@ public class BoundaryFFTest {
     public void testExec2() {
         System.out.println("exec2");
         GeoSPARQLSupport.loadFunctionsNoIndex();
-        NodeValue v = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((38.913574 -77.089005, 38.913574 -77.029953, 38.886321 -77.029953, 38.886321 -77.089005, 38.913574 -77.089005))", WKTDatatype.THE_WKT_DATATYPE);
+        NodeValue v = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((38.913574 -77.089005, 38.913574 -77.029953, 38.886321 -77.029953, 38.886321 -77.089005, 38.913574 -77.089005))", WKTDatatype.INSTANCE);
         BoundaryFF instance = new BoundaryFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(38.913574 -77.089005, 38.913574 -77.029953, 38.886321 -77.029953, 38.886321 -77.089005, 38.913574 -77.089005)", WKTDatatype.THE_WKT_DATATYPE);
+        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(38.913574 -77.089005, 38.913574 -77.029953, 38.886321 -77.029953, 38.886321 -77.089005, 38.913574 -77.089005)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v);
 
         System.out.println("Exp: " + expResult);

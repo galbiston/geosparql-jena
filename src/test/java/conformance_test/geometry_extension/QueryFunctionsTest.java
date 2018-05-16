@@ -108,7 +108,7 @@ public class QueryFunctionsTest {
         String lexicalForm = "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((49.9 -7.5, 50.0 -7.5, 50.0 -7.4, 49.9 -7.4, 49.9 -7.5))";
         GeoSPARQLSupport.loadFunctionsNoIndex();
         InfModel model = ModelFactory.createRDFSModel(ModelFactory.createDefaultModel());
-        model.add(ResourceFactory.createResource("http://example.org/Geometry#PointA"), Geo.AS_WKT_PROP, lexicalForm, WKTDatatype.THE_WKT_DATATYPE);
+        model.add(ResourceFactory.createResource("http://example.org/Geometry#PointA"), Geo.AS_WKT_PROP, lexicalForm, WKTDatatype.INSTANCE);
         String queryString = "SELECT ?buffer WHERE{ "
                 + "geom:PointA geo:asWKT ?aWkt . "
                 + "BIND( geof:buffer(?aWkt, 20, uom:metre) AS ?buffer) . "

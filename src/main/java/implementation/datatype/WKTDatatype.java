@@ -30,18 +30,18 @@ public class WKTDatatype extends BaseDatatype implements DatatypeReader {
     /**
      * The default WKT type URI.
      */
-    public static final String THE_TYPE_URI = GEO_URI + "wktLiteral";
+    public static final String URI = GEO_URI + "wktLiteral";
 
     /**
      * A static instance of WKTDatatype.
      */
-    public static final WKTDatatype THE_WKT_DATATYPE = new WKTDatatype();
+    public static final WKTDatatype INSTANCE = new WKTDatatype();
 
     /**
      * private constructor - single global instance.
      */
     private WKTDatatype() {
-        super(THE_TYPE_URI);
+        super(URI);
     }
 
     /**

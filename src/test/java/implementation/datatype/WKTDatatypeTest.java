@@ -54,7 +54,7 @@ public class WKTDatatypeTest {
     }
 
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
-    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.THE_WKT_DATATYPE;
+    private static final WKTDatatype WKT_DATATYPE = WKTDatatype.INSTANCE;
 
     /**
      * Test of unparse method, of class WKTDatatype.

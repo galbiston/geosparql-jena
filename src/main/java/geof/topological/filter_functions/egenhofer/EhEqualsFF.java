@@ -28,7 +28,7 @@ public class EhEqualsFF extends GenericFilterFunction {
         if (v1.isLiteral() && v2.isLiteral()) {
             if (v1.asString().equals(v2.asString())) {
                 String datatypeURI = v1.getDatatypeURI();
-                if (datatypeURI.equals(WKTDatatype.THE_TYPE_URI) || datatypeURI.equals(GMLDatatype.THE_TYPE_URI)) {
+                if (datatypeURI.equals(WKTDatatype.URI) || datatypeURI.equals(GMLDatatype.THE_TYPE_URI)) {
                     return NodeValue.TRUE;
                 } else {
                     return NodeValue.FALSE;
@@ -44,7 +44,7 @@ public class EhEqualsFF extends GenericFilterFunction {
     public Boolean exec(Literal v1, Literal v2) {
         if (v1.getLexicalForm().equals(v2.getLexicalForm())) {
             String datatypeURI = v1.getDatatypeURI();
-            if (datatypeURI.equals(WKTDatatype.THE_TYPE_URI) || datatypeURI.equals(GMLDatatype.THE_TYPE_URI)) {
+            if (datatypeURI.equals(WKTDatatype.URI) || datatypeURI.equals(GMLDatatype.THE_TYPE_URI)) {
                 return Boolean.TRUE;
             } else {
                 return Boolean.FALSE;

@@ -37,7 +37,7 @@ public class GMLDatatype extends BaseDatatype implements DatatypeReader {
     /**
      * A static instance of GMLDatatype.
      */
-    public static final GMLDatatype THE_GML_DATATYPE = new GMLDatatype();
+    public static final GMLDatatype INSTANCE = new GMLDatatype();
 
     /**
      * XML element tag "gml" is defined for the convenience of GML generation.

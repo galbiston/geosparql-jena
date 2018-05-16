@@ -225,8 +225,8 @@ public class GeoSPARQLSupport {
             RCC8.loadFilterFunctions(functionRegistry);
             Relate.loadRelateFunction(functionRegistry);
             GeometryProperty.loadPropertyFunctions(propertyRegistry);
-            TypeMapper.getInstance().registerDatatype(WKTDatatype.THE_WKT_DATATYPE);
-            TypeMapper.getInstance().registerDatatype(GMLDatatype.THE_GML_DATATYPE);
+            TypeMapper.getInstance().registerDatatype(WKTDatatype.INSTANCE);
+            TypeMapper.getInstance().registerDatatype(GMLDatatype.INSTANCE);
             isFunctionsRegistered = true;
         }
     }

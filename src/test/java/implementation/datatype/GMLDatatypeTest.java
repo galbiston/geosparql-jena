@@ -37,7 +37,7 @@ public class GMLDatatypeTest {
     public final String URN_SRS_NAMESPACE = "urn:ogc:def:crs:EPSG::27700";
     public final String URL_SRS_NAMESPACE = "http://www.opengis.net/def/crs/EPSG/0/27700";
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
-    private static final GMLDatatype GML_DATATYPE = GMLDatatype.THE_GML_DATATYPE;
+    private static final GMLDatatype GML_DATATYPE = GMLDatatype.INSTANCE;
 
     public GMLDatatypeTest() {
     }
@@ -67,7 +67,7 @@ public class GMLDatatypeTest {
 
         String expResult = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
+        GMLDatatype instance = GMLDatatype.INSTANCE;
 
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point point = GEOMETRY_FACTORY.createPoint(coord);
@@ -92,7 +92,7 @@ public class GMLDatatypeTest {
         System.out.println("parse");
         String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
+        GMLDatatype instance = GMLDatatype.INSTANCE;
         GeometryWrapper result = instance.parse(lexicalForm);
 
         Coordinate coord = new Coordinate(-83.38, 33.95);
@@ -115,7 +115,7 @@ public class GMLDatatypeTest {
         System.out.println("parseNotEqual");
         String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
+        GMLDatatype instance = GMLDatatype.INSTANCE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
@@ -140,7 +140,7 @@ public class GMLDatatypeTest {
         System.out.println("parseNotEqual2");
         String lexicalForm = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
 
-        GMLDatatype instance = GMLDatatype.THE_GML_DATATYPE;
+        GMLDatatype instance = GMLDatatype.INSTANCE;
 
         GeometryWrapper result = instance.parse(lexicalForm);
 
