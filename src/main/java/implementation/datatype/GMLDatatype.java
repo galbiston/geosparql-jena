@@ -32,7 +32,7 @@ public class GMLDatatype extends BaseDatatype implements DatatypeReader {
     /**
      * The default GML type URI.
      */
-    public static final String THE_TYPE_URI = GEO_URI + "gmlLiteral";
+    public static final String URI = GEO_URI + "gmlLiteral";
 
     /**
      * A static instance of GMLDatatype.
@@ -54,7 +54,7 @@ public class GMLDatatype extends BaseDatatype implements DatatypeReader {
      * private constructor - single global instance.
      */
     public GMLDatatype() {
-        super(THE_TYPE_URI);
+        super(URI);
     }
 
     /**
