@@ -27,9 +27,9 @@ public class IndexConfiguration {
     /*
      * Indexing and Registry Sizes
      */
-    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 100000;
-    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 100000;
-    public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE = 100000;
+    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE = 50000;
+    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE = 50000;
+    public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE = 50000;
 
     /*
      * Index Storage Filenames
