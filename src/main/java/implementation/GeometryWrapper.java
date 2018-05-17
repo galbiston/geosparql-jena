@@ -367,21 +367,18 @@ public class GeometryWrapper implements Serializable {
 
     public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
-        targetGeometry.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.contains(transformedGeometry.xyGeometry);
     }
 
     public boolean crosses(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
-        targetGeometry.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.crosses(transformedGeometry.xyGeometry);
     }
 
     public boolean disjoint(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
-        targetGeometry.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.disjoint(transformedGeometry.xyGeometry);
     }
@@ -398,7 +395,6 @@ public class GeometryWrapper implements Serializable {
 
     public boolean intersects(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
-        targetGeometry.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.intersects(transformedGeometry.xyGeometry);
 
@@ -406,21 +402,18 @@ public class GeometryWrapper implements Serializable {
 
     public boolean overlaps(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
-        targetGeometry.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.overlaps(transformedGeometry.xyGeometry);
     }
 
     public boolean touches(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
-        targetGeometry.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.touches(transformedGeometry.xyGeometry);
     }
 
     public boolean within(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
-        targetGeometry.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.within(transformedGeometry.xyGeometry);
     }
