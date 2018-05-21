@@ -43,7 +43,7 @@ public class GeometryLiteralIndex {
     private static Dataset DATASET = null;
 
     static {
-        setMaxSize(IndexConfiguration.GEOMETRY_LITERAL_INDEX_MAX_SIZE);
+        setMaxSize(IndexConfiguration.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT);
     }
 
     public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader) {

@@ -23,7 +23,7 @@ public class QueryRewriteIndex {
     private static Boolean IS_INDEX_ACTIVE = true;
 
     static {
-        setMaxSize(IndexConfiguration.QUERY_REWRITE_INDEX_MAX_SIZE);
+        setMaxSize(IndexConfiguration.QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT);
     }
 
     /**

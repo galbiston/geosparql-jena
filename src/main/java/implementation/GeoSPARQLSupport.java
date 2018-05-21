@@ -39,7 +39,7 @@ public class GeoSPARQLSupport {
      * GeoSPARQL schema
      */
     private static final String GEOSPARQL_SCHEMA = "schema/geosparql_vocab_all.rdf";
-    private static Boolean isFunctionsRegistered = false;
+    private static Boolean IS_FUNCTIONS_REGISTERED = false;
 
     /**
      * Prepare an empty GeoSPARQL model with RDFS reasoning.
@@ -154,13 +154,13 @@ public class GeoSPARQLSupport {
      * contexts.
      * <br>Any existing in-memory indexes will be emptied.
      *
-     * @param geometryLiteralIndexMaxSize - default max size: 100,000
-     * @param geometryTransformIndexMaxSize - default max size: 100,000
-     * @param queryRewriteIndexMaxSize - default max size: 100,000
+     * @param geometryLiteralIndexMaxSize - default max size: 50,000
+     * @param geometryWrapperCRSTransformationsMaxSize - default max size: 4
+     * @param queryRewriteIndexMaxSize - default max size: 50,000
      */
-    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize) {
+    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryWrapperCRSTransformationsMaxSize, Integer queryRewriteIndexMaxSize) {
         loadFunctions(IndexOption.MEMORY, null);
-        IndexConfiguration.setIndexMaxSize(geometryLiteralIndexMaxSize, geometryTransformIndexMaxSize, queryRewriteIndexMaxSize);
+        IndexConfiguration.setIndexMaxSize(geometryLiteralIndexMaxSize, geometryWrapperCRSTransformationsMaxSize, queryRewriteIndexMaxSize);
     }
 
     /**
@@ -213,7 +213,7 @@ public class GeoSPARQLSupport {
         IndexConfiguration.setConfig(indexOption, indexFolder);
 
         //Only register functions once.
-        if (!isFunctionsRegistered) {
+        if (!IS_FUNCTIONS_REGISTERED) {
 
             //Setup Default Cordinate Reference Systems
             CRSRegistry.setupDefaultCRS();
@@ -232,7 +232,7 @@ public class GeoSPARQLSupport {
             GeometryProperty.loadPropertyFunctions(propertyRegistry);
             TypeMapper.getInstance().registerDatatype(WKTDatatype.INSTANCE);
             TypeMapper.getInstance().registerDatatype(GMLDatatype.INSTANCE);
-            isFunctionsRegistered = true;
+            IS_FUNCTIONS_REGISTERED = true;
         }
     }
 
@@ -246,6 +246,8 @@ public class GeoSPARQLSupport {
 
     /**
      * Writes the current index and registry to the provided folder.
+     *
+     * @param indexFolder
      */
     public static final void writeIndexRegistryToFile(File indexFolder) {
         IndexConfiguration.writeIndexRegistryToFile(indexFolder);
