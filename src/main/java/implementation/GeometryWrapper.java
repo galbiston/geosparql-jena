@@ -230,7 +230,7 @@ public class GeometryWrapper implements Serializable {
 
     public GeometryWrapper buffer(double distance, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
 
-        //Check whether the source geometry is linear units for cartesian calculation. If not then transform to default GeoCentric CRS GeometryWrapper.
+        //Check whether the source geometry is linear units for cartesian calculation. If not then transform to relevant UTM CRS GeometryWrapper.
         GeometryWrapper transformedGeometryWrapper;
         Boolean isTransformNeeded = !unitsOfMeasure.isLinearUnits();
         if (isTransformNeeded) {
