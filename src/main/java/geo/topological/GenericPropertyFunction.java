@@ -8,7 +8,6 @@ package geo.topological;
 import geof.topological.GenericFilterFunction;
 import implementation.index.QueryRewriteIndex;
 import implementation.vocabulary.Geo;
-import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.graph.Graph;
@@ -32,8 +31,6 @@ import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.pfunction.PFuncSimple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.RDF;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -42,7 +39,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class GenericPropertyFunction extends PFuncSimple {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final GenericFilterFunction filterFunction;
 
     public GenericPropertyFunction(GenericFilterFunction filterFunction) {
