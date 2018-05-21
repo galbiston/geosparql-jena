@@ -231,13 +231,23 @@ public class GeometryWrapper implements Serializable {
     public GeometryWrapper buffer(double distance, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
 
         //Check whether the source geometry is linear units for cartesian calculation. If not then transform to relevant UTM CRS GeometryWrapper.
+        Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
         GeometryWrapper transformedGeometryWrapper;
-        Boolean isTransformNeeded = !unitsOfMeasure.isLinearUnits();
-        if (isTransformNeeded) {
+        Boolean isTransformNeeded;
+
+        if (unitsOfMeasure.isLinearUnits() == isTargetUnitsLinear) {
+            //Source geometry and target units are both the same.
+            transformedGeometryWrapper = this;
+            isTransformNeeded = false;
+        } else if (isTargetUnitsLinear) {
+            //Source geometry is not linear but targets are so convert to linear CRS.
             String utmURI = findUTMZoneURI();
             transformedGeometryWrapper = transform(utmURI);
+            isTransformNeeded = true;
         } else {
-            transformedGeometryWrapper = this;
+            //Source geometry is linear but targets are not so convert to nonlinear CRS.
+            transformedGeometryWrapper = transform(SRS_URI.DEFAULT_WKT_CRS84);
+            isTransformNeeded = true;
         }
 
         //Check whether the units of the distance need converting.
