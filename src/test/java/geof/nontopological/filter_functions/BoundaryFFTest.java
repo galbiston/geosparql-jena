@@ -69,8 +69,8 @@ public class BoundaryFFTest {
         NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(38.913574 -77.089005, 38.913574 -77.029953, 38.886321 -77.029953, 38.886321 -77.089005, 38.913574 -77.089005)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
