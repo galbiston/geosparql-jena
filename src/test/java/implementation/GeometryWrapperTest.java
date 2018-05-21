@@ -329,13 +329,31 @@ public class GeometryWrapperTest {
      *
      */
     @Test
-    public void testEmptyGeometryWrapper() {
-        System.out.println("emptyGeometryWrapper");
+    public void testEmptyWKTGeometryWrapper() {
+        System.out.println("emptyWKTGeometryWrapper");
 
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
         GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.EMPTY_WKT;
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of empty GML GeometryWrapper.
+     *
+     */
+    @Test
+    public void testEmptyGMLGeometryWrapper() {
+        System.out.println("emptyGMLGeometryWrapper");
+
+        String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
+        GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoDatatypeEnum.GML, DimensionInfo.xyPoint());
+
+        GeometryWrapper expResult = GeometryWrapper.EMPTY_GML;
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

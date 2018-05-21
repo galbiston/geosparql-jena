@@ -13,6 +13,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
 import implementation.datatype.DatatypeUtil;
+import implementation.datatype.GMLDatatype;
 import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.GeometryDatatype;
 import implementation.datatype.WKTDatatype;
@@ -112,17 +113,18 @@ public class GeometryWrapper implements Serializable {
      * @param dimensionInfo
      */
     public GeometryWrapper(String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
-        this(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions()), srsURI);
+        this(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions()), datatypeEnum, srsURI);
     }
 
     /**
      * Point geometry with specified SRS.
      *
      * @param pointCoordinateSequence
+     * @param datatypeEnum
      * @param srsURI
      */
-    public GeometryWrapper(CustomCoordinateSequence pointCoordinateSequence, String srsURI) {
-        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+    public GeometryWrapper(CustomCoordinateSequence pointCoordinateSequence, GeoDatatypeEnum datatypeEnum, String srsURI) {
+        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, datatypeEnum, DimensionInfo.xyPoint());
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
@@ -553,14 +555,10 @@ public class GeometryWrapper implements Serializable {
 
     }
 
-    public static final GeometryWrapper EMPTY_WKT = WKTDatatype.INSTANCE.read("POINT EMPTY");
+    public static final GeometryWrapper EMPTY_WKT = WKTDatatype.INSTANCE.read("");
 
-    /*
-    //TODO - empty GML GeometryWrapper creation.
-    public static final GeometryWrapper emptyGML() {
+    public static final GeometryWrapper EMPTY_GML = GMLDatatype.INSTANCE.read("");
 
-    }
-     */
     //If parsingGeometry are equal then xyGeometry will be equal.
     @Override
     public int hashCode() {
