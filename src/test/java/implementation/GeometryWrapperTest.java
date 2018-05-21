@@ -203,11 +203,11 @@ public class GeometryWrapperTest {
         System.out.println("distance, same CRS, same Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
-        String targetSRSURI = SRS_URI.OSGB_CRS;
+        String targetSRSURI = SRS_URI.OSGB36_CRS;
         GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(12.0, 1.0));
-        String instanceSRSURI = SRS_URI.OSGB_CRS;
+        String instanceSRSURI = SRS_URI.OSGB36_CRS;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
 
         //CRS is in metres.
@@ -231,11 +231,11 @@ public class GeometryWrapperTest {
         System.out.println("distance, same CRS, different Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(385458, 156785)); //LatLon - 51.31, -2.21
-        String targetSRSURI = SRS_URI.OSGB_CRS;
+        String targetSRSURI = SRS_URI.OSGB36_CRS;
         GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(487920, 157518)); //LatLon: 51.31, -0.74
-        String instanceSRSURI = SRS_URI.OSGB_CRS;
+        String instanceSRSURI = SRS_URI.OSGB36_CRS;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
 
         //CRS is in metres.
