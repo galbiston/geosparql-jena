@@ -140,7 +140,7 @@ public class GeoSPARQLSupport {
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup.
      */
-    public static void loadFunctionsMemoryIndex() {
+    public static final void loadFunctionsMemoryIndex() {
         loadFunctions(IndexOption.MEMORY, null);
         IndexConfiguration.defaultMemoryIndexMaxSize();
     }
@@ -159,7 +159,7 @@ public class GeoSPARQLSupport {
      * CRS used in certain functions)
      * @param queryRewriteIndexMaxSize - default max size: 50,000
      */
-    public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryWrapperCRSTransformationsMaxSize, Integer queryRewriteIndexMaxSize) {
+    public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryWrapperCRSTransformationsMaxSize, Integer queryRewriteIndexMaxSize) {
         loadFunctions(IndexOption.MEMORY, null);
         IndexConfiguration.setIndexMaxSize(geometryLiteralIndexMaxSize, geometryWrapperCRSTransformationsMaxSize, queryRewriteIndexMaxSize);
     }
@@ -168,7 +168,7 @@ public class GeoSPARQLSupport {
      * Initialise all GeoSPARQL property and filter functions with TDB indexing.
      * <br>Use this for TDB indexing GeoSPARQL setup.
      */
-    public static void loadFunctionsTDBIndex() {
+    public static final void loadFunctionsTDBIndex() {
         loadFunctions(IndexOption.TDB, null);
     }
 
@@ -177,8 +177,16 @@ public class GeoSPARQLSupport {
      * <br>Use this for no indexing GeoSPARQL setup.
      * <br>Warning: Any previously setup index folders will be deleted.
      */
-    public static void loadFunctionsNoIndex() {
+    public static final void loadFunctionsNoIndex() {
         loadFunctions(IndexOption.NONE, null);
+    }
+
+    /**
+     * Switch off indexing when parsing Geometry Literals etc. No GeoSPARQL
+     * functions loaded.
+     */
+    public static final void noIndex() {
+        IndexConfiguration.setConfig(IndexOption.NONE, null);
     }
 
     /**
@@ -187,7 +195,7 @@ public class GeoSPARQLSupport {
      *
      * @param indexOption
      */
-    public static void loadFunctions(IndexOption indexOption) {
+    public static final void loadFunctions(IndexOption indexOption) {
         File indexFolder;
         if (indexOption.equals(IndexOption.TDB)) {
             indexFolder = new File("geosparql_indexes");
@@ -208,7 +216,7 @@ public class GeoSPARQLSupport {
      * @param indexOption
      * @param indexFolder
      */
-    public static void loadFunctions(IndexOption indexOption, File indexFolder) {
+    public static final void loadFunctions(IndexOption indexOption, File indexFolder) {
 
         //Set the configuration for indexing.
         IndexConfiguration.setConfig(indexOption, indexFolder);
