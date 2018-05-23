@@ -187,6 +187,8 @@ public class GeoSPARQLSupport {
      */
     public static final void noIndex() {
         IndexConfiguration.setConfig(IndexOption.NONE, null);
+        //Setup Default Cordinate Reference Systems
+        CRSRegistry.setupDefaultCRS();
     }
 
     /**

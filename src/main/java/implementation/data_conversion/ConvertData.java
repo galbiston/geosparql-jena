@@ -5,11 +5,11 @@
  */
 package implementation.data_conversion;
 
+import implementation.GeoSPARQLSupport;
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeUtil;
 import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.GeometryDatatype;
-import implementation.registry.CRSRegistry;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -109,8 +109,8 @@ public class ConvertData {
             return null;
         }
 
-        //Setup Default Cordinate Reference Systems
-        CRSRegistry.setupDefaultCRS();
+        //Setup CRS registries but without indexing.
+        GeoSPARQLSupport.noIndex();
 
         //Iterate through all statements: convert geometry literals and just add the rest.
         Model outputModel = ModelFactory.createDefaultModel();
