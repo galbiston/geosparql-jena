@@ -159,7 +159,7 @@ public class GeometryWrapper implements Serializable {
         if (srsURI.equals(targetGeometryWrapper.srsURI)) {
             transformedGeometryWrapper = targetGeometryWrapper;
         } else {
-            transformedGeometryWrapper = targetGeometryWrapper.transform(srsURI);
+            transformedGeometryWrapper = targetGeometryWrapper.transform(srsURI, true);
         }
 
         return transformedGeometryWrapper;
@@ -185,7 +185,7 @@ public class GeometryWrapper implements Serializable {
      * @throws TransformException
      */
     public GeometryWrapper convertCRS(String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
-        return transform(srsURI);
+        return transform(srsURI, true);
     }
 
     public CoordinateReferenceSystem getCRS() {
@@ -242,11 +242,11 @@ public class GeometryWrapper implements Serializable {
         } else if (isTargetUnitsLinear) {
             //Source geometry is not linear but targets are so convert to linear CRS.
             String utmURI = findUTMZoneURI();
-            transformedGeometryWrapper = transform(utmURI);
+            transformedGeometryWrapper = transform(utmURI, true);
             isTransformNeeded = true;
         } else {
             //Source geometry is linear but targets are not so convert to nonlinear CRS.
-            transformedGeometryWrapper = transform(SRS_URI.DEFAULT_WKT_CRS84);
+            transformedGeometryWrapper = transform(SRS_URI.DEFAULT_WKT_CRS84, true);
             isTransformNeeded = true;
         }
 
@@ -261,7 +261,7 @@ public class GeometryWrapper implements Serializable {
 
         //Check whether need to transform back to the original srsURI.
         if (isTransformNeeded) {
-            return bufferedGeometryWrapper.transform(srsURI);
+            return bufferedGeometryWrapper.transform(srsURI, false);
         } else {
             return bufferedGeometryWrapper;
         }
@@ -326,12 +326,12 @@ public class GeometryWrapper implements Serializable {
             preparedTargetGeometry = checkTransformCRS(targetGeometry);
         } else if (isTargetUnitsLinear) {
             //Source geometry is not linear but targets are so convert to linear CRS.
-            preparedSourceGeometry = transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
-            preparedTargetGeometry = targetGeometry.transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
+            preparedSourceGeometry = transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, true);
+            preparedTargetGeometry = targetGeometry.transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, true);
         } else {
             //Source geometry is linear but targets are not so convert to nonlinear CRS.
-            preparedSourceGeometry = transform(SRS_URI.DEFAULT_WKT_CRS84);
-            preparedTargetGeometry = targetGeometry.transform(SRS_URI.DEFAULT_WKT_CRS84);
+            preparedSourceGeometry = transform(SRS_URI.DEFAULT_WKT_CRS84, true);
+            preparedTargetGeometry = targetGeometry.transform(SRS_URI.DEFAULT_WKT_CRS84, true);
         }
 
         double distance = preparedSourceGeometry.xyGeometry.distance(preparedTargetGeometry.xyGeometry);
@@ -527,7 +527,7 @@ public class GeometryWrapper implements Serializable {
         return geometry;
     }
 
-    public GeometryWrapper transform(String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+    public GeometryWrapper transform(String srsURI, boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometryWrapper;
 
@@ -539,7 +539,7 @@ public class GeometryWrapper implements Serializable {
             Geometry transformedGeometry = JTS.transform(parsingGeometry, transform);
 
             transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, datatypeEnum, dimensionInfo);
-            if (IS_CRS_TRANSFORMATION_ACTIVE) {
+            if (IS_CRS_TRANSFORMATION_ACTIVE && storeCRSTransform) {
                 crsTransfomations.put(srsURI, transformedGeometryWrapper);
             }
         }
