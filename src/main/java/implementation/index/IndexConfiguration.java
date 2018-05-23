@@ -29,7 +29,7 @@ public class IndexConfiguration {
      * Default Indexing and Registry Sizes
      */
     public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT = 50000;
-    public static final Integer GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT = 4;
+    public static final Integer GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT = 8;
     public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT = 50000;
 
     /*

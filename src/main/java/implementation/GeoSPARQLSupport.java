@@ -155,7 +155,8 @@ public class GeoSPARQLSupport {
      * <br>Any existing in-memory indexes will be emptied.
      *
      * @param geometryLiteralIndexMaxSize - default max size: 50,000
-     * @param geometryWrapperCRSTransformationsMaxSize - default max size: 4
+     * @param geometryWrapperCRSTransformationsMaxSize - default max size: 8 (3
+     * CRS used in certain functions)
      * @param queryRewriteIndexMaxSize - default max size: 50,000
      */
     public static void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryWrapperCRSTransformationsMaxSize, Integer queryRewriteIndexMaxSize) {
