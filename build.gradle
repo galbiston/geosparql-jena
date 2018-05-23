@@ -55,7 +55,11 @@ dependencies {
     testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
 
     //JUnit Testing
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    ext.junitVersion = "4.12"
+    testCompile "junit:junit:$junitVersion"
+    
+    ext.rdfConverterVersion = "1.0.0"
+    api "org.ntu:RDFConverter:$rdfConverterVersion"
 }
 
 
