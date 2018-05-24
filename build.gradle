@@ -18,6 +18,9 @@ repositories {
         url "http://download.osgeo.org/webdav/geotools/"
     }
 
+
+    //Maven local
+    mavenLocal()
     //Maven central
     mavenCentral()
 }
@@ -57,7 +60,7 @@ dependencies {
     //JUnit Testing
     ext.junitVersion = "4.12"
     testCompile "junit:junit:$junitVersion"
-    
+
     ext.rdfConverterVersion = "1.0.0"
     api "org.ntu:RDFConverter:$rdfConverterVersion"
 }
