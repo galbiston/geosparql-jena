@@ -16,27 +16,27 @@ import org.apache.jena.rdf.model.ResourceFactory;
  *
  *
  */
-public class Geo {
+public interface Geo {
 
-    public static final Property HAS_SERIALIZATION_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasSerialization");
+    public static final Property HAS_SERIALIZATION_PROP = ResourceFactory.createProperty(GEO_URI + "hasSerialization");
     public static final Node HAS_SERIALIZATION_NODE = HAS_SERIALIZATION_PROP.asNode();
 
-    public static final Property AS_WKT_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "asWKT");
-    public static final Property AS_GML_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "asGML");
+    public static final Property AS_WKT_PROP = ResourceFactory.createProperty(GEO_URI + "asWKT");
+    public static final Property AS_GML_PROP = ResourceFactory.createProperty(GEO_URI + "asGML");
 
-    public static final Property HAS_DEFAULT_GEOMETRY_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasDefaultGeometry");
+    public static final Property HAS_DEFAULT_GEOMETRY_PROP = ResourceFactory.createProperty(GEO_URI + "hasDefaultGeometry");
     public static final Node HAS_DEFAULT_GEOMETRY_NODE = HAS_DEFAULT_GEOMETRY_PROP.asNode();
 
-    public static final Property HAS_GEOMETRY_PROP = ResourceFactory.createProperty(Prefixes.GEO_URI + "hasGeometry");
+    public static final Property HAS_GEOMETRY_PROP = ResourceFactory.createProperty(GEO_URI + "hasGeometry");
     public static final Node HAS_GEOMETRY_NODE = HAS_GEOMETRY_PROP.asNode();
 
-    public static final Resource GEOMETRY_RES = ResourceFactory.createResource(Prefixes.GEO_URI + "Geometry");
+    public static final Resource GEOMETRY_RES = ResourceFactory.createResource(GEO_URI + "Geometry");
     public static final Node GEOMETRY_NODE = GEOMETRY_RES.asNode();
 
-    public static final Resource FEATURE_RES = ResourceFactory.createResource(Prefixes.GEO_URI + "Feature");
+    public static final Resource FEATURE_RES = ResourceFactory.createResource(GEO_URI + "Feature");
     public static final Node FEATURE_NODE = FEATURE_RES.asNode();
 
-    public static final Resource SPATIAL_OBJECT_RES = ResourceFactory.createResource(Prefixes.GEO_URI + "SpatialObject");
+    public static final Resource SPATIAL_OBJECT_RES = ResourceFactory.createResource(GEO_URI + "SpatialObject");
     public static final Node SPATIAL_OBJECT_NODE = SPATIAL_OBJECT_RES.asNode();
 
     //Simple Feature Topological function names:
@@ -90,4 +90,8 @@ public class Geo {
     public static final Node IS_EMPTY_NODE = IS_EMPTY_RES.asNode();
     public static final Property IS_SIMPLE_RES = ResourceFactory.createProperty(IS_SIMPLE);
     public static final Node IS_SIMPLE_NODE = IS_SIMPLE_RES.asNode();
+
+    //Geometry Literal Datatypes
+    public static final String WKT = GEO_URI + "wktLiteral";
+    public static final String GML = GEO_URI + "gmlLiteral";
 }

@@ -11,7 +11,7 @@ import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex;
 import implementation.parsers.gml.GMLReader;
 import implementation.parsers.gml.GMLWriter;
-import static implementation.vocabulary.Prefixes.GEO_URI;
+import implementation.vocabulary.Geo;
 import java.io.IOException;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.jdom2.JDOMException;
@@ -30,7 +30,7 @@ public class GMLDatatype extends GeometryDatatype {
     /**
      * The default GML type URI.
      */
-    public static final String URI = GEO_URI + "gmlLiteral";
+    public static final String URI = Geo.GML;
 
     /**
      * A static instance of GMLDatatype.

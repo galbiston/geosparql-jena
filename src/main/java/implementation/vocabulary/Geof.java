@@ -9,10 +9,10 @@ import static implementation.vocabulary.Prefixes.GEOF_URI;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
-public class Geof {
+public interface Geof {
 
     //Relate function symbol:
     public static final String RELATE = GEOF_URI + "relate";

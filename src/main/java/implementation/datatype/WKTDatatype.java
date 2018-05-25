@@ -11,7 +11,7 @@ import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex;
 import implementation.parsers.wkt.WKTReader;
 import implementation.parsers.wkt.WKTWriter;
-import static implementation.vocabulary.Prefixes.GEO_URI;
+import implementation.vocabulary.Geo;
 import implementation.vocabulary.SRS_URI;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class WKTDatatype extends GeometryDatatype {
     /**
      * The default WKT type URI.
      */
-    public static final String URI = GEO_URI + "wktLiteral";
+    public static final String URI = Geo.WKT;
 
     /**
      * A static instance of WKTDatatype.

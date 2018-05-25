@@ -9,7 +9,7 @@ package implementation.vocabulary;
  *
  *
  */
-public class SRS_URI {
+public interface SRS_URI {
 
     public static final String OSGB36_CRS = "http://www.opengis.net/def/crs/EPSG/0/27700";
     public static final String GREEK_GRID_CRS = "http://www.opengis.net/def/crs/EPSG/0/2100";

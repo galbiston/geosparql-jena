@@ -9,7 +9,7 @@ package implementation.vocabulary;
  *
  *
  */
-public class Prefixes {
+public interface Prefixes {
 
     //URI
     public static final String SF_URI = "http://www.opengis.net/ont/sf#";

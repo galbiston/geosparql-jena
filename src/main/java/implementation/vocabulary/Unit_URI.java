@@ -9,7 +9,7 @@ package implementation.vocabulary;
  *
  *
  */
-public class Unit_URI {
+public interface Unit_URI {
 
     //NonLinear - degrees
     public static final String DEGREE_ANGLE_URI = Prefixes.UOM_URI + "degree";
