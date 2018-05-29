@@ -565,9 +565,13 @@ public class GeometryWrapper implements Serializable {
 
     }
 
-    public static final GeometryWrapper EMPTY_WKT = WKTDatatype.INSTANCE.read("");
+    public static final GeometryWrapper getEmptyWKT() {
+        return WKTDatatype.INSTANCE.read("");
+    }
 
-    public static final GeometryWrapper EMPTY_GML = GMLDatatype.INSTANCE.read("");
+    public static final GeometryWrapper getEmptyGML() {
+        return GMLDatatype.INSTANCE.read("");
+    }
 
     //If parsingGeometry are equal then xyGeometry will be equal.
     @Override
