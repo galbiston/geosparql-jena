@@ -59,7 +59,7 @@ dependencies {
 
     //JUnit Testing
     ext.junitVersion = "4.12"
-    testCompile "junit:junit:$junitVersion"
+    testImplementation "junit:junit:$junitVersion"
 
     ext.rdfConverterVersion = "1.0.0"
     api "org.ntu:RDFConverter:$rdfConverterVersion"
