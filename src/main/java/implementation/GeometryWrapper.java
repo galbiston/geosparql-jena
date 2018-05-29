@@ -17,7 +17,7 @@ import implementation.datatype.GMLDatatype;
 import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.GeometryDatatype;
 import implementation.datatype.WKTDatatype;
-import implementation.index.IndexConfiguration;
+import implementation.index.IndexDefaultValues;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.jts.CustomGeometryFactory;
@@ -56,7 +56,7 @@ public class GeometryWrapper implements Serializable {
     private final UnitsOfMeasure unitsOfMeasure;
     private final DimensionInfo dimensionInfo;
     private final LRUMap<String, GeometryWrapper> crsTransfomations;
-    private static Integer CRS_TRANSFORMATIONS_MAX_SIZE = IndexConfiguration.GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT;
+    private static Integer CRS_TRANSFORMATIONS_MAX_SIZE = IndexDefaultValues.GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT;
     private static Boolean IS_CRS_TRANSFORMATION_ACTIVE = true;
 
     public GeometryWrapper(Geometry geometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
@@ -560,7 +560,7 @@ public class GeometryWrapper implements Serializable {
         if (IS_CRS_TRANSFORMATION_ACTIVE) {
             CRS_TRANSFORMATIONS_MAX_SIZE = maxSize;
         } else {
-            CRS_TRANSFORMATIONS_MAX_SIZE = IndexConfiguration.GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT;
+            CRS_TRANSFORMATIONS_MAX_SIZE = IndexDefaultValues.GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT;
         }
 
     }

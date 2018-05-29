@@ -38,13 +38,9 @@ import org.slf4j.LoggerFactory;
 public class GeometryLiteralIndex {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>();
+    private static LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT);
     private static Boolean IS_INDEX_ACTIVE = true;
     private static Dataset DATASET = null;
-
-    static {
-        setMaxSize(IndexConfiguration.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT);
-    }
 
     public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader) {
         GeometryWrapper geometryWrapper;

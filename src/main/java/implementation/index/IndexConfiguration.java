@@ -10,8 +10,6 @@ import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.query.Dataset;
@@ -25,21 +23,6 @@ import org.slf4j.LoggerFactory;
  */
 public class IndexConfiguration {
 
-    /*
-     * Default Indexing and Registry Sizes
-     */
-    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT = 50000;
-    public static final Integer GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT = 8;
-    public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT = 50000;
-
-    /*
-     * Index Storage Filenames
-     */
-    public static final String CRS_REGISTRY_FILENAME = "geosparql-CRS.registry";
-    public static final String MATH_TRANSFORM_REGISTRY_FILENAME = "geosparql-MathTransform.registry";
-    public static final String GEOMETRY_LITERAL_INDEX_FILENAME = "geosparql-GeometryLiteral.index";
-    public static final String QUERY_REWRITE_INDEX_FILENAME = "geosparql-QueryRewrite.index";
-    private static final List<String> INDEX_REGISTRY_FILENAMES = Arrays.asList(CRS_REGISTRY_FILENAME, MATH_TRANSFORM_REGISTRY_FILENAME, GEOMETRY_LITERAL_INDEX_FILENAME, QUERY_REWRITE_INDEX_FILENAME);
     /*
      * Index Configuration Parameters
      */
@@ -111,7 +94,7 @@ public class IndexConfiguration {
 
     private static void clearStoredMemIndexes() {
         if (indexStorageFolder != null) {
-            for (String filename : INDEX_REGISTRY_FILENAMES) {
+            for (String filename : IndexDefaultValues.INDEX_REGISTRY_FILENAMES) {
                 File indexFile = new File(indexStorageFolder, filename);
                 FileUtils.deleteQuietly(indexFile);
             }
@@ -127,32 +110,32 @@ public class IndexConfiguration {
 
     private static void loadMemoryIndexes(File indexFolder) {
         //CRS Registry
-        File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
+        File crsRegistryFile = new File(indexFolder, IndexDefaultValues.CRS_REGISTRY_FILENAME);
         if (crsRegistryFile.exists()) {
             CRSRegistry.readCRSRegistry(crsRegistryFile);
         }
 
         //Math Transform Registry
-        File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
+        File mathTransformRegistryFile = new File(indexFolder, IndexDefaultValues.MATH_TRANSFORM_REGISTRY_FILENAME);
         if (mathTransformRegistryFile.exists()) {
             MathTransformRegistry.read(mathTransformRegistryFile);
         }
         //Geometry Literal Index
-        File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
+        File geometryLiteralIndexFile = new File(indexFolder, IndexDefaultValues.GEOMETRY_LITERAL_INDEX_FILENAME);
         if (geometryLiteralIndexFile.exists()) {
             GeometryLiteralIndex.read(geometryLiteralIndexFile);
         }
         //Query Rewrite Index
-        File queryRewriteIndexFile = new File(indexFolder, QUERY_REWRITE_INDEX_FILENAME);
+        File queryRewriteIndexFile = new File(indexFolder, IndexDefaultValues.QUERY_REWRITE_INDEX_FILENAME);
         if (queryRewriteIndexFile.exists()) {
             QueryRewriteIndex.read(queryRewriteIndexFile);
         }
     }
 
     public static void defaultMemoryIndexMaxSize() {
-        GeometryLiteralIndex.setMaxSize(GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT);
-        GeometryWrapper.setCRSTransformationsMaxSize(GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT);
-        QueryRewriteIndex.setMaxSize(QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT);
+        GeometryLiteralIndex.setMaxSize(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT);
+        GeometryWrapper.setCRSTransformationsMaxSize(IndexDefaultValues.GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT);
+        QueryRewriteIndex.setMaxSize(IndexDefaultValues.QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT);
     }
 
     private static void storeMemoryIndexesAtShutdown(File indexFolder) {
@@ -171,16 +154,16 @@ public class IndexConfiguration {
 
     public static void writeIndexRegistryToFile(File indexFolder) {
         //CRS Registry
-        File crsRegistryFile = new File(indexFolder, CRS_REGISTRY_FILENAME);
+        File crsRegistryFile = new File(indexFolder, IndexDefaultValues.CRS_REGISTRY_FILENAME);
         CRSRegistry.writeCRSRegistry(crsRegistryFile);
         //Math Transform Registry
-        File mathTransformRegistryFile = new File(indexFolder, MATH_TRANSFORM_REGISTRY_FILENAME);
+        File mathTransformRegistryFile = new File(indexFolder, IndexDefaultValues.MATH_TRANSFORM_REGISTRY_FILENAME);
         MathTransformRegistry.write(mathTransformRegistryFile);
         //Geometry Literal Index
-        File geometryLiteralIndexFile = new File(indexFolder, GEOMETRY_LITERAL_INDEX_FILENAME);
+        File geometryLiteralIndexFile = new File(indexFolder, IndexDefaultValues.GEOMETRY_LITERAL_INDEX_FILENAME);
         GeometryLiteralIndex.write(geometryLiteralIndexFile);
         //Query Rewrite Index
-        File queryRewriteIndex = new File(indexFolder, QUERY_REWRITE_INDEX_FILENAME);
+        File queryRewriteIndex = new File(indexFolder, IndexDefaultValues.QUERY_REWRITE_INDEX_FILENAME);
         QueryRewriteIndex.write(queryRewriteIndex);
     }
 

@@ -19,12 +19,8 @@ import org.apache.jena.rdf.model.Property;
  */
 public class QueryRewriteIndex {
 
-    private static MultiKeyMap<MultiKey, Boolean> QUERY_REWRITE_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>());
+    private static MultiKeyMap<MultiKey, Boolean> QUERY_REWRITE_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT));
     private static Boolean IS_INDEX_ACTIVE = true;
-
-    static {
-        setMaxSize(IndexConfiguration.QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT);
-    }
 
     /**
      *
