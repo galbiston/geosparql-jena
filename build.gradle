@@ -1,3 +1,8 @@
+//JMH Plugin
+plugins {
+    id "me.champeau.gradle.jmh" version "0.4.5"
+}
+
 apply plugin: 'java-library'
 
 sourceCompatibility = '1.8'
@@ -63,6 +68,23 @@ dependencies {
 
     ext.rdfConverterVersion = "1.0.0"
     api "org.ntu:RDFConverter:$rdfConverterVersion"
+
+    jmh 'org.openjdk.jmh:jmh-core:1.21'
+    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.21'
+    jmh "org.apache.jena:apache-jena-libs:$jenaVersion"
+    jmh group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion
+}
+
+//JMH configuration block to override defaults. Can be overidden by Benchmark annotations, although @Fork fails.
+jmh {
+    fork = 1
+    iterations = 5
+    warmupIterations = 1
+    duplicateClassesStrategy = 'warn'
+    resultFormat = 'CSV'
+    timeUnit = 'ms'
+    //timeout = '60m' //errors with 'String is null'
+    forceGC = true
 }
 
 

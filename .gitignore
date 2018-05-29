@@ -13,3 +13,4 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 /.nb-gradle/
+v8.6.0.0
