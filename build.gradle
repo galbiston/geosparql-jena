@@ -75,3 +75,13 @@ gradle.projectsEvaluated {
 group = 'org.ntu'
 version = '1.0.0'
 
+apply plugin: 'maven-publish'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+build.finalizedBy(publishToMavenLocal)
