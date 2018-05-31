@@ -5,11 +5,13 @@
  */
 package implementation.vocabulary;
 
+import java.util.HashMap;
+
 /**
  *
  *
  */
-public interface Prefixes {
+public class Prefixes {
 
     //URI
     public static final String SF_URI = "http://www.opengis.net/ont/sf#";
@@ -21,5 +23,22 @@ public interface Prefixes {
     public static final String RDF_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     public static final String RDFS_URI = "http://www.w3.org/2000/01/rdf-schema#";
     public static final String UOM_URI = "http://www.opengis.net/def/uom/OGC/1.0/";
+
+    private static final HashMap<String, String> PREFIXES = new HashMap<>();
+
+    public static final HashMap<String, String> getGeoSPARQL() {
+
+        if (PREFIXES.isEmpty()) {
+            PREFIXES.put("sf", SF_URI);
+            PREFIXES.put("gml", GML_URI);
+            PREFIXES.put("geof", GEOF_URI);
+            PREFIXES.put("geo", GEO_URI);
+            PREFIXES.put("xsd", XSD_URI);
+            PREFIXES.put("rdf", RDF_URI);
+            PREFIXES.put("rdfs", RDFS_URI);
+            PREFIXES.put("uom", UOM_URI);
+        }
+        return PREFIXES;
+    }
 
 }
