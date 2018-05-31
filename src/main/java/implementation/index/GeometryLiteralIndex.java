@@ -47,8 +47,9 @@ public class GeometryLiteralIndex {
 
         switch (IndexConfiguration.getIndexOption()) {
             case TDB:
-                geometryWrapper = retrieveTDBIndex(geometryLiteral, datatypeReader);
-                break;
+                //geometryWrapper = retrieveTDBIndex(geometryLiteral, datatypeReader);
+                //break;
+                LOGGER.warn("TDB Option currently not supported. Defaulting to Memory Index.");
             default:
                 geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader);
         }
@@ -147,6 +148,13 @@ public class GeometryLiteralIndex {
         DATASET.end();
     }
 
+    /**
+     *
+     * @param geometryLiteral
+     * @param datatypeReader
+     * @return
+     * @deprecated
+     */
     private static GeometryWrapper retrieveTDBIndex(String geometryLiteral, DatatypeReader datatypeReader) {
         GeometryWrapper geometryWrapper;
         Literal geometryString = ResourceFactory.createPlainLiteral(geometryLiteral);
