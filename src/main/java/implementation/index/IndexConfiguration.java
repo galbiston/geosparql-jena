@@ -5,17 +5,13 @@
  */
 package implementation.index;
 
-import implementation.GeometryWrapper;
 import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
 import java.io.File;
-import java.lang.invoke.MethodHandles;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.tdb.TDBFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -29,7 +25,6 @@ public class IndexConfiguration {
     private static File indexStorageFolder = null;
     private static Thread shutdownStorageThread = null;
     private static IndexOption indexOptionEnum = IndexOption.MEMORY;
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static final void setConfig(IndexOption indexOption, File indexFolder) {
         indexOptionEnum = indexOption;
@@ -102,9 +97,9 @@ public class IndexConfiguration {
         }
     }
 
-    public static final void setIndexMaxSize(Integer geometryLiteralIndexMaxSize, Integer geometryWrapperTransformMaxSize, Integer queryRewriteIndexMaxSize) {
+    public static final void setIndexMaxSize(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize) {
         GeometryLiteralIndex.setMaxSize(geometryLiteralIndexMaxSize);
-        GeometryWrapper.setCRSTransformationsMaxSize(geometryWrapperTransformMaxSize);
+        GeometryTransformIndex.setMaxSize(geometryTransformIndexMaxSize);
         QueryRewriteIndex.setMaxSize(queryRewriteIndexMaxSize);
     }
 
@@ -125,6 +120,11 @@ public class IndexConfiguration {
         if (geometryLiteralIndexFile.exists()) {
             GeometryLiteralIndex.read(geometryLiteralIndexFile);
         }
+        //Geometry Transform Index
+        File geometryTransformIndexFile = new File(indexFolder, IndexDefaultValues.GEOMETRY_TRANSFORM_INDEX_FILENAME);
+        if (geometryTransformIndexFile.exists()) {
+            GeometryTransformIndex.read(geometryTransformIndexFile);
+        }
         //Query Rewrite Index
         File queryRewriteIndexFile = new File(indexFolder, IndexDefaultValues.QUERY_REWRITE_INDEX_FILENAME);
         if (queryRewriteIndexFile.exists()) {
@@ -134,7 +134,7 @@ public class IndexConfiguration {
 
     public static void defaultMemoryIndexMaxSize() {
         GeometryLiteralIndex.setMaxSize(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT);
-        GeometryWrapper.setCRSTransformationsMaxSize(IndexDefaultValues.GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT);
+        GeometryTransformIndex.setMaxSize(IndexDefaultValues.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE_DEFAULT);
         QueryRewriteIndex.setMaxSize(IndexDefaultValues.QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT);
     }
 
@@ -162,6 +162,9 @@ public class IndexConfiguration {
         //Geometry Literal Index
         File geometryLiteralIndexFile = new File(indexFolder, IndexDefaultValues.GEOMETRY_LITERAL_INDEX_FILENAME);
         GeometryLiteralIndex.write(geometryLiteralIndexFile);
+        //Geometry Transform Index
+        File geometryTransformIndexFile = new File(indexFolder, IndexDefaultValues.GEOMETRY_TRANSFORM_INDEX_FILENAME);
+        GeometryTransformIndex.write(geometryTransformIndexFile);
         //Query Rewrite Index
         File queryRewriteIndex = new File(indexFolder, IndexDefaultValues.QUERY_REWRITE_INDEX_FILENAME);
         QueryRewriteIndex.write(queryRewriteIndex);
@@ -173,9 +176,9 @@ public class IndexConfiguration {
         }
     }
 
-    private static void zeroMemoryIndexMaxSize() {
+    public static void zeroMemoryIndexMaxSize() {
         GeometryLiteralIndex.setMaxSize(0);
-        GeometryWrapper.setCRSTransformationsMaxSize(0);
+        GeometryTransformIndex.setMaxSize(0);
         QueryRewriteIndex.setMaxSize(0);
     }
 

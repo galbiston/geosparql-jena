@@ -18,7 +18,7 @@ public interface IndexDefaultValues {
      * Default Indexing and Registry Sizes
      */
     public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT = 50000;
-    public static final Integer GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT = 8;
+    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE_DEFAULT = 50000;
     public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT = 50000;
     public static final Integer INDEX_MINIMUM_SIZE = 1;
 
@@ -28,7 +28,8 @@ public interface IndexDefaultValues {
     public static final String CRS_REGISTRY_FILENAME = "geosparql-CRS.registry";
     public static final String MATH_TRANSFORM_REGISTRY_FILENAME = "geosparql-MathTransform.registry";
     public static final String GEOMETRY_LITERAL_INDEX_FILENAME = "geosparql-GeometryLiteral.index";
+    public static final String GEOMETRY_TRANSFORM_INDEX_FILENAME = "geosparql-GeometryTransform.index";
     public static final String QUERY_REWRITE_INDEX_FILENAME = "geosparql-QueryRewrite.index";
-    public static final List<String> INDEX_REGISTRY_FILENAMES = Arrays.asList(CRS_REGISTRY_FILENAME, MATH_TRANSFORM_REGISTRY_FILENAME, GEOMETRY_LITERAL_INDEX_FILENAME, QUERY_REWRITE_INDEX_FILENAME);
+    public static final List<String> INDEX_REGISTRY_FILENAMES = Arrays.asList(CRS_REGISTRY_FILENAME, MATH_TRANSFORM_REGISTRY_FILENAME, GEOMETRY_LITERAL_INDEX_FILENAME, GEOMETRY_TRANSFORM_INDEX_FILENAME, QUERY_REWRITE_INDEX_FILENAME);
 
 }
