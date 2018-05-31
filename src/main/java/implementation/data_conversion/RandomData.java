@@ -76,18 +76,23 @@ public class RandomData {
                 LOGGER.info("Created Triple: {} - {} {} {}", i, geometry, Geo.HAS_SERIALIZATION_PROP, geometryLiteral);
             }
         }
+        writeTDB(infModel, tdbFolder);
+        if (isSerialise) {
+            serialiseTDB(tdbFolder, Lang.TTL);
+        }
+    }
 
+    public static final void writeTDB(Model model, File tdbFolder) {
+        LOGGER.info("----------Writing to TDB: {} Started----------", tdbFolder);
         Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
         dataset.begin(ReadWrite.WRITE);
         Model defaultModel = dataset.getDefaultModel();
-        defaultModel.add(infModel);
+        defaultModel.add(model);
         dataset.commit();
         dataset.end();
         dataset.close();
         TDBFactory.release(dataset);
-        if (isSerialise) {
-            serialiseTDB(tdbFolder, Lang.TTL);
-        }
+        LOGGER.info("----------Writing to TDB: {} Completed----------", tdbFolder);
     }
 
     public static final void serialiseTDB(File tdbFolder, Lang rdfLang) {
