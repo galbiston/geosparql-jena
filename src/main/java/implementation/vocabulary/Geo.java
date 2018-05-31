@@ -5,7 +5,7 @@
  */
 package implementation.vocabulary;
 
-import static implementation.vocabulary.Prefixes.GEO_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.GEO_URI;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;

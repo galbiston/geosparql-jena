@@ -5,14 +5,14 @@
  */
 package conformance_test;
 
-import static implementation.vocabulary.Prefixes.GEOF_URI;
-import static implementation.vocabulary.Prefixes.GEOR_URI;
-import static implementation.vocabulary.Prefixes.GEO_URI;
-import static implementation.vocabulary.Prefixes.RDFS_URI;
-import static implementation.vocabulary.Prefixes.RDF_URI;
-import static implementation.vocabulary.Prefixes.SF_URI;
-import static implementation.vocabulary.Prefixes.UOM_URI;
-import static implementation.vocabulary.Prefixes.XSD_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.GEOF_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.GEOR_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.GEO_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.RDFS_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.RDF_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.SF_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.UOM_URI;
+import static implementation.vocabulary.GeoSPARQL_URI.XSD_URI;
 import java.util.HashMap;
 import java.util.Map;
 

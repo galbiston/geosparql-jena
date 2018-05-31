@@ -11,7 +11,7 @@ import java.util.HashMap;
  *
  *
  */
-public class Prefixes {
+public class GeoSPARQL_URI {
 
     //URI
     public static final String SF_URI = "http://www.opengis.net/ont/sf#";
@@ -26,7 +26,7 @@ public class Prefixes {
 
     private static final HashMap<String, String> PREFIXES = new HashMap<>();
 
-    public static final HashMap<String, String> getGeoSPARQL() {
+    public static final HashMap<String, String> getPrefixes() {
 
         if (PREFIXES.isEmpty()) {
             PREFIXES.put("sf", SF_URI);
