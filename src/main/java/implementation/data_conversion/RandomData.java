@@ -32,7 +32,7 @@ public class RandomData {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static void createLineStrings(Integer spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema) {
+    public static void generateLineStrings(Integer spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema) {
 
         GeoSPARQLSupport.noIndex();
         Model model = ModelFactory.createDefaultModel();
