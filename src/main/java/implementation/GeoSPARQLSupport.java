@@ -38,7 +38,7 @@ public class GeoSPARQLSupport {
     /**
      * GeoSPARQL schema
      */
-    private static final String GEOSPARQL_SCHEMA = "schema/geosparql_vocab_all.rdf";
+    private static final String GEOSPARQL_SCHEMA = "schema/geosparql_vocab_all_v1_0_1_updated.rdf";
     private static Boolean IS_FUNCTIONS_REGISTERED = false;
 
     /**

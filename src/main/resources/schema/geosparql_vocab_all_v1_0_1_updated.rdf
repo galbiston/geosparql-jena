@@ -13,7 +13,8 @@
     Copyright (c) 2012 Open Geospatial Consortium.
     To obtain additional rights of use, visit http://www.opengeospatial.org/legal/ .
     
-    Version: 1.0.1
+    Version: 1.0.1 - Updated
+	Replaced "defaultGeometry" with "hasDefaultGeometry" to align with 11-052r4 standard.
   -->
   <owl:Ontology rdf:about="">
     <rdfs:seeAlso rdf:resource="http://www.opengis.net/doc/IS/geosparql/1.0"/>
@@ -151,7 +152,7 @@
     <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
     >2011-06-16</dc:date>
   </owl:Class>
-  <owl:ObjectProperty rdf:ID="defaultGeometry">
+  <owl:ObjectProperty rdf:ID="hasDefaultGeometry">
     <rdfs:subPropertyOf>
       <owl:ObjectProperty rdf:ID="hasGeometry"/>
     </rdfs:subPropertyOf>
@@ -166,13 +167,13 @@
       The default geometry to be used in spatial calculations.
       It is Usually the most detailed geometry.
     </skos:definition>
-    <rdfs:label xml:lang="en">defaultGeometry</rdfs:label>
+    <rdfs:label xml:lang="en">hasDefaultGeometry</rdfs:label>
     <rdfs:comment xml:lang="en">
       The default geometry to be used in spatial calculations.
       It is Usually the most detailed geometry.
     </rdfs:comment>
     <rdfs:domain rdf:resource="#Feature"/>
-    <skos:prefLabel xml:lang="en">defaultGeometry</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">hasDefaultGeometry</skos:prefLabel>
     <rdfs:isDefinedBy rdf:resource="http://www.opengis.net/spec/geosparql/1.0"/>
     <dc:date rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
     >2011-06-16</dc:date>
