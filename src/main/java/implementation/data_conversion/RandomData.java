@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 public class RandomData {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    public static final String FEATURE_URI_BASE = "http:example.org/randomLineString#Feature";
+    public static final String GEOMETRY_URI_BASE = "http:example.org/randomLineString#Geometry";
 
     public static void generateLineStrings(Double spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema) {
 
@@ -53,8 +55,8 @@ public class RandomData {
         for (int i = 0; i < tripleCount; i++) {
 
             //Feature hasDefaultGeometry Geometry .
-            Resource feature = ResourceFactory.createResource("http:example.org/randomLineString#Feature" + i);
-            Resource geometry = ResourceFactory.createResource("http:example.org/randomLineString#Geometry" + i);
+            Resource feature = ResourceFactory.createResource(FEATURE_URI_BASE + i);
+            Resource geometry = ResourceFactory.createResource(GEOMETRY_URI_BASE + i);
             infModel.add(feature, Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
 
             //Geometry hasSerialization GeometryLiteral .
