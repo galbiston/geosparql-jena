@@ -9,7 +9,7 @@ import implementation.GeometryWrapper;
 
 /**
  *
- * @author Gerg
+ * 
  */
 public interface DatatypeReader {
 

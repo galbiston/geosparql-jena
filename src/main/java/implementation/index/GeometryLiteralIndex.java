@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author Gerg
+ * 
  */
 public class GeometryLiteralIndex {
 

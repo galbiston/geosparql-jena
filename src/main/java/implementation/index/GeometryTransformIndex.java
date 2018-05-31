@@ -24,7 +24,7 @@ import org.opengis.referencing.operation.TransformException;
 
 /**
  *
- * @author Gerg
+ * 
  */
 public class GeometryTransformIndex {
 
