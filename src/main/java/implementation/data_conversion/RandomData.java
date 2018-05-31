@@ -34,8 +34,8 @@ import org.slf4j.LoggerFactory;
 public class RandomData {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    public static final String FEATURE_URI_BASE = "http:example.org/randomLineString#Feature";
-    public static final String GEOMETRY_URI_BASE = "http:example.org/randomLineString#Geometry";
+    public static final String FEATURE_URI_BASE = "http://example.org/randomLineString#Feature";
+    public static final String GEOMETRY_URI_BASE = "http://example.org/randomLineString#Geometry";
 
     public static void generateLineStrings(Double spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema, Boolean isSerialise) {
 
