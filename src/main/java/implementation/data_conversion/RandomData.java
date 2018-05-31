@@ -17,7 +17,6 @@ import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.riot.RDFDataMgr;
@@ -41,14 +40,20 @@ public class RandomData {
         InfModel infModel = ModelFactory.createRDFSModel(geosparqlSchema, model);
         Random random = new Random();
 
-        Property property = Geo.HAS_SERIALIZATION_PROP;
         for (int i = 0; i < tripleCount; i++) {
-            Resource subject = ResourceFactory.createResource("http:example.org#Subject" + i);
-            String geometry = "LINESTRING(" + random.nextInt(spaceLimit) + " " + random.nextInt(spaceLimit) + ", " + random.nextInt(spaceLimit) + " " + random.nextInt(spaceLimit) + ")";
-            Literal object = ResourceFactory.createTypedLiteral(geometry, WKTDatatype.INSTANCE);
-            infModel.add(subject, property, object);
+
+            //Feature hasDefaultGeometry Geometry .
+            Resource feature = ResourceFactory.createResource("http:example.org/randomLineString#Feature" + i);
+            Resource geometry = ResourceFactory.createResource("http:example.org/randomLineString#Geometry" + i);
+            infModel.add(feature, Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
+
+            //Geometry hasSerialization GeometryLiteral .
+            String lineString = "LINESTRING(" + random.nextInt(spaceLimit) + " " + random.nextInt(spaceLimit) + ", " + random.nextInt(spaceLimit) + " " + random.nextInt(spaceLimit) + ")";
+            Literal geometryLiteral = ResourceFactory.createTypedLiteral(lineString, WKTDatatype.INSTANCE);
+            infModel.add(geometry, Geo.HAS_SERIALIZATION_PROP, geometryLiteral);
             if (i % 1000 == 0) {
-                LOGGER.info("Created Triple: {} - {} {} {}", i, subject, property, object);
+                LOGGER.info("Created Triple: {} - {} {} {}", i, feature, Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
+                LOGGER.info("Created Triple: {} - {} {} {}", i, geometry, Geo.HAS_SERIALIZATION_PROP, geometryLiteral);
             }
         }
 
