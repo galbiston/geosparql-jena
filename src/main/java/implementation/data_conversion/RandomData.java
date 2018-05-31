@@ -9,6 +9,8 @@ import implementation.GeoSPARQLSupport;
 import implementation.datatype.WKTDatatype;
 import implementation.vocabulary.Geo;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Random;
 import org.apache.jena.query.Dataset;
@@ -19,6 +21,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.tdb.TDBFactory;
 import org.slf4j.Logger;
@@ -34,7 +37,7 @@ public class RandomData {
     public static final String FEATURE_URI_BASE = "http:example.org/randomLineString#Feature";
     public static final String GEOMETRY_URI_BASE = "http:example.org/randomLineString#Geometry";
 
-    public static void generateLineStrings(Double spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema) {
+    public static void generateLineStrings(Double spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema, Boolean isSerialise) {
 
         if (tdbFolder.exists()) {
             if (tdbFolder.isDirectory() && tdbFolder.listFiles().length != 0) {
@@ -78,6 +81,25 @@ public class RandomData {
         dataset.end();
         dataset.close();
         TDBFactory.release(dataset);
+        if (isSerialise) {
+            serialiseTDB(tdbFolder, Lang.TTL);
+        }
+    }
+
+    public static final void serialiseTDB(File tdbFolder, Lang rdfLang) {
+        String tdbFolderParent = tdbFolder.getParent();
+        if (tdbFolderParent == null) {
+            tdbFolderParent = "";
+        }
+        File outputFile = new File(tdbFolderParent, tdbFolder.getName() + rdfLang.getLabel());
+
+        Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
+        Model model = dataset.getDefaultModel();
+        try (FileOutputStream out = new FileOutputStream(outputFile)) {
+            RDFDataMgr.write(out, model, rdfLang);
+        } catch (IOException ex) {
+            LOGGER.error("IOException: {} - {}", ex.getMessage(), outputFile.getAbsolutePath());
+        }
     }
 
 }
