@@ -32,7 +32,7 @@ public class RandomData {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static void generateLineStrings(Integer spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema) {
+    public static void generateLineStrings(Double spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema) {
 
         if (tdbFolder.exists()) {
             if (tdbFolder.isDirectory() && tdbFolder.listFiles().length != 0) {
@@ -58,7 +58,8 @@ public class RandomData {
             infModel.add(feature, Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
 
             //Geometry hasSerialization GeometryLiteral .
-            String lineString = "LINESTRING(" + random.nextInt(spaceLimit) + " " + random.nextInt(spaceLimit) + ", " + random.nextInt(spaceLimit) + " " + random.nextInt(spaceLimit) + ")";
+            Integer spaceLimitInt = spaceLimit.intValue();
+            String lineString = "LINESTRING(" + random.nextInt(spaceLimitInt) + " " + random.nextInt(spaceLimitInt) + ", " + random.nextInt(spaceLimitInt) + " " + random.nextInt(spaceLimitInt) + ")";
             Literal geometryLiteral = ResourceFactory.createTypedLiteral(lineString, WKTDatatype.INSTANCE);
             infModel.add(geometry, Geo.HAS_SERIALIZATION_PROP, geometryLiteral);
             if (i % 1000 == 0) {
