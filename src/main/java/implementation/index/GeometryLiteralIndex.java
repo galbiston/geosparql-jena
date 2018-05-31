@@ -113,7 +113,7 @@ public class GeometryLiteralIndex {
         if (IS_INDEX_ACTIVE) {
             newGeometryIndex = new LRUMap<>(maxSize);
         } else {
-            newGeometryIndex = new LRUMap<>();
+            newGeometryIndex = new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE);
         }
         GEOMETRY_LITERAL_INDEX.clear();
         GEOMETRY_LITERAL_INDEX = newGeometryIndex;

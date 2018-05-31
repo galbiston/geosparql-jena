@@ -73,7 +73,7 @@ public class QueryRewriteIndex {
         if (IS_INDEX_ACTIVE) {
             newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
         } else {
-            newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>());
+            newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
         }
         QUERY_REWRITE_INDEX.clear();
         QUERY_REWRITE_INDEX = newQueryRewriteIndex;
