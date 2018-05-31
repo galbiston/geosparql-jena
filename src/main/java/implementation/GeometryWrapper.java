@@ -17,7 +17,7 @@ import implementation.datatype.GMLDatatype;
 import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.GeometryDatatype;
 import implementation.datatype.WKTDatatype;
-import implementation.index.IndexDefaultValues;
+import implementation.index.GeometryTransformIndex;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import implementation.jts.CustomGeometryFactory;
@@ -28,7 +28,6 @@ import implementation.vocabulary.SRS_URI;
 import implementation.vocabulary.Unit_URI;
 import java.io.Serializable;
 import java.util.Objects;
-import org.apache.commons.collections4.map.LRUMap;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
@@ -51,13 +50,11 @@ public class GeometryWrapper implements Serializable {
     private final Geometry parsingGeometry;
     private PreparedGeometry preparedGeometry;
     private final String srsURI;
+    private String utmURI = null;
     private final GeoDatatypeEnum datatypeEnum;
     private final CoordinateReferenceSystem crs;
     private final UnitsOfMeasure unitsOfMeasure;
     private final DimensionInfo dimensionInfo;
-    private final LRUMap<String, GeometryWrapper> crsTransfomations;
-    private static Integer CRS_TRANSFORMATIONS_MAX_SIZE = IndexDefaultValues.GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT;
-    private static Boolean IS_CRS_TRANSFORMATION_ACTIVE = true;
 
     public GeometryWrapper(Geometry geometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
         this(geometry, GeometryReverse.check(geometry, CRSRegistry.getCRS(srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI)), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, datatypeEnum, dimensionInfo);
@@ -79,7 +76,6 @@ public class GeometryWrapper implements Serializable {
         this.unitsOfMeasure = CRSRegistry.getUnitsOfMeasure(srsURI);
 
         this.dimensionInfo = dimensionInfo;
-        this.crsTransfomations = new LRUMap<>(CRS_TRANSFORMATIONS_MAX_SIZE);
     }
 
     /**
@@ -133,13 +129,12 @@ public class GeometryWrapper implements Serializable {
         this.parsingGeometry = geometryWrapper.parsingGeometry;
         this.preparedGeometry = geometryWrapper.preparedGeometry;
         this.srsURI = geometryWrapper.srsURI;
+        this.utmURI = geometryWrapper.utmURI;
         this.datatypeEnum = geometryWrapper.datatypeEnum;
 
         this.crs = geometryWrapper.crs;
         this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
         this.dimensionInfo = geometryWrapper.dimensionInfo;
-        this.crsTransfomations = new LRUMap<>(CRS_TRANSFORMATIONS_MAX_SIZE);
-        this.crsTransfomations.putAll(geometryWrapper.crsTransfomations);
     }
 
     /**
@@ -159,10 +154,18 @@ public class GeometryWrapper implements Serializable {
         if (srsURI.equals(targetGeometryWrapper.srsURI)) {
             transformedGeometryWrapper = targetGeometryWrapper;
         } else {
-            transformedGeometryWrapper = targetGeometryWrapper.transform(srsURI, true);
+            transformedGeometryWrapper = targetGeometryWrapper.transform(srsURI);
         }
 
         return transformedGeometryWrapper;
+    }
+
+    public GeometryWrapper transform(String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+        return transform(srsURI, true);
+    }
+
+    public GeometryWrapper transform(String srsURI, Boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
+        return GeometryTransformIndex.transform(this, srsURI, storeCRSTransform);
     }
 
     /**
@@ -185,7 +188,7 @@ public class GeometryWrapper implements Serializable {
      * @throws TransformException
      */
     public GeometryWrapper convertCRS(String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
-        return transform(srsURI, true);
+        return transform(srsURI);
     }
 
     public CoordinateReferenceSystem getCRS() {
@@ -241,12 +244,12 @@ public class GeometryWrapper implements Serializable {
             isTransformNeeded = false;
         } else if (isTargetUnitsLinear) {
             //Source geometry is not linear but targets are so convert to linear CRS.
-            String utmURI = findUTMZoneURI();
-            transformedGeometryWrapper = transform(utmURI, true);
+            String sourceUtmURI = getUTMZoneURI();
+            transformedGeometryWrapper = transform(sourceUtmURI);
             isTransformNeeded = true;
         } else {
             //Source geometry is linear but targets are not so convert to nonlinear CRS.
-            transformedGeometryWrapper = transform(SRS_URI.DEFAULT_WKT_CRS84, true);
+            transformedGeometryWrapper = transform(SRS_URI.DEFAULT_WKT_CRS84);
             isTransformNeeded = true;
         }
 
@@ -261,25 +264,30 @@ public class GeometryWrapper implements Serializable {
 
         //Check whether need to transform back to the original srsURI.
         if (isTransformNeeded) {
+            //Don't store the buffered geometry as it is dependent upon the target distance and so likely to vary beween calls.
             return bufferedGeometryWrapper.transform(srsURI, false);
         } else {
             return bufferedGeometryWrapper;
         }
     }
 
-    private String findUTMZoneURI() throws FactoryException, MismatchedDimensionException, TransformException {
+    public String getUTMZoneURI() throws FactoryException, MismatchedDimensionException, TransformException {
 
-        //Find a point in the parsing geometry.
-        Coordinate coord = parsingGeometry.getCoordinate();
-        Point point = GEOMETRY_FACTORY.createPoint(coord);
-        //Convert to WGS84.
-        CoordinateReferenceSystem wgs84CRS = CRSRegistry.getCRS(SRS_URI.WGS84_CRS);
-        MathTransform transform = MathTransformRegistry.getMathTransform(crs, wgs84CRS);
+        if (utmURI == null) {
 
-        Point wgs84Point = (Point) JTS.transform(point, transform);
+            //Find a point in the parsing geometry.
+            Coordinate coord = parsingGeometry.getCoordinate();
+            Point point = GEOMETRY_FACTORY.createPoint(coord);
+            //Convert to WGS84.
+            CoordinateReferenceSystem wgs84CRS = CRSRegistry.getCRS(SRS_URI.WGS84_CRS);
+            MathTransform transform = MathTransformRegistry.getMathTransform(crs, wgs84CRS);
 
-        //Find the UTM zone.
-        return CRSRegistry.findUTMZoneURIFromWGS84(wgs84Point.getX(), wgs84Point.getY());
+            Point wgs84Point = (Point) JTS.transform(point, transform);
+
+            //Find the UTM zone.
+            utmURI = CRSRegistry.findUTMZoneURIFromWGS84(wgs84Point.getX(), wgs84Point.getY());
+        }
+        return utmURI;
     }
 
     public GeometryWrapper convexHull() {
@@ -326,12 +334,12 @@ public class GeometryWrapper implements Serializable {
             preparedTargetGeometry = checkTransformCRS(targetGeometry);
         } else if (isTargetUnitsLinear) {
             //Source geometry is not linear but targets are so convert to linear CRS.
-            preparedSourceGeometry = transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, true);
-            preparedTargetGeometry = targetGeometry.transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN, true);
+            preparedSourceGeometry = transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
+            preparedTargetGeometry = targetGeometry.transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
         } else {
             //Source geometry is linear but targets are not so convert to nonlinear CRS.
-            preparedSourceGeometry = transform(SRS_URI.DEFAULT_WKT_CRS84, true);
-            preparedTargetGeometry = targetGeometry.transform(SRS_URI.DEFAULT_WKT_CRS84, true);
+            preparedSourceGeometry = transform(SRS_URI.DEFAULT_WKT_CRS84);
+            preparedTargetGeometry = targetGeometry.transform(SRS_URI.DEFAULT_WKT_CRS84);
         }
 
         double distance = preparedSourceGeometry.xyGeometry.distance(preparedTargetGeometry.xyGeometry);
@@ -472,10 +480,6 @@ public class GeometryWrapper implements Serializable {
         return dimensionInfo.getDimensions();
     }
 
-    public CoordinateReferenceSystem getCrs() {
-        return crs;
-    }
-
     public UnitsOfMeasure getUnitsOfMeasure() {
         return unitsOfMeasure;
     }
@@ -525,44 +529,6 @@ public class GeometryWrapper implements Serializable {
         GeometryDatatype datatype = DatatypeUtil.getDatatype(datatypeURI);
         GeometryWrapper geometry = datatype.parse(lexicalForm);
         return geometry;
-    }
-
-    public GeometryWrapper transform(String srsURI, boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
-
-        GeometryWrapper transformedGeometryWrapper;
-
-        if (crsTransfomations.containsKey(srsURI)) {
-            transformedGeometryWrapper = crsTransfomations.get(srsURI);
-        } else {
-            CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
-            MathTransform transform = MathTransformRegistry.getMathTransform(crs, targetCRS);
-            Geometry transformedGeometry = JTS.transform(parsingGeometry, transform);
-
-            transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, datatypeEnum, dimensionInfo);
-            if (IS_CRS_TRANSFORMATION_ACTIVE && storeCRSTransform) {
-                crsTransfomations.put(srsURI, transformedGeometryWrapper);
-            }
-        }
-        return transformedGeometryWrapper;
-    }
-
-    /**
-     * Sets the maximum number of CRS Transformations that each GeometryWrapper
-     * will retain.<br>
-     * Only applies to future GeometryWrappers created.
-     *
-     * @param maxSize
-     */
-    public static final void setCRSTransformationsMaxSize(Integer maxSize) {
-
-        IS_CRS_TRANSFORMATION_ACTIVE = maxSize != 0;
-
-        if (IS_CRS_TRANSFORMATION_ACTIVE) {
-            CRS_TRANSFORMATIONS_MAX_SIZE = maxSize;
-        } else {
-            CRS_TRANSFORMATIONS_MAX_SIZE = IndexDefaultValues.GEOMETRY_WRAPPER_CRS_TRANSFORMATIONS_MAX_SIZE_DEFAULT;
-        }
-
     }
 
     public static final GeometryWrapper getEmptyWKT() {
