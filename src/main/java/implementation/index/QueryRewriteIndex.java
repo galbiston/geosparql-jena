@@ -15,7 +15,6 @@ import org.apache.jena.rdf.model.Property;
 
 /**
  *
- * @author Gerg
  */
 public class QueryRewriteIndex {
 
@@ -60,7 +59,7 @@ public class QueryRewriteIndex {
     }
 
     /**
-     * Changes the max size of the Geometry Transform Index.
+     * Changes the max size of the Query Rewrite Index.
      * <br> The index will be empty after this process.
      *
      * @param maxSize
