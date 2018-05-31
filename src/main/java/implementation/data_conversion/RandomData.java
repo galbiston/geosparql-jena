@@ -8,10 +8,13 @@ package implementation.data_conversion;
 import implementation.GeoSPARQLSupport;
 import implementation.datatype.WKTDatatype;
 import implementation.vocabulary.Geo;
+import implementation.vocabulary.GeoSPARQL_URI;
+import implementation.vocabulary.Other_URI;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.HashMap;
 import java.util.Random;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
@@ -34,8 +37,9 @@ import org.slf4j.LoggerFactory;
 public class RandomData {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    public static final String FEATURE_URI_BASE = "http://example.org/randomLineString#Feature";
-    public static final String GEOMETRY_URI_BASE = "http://example.org/randomLineString#Geometry";
+    public static final String URI_BASE = "http://example.org/randomLineString#";
+    public static final String FEATURE_URI_BASE = URI_BASE + "Feature";
+    public static final String GEOMETRY_URI_BASE = URI_BASE + "Geometry";
 
     public static void generateLineStrings(Double spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema, Boolean isSerialise) {
 
@@ -87,19 +91,36 @@ public class RandomData {
     }
 
     public static final void serialiseTDB(File tdbFolder, Lang rdfLang) {
+
         String tdbFolderParent = tdbFolder.getParent();
         if (tdbFolderParent == null) {
-            tdbFolderParent = "";
+            tdbFolderParent = ".";
         }
-        File outputFile = new File(tdbFolderParent, tdbFolder.getName() + rdfLang.getLabel());
-
+        String fileExtension;
+        if (rdfLang.getFileExtensions().isEmpty()) {
+            fileExtension = "rdf";
+        } else {
+            fileExtension = rdfLang.getFileExtensions().get(0);
+        }
+        File outputFile = new File(tdbFolderParent, tdbFolder.getName() + "." + fileExtension);
+        LOGGER.info("----------Serialising: {} to {} Started----------", tdbFolder, outputFile);
         Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
-        Model model = dataset.getDefaultModel();
+        Model defaultModel = dataset.getDefaultModel();
+
+        //Set namespace prefixes on the model.
+        HashMap<String, String> prefixes = new HashMap<>();
+        prefixes.putAll(GeoSPARQL_URI.getPrefixes());
+        prefixes.putAll(Other_URI.getPrefixes());
+        prefixes.put("ex", URI_BASE);
+        defaultModel.setNsPrefixes(prefixes);
+
+        //Output the model.
         try (FileOutputStream out = new FileOutputStream(outputFile)) {
-            RDFDataMgr.write(out, model, rdfLang);
+            RDFDataMgr.write(out, defaultModel, rdfLang);
         } catch (IOException ex) {
             LOGGER.error("IOException: {} - {}", ex.getMessage(), outputFile.getAbsolutePath());
         }
+        LOGGER.info("----------Serialising: {} to {} Completed----------", tdbFolder, outputFile);
     }
 
 }
