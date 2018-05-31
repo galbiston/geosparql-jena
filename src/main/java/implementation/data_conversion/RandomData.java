@@ -34,6 +34,16 @@ public class RandomData {
 
     public static void generateLineStrings(Integer spaceLimit, Integer tripleCount, File tdbFolder, File geosparpqlSchema) {
 
+        if (tdbFolder.exists()) {
+            if (tdbFolder.isDirectory() && tdbFolder.listFiles().length != 0) {
+                LOGGER.error("Target TDB folder is not empty: {}", tdbFolder);
+                throw new AssertionError();
+            } else if (!tdbFolder.isDirectory()) {
+                LOGGER.error("Target TDB folder is a file: {}", tdbFolder);
+                throw new AssertionError();
+            }
+        }
+
         GeoSPARQLSupport.noIndex();
         Model model = ModelFactory.createDefaultModel();
         Model geosparqlSchema = RDFDataMgr.loadModel(geosparpqlSchema.getAbsolutePath());
