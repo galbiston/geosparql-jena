@@ -57,6 +57,10 @@ public class RandomData {
         Model model = ModelFactory.createDefaultModel();
         Model geosparqlSchema = RDFDataMgr.loadModel(geosparpqlSchema.getAbsolutePath());
         InfModel infModel = ModelFactory.createRDFSModel(geosparqlSchema, model);
+
+        //Set namespace prefixes on the model.
+        setNSPrefixes(infModel);
+
         Random random = new Random();
 
         for (int i = 0; i < tripleCount; i++) {
@@ -80,6 +84,14 @@ public class RandomData {
         if (isSerialise) {
             serialiseTDB(tdbFolder, Lang.TTL);
         }
+    }
+
+    private static void setNSPrefixes(Model model) {
+        HashMap<String, String> prefixes = new HashMap<>();
+        prefixes.putAll(GeoSPARQL_URI.getPrefixes());
+        prefixes.putAll(Other_URI.getPrefixes());
+        prefixes.put("ex", URI_BASE);
+        model.setNsPrefixes(prefixes);
     }
 
     public static final void writeTDB(Model model, File tdbFolder) {
@@ -110,14 +122,8 @@ public class RandomData {
         File outputFile = new File(tdbFolderParent, tdbFolder.getName() + "." + fileExtension);
         LOGGER.info("----------Serialising: {} to {} Started----------", tdbFolder, outputFile);
         Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
+        dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
-
-        //Set namespace prefixes on the model.
-        HashMap<String, String> prefixes = new HashMap<>();
-        prefixes.putAll(GeoSPARQL_URI.getPrefixes());
-        prefixes.putAll(Other_URI.getPrefixes());
-        prefixes.put("ex", URI_BASE);
-        defaultModel.setNsPrefixes(prefixes);
 
         //Output the model.
         try (FileOutputStream out = new FileOutputStream(outputFile)) {
@@ -125,6 +131,9 @@ public class RandomData {
         } catch (IOException ex) {
             LOGGER.error("IOException: {} - {}", ex.getMessage(), outputFile.getAbsolutePath());
         }
+        dataset.end();
+        dataset.close();
+        TDBFactory.release(dataset);
         LOGGER.info("----------Serialising: {} to {} Completed----------", tdbFolder, outputFile);
     }
 
