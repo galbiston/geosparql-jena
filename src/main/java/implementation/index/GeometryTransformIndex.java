@@ -24,7 +24,7 @@ import org.opengis.referencing.operation.TransformException;
 
 /**
  *
- * 
+ *
  */
 public class GeometryTransformIndex {
 
@@ -42,7 +42,7 @@ public class GeometryTransformIndex {
      * @throws TransformException
      */
     @SuppressWarnings("unchecked")
-    public static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
+    public synchronized static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometryWrapper;
         MultiKey key = new MultiKey<>(sourceGeometryWrapper, srsURI);
@@ -67,16 +67,16 @@ public class GeometryTransformIndex {
         return transformedGeometryWrapper;
     }
 
-    public static final void write(File indexFile) {
+    public synchronized static final void write(File indexFile) {
         IndexUtils.write(indexFile, GEOMETRY_TRANSFORM_INDEX);
     }
 
-    public static final void read(File indexFile) {
+    public synchronized static final void read(File indexFile) {
         GEOMETRY_TRANSFORM_INDEX.clear();
         IndexUtils.read(indexFile, GEOMETRY_TRANSFORM_INDEX);
     }
 
-    public static final void clear() {
+    public synchronized static final void clear() {
         GEOMETRY_TRANSFORM_INDEX.clear();
     }
 
@@ -86,7 +86,7 @@ public class GeometryTransformIndex {
      *
      * @param maxSize
      */
-    public static final void setMaxSize(Integer maxSize) {
+    public synchronized static final void setMaxSize(Integer maxSize) {
 
         IS_INDEX_ACTIVE = maxSize != 0;
 

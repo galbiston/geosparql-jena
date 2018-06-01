@@ -5,12 +5,8 @@
  */
 package implementation.registry;
 
+import implementation.index.IndexUtils;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.lang.invoke.MethodHandles;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.HashedMap;
@@ -34,7 +30,7 @@ public class MathTransformRegistry {
     private static final MultiKeyMap<MultiKey, MathTransform> MATH_TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new HashedMap<>());
 
     @SuppressWarnings("unchecked")
-    public static final MathTransform getMathTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {
+    public synchronized static final MathTransform getMathTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {
 
         MathTransform transform;
         MultiKey key = new MultiKey<>(sourceCRS, targetCRS);
@@ -47,29 +43,16 @@ public class MathTransformRegistry {
         return transform;
     }
 
-    public static final void write(File mathTransformRegistryFile) {
-        LOGGER.info("Writing Math Transform Registry - {}: Started", mathTransformRegistryFile);
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(mathTransformRegistryFile))) {
-            objectOutputStream.writeObject(MATH_TRANSFORM_REGISTRY);
-        } catch (IOException ex) {
-            LOGGER.error("Store Geometry Literal Index exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Writing Math Transform Registry - {}: Completed", mathTransformRegistryFile);
+    public synchronized static final void write(File indexFile) {
+        IndexUtils.write(indexFile, MATH_TRANSFORM_REGISTRY);
     }
 
-    public static final void read(File mathTransformRegistryFile) {
-        LOGGER.info("Reading Math Transform Registry - {}: Started", mathTransformRegistryFile);
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(mathTransformRegistryFile))) {
-            @SuppressWarnings("unchecked")
-            MultiKeyMap<MultiKey, MathTransform> mathTransformRegistry = (MultiKeyMap<MultiKey, MathTransform>) objectInputStream.readObject();
-            MATH_TRANSFORM_REGISTRY.putAll(mathTransformRegistry);
-        } catch (IOException | ClassNotFoundException ex) {
-            LOGGER.error("Read Math Transform Registry exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Reading Math Transform Registry - {}: Completed", mathTransformRegistryFile);
+    public synchronized static final void read(File indexFile) {
+        MATH_TRANSFORM_REGISTRY.clear();
+        IndexUtils.read(indexFile, MATH_TRANSFORM_REGISTRY);
     }
 
-    public static final void clear() {
+    public synchronized static final void clear() {
         MATH_TRANSFORM_REGISTRY.clear();
     }
 

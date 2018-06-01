@@ -40,6 +40,7 @@ public class IndexUtils {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(indexFile))) {
             @SuppressWarnings("unchecked")
             Map readIndex = (Map) objectInputStream.readObject();
+            //TODO ensure index is large enough to take readIndex. Use interface to access setMaxSize method. Require making all indexes objects rather than static variables.
             index.putAll(readIndex);
         } catch (IOException | ClassNotFoundException ex) {
             LOGGER.error("Read Index exception: {}", ex.getMessage());

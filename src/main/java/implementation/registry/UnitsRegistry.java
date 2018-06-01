@@ -8,7 +8,9 @@ package implementation.registry;
 import implementation.UnitsOfMeasure;
 import implementation.vocabulary.Unit_URI;
 import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
 import javax.measure.unit.Unit;
@@ -23,8 +25,8 @@ public class UnitsRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final HashMap<String, Unit> UNITS_REGISTRY = new HashMap<>();
-    private static final HashMap<Unit, String> UNITS_URI_REGISTRY = new HashMap<>();
+    private static final Map<String, Unit> UNITS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<Unit, String> UNITS_URI_REGISTRY = Collections.synchronizedMap(new HashMap<>());
 
     static {
 

@@ -10,8 +10,6 @@ import implementation.datatype.DatatypeReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,6 +17,8 @@ import java.lang.invoke.MethodHandles;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
+import java.util.Collections;
+import java.util.Map;
 import org.apache.commons.collections4.map.LRUMap;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.TxnType;
@@ -33,12 +33,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
+ *
  */
 public class GeometryLiteralIndex {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static LRUMap<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT);
+    private static Map<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
     private static Boolean IS_INDEX_ACTIVE = true;
     private static Dataset DATASET = null;
 
@@ -70,27 +70,13 @@ public class GeometryLiteralIndex {
         return geometryWrapper;
     }
 
-    public static final void write(File geometryLiteralIndexFile) {
-
-        LOGGER.info("Writing Geometry Literal Index - {}: Started", geometryLiteralIndexFile);
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(geometryLiteralIndexFile))) {
-            objectOutputStream.writeObject(GEOMETRY_LITERAL_INDEX);
-        } catch (IOException ex) {
-            LOGGER.error("Store Geometry Literal Index exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Writing Geometry Literal Index - {}: Completed", geometryLiteralIndexFile);
+    public synchronized static final void write(File indexFile) {
+        IndexUtils.write(indexFile, GEOMETRY_LITERAL_INDEX);
     }
 
-    public static final void read(File geometryLiteralIndexFile) {
-        LOGGER.info("Reading Geometry Literal Index - {}: Started", geometryLiteralIndexFile);
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(geometryLiteralIndexFile))) {
-            @SuppressWarnings("unchecked")
-            LRUMap<String, GeometryWrapper> geometryLiteralIndex = (LRUMap<String, GeometryWrapper>) objectInputStream.readObject();
-            GEOMETRY_LITERAL_INDEX.putAll(geometryLiteralIndex);
-        } catch (IOException | ClassNotFoundException ex) {
-            LOGGER.error("Read Geometry Literal Index exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Reading Geometry Literal Index - {}: Completed", geometryLiteralIndexFile);
+    public synchronized static final void read(File indexFile) {
+        GEOMETRY_LITERAL_INDEX.clear();
+        IndexUtils.read(indexFile, GEOMETRY_LITERAL_INDEX);
     }
 
     /**
@@ -110,11 +96,11 @@ public class GeometryLiteralIndex {
 
         IS_INDEX_ACTIVE = maxSize != 0;
 
-        LRUMap<String, GeometryWrapper> newGeometryIndex;
+        Map<String, GeometryWrapper> newGeometryIndex;
         if (IS_INDEX_ACTIVE) {
-            newGeometryIndex = new LRUMap<>(maxSize);
+            newGeometryIndex = Collections.synchronizedMap(new LRUMap<>(maxSize));
         } else {
-            newGeometryIndex = new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE);
+            newGeometryIndex = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
         }
         GEOMETRY_LITERAL_INDEX.clear();
         GEOMETRY_LITERAL_INDEX = newGeometryIndex;
@@ -126,6 +112,11 @@ public class GeometryLiteralIndex {
     private static final Property GEOMETRY_PROPERTY = ResourceFactory.createProperty(INDEX_URI + "hasLiteral");
     private static final Property WRAPPER_PROPERTY = ResourceFactory.createProperty(INDEX_URI + "hasWrapper");
 
+    /**
+     *
+     * @param dataset
+     * @deprecated
+     */
     public static final void setupTDBIndex(Dataset dataset) {
 
         DATASET = dataset;
@@ -139,6 +130,9 @@ public class GeometryLiteralIndex {
         DATASET.end();
     }
 
+    /**
+     * @deprecated
+     */
     public static final void clearTDBIndex() {
 
         DATASET.begin(TxnType.WRITE);
@@ -181,6 +175,12 @@ public class GeometryLiteralIndex {
 
     private static final Encoder ENCODER = Base64.getEncoder();
 
+    /**
+     *
+     * @param geometryWrapper
+     * @return
+     * @deprecated
+     */
     private static Literal encodeBase64(GeometryWrapper geometryWrapper) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -198,6 +198,12 @@ public class GeometryLiteralIndex {
 
     private static final Decoder DECODER = Base64.getDecoder();
 
+    /**
+     *
+     * @param wrapperString
+     * @return
+     * @deprecated
+     */
     private static GeometryWrapper decodeBase64(String wrapperString) {
 
         byte[] bytes = DECODER.decode(wrapperString);

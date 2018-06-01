@@ -30,7 +30,7 @@ public class QueryRewriteIndex {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static final Boolean test(Literal subjectGeometryLiteral, Property predicate, Literal objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
+    public synchronized static final Boolean test(Literal subjectGeometryLiteral, Property predicate, Literal objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
 
         Boolean result;
         MultiKey key = new MultiKey<>(subjectGeometryLiteral, predicate, objectGeometryLiteral);
@@ -45,16 +45,16 @@ public class QueryRewriteIndex {
         return result;
     }
 
-    public static final void write(File indexFile) {
+    public synchronized static final void write(File indexFile) {
         IndexUtils.write(indexFile, QUERY_REWRITE_INDEX);
     }
 
-    public static final void read(File indexFile) {
+    public synchronized static final void read(File indexFile) {
         QUERY_REWRITE_INDEX.clear();
         IndexUtils.read(indexFile, QUERY_REWRITE_INDEX);
     }
 
-    public static final void clear() {
+    public synchronized static final void clear() {
         QUERY_REWRITE_INDEX.clear();
     }
 
@@ -64,7 +64,7 @@ public class QueryRewriteIndex {
      *
      * @param maxSize
      */
-    public static final void setMaxSize(Integer maxSize) {
+    public synchronized static final void setMaxSize(Integer maxSize) {
 
         IS_INDEX_ACTIVE = maxSize != 0;
 

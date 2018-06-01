@@ -6,18 +6,19 @@
 package implementation.registry;
 
 import implementation.UnitsOfMeasure;
+import implementation.index.IndexUtils;
 import implementation.vocabulary.SRS_URI;
 import static implementation.vocabulary.SRS_URI.EPSG_BASE_CRS_URI;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeocentricCRS;
@@ -34,8 +35,8 @@ public class CRSRegistry implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final HashMap<String, CoordinateReferenceSystem> CRS_REGISTRY = new HashMap<>();
-    private static final HashMap<String, UnitsOfMeasure> UNITS_OF_MEASURE_REGISTRY = new HashMap<>();
+    private static final Map<String, CoordinateReferenceSystem> CRS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, UnitsOfMeasure> UNITS_OF_MEASURE_REGISTRY = Collections.synchronizedMap(new HashMap<>());
 
     public static final String DEFAULT_WKT_CRS84_STRING = "GEOGCS[\"CRS 84\", \n"
             + "  DATUM[\"WGS_1984\", \n"
@@ -129,19 +130,13 @@ public class CRSRegistry implements Serializable {
     }
 
     ///////////////////////////////////////Registry Writing and Reading to File////////////////////////////
-    public static final void writeCRSRegistry(File crsRegistryFile) {
-        LOGGER.info("Writing CRS Registry - {}: Started", crsRegistryFile);
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(crsRegistryFile))) {
-            objectOutputStream.writeObject(CRS_REGISTRY.keySet());
-        } catch (IOException ex) {
-            LOGGER.error("Store CRS Registry exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Writing CRS Registry - {}: Completed", crsRegistryFile);
+    public synchronized static final void writeCRSRegistry(File registryFile) {
+        IndexUtils.write(registryFile, CRS_REGISTRY);
     }
 
-    public static final void readCRSRegistry(File crsRegistryFile) {
-        LOGGER.info("Reading CRS Registry - {}: Started", crsRegistryFile);
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(crsRegistryFile))) {
+    public static final void readCRSRegistry(File registryFile) {
+        LOGGER.info("Reading CRS Registry - {}: Started", registryFile);
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(registryFile))) {
             @SuppressWarnings("unchecked")
             Set<String> crsRegistryKeys = (Set<String>) objectInputStream.readObject();
             for (String key : crsRegistryKeys) {
@@ -151,7 +146,7 @@ public class CRSRegistry implements Serializable {
         } catch (IOException | ClassNotFoundException ex) {
             LOGGER.error("Read CRS Registry exception: {}", ex.getMessage());
         }
-        LOGGER.info("Reading CRS Registry - {}: Completed", crsRegistryFile);
+        LOGGER.info("Reading CRS Registry - {}: Completed", registryFile);
     }
 
     private static final String NORTH_UTM_EPSG = EPSG_BASE_CRS_URI + "326";
