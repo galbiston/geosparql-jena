@@ -82,7 +82,7 @@ public class CRSRegistry implements Serializable {
             try {
                 crs = CRS.decode(srsURI);
             } catch (FactoryException ex) {
-                LOGGER.error("SRS URI Unrecongised: {} - {}", srsURI, ex.getMessage());
+                LOGGER.error("SRS URI Unrecognised: {} - {}", srsURI, ex.getMessage());
                 return null;
             }
 
