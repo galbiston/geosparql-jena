@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex;
+import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import implementation.parsers.wkt.WKTReader;
 import implementation.parsers.wkt.WKTWriter;
 import implementation.vocabulary.Geo;
@@ -84,8 +85,13 @@ public class WKTDatatype extends GeometryDatatype {
      */
     @Override
     public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
+        return parse(lexicalForm, GeometryIndex.PRIMARY);
+    }
+
+    @Override
+    public GeometryWrapper parse(String lexicalForm, GeometryIndex targetIndex) throws DatatypeFormatException {
         try {
-            return GeometryLiteralIndex.retrieve(lexicalForm, this);
+            return GeometryLiteralIndex.retrieve(lexicalForm, this, targetIndex);
         } catch (ParseException | IllegalArgumentException ex) {
             LOGGER.error("{} - Illegal WKT literal: {} ", ex.getMessage(), lexicalForm);
             throw new DatatypeFormatException(ex.getMessage() + " - Illegal WKT literal: " + lexicalForm);

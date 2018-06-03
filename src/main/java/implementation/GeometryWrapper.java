@@ -17,6 +17,7 @@ import implementation.datatype.GMLDatatype;
 import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.GeometryDatatype;
 import implementation.datatype.WKTDatatype;
+import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import implementation.index.GeometryTransformIndex;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
@@ -500,9 +501,10 @@ public class GeometryWrapper implements Serializable {
      * Returns null if invalid node value provided.
      *
      * @param nodeValue
+     * @param targetIndex
      * @return
      */
-    public static final GeometryWrapper extract(NodeValue nodeValue) {
+    public static final GeometryWrapper extract(NodeValue nodeValue, GeometryIndex targetIndex) {
 
         if (!nodeValue.isLiteral()) {
             return null;
@@ -511,23 +513,32 @@ public class GeometryWrapper implements Serializable {
         Node node = nodeValue.asNode();
         String datatypeURI = node.getLiteralDatatypeURI();
         String lexicalForm = node.getLiteralLexicalForm();
-        return extract(lexicalForm, datatypeURI);
+        return extract(lexicalForm, datatypeURI, targetIndex);
+    }
+
+    public static final GeometryWrapper extract(NodeValue nodeValue) {
+        return extract(nodeValue, GeometryIndex.PRIMARY);
     }
 
     /**
      * Returns null if invalid literal provided.
      *
      * @param geometryLiteral
+     * @param targetIndex
      * @return
      */
-    public static final GeometryWrapper extract(Literal geometryLiteral) {
-        return extract(geometryLiteral.getLexicalForm(), geometryLiteral.getDatatypeURI());
+    public static final GeometryWrapper extract(Literal geometryLiteral, GeometryIndex targetIndex) {
+        return extract(geometryLiteral.getLexicalForm(), geometryLiteral.getDatatypeURI(), targetIndex);
     }
 
-    private static GeometryWrapper extract(String lexicalForm, String datatypeURI) {
+    public static final GeometryWrapper extract(Literal geometryLiteral) {
+        return extract(geometryLiteral, GeometryIndex.PRIMARY);
+    }
+
+    private static GeometryWrapper extract(String lexicalForm, String datatypeURI, GeometryIndex targetIndex) {
 
         GeometryDatatype datatype = DatatypeUtil.getDatatype(datatypeURI);
-        GeometryWrapper geometry = datatype.parse(lexicalForm);
+        GeometryWrapper geometry = datatype.parse(lexicalForm, targetIndex);
         return geometry;
     }
 

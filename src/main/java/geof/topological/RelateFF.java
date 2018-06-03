@@ -7,6 +7,7 @@ package geof.topological;
 
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import implementation.GeometryWrapper;
+import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -29,12 +30,12 @@ public class RelateFF extends FunctionBase3 {
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
 
         try {
-            GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return NodeValue.FALSE;
             }
 
-            GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
             if (geometry2 == null) {
                 return NodeValue.FALSE;
             }

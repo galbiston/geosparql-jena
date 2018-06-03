@@ -10,8 +10,6 @@ import implementation.registry.MathTransformRegistry;
 import java.io.File;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.tdb.TDBFactory;
 
 /**
  *
@@ -33,9 +31,6 @@ public class IndexConfiguration {
             case MEMORY:
                 IndexConfiguration.setupMemoryIndex(indexFolder);
                 break;
-            case TDB:
-                IndexConfiguration.setupTDBIndex(indexFolder);
-                break;
             default:
                 IndexConfiguration.setupNoIndex();
         }
@@ -45,13 +40,6 @@ public class IndexConfiguration {
         removeMemoryIndexStorageThread();
         zeroMemoryIndexMaxSize();
         clearStoredMemIndexes();
-    }
-
-    public static void setupTDBIndex(File indexFolder) {
-        indexStorageFolder = indexFolder;
-        removeMemoryIndexStorageThread();
-        zeroMemoryIndexMaxSize();
-        createTDBIndexes();
     }
 
     public static void setupMemoryIndex(File indexFolder) {
@@ -70,21 +58,6 @@ public class IndexConfiguration {
         QueryRewriteIndex.clear();
         CRSRegistry.clearAll();
         MathTransformRegistry.clear();
-        clearTDBIndexes();
-    }
-
-    private static void clearTDBIndexes() {
-        if (indexStorageFolder != null) {
-            Boolean inUse = TDBFactory.inUseLocation(indexStorageFolder.getAbsolutePath());
-            if (inUse) {
-                GeometryLiteralIndex.clearTDBIndex();
-            }
-        }
-    }
-
-    private static void createTDBIndexes() {
-        Dataset dataset = TDBFactory.createDataset(indexStorageFolder.getAbsolutePath());
-        GeometryLiteralIndex.setupTDBIndex(dataset);
     }
 
     private static void clearStoredMemIndexes() {

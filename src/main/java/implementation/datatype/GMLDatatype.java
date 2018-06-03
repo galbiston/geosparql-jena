@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex;
+import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import implementation.parsers.gml.GMLReader;
 import implementation.parsers.gml.GMLWriter;
 import implementation.vocabulary.Geo;
@@ -77,9 +78,19 @@ public class GMLDatatype extends GeometryDatatype {
      */
     @Override
     public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
+        return parse(lexicalForm, GeometryIndex.PRIMARY);
+    }
+
+    @Override
+    public GeometryWrapper parse(String lexicalForm, GeometryIndex targetIndex) throws DatatypeFormatException {
         //Check the Geometry Literal Index to see if been previously read and cached.
         //DatatypeReader interface used to instruct index on how to obtain the GeometryWrapper.
-        return GeometryLiteralIndex.retrieve(lexicalForm, this);
+        try {
+            return GeometryLiteralIndex.retrieve(lexicalForm, this, targetIndex);
+        } catch (ParseException | IllegalArgumentException ex) {
+            LOGGER.error("{} - Illegal WKT literal: {} ", ex.getMessage(), lexicalForm);
+            throw new DatatypeFormatException(ex.getMessage() + " - Illegal WKT literal: " + lexicalForm);
+        }
     }
 
     @Override

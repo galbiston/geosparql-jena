@@ -7,29 +7,10 @@ package implementation.index;
 
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.invoke.MethodHandles;
-import java.util.Base64;
-import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
 import java.util.Collections;
 import java.util.Map;
 import org.apache.commons.collections4.map.LRUMap;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.query.TxnType;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,53 +18,56 @@ import org.slf4j.LoggerFactory;
  */
 public class GeometryLiteralIndex {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static Map<String, GeometryWrapper> GEOMETRY_LITERAL_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
+    private static Map<String, GeometryWrapper> PRIMARY_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
+    private static Map<String, GeometryWrapper> SECONDARY_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
     private static Boolean IS_INDEX_ACTIVE = true;
-    private static Dataset DATASET = null;
 
-    public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader) {
+    public enum GeometryIndex {
+        PRIMARY, SECONDARY
+    }
+
+    public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader, GeometryIndex targetIndex) {
         GeometryWrapper geometryWrapper;
 
-        switch (IndexConfiguration.getIndexOption()) {
-            case TDB:
-                //geometryWrapper = retrieveTDBIndex(geometryLiteral, datatypeReader);
-                //break;
-                LOGGER.warn("TDB Option currently not supported. Defaulting to Memory Index.");
+        switch (targetIndex) {
+            case SECONDARY:
+                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader, SECONDARY_INDEX);
+                break;
             default:
-                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader);
+                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader, PRIMARY_INDEX);
         }
 
         return geometryWrapper;
     }
 
-    private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, DatatypeReader datatypeReader) {
+    private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, DatatypeReader datatypeReader, Map<String, GeometryWrapper> index) {
         GeometryWrapper geometryWrapper;
-        if (GEOMETRY_LITERAL_INDEX.containsKey(geometryLiteral)) {
-            geometryWrapper = GEOMETRY_LITERAL_INDEX.get(geometryLiteral);
+        if (index.containsKey(geometryLiteral)) {
+            geometryWrapper = index.get(geometryLiteral);
         } else {
             geometryWrapper = datatypeReader.read(geometryLiteral);
             if (IS_INDEX_ACTIVE) {
-                GEOMETRY_LITERAL_INDEX.put(geometryLiteral, geometryWrapper);
+                index.put(geometryLiteral, geometryWrapper);
             }
         }
         return geometryWrapper;
     }
 
     public synchronized static final void write(File indexFile) {
-        IndexUtils.write(indexFile, GEOMETRY_LITERAL_INDEX);
+        IndexUtils.write(indexFile, PRIMARY_INDEX);
     }
 
     public synchronized static final void read(File indexFile) {
-        GEOMETRY_LITERAL_INDEX.clear();
-        IndexUtils.read(indexFile, GEOMETRY_LITERAL_INDEX);
+        PRIMARY_INDEX.clear();
+        IndexUtils.read(indexFile, PRIMARY_INDEX);
     }
 
     /**
      * Empty the Geometry Literal Index.
      */
     public static final void clear() {
-        GEOMETRY_LITERAL_INDEX.clear();
+        PRIMARY_INDEX.clear();
+        SECONDARY_INDEX.clear();
     }
 
     /**
@@ -96,125 +80,20 @@ public class GeometryLiteralIndex {
 
         IS_INDEX_ACTIVE = maxSize != 0;
 
-        Map<String, GeometryWrapper> newGeometryIndex;
+        Map<String, GeometryWrapper> newPrimaryIndex;
+        Map<String, GeometryWrapper> newSecondaryIndex;
         if (IS_INDEX_ACTIVE) {
-            newGeometryIndex = Collections.synchronizedMap(new LRUMap<>(maxSize));
+            newPrimaryIndex = Collections.synchronizedMap(new LRUMap<>(maxSize));
+            newSecondaryIndex = Collections.synchronizedMap(new LRUMap<>(maxSize));
         } else {
-            newGeometryIndex = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
+            newPrimaryIndex = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
+            newSecondaryIndex = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
         }
-        GEOMETRY_LITERAL_INDEX.clear();
-        GEOMETRY_LITERAL_INDEX = newGeometryIndex;
-    }
+        PRIMARY_INDEX.clear();
+        PRIMARY_INDEX = newPrimaryIndex;
 
-    private static final String INDEX_URI = "http://example.org/geometryIndex#";
-    private static final String INDEX_GRAPH_URI = "http://example.org/geometryIndex#Graph";
-
-    private static final Property GEOMETRY_PROPERTY = ResourceFactory.createProperty(INDEX_URI + "hasLiteral");
-    private static final Property WRAPPER_PROPERTY = ResourceFactory.createProperty(INDEX_URI + "hasWrapper");
-
-    /**
-     *
-     * @param dataset
-     * @deprecated
-     */
-    public static final void setupTDBIndex(Dataset dataset) {
-
-        DATASET = dataset;
-        DATASET.begin(TxnType.READ_PROMOTE);
-        if (!DATASET.containsNamedModel(INDEX_GRAPH_URI)) {
-            Model model = ModelFactory.createDefaultModel();
-            DATASET.promote();
-            DATASET.addNamedModel(INDEX_GRAPH_URI, model);
-            DATASET.commit();
-        }
-        DATASET.end();
-    }
-
-    /**
-     * @deprecated
-     */
-    public static final void clearTDBIndex() {
-
-        DATASET.begin(TxnType.WRITE);
-        Model model = DATASET.getNamedModel(INDEX_GRAPH_URI);
-        model.removeAll();
-        DATASET.commit();
-        DATASET.end();
-    }
-
-    /**
-     *
-     * @param geometryLiteral
-     * @param datatypeReader
-     * @return
-     * @deprecated
-     */
-    private static GeometryWrapper retrieveTDBIndex(String geometryLiteral, DatatypeReader datatypeReader) {
-        GeometryWrapper geometryWrapper;
-        Literal geometryString = ResourceFactory.createPlainLiteral(geometryLiteral);
-        DATASET.begin(TxnType.READ_PROMOTE);
-        Model indexModel = DATASET.getNamedModel(INDEX_GRAPH_URI);
-
-        if (indexModel.contains(null, GEOMETRY_PROPERTY, geometryString)) {
-            Resource resource = indexModel.listResourcesWithProperty(GEOMETRY_PROPERTY, geometryString).nextResource();
-            Literal wrapper = indexModel.getProperty(resource, WRAPPER_PROPERTY).getLiteral();
-            geometryWrapper = decodeBase64(wrapper.getLexicalForm());
-        } else {
-            geometryWrapper = datatypeReader.read(geometryLiteral);
-            Resource resource = ResourceFactory.createResource(IndexConfiguration.createURI(INDEX_URI, "GeometryLiteral"));
-            Literal wrapperString = encodeBase64(geometryWrapper);
-            DATASET.promote();
-            indexModel.add(resource, GEOMETRY_PROPERTY, geometryString);
-            indexModel.add(resource, WRAPPER_PROPERTY, wrapperString);
-            DATASET.commit();
-        }
-        DATASET.end();
-
-        return geometryWrapper;
-    }
-
-    private static final Encoder ENCODER = Base64.getEncoder();
-
-    /**
-     *
-     * @param geometryWrapper
-     * @return
-     * @deprecated
-     */
-    private static Literal encodeBase64(GeometryWrapper geometryWrapper) {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(baos)) {
-            objectOutputStream.writeObject(geometryWrapper);
-            String encodedStr = ENCODER.encodeToString(baos.toByteArray());
-            Literal wrapperString = ResourceFactory.createPlainLiteral(encodedStr);
-            baos.close();
-            return wrapperString;
-        } catch (IOException ex) {
-            LOGGER.error("IOException: {}", ex.getMessage());
-            return null;
-        }
-    }
-
-    private static final Decoder DECODER = Base64.getDecoder();
-
-    /**
-     *
-     * @param wrapperString
-     * @return
-     * @deprecated
-     */
-    private static GeometryWrapper decodeBase64(String wrapperString) {
-
-        byte[] bytes = DECODER.decode(wrapperString);
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
-            @SuppressWarnings("unchecked")
-            GeometryWrapper geometryWrapper = (GeometryWrapper) objectInputStream.readObject();
-            return geometryWrapper;
-        } catch (IOException | ClassNotFoundException ex) {
-            LOGGER.error("Read Geometry Literal Index exception: {}", ex.getMessage());
-            return null;
-        }
+        SECONDARY_INDEX.clear();
+        SECONDARY_INDEX = newSecondaryIndex;
     }
 
 }

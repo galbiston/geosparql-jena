@@ -164,14 +164,6 @@ public class GeoSPARQLSupport {
     }
 
     /**
-     * Initialise all GeoSPARQL property and filter functions with TDB indexing.
-     * <br>Use this for TDB indexing GeoSPARQL setup.
-     */
-    public static final void loadFunctionsTDBIndex() {
-        loadFunctions(IndexOption.TDB, null);
-    }
-
-    /**
      * Initialise all GeoSPARQL property and filter functions with no indexing.
      * <br>Use this for no indexing GeoSPARQL setup.
      * <br>Warning: Any previously setup index folders will be deleted.
@@ -191,19 +183,12 @@ public class GeoSPARQLSupport {
     }
 
     /**
-     * Provide an IndexOption enum for configuring index. If TDB option is
-     * selected then folder created in current working directory.
+     * Provide an IndexOption enum for configuring index.
      *
      * @param indexOption
      */
     public static final void loadFunctions(IndexOption indexOption) {
-        File indexFolder;
-        if (indexOption.equals(IndexOption.TDB)) {
-            indexFolder = new File("geosparql_indexes");
-        } else {
-            indexFolder = null;
-        }
-        loadFunctions(indexOption, indexFolder);
+        loadFunctions(indexOption, null);
     }
 
     /**

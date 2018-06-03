@@ -10,5 +10,5 @@ package implementation.index;
  *
  */
 public enum IndexOption {
-    NONE, MEMORY, TDB
+    NONE, MEMORY
 }

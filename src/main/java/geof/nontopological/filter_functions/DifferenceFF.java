@@ -6,6 +6,7 @@
 package geof.nontopological.filter_functions;
 
 import implementation.GeometryWrapper;
+import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import java.lang.invoke.MethodHandles;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -28,12 +29,12 @@ public class DifferenceFF extends FunctionBase2 {
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
         try {
-            GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return NodeValue.nvEmptyString;
             }
 
-            GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
             if (geometry2 == null) {
                 return NodeValue.nvEmptyString;
             }

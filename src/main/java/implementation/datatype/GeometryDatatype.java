@@ -6,6 +6,7 @@
 package implementation.datatype;
 
 import implementation.GeometryWrapper;
+import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 
@@ -21,5 +22,7 @@ public abstract class GeometryDatatype extends BaseDatatype implements DatatypeR
 
     @Override
     public abstract GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException;
+
+    public abstract GeometryWrapper parse(String lexicalForm, GeometryIndex targetIndex) throws DatatypeFormatException;
 
 }

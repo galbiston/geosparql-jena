@@ -6,6 +6,7 @@
 package geof.topological;
 
 import implementation.GeometryWrapper;
+import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -27,12 +28,12 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
         try {
-            GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return NodeValue.FALSE;
             }
 
-            GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
             if (geometry2 == null) {
                 return NodeValue.FALSE;
             }
@@ -48,12 +49,12 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
     public Boolean exec(Literal v1, Literal v2) {
         try {
-            GeometryWrapper geometry1 = GeometryWrapper.extract(v1);
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return Boolean.FALSE;
             }
 
-            GeometryWrapper geometry2 = GeometryWrapper.extract(v2);
+            GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
             if (geometry2 == null) {
                 return Boolean.FALSE;
             }
