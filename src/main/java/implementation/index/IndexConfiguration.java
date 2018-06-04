@@ -5,6 +5,8 @@
  */
 package implementation.index;
 
+import static implementation.index.IndexDefaultValues.NO_INDEX;
+import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
 import java.util.UUID;
@@ -37,9 +39,35 @@ public class IndexConfiguration {
     }
 
     public static void setupNoIndex() {
-        GeometryLiteralIndex.setActive(Boolean.FALSE);
-        GeometryTransformIndex.setActive(Boolean.FALSE);
-        QueryRewriteIndex.setActive(Boolean.FALSE);
+        GeometryLiteralIndex.setMaxSize(NO_INDEX);
+        GeometryTransformIndex.setMaxSize(NO_INDEX);
+        QueryRewriteIndex.setMaxSize(NO_INDEX);
+    }
+
+    public static void setupMemoryIndex() {
+        GeometryLiteralIndex.setMaxSize(UNLIMITED_INDEX);
+        GeometryTransformIndex.setMaxSize(UNLIMITED_INDEX);
+        QueryRewriteIndex.setMaxSize(UNLIMITED_INDEX);
+    }
+
+    /**
+     * Set the maximum size of the indexes. Zero for no index and -1 for
+     * unlimited size.
+     *
+     * @param geometryLiteralIndex
+     * @param geometryTransformIndex
+     * @param queryRewriteIndex
+     */
+    public static final void setIndexMaxSize(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
+        GeometryLiteralIndex.setMaxSize(geometryLiteralIndex);
+        GeometryTransformIndex.setMaxSize(geometryTransformIndex);
+        QueryRewriteIndex.setMaxSize(queryRewriteIndex);
+    }
+
+    public static final void setIndexTimeoutSeconds(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
+        GeometryLiteralIndex.setTimeoutSeconds(geometryLiteralIndex);
+        GeometryTransformIndex.setTimeoutSeconds(geometryTransformIndex);
+        QueryRewriteIndex.setTimeoutSeconds(queryRewriteIndex);
     }
 
     public static final void clearAllIndexesAndRegistries() {
@@ -47,18 +75,6 @@ public class IndexConfiguration {
         QueryRewriteIndex.clear();
         CRSRegistry.clearAll();
         MathTransformRegistry.clear();
-    }
-
-    public static final void setIndex(Boolean geometryLiteralIndex, Boolean geometryTransformIndex, Boolean queryRewriteIndex) {
-        GeometryLiteralIndex.setActive(geometryLiteralIndex);
-        GeometryTransformIndex.setActive(geometryTransformIndex);
-        QueryRewriteIndex.setActive(queryRewriteIndex);
-    }
-
-    public static void setupMemoryIndex() {
-        GeometryLiteralIndex.setActive(Boolean.TRUE);
-        GeometryTransformIndex.setActive(Boolean.TRUE);
-        QueryRewriteIndex.setActive(Boolean.TRUE);
     }
 
     public static final IndexOption getIndexOption() {

@@ -7,8 +7,13 @@ package implementation.index;
 
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeReader;
+import static implementation.index.IndexDefaultValues.NO_INDEX;
+import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
+import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import org.apache.mina.util.ExpiringMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -16,11 +21,12 @@ import org.apache.mina.util.ExpiringMap;
  */
 public class GeometryLiteralIndex {
 
-    private static ExpiringMap<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringMap<>();
-    private static ExpiringMap<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringMap<>();
-    //private static Map<String, GeometryWrapper> PRIMARY_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
-    //private static Map<String, GeometryWrapper> SECONDARY_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Boolean IS_INDEX_ACTIVE = true;
+    private static Integer INDEX_MAX_SIZE = IndexDefaultValues.UNLIMITED_INDEX;
+    private static Integer INDEX_TIMEOUT_SECONDS = IndexDefaultValues.INDEX_TIMEOUT_SECONDS;
+    private static ExpiringMap<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
+    private static ExpiringMap<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
 
     public enum GeometryIndex {
         PRIMARY, SECONDARY
@@ -41,15 +47,23 @@ public class GeometryLiteralIndex {
     }
 
     private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, DatatypeReader datatypeReader, Map<String, GeometryWrapper> index) {
+
         GeometryWrapper geometryWrapper;
-        if (index.containsKey(geometryLiteral)) {
-            geometryWrapper = index.get(geometryLiteral);
+
+        if (IS_INDEX_ACTIVE && index.size() < INDEX_MAX_SIZE) {
+            if (index.containsKey(geometryLiteral)) {
+                geometryWrapper = index.get(geometryLiteral);
+            } else {
+                geometryWrapper = datatypeReader.read(geometryLiteral);
+                index.put(geometryLiteral, geometryWrapper);
+            }
         } else {
             geometryWrapper = datatypeReader.read(geometryLiteral);
             if (IS_INDEX_ACTIVE) {
-                index.put(geometryLiteral, geometryWrapper);
+                LOGGER.warn("Geometry Literal Index Full: {}", INDEX_MAX_SIZE);
             }
         }
+
         return geometryWrapper;
     }
 
@@ -62,21 +76,36 @@ public class GeometryLiteralIndex {
     }
 
     /**
-     * Sets whether the Geometry Literal Index is active.
+     * Sets whether the Geometry Literal Indexes is active.
      * <br> The index will be empty after this process.
      *
-     * @param isActive
+     * @param maxSize : use -1 for unlimited size
      */
-    public static final void setActive(Boolean isActive) {
+    public static final void setMaxSize(Integer maxSize) {
 
-        IS_INDEX_ACTIVE = isActive;
-        PRIMARY_INDEX.clear();
+        IS_INDEX_ACTIVE = !NO_INDEX.equals(maxSize);
+        INDEX_MAX_SIZE = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
 
-        PRIMARY_INDEX = new ExpiringMap<>();
+        if (IS_INDEX_ACTIVE) {
+            PRIMARY_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
+            SECONDARY_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
+        } else {
+            PRIMARY_INDEX = null;
+            SECONDARY_INDEX = null;
+        }
+    }
 
-        SECONDARY_INDEX.clear();
-        //SECONDARY_INDEX = newSecondaryIndex;
-        SECONDARY_INDEX = new ExpiringMap<>();
+    /**
+     * Sets the expiry time in seconds of the Geometry Literal Indexes.
+     *
+     * @param timeoutSeconds
+     */
+    public static final void setTimeoutSeconds(Integer timeoutSeconds) {
+        INDEX_TIMEOUT_SECONDS = timeoutSeconds;
+        if (IS_INDEX_ACTIVE) {
+            PRIMARY_INDEX.setTimeToLive(timeoutSeconds);
+            SECONDARY_INDEX.setTimeToLive(timeoutSeconds);
+        }
     }
 
 }

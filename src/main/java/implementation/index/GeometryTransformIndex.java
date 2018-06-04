@@ -9,8 +9,11 @@ import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.datatype.GeoDatatypeEnum;
+import static implementation.index.IndexDefaultValues.NO_INDEX;
+import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
+import java.lang.invoke.MethodHandles;
 import org.apache.mina.util.ExpiringMap;
 import org.geotools.geometry.jts.JTS;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -18,6 +21,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -25,10 +30,11 @@ import org.opengis.referencing.operation.TransformException;
  */
 public class GeometryTransformIndex {
 
-    private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>();
-    //private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new ExpiringMap<>());
-    //private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE_DEFAULT));
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Boolean IS_INDEX_ACTIVE = true;
+    private static Integer INDEX_MAX_SIZE = IndexDefaultValues.UNLIMITED_INDEX;
+    private static Integer INDEX_TIMEOUT_SECONDS = IndexDefaultValues.INDEX_TIMEOUT_SECONDS;
+    private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
 
     /**
      *
@@ -43,27 +49,35 @@ public class GeometryTransformIndex {
     public static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometryWrapper;
-//        MultiKey key = new MultiKey<>(sourceGeometryWrapper, srsURI);
         String key = sourceGeometryWrapper.getLexicalForm() + "@" + srsURI;
 
-        if (GEOMETRY_TRANSFORM_INDEX.containsKey(key)) {
-            transformedGeometryWrapper = GEOMETRY_TRANSFORM_INDEX.get(key);
-        } else {
-            CoordinateReferenceSystem sourceCRS = sourceGeometryWrapper.getCRS();
-            CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
-            MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
-            Geometry parsingGeometry = sourceGeometryWrapper.getParsingGeometry();
-            Geometry transformedGeometry = JTS.transform(parsingGeometry, transform);
-
-            GeoDatatypeEnum datatypeEnum = sourceGeometryWrapper.getGeoDatatypeEnum();
-            DimensionInfo dimensionInfo = sourceGeometryWrapper.getDimensionInfo();
-            transformedGeometryWrapper = new GeometryWrapper(transformedGeometry, srsURI, datatypeEnum, dimensionInfo);
-            if (IS_INDEX_ACTIVE && storeCRSTransform) {
+        if (IS_INDEX_ACTIVE && storeCRSTransform && GEOMETRY_TRANSFORM_INDEX.size() < INDEX_MAX_SIZE) {
+            if (GEOMETRY_TRANSFORM_INDEX.containsKey(key)) {
+                transformedGeometryWrapper = GEOMETRY_TRANSFORM_INDEX.get(key);
+            } else {
+                transformedGeometryWrapper = transform(sourceGeometryWrapper, srsURI);
                 GEOMETRY_TRANSFORM_INDEX.put(key, transformedGeometryWrapper);
+            }
+        } else {
+            transformedGeometryWrapper = transform(sourceGeometryWrapper, srsURI);
+            if (IS_INDEX_ACTIVE && storeCRSTransform) {
+                LOGGER.warn("Geometry Transform Index Full: {}", INDEX_MAX_SIZE);
             }
         }
 
         return transformedGeometryWrapper;
+    }
+
+    private static GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+        CoordinateReferenceSystem sourceCRS = sourceGeometryWrapper.getCRS();
+        CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
+        MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
+        Geometry parsingGeometry = sourceGeometryWrapper.getParsingGeometry();
+        Geometry transformedGeometry = JTS.transform(parsingGeometry, transform);
+
+        GeoDatatypeEnum datatypeEnum = sourceGeometryWrapper.getGeoDatatypeEnum();
+        DimensionInfo dimensionInfo = sourceGeometryWrapper.getDimensionInfo();
+        return new GeometryWrapper(transformedGeometry, srsURI, datatypeEnum, dimensionInfo);
     }
 
     public static final void clear() {
@@ -74,14 +88,30 @@ public class GeometryTransformIndex {
      * Sets whether the Geometry Transform Index is active.
      * <br> The index will be empty after this process.
      *
-     * @param isActive
+     * @param maxSize : use -1 for unlimited size
      */
-    public static final void setActive(Boolean isActive) {
+    public static final void setMaxSize(Integer maxSize) {
 
-        IS_INDEX_ACTIVE = isActive;
+        IS_INDEX_ACTIVE = !NO_INDEX.equals(maxSize);
+        INDEX_MAX_SIZE = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
 
-        GEOMETRY_TRANSFORM_INDEX.clear();
-        GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>();
+        if (IS_INDEX_ACTIVE) {
+            GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
+        } else {
+            GEOMETRY_TRANSFORM_INDEX = null;
+        }
+    }
+
+    /**
+     * Sets the expiry time in seconds of the Geometry Transform Index.
+     *
+     * @param timeoutSeconds
+     */
+    public static final void setTimeoutSeconds(Integer timeoutSeconds) {
+        INDEX_TIMEOUT_SECONDS = timeoutSeconds;
+        if (IS_INDEX_ACTIVE) {
+            GEOMETRY_TRANSFORM_INDEX.setTimeToLive(timeoutSeconds);
+        }
     }
 
 }
