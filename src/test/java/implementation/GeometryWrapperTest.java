@@ -372,7 +372,7 @@ public class GeometryWrapperTest {
         GeometryWrapper instance = WKTDatatype.INSTANCE.parse(lexicalForm);
 
         Literal result = instance.asLiteral();
-        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> " + lexicalForm, WKTDatatype.INSTANCE);
+        Literal expResult = ResourceFactory.createTypedLiteral(lexicalForm, WKTDatatype.INSTANCE);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

@@ -7,10 +7,8 @@ package implementation.index;
 
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeReader;
-import java.io.File;
-import java.util.Collections;
 import java.util.Map;
-import org.apache.commons.collections4.map.LRUMap;
+import org.apache.mina.util.ExpiringMap;
 
 /**
  *
@@ -18,8 +16,10 @@ import org.apache.commons.collections4.map.LRUMap;
  */
 public class GeometryLiteralIndex {
 
-    private static Map<String, GeometryWrapper> PRIMARY_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
-    private static Map<String, GeometryWrapper> SECONDARY_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
+    private static ExpiringMap<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringMap<>();
+    private static ExpiringMap<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringMap<>();
+    //private static Map<String, GeometryWrapper> PRIMARY_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
+    //private static Map<String, GeometryWrapper> SECONDARY_INDEX = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT));
     private static Boolean IS_INDEX_ACTIVE = true;
 
     public enum GeometryIndex {
@@ -53,15 +53,6 @@ public class GeometryLiteralIndex {
         return geometryWrapper;
     }
 
-    public synchronized static final void write(File indexFile) {
-        IndexUtils.write(indexFile, PRIMARY_INDEX);
-    }
-
-    public synchronized static final void read(File indexFile) {
-        PRIMARY_INDEX.clear();
-        IndexUtils.read(indexFile, PRIMARY_INDEX);
-    }
-
     /**
      * Empty the Geometry Literal Index.
      */
@@ -71,29 +62,21 @@ public class GeometryLiteralIndex {
     }
 
     /**
-     * Changes the max size of the Geometry Literal Index.
+     * Sets whether the Geometry Literal Index is active.
      * <br> The index will be empty after this process.
      *
-     * @param maxSize
+     * @param isActive
      */
-    public static final void setMaxSize(Integer maxSize) {
+    public static final void setActive(Boolean isActive) {
 
-        IS_INDEX_ACTIVE = maxSize != 0;
-
-        Map<String, GeometryWrapper> newPrimaryIndex;
-        Map<String, GeometryWrapper> newSecondaryIndex;
-        if (IS_INDEX_ACTIVE) {
-            newPrimaryIndex = Collections.synchronizedMap(new LRUMap<>(maxSize));
-            newSecondaryIndex = Collections.synchronizedMap(new LRUMap<>(maxSize));
-        } else {
-            newPrimaryIndex = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
-            newSecondaryIndex = Collections.synchronizedMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
-        }
+        IS_INDEX_ACTIVE = isActive;
         PRIMARY_INDEX.clear();
-        PRIMARY_INDEX = newPrimaryIndex;
+
+        PRIMARY_INDEX = new ExpiringMap<>();
 
         SECONDARY_INDEX.clear();
-        SECONDARY_INDEX = newSecondaryIndex;
+        //SECONDARY_INDEX = newSecondaryIndex;
+        SECONDARY_INDEX = new ExpiringMap<>();
     }
 
 }

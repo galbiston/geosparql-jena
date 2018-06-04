@@ -15,10 +15,9 @@ import implementation.function_registration.RCC8;
 import implementation.function_registration.Relate;
 import implementation.function_registration.SimpleFeatures;
 import implementation.index.IndexConfiguration;
-import implementation.index.IndexOption;
+import implementation.index.IndexConfiguration.IndexOption;
 import implementation.registry.CRSRegistry;
 import implementation.vocabulary.Geo;
-import java.io.File;
 import java.io.InputStream;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.rdf.model.InfModel;
@@ -141,26 +140,13 @@ public class GeoSPARQLSupport {
      * <br>Use this for in-memory indexing GeoSPARQL setup.
      */
     public static final void loadFunctionsMemoryIndex() {
-        loadFunctions(IndexOption.MEMORY, null);
-        IndexConfiguration.defaultMemoryIndexMaxSize();
+        loadFunctions(IndexOption.MEMORY);
+        IndexConfiguration.setupMemoryIndex();
     }
 
-    /**
-     * Initialise all GeoSPARQL property and filter functions with memory
-     * indexing.
-     * <br>Use this for in-memory indexing GeoSPARQL setup but override the
-     * default maximum sizes of indexes.
-     * <br>Indexes are large and contain data that may have re-use in specific
-     * contexts.
-     * <br>Any existing in-memory indexes will be emptied.
-     *
-     * @param geometryLiteralIndexMaxSize - default max size: 50,000
-     * @param geometryTransformIndexMaxSize - default max size: 50,000
-     * @param queryRewriteIndexMaxSize - default max size: 50,000
-     */
-    public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndexMaxSize, Integer geometryTransformIndexMaxSize, Integer queryRewriteIndexMaxSize) {
-        loadFunctions(IndexOption.MEMORY, null);
-        IndexConfiguration.setIndexMaxSize(geometryLiteralIndexMaxSize, geometryTransformIndexMaxSize, queryRewriteIndexMaxSize);
+    public static final void loadFunctionsMemoryIndex(Boolean geometryLiteralIndex, Boolean geometryTransformIndex, Boolean queryRewriteIndex) {
+        loadFunctions(IndexOption.MEMORY);
+        IndexConfiguration.setIndex(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
     }
 
     /**
@@ -169,7 +155,7 @@ public class GeoSPARQLSupport {
      * <br>Warning: Any previously setup index folders will be deleted.
      */
     public static final void loadFunctionsNoIndex() {
-        loadFunctions(IndexOption.NONE, null);
+        loadFunctions(IndexOption.NONE);
     }
 
     /**
@@ -177,18 +163,9 @@ public class GeoSPARQLSupport {
      * functions loaded.
      */
     public static final void noIndex() {
-        IndexConfiguration.setConfig(IndexOption.NONE, null);
+        IndexConfiguration.setConfig(IndexOption.NONE);
         //Setup Default Cordinate Reference Systems
         CRSRegistry.setupDefaultCRS();
-    }
-
-    /**
-     * Provide an IndexOption enum for configuring index.
-     *
-     * @param indexOption
-     */
-    public static final void loadFunctions(IndexOption indexOption) {
-        loadFunctions(indexOption, null);
     }
 
     /**
@@ -200,12 +177,11 @@ public class GeoSPARQLSupport {
      * deleted.
      *
      * @param indexOption
-     * @param indexFolder
      */
-    public static final void loadFunctions(IndexOption indexOption, File indexFolder) {
+    public static final void loadFunctions(IndexOption indexOption) {
 
         //Set the configuration for indexing.
-        IndexConfiguration.setConfig(indexOption, indexFolder);
+        IndexConfiguration.setConfig(indexOption);
 
         //Only register functions once.
         if (!IS_FUNCTIONS_REGISTERED) {
@@ -237,15 +213,6 @@ public class GeoSPARQLSupport {
     public static final void clearAllIndexesAndRegistries() {
         //Convenience method so that setup and clearing in one class.
         IndexConfiguration.clearAllIndexesAndRegistries();
-    }
-
-    /**
-     * Writes the current index and registry to the provided folder.
-     *
-     * @param indexFolder
-     */
-    public static final void writeIndexRegistryToFile(File indexFolder) {
-        IndexConfiguration.writeIndexRegistryToFile(indexFolder);
     }
 
 }

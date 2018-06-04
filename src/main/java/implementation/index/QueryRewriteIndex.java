@@ -6,19 +6,17 @@
 package implementation.index;
 
 import geo.topological.GenericPropertyFunction;
-import java.io.File;
-import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.apache.commons.collections4.map.LRUMap;
-import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Property;
+import org.apache.mina.util.ExpiringMap;
 
 /**
  *
  */
 public class QueryRewriteIndex {
 
-    private static MultiKeyMap<MultiKey, Boolean> QUERY_REWRITE_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT));
+    private static ExpiringMap<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringMap<>();
+    //private static MultiKeyMap<MultiKey, Boolean> QUERY_REWRITE_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT));
     private static Boolean IS_INDEX_ACTIVE = true;
 
     /**
@@ -29,11 +27,12 @@ public class QueryRewriteIndex {
      * @param propertyFunction
      * @return
      */
-    @SuppressWarnings("unchecked")
-    public synchronized static final Boolean test(Literal subjectGeometryLiteral, Property predicate, Literal objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
+    public static final Boolean test(Literal subjectGeometryLiteral, Property predicate, Literal objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
 
         Boolean result;
-        MultiKey key = new MultiKey<>(subjectGeometryLiteral, predicate, objectGeometryLiteral);
+        //MultiKey key = new MultiKey<>(subjectGeometryLiteral, predicate, objectGeometryLiteral);
+        String key = subjectGeometryLiteral.getLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLexicalForm();
+
         if (QUERY_REWRITE_INDEX.containsKey(key)) {
             result = QUERY_REWRITE_INDEX.get(key);
         } else {
@@ -45,37 +44,22 @@ public class QueryRewriteIndex {
         return result;
     }
 
-    public synchronized static final void write(File indexFile) {
-        IndexUtils.write(indexFile, QUERY_REWRITE_INDEX);
-    }
-
-    public synchronized static final void read(File indexFile) {
-        QUERY_REWRITE_INDEX.clear();
-        IndexUtils.read(indexFile, QUERY_REWRITE_INDEX);
-    }
-
-    public synchronized static final void clear() {
+    public static final void clear() {
         QUERY_REWRITE_INDEX.clear();
     }
 
     /**
-     * Changes the max size of the Query Rewrite Index.
+     * Sets whether the Query Rewrite Index is active.
      * <br> The index will be empty after this process.
      *
-     * @param maxSize
+     * @param isActive
      */
-    public synchronized static final void setMaxSize(Integer maxSize) {
+    public static final void setActive(Boolean isActive) {
 
-        IS_INDEX_ACTIVE = maxSize != 0;
+        IS_INDEX_ACTIVE = isActive;
 
-        MultiKeyMap<MultiKey, Boolean> newQueryRewriteIndex;
-        if (IS_INDEX_ACTIVE) {
-            newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
-        } else {
-            newQueryRewriteIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
-        }
         QUERY_REWRITE_INDEX.clear();
-        QUERY_REWRITE_INDEX = newQueryRewriteIndex;
+        QUERY_REWRITE_INDEX = new ExpiringMap<>();
     }
 
 }

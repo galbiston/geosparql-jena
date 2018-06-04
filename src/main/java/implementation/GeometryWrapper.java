@@ -56,12 +56,17 @@ public class GeometryWrapper implements Serializable {
     private final CoordinateReferenceSystem crs;
     private final UnitsOfMeasure unitsOfMeasure;
     private final DimensionInfo dimensionInfo;
+    private String lexicalForm;
 
     public GeometryWrapper(Geometry geometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
-        this(geometry, GeometryReverse.check(geometry, CRSRegistry.getCRS(srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI)), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, datatypeEnum, dimensionInfo);
+        this(geometry, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
-    private GeometryWrapper(Geometry parsingGeometry, Geometry xyGeometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
+    public GeometryWrapper(Geometry geometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo, String geometryLiteral) {
+        this(geometry, GeometryReverse.check(geometry, CRSRegistry.getCRS(srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI)), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, datatypeEnum, dimensionInfo, geometryLiteral);
+    }
+
+    private GeometryWrapper(Geometry parsingGeometry, Geometry xyGeometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo, String lexicalForm) {
 
         this.parsingGeometry = parsingGeometry;
         this.xyGeometry = xyGeometry;
@@ -77,6 +82,7 @@ public class GeometryWrapper implements Serializable {
         this.unitsOfMeasure = CRSRegistry.getUnitsOfMeasure(srsURI);
 
         this.dimensionInfo = dimensionInfo;
+        this.lexicalForm = lexicalForm;
     }
 
     /**
@@ -136,6 +142,7 @@ public class GeometryWrapper implements Serializable {
         this.crs = geometryWrapper.crs;
         this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
         this.dimensionInfo = geometryWrapper.dimensionInfo;
+        this.lexicalForm = geometryWrapper.lexicalForm;
     }
 
     /**
@@ -261,7 +268,7 @@ public class GeometryWrapper implements Serializable {
         Geometry xyGeo = transformedGeometryWrapper.xyGeometry.buffer(transformedDistance);
         DimensionInfo bufferedDimensionInfo = new DimensionInfo(dimensionInfo.getCoordinate(), dimensionInfo.getSpatial(), xyGeo.getDimension());
         Geometry parsingGeo = GeometryReverse.check(xyGeo, transformedGeometryWrapper.crs);
-        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(parsingGeo, xyGeo, transformedGeometryWrapper.srsURI, transformedGeometryWrapper.datatypeEnum, bufferedDimensionInfo);
+        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(parsingGeo, xyGeo, transformedGeometryWrapper.srsURI, transformedGeometryWrapper.datatypeEnum, bufferedDimensionInfo, null);
 
         //Check whether need to transform back to the original srsURI.
         if (isTransformNeeded) {
@@ -294,14 +301,14 @@ public class GeometryWrapper implements Serializable {
     public GeometryWrapper convexHull() {
         Geometry xyGeo = this.xyGeometry.convexHull();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
     public GeometryWrapper difference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.difference(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
     /**
@@ -353,20 +360,20 @@ public class GeometryWrapper implements Serializable {
     public GeometryWrapper boundary() {
         Geometry xyGeo = this.xyGeometry.getBoundary();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
     public GeometryWrapper envelope() {
         Geometry xyGeo = this.xyGeometry.getEnvelope();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
     public GeometryWrapper intersection(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.intersection(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
     public IntersectionMatrix relate(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -383,14 +390,14 @@ public class GeometryWrapper implements Serializable {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.symDifference(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
     public GeometryWrapper union(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.union(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
     public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -452,7 +459,15 @@ public class GeometryWrapper implements Serializable {
     }
 
     public Literal asLiteral() throws DatatypeFormatException {
-        return asLiteral(datatypeEnum);
+
+        GeometryDatatype datatype = DatatypeUtil.getDatatype(datatypeEnum);
+        if (lexicalForm != null) {
+            return ResourceFactory.createTypedLiteral(lexicalForm, datatype);
+        }
+
+        Literal literal = asLiteral(datatype);
+        lexicalForm = literal.getLexicalForm();
+        return literal;
     }
 
     public Literal asLiteral(GeoDatatypeEnum outputDatatypeEnum) throws DatatypeFormatException {
@@ -461,8 +476,8 @@ public class GeometryWrapper implements Serializable {
     }
 
     public Literal asLiteral(GeometryDatatype datatype) {
-        String lexicalForm = datatype.unparse(this);
-        return ResourceFactory.createTypedLiteral(lexicalForm, datatype);
+        String tempLexicalForm = datatype.unparse(this);
+        return ResourceFactory.createTypedLiteral(tempLexicalForm, datatype);
     }
 
     public int getCoordinateDimension() {
@@ -487,6 +502,16 @@ public class GeometryWrapper implements Serializable {
 
     public DimensionInfo getDimensionInfo() {
         return dimensionInfo;
+    }
+
+    public String getLexicalForm() {
+
+        if (lexicalForm != null) {
+            return lexicalForm;
+        } else {
+            Literal literal = asLiteral();
+            return literal.getLexicalForm();
+        }
     }
 
     public boolean isEmpty() {

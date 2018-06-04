@@ -5,8 +5,6 @@
  */
 package implementation.registry;
 
-import implementation.index.IndexUtils;
-import java.io.File;
 import java.lang.invoke.MethodHandles;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.HashedMap;
@@ -41,15 +39,6 @@ public class MathTransformRegistry {
             MATH_TRANSFORM_REGISTRY.put(key, transform);
         }
         return transform;
-    }
-
-    public synchronized static final void write(File indexFile) {
-        IndexUtils.write(indexFile, MATH_TRANSFORM_REGISTRY);
-    }
-
-    public synchronized static final void read(File indexFile) {
-        MATH_TRANSFORM_REGISTRY.clear();
-        IndexUtils.read(indexFile, MATH_TRANSFORM_REGISTRY);
     }
 
     public synchronized static final void clear() {

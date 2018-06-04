@@ -11,10 +11,7 @@ import implementation.GeometryWrapper;
 import implementation.datatype.GeoDatatypeEnum;
 import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
-import java.io.File;
-import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.apache.commons.collections4.map.LRUMap;
-import org.apache.commons.collections4.map.MultiKeyMap;
+import org.apache.mina.util.ExpiringMap;
 import org.geotools.geometry.jts.JTS;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -28,7 +25,9 @@ import org.opengis.referencing.operation.TransformException;
  */
 public class GeometryTransformIndex {
 
-    private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE_DEFAULT));
+    private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>();
+    //private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new ExpiringMap<>());
+    //private static MultiKeyMap<MultiKey, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.GEOMETRY_TRANSFORM_INDEX_MAX_SIZE_DEFAULT));
     private static Boolean IS_INDEX_ACTIVE = true;
 
     /**
@@ -41,11 +40,11 @@ public class GeometryTransformIndex {
      * @throws MismatchedDimensionException
      * @throws TransformException
      */
-    @SuppressWarnings("unchecked")
-    public synchronized static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
 
         GeometryWrapper transformedGeometryWrapper;
-        MultiKey key = new MultiKey<>(sourceGeometryWrapper, srsURI);
+//        MultiKey key = new MultiKey<>(sourceGeometryWrapper, srsURI);
+        String key = sourceGeometryWrapper.getLexicalForm() + "@" + srsURI;
 
         if (GEOMETRY_TRANSFORM_INDEX.containsKey(key)) {
             transformedGeometryWrapper = GEOMETRY_TRANSFORM_INDEX.get(key);
@@ -67,37 +66,22 @@ public class GeometryTransformIndex {
         return transformedGeometryWrapper;
     }
 
-    public synchronized static final void write(File indexFile) {
-        IndexUtils.write(indexFile, GEOMETRY_TRANSFORM_INDEX);
-    }
-
-    public synchronized static final void read(File indexFile) {
-        GEOMETRY_TRANSFORM_INDEX.clear();
-        IndexUtils.read(indexFile, GEOMETRY_TRANSFORM_INDEX);
-    }
-
-    public synchronized static final void clear() {
+    public static final void clear() {
         GEOMETRY_TRANSFORM_INDEX.clear();
     }
 
     /**
-     * Changes the max size of the Geometry Transform Index.
+     * Sets whether the Geometry Transform Index is active.
      * <br> The index will be empty after this process.
      *
-     * @param maxSize
+     * @param isActive
      */
-    public synchronized static final void setMaxSize(Integer maxSize) {
+    public static final void setActive(Boolean isActive) {
 
-        IS_INDEX_ACTIVE = maxSize != 0;
+        IS_INDEX_ACTIVE = isActive;
 
-        MultiKeyMap<MultiKey, GeometryWrapper> newGeometryTransformIndex;
-        if (IS_INDEX_ACTIVE) {
-            newGeometryTransformIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(maxSize));
-        } else {
-            newGeometryTransformIndex = MultiKeyMap.multiKeyMap(new LRUMap<>(IndexDefaultValues.INDEX_MINIMUM_SIZE));
-        }
         GEOMETRY_TRANSFORM_INDEX.clear();
-        GEOMETRY_TRANSFORM_INDEX = newGeometryTransformIndex;
+        GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>();
     }
 
 }

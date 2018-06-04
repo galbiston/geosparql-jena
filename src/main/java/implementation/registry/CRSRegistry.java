@@ -6,20 +6,14 @@
 package implementation.registry;
 
 import implementation.UnitsOfMeasure;
-import implementation.index.IndexUtils;
 import implementation.vocabulary.SRS_URI;
 import static implementation.vocabulary.SRS_URI.EPSG_BASE_CRS_URI;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeocentricCRS;
 import org.opengis.referencing.FactoryException;
@@ -127,26 +121,6 @@ public class CRSRegistry implements Serializable {
         CRS_REGISTRY.clear();
         UNITS_OF_MEASURE_REGISTRY.clear();
         setupDefaultCRS();
-    }
-
-    ///////////////////////////////////////Registry Writing and Reading to File////////////////////////////
-    public synchronized static final void writeCRSRegistry(File registryFile) {
-        IndexUtils.write(registryFile, CRS_REGISTRY);
-    }
-
-    public static final void readCRSRegistry(File registryFile) {
-        LOGGER.info("Reading CRS Registry - {}: Started", registryFile);
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(registryFile))) {
-            @SuppressWarnings("unchecked")
-            Set<String> crsRegistryKeys = (Set<String>) objectInputStream.readObject();
-            for (String key : crsRegistryKeys) {
-                getCRS(key);
-            }
-
-        } catch (IOException | ClassNotFoundException ex) {
-            LOGGER.error("Read CRS Registry exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Reading CRS Registry - {}: Completed", registryFile);
     }
 
     private static final String NORTH_UTM_EPSG = EPSG_BASE_CRS_URI + "326";
