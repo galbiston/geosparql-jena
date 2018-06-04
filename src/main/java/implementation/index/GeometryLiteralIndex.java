@@ -37,16 +37,16 @@ public class GeometryLiteralIndex {
 
         switch (targetIndex) {
             case SECONDARY:
-                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader, SECONDARY_INDEX);
+                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader, SECONDARY_INDEX, PRIMARY_INDEX);
                 break;
             default:
-                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader, PRIMARY_INDEX);
+                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader, PRIMARY_INDEX, SECONDARY_INDEX);
         }
 
         return geometryWrapper;
     }
 
-    private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, DatatypeReader datatypeReader, Map<String, GeometryWrapper> index) {
+    private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, DatatypeReader datatypeReader, Map<String, GeometryWrapper> index, Map<String, GeometryWrapper> otherIndex) {
 
         GeometryWrapper geometryWrapper;
 
@@ -54,7 +54,11 @@ public class GeometryLiteralIndex {
             if (index.containsKey(geometryLiteral)) {
                 geometryWrapper = index.get(geometryLiteral);
             } else {
-                geometryWrapper = datatypeReader.read(geometryLiteral);
+                if (otherIndex.containsKey(geometryLiteral)) {
+                    geometryWrapper = otherIndex.get(geometryLiteral);
+                } else {
+                    geometryWrapper = datatypeReader.read(geometryLiteral);
+                }
                 index.put(geometryLiteral, geometryWrapper);
             }
         } else {
