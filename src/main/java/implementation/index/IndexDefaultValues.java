@@ -17,9 +17,9 @@ public interface IndexDefaultValues {
     /*
      * Default Indexing and Registry Sizes
      */
-    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT = 10000;
-    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE_DEFAULT = 1000;
-    public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT = 10000;
+    public static final Integer GEOMETRY_LITERAL_INDEX_MAX_SIZE_DEFAULT = 25000;
+    public static final Integer GEOMETRY_TRANSFORM_INDEX_MAX_SIZE_DEFAULT = 5000;
+    public static final Integer QUERY_REWRITE_INDEX_MAX_SIZE_DEFAULT = 25000;
     public static final Integer INDEX_MINIMUM_SIZE = 1;
 
     /*
