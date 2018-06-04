@@ -92,7 +92,9 @@ public class GeometryLiteralIndex {
 
         if (IS_INDEX_ACTIVE) {
             PRIMARY_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
+            PRIMARY_INDEX.getExpirer().startExpiringIfNotStarted();
             SECONDARY_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
+            SECONDARY_INDEX.getExpirer().startExpiringIfNotStarted();
         } else {
             PRIMARY_INDEX = null;
             SECONDARY_INDEX = null;

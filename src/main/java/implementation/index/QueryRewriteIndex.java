@@ -73,6 +73,7 @@ public class QueryRewriteIndex {
 
         if (IS_INDEX_ACTIVE) {
             QUERY_REWRITE_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
+            QUERY_REWRITE_INDEX.getExpirer().startExpiringIfNotStarted();
         } else {
             QUERY_REWRITE_INDEX = null;
         }

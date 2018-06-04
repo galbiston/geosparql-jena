@@ -97,6 +97,7 @@ public class GeometryTransformIndex {
 
         if (IS_INDEX_ACTIVE) {
             GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
+            GEOMETRY_TRANSFORM_INDEX.getExpirer().startExpiringIfNotStarted();
         } else {
             GEOMETRY_TRANSFORM_INDEX = null;
         }
