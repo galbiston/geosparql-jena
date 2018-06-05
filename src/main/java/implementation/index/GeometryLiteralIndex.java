@@ -75,8 +75,12 @@ public class GeometryLiteralIndex {
      * Empty the Geometry Literal Index.
      */
     public static final void clear() {
-        PRIMARY_INDEX.clear();
-        SECONDARY_INDEX.clear();
+        if (PRIMARY_INDEX != null) {
+            PRIMARY_INDEX.clear();
+        }
+        if (SECONDARY_INDEX != null) {
+            SECONDARY_INDEX.clear();
+        }
     }
 
     /**
@@ -104,13 +108,21 @@ public class GeometryLiteralIndex {
     /**
      * Sets the expiry time in seconds of the Geometry Literal Indexes.
      *
-     * @param timeoutSeconds
+     * @param timeoutSeconds : use 0 or negative for unlimited timeout
      */
     public static final void setTimeoutSeconds(Integer timeoutSeconds) {
         INDEX_TIMEOUT_SECONDS = timeoutSeconds;
+
         if (IS_INDEX_ACTIVE) {
-            PRIMARY_INDEX.setTimeToLive(timeoutSeconds);
-            SECONDARY_INDEX.setTimeToLive(timeoutSeconds);
+            if (INDEX_TIMEOUT_SECONDS > 0) {
+                PRIMARY_INDEX.setTimeToLive(INDEX_TIMEOUT_SECONDS);
+                PRIMARY_INDEX.getExpirer().startExpiringIfNotStarted();
+                SECONDARY_INDEX.setTimeToLive(INDEX_TIMEOUT_SECONDS);
+                SECONDARY_INDEX.getExpirer().startExpiringIfNotStarted();
+            } else {
+                PRIMARY_INDEX.getExpirer().stopExpiring();
+                SECONDARY_INDEX.getExpirer().stopExpiring();
+            }
         }
     }
 

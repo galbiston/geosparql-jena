@@ -81,7 +81,9 @@ public class GeometryTransformIndex {
     }
 
     public static final void clear() {
-        GEOMETRY_TRANSFORM_INDEX.clear();
+        if (GEOMETRY_TRANSFORM_INDEX != null) {
+            GEOMETRY_TRANSFORM_INDEX.clear();
+        }
     }
 
     /**
@@ -106,12 +108,18 @@ public class GeometryTransformIndex {
     /**
      * Sets the expiry time in seconds of the Geometry Transform Index.
      *
-     * @param timeoutSeconds
+     * @param timeoutSeconds : use 0 or negative for unlimited timeout
      */
     public static final void setTimeoutSeconds(Integer timeoutSeconds) {
         INDEX_TIMEOUT_SECONDS = timeoutSeconds;
+
         if (IS_INDEX_ACTIVE) {
-            GEOMETRY_TRANSFORM_INDEX.setTimeToLive(timeoutSeconds);
+            if (INDEX_TIMEOUT_SECONDS > 0) {
+                GEOMETRY_TRANSFORM_INDEX.setTimeToLive(INDEX_TIMEOUT_SECONDS);
+                GEOMETRY_TRANSFORM_INDEX.getExpirer().startExpiringIfNotStarted();
+            } else {
+                GEOMETRY_TRANSFORM_INDEX.getExpirer().stopExpiring();
+            }
         }
     }
 

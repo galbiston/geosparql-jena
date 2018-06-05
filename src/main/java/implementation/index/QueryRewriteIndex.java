@@ -57,7 +57,9 @@ public class QueryRewriteIndex {
     }
 
     public static final void clear() {
-        QUERY_REWRITE_INDEX.clear();
+        if (QUERY_REWRITE_INDEX != null) {
+            QUERY_REWRITE_INDEX.clear();
+        }
     }
 
     /**
@@ -82,12 +84,18 @@ public class QueryRewriteIndex {
     /**
      * Sets the expiry time in seconds of the Query Rewrite Index.
      *
-     * @param timeoutSeconds
+     * @param timeoutSeconds : use 0 or negative for unlimited timeout
      */
     public static final void setTimeoutSeconds(Integer timeoutSeconds) {
         INDEX_TIMEOUT_SECONDS = timeoutSeconds;
+
         if (IS_INDEX_ACTIVE) {
-            QUERY_REWRITE_INDEX.setTimeToLive(timeoutSeconds);
+            if (INDEX_TIMEOUT_SECONDS > 0) {
+                QUERY_REWRITE_INDEX.setTimeToLive(INDEX_TIMEOUT_SECONDS);
+                QUERY_REWRITE_INDEX.getExpirer().startExpiringIfNotStarted();
+            } else {
+                QUERY_REWRITE_INDEX.getExpirer().stopExpiring();
+            }
         }
     }
 
