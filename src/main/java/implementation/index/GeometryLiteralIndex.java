@@ -7,6 +7,7 @@ package implementation.index;
 
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeReader;
+import static implementation.index.IndexDefaultValues.FULL_INDEX_WARNING_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import java.lang.invoke.MethodHandles;
@@ -27,6 +28,7 @@ public class GeometryLiteralIndex {
     private static Integer INDEX_TIMEOUT_SECONDS = IndexDefaultValues.INDEX_TIMEOUT_SECONDS;
     private static ExpiringMap<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
     private static ExpiringMap<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
+    private static long FULL_INDEX_WARNING = System.currentTimeMillis();
 
     public enum GeometryIndex {
         PRIMARY, SECONDARY
@@ -64,7 +66,11 @@ public class GeometryLiteralIndex {
         } else {
             geometryWrapper = datatypeReader.read(geometryLiteral);
             if (IS_INDEX_ACTIVE) {
-                LOGGER.warn("Geometry Literal Index Full: {}", INDEX_MAX_SIZE);
+                long currentSystemTime = System.currentTimeMillis();
+                if (FULL_INDEX_WARNING - currentSystemTime > FULL_INDEX_WARNING_INTERVAL) {
+                    FULL_INDEX_WARNING = currentSystemTime;
+                    LOGGER.warn("Geometry Literal Index Full: {}", INDEX_MAX_SIZE);
+                }
             }
         }
 

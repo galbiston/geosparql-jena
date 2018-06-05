@@ -14,4 +14,5 @@ public interface IndexDefaultValues {
     public static final Integer UNLIMITED_INDEX = -1;
     public static final Integer INDEX_TIMEOUT_SECONDS = 60;
     public static final Integer NO_INDEX = 0;
+    public static final Integer FULL_INDEX_WARNING_INTERVAL = 30000;
 }

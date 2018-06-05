@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.datatype.GeoDatatypeEnum;
+import static implementation.index.IndexDefaultValues.FULL_INDEX_WARNING_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import implementation.registry.CRSRegistry;
@@ -35,6 +36,7 @@ public class GeometryTransformIndex {
     private static Integer INDEX_MAX_SIZE = IndexDefaultValues.UNLIMITED_INDEX;
     private static Integer INDEX_TIMEOUT_SECONDS = IndexDefaultValues.INDEX_TIMEOUT_SECONDS;
     private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
+    private static long FULL_INDEX_WARNING = System.currentTimeMillis();
 
     /**
      *
@@ -61,7 +63,11 @@ public class GeometryTransformIndex {
         } else {
             transformedGeometryWrapper = transform(sourceGeometryWrapper, srsURI);
             if (IS_INDEX_ACTIVE && storeCRSTransform) {
-                LOGGER.warn("Geometry Transform Index Full: {}", INDEX_MAX_SIZE);
+                long currentSystemTime = System.currentTimeMillis();
+                if (FULL_INDEX_WARNING - currentSystemTime > FULL_INDEX_WARNING_INTERVAL) {
+                    FULL_INDEX_WARNING = currentSystemTime;
+                    LOGGER.warn("Geometry Transform Index Full: {}", INDEX_MAX_SIZE);
+                }
             }
         }
 

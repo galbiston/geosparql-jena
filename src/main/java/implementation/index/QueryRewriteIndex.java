@@ -6,6 +6,7 @@
 package implementation.index;
 
 import geo.topological.GenericPropertyFunction;
+import static implementation.index.IndexDefaultValues.FULL_INDEX_WARNING_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import java.lang.invoke.MethodHandles;
@@ -25,6 +26,7 @@ public class QueryRewriteIndex {
     private static Integer INDEX_MAX_SIZE = IndexDefaultValues.UNLIMITED_INDEX;
     private static Integer INDEX_TIMEOUT_SECONDS = IndexDefaultValues.INDEX_TIMEOUT_SECONDS;
     private static ExpiringMap<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
+    private static long FULL_INDEX_WARNING = System.currentTimeMillis();
 
     /**
      *
@@ -49,7 +51,11 @@ public class QueryRewriteIndex {
         } else {
             result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
             if (IS_INDEX_ACTIVE) {
-                LOGGER.warn("Query Rewrite Index Full: {}", INDEX_MAX_SIZE);
+                long currentSystemTime = System.currentTimeMillis();
+                if (FULL_INDEX_WARNING - currentSystemTime > FULL_INDEX_WARNING_INTERVAL) {
+                    FULL_INDEX_WARNING = currentSystemTime;
+                    LOGGER.warn("Query Rewrite Index Full: {}", INDEX_MAX_SIZE);
+                }
             }
         }
 
