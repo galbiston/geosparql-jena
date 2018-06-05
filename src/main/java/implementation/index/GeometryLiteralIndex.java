@@ -69,7 +69,7 @@ public class GeometryLiteralIndex {
                 long currentSystemTime = System.currentTimeMillis();
                 if (FULL_INDEX_WARNING - currentSystemTime > FULL_INDEX_WARNING_INTERVAL) {
                     FULL_INDEX_WARNING = currentSystemTime;
-                    LOGGER.warn("Geometry Literal Index Full: {}", INDEX_MAX_SIZE);
+                    LOGGER.warn("Geometry Literal Index Full: {} - Warning suppressed for {}ms", INDEX_MAX_SIZE, FULL_INDEX_WARNING_INTERVAL);
                 }
             }
         }
