@@ -64,7 +64,7 @@ public class GeometryTransformIndex {
             transformedGeometryWrapper = transform(sourceGeometryWrapper, srsURI);
             if (IS_INDEX_ACTIVE && storeCRSTransform) {
                 long currentSystemTime = System.currentTimeMillis();
-                if (FULL_INDEX_WARNING - currentSystemTime > FULL_INDEX_WARNING_INTERVAL) {
+                if (currentSystemTime - FULL_INDEX_WARNING > FULL_INDEX_WARNING_INTERVAL) {
                     FULL_INDEX_WARNING = currentSystemTime;
                     LOGGER.warn("Geometry Transform Index Full: {} - Warning suppressed for {}ms", INDEX_MAX_SIZE, FULL_INDEX_WARNING_INTERVAL);
                 }

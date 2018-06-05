@@ -52,7 +52,7 @@ public class QueryRewriteIndex {
             result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
             if (IS_INDEX_ACTIVE) {
                 long currentSystemTime = System.currentTimeMillis();
-                if (FULL_INDEX_WARNING - currentSystemTime > FULL_INDEX_WARNING_INTERVAL) {
+                if (currentSystemTime - FULL_INDEX_WARNING > FULL_INDEX_WARNING_INTERVAL) {
                     FULL_INDEX_WARNING = currentSystemTime;
                     LOGGER.warn("Query Rewrite Index Full: {} - Warning suppressed for {}ms", INDEX_MAX_SIZE, FULL_INDEX_WARNING_INTERVAL);
                 }
