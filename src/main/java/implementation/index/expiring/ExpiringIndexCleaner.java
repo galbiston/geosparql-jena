@@ -5,12 +5,9 @@
  */
 package implementation.index.expiring;
 
-import java.lang.invoke.MethodHandles;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.TimerTask;
-import java.util.TreeSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -18,9 +15,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ExpiringIndexCleaner extends TimerTask {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    private final TreeSet<KeyTimestampPair> tracking = new TreeSet<>();
+    //private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private final ArrayDeque<KeyTimestampPair> tracking = new ArrayDeque<>();
     private final HashMap<Object, Long> refresh = new HashMap<>();
     private final ExpiringIndex index;
     private long expiryInterval;
@@ -41,14 +37,18 @@ public class ExpiringIndexCleaner extends TimerTask {
                 return;
             }
 
-            KeyTimestampPair current = tracking.first();
+            KeyTimestampPair current = tracking.getFirst();
             isEarlier = current.isEarlier(thresholdTimestamp);
             if (isEarlier) {
                 tracking.pollFirst();
                 Object key = current.getKey();
                 if (refresh.containsKey(key)) {
                     Long timestamp = refresh.get(key);
-                    tracking.add(new KeyTimestampPair(key, timestamp));
+
+                    //Check whether the refresh is still valid.
+                    if (thresholdTimestamp < timestamp) {
+                        tracking.add(new KeyTimestampPair(key, timestamp));
+                    }
                     refresh.remove(key);
                 } else {
                     index.remove(key);

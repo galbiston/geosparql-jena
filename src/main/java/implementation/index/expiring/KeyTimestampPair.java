@@ -9,7 +9,7 @@ package implementation.index.expiring;
  *
  *
  */
-public class KeyTimestampPair implements Comparable<KeyTimestampPair> {
+public class KeyTimestampPair {
 
     private final Object key;
     private long timestamp;
@@ -37,26 +37,6 @@ public class KeyTimestampPair implements Comparable<KeyTimestampPair> {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    @Override
-    public int compareTo(KeyTimestampPair o) {
-
-        if (o == null) {
-            throw new NullPointerException();
-        }
-
-        if (timestamp < o.timestamp) {
-            return -1;
-        } else if (timestamp > o.timestamp) {
-            return 1;
-        } else {
-            if (key.equals(o.key)) {
-                return 0;
-            } else {
-                return -1;
-            }
-        }
     }
 
     @Override
