@@ -68,6 +68,7 @@ public class ExpiringIndexTest {
         //System.out.println("Size After: " + instance.size());
         int result = instance.size();
         int expResult = 1;
+        instance.stopExpiry();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -101,6 +102,7 @@ public class ExpiringIndexTest {
         //System.out.println("Size After: " + instance.size());
         int result = instance.size();
         int expResult = 2;
+        instance.stopExpiry();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -133,6 +135,7 @@ public class ExpiringIndexTest {
         //System.out.println("Size After: " + instance.size());
         int result = instance.size();
         int expResult = 0;
+        instance.stopExpiry();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
