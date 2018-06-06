@@ -72,9 +72,6 @@ dependencies {
     ext.guavaVersion = "25.1-jre"
     implementation "com.google.guava:guava:$guavaVersion"
 
-    ext.minaVersion = "2.0.18"
-    implementation "org.apache.mina:mina-core:$minaVersion"
-
 }
 
 gradle.projectsEvaluated {
