@@ -5,9 +5,9 @@
  */
 package implementation.index.expiring;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  *
@@ -16,8 +16,8 @@ import java.util.TimerTask;
 public class ExpiringIndexCleaner extends TimerTask {
 
     //private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final ArrayDeque<KeyTimestampPair> tracking = new ArrayDeque<>();
-    private final HashMap<Object, Long> refresh = new HashMap<>();
+    private final ConcurrentSkipListSet<KeyTimestampPair> tracking = new ConcurrentSkipListSet<>();
+    private final ConcurrentHashMap<Object, Long> refresh = new ConcurrentHashMap<>();
     private final ExpiringIndex index;
     private long expiryInterval;
 
@@ -37,15 +37,14 @@ public class ExpiringIndexCleaner extends TimerTask {
                 return;
             }
 
-            KeyTimestampPair current = tracking.getFirst();
+            KeyTimestampPair current = tracking.first();
             isEarlier = current.isEarlier(thresholdTimestamp);
             if (isEarlier) {
-                tracking.pollFirst();
                 Object key = current.getKey();
+                tracking.pollFirst();
                 if (refresh.containsKey(key)) {
+                    //Check whether the refresh is still valid.
                     Long timestamp = refresh.get(key);
-
-                    //Check whether the refresh is still valid. Tolerate that may not be cleared upto (expiryInterval - cleanerInterval) later.
                     if (thresholdTimestamp < timestamp) {
                         tracking.add(new KeyTimestampPair(key, timestamp));
                     }
