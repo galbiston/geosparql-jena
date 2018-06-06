@@ -48,26 +48,91 @@ public class ExpiringIndexTest {
      * @throws java.lang.InterruptedException
      */
     @Test
-    public void testPut() throws InterruptedException {
+    public void testExpiry() throws InterruptedException {
         System.out.println("expiry");
 
         long expiryInterval = 2000l;
-        long halfExpiryTime = expiryInterval / 2;
+        long halfExpiryInterval = expiryInterval / 2;
 
-        ExpiringIndex<String, String> instance = new ExpiringIndex<>(5, expiryInterval, halfExpiryTime, "Test");
+        ExpiringIndex<String, String> instance = new ExpiringIndex<>(5, expiryInterval, halfExpiryInterval, "Test");
         instance.startExpiry();
         instance.put("key1", "value1");
         instance.put("key2", "value2");
         instance.put("key3", "value3");
         instance.put("key4", "value4");
-        Thread.sleep(halfExpiryTime);
+        Thread.sleep(halfExpiryInterval);
         instance.put("key5", "value5");
         instance.put("key6", "value6");
-        System.out.println("Size Before: " + instance.size());
+        //System.out.println("Size Before: " + instance.size());
         Thread.sleep(expiryInterval);
-        System.out.println("Size After: " + instance.size());
+        //System.out.println("Size After: " + instance.size());
         int result = instance.size();
         int expResult = 1;
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of put method, of class ExpiringIndex.
+     *
+     * @throws java.lang.InterruptedException
+     */
+    @Test
+    public void testRefresh() throws InterruptedException {
+        System.out.println("refresh");
+
+        long expiryInterval = 2000l;
+        long halfExpiryInterval = expiryInterval / 2;
+        long quarterExpiryInterval = expiryInterval / 3 * 4;
+
+        ExpiringIndex<String, String> instance = new ExpiringIndex<>(5, expiryInterval, halfExpiryInterval, "Test");
+        instance.startExpiry();
+        instance.put("key1", "value1");
+        instance.put("key2", "value2");
+        instance.put("key3", "value3");
+        instance.put("key4", "value4");
+        Thread.sleep(halfExpiryInterval + quarterExpiryInterval);
+        instance.put("key1", "value1");
+        instance.put("key2", "value2");
+        //System.out.println("Size Before: " + instance.size());
+        Thread.sleep(halfExpiryInterval);
+        //System.out.println("Size After: " + instance.size());
+        int result = instance.size();
+        int expResult = 2;
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of put method, of class ExpiringIndex.
+     *
+     * @throws java.lang.InterruptedException
+     */
+    @Test
+    public void testEmpty() throws InterruptedException {
+        System.out.println("empty");
+
+        long expiryInterval = 2000l;
+        long halfExpiryInterval = expiryInterval / 2;
+
+        ExpiringIndex<String, String> instance = new ExpiringIndex<>(5, expiryInterval, halfExpiryInterval, "Test");
+        instance.startExpiry();
+        instance.put("key1", "value1");
+        instance.put("key2", "value2");
+        instance.put("key3", "value3");
+        instance.put("key4", "value4");
+        Thread.sleep(halfExpiryInterval);
+        instance.put("key1", "value1");
+        instance.put("key2", "value2");
+        //System.out.println("Size Before: " + instance.size());
+        Thread.sleep(expiryInterval * 2);
+        //System.out.println("Size After: " + instance.size());
+        int result = instance.size();
+        int expResult = 0;
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
