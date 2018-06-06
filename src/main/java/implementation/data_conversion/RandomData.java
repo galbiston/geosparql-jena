@@ -6,7 +6,6 @@
 package implementation.data_conversion;
 
 import implementation.GeoSPARQLSupport;
-import implementation.datatype.WKTDatatype;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.GeoSPARQL_URI;
 import implementation.vocabulary.Other_URI;
@@ -76,9 +75,12 @@ public class RandomData {
             infModel.add(feature, Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
 
             //Geometry hasSerialization GeometryLiteral .
-            Integer spaceLimitInt = spaceLimit.intValue();
-            String lineString = "LINESTRING(" + random.nextInt(spaceLimitInt) + " " + random.nextInt(spaceLimitInt) + ", " + random.nextInt(spaceLimitInt) + " " + random.nextInt(spaceLimitInt) + ")";
-            Literal geometryLiteral = ResourceFactory.createTypedLiteral(lineString, WKTDatatype.INSTANCE);
+            Double minX = random.nextDouble() * spaceLimit;
+            Double minY = random.nextDouble() * spaceLimit;
+            Double maxX = random.nextDouble() * spaceLimit;
+            Double maxY = random.nextDouble() * spaceLimit;
+
+            Literal geometryLiteral = WKTCreation.createLineString(minX, minY, maxX, maxY);
             infModel.add(geometry, Geo.HAS_SERIALIZATION_PROP, geometryLiteral);
             if (i % 1000 == 0) {
                 LOGGER.info("Created Triple: {} - {} {} {}", i, feature, Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
