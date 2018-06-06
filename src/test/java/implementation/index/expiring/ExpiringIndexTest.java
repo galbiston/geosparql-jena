@@ -5,12 +5,17 @@
  */
 package implementation.index.expiring;
 
+import implementation.GeoSPARQLSupport;
+import implementation.GeometryWrapper;
+import implementation.datatype.WKTDatatype;
+import implementation.index.GeometryLiteralIndex;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.opengis.referencing.FactoryException;
 
 /**
  *
@@ -67,6 +72,26 @@ public class ExpiringIndexTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Index Retrieval of class GeometryLiteral.
+     *
+     * @throws org.opengis.referencing.FactoryException
+     */
+    @Test
+    public void testIndexRetrieval() throws FactoryException {
+        System.out.println("Index Retrieval");
+        GeoSPARQLSupport.loadFunctionsMemoryIndex();
+        String testItem = "POINT EMPTY";
+        GeometryWrapper result = GeometryLiteralIndex.retrieve(testItem, WKTDatatype.INSTANCE, GeometryLiteralIndex.GeometryIndex.PRIMARY);
+
+        GeometryWrapper expResult = GeometryLiteralIndex.retrieve(testItem, WKTDatatype.INSTANCE, GeometryLiteralIndex.GeometryIndex.PRIMARY);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+
     }
 
 }

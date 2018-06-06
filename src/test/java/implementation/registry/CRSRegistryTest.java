@@ -60,7 +60,7 @@ public class CRSRegistryTest {
         CoordinateReferenceSystem expResult = CRS.decode(srsURI);
         CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
 
-//System.out.println("Exp: " + expResult);
+        //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
