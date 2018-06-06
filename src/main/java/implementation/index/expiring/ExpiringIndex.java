@@ -57,11 +57,12 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
     @Override
     public V put(K key, V value) {
         if (super.size() < maxSize) {
-            indexCleaner.update(key);
+            indexCleaner.put(key);
             return super.put(key, value);
         } else {
             long currentSystemTime = System.currentTimeMillis();
-            if (currentSystemTime - fullIndexWarning > fullIndexWarningInterval) {
+            long difference = currentSystemTime - fullIndexWarning;
+            if (difference > fullIndexWarningInterval) {
                 fullIndexWarning = currentSystemTime;
                 LOGGER.warn("{} Index Full: {} - Warning suppressed for {}ms", label, maxSize, fullIndexWarningInterval);
             }
@@ -74,7 +75,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
     public boolean containsKey(Object key) {
         boolean isContained = super.containsKey(key);
         if (isContained) {
-            indexCleaner.update(key);
+            indexCleaner.refresh(key);
         }
         return isContained;
     }
@@ -83,7 +84,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
     public V get(Object key) {
         V value = super.get(key);
         if (value != null) {
-            indexCleaner.update(key);
+            indexCleaner.refresh(key);
         }
         return value;
     }

@@ -11,7 +11,10 @@ import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import implementation.index.expiring.ExpiringIndex;
+import java.lang.invoke.MethodHandles;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -42,11 +45,19 @@ public class GeometryLiteralIndex {
 
         return geometryWrapper;
     }
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    //private static Integer debugRetrievalCount = 0;
 
     private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, DatatypeReader datatypeReader, Map<String, GeometryWrapper> index, Map<String, GeometryWrapper> otherIndex) {
 
         GeometryWrapper geometryWrapper;
 
+        /*
+        debugRetrievalCount++;
+        if (debugRetrievalCount % 10000 == 0) {
+            LOGGER.info("Retrieve Count: {}", debugRetrievalCount);
+        }
+         */
         if (IS_INDEX_ACTIVE) {
             if (index.containsKey(geometryLiteral)) {
                 geometryWrapper = index.get(geometryLiteral);
