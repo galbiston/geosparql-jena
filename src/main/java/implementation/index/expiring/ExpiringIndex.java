@@ -8,6 +8,9 @@ package implementation.index.expiring;
 import static implementation.index.IndexDefaultValues.FULL_INDEX_WARNING_INTERVAL;
 import static implementation.index.IndexDefaultValues.INDEX_CLEANER_INTERVAL;
 import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
+import static implementation.index.IndexDefaultValues.MINIMUM_INDEX_CLEANER_INTERVAL;
+import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
+import static implementation.index.IndexDefaultValues.UNLIMITED_INITIAL_CAPACITY;
 import java.lang.invoke.MethodHandles;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,9 +39,13 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
         this(maxSize, INDEX_EXPIRY_INTERVAL, FULL_INDEX_WARNING_INTERVAL, label);
     }
 
+    public ExpiringIndex(int maxSize, long expiryInterval, String label) {
+        this(maxSize, expiryInterval, FULL_INDEX_WARNING_INTERVAL, label);
+    }
+
     public ExpiringIndex(int maxSize, long expiryInterval, long fullIndexWarningInterval, String label) {
-        super(maxSize);
-        this.maxSize = maxSize;
+        super(maxSize > UNLIMITED_INDEX ? maxSize : UNLIMITED_INITIAL_CAPACITY);
+        this.maxSize = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
         this.expiryInterval = expiryInterval;
         this.fullIndexWarningInterval = fullIndexWarningInterval;
         this.fullIndexWarning = System.currentTimeMillis();
@@ -92,7 +99,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
     }
 
     public void setMaxSize(int maxSize) {
-        this.maxSize = maxSize;
+        this.maxSize = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
     }
 
     public long getExpiryInterval() {
@@ -139,14 +146,25 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
     }
 
     public void startExpiry(long cleanerInterval) {
-        this.cleanerInterval = cleanerInterval;
+        if (cleanerTimer != null) {
+            cleanerTimer.cancel();
+        }
+
+        if (MINIMUM_INDEX_CLEANER_INTERVAL < cleanerInterval) {
+            this.cleanerInterval = cleanerInterval;
+        } else {
+            LOGGER.warn("Cleaner Interval: {} less than minimum: {}. Setting to minimum.", cleanerInterval, MINIMUM_INDEX_CLEANER_INTERVAL);
+            this.cleanerInterval = MINIMUM_INDEX_CLEANER_INTERVAL;
+        }
         cleanerTimer = new Timer(true);
-        cleanerTimer.scheduleAtFixedRate(indexCleaner, cleanerInterval, cleanerInterval);
+        cleanerTimer.scheduleAtFixedRate(indexCleaner, this.cleanerInterval, this.cleanerInterval);
     }
 
     public void stopExpiry() {
-        cleanerTimer.cancel();
-        cleanerTimer = null;
+        if (cleanerTimer != null) {
+            cleanerTimer.cancel();
+            cleanerTimer = null;
+        }
     }
 
     @Override
