@@ -5,9 +5,11 @@
  */
 package implementation.index.expiring;
 
+import java.util.Collections;
+import java.util.SortedSet;
 import java.util.TimerTask;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  *
@@ -16,7 +18,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class ExpiringIndexCleaner extends TimerTask {
 
     //private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final ConcurrentSkipListSet<KeyTimestampPair> tracking = new ConcurrentSkipListSet<>();
+    private final SortedSet<KeyTimestampPair> tracking = Collections.synchronizedSortedSet(new TreeSet<>());
     private final ConcurrentHashMap<Object, Long> refresh = new ConcurrentHashMap<>();
     private final ExpiringIndex index;
     private long expiryInterval;
@@ -41,7 +43,7 @@ public class ExpiringIndexCleaner extends TimerTask {
             isEarlier = current.isEarlier(thresholdTimestamp);
             if (isEarlier) {
                 Object key = current.getKey();
-                tracking.pollFirst();
+                tracking.remove(current);
                 if (refresh.containsKey(key)) {
                     //Check whether the refresh is still valid.
                     Long timestamp = refresh.get(key);
