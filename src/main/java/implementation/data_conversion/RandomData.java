@@ -15,15 +15,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.tdb.TDBFactory;
@@ -81,6 +86,7 @@ public class RandomData {
             }
         }
         writeTDB(infModel, tdbFolder);
+        checkUniqueGeometryLiterals(tdbFolder);
         if (isSerialise) {
             serialiseTDB(tdbFolder, Lang.TTL);
         }
@@ -135,6 +141,40 @@ public class RandomData {
         dataset.close();
         TDBFactory.release(dataset);
         LOGGER.info("----------Serialising: {} to {} Completed----------", tdbFolder, outputFile);
+    }
+
+    public static final void checkUniqueGeometryLiterals(File tdbFolder) {
+        LOGGER.info("----------Checking Geometry Literal count in TDB: {} Started----------", tdbFolder);
+        Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
+
+        dataset.begin(ReadWrite.READ);
+        Model defaultModel = dataset.getDefaultModel();
+        countGeometryLiterals(defaultModel, "Default Model");
+        Iterator<String> iterator = dataset.listNames();
+        while (iterator.hasNext()) {
+            String graphName = iterator.next();
+            Model model = dataset.getNamedModel(graphName);
+            countGeometryLiterals(model, graphName);
+        }
+
+        dataset.end();
+        dataset.close();
+        TDBFactory.release(dataset);
+        LOGGER.info("----------Checking Geometry Literal count in TDB: {} Completed----------", tdbFolder);
+    }
+
+    private static void countGeometryLiterals(Model model, String graphName) {
+        Set<String> literalStrings = new TreeSet<>();
+        Iterator<Statement> iterator = model.listStatements(null, Geo.HAS_SERIALIZATION_PROP, (RDFNode) null);
+        int count = 0;
+        while (iterator.hasNext()) {
+            Statement st = iterator.next();
+            String literalString = st.getLiteral().getString();
+            literalStrings.add(literalString);
+            count++;
+        }
+        LOGGER.info("Graph: {} has {} unique out of {} Geometry Literals.", graphName, literalStrings.size(), count);
+
     }
 
 }
