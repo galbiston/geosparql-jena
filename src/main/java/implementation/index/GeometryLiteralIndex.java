@@ -7,14 +7,11 @@ package implementation.index;
 
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeReader;
-import static implementation.index.IndexDefaultValues.FULL_INDEX_WARNING_INTERVAL;
+import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
-import java.lang.invoke.MethodHandles;
+import implementation.index.expiring.ExpiringIndex;
 import java.util.Map;
-import org.apache.mina.util.ExpiringMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -22,13 +19,11 @@ import org.slf4j.LoggerFactory;
  */
 public class GeometryLiteralIndex {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Boolean IS_INDEX_ACTIVE = true;
-    private static Integer INDEX_MAX_SIZE = IndexDefaultValues.UNLIMITED_INDEX;
-    private static Integer INDEX_TIMEOUT_SECONDS = IndexDefaultValues.INDEX_TIMEOUT_SECONDS;
-    private static ExpiringMap<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
-    private static ExpiringMap<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
-    private static long FULL_INDEX_WARNING = System.currentTimeMillis();
+    private static final String PRIMARY_INDEX_LABEL = "Primary Geometry Literal";
+    private static final String SECONDARY_INDEX_LABEL = "Secondary Geometry Literal";
+    private static ExpiringIndex<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, PRIMARY_INDEX_LABEL);
+    private static ExpiringIndex<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, SECONDARY_INDEX_LABEL);
 
     public enum GeometryIndex {
         PRIMARY, SECONDARY
@@ -52,7 +47,7 @@ public class GeometryLiteralIndex {
 
         GeometryWrapper geometryWrapper;
 
-        if (IS_INDEX_ACTIVE && index.size() < INDEX_MAX_SIZE) {
+        if (IS_INDEX_ACTIVE) {
             if (index.containsKey(geometryLiteral)) {
                 geometryWrapper = index.get(geometryLiteral);
             } else {
@@ -65,13 +60,6 @@ public class GeometryLiteralIndex {
             }
         } else {
             geometryWrapper = datatypeReader.read(geometryLiteral);
-            if (IS_INDEX_ACTIVE) {
-                long currentSystemTime = System.currentTimeMillis();
-                if (currentSystemTime - FULL_INDEX_WARNING > FULL_INDEX_WARNING_INTERVAL) {
-                    FULL_INDEX_WARNING = currentSystemTime;
-                    LOGGER.warn("Geometry Literal Index Full: {} - Warning suppressed for {}ms", INDEX_MAX_SIZE, FULL_INDEX_WARNING_INTERVAL);
-                }
-            }
         }
 
         return geometryWrapper;
@@ -95,39 +83,49 @@ public class GeometryLiteralIndex {
      *
      * @param maxSize : use -1 for unlimited size
      */
-    public static final void setMaxSize(Integer maxSize) {
+    public static final void setMaxSize(int maxSize) {
+        setMaxSize(maxSize, PRIMARY_INDEX.getExpiryInterval());
+    }
 
-        IS_INDEX_ACTIVE = !NO_INDEX.equals(maxSize);
-        INDEX_MAX_SIZE = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
+    public static final void setMaxSize(int maxSize, long expiryInterval) {
+
+        IS_INDEX_ACTIVE = NO_INDEX != maxSize;
 
         if (IS_INDEX_ACTIVE) {
-            PRIMARY_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
-            PRIMARY_INDEX.getExpirer().startExpiringIfNotStarted();
-            SECONDARY_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
-            SECONDARY_INDEX.getExpirer().startExpiringIfNotStarted();
+            PRIMARY_INDEX.stopExpiry();
+            PRIMARY_INDEX = new ExpiringIndex<>(maxSize, expiryInterval, PRIMARY_INDEX_LABEL);
+            PRIMARY_INDEX.startExpiry();
+            SECONDARY_INDEX.stopExpiry();
+            SECONDARY_INDEX = new ExpiringIndex<>(maxSize, expiryInterval, SECONDARY_INDEX_LABEL);
+            SECONDARY_INDEX.startExpiry();
         } else {
+            if (PRIMARY_INDEX != null) {
+                PRIMARY_INDEX.stopExpiry();
+                SECONDARY_INDEX.stopExpiry();
+            }
+
             PRIMARY_INDEX = null;
             SECONDARY_INDEX = null;
         }
     }
 
     /**
-     * Sets the expiry time in seconds of the Geometry Literal Indexes.
+     * Sets the expiry time in milliseconds of the Geometry Literal Indexes, if
+     * active.
      *
-     * @param timeoutSeconds : use 0 or negative for unlimited timeout
+     * @param expiryInterval : use 0 or negative for unlimited timeout
      */
-    public static final void setTimeoutSeconds(Integer timeoutSeconds) {
-        INDEX_TIMEOUT_SECONDS = timeoutSeconds;
+    public static final void setExpiry(long expiryInterval) {
 
         if (IS_INDEX_ACTIVE) {
-            if (INDEX_TIMEOUT_SECONDS > 0) {
-                PRIMARY_INDEX.setTimeToLive(INDEX_TIMEOUT_SECONDS);
-                PRIMARY_INDEX.getExpirer().startExpiringIfNotStarted();
-                SECONDARY_INDEX.setTimeToLive(INDEX_TIMEOUT_SECONDS);
-                SECONDARY_INDEX.getExpirer().startExpiringIfNotStarted();
+            if (expiryInterval > 0) {
+                PRIMARY_INDEX.setExpiryInterval(expiryInterval);
+                PRIMARY_INDEX.startExpiry();
+                SECONDARY_INDEX.setExpiryInterval(expiryInterval);
+                SECONDARY_INDEX.startExpiry();
             } else {
-                PRIMARY_INDEX.getExpirer().stopExpiring();
-                SECONDARY_INDEX.getExpirer().stopExpiring();
+                PRIMARY_INDEX.stopExpiry();
+                SECONDARY_INDEX.stopExpiry();
             }
         }
     }

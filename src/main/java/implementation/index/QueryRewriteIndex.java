@@ -6,27 +6,21 @@
 package implementation.index;
 
 import geo.topological.GenericPropertyFunction;
-import static implementation.index.IndexDefaultValues.FULL_INDEX_WARNING_INTERVAL;
+import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
-import java.lang.invoke.MethodHandles;
+import implementation.index.expiring.ExpiringIndex;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Property;
-import org.apache.mina.util.ExpiringMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  */
 public class QueryRewriteIndex {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Boolean IS_INDEX_ACTIVE = true;
-    private static Integer INDEX_MAX_SIZE = IndexDefaultValues.UNLIMITED_INDEX;
-    private static Integer INDEX_TIMEOUT_SECONDS = IndexDefaultValues.INDEX_TIMEOUT_SECONDS;
-    private static ExpiringMap<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
-    private static long FULL_INDEX_WARNING = System.currentTimeMillis();
+    private static final String QUERY_REWRITE_LABEL = "Geometry Transform";
+    private static ExpiringIndex<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, QUERY_REWRITE_LABEL);
 
     /**
      *
@@ -41,7 +35,7 @@ public class QueryRewriteIndex {
         Boolean result;
         String key = subjectGeometryLiteral.getLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLexicalForm();
 
-        if (IS_INDEX_ACTIVE && QUERY_REWRITE_INDEX.size() < INDEX_MAX_SIZE) {
+        if (IS_INDEX_ACTIVE) {
             if (QUERY_REWRITE_INDEX.containsKey(key)) {
                 result = QUERY_REWRITE_INDEX.get(key);
             } else {
@@ -50,13 +44,6 @@ public class QueryRewriteIndex {
             }
         } else {
             result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
-            if (IS_INDEX_ACTIVE) {
-                long currentSystemTime = System.currentTimeMillis();
-                if (currentSystemTime - FULL_INDEX_WARNING > FULL_INDEX_WARNING_INTERVAL) {
-                    FULL_INDEX_WARNING = currentSystemTime;
-                    LOGGER.warn("Query Rewrite Index Full: {} - Warning suppressed for {}ms", INDEX_MAX_SIZE, FULL_INDEX_WARNING_INTERVAL);
-                }
-            }
         }
 
         return result;
@@ -74,33 +61,40 @@ public class QueryRewriteIndex {
      *
      * @param maxSize : use -1 for unlimited size
      */
-    public static final void setMaxSize(Integer maxSize) {
+    public static final void setMaxSize(int maxSize) {
+        setMaxSize(maxSize, QUERY_REWRITE_INDEX.getExpiryInterval());
+    }
 
-        IS_INDEX_ACTIVE = !NO_INDEX.equals(maxSize);
-        INDEX_MAX_SIZE = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
+    public static final void setMaxSize(int maxSize, long expiryInterval) {
+        IS_INDEX_ACTIVE = NO_INDEX != maxSize;
 
         if (IS_INDEX_ACTIVE) {
-            QUERY_REWRITE_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
-            QUERY_REWRITE_INDEX.getExpirer().startExpiringIfNotStarted();
+
+            QUERY_REWRITE_INDEX.stopExpiry();
+            QUERY_REWRITE_INDEX = new ExpiringIndex<>(maxSize, expiryInterval, QUERY_REWRITE_LABEL);
+            QUERY_REWRITE_INDEX.startExpiry();
         } else {
+            if (QUERY_REWRITE_INDEX != null) {
+                QUERY_REWRITE_INDEX.stopExpiry();
+            }
             QUERY_REWRITE_INDEX = null;
         }
     }
 
     /**
-     * Sets the expiry time in seconds of the Query Rewrite Index.
+     * Sets the expiry time in milliseconds of the Query Rewrite Index, if
+     * active.
      *
-     * @param timeoutSeconds : use 0 or negative for unlimited timeout
+     * @param expiryInterval : use 0 or negative for unlimited timeout
      */
-    public static final void setTimeoutSeconds(Integer timeoutSeconds) {
-        INDEX_TIMEOUT_SECONDS = timeoutSeconds;
+    public static final void setExpiry(long expiryInterval) {
 
         if (IS_INDEX_ACTIVE) {
-            if (INDEX_TIMEOUT_SECONDS > 0) {
-                QUERY_REWRITE_INDEX.setTimeToLive(INDEX_TIMEOUT_SECONDS);
-                QUERY_REWRITE_INDEX.getExpirer().startExpiringIfNotStarted();
+            if (expiryInterval > 0) {
+                QUERY_REWRITE_INDEX.setExpiryInterval(expiryInterval);
+                QUERY_REWRITE_INDEX.startExpiry();
             } else {
-                QUERY_REWRITE_INDEX.getExpirer().stopExpiring();
+                QUERY_REWRITE_INDEX.stopExpiry();
             }
         }
     }

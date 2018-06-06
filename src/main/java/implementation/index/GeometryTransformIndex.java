@@ -9,21 +9,18 @@ import com.vividsolutions.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.datatype.GeoDatatypeEnum;
-import static implementation.index.IndexDefaultValues.FULL_INDEX_WARNING_INTERVAL;
+import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
+import implementation.index.expiring.ExpiringIndex;
 import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
-import java.lang.invoke.MethodHandles;
-import org.apache.mina.util.ExpiringMap;
 import org.geotools.geometry.jts.JTS;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -31,12 +28,9 @@ import org.slf4j.LoggerFactory;
  */
 public class GeometryTransformIndex {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private static Boolean IS_INDEX_ACTIVE = true;
-    private static Integer INDEX_MAX_SIZE = IndexDefaultValues.UNLIMITED_INDEX;
-    private static Integer INDEX_TIMEOUT_SECONDS = IndexDefaultValues.INDEX_TIMEOUT_SECONDS;
-    private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(IndexDefaultValues.INDEX_TIMEOUT_SECONDS);
-    private static long FULL_INDEX_WARNING = System.currentTimeMillis();
+    private static final String GEOMETRY_TRANSFORM_LABEL = "Geometry Transform";
+    private static ExpiringIndex<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, GEOMETRY_TRANSFORM_LABEL);
 
     /**
      *
@@ -53,7 +47,7 @@ public class GeometryTransformIndex {
         GeometryWrapper transformedGeometryWrapper;
         String key = sourceGeometryWrapper.getLexicalForm() + "@" + srsURI;
 
-        if (IS_INDEX_ACTIVE && storeCRSTransform && GEOMETRY_TRANSFORM_INDEX.size() < INDEX_MAX_SIZE) {
+        if (IS_INDEX_ACTIVE && storeCRSTransform) {
             if (GEOMETRY_TRANSFORM_INDEX.containsKey(key)) {
                 transformedGeometryWrapper = GEOMETRY_TRANSFORM_INDEX.get(key);
             } else {
@@ -62,13 +56,6 @@ public class GeometryTransformIndex {
             }
         } else {
             transformedGeometryWrapper = transform(sourceGeometryWrapper, srsURI);
-            if (IS_INDEX_ACTIVE && storeCRSTransform) {
-                long currentSystemTime = System.currentTimeMillis();
-                if (currentSystemTime - FULL_INDEX_WARNING > FULL_INDEX_WARNING_INTERVAL) {
-                    FULL_INDEX_WARNING = currentSystemTime;
-                    LOGGER.warn("Geometry Transform Index Full: {} - Warning suppressed for {}ms", INDEX_MAX_SIZE, FULL_INDEX_WARNING_INTERVAL);
-                }
-            }
         }
 
         return transformedGeometryWrapper;
@@ -98,35 +85,41 @@ public class GeometryTransformIndex {
      *
      * @param maxSize : use -1 for unlimited size
      */
-    public static final void setMaxSize(Integer maxSize) {
+    public static final void setMaxSize(int maxSize) {
+        setMaxSize(maxSize, GEOMETRY_TRANSFORM_INDEX.getExpiryInterval());
+    }
 
-        IS_INDEX_ACTIVE = !NO_INDEX.equals(maxSize);
-        INDEX_MAX_SIZE = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
+    public static final void setMaxSize(int maxSize, long expiryInterval) {
+        IS_INDEX_ACTIVE = NO_INDEX != maxSize;
 
         if (IS_INDEX_ACTIVE) {
-            GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(INDEX_TIMEOUT_SECONDS);
-            GEOMETRY_TRANSFORM_INDEX.getExpirer().startExpiringIfNotStarted();
+
+            GEOMETRY_TRANSFORM_INDEX.stopExpiry();
+            GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(maxSize, expiryInterval, GEOMETRY_TRANSFORM_LABEL);
+            GEOMETRY_TRANSFORM_INDEX.startExpiry();
         } else {
+            if (GEOMETRY_TRANSFORM_INDEX != null) {
+                GEOMETRY_TRANSFORM_INDEX.stopExpiry();
+            }
             GEOMETRY_TRANSFORM_INDEX = null;
         }
     }
 
     /**
-     * Sets the expiry time in seconds of the Geometry Transform Index.
+     * Sets the expiry time in milliseconds of the Geometry Transform Index, if
+     * active.
      *
-     * @param timeoutSeconds : use 0 or negative for unlimited timeout
+     * @param expiryInterval : use 0 or negative for unlimited timeout
      */
-    public static final void setTimeoutSeconds(Integer timeoutSeconds) {
-        INDEX_TIMEOUT_SECONDS = timeoutSeconds;
+    public static final void setExpiry(long expiryInterval) {
 
         if (IS_INDEX_ACTIVE) {
-            if (INDEX_TIMEOUT_SECONDS > 0) {
-                GEOMETRY_TRANSFORM_INDEX.setTimeToLive(INDEX_TIMEOUT_SECONDS);
-                GEOMETRY_TRANSFORM_INDEX.getExpirer().startExpiringIfNotStarted();
+            if (expiryInterval > 0) {
+                GEOMETRY_TRANSFORM_INDEX.setExpiryInterval(expiryInterval);
+                GEOMETRY_TRANSFORM_INDEX.startExpiry();
             } else {
-                GEOMETRY_TRANSFORM_INDEX.getExpirer().stopExpiring();
+                GEOMETRY_TRANSFORM_INDEX.stopExpiry();
             }
         }
     }
-
 }

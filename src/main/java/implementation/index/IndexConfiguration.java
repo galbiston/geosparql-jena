@@ -58,16 +58,23 @@ public class IndexConfiguration {
      * @param geometryTransformIndex
      * @param queryRewriteIndex
      */
-    public static final void setIndexMaxSize(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
+    public static final void setIndexMaxSize(int geometryLiteralIndex, int geometryTransformIndex, int queryRewriteIndex) {
         GeometryLiteralIndex.setMaxSize(geometryLiteralIndex);
         GeometryTransformIndex.setMaxSize(geometryTransformIndex);
         QueryRewriteIndex.setMaxSize(queryRewriteIndex);
     }
 
-    public static final void setIndexTimeoutSeconds(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
-        GeometryLiteralIndex.setTimeoutSeconds(geometryLiteralIndex);
-        GeometryTransformIndex.setTimeoutSeconds(geometryTransformIndex);
-        QueryRewriteIndex.setTimeoutSeconds(queryRewriteIndex);
+    /**
+     * Set the index expiry interval in milliseconds.
+     *
+     * @param geometryLiteralIndex
+     * @param geometryTransformIndex
+     * @param queryRewriteIndex
+     */
+    public static final void setIndexExpiry(long geometryLiteralIndex, long geometryTransformIndex, long queryRewriteIndex) {
+        GeometryLiteralIndex.setExpiry(geometryLiteralIndex);
+        GeometryTransformIndex.setExpiry(geometryTransformIndex);
+        QueryRewriteIndex.setExpiry(queryRewriteIndex);
     }
 
     public static final void clearAllIndexesAndRegistries() {
