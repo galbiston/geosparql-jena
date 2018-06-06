@@ -45,7 +45,7 @@ public class ExpiringIndexCleaner extends TimerTask {
                 if (refresh.containsKey(key)) {
                     Long timestamp = refresh.get(key);
 
-                    //Check whether the refresh is still valid.
+                    //Check whether the refresh is still valid. Tolerate that may not be cleared upto (expiryInterval - cleanerInterval) later.
                     if (thresholdTimestamp < timestamp) {
                         tracking.add(new KeyTimestampPair(key, timestamp));
                     }
@@ -67,11 +67,11 @@ public class ExpiringIndexCleaner extends TimerTask {
         tracking.add(new KeyTimestampPair(key, System.currentTimeMillis()));
     }
 
-    public void setExpiryInterval(long expiryInterval) {
+    public synchronized void setExpiryInterval(long expiryInterval) {
         this.expiryInterval = expiryInterval;
     }
 
-    public void clear() {
+    public synchronized void clear() {
         tracking.clear();
     }
 
