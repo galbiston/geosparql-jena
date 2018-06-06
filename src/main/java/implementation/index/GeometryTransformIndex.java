@@ -86,16 +86,13 @@ public class GeometryTransformIndex {
      * @param maxSize : use -1 for unlimited size
      */
     public static final void setMaxSize(int maxSize) {
-        setMaxSize(maxSize, GEOMETRY_TRANSFORM_INDEX.getExpiryInterval());
-    }
-
-    public static final void setMaxSize(int maxSize, long expiryInterval) {
         IS_INDEX_ACTIVE = NO_INDEX != maxSize;
 
         if (IS_INDEX_ACTIVE) {
-
-            GEOMETRY_TRANSFORM_INDEX.stopExpiry();
-            GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(maxSize, expiryInterval, GEOMETRY_TRANSFORM_LABEL);
+            if (GEOMETRY_TRANSFORM_INDEX != null) {
+                GEOMETRY_TRANSFORM_INDEX.stopExpiry();
+            }
+            GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(maxSize, INDEX_EXPIRY_INTERVAL, GEOMETRY_TRANSFORM_LABEL);
             GEOMETRY_TRANSFORM_INDEX.startExpiry();
         } else {
             if (GEOMETRY_TRANSFORM_INDEX != null) {
@@ -115,6 +112,7 @@ public class GeometryTransformIndex {
 
         if (IS_INDEX_ACTIVE) {
             if (expiryInterval > 0) {
+                GEOMETRY_TRANSFORM_INDEX.stopExpiry();
                 GEOMETRY_TRANSFORM_INDEX.setExpiryInterval(expiryInterval);
                 GEOMETRY_TRANSFORM_INDEX.startExpiry();
             } else {

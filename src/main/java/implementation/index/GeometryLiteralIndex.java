@@ -84,19 +84,17 @@ public class GeometryLiteralIndex {
      * @param maxSize : use -1 for unlimited size
      */
     public static final void setMaxSize(int maxSize) {
-        setMaxSize(maxSize, PRIMARY_INDEX.getExpiryInterval());
-    }
-
-    public static final void setMaxSize(int maxSize, long expiryInterval) {
 
         IS_INDEX_ACTIVE = NO_INDEX != maxSize;
 
         if (IS_INDEX_ACTIVE) {
-            PRIMARY_INDEX.stopExpiry();
-            PRIMARY_INDEX = new ExpiringIndex<>(maxSize, expiryInterval, PRIMARY_INDEX_LABEL);
+            if (PRIMARY_INDEX != null) {
+                PRIMARY_INDEX.stopExpiry();
+                SECONDARY_INDEX.stopExpiry();
+            }
+            PRIMARY_INDEX = new ExpiringIndex<>(maxSize, INDEX_EXPIRY_INTERVAL, PRIMARY_INDEX_LABEL);
             PRIMARY_INDEX.startExpiry();
-            SECONDARY_INDEX.stopExpiry();
-            SECONDARY_INDEX = new ExpiringIndex<>(maxSize, expiryInterval, SECONDARY_INDEX_LABEL);
+            SECONDARY_INDEX = new ExpiringIndex<>(maxSize, INDEX_EXPIRY_INTERVAL, SECONDARY_INDEX_LABEL);
             SECONDARY_INDEX.startExpiry();
         } else {
             if (PRIMARY_INDEX != null) {
@@ -119,8 +117,10 @@ public class GeometryLiteralIndex {
 
         if (IS_INDEX_ACTIVE) {
             if (expiryInterval > 0) {
+                PRIMARY_INDEX.stopExpiry();
                 PRIMARY_INDEX.setExpiryInterval(expiryInterval);
                 PRIMARY_INDEX.startExpiry();
+                PRIMARY_INDEX.stopExpiry();
                 SECONDARY_INDEX.setExpiryInterval(expiryInterval);
                 SECONDARY_INDEX.startExpiry();
             } else {

@@ -62,16 +62,13 @@ public class QueryRewriteIndex {
      * @param maxSize : use -1 for unlimited size
      */
     public static final void setMaxSize(int maxSize) {
-        setMaxSize(maxSize, QUERY_REWRITE_INDEX.getExpiryInterval());
-    }
-
-    public static final void setMaxSize(int maxSize, long expiryInterval) {
         IS_INDEX_ACTIVE = NO_INDEX != maxSize;
 
         if (IS_INDEX_ACTIVE) {
-
-            QUERY_REWRITE_INDEX.stopExpiry();
-            QUERY_REWRITE_INDEX = new ExpiringIndex<>(maxSize, expiryInterval, QUERY_REWRITE_LABEL);
+            if (QUERY_REWRITE_INDEX != null) {
+                QUERY_REWRITE_INDEX.stopExpiry();
+            }
+            QUERY_REWRITE_INDEX = new ExpiringIndex<>(maxSize, INDEX_EXPIRY_INTERVAL, QUERY_REWRITE_LABEL);
             QUERY_REWRITE_INDEX.startExpiry();
         } else {
             if (QUERY_REWRITE_INDEX != null) {
@@ -91,6 +88,7 @@ public class QueryRewriteIndex {
 
         if (IS_INDEX_ACTIVE) {
             if (expiryInterval > 0) {
+                QUERY_REWRITE_INDEX.stopExpiry();
                 QUERY_REWRITE_INDEX.setExpiryInterval(expiryInterval);
                 QUERY_REWRITE_INDEX.startExpiry();
             } else {
