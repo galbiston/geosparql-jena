@@ -5,6 +5,8 @@
  */
 package implementation.index.expiring;
 
+import java.util.Objects;
+
 /**
  *
  *
@@ -57,6 +59,35 @@ public class KeyTimestampPair implements Comparable<KeyTimestampPair> {
                 return -1;
             }
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.key);
+        hash = 67 * hash + (int) (this.timestamp ^ (this.timestamp >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final KeyTimestampPair other = (KeyTimestampPair) obj;
+        if (this.timestamp != other.timestamp) {
+            return false;
+        }
+        if (!Objects.equals(this.key, other.key)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
