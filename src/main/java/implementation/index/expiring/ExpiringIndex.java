@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private int maxSize;
+    private long maxSize;
     private long expiryInterval;
     private long fullIndexWarningInterval;
     private long fullIndexWarning;
@@ -45,7 +45,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
 
     public ExpiringIndex(int maxSize, long expiryInterval, long fullIndexWarningInterval, String label) {
         super(maxSize > UNLIMITED_INDEX ? maxSize : UNLIMITED_INITIAL_CAPACITY);
-        this.maxSize = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
+        this.maxSize = maxSize > UNLIMITED_INDEX ? maxSize : Long.MAX_VALUE;
         this.expiryInterval = expiryInterval;
         this.fullIndexWarningInterval = fullIndexWarningInterval;
         this.fullIndexWarning = System.currentTimeMillis();
@@ -56,7 +56,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
 
     @Override
     public V put(K key, V value) {
-        if (super.size() < maxSize) {
+        if (super.mappingCount() < maxSize) {
             indexCleaner.put(key);
             return super.put(key, value);
         } else {
@@ -95,12 +95,12 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
         indexCleaner.clear();
     }
 
-    public int getMaxSize() {
+    public long getMaxSize() {
         return maxSize;
     }
 
-    public void setMaxSize(int maxSize) {
-        this.maxSize = maxSize > UNLIMITED_INDEX ? maxSize : Integer.MAX_VALUE;
+    public void setMaxSize(long maxSize) {
+        this.maxSize = maxSize > UNLIMITED_INDEX ? maxSize : Long.MAX_VALUE;
     }
 
     public long getExpiryInterval() {
