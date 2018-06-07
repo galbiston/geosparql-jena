@@ -84,10 +84,7 @@ public class KeyTimestampPair implements Comparable<KeyTimestampPair> {
         if (this.timestamp != other.timestamp) {
             return false;
         }
-        if (!Objects.equals(this.key, other.key)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.key, other.key);
     }
 
     @Override
