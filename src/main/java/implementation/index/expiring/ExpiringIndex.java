@@ -155,7 +155,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
                 this.cleanerInterval = MINIMUM_INDEX_CLEANER_INTERVAL;
             }
             cleanerTimer = new Timer(label, true);
-            indexCleaner = new ExpiringIndexCleaner(this, expiryInterval);
+            indexCleaner = new ExpiringIndexCleaner(indexCleaner);
             cleanerTimer.scheduleAtFixedRate(indexCleaner, this.cleanerInterval, this.cleanerInterval);
         }
     }

@@ -28,6 +28,13 @@ public class ExpiringIndexCleaner extends TimerTask {
         this.expiryInterval = expiryInterval;
     }
 
+    public ExpiringIndexCleaner(ExpiringIndexCleaner indexCleaner) {
+        this.index = indexCleaner.index;
+        this.expiryInterval = indexCleaner.expiryInterval;
+        tracking.addAll(indexCleaner.tracking);
+        refresh.putAll(indexCleaner.refresh);
+    }
+
     @Override
     public void run() {
 
