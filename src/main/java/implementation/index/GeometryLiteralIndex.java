@@ -51,21 +51,28 @@ public class GeometryLiteralIndex {
         RETRIEVAL_COUNT++;
 
         if (IS_INDEX_ACTIVE) {
-            if (index.containsKey(geometryLiteral)) {
-                geometryWrapper = index.get(geometryLiteral);
-            } else {
-                if (otherIndex.containsKey(geometryLiteral)) {
-                    geometryWrapper = otherIndex.get(geometryLiteral);
+
+            try {
+                if (index.containsKey(geometryLiteral)) {
+                    geometryWrapper = index.get(geometryLiteral);
                 } else {
-                    geometryWrapper = datatypeReader.read(geometryLiteral);
+                    if (otherIndex.containsKey(geometryLiteral)) {
+                        geometryWrapper = otherIndex.get(geometryLiteral);
+                    } else {
+                        geometryWrapper = datatypeReader.read(geometryLiteral);
+                    }
+                    index.put(geometryLiteral, geometryWrapper);
+
                 }
-                index.put(geometryLiteral, geometryWrapper);
+
+                return geometryWrapper;
+            } catch (NullPointerException ex) {
+                //Catch NullPointerException and fall through to default action.
             }
-        } else {
-            geometryWrapper = datatypeReader.read(geometryLiteral);
         }
 
-        return geometryWrapper;
+        return datatypeReader.read(geometryLiteral);
+
     }
 
     /**

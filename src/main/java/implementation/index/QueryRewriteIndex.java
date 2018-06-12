@@ -37,17 +37,20 @@ public class QueryRewriteIndex {
         String key = subjectGeometryLiteral.getLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLexicalForm();
         RETRIEVAL_COUNT++;
         if (IS_INDEX_ACTIVE) {
-            if (QUERY_REWRITE_INDEX.containsKey(key)) {
-                result = QUERY_REWRITE_INDEX.get(key);
-            } else {
-                result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
-                QUERY_REWRITE_INDEX.put(key, result);
+            try {
+                if (QUERY_REWRITE_INDEX.containsKey(key)) {
+                    result = QUERY_REWRITE_INDEX.get(key);
+                } else {
+                    result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+                    QUERY_REWRITE_INDEX.put(key, result);
+                }
+                return result;
+            } catch (NullPointerException ex) {
+                //Catch NullPointerException and fall through to default action.
             }
-        } else {
-            result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
         }
 
-        return result;
+        return propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
     }
 
     public static final void clear() {
