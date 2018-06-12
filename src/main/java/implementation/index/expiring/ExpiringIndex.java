@@ -31,7 +31,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
     private long fullIndexWarningInterval;
     private long fullIndexWarning;
     private String label;
-    private final ExpiringIndexCleaner indexCleaner;
+    private ExpiringIndexCleaner indexCleaner;
     private Timer cleanerTimer;
     private long cleanerInterval = INDEX_CLEANER_INTERVAL;
 
@@ -147,18 +147,17 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
     }
 
     public void startExpiry(long cleanerInterval) {
-        if (cleanerTimer != null) {
-            cleanerTimer.cancel();
+        if (cleanerTimer == null) {
+            if (MINIMUM_INDEX_CLEANER_INTERVAL < cleanerInterval) {
+                this.cleanerInterval = cleanerInterval;
+            } else {
+                LOGGER.warn("Cleaner Interval: {} less than minimum: {}. Setting to minimum.", cleanerInterval, MINIMUM_INDEX_CLEANER_INTERVAL);
+                this.cleanerInterval = MINIMUM_INDEX_CLEANER_INTERVAL;
+            }
+            cleanerTimer = new Timer(label, true);
+            indexCleaner = new ExpiringIndexCleaner(this, expiryInterval);
+            cleanerTimer.scheduleAtFixedRate(indexCleaner, this.cleanerInterval, this.cleanerInterval);
         }
-
-        if (MINIMUM_INDEX_CLEANER_INTERVAL < cleanerInterval) {
-            this.cleanerInterval = cleanerInterval;
-        } else {
-            LOGGER.warn("Cleaner Interval: {} less than minimum: {}. Setting to minimum.", cleanerInterval, MINIMUM_INDEX_CLEANER_INTERVAL);
-            this.cleanerInterval = MINIMUM_INDEX_CLEANER_INTERVAL;
-        }
-        cleanerTimer = new Timer(label, true);
-        cleanerTimer.scheduleAtFixedRate(indexCleaner, this.cleanerInterval, this.cleanerInterval);
     }
 
     public void stopExpiry() {
