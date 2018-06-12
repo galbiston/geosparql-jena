@@ -11,10 +11,7 @@ import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import implementation.index.expiring.ExpiringIndex;
-import java.lang.invoke.MethodHandles;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -27,6 +24,7 @@ public class GeometryLiteralIndex {
     private static final String SECONDARY_INDEX_LABEL = "Secondary Geometry Literal";
     private static ExpiringIndex<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, PRIMARY_INDEX_LABEL);
     private static ExpiringIndex<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, SECONDARY_INDEX_LABEL);
+    private static Long RETRIEVAL_COUNT = 0L;
 
     public enum GeometryIndex {
         PRIMARY, SECONDARY
@@ -45,19 +43,13 @@ public class GeometryLiteralIndex {
 
         return geometryWrapper;
     }
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    //private static Integer debugRetrievalCount = 0;
 
     private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, DatatypeReader datatypeReader, Map<String, GeometryWrapper> index, Map<String, GeometryWrapper> otherIndex) {
 
         GeometryWrapper geometryWrapper;
 
-        /*
-        debugRetrievalCount++;
-        if (debugRetrievalCount % 10000 == 0) {
-            LOGGER.info("Retrieve Count: {}", debugRetrievalCount);
-        }
-         */
+        RETRIEVAL_COUNT++;
+
         if (IS_INDEX_ACTIVE) {
             if (index.containsKey(geometryLiteral)) {
                 geometryWrapper = index.get(geometryLiteral);
@@ -86,6 +78,7 @@ public class GeometryLiteralIndex {
         if (SECONDARY_INDEX != null) {
             SECONDARY_INDEX.clear();
         }
+        RETRIEVAL_COUNT = 0L;
     }
 
     /**
@@ -139,6 +132,26 @@ public class GeometryLiteralIndex {
                 SECONDARY_INDEX.stopExpiry();
             }
         }
+    }
+
+    public static final Integer getPrimaryIndexSize() {
+        if (PRIMARY_INDEX != null) {
+            return PRIMARY_INDEX.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public static final Integer getSecondaryIndexSize() {
+        if (SECONDARY_INDEX != null) {
+            return SECONDARY_INDEX.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public static final Long getRetrievalCount() {
+        return RETRIEVAL_COUNT;
     }
 
 }

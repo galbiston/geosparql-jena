@@ -21,6 +21,7 @@ public class QueryRewriteIndex {
     private static Boolean IS_INDEX_ACTIVE = true;
     private static final String QUERY_REWRITE_LABEL = "Geometry Transform";
     private static ExpiringIndex<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, QUERY_REWRITE_LABEL);
+    public static Long RETRIEVAL_COUNT = 0L;
 
     /**
      *
@@ -34,7 +35,7 @@ public class QueryRewriteIndex {
 
         Boolean result;
         String key = subjectGeometryLiteral.getLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLexicalForm();
-
+        RETRIEVAL_COUNT++;
         if (IS_INDEX_ACTIVE) {
             if (QUERY_REWRITE_INDEX.containsKey(key)) {
                 result = QUERY_REWRITE_INDEX.get(key);
@@ -53,6 +54,7 @@ public class QueryRewriteIndex {
         if (QUERY_REWRITE_INDEX != null) {
             QUERY_REWRITE_INDEX.clear();
         }
+        RETRIEVAL_COUNT = 0L;
     }
 
     /**
@@ -97,4 +99,15 @@ public class QueryRewriteIndex {
         }
     }
 
+    public static final Integer getQueryRewriteIndexSize() {
+        if (QUERY_REWRITE_INDEX != null) {
+            return QUERY_REWRITE_INDEX.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public static final Long getRetrievalCount() {
+        return RETRIEVAL_COUNT;
+    }
 }

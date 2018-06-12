@@ -31,6 +31,7 @@ public class GeometryTransformIndex {
     private static Boolean IS_INDEX_ACTIVE = true;
     private static final String GEOMETRY_TRANSFORM_LABEL = "Geometry Transform";
     private static ExpiringIndex<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, GEOMETRY_TRANSFORM_LABEL);
+    public static Long RETRIEVAL_COUNT = 0L;
 
     /**
      *
@@ -46,8 +47,10 @@ public class GeometryTransformIndex {
 
         GeometryWrapper transformedGeometryWrapper;
         String key = sourceGeometryWrapper.getLexicalForm() + "@" + srsURI;
+        RETRIEVAL_COUNT++;
 
         if (IS_INDEX_ACTIVE && storeCRSTransform) {
+
             if (GEOMETRY_TRANSFORM_INDEX.containsKey(key)) {
                 transformedGeometryWrapper = GEOMETRY_TRANSFORM_INDEX.get(key);
             } else {
@@ -77,6 +80,7 @@ public class GeometryTransformIndex {
         if (GEOMETRY_TRANSFORM_INDEX != null) {
             GEOMETRY_TRANSFORM_INDEX.clear();
         }
+        RETRIEVAL_COUNT = 0L;
     }
 
     /**
@@ -119,5 +123,17 @@ public class GeometryTransformIndex {
                 GEOMETRY_TRANSFORM_INDEX.stopExpiry();
             }
         }
+    }
+
+    public static final Integer getGeometryTransformIndexSize() {
+        if (GEOMETRY_TRANSFORM_INDEX != null) {
+            return GEOMETRY_TRANSFORM_INDEX.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public static final Long getRetrievalCount() {
+        return RETRIEVAL_COUNT;
     }
 }
