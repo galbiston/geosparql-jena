@@ -432,7 +432,6 @@ public class GeometryWrapper implements Serializable {
         this.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.intersects(transformedGeometry.xyGeometry);
-
     }
 
     public boolean overlaps(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
