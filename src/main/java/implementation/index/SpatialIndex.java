@@ -46,30 +46,64 @@ public class SpatialIndex implements Serializable {
     private static final HashMap<String, Envelope> SPATIAL_INDEX = new HashMap<>();
     private static final String SPATIAL_INDEX_FILE = "spatial.index";
 
-    public static final Boolean addIfMissing(NodeValue nodeValue) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final Boolean checkIntersects(NodeValue nodeValue1, NodeValue nodeValue2, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
 
-        if (!nodeValue.isLiteral()) {
+        if (!nodeValue1.isLiteral()) {
             return null;
         }
 
-        Node node = nodeValue.asNode();
-        String datatypeURI = node.getLiteralDatatypeURI();
-        String lexicalForm = node.getLiteralLexicalForm();
+        Node node1 = nodeValue1.asNode();
+        String sourceDataypeURI = node1.getLiteralDatatypeURI();
+        String sourceLexicalForm = node1.getLiteralLexicalForm();
 
-        return addIfMissing(lexicalForm, datatypeURI);
+        addIfMissing(sourceLexicalForm, sourceDataypeURI);
+
+        if (!nodeValue2.isLiteral()) {
+            return null;
+        }
+
+        Node node2 = nodeValue1.asNode();
+        String targetDataypeURI = node2.getLiteralDatatypeURI();
+        String targetLexicalForm = node2.getLiteralLexicalForm();
+        addIfMissing(targetLexicalForm, targetDataypeURI);
+
+        return checkIntersects(sourceLexicalForm, targetLexicalForm, isDisjoint);
     }
 
-    public static final Boolean addIfMissing(Literal literal) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final Boolean checkIntersects(Literal literal1, Literal literal2, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
 
-        String datatypeURI = literal.getDatatypeURI();
-        String lexicalForm = literal.getLexicalForm();
+        String sourceDatatypeURI = literal1.getDatatypeURI();
+        String sourceLexicalForm = literal1.getLexicalForm();
 
-        return addIfMissing(lexicalForm, datatypeURI);
+        addIfMissing(sourceLexicalForm, sourceDatatypeURI);
+
+        String targetDatatypeURI = literal2.getDatatypeURI();
+        String targetLexicalForm = literal2.getLexicalForm();
+        addIfMissing(targetLexicalForm, targetDatatypeURI);
+
+        return checkIntersects(sourceLexicalForm, targetLexicalForm, isDisjoint);
     }
 
-    public static final Boolean addIfMissing(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final Boolean checkIntersects(String sourceGeometryLiteral, String targetGeometryLiteral, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
+        Envelope sourceEnvelope = SPATIAL_INDEX.get(sourceGeometryLiteral);
+        Envelope targetEnvelope = SPATIAL_INDEX.get(targetGeometryLiteral);
+        boolean isIntersect = sourceEnvelope.intersects(targetEnvelope);
+
+        //Change the intersect depending on whether Disjoint relation or not.
+        if (!isIntersect && !isDisjoint) {
+            //Exit quickly if doesn't intersect and not disjoint.
+            return Boolean.FALSE;
+        } else if (!isIntersect && isDisjoint) {
+            //Exit quickly if doesn't intersect and disjoint.
+            return Boolean.TRUE;
+        }
+
+        return isIntersect;
+    }
+
+    private static Boolean addIfMissing(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
         if (datatypeURI.equals(WKTDatatype.URI) || datatypeURI.equals(GMLDatatype.URI)) {
-            if (contains(lexicalForm)) {
+            if (SPATIAL_INDEX.containsKey(lexicalForm)) {
                 return false;
             } else {
                 insert(lexicalForm, datatypeURI);
@@ -102,7 +136,9 @@ public class SpatialIndex implements Serializable {
                 RDFNode node = nodeIt.nextNode();
                 if (node.isLiteral()) {
                     Literal literal = node.asLiteral();
-                    addIfMissing(literal);
+                    String lexicalForm = literal.getLexicalForm();
+                    String datatypeURI = literal.getDatatypeURI();
+                    addIfMissing(lexicalForm, datatypeURI);
                 }
             }
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
@@ -115,30 +151,6 @@ public class SpatialIndex implements Serializable {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(lexicalForm, datatypeURI);
         Envelope envelope = extractEnvelope(geometryWrapper);
         SPATIAL_INDEX.put(lexicalForm, envelope);
-    }
-
-    public static final Boolean query(GeometryWrapper sourceGeometryWrapper, NodeValue nodeValue) throws FactoryException, MismatchedDimensionException, TransformException {
-
-        if (!nodeValue.isLiteral()) {
-            return null;
-        }
-
-        Node node = nodeValue.asNode();
-        String lexicalForm = node.getLiteralLexicalForm();
-        return query(sourceGeometryWrapper, lexicalForm);
-    }
-
-    public static final Boolean query(GeometryWrapper sourceGeometryWrapper, Literal literal) throws FactoryException, MismatchedDimensionException, TransformException {
-        String lexicalForm = literal.getLexicalForm();
-        return query(sourceGeometryWrapper, lexicalForm);
-    }
-
-    public static final Boolean query(GeometryWrapper geometryWrapper, String testGeometryLiteral) throws FactoryException, MismatchedDimensionException, TransformException {
-        Envelope searchEnvelope = extractEnvelope(geometryWrapper);
-        @SuppressWarnings("unchecked")
-        Envelope testEnvelope = SPATIAL_INDEX.get(testGeometryLiteral);
-        boolean isIntersected = searchEnvelope.intersects(testEnvelope);
-        return isIntersected;
     }
 
     private static Envelope extractEnvelope(GeometryWrapper sourceGeometryWrapper) throws FactoryException, MismatchedDimensionException, TransformException {

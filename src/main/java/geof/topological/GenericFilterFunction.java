@@ -30,25 +30,14 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
         try {
             //Check spatial index.
-            Boolean isAdded = SpatialIndex.addIfMissing(v2);
-            if (isAdded == null) {
+            Boolean isIntersect = SpatialIndex.checkIntersects(v1, v2, isDisjoint());
+            if (isIntersect == null || !isIntersect) {
                 return NodeValue.FALSE;
             }
 
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return NodeValue.FALSE;
-            }
-
-            //Discover if an intersection.
-            boolean isIntersect = SpatialIndex.query(geometry1, v2);
-            //Change the intersect depending on whether Disjoint relation or not.
-            if (!isIntersect && !isDisjoint()) {
-                //Exit quickly if doesn't intersect and not disjoint.
-                return NodeValue.FALSE;
-            } else if (!isIntersect && isDisjoint()) {
-                //Exit quickly if doesn't intersect and disjoint.
-                return NodeValue.TRUE;
             }
 
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
@@ -69,25 +58,14 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
         try {
 
             //Check spatial index.
-            Boolean isAdded = SpatialIndex.addIfMissing(v2);
-            if (isAdded == null) {
+            Boolean isIntersect = SpatialIndex.checkIntersects(v1, v2, isDisjoint());
+            if (isIntersect == null || !isIntersect) {
                 return Boolean.FALSE;
             }
 
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return Boolean.FALSE;
-            }
-
-            //Discover if an intersection.
-            boolean isIntersect = SpatialIndex.query(geometry1, v2);
-            //Change the intersect depending on whether Disjoint relation or not.
-            if (!isIntersect && !isDisjoint()) {
-                //Exit quickly if doesn't intersect and not disjoint.
-                return Boolean.FALSE;
-            } else if (!isIntersect && isDisjoint()) {
-                //Exit quickly if doesn't intersect and disjoint.
-                return Boolean.TRUE;
             }
 
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
