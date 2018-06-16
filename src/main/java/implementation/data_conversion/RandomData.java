@@ -82,9 +82,10 @@ public class RandomData {
 
             Literal geometryLiteral = WKTCreation.createLineString(minX, minY, maxX, maxY);
             infModel.add(geometry, Geo.HAS_SERIALIZATION_PROP, geometryLiteral);
-            if (i % 1000 == 0) {
-                LOGGER.info("Created Triple: {} - {} {} {}", i, feature, Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
-                LOGGER.info("Created Triple: {} - {} {} {}", i, geometry, Geo.HAS_SERIALIZATION_PROP, geometryLiteral);
+            int tripleProgress = i + 1;
+            if (tripleProgress % 1000 == 0 || tripleProgress == tripleCount) {
+                LOGGER.info("Created Triple: {} - {} {} {}", tripleProgress, feature, Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
+                LOGGER.info("Created Triple: {} - {} {} {}", tripleProgress, geometry, Geo.HAS_SERIALIZATION_PROP, geometryLiteral);
             }
         }
         writeTDB(infModel, tdbFolder);
