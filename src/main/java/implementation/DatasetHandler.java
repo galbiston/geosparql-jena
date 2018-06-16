@@ -129,7 +129,7 @@ public class DatasetHandler {
 
         dataset.close();
         TDBFactory.release(dataset);
-        SpatialIndex.deleteIndexFiles(datasetFolder);
+        SpatialIndex.deleteIndexFile(datasetFolder);
         return isCleared;
     }
 
