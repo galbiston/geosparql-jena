@@ -49,7 +49,10 @@ dependencies {
     api "org.apache.jena:jena-arq:$jenaVersion"
     api "org.apache.jena:jena-iri:$jenaVersion"
     api "org.apache.jena:jena-tdb:$jenaVersion"
-    implementation "org.apache.jena:jena-cmds:$jenaVersion"        
+    implementation (group: 'org.apache.jena', name: 'jena-cmds', version: jenaVersion){
+        exclude group: "org.apache.jena", module: "apache-jena-libs"
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
+    }       
 
     //Apache Commons Collections
     ext.commonsCollectionsVersion = "4.1"
