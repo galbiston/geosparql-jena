@@ -30,7 +30,7 @@ import tdb.tdbstats;
 
 /**
  *
- * @author Gerg
+ * 
  */
 public class DatasetHandler {
 

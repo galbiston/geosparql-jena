@@ -19,7 +19,7 @@ import org.opengis.referencing.FactoryException;
 
 /**
  *
- * @author Gerg
+ * 
  */
 public class ExpiringIndexTest {
 
