@@ -19,6 +19,7 @@ import implementation.index.IndexConfiguration.IndexOption;
 import implementation.index.SpatialIndex;
 import implementation.registry.CRSRegistry;
 import implementation.vocabulary.Geo;
+import java.io.File;
 import java.io.InputStream;
 import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.Dataset;
@@ -29,6 +30,7 @@ import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
+import org.apache.jena.tdb.TDBFactory;
 
 /**
  *
@@ -172,6 +174,12 @@ public class GeoSPARQLSupport {
         IndexConfiguration.setConfig(IndexOption.NONE);
         //Setup Default Cordinate Reference Systems
         CRSRegistry.setupDefaultCRS();
+    }
+
+    public static final void loadFunctions(IndexOption indexOption, File tdbFolder) {
+        loadFunctions(indexOption);
+        Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
+        SpatialIndex.prepare(dataset);
     }
 
     public static final void loadFunctions(IndexOption indexOption, Dataset dataset) {
