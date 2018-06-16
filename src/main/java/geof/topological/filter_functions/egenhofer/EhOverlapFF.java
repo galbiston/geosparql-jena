@@ -23,4 +23,8 @@ public class EhOverlapFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.OVERLAP);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

@@ -23,4 +23,8 @@ public class EhInsideFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.INSIDE);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

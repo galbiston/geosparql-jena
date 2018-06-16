@@ -6,6 +6,7 @@
 package implementation;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
@@ -369,6 +370,10 @@ public class GeometryWrapper implements Serializable {
         return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
     }
 
+    public Envelope getEnvelope() {
+        return this.xyGeometry.getEnvelopeInternal();
+    }
+
     public GeometryWrapper intersection(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.intersection(transformedGeometry.xyGeometry);
@@ -559,7 +564,11 @@ public class GeometryWrapper implements Serializable {
         return extract(geometryLiteral, GeometryIndex.PRIMARY);
     }
 
-    private static GeometryWrapper extract(String lexicalForm, String datatypeURI, GeometryIndex targetIndex) {
+    public static GeometryWrapper extract(String lexicalForm, String datatypeURI) {
+        return extract(lexicalForm, datatypeURI, GeometryIndex.PRIMARY);
+    }
+
+    public static GeometryWrapper extract(String lexicalForm, String datatypeURI, GeometryIndex targetIndex) {
 
         GeometryDatatype datatype = DatatypeUtil.getDatatype(datatypeURI);
         GeometryWrapper geometry = datatype.parse(lexicalForm, targetIndex);

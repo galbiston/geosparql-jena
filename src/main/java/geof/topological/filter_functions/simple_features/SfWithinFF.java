@@ -22,4 +22,8 @@ public class SfWithinFF extends GenericFilterFunction {
         return sourceGeometry.within(targetGeometry);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

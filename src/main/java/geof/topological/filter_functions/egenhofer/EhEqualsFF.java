@@ -50,4 +50,9 @@ public class EhEqualsFF extends GenericFilterFunction {
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         return sourceGeometry.equals(targetGeometry);
     }
+
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

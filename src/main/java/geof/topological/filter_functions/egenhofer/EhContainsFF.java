@@ -23,4 +23,8 @@ public class EhContainsFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.CONTAINS);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

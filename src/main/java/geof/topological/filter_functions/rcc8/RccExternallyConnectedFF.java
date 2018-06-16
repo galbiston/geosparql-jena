@@ -23,4 +23,8 @@ public class RccExternallyConnectedFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.EXTERNALLY_CONNECTED);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

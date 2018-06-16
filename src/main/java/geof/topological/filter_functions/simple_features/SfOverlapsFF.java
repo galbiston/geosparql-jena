@@ -22,4 +22,8 @@ public class SfOverlapsFF extends GenericFilterFunction {
         return sourceGeometry.overlaps(targetGeometry);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

@@ -117,7 +117,7 @@ public class CRSRegistry implements Serializable {
         }
     }
 
-    public static final void clearAll() {
+    public static final void reset() {
         CRS_REGISTRY.clear();
         UNITS_OF_MEASURE_REGISTRY.clear();
         setupDefaultCRS();

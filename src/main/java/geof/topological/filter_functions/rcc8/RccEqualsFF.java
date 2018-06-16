@@ -51,4 +51,8 @@ public class RccEqualsFF extends GenericFilterFunction {
         return sourceGeometry.equals(targetGeometry);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

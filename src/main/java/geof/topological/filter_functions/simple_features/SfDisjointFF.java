@@ -22,4 +22,8 @@ public class SfDisjointFF extends GenericFilterFunction {
         return sourceGeometry.disjoint(targetGeometry);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return true;
+    }
 }

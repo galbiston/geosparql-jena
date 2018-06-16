@@ -22,4 +22,8 @@ public class SfIntersectsFF extends GenericFilterFunction {
         return sourceGeometry.intersects(targetGeometry);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

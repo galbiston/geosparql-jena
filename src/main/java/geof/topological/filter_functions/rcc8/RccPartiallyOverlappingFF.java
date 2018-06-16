@@ -24,4 +24,8 @@ public class RccPartiallyOverlappingFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.PARTIALLY_OVERLAPPING);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

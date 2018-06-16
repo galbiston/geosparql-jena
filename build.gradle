@@ -49,6 +49,7 @@ dependencies {
     api "org.apache.jena:jena-arq:$jenaVersion"
     api "org.apache.jena:jena-iri:$jenaVersion"
     api "org.apache.jena:jena-tdb:$jenaVersion"
+    implementation "org.apache.jena:jena-cmds:$jenaVersion"        
 
     //Apache Commons Collections
     ext.commonsCollectionsVersion = "4.1"

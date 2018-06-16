@@ -22,4 +22,8 @@ public class SfTouchesFF extends GenericFilterFunction {
         return sourceGeometry.touches(targetGeometry);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

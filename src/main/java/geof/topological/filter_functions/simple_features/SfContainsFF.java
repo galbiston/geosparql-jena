@@ -22,4 +22,9 @@ public class SfContainsFF extends GenericFilterFunction {
         return sourceGeometry.contains(targetGeometry);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
+
 }

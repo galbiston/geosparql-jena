@@ -23,4 +23,8 @@ public class RccTangentialProperPartInverseFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.TANGENTIAL_PROPER_PART_INVERSE);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

@@ -77,10 +77,10 @@ public class IndexConfiguration {
         QueryRewriteIndex.setExpiry(queryRewriteIndex);
     }
 
-    public static final void clearAllIndexesAndRegistries() {
+    public static final void resetIndexesAndRegistries() {
         GeometryLiteralIndex.clear();
         QueryRewriteIndex.clear();
-        CRSRegistry.clearAll();
+        CRSRegistry.reset();
         MathTransformRegistry.clear();
     }
 

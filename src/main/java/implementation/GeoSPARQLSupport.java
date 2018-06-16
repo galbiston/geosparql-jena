@@ -16,10 +16,12 @@ import implementation.function_registration.Relate;
 import implementation.function_registration.SimpleFeatures;
 import implementation.index.IndexConfiguration;
 import implementation.index.IndexConfiguration.IndexOption;
+import implementation.index.SpatialIndex;
 import implementation.registry.CRSRegistry;
 import implementation.vocabulary.Geo;
 import java.io.InputStream;
 import org.apache.jena.datatypes.TypeMapper;
+import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -131,6 +133,10 @@ public class GeoSPARQLSupport {
 
         //Setup inference model.
         InfModel infModel = ModelFactory.createInfModel(reasoner, model);
+
+        //Build spatial index.
+        SpatialIndex.build(infModel);
+
         return infModel;
     }
 
@@ -166,6 +172,11 @@ public class GeoSPARQLSupport {
         IndexConfiguration.setConfig(IndexOption.NONE);
         //Setup Default Cordinate Reference Systems
         CRSRegistry.setupDefaultCRS();
+    }
+
+    public static final void loadFunctions(IndexOption indexOption, Dataset dataset) {
+        loadFunctions(indexOption);
+        SpatialIndex.prepare(dataset);
     }
 
     /**
@@ -210,9 +221,9 @@ public class GeoSPARQLSupport {
     /**
      * Empty all indexes and registries currently in use.
      */
-    public static final void clearAllIndexesAndRegistries() {
+    public static final void resetIndexesAndRegistries() {
         //Convenience method so that setup and clearing in one class.
-        IndexConfiguration.clearAllIndexesAndRegistries();
+        IndexConfiguration.resetIndexesAndRegistries();
     }
 
 }

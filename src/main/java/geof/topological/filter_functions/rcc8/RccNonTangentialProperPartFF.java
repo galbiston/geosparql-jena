@@ -23,4 +23,8 @@ public class RccNonTangentialProperPartFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.NON_TANGENTIAL_PROPER_PART);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

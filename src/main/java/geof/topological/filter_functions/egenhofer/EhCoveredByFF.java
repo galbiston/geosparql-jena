@@ -23,4 +23,8 @@ public class EhCoveredByFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.COVERED_BY);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }

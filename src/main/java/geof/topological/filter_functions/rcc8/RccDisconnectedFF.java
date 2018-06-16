@@ -23,4 +23,8 @@ public class RccDisconnectedFF extends GenericFilterFunction {
         return sourceGeometry.relate(targetGeometry, RCC8IntersectionPattern.DISCONNECTED);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return true;
+    }
 }

@@ -22,4 +22,8 @@ public class SfCrossesFF extends GenericFilterFunction {
         return sourceGeometry.crosses(targetGeometry);
     }
 
+    @Override
+    protected boolean isDisjoint() {
+        return false;
+    }
 }
