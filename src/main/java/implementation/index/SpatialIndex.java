@@ -89,15 +89,17 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final void build(Dataset dataset) {
+        LOGGER.info("Building Spatial Index for Dataset: Started");
         Model defaultModel = dataset.getDefaultModel();
-        SpatialIndex.build(defaultModel);
+        SpatialIndex.build(defaultModel, "Default Model");
 
         Model unionModel = dataset.getUnionModel();
-        SpatialIndex.build(unionModel);
+        SpatialIndex.build(unionModel, "Union Model");
+        LOGGER.info("Building Spatial Index for Dataset: Completed");
     }
 
-    public static final void build(Model model) {
-        LOGGER.info("Building Spatial Index: Started");
+    public static final void build(Model model, String graphName) {
+        LOGGER.info("Building Spatial Index for {}: Started", graphName);
         try {
             NodeIterator nodeIt = model.listObjectsOfProperty(Geo.HAS_SERIALIZATION_PROP);
             while (nodeIt.hasNext()) {
@@ -110,7 +112,7 @@ public class SpatialIndex implements Serializable {
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Build Spatial Index Exception: {}", ex.getMessage());
         }
-        LOGGER.info("Building Spatial Index: Finished");
+        LOGGER.info("Building Spatial Index for {}: Completed", graphName);
     }
 
     public static final void insert(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -138,6 +140,7 @@ public class SpatialIndex implements Serializable {
 
     public static final Boolean query(GeometryWrapper geometryWrapper, String testGeometryLiteral) throws FactoryException, MismatchedDimensionException, TransformException {
         Envelope searchEnvelope = extractEnvelope(geometryWrapper);
+        @SuppressWarnings("unchecked")
         List<String> intersections = QUAD_TREE.query(searchEnvelope);
         boolean isIntersected = intersections.contains(testGeometryLiteral);
         return isIntersected;
@@ -163,7 +166,7 @@ public class SpatialIndex implements Serializable {
 
         File geometryLiteralFilepath = new File(indexFolder, GEOMETRY_LITERAL_FILE);
         writeObject(geometryLiteralFilepath, GEOMETRY_LITERALS);
-        LOGGER.info("Writing Spatial Index: Finished");
+        LOGGER.info("Writing Spatial Index: Completed");
     }
 
     /**
@@ -194,17 +197,21 @@ public class SpatialIndex implements Serializable {
         LOGGER.info("Reading Spatial Index: Started");
 
         File quadTreeFilepath = new File(indexFolder, QUAD_TREE_FILE);
-        Quadtree quadtree = (Quadtree) readObject(quadTreeFilepath);
-        if (quadtree != null) {
+
+        Object quadtreeObject = readObject(quadTreeFilepath);
+        if (quadtreeObject instanceof Quadtree) {
+            @SuppressWarnings("unchecked")
+            Quadtree quadtree = (Quadtree) quadtreeObject;
             QUAD_TREE = quadtree;
         }
-
         File geometryLiteralFilepath = new File(indexFolder, GEOMETRY_LITERAL_FILE);
-        HashSet<String> geometryLiterals = (HashSet<String>) readObject(geometryLiteralFilepath);
-        if (geometryLiterals != null) {
+        Object geometryLiteralObject = readObject(geometryLiteralFilepath);
+        if (geometryLiteralObject instanceof HashSet<?>) {
+            @SuppressWarnings("unchecked")
+            HashSet<String> geometryLiterals = (HashSet<String>) geometryLiteralObject;
             GEOMETRY_LITERALS = geometryLiterals;
         }
-        LOGGER.info("Reading Spatial Index: Finished");
+        LOGGER.info("Reading Spatial Index: Completed");
     }
 
     private static boolean containsIndex(File indexFolder) {

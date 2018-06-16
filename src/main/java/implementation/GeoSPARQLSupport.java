@@ -137,7 +137,7 @@ public class GeoSPARQLSupport {
         InfModel infModel = ModelFactory.createInfModel(reasoner, model);
 
         //Build spatial index.
-        SpatialIndex.build(infModel);
+        SpatialIndex.build(infModel, "Model");
 
         return infModel;
     }
@@ -177,9 +177,8 @@ public class GeoSPARQLSupport {
     }
 
     public static final void loadFunctions(IndexOption indexOption, File tdbFolder) {
-        loadFunctions(indexOption);
         Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
-        SpatialIndex.prepare(dataset);
+        loadFunctions(indexOption, dataset);
     }
 
     public static final void loadFunctions(IndexOption indexOption, Dataset dataset) {
