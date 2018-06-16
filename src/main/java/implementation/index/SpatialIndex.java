@@ -6,7 +6,6 @@
 package implementation.index;
 
 import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.index.quadtree.Quadtree;
 import implementation.GeometryWrapper;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
@@ -20,8 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
-import java.util.HashSet;
-import java.util.List;
+import java.util.HashMap;
 import org.apache.jena.graph.Node;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.Literal;
@@ -44,11 +42,9 @@ import org.slf4j.LoggerFactory;
 public class SpatialIndex implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static HashSet<String> GEOMETRY_LITERALS = new HashSet<>();
-    private static Quadtree QUAD_TREE = new Quadtree();
 
-    private static final String GEOMETRY_LITERAL_FILE = "spatial-literal.index";
-    private static final String QUAD_TREE_FILE = "spatial-quad.index";
+    private static final HashMap<String, Envelope> SPATIAL_INDEX = new HashMap<>();
+    private static final String SPATIAL_INDEX_FILE = "spatial.index";
 
     public static final Boolean addIfMissing(NodeValue nodeValue) throws FactoryException, MismatchedDimensionException, TransformException {
 
@@ -85,7 +81,7 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final Boolean contains(String geometryLiteral) {
-        return GEOMETRY_LITERALS.contains(geometryLiteral);
+        return SPATIAL_INDEX.containsKey(geometryLiteral);
     }
 
     public static final void build(Dataset dataset) {
@@ -118,8 +114,7 @@ public class SpatialIndex implements Serializable {
     public static final void insert(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(lexicalForm, datatypeURI);
         Envelope envelope = extractEnvelope(geometryWrapper);
-        GEOMETRY_LITERALS.add(lexicalForm);
-        QUAD_TREE.insert(envelope, lexicalForm);
+        SPATIAL_INDEX.put(lexicalForm, envelope);
     }
 
     public static final Boolean query(GeometryWrapper sourceGeometryWrapper, NodeValue nodeValue) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -141,8 +136,8 @@ public class SpatialIndex implements Serializable {
     public static final Boolean query(GeometryWrapper geometryWrapper, String testGeometryLiteral) throws FactoryException, MismatchedDimensionException, TransformException {
         Envelope searchEnvelope = extractEnvelope(geometryWrapper);
         @SuppressWarnings("unchecked")
-        List<String> intersections = QUAD_TREE.query(searchEnvelope);
-        boolean isIntersected = intersections.contains(testGeometryLiteral);
+        Envelope testEnvelope = SPATIAL_INDEX.get(testGeometryLiteral);
+        boolean isIntersected = searchEnvelope.intersects(testEnvelope);
         return isIntersected;
     }
 
@@ -153,19 +148,15 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final void clear() {
-        GEOMETRY_LITERALS = new HashSet<>();
-        QUAD_TREE = new Quadtree();
+        SPATIAL_INDEX.clear();
     }
 
     public static final void write(File indexFolder) {
         LOGGER.info("Writing Spatial Index: Started");
         indexFolder.mkdir();
 
-        File quadTreeFilepath = new File(indexFolder, QUAD_TREE_FILE);
-        writeObject(quadTreeFilepath, QUAD_TREE);
-
-        File geometryLiteralFilepath = new File(indexFolder, GEOMETRY_LITERAL_FILE);
-        writeObject(geometryLiteralFilepath, GEOMETRY_LITERALS);
+        File spatialIndexFilepath = new File(indexFolder, SPATIAL_INDEX_FILE);
+        writeObject(spatialIndexFilepath, SPATIAL_INDEX);
         LOGGER.info("Writing Spatial Index: Completed");
     }
 
@@ -196,29 +187,19 @@ public class SpatialIndex implements Serializable {
     public static final void read(File indexFolder) {
         LOGGER.info("Reading Spatial Index: Started");
 
-        File quadTreeFilepath = new File(indexFolder, QUAD_TREE_FILE);
-
-        Object quadtreeObject = readObject(quadTreeFilepath);
-        if (quadtreeObject instanceof Quadtree) {
+        File spatialIndexFilepath = new File(indexFolder, SPATIAL_INDEX_FILE);
+        Object spatialIndexObject = readObject(spatialIndexFilepath);
+        if (spatialIndexObject instanceof HashMap<?, ?>) {
             @SuppressWarnings("unchecked")
-            Quadtree quadtree = (Quadtree) quadtreeObject;
-            QUAD_TREE = quadtree;
-        }
-        File geometryLiteralFilepath = new File(indexFolder, GEOMETRY_LITERAL_FILE);
-        Object geometryLiteralObject = readObject(geometryLiteralFilepath);
-        if (geometryLiteralObject instanceof HashSet<?>) {
-            @SuppressWarnings("unchecked")
-            HashSet<String> geometryLiterals = (HashSet<String>) geometryLiteralObject;
-            GEOMETRY_LITERALS = geometryLiterals;
+            HashMap<String, Envelope> spatialIndex = (HashMap<String, Envelope>) spatialIndexObject;
+            SPATIAL_INDEX.putAll(spatialIndex);
         }
         LOGGER.info("Reading Spatial Index: Completed");
     }
 
     private static boolean containsIndex(File indexFolder) {
-        File quadTreeFilepath = new File(indexFolder, QUAD_TREE_FILE);
-        File geometryLiteralFilepath = new File(indexFolder, GEOMETRY_LITERAL_FILE);
-
-        return quadTreeFilepath.exists() && geometryLiteralFilepath.exists();
+        File geometryLiteralFilepath = new File(indexFolder, SPATIAL_INDEX_FILE);
+        return geometryLiteralFilepath.exists();
     }
 
     private static void writeObject(File indexFile, Object index) {
@@ -254,12 +235,10 @@ public class SpatialIndex implements Serializable {
         return result;
     }
 
-    public static final void deleteIndexFiles(File indexFolder) {
+    public static final void deleteIndexFile(File indexFolder) {
 
-        File quadTreeFilepath = new File(indexFolder, QUAD_TREE_FILE);
-        File geometryLiteralFilepath = new File(indexFolder, GEOMETRY_LITERAL_FILE);
-        quadTreeFilepath.delete();
-        geometryLiteralFilepath.delete();
+        File spatialIndexFilepath = new File(indexFolder, SPATIAL_INDEX_FILE);
+        spatialIndexFilepath.delete();
     }
 
 }
