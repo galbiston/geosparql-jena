@@ -247,4 +247,12 @@ public class SpatialIndex implements Serializable {
         return result;
     }
 
+    public static final void deleteIndexFiles(File indexFolder) {
+
+        File quadTreeFilepath = new File(indexFolder, QUAD_TREE_FILE);
+        File geometryLiteralFilepath = new File(indexFolder, GEOMETRY_LITERAL_FILE);
+        quadTreeFilepath.delete();
+        geometryLiteralFilepath.delete();
+    }
+
 }

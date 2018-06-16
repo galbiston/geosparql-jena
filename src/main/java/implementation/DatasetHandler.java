@@ -30,7 +30,7 @@ import tdb.tdbstats;
 
 /**
  *
- * 
+ *
  */
 public class DatasetHandler {
 
@@ -101,9 +101,7 @@ public class DatasetHandler {
 
     public static void buildSpatialIndexTDB(File datasetFolder) {
         Dataset dataset = TDBFactory.createDataset(datasetFolder.getAbsolutePath());
-
         SpatialIndex.build(dataset);
-
         SpatialIndex.write(datasetFolder);
     }
 
@@ -131,6 +129,7 @@ public class DatasetHandler {
 
         dataset.close();
         TDBFactory.release(dataset);
+        SpatialIndex.deleteIndexFiles(datasetFolder);
         return isCleared;
     }
 
