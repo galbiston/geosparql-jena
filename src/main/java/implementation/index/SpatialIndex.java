@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * 
+ *
  */
 public class SpatialIndex implements Serializable {
 
@@ -207,14 +207,14 @@ public class SpatialIndex implements Serializable {
         LOGGER.info("Reading Spatial Index: Finished");
     }
 
-    private static final boolean containsIndex(File indexFolder) {
+    private static boolean containsIndex(File indexFolder) {
         File quadTreeFilepath = new File(indexFolder, QUAD_TREE_FILE);
         File geometryLiteralFilepath = new File(indexFolder, GEOMETRY_LITERAL_FILE);
 
         return quadTreeFilepath.exists() && geometryLiteralFilepath.exists();
     }
 
-    private static final void writeObject(File indexFile, Object index) {
+    private static void writeObject(File indexFile, Object index) {
 
         LOGGER.info("Writing Index - {}: Started", indexFile.getName());
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(indexFile))) {
@@ -226,7 +226,7 @@ public class SpatialIndex implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    private static final Object readObject(File indexFile) {
+    private static Object readObject(File indexFile) {
 
         if (!indexFile.exists()) {
             LOGGER.error("Index does not exist: {}", indexFile.getAbsolutePath());
