@@ -20,8 +20,8 @@ import java.util.Map;
 public class GeometryLiteralIndex {
 
     private static Boolean IS_INDEX_ACTIVE = true;
-    private static final String PRIMARY_INDEX_LABEL = "Primary Geometry Literal";
-    private static final String SECONDARY_INDEX_LABEL = "Secondary Geometry Literal";
+    private static final String PRIMARY_INDEX_LABEL = "Primary Geometry Literal Index";
+    private static final String SECONDARY_INDEX_LABEL = "Secondary Geometry Literal Index";
     private static ExpiringIndex<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, PRIMARY_INDEX_LABEL);
     private static ExpiringIndex<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, SECONDARY_INDEX_LABEL);
     private static Long RETRIEVAL_COUNT = 0L;
@@ -131,7 +131,7 @@ public class GeometryLiteralIndex {
                 PRIMARY_INDEX.stopExpiry();
                 PRIMARY_INDEX.setExpiryInterval(expiryInterval);
                 PRIMARY_INDEX.startExpiry();
-                PRIMARY_INDEX.stopExpiry();
+                SECONDARY_INDEX.stopExpiry();
                 SECONDARY_INDEX.setExpiryInterval(expiryInterval);
                 SECONDARY_INDEX.startExpiry();
             } else {
