@@ -49,7 +49,8 @@ public class IndexConfiguration {
         GeometryLiteralIndex.setMaxSize(UNLIMITED_INDEX);
         GeometryTransformIndex.setMaxSize(UNLIMITED_INDEX);
         QueryRewriteIndex.setMaxSize(UNLIMITED_INDEX);
-        SpatialIndex.setActive(true);
+        //Spatial index switched off, needs  reactiviating in GenericFilterFunction:exec as well.
+        SpatialIndex.setActive(false);
     }
 
     /**

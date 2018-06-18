@@ -206,13 +206,15 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final void build(Dataset dataset) {
-        LOGGER.info("Building Spatial Index for Dataset: Started");
-        Model defaultModel = dataset.getDefaultModel();
-        SpatialIndex.build(defaultModel, "Default Model");
+        if (IS_ACTIVE) {
+            LOGGER.info("Building Spatial Index for Dataset: Started");
+            Model defaultModel = dataset.getDefaultModel();
+            SpatialIndex.build(defaultModel, "Default Model");
 
-        Model unionModel = dataset.getUnionModel();
-        SpatialIndex.build(unionModel, "Union Model");
-        LOGGER.info("Building Spatial Index for Dataset: Completed");
+            Model unionModel = dataset.getUnionModel();
+            SpatialIndex.build(unionModel, "Union Model");
+            LOGGER.info("Building Spatial Index for Dataset: Completed");
+        }
     }
 
     public static final void build(Model model, String graphName) {
