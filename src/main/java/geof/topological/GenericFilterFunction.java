@@ -6,6 +6,7 @@
 package geof.topological;
 
 import implementation.GeometryWrapper;
+import implementation.index.CollisionResult;
 import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import implementation.index.SpatialIndex;
 import org.apache.jena.rdf.model.Literal;
@@ -30,9 +31,11 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
         try {
             //Check spatial index.
-            Boolean isIntersect = SpatialIndex.checkIntersects(v1, v2, isDisjoint());
-            if (isIntersect == null || !isIntersect) {
+            CollisionResult collisionResult = SpatialIndex.checkCollision(v1, v2, isDisjoint());
+            if (collisionResult == CollisionResult.FALSE_RELATION) {
                 return NodeValue.FALSE;
+            } else if (collisionResult == CollisionResult.TRUE_RELATION) {
+                return NodeValue.TRUE;
             }
 
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
@@ -58,9 +61,11 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
         try {
 
             //Check spatial index.
-            Boolean isIntersect = SpatialIndex.checkIntersects(v1, v2, isDisjoint());
-            if (isIntersect == null || !isIntersect) {
+            CollisionResult collisionResult = SpatialIndex.checkCollision(v1, v2, isDisjoint());
+            if (collisionResult == CollisionResult.FALSE_RELATION) {
                 return Boolean.FALSE;
+            } else if (collisionResult == CollisionResult.TRUE_RELATION) {
+                return Boolean.TRUE;
             }
 
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);

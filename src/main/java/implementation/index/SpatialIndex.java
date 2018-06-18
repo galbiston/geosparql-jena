@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Envelope;
 import implementation.GeometryWrapper;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
+import static implementation.index.CollisionResult.*;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.SRS_URI;
 import java.io.File;
@@ -46,62 +47,76 @@ public class SpatialIndex implements Serializable {
     private static final HashMap<String, Envelope> SPATIAL_INDEX = new HashMap<>();
     private static final String SPATIAL_INDEX_FILE = "spatial.index";
 
-    public static final Boolean checkIntersects(NodeValue nodeValue1, NodeValue nodeValue2, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final CollisionResult checkCollision(NodeValue nodeValue1, NodeValue nodeValue2, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
 
         if (!nodeValue1.isLiteral()) {
-            return null;
+            return FALSE_RELATION;
         }
 
         Node node1 = nodeValue1.asNode();
-        String sourceDataypeURI = node1.getLiteralDatatypeURI();
+        String sourceDatatypeURI = node1.getLiteralDatatypeURI();
         String sourceLexicalForm = node1.getLiteralLexicalForm();
 
-        addIfMissing(sourceLexicalForm, sourceDataypeURI);
+        Boolean isAdded = addIfMissing(sourceLexicalForm, sourceDatatypeURI);
+        if (isAdded == null) {
+            return FALSE_RELATION;
+        }
 
         if (!nodeValue2.isLiteral()) {
-            return null;
+            return FALSE_RELATION;
         }
 
         Node node2 = nodeValue1.asNode();
-        String targetDataypeURI = node2.getLiteralDatatypeURI();
+        String targetDatatypeURI = node2.getLiteralDatatypeURI();
         String targetLexicalForm = node2.getLiteralLexicalForm();
-        addIfMissing(targetLexicalForm, targetDataypeURI);
+        isAdded = addIfMissing(targetLexicalForm, targetDatatypeURI);
+        if (isAdded == null) {
+            return FALSE_RELATION;
+        }
 
-        return checkIntersects(sourceLexicalForm, targetLexicalForm, isDisjoint);
+        return SpatialIndex.checkCollision(sourceLexicalForm, targetLexicalForm, isDisjoint);
     }
 
-    public static final Boolean checkIntersects(Literal literal1, Literal literal2, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final CollisionResult checkCollision(Literal literal1, Literal literal2, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
 
         String sourceDatatypeURI = literal1.getDatatypeURI();
         String sourceLexicalForm = literal1.getLexicalForm();
 
-        addIfMissing(sourceLexicalForm, sourceDatatypeURI);
+        Boolean isAdded = addIfMissing(sourceLexicalForm, sourceDatatypeURI);
+        if (isAdded == null) {
+            return FALSE_RELATION;
+        }
 
         String targetDatatypeURI = literal2.getDatatypeURI();
         String targetLexicalForm = literal2.getLexicalForm();
-        addIfMissing(targetLexicalForm, targetDatatypeURI);
+        isAdded = addIfMissing(targetLexicalForm, targetDatatypeURI);
+        if (isAdded == null) {
+            return FALSE_RELATION;
+        }
 
-        return checkIntersects(sourceLexicalForm, targetLexicalForm, isDisjoint);
+        return SpatialIndex.checkCollision(sourceLexicalForm, targetLexicalForm, isDisjoint);
     }
 
-    public static final Boolean checkIntersects(String sourceGeometryLiteral, String targetGeometryLiteral, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final CollisionResult checkCollision(String sourceGeometryLiteral, String targetGeometryLiteral, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
         Envelope sourceEnvelope = SPATIAL_INDEX.get(sourceGeometryLiteral);
         Envelope targetEnvelope = SPATIAL_INDEX.get(targetGeometryLiteral);
         boolean isIntersect = sourceEnvelope.intersects(targetEnvelope);
 
-        //Change the intersect depending on whether Disjoint relation or not.
-        if (!isIntersect && !isDisjoint) {
-            //Exit quickly if doesn't intersect and not disjoint.
-            return Boolean.FALSE;
-        } else if (!isIntersect && isDisjoint) {
-            //Exit quickly if doesn't intersect and disjoint.
-            return Boolean.TRUE;
+        if (!isIntersect) {
+            if (isDisjoint) {
+                //It doesn't intersect and is a disjoint relation so definitely true.
+                return TRUE_RELATION;
+            } else {
+                //It doesn't intersect and is not a disjoint relation so definitely false.
+                return FALSE_RELATION;
+            }
         }
 
-        return isIntersect;
+        //It does intersect so further checking required.
+        return CHECK_RELATION;
     }
 
-    private static Boolean addIfMissing(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static Boolean addIfMissing(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
         if (datatypeURI.equals(WKTDatatype.URI) || datatypeURI.equals(GMLDatatype.URI)) {
             if (SPATIAL_INDEX.containsKey(lexicalForm)) {
                 return false;
