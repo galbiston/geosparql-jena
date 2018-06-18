@@ -68,8 +68,8 @@ public class Rcc8eqTest {
     public void rcc8eqBothBoundTest() {
 
         System.out.println("rcc8eq Both Bound");
-        String expResult = "http://example.org/Geometry#LineStringE";
-        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#LineStringE", "geo:rcc8eq", "http://example.org/Geometry#LineStringE");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = QueryRewriteTestMethods.runBothBoundQuery("http://example.org/Geometry#PolygonJ", "geo:rcc8eq", "http://example.org/Geometry#PolygonJ");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -85,10 +85,10 @@ public class Rcc8eqTest {
 
         System.out.println("rcc8eq Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/Feature#E");
-        expResult.add("http://example.org/Geometry#LineStringE");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
 
-        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:rcc8eq", "http://example.org/Geometry#LineStringE");
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:rcc8eq", "http://example.org/Geometry#PolygonJ");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

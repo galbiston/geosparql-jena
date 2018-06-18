@@ -63,8 +63,8 @@ public class Rcc8eqTest {
     public void rcc8eqBoundPostiveTest() {
 
         System.out.println("rcc8eq Bound Positive");
-        String expResult = "http://example.org/Geometry#LineStringE";
-        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#LineStringE", "geo:rcc8eq", "http://example.org/Geometry#LineStringE");
+        String expResult = "http://example.org/Geometry#PolygonJ";
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonJ", "geo:rcc8eq", "http://example.org/Geometry#PolygonJ");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -80,7 +80,7 @@ public class Rcc8eqTest {
 
         System.out.println("rcc8eq Bound Negative");
         String expResult = null;
-        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#LineStringE", "geo:rcc8eq", "http://example.org/Geometry#LineStringD");
+        String result = PropertyTestMethods.runBoundQuery("http://example.org/Geometry#PolygonJ", "geo:rcc8eq", "http://example.org/Geometry#PolygonL");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -96,9 +96,9 @@ public class Rcc8eqTest {
 
         System.out.println("rcc8eq Unbound Positive");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/Feature#E");
-        expResult.add("http://example.org/Geometry#LineStringE");
-        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#LineStringE", "geo:rcc8eq");
+        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Geometry#PolygonJ");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geo:rcc8eq");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

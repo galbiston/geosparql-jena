@@ -90,8 +90,7 @@ public class Rcc8ecTest {
     }
 
     /**
-     * Equal returns t (TRUE) if two geometries of the same type have identical
-     * X,Y coordinate values.
+     * rcc8ec has similar functionality with sfTouches and ehMeet.
      */
     @Test
     public void rcc8ecUnboundPostiveTest() {

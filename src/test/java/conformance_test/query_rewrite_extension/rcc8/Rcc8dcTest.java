@@ -85,32 +85,12 @@ public class Rcc8dcTest {
 
         System.out.println("rcc8dc Unbound Subject");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/Feature#B");
-        expResult.add("http://example.org/Feature#C");
-        expResult.add("http://example.org/Feature#C2");
-        expResult.add("http://example.org/Feature#D");
-        expResult.add("http://example.org/Feature#E");
-        expResult.add("http://example.org/Feature#Empty");
-        expResult.add("http://example.org/Feature#F");
-        expResult.add("http://example.org/Feature#G");
-        expResult.add("http://example.org/Feature#I");
-        expResult.add("http://example.org/Feature#J");
+        expResult.add("http://example.org/Feature#H");
         expResult.add("http://example.org/Feature#K");
-        expResult.add("http://example.org/Feature#L");
-        expResult.add("http://example.org/Geometry#LineStringD");
-        expResult.add("http://example.org/Geometry#LineStringE");
-        expResult.add("http://example.org/Geometry#LineStringF");
-        expResult.add("http://example.org/Geometry#LineStringG");
-        expResult.add("http://example.org/Geometry#PointB");
-        expResult.add("http://example.org/Geometry#PointC");
-        expResult.add("http://example.org/Geometry#PointC2");
-        expResult.add("http://example.org/Geometry#PointEmpty");
-        expResult.add("http://example.org/Geometry#PolygonI");
-        expResult.add("http://example.org/Geometry#PolygonJ");
+        expResult.add("http://example.org/Geometry#PolygonH");
         expResult.add("http://example.org/Geometry#PolygonK");
-        expResult.add("http://example.org/Geometry#PolygonL");
 
-        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:rcc8dc", "http://example.org/Geometry#PointA");
+        List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:rcc8dc", "http://example.org/Geometry#PolygonJ");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -126,16 +106,8 @@ public class Rcc8dcTest {
 
         System.out.println("rcc8dc Unbound Object");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/Feature#C");
-        expResult.add("http://example.org/Feature#C2");
-        expResult.add("http://example.org/Feature#Empty");
-        expResult.add("http://example.org/Feature#F");
         expResult.add("http://example.org/Feature#J");
         expResult.add("http://example.org/Feature#L");
-        expResult.add("http://example.org/Geometry#LineStringF");
-        expResult.add("http://example.org/Geometry#PointC");
-        expResult.add("http://example.org/Geometry#PointC2");
-        expResult.add("http://example.org/Geometry#PointEmpty");
         expResult.add("http://example.org/Geometry#PolygonJ");
         expResult.add("http://example.org/Geometry#PolygonL");
 

@@ -100,10 +100,6 @@ public class Rcc8dcTest {
 
         System.out.println("rcc8dc Unbound Positive");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/Geometry#LineStringF");
-        expResult.add("http://example.org/Geometry#PointC");
-        expResult.add("http://example.org/Geometry#PointC2");
-        expResult.add("http://example.org/Geometry#PointEmpty");
         expResult.add("http://example.org/Geometry#PolygonJ");
         expResult.add("http://example.org/Geometry#PolygonL");
         List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonH", "geof:rcc8dc");
@@ -122,15 +118,6 @@ public class Rcc8dcTest {
 
         System.out.println("rcc8dc Unbound Negative");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/Geometry#LineStringD");
-        expResult.add("http://example.org/Geometry#LineStringE");
-        expResult.add("http://example.org/Geometry#LineStringF");
-        expResult.add("http://example.org/Geometry#LineStringG");
-        expResult.add("http://example.org/Geometry#PointA");
-        expResult.add("http://example.org/Geometry#PointB");
-        expResult.add("http://example.org/Geometry#PointC");
-        expResult.add("http://example.org/Geometry#PointC2");
-        expResult.add("http://example.org/Geometry#PointEmpty");
         expResult.add("http://example.org/Geometry#PolygonH");
         expResult.add("http://example.org/Geometry#PolygonK");
         List<String> result = FilterTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geof:rcc8dc");

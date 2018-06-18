@@ -5,6 +5,7 @@
  */
 package geof.topological;
 
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.index.CollisionResult;
 import implementation.index.GeometryLiteralIndex.GeometryIndex;
@@ -48,6 +49,10 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
                 return NodeValue.FALSE;
             }
 
+            if (!permittedTopology(geometry1.getDimensionInfo(), geometry2.getDimensionInfo())) {
+                return NodeValue.FALSE;
+            }
+
             boolean result = relate(geometry1, geometry2);
 
             return NodeValue.makeBoolean(result);
@@ -59,15 +64,15 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
     public Boolean exec(Literal v1, Literal v2) {
         try {
-
-            //Check spatial index.
-            CollisionResult collisionResult = SpatialIndex.checkCollision(v1, v2, isDisjoint());
-            if (collisionResult == CollisionResult.FALSE_RELATION) {
-                return Boolean.FALSE;
-            } else if (collisionResult == CollisionResult.TRUE_RELATION) {
-                return Boolean.TRUE;
+            //Check spatial index when not a RCC disconnect relations, as need to know the shape to correctly give the disconnect.
+            if (!isDisconnected()) {
+                CollisionResult collisionResult = SpatialIndex.checkCollision(v1, v2, isDisjoint());
+                if (collisionResult == CollisionResult.FALSE_RELATION) {
+                    return Boolean.FALSE;
+                } else if (collisionResult == CollisionResult.TRUE_RELATION) {
+                    return Boolean.TRUE;
+                }
             }
-
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return Boolean.FALSE;
@@ -75,6 +80,10 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
             if (geometry2 == null) {
+                return Boolean.FALSE;
+            }
+
+            if (!permittedTopology(geometry1.getDimensionInfo(), geometry2.getDimensionInfo())) {
                 return Boolean.FALSE;
             }
 
@@ -86,7 +95,12 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
         }
     }
 
+    protected abstract boolean permittedTopology(DimensionInfo sourceDimensionInfo, DimensionInfo targetDimensionInfo);
+
     protected abstract boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException;
 
     protected abstract boolean isDisjoint();
+
+    protected abstract boolean isDisconnected();
+
 }

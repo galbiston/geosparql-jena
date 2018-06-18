@@ -6,6 +6,7 @@
 package geof.topological.filter_functions.simple_features;
 
 import geof.topological.GenericFilterFunction;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -24,6 +25,16 @@ public class SfTouchesFF extends GenericFilterFunction {
 
     @Override
     protected boolean isDisjoint() {
+        return false;
+    }
+
+    @Override
+    protected boolean permittedTopology(DimensionInfo sourceDimensionInfo, DimensionInfo targetDimensionInfo) {
+        return !(sourceDimensionInfo.isPoint() && targetDimensionInfo.isPoint());
+    }
+
+    @Override
+    protected boolean isDisconnected() {
         return false;
     }
 }

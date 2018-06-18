@@ -94,9 +94,7 @@ public class SfCrossesTest {
         System.out.println("sfCrosses Unbound Subject");
         List<String> expResult = new ArrayList<>();
         expResult.add("http://example.org/Feature#G");
-        expResult.add("http://example.org/Feature#H");
         expResult.add("http://example.org/Geometry#LineStringG");
-        expResult.add("http://example.org/Geometry#PolygonH");
 
         List<String> result = QueryRewriteTestMethods.runUnboundSubjectQuery("geo:sfCrosses", "http://example.org/Geometry#LineStringE");
 

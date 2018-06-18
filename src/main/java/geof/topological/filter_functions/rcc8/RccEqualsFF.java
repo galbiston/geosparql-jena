@@ -6,10 +6,8 @@
 package geof.topological.filter_functions.rcc8;
 
 import geof.topological.GenericFilterFunction;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
-import implementation.datatype.DatatypeUtil;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.sparql.expr.NodeValue;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -20,31 +18,6 @@ import org.opengis.referencing.operation.TransformException;
  */
 public class RccEqualsFF extends GenericFilterFunction {
 
-    @Override
-    public NodeValue exec(NodeValue v1, NodeValue v2) {
-
-        if (v1.isLiteral() && v2.isLiteral()) {
-            if (v1.asString().equals(v2.asString())) {
-                String datatypeURI = v1.getDatatypeURI();
-                boolean isGeometryDatatype = DatatypeUtil.checkGeometryDatatypeURI(datatypeURI);
-                return NodeValue.makeBoolean(isGeometryDatatype);
-            } else {
-                return super.exec(v1, v2);
-            }
-        }
-        return NodeValue.FALSE;
-    }
-
-    @Override
-    public Boolean exec(Literal v1, Literal v2) {
-        if (v1.getLexicalForm().equals(v2.getLexicalForm())) {
-            String datatypeURI = v1.getDatatypeURI();
-            return DatatypeUtil.checkGeometryDatatypeURI(datatypeURI);
-        } else {
-            return super.exec(v1, v2);
-        }
-    }
-
     //Simple Features equals and RCC8 equal intersection patterns are the same, see GeoSPARQL standard page 11.
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -53,6 +26,16 @@ public class RccEqualsFF extends GenericFilterFunction {
 
     @Override
     protected boolean isDisjoint() {
+        return false;
+    }
+
+    @Override
+    protected boolean permittedTopology(DimensionInfo sourceDimensionInfo, DimensionInfo targetDimensionInfo) {
+        return sourceDimensionInfo.isArea() && targetDimensionInfo.isArea();
+    }
+
+    @Override
+    protected boolean isDisconnected() {
         return false;
     }
 }

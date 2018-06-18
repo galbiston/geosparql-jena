@@ -6,6 +6,7 @@
 package geof.topological.filter_functions.rcc8;
 
 import geof.topological.GenericFilterFunction;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.intersection_patterns.RCC8IntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -25,6 +26,16 @@ public class RccNonTangentialProperPartFF extends GenericFilterFunction {
 
     @Override
     protected boolean isDisjoint() {
+        return false;
+    }
+
+    @Override
+    protected boolean permittedTopology(DimensionInfo sourceDimensionInfo, DimensionInfo targetDimensionInfo) {
+        return sourceDimensionInfo.isArea() && targetDimensionInfo.isArea();
+    }
+
+    @Override
+    protected boolean isDisconnected() {
         return false;
     }
 }

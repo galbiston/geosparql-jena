@@ -6,6 +6,7 @@
 package geof.topological.filter_functions.simple_features;
 
 import geof.topological.GenericFilterFunction;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeUtil;
 import org.apache.jena.rdf.model.Literal;
@@ -52,6 +53,16 @@ public class SfEqualsFF extends GenericFilterFunction {
 
     @Override
     protected boolean isDisjoint() {
+        return false;
+    }
+
+    @Override
+    protected boolean permittedTopology(DimensionInfo sourceDimensionInfo, DimensionInfo targetDimensionInfo) {
+        return true;
+    }
+
+    @Override
+    protected boolean isDisconnected() {
         return false;
     }
 }

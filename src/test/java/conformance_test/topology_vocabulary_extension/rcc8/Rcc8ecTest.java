@@ -94,9 +94,9 @@ public class Rcc8ecTest {
 
         System.out.println("rcc8ec Unbound Positive");
         List<String> expResult = new ArrayList<>();
-        expResult.add("http://example.org/Feature#J");
-        expResult.add("http://example.org/Geometry#PolygonJ");
-        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonI", "geo:rcc8ec");
+        expResult.add("http://example.org/Feature#I");
+        expResult.add("http://example.org/Geometry#PolygonI");
+        List<String> result = PropertyTestMethods.runUnboundQuery("http://example.org/Geometry#PolygonJ", "geo:rcc8ec");
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

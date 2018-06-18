@@ -6,6 +6,7 @@
 package geof.topological.filter_functions.egenhofer;
 
 import geof.topological.GenericFilterFunction;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -26,5 +27,15 @@ public class EhDisjointFF extends GenericFilterFunction {
     @Override
     protected boolean isDisjoint() {
         return true;
+    }
+
+    @Override
+    protected boolean permittedTopology(DimensionInfo sourceDimensionInfo, DimensionInfo targetDimensionInfo) {
+        return true;
+    }
+
+    @Override
+    protected boolean isDisconnected() {
+        return false;
     }
 }

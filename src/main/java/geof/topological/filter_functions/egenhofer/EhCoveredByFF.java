@@ -6,6 +6,7 @@
 package geof.topological.filter_functions.egenhofer;
 
 import geof.topological.GenericFilterFunction;
+import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.intersection_patterns.EgenhoferIntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -25,6 +26,16 @@ public class EhCoveredByFF extends GenericFilterFunction {
 
     @Override
     protected boolean isDisjoint() {
+        return false;
+    }
+
+    @Override
+    protected boolean permittedTopology(DimensionInfo sourceDimensionInfo, DimensionInfo targetDimensionInfo) {
+        return (sourceDimensionInfo.isArea() && targetDimensionInfo.isArea()) || (sourceDimensionInfo.isLine() && targetDimensionInfo.isArea()) || (sourceDimensionInfo.isLine() && targetDimensionInfo.isLine());
+    }
+
+    @Override
+    protected boolean isDisconnected() {
         return false;
     }
 }

@@ -20,11 +20,18 @@ public class DimensionInfo implements Serializable {
     private final int topological;
     private final CoordinateSequenceDimensions coordinateSequenceDimensions;
 
+    private final boolean isPoint;
+    private final boolean isLine;
+    private final boolean isArea;
+
     public DimensionInfo(int coordinate, int spatial, int topological) {
         this.coordinate = coordinate;
         this.spatial = spatial;
         this.topological = topological;
         this.coordinateSequenceDimensions = findCoordinateSequenceDimensions(coordinate, spatial);
+        this.isPoint = topological == 0;
+        this.isLine = topological == 1;
+        this.isArea = topological == 2;
     }
 
     public int getCoordinate() {
@@ -37,6 +44,18 @@ public class DimensionInfo implements Serializable {
 
     public int getTopological() {
         return topological;
+    }
+
+    public boolean isPoint() {
+        return isPoint;
+    }
+
+    public boolean isLine() {
+        return isLine;
+    }
+
+    public boolean isArea() {
+        return isArea;
     }
 
     public CoordinateSequenceDimensions getDimensions() {
