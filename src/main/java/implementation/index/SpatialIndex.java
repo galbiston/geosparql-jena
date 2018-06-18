@@ -133,6 +133,26 @@ public class SpatialIndex implements Serializable {
         return SPATIAL_INDEX.containsKey(geometryLiteral);
     }
 
+    public static final Envelope remove(String geometryLiteral) {
+        return SPATIAL_INDEX.remove(geometryLiteral);
+    }
+
+    public static final void insert(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(lexicalForm, datatypeURI);
+        Envelope envelope = extractEnvelope(geometryWrapper);
+        SPATIAL_INDEX.put(lexicalForm, envelope);
+    }
+
+    private static Envelope extractEnvelope(GeometryWrapper sourceGeometryWrapper) throws FactoryException, MismatchedDimensionException, TransformException {
+        GeometryWrapper transformedGeometryWrapper = sourceGeometryWrapper.transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
+        Envelope envelope = transformedGeometryWrapper.getEnvelope();
+        return envelope;
+    }
+
+    public static final void clear() {
+        SPATIAL_INDEX.clear();
+    }
+
     public static final void build(Dataset dataset) {
         LOGGER.info("Building Spatial Index for Dataset: Started");
         Model defaultModel = dataset.getDefaultModel();
@@ -160,22 +180,6 @@ public class SpatialIndex implements Serializable {
             LOGGER.error("Build Spatial Index Exception: {}", ex.getMessage());
         }
         LOGGER.info("Building Spatial Index for {}: Completed", graphName);
-    }
-
-    public static final void insert(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(lexicalForm, datatypeURI);
-        Envelope envelope = extractEnvelope(geometryWrapper);
-        SPATIAL_INDEX.put(lexicalForm, envelope);
-    }
-
-    private static Envelope extractEnvelope(GeometryWrapper sourceGeometryWrapper) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometryWrapper = sourceGeometryWrapper.transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
-        Envelope envelope = transformedGeometryWrapper.getEnvelope();
-        return envelope;
-    }
-
-    public static final void clear() {
-        SPATIAL_INDEX.clear();
     }
 
     public static final void write(File indexFolder) {
