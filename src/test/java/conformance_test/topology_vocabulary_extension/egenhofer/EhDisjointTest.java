@@ -96,7 +96,6 @@ public class EhDisjointTest {
 
         System.out.println("ehDisjoint Unbound Positive");
         List<String> expResult = new ArrayList<>();
-
         expResult.add("http://example.org/Feature#C");
         expResult.add("http://example.org/Feature#C2");
         expResult.add("http://example.org/Feature#Empty");
