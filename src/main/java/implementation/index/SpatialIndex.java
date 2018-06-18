@@ -49,6 +49,7 @@ public class SpatialIndex implements Serializable {
     private static Boolean IS_ACTIVE = true;
     private static long WARNING_ISSUED_TIME = System.currentTimeMillis();
     private static final long WARNING_DURATION = 60000;
+    private static Long RETRIEVAL_COUNT = 0L;
 
     public static final void setActive(boolean isActive) {
         IS_ACTIVE = isActive;
@@ -120,6 +121,8 @@ public class SpatialIndex implements Serializable {
         if (!IS_ACTIVE) {
             return CHECK_RELATION;
         }
+
+        RETRIEVAL_COUNT++;
 
         Envelope sourceEnvelope = SPATIAL_INDEX.get(sourceGeometryLiteral);
         Envelope targetEnvelope = SPATIAL_INDEX.get(targetGeometryLiteral);
@@ -199,6 +202,7 @@ public class SpatialIndex implements Serializable {
 
     public static final void clear() {
         SPATIAL_INDEX.clear();
+        RETRIEVAL_COUNT = 0L;
     }
 
     public static final void build(Dataset dataset) {
@@ -230,7 +234,7 @@ public class SpatialIndex implements Serializable {
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Build Spatial Index Exception: {}", ex.getMessage());
         }
-        LOGGER.info("Building Spatial Index for {}: Completed", graphName);
+        LOGGER.info("Building Spatial Index for {}: Completed- Index size: {}", graphName, SPATIAL_INDEX.size());
     }
 
     public static final void write(File indexFolder) {
@@ -243,7 +247,7 @@ public class SpatialIndex implements Serializable {
 
         File indexFile = createIndexFile(indexFolder);
         writeObject(indexFile, SPATIAL_INDEX);
-        LOGGER.info("Writing Spatial Index: Completed");
+        LOGGER.info("Writing Spatial Index: Completed - Index size: {}", SPATIAL_INDEX.size());
     }
 
     /**
@@ -287,7 +291,7 @@ public class SpatialIndex implements Serializable {
             HashMap<String, Envelope> spatialIndex = (HashMap<String, Envelope>) spatialIndexObject;
             SPATIAL_INDEX.putAll(spatialIndex);
         }
-        LOGGER.info("Reading Spatial Index: Completed");
+        LOGGER.info("Reading Spatial Index: Completed - Index size: {}", SPATIAL_INDEX.size());
     }
 
     public static boolean containsIndex(File indexFolder) {
@@ -341,5 +345,13 @@ public class SpatialIndex implements Serializable {
         } else {
             LOGGER.warn("Deleting Index - {}: Index file does not exist.", indexFile.getName());
         }
+    }
+
+    public static final Integer getSpatialIndexSize() {
+        return SPATIAL_INDEX.size();
+    }
+
+    public static final Long getRetrievalCount() {
+        return RETRIEVAL_COUNT;
     }
 }
