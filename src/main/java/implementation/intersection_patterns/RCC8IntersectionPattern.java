@@ -7,9 +7,9 @@ package implementation.intersection_patterns;
 
 /**
  *
- * 
+ *
  */
-public class RCC8IntersectionPattern {
+public interface RCC8IntersectionPattern {
 
     public static final String EQUALS = "TFFFTFFFT";
 
