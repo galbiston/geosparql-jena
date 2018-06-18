@@ -7,9 +7,9 @@ package implementation.intersection_patterns;
 
 /**
  *
- * 
+ *
  */
-public class EgenhoferIntersectionPattern {
+public interface EgenhoferIntersectionPattern {
 
     public static final String EQUALS = "T*F**FFF*";
     //Pattern "TFFFTFFFT" stated in GeoSPARQL 11-052r4 p. 9 but incorrect.
