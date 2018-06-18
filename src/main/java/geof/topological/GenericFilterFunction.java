@@ -32,13 +32,14 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
         try {
             //Check spatial index.
-            CollisionResult collisionResult = SpatialIndex.checkCollision(v1, v2, isDisjoint());
-            if (collisionResult == CollisionResult.FALSE_RELATION) {
-                return NodeValue.FALSE;
-            } else if (collisionResult == CollisionResult.TRUE_RELATION) {
-                return NodeValue.TRUE;
+            if (!isDisconnected()) {
+                CollisionResult collisionResult = SpatialIndex.checkCollision(v1, v2, isDisjoint());
+                if (collisionResult == CollisionResult.FALSE_RELATION) {
+                    return NodeValue.FALSE;
+                } else if (collisionResult == CollisionResult.TRUE_RELATION) {
+                    return NodeValue.TRUE;
+                }
             }
-
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return NodeValue.FALSE;
