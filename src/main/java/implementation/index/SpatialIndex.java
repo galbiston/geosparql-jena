@@ -240,16 +240,18 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final void write(File indexFolder) {
-        LOGGER.info("Writing Spatial Index: Started");
-        indexFolder.mkdir();
-        if (!indexFolder.exists()) {
-            LOGGER.error("Writing Spatial Index: Failed - {} does not exist.", indexFolder.getAbsolutePath());
-            return;
-        }
+		if (IS_ACTIVE) {
+			LOGGER.info("Writing Spatial Index: Started");
+			indexFolder.mkdir();
+			if (!indexFolder.exists()) {
+				LOGGER.error("Writing Spatial Index: Failed - {} does not exist.", indexFolder.getAbsolutePath());
+				return;
+			}
 
-        File indexFile = createIndexFile(indexFolder);
-        writeObject(indexFile, SPATIAL_INDEX);
-        LOGGER.info("Writing Spatial Index: Completed - Index size: {}", SPATIAL_INDEX.size());
+			File indexFile = createIndexFile(indexFolder);
+			writeObject(indexFile, SPATIAL_INDEX);
+			LOGGER.info("Writing Spatial Index: Completed - Index size: {}", SPATIAL_INDEX.size());
+		}
     }
 
     /**
