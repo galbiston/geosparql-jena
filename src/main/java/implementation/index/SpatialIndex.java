@@ -46,8 +46,23 @@ public class SpatialIndex implements Serializable {
 
     private static final HashMap<String, Envelope> SPATIAL_INDEX = new HashMap<>();
     private static final String SPATIAL_INDEX_FILE = "spatial.index";
+    private static Boolean IS_ACTIVE = true;
+    private static long WARNING_ISSUED_TIME = System.currentTimeMillis();
+    private static final long WARNING_DURATION = 60000;
+
+    public static final void setActive(boolean isActive) {
+        IS_ACTIVE = isActive;
+    }
+
+    public static final boolean isActive() {
+        return IS_ACTIVE;
+    }
 
     public static final CollisionResult checkCollision(NodeValue nodeValue1, NodeValue nodeValue2, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        if (!IS_ACTIVE) {
+            return CHECK_RELATION;
+        }
 
         if (!nodeValue1.isLiteral()) {
             return FALSE_RELATION;
@@ -79,6 +94,10 @@ public class SpatialIndex implements Serializable {
 
     public static final CollisionResult checkCollision(Literal literal1, Literal literal2, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
 
+        if (!IS_ACTIVE) {
+            return CHECK_RELATION;
+        }
+
         String sourceDatatypeURI = literal1.getDatatypeURI();
         String sourceLexicalForm = literal1.getLexicalForm();
 
@@ -98,6 +117,10 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final CollisionResult checkCollision(String sourceGeometryLiteral, String targetGeometryLiteral, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
+        if (!IS_ACTIVE) {
+            return CHECK_RELATION;
+        }
+
         Envelope sourceEnvelope = SPATIAL_INDEX.get(sourceGeometryLiteral);
         Envelope targetEnvelope = SPATIAL_INDEX.get(targetGeometryLiteral);
         boolean isIntersect = sourceEnvelope.intersects(targetEnvelope);
@@ -116,7 +139,23 @@ public class SpatialIndex implements Serializable {
         return CHECK_RELATION;
     }
 
+    /**
+     * Adds the lexical part of a literal to the index. Checks the datatype to
+     * ensure a GeometryLiteral. Returns whether added to index and null if not
+     * a GeometryLiteral.
+     *
+     * @param lexicalForm
+     * @param datatypeURI
+     * @return
+     * @throws FactoryException
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     */
     public static Boolean addIfMissing(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
+        if (!IS_ACTIVE) {
+            return false;
+        }
+
         if (datatypeURI.equals(WKTDatatype.URI) || datatypeURI.equals(GMLDatatype.URI)) {
             if (SPATIAL_INDEX.containsKey(lexicalForm)) {
                 return false;
@@ -138,6 +177,15 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final void insert(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
+        if (!IS_ACTIVE) {
+            long timeNow = System.currentTimeMillis();
+            if (timeNow - WARNING_ISSUED_TIME > WARNING_DURATION) {
+                LOGGER.warn("Spatial Index is inactive and attempted to insert GeometryLiteral. Warning will be suppresed for {} milliseconds", WARNING_DURATION);
+                WARNING_ISSUED_TIME = timeNow;
+            }
+            return;
+        }
+
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(lexicalForm, datatypeURI);
         Envelope envelope = extractEnvelope(geometryWrapper);
         SPATIAL_INDEX.put(lexicalForm, envelope);
@@ -165,6 +213,9 @@ public class SpatialIndex implements Serializable {
 
     public static final void build(Model model, String graphName) {
         LOGGER.info("Building Spatial Index for {}: Started", graphName);
+        if (!IS_ACTIVE) {
+            LOGGER.warn("Spatial Index is inactive. Building index but will not be accessible unless made active.");
+        }
         try {
             NodeIterator nodeIt = model.listObjectsOfProperty(Geo.HAS_SERIALIZATION_PROP);
             while (nodeIt.hasNext()) {
@@ -185,9 +236,13 @@ public class SpatialIndex implements Serializable {
     public static final void write(File indexFolder) {
         LOGGER.info("Writing Spatial Index: Started");
         indexFolder.mkdir();
+        if (!indexFolder.exists()) {
+            LOGGER.error("Writing Spatial Index: Failed - {} does not exist.", indexFolder.getAbsolutePath());
+            return;
+        }
 
-        File spatialIndexFilepath = new File(indexFolder, SPATIAL_INDEX_FILE);
-        writeObject(spatialIndexFilepath, SPATIAL_INDEX);
+        File indexFile = createIndexFile(indexFolder);
+        writeObject(indexFile, SPATIAL_INDEX);
         LOGGER.info("Writing Spatial Index: Completed");
     }
 
@@ -217,9 +272,16 @@ public class SpatialIndex implements Serializable {
 
     public static final void read(File indexFolder) {
         LOGGER.info("Reading Spatial Index: Started");
+        if (!containsIndex(indexFolder)) {
+            LOGGER.error("Read Spatial Index: Failed - No index file {} in {}.", SPATIAL_INDEX_FILE, indexFolder.getAbsolutePath());
+            return;
+        }
 
-        File spatialIndexFilepath = new File(indexFolder, SPATIAL_INDEX_FILE);
-        Object spatialIndexObject = readObject(spatialIndexFilepath);
+        if (!IS_ACTIVE) {
+            LOGGER.warn("Spatial Index is inactive. Reading index file but will not be accessible unless made active.");
+        }
+        File indexFile = createIndexFile(indexFolder);
+        Object spatialIndexObject = readObject(indexFile);
         if (spatialIndexObject instanceof HashMap<?, ?>) {
             @SuppressWarnings("unchecked")
             HashMap<String, Envelope> spatialIndex = (HashMap<String, Envelope>) spatialIndexObject;
@@ -228,9 +290,13 @@ public class SpatialIndex implements Serializable {
         LOGGER.info("Reading Spatial Index: Completed");
     }
 
-    private static boolean containsIndex(File indexFolder) {
-        File geometryLiteralFilepath = new File(indexFolder, SPATIAL_INDEX_FILE);
-        return geometryLiteralFilepath.exists();
+    public static boolean containsIndex(File indexFolder) {
+        File indexFile = createIndexFile(indexFolder);
+        return indexFile.exists();
+    }
+
+    private static File createIndexFile(File indexFolder) {
+        return new File(indexFolder, SPATIAL_INDEX_FILE);
     }
 
     private static void writeObject(File indexFile, Object index) {
@@ -267,9 +333,13 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final void deleteIndexFile(File indexFolder) {
-
-        File spatialIndexFilepath = new File(indexFolder, SPATIAL_INDEX_FILE);
-        spatialIndexFilepath.delete();
+        File indexFile = createIndexFile(indexFolder);
+        LOGGER.info("Deleting Index - {}: Started", indexFile.getName());
+        if (indexFile.exists()) {
+            indexFile.delete();
+            LOGGER.info("Deleting Index - {}: Completed", indexFile.getName());
+        } else {
+            LOGGER.warn("Deleting Index - {}: Index file does not exist.", indexFile.getName());
+        }
     }
-
 }

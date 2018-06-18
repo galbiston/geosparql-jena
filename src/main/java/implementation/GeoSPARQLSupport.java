@@ -152,9 +152,9 @@ public class GeoSPARQLSupport {
         IndexConfiguration.setupMemoryIndex();
     }
 
-    public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
+    public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex, Boolean spatialIndexActive) {
         loadFunctions(IndexOption.MEMORY);
-        IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
+        IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex, spatialIndexActive);
     }
 
     /**
