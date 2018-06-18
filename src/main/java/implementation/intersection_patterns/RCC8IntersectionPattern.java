@@ -13,7 +13,8 @@ public interface RCC8IntersectionPattern {
 
     public static final String EQUALS = "TFFFTFFFT";
 
-    public static final String DISCONNECTED = "FFTFFTTTT";
+    public static final String DISCONNECTED = "FF**FF****";
+    //Pattern "FFTFFTTTT" stated in GeoSPARQL 11-052r4 p. 9 but means that Points are not disconnected not from Polygons. Using SimpleFeatures disjoint pattern as page 11 states they are equivalent.
 
     public static final String EXTERNALLY_CONNECTED = "FFTFTTTTT";
 
