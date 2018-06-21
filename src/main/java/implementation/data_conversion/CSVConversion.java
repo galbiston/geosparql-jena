@@ -5,23 +5,19 @@
  */
 package implementation.data_conversion;
 
-import java.lang.invoke.MethodHandles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import implementation.datatype.GMLDatatype;
+import implementation.datatype.WKTDatatype;
+import rdfconverter.datatypes.DatatypeController;
 
 /**
  *
- * 
+ *
  */
 public class CSVConversion {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
     public static final void registerDatatypes() {
-        /*
-        DatatypeController.addPrefixDatatype("wkt", WKTDatatype.INSTANCE);
-        DatatypeController.addPrefixDatatype("gml", GMLDatatype.INSTANCE);
-         */
+        DatatypeController.addPrefixDatatype("wkt", WKTDatatype.URI);
+        DatatypeController.addPrefixDatatype("gml", GMLDatatype.URI);
     }
 
 }

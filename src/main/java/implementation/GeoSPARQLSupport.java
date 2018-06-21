@@ -6,6 +6,7 @@
 package implementation;
 
 import geof.topological.RelateFF;
+import implementation.data_conversion.CSVConversion;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.function_registration.Egenhofer;
@@ -174,6 +175,7 @@ public class GeoSPARQLSupport {
         IndexConfiguration.setConfig(IndexOption.NONE);
         //Setup Default Cordinate Reference Systems
         CRSRegistry.setupDefaultCRS();
+        CSVConversion.registerDatatypes();
     }
 
     public static final void loadFunctions(IndexOption indexOption, File tdbFolder) {
@@ -206,6 +208,9 @@ public class GeoSPARQLSupport {
 
             //Setup Default Cordinate Reference Systems
             CRSRegistry.setupDefaultCRS();
+
+            //Register GeometryLiteral datatypes for CSV conversion
+            CSVConversion.registerDatatypes();
 
             PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
             FunctionRegistry functionRegistry = FunctionRegistry.get();
