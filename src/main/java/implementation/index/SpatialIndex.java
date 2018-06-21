@@ -236,8 +236,6 @@ public class SpatialIndex implements Serializable {
                 LOGGER.error("Build Spatial Index Exception: {}", ex.getMessage());
             }
             LOGGER.info("Building Spatial Index for {}: Completed- Index size: {}", graphName, SPATIAL_INDEX.size());
-        } else {
-            LOGGER.warn("Spatial Index is inactive. Building index but will not be accessible unless made active.");
         }
     }
 
