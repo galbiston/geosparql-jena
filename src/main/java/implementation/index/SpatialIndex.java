@@ -218,40 +218,42 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final void build(Model model, String graphName) {
-        LOGGER.info("Building Spatial Index for {}: Started", graphName);
-        if (!IS_ACTIVE) {
+        if (IS_ACTIVE) {
+            LOGGER.info("Building Spatial Index for {}: Started", graphName);
+
+            try {
+                NodeIterator nodeIt = model.listObjectsOfProperty(Geo.HAS_SERIALIZATION_PROP);
+                while (nodeIt.hasNext()) {
+                    RDFNode node = nodeIt.nextNode();
+                    if (node.isLiteral()) {
+                        Literal literal = node.asLiteral();
+                        String lexicalForm = literal.getLexicalForm();
+                        String datatypeURI = literal.getDatatypeURI();
+                        addIfMissing(lexicalForm, datatypeURI);
+                    }
+                }
+            } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+                LOGGER.error("Build Spatial Index Exception: {}", ex.getMessage());
+            }
+            LOGGER.info("Building Spatial Index for {}: Completed- Index size: {}", graphName, SPATIAL_INDEX.size());
+        } else {
             LOGGER.warn("Spatial Index is inactive. Building index but will not be accessible unless made active.");
         }
-        try {
-            NodeIterator nodeIt = model.listObjectsOfProperty(Geo.HAS_SERIALIZATION_PROP);
-            while (nodeIt.hasNext()) {
-                RDFNode node = nodeIt.nextNode();
-                if (node.isLiteral()) {
-                    Literal literal = node.asLiteral();
-                    String lexicalForm = literal.getLexicalForm();
-                    String datatypeURI = literal.getDatatypeURI();
-                    addIfMissing(lexicalForm, datatypeURI);
-                }
-            }
-        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Build Spatial Index Exception: {}", ex.getMessage());
-        }
-        LOGGER.info("Building Spatial Index for {}: Completed- Index size: {}", graphName, SPATIAL_INDEX.size());
     }
 
     public static final void write(File indexFolder) {
-		if (IS_ACTIVE) {
-			LOGGER.info("Writing Spatial Index: Started");
-			indexFolder.mkdir();
-			if (!indexFolder.exists()) {
-				LOGGER.error("Writing Spatial Index: Failed - {} does not exist.", indexFolder.getAbsolutePath());
-				return;
-			}
+        if (IS_ACTIVE) {
+            LOGGER.info("Writing Spatial Index: Started");
+            indexFolder.mkdir();
+            if (!indexFolder.exists()) {
+                LOGGER.error("Writing Spatial Index: Failed - {} does not exist.", indexFolder.getAbsolutePath());
+                return;
+            }
 
-			File indexFile = createIndexFile(indexFolder);
-			writeObject(indexFile, SPATIAL_INDEX);
-			LOGGER.info("Writing Spatial Index: Completed - Index size: {}", SPATIAL_INDEX.size());
-		}
+            File indexFile = createIndexFile(indexFolder);
+            writeObject(indexFile, SPATIAL_INDEX);
+            LOGGER.info("Writing Spatial Index: Completed - Index size: {}", SPATIAL_INDEX.size());
+        }
     }
 
     /**
