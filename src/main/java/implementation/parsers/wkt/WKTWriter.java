@@ -96,7 +96,7 @@ public class WKTWriter {
             }
             sb.append(")");
         } else {
-            sb.append("EMPTY");
+            sb.append(" EMPTY");
         }
 
         return sb.toString();
