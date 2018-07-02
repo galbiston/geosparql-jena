@@ -19,7 +19,7 @@ import org.opengis.referencing.FactoryException;
 
 /**
  *
- * 
+ *
  */
 public class ExpiringIndexTest {
 
@@ -51,7 +51,7 @@ public class ExpiringIndexTest {
     public void testExpiry() throws InterruptedException {
         System.out.println("expiry");
 
-        long expiryInterval = 2000l;
+        long expiryInterval = 5000l;
         long halfExpiryInterval = expiryInterval / 2;
 
         ExpiringIndex<String, String> instance = new ExpiringIndex<>(5, expiryInterval, halfExpiryInterval, "Test");
