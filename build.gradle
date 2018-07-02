@@ -42,7 +42,7 @@ dependencies {
     implementation group: 'org.jdom', name: 'jdom2', version: '2.0.6'
 
     //Apache Jena
-    ext.jenaVersion = "3.7.0"
+    ext.jenaVersion = "3.8.0"
     //api "org.apache.jena:apache-jena-libs:$jenaVersion"
     //Issue resolving apache-jena-libs in Maven projects. Use individual modules as provide jars.
     api "org.apache.jena:jena-core:$jenaVersion"
@@ -52,7 +52,7 @@ dependencies {
     implementation (group: 'org.apache.jena', name: 'jena-cmds', version: jenaVersion){
         exclude group: "org.apache.jena", module: "apache-jena-libs"
         exclude group: "org.slf4j", module: "slf4j-log4j12"
-    }       
+    }
 
     //Apache Commons Collections
     ext.commonsCollectionsVersion = "4.1"
