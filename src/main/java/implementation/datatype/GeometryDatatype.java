@@ -44,7 +44,7 @@ public abstract class GeometryDatatype extends BaseDatatype implements DatatypeR
         if (rdfDatatype instanceof GeometryDatatype) {
             return (GeometryDatatype) rdfDatatype;
         } else {
-            LOGGER.error("Unrecognised Geometry Datatype: {}", rdfDatatype.getURI());
+            LOGGER.error("Unrecognised Geometry Datatype: {}. Ensure that Datatype is extending GeometryDatatype.", rdfDatatype.getURI());
             throw new DatatypeFormatException("Unrecognised Geometry Datatype: " + rdfDatatype.getURI());
         }
     }
@@ -56,7 +56,12 @@ public abstract class GeometryDatatype extends BaseDatatype implements DatatypeR
 
     public static final boolean checkURI(String datatypeURI) {
         RDFDatatype rdfDatatype = TYPE_MAPPER.getTypeByName(datatypeURI);
-        return check(rdfDatatype);
+        if (rdfDatatype != null) {
+            return check(rdfDatatype);
+        } else {
+            LOGGER.error("Unrecognised Datatype: {} - Ensure that GeoSPARQLSupport is enabled and Datatype has been registered.", datatypeURI);
+            throw new NullPointerException("Datatype not found: " + datatypeURI);
+        }
     }
 
     public static final boolean check(RDFDatatype rdfDatatype) {
