@@ -13,6 +13,7 @@ import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import implementation.DimensionInfo;
+import implementation.GeoSPARQLSupport;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomGeometryFactory;
@@ -37,7 +38,7 @@ public class WKTDatatypeTest {
 
     @BeforeClass
     public static void setUpClass() {
-
+        GeoSPARQLSupport.loadFunctionsNoIndex();
     }
 
     @AfterClass

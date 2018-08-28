@@ -12,10 +12,11 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
-import implementation.jts.CustomGeometryFactory;
 import implementation.DimensionInfo;
+import implementation.GeoSPARQLSupport;
 import implementation.GeometryWrapper;
 import implementation.jts.CustomCoordinateSequence;
+import implementation.jts.CustomGeometryFactory;
 import java.io.IOException;
 import static org.hamcrest.CoreMatchers.not;
 import org.jdom2.JDOMException;
@@ -43,6 +44,7 @@ public class GMLDatatypeTest {
 
     @BeforeClass
     public static void setUpClass() {
+        GeoSPARQLSupport.loadFunctionsNoIndex();
     }
 
     @AfterClass
