@@ -7,7 +7,6 @@ package implementation.data_conversion;
 
 import implementation.GeoSPARQLSupport;
 import implementation.GeometryWrapper;
-import implementation.datatype.DatatypeUtil;
 import implementation.datatype.GeometryDatatype;
 import java.io.File;
 import java.io.FileInputStream;
@@ -77,7 +76,7 @@ public class ConvertData {
 
     private static Model convertCRSDatatype(Model inputModel, String outputSrsURI, GeometryDatatype outputDatatype) {
 
-        if (!DatatypeUtil.checkGeometryDatatype(outputDatatype)) {
+        if (!GeometryDatatype.check(outputDatatype)) {
             LOGGER.error("Output datatype {} is not a recognised Geometry Literal", outputDatatype);
             return null;
         }
@@ -106,7 +105,7 @@ public class ConvertData {
 
         RDFDatatype datatype = literal.getDatatype();
         //Check whether a supported geometry literal.
-        if (DatatypeUtil.checkGeometryDatatype(datatype)) {
+        if (GeometryDatatype.check(datatype)) {
             GeometryWrapper originalGeom = GeometryWrapper.extract(literal);
             GeometryWrapper convertedGeom;
             try {
@@ -122,7 +121,7 @@ public class ConvertData {
             }
 
             if (outputDatatype == null) {
-                outputDatatype = DatatypeUtil.getDatatype(datatype);
+                outputDatatype = GeometryDatatype.get(datatype);
             }
 
             Statement outputStatement = ResourceFactory.createStatement(statement.getSubject(), statement.getPredicate(), convertedGeom.asLiteral(outputDatatype));

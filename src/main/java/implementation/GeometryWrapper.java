@@ -13,7 +13,6 @@ import com.vividsolutions.jts.geom.IntersectionMatrix;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
-import implementation.datatype.DatatypeUtil;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.GeometryDatatype;
 import implementation.datatype.WKTDatatype;
@@ -463,7 +462,7 @@ public class GeometryWrapper implements Serializable {
 
     public Literal asLiteral() throws DatatypeFormatException {
 
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(geometryDatatypeURI);
+        GeometryDatatype datatype = GeometryDatatype.get(geometryDatatypeURI);
         if (lexicalForm != null) {
             return ResourceFactory.createTypedLiteral(lexicalForm, datatype);
         }
@@ -474,7 +473,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     public Literal asLiteral(String outputGeometryDatatypeURI) throws DatatypeFormatException {
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputGeometryDatatypeURI);
+        GeometryDatatype datatype = GeometryDatatype.get(outputGeometryDatatypeURI);
         return asLiteral(datatype);
     }
 
@@ -569,7 +568,7 @@ public class GeometryWrapper implements Serializable {
 
     public static GeometryWrapper extract(String lexicalForm, String datatypeURI, GeometryIndex targetIndex) {
 
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(datatypeURI);
+        GeometryDatatype datatype = GeometryDatatype.get(datatypeURI);
         GeometryWrapper geometry = datatype.parse(lexicalForm, targetIndex);
         return geometry;
     }
@@ -585,13 +584,13 @@ public class GeometryWrapper implements Serializable {
     //If parsingGeometry are equal then xyGeometry will be equal.
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.parsingGeometry);
-        hash = 71 * hash + Objects.hashCode(this.srsURI);
-        hash = 71 * hash + Objects.hashCode(this.geometryDatatypeURI);
-        hash = 71 * hash + Objects.hashCode(this.crs);
-        hash = 71 * hash + Objects.hashCode(this.unitsOfMeasure);
-        hash = 71 * hash + Objects.hashCode(this.dimensionInfo);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.parsingGeometry);
+        hash = 29 * hash + Objects.hashCode(this.srsURI);
+        hash = 29 * hash + Objects.hashCode(this.geometryDatatypeURI);
+        hash = 29 * hash + Objects.hashCode(this.crs);
+        hash = 29 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 29 * hash + Objects.hashCode(this.dimensionInfo);
         return hash;
     }
 
@@ -610,7 +609,7 @@ public class GeometryWrapper implements Serializable {
         if (!Objects.equals(this.srsURI, other.srsURI)) {
             return false;
         }
-        if (this.geometryDatatypeURI != other.geometryDatatypeURI) {
+        if (!this.geometryDatatypeURI.equals(other.geometryDatatypeURI)) {
             return false;
         }
         if (!Objects.equals(this.parsingGeometry, other.parsingGeometry)) {
@@ -627,7 +626,7 @@ public class GeometryWrapper implements Serializable {
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + ", srsURI=" + srsURI + ", datatypeEnum=" + geometryDatatypeURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", dimensionInfo=" + dimensionInfo + '}';
+        return "GeometryWrapper{" + "xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + ", srsURI=" + srsURI + ", geometryDatatypeURI=" + geometryDatatypeURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", dimensionInfo=" + dimensionInfo + '}';
     }
 
 }

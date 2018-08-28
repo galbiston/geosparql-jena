@@ -8,7 +8,7 @@ package geof.topological.filter_functions.egenhofer;
 import geof.topological.GenericFilterFunction;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
-import implementation.datatype.DatatypeUtil;
+import implementation.datatype.GeometryDatatype;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -27,7 +27,7 @@ public class EhEqualsFF extends GenericFilterFunction {
         if (v1.isLiteral() && v2.isLiteral()) {
             if (v1.asString().equals(v2.asString())) {
                 String datatypeURI = v1.getDatatypeURI();
-                boolean isGeometryDatatype = DatatypeUtil.checkGeometryDatatypeURI(datatypeURI);
+                boolean isGeometryDatatype = GeometryDatatype.checkURI(datatypeURI);
                 return NodeValue.makeBoolean(isGeometryDatatype);
             } else {
                 return super.exec(v1, v2);
@@ -40,7 +40,7 @@ public class EhEqualsFF extends GenericFilterFunction {
     public Boolean exec(Literal v1, Literal v2) {
         if (v1.getLexicalForm().equals(v2.getLexicalForm())) {
             String datatypeURI = v1.getDatatypeURI();
-            return DatatypeUtil.checkGeometryDatatypeURI(datatypeURI);
+            return GeometryDatatype.checkURI(datatypeURI);
         } else {
             return super.exec(v1, v2);
         }

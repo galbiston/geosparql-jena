@@ -7,8 +7,7 @@ package implementation;
 
 import geof.topological.RelateFF;
 import implementation.data_conversion.CSVConversion;
-import implementation.datatype.GMLDatatype;
-import implementation.datatype.WKTDatatype;
+import implementation.datatype.GeometryDatatype;
 import implementation.function_registration.Egenhofer;
 import implementation.function_registration.GeometryProperty;
 import implementation.function_registration.NonTopological;
@@ -22,7 +21,6 @@ import implementation.registry.CRSRegistry;
 import implementation.vocabulary.Geo;
 import java.io.File;
 import java.io.InputStream;
-import org.apache.jena.datatypes.TypeMapper;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
@@ -176,6 +174,7 @@ public class GeoSPARQLSupport {
         //Setup Default Cordinate Reference Systems
         CRSRegistry.setupDefaultCRS();
         CSVConversion.registerDatatypes();
+        GeometryDatatype.registerDatatypes();
     }
 
     public static final void loadFunctions(IndexOption indexOption, File tdbFolder) {
@@ -212,6 +211,9 @@ public class GeoSPARQLSupport {
             //Register GeometryLiteral datatypes for CSV conversion
             CSVConversion.registerDatatypes();
 
+            //Register GeometryDatatypes with the TypeMapper.
+            GeometryDatatype.registerDatatypes();
+
             PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
             FunctionRegistry functionRegistry = FunctionRegistry.get();
             NonTopological.loadFilterFunctions(functionRegistry);
@@ -224,8 +226,6 @@ public class GeoSPARQLSupport {
             RCC8.loadFilterFunctions(functionRegistry);
             Relate.loadRelateFunction(functionRegistry);
             GeometryProperty.loadPropertyFunctions(propertyRegistry);
-            TypeMapper.getInstance().registerDatatype(WKTDatatype.INSTANCE);
-            TypeMapper.getInstance().registerDatatype(GMLDatatype.INSTANCE);
             IS_FUNCTIONS_REGISTERED = true;
         }
     }
