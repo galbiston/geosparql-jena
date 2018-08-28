@@ -34,6 +34,7 @@ public class SpatialIndexTest {
     @BeforeClass
     public static void setUpClass() {
         GeoSPARQLSupport.loadFunctionsMemoryIndex();
+        SpatialIndex.setActive(true);
         String datatypeURI = WKTDatatype.URI;
 
         try {
@@ -47,6 +48,7 @@ public class SpatialIndexTest {
 
     @AfterClass
     public static void tearDownClass() {
+        SpatialIndex.setActive(false);
     }
 
     @Before
