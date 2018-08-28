@@ -9,7 +9,6 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import implementation.datatype.GMLDatatype;
-import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.WKTDatatype;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomGeometryFactory;
@@ -65,15 +64,15 @@ public class GeometryWrapperTest {
         System.out.println("checkCRS");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper sourceCRSGeometry = new GeometryWrapper(geometry, sourceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper sourceCRSGeometry = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //Only the SRS_URI is important in the instance.
         String targetSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper instance = new GeometryWrapper(geometry, targetSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(geometry, targetSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //Expecting the coordinates to be reveresed.
         Geometry geometryTarget = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
-        GeometryWrapper expResult = new GeometryWrapper(geometryTarget, targetSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper expResult = new GeometryWrapper(geometryTarget, targetSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
         GeometryWrapper result = instance.checkTransformCRS(sourceCRSGeometry);
 
         //System.out.println("Exp: " + expResult);
@@ -91,7 +90,7 @@ public class GeometryWrapperTest {
         System.out.println("getCRS");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         CoordinateReferenceSystem expResult = CRS.decode(sourceSRSURI);
         CoordinateReferenceSystem result = instance.getCRS();
@@ -109,7 +108,7 @@ public class GeometryWrapperTest {
         System.out.println("getXYGeometry");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //Expect the coordinates to be reversed as JTS is x,y and WGS84 is y,x
         Geometry expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
@@ -128,7 +127,7 @@ public class GeometryWrapperTest {
         System.out.println("getParsingGeometry");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //Expect coordinates to be same as supplied.
         Geometry expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
@@ -147,7 +146,7 @@ public class GeometryWrapperTest {
         System.out.println("getSrsURI");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         String expResult = SRS_URI.WGS84_CRS;
         String result = instance.getSrsURI();
@@ -165,7 +164,7 @@ public class GeometryWrapperTest {
         System.out.println("getSRID");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         String expResult = SRS_URI.WGS84_CRS;
         String result = instance.getSRID();
@@ -176,17 +175,17 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of getGeoDatatypeEnum method, of class GeometryWrapper.
+     * Test of getGeometryDatatypeURI method, of class GeometryWrapper.
      */
     @Test
-    public void testGetDatatypeEnum() {
-        System.out.println("getDatatypeEnum");
+    public void testGetGeometryDatatypeURI() {
+        System.out.println("getGeometryDatatypeURI");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
-        GeoDatatypeEnum expResult = GeoDatatypeEnum.WKT;
-        GeoDatatypeEnum result = instance.getGeoDatatypeEnum();
+        String expResult = WKTDatatype.URI;
+        String result = instance.getGeometryDatatypeURI();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -204,11 +203,11 @@ public class GeometryWrapperTest {
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         String targetSRSURI = SRS_URI.OSGB36_CRS;
-        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(12.0, 1.0));
         String instanceSRSURI = SRS_URI.OSGB36_CRS;
-        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //CRS is in metres.
         String distanceUnitsURI = Unit_URI.METRE_URI;
@@ -232,11 +231,11 @@ public class GeometryWrapperTest {
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(385458, 156785)); //LatLon - 51.31, -2.21
         String targetSRSURI = SRS_URI.OSGB36_CRS;
-        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(487920, 157518)); //LatLon: 51.31, -0.74
         String instanceSRSURI = SRS_URI.OSGB36_CRS;
-        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //CRS is in metres.
         String distanceUnitsURI = Unit_URI.RADIAN_URI;
@@ -260,11 +259,11 @@ public class GeometryWrapperTest {
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         String targetSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 12.0));
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //CRS is in degrees.
         String distanceUnitsURI = Unit_URI.DEGREE_ANGLE_URI;
@@ -288,11 +287,11 @@ public class GeometryWrapperTest {
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(0.0, 1.0));
         String targetSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper targetGeometry = new GeometryWrapper(targetGeo, targetSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 0.0));
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //CRS is in degrees.
         String distanceUnitsURI = Unit_URI.METRE_URI;
@@ -315,7 +314,7 @@ public class GeometryWrapperTest {
         CustomCoordinateSequence sequence = new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions());
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint(sequence);
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.getEmptyWKT();
 
@@ -333,7 +332,7 @@ public class GeometryWrapperTest {
         System.out.println("emptyWKTGeometryWrapper");
 
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoDatatypeEnum.WKT, DimensionInfo.xyPoint());
+        GeometryWrapper result = new GeometryWrapper(instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.getEmptyWKT();
 
@@ -351,7 +350,7 @@ public class GeometryWrapperTest {
         System.out.println("emptyGMLGeometryWrapper");
 
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GeoDatatypeEnum.GML, DimensionInfo.xyPoint());
+        GeometryWrapper result = new GeometryWrapper(instanceSRSURI, GMLDatatype.URI, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.getEmptyGML();
 
@@ -380,17 +379,17 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of asLiteral conversion enum.
+     * Test of asLiteral conversion URI.
      *
      */
     @Test
-    public void testAsLiteralConversionEnum() {
-        System.out.println("asLiteralConversionEnum");
+    public void testAsLiteralConversionURI() {
+        System.out.println("asLiteralConversionURI");
 
         String lexicalForm = "POINT(-83.38 33.95)";
         GeometryWrapper instance = WKTDatatype.INSTANCE.parse(lexicalForm);
 
-        Literal result = instance.asLiteral(GeoDatatypeEnum.GML);
+        Literal result = instance.asLiteral(GMLDatatype.URI);
         String gmlGeometryLiteral = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\"><gml:pos>-83.38 33.95</gml:pos></gml:Point>";
         Literal expResult = ResourceFactory.createTypedLiteral(gmlGeometryLiteral, GMLDatatype.INSTANCE);
 

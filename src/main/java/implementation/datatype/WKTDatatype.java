@@ -107,7 +107,7 @@ public class WKTDatatype extends GeometryDatatype {
         Geometry geometry = wktReader.getGeometry();
         DimensionInfo dimensionInfo = wktReader.getDimensionInfo();
 
-        return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), GeoDatatypeEnum.WKT, dimensionInfo, geometryLiteral);
+        return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), URI, dimensionInfo, geometryLiteral);
     }
 
     private class WKTTextSRS {

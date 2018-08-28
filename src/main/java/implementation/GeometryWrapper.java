@@ -15,7 +15,6 @@ import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
 import implementation.datatype.DatatypeUtil;
 import implementation.datatype.GMLDatatype;
-import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.GeometryDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.index.GeometryLiteralIndex.GeometryIndex;
@@ -53,27 +52,27 @@ public class GeometryWrapper implements Serializable {
     private PreparedGeometry preparedGeometry;
     private final String srsURI;
     private String utmURI = null;
-    private final GeoDatatypeEnum datatypeEnum;
+    private final String geometryDatatypeURI;
     private final CoordinateReferenceSystem crs;
     private final UnitsOfMeasure unitsOfMeasure;
     private final DimensionInfo dimensionInfo;
     private String lexicalForm;
 
-    public GeometryWrapper(Geometry geometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
-        this(geometry, srsURI, datatypeEnum, dimensionInfo, null);
+    public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo) {
+        this(geometry, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
-    public GeometryWrapper(Geometry geometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo, String geometryLiteral) {
-        this(geometry, GeometryReverse.check(geometry, CRSRegistry.getCRS(srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI)), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, datatypeEnum, dimensionInfo, geometryLiteral);
+    public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo, String geometryLiteral) {
+        this(geometry, GeometryReverse.check(geometry, CRSRegistry.getCRS(srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI)), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, geometryDatatypeURI, dimensionInfo, geometryLiteral);
     }
 
-    private GeometryWrapper(Geometry parsingGeometry, Geometry xyGeometry, String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo, String lexicalForm) {
+    private GeometryWrapper(Geometry parsingGeometry, Geometry xyGeometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo, String lexicalForm) {
 
         this.parsingGeometry = parsingGeometry;
         this.xyGeometry = xyGeometry;
         this.preparedGeometry = null; //Initialised when required by spatial relations checkPreparedGeometry.
 
-        this.datatypeEnum = datatypeEnum;
+        this.geometryDatatypeURI = geometryDatatypeURI;
 
         if (srsURI.isEmpty()) {
             srsURI = SRS_URI.DEFAULT_WKT_CRS84;
@@ -90,10 +89,10 @@ public class GeometryWrapper implements Serializable {
      * Default to WGS84 and XY coordinate dimensions.
      *
      * @param geometry
-     * @param datatypeEnum
+     * @param geometryDatatypeURI
      */
-    public GeometryWrapper(Geometry geometry, GeoDatatypeEnum datatypeEnum) {
-        this(geometry, "", datatypeEnum, DimensionInfo.xyPoint());
+    public GeometryWrapper(Geometry geometry, String geometryDatatypeURI) {
+        this(geometry, "", geometryDatatypeURI, DimensionInfo.xyPoint());
     }
 
     /**
@@ -101,10 +100,10 @@ public class GeometryWrapper implements Serializable {
      *
      * @param geometry
      * @param srsURI
-     * @param datatypeEnum
+     * @param geometryDatatypeURI
      */
-    public GeometryWrapper(Geometry geometry, String srsURI, GeoDatatypeEnum datatypeEnum) {
-        this(geometry, srsURI, datatypeEnum, DimensionInfo.xyPoint());
+    public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI) {
+        this(geometry, srsURI, geometryDatatypeURI, DimensionInfo.xyPoint());
     }
 
     transient private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
@@ -113,22 +112,22 @@ public class GeometryWrapper implements Serializable {
      * Empty geometry with specified parameters.
      *
      * @param srsURI
-     * @param datatypeEnum
+     * @param geometryDatatypeURI
      * @param dimensionInfo
      */
-    public GeometryWrapper(String srsURI, GeoDatatypeEnum datatypeEnum, DimensionInfo dimensionInfo) {
-        this(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions()), datatypeEnum, srsURI);
+    public GeometryWrapper(String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo) {
+        this(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions()), geometryDatatypeURI, srsURI);
     }
 
     /**
      * Point geometry with specified SRS.
      *
      * @param pointCoordinateSequence
-     * @param datatypeEnum
+     * @param geometryDatatypeURI
      * @param srsURI
      */
-    public GeometryWrapper(CustomCoordinateSequence pointCoordinateSequence, GeoDatatypeEnum datatypeEnum, String srsURI) {
-        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, datatypeEnum, DimensionInfo.xyPoint());
+    public GeometryWrapper(CustomCoordinateSequence pointCoordinateSequence, String geometryDatatypeURI, String srsURI) {
+        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, geometryDatatypeURI, DimensionInfo.xyPoint());
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
@@ -138,7 +137,7 @@ public class GeometryWrapper implements Serializable {
         this.preparedGeometry = geometryWrapper.preparedGeometry;
         this.srsURI = geometryWrapper.srsURI;
         this.utmURI = geometryWrapper.utmURI;
-        this.datatypeEnum = geometryWrapper.datatypeEnum;
+        this.geometryDatatypeURI = geometryWrapper.geometryDatatypeURI;
 
         this.crs = geometryWrapper.crs;
         this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
@@ -236,8 +235,8 @@ public class GeometryWrapper implements Serializable {
         return srsURI;
     }
 
-    public GeoDatatypeEnum getGeoDatatypeEnum() {
-        return datatypeEnum;
+    public String getGeometryDatatypeURI() {
+        return geometryDatatypeURI;
     }
 
     public GeometryWrapper buffer(double distance, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -269,7 +268,7 @@ public class GeometryWrapper implements Serializable {
         Geometry xyGeo = transformedGeometryWrapper.xyGeometry.buffer(transformedDistance);
         DimensionInfo bufferedDimensionInfo = new DimensionInfo(dimensionInfo.getCoordinate(), dimensionInfo.getSpatial(), xyGeo.getDimension());
         Geometry parsingGeo = GeometryReverse.check(xyGeo, transformedGeometryWrapper.crs);
-        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(parsingGeo, xyGeo, transformedGeometryWrapper.srsURI, transformedGeometryWrapper.datatypeEnum, bufferedDimensionInfo, null);
+        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(parsingGeo, xyGeo, transformedGeometryWrapper.srsURI, transformedGeometryWrapper.geometryDatatypeURI, bufferedDimensionInfo, null);
 
         //Check whether need to transform back to the original srsURI.
         if (isTransformNeeded) {
@@ -302,14 +301,14 @@ public class GeometryWrapper implements Serializable {
     public GeometryWrapper convexHull() {
         Geometry xyGeo = this.xyGeometry.convexHull();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
     public GeometryWrapper difference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.difference(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
     /**
@@ -361,13 +360,13 @@ public class GeometryWrapper implements Serializable {
     public GeometryWrapper boundary() {
         Geometry xyGeo = this.xyGeometry.getBoundary();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
     public GeometryWrapper envelope() {
         Geometry xyGeo = this.xyGeometry.getEnvelope();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
     public Envelope getEnvelope() {
@@ -378,7 +377,7 @@ public class GeometryWrapper implements Serializable {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.intersection(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
     public IntersectionMatrix relate(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -395,14 +394,14 @@ public class GeometryWrapper implements Serializable {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.symDifference(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
     public GeometryWrapper union(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.union(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crs);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, datatypeEnum, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
     public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
@@ -464,7 +463,7 @@ public class GeometryWrapper implements Serializable {
 
     public Literal asLiteral() throws DatatypeFormatException {
 
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(datatypeEnum);
+        GeometryDatatype datatype = DatatypeUtil.getDatatype(geometryDatatypeURI);
         if (lexicalForm != null) {
             return ResourceFactory.createTypedLiteral(lexicalForm, datatype);
         }
@@ -474,8 +473,8 @@ public class GeometryWrapper implements Serializable {
         return literal;
     }
 
-    public Literal asLiteral(GeoDatatypeEnum outputDatatypeEnum) throws DatatypeFormatException {
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputDatatypeEnum);
+    public Literal asLiteral(String outputGeometryDatatypeURI) throws DatatypeFormatException {
+        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputGeometryDatatypeURI);
         return asLiteral(datatype);
     }
 
@@ -589,7 +588,7 @@ public class GeometryWrapper implements Serializable {
         int hash = 3;
         hash = 71 * hash + Objects.hashCode(this.parsingGeometry);
         hash = 71 * hash + Objects.hashCode(this.srsURI);
-        hash = 71 * hash + Objects.hashCode(this.datatypeEnum);
+        hash = 71 * hash + Objects.hashCode(this.geometryDatatypeURI);
         hash = 71 * hash + Objects.hashCode(this.crs);
         hash = 71 * hash + Objects.hashCode(this.unitsOfMeasure);
         hash = 71 * hash + Objects.hashCode(this.dimensionInfo);
@@ -611,7 +610,7 @@ public class GeometryWrapper implements Serializable {
         if (!Objects.equals(this.srsURI, other.srsURI)) {
             return false;
         }
-        if (this.datatypeEnum != other.datatypeEnum) {
+        if (this.geometryDatatypeURI != other.geometryDatatypeURI) {
             return false;
         }
         if (!Objects.equals(this.parsingGeometry, other.parsingGeometry)) {
@@ -628,7 +627,7 @@ public class GeometryWrapper implements Serializable {
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + ", srsURI=" + srsURI + ", datatypeEnum=" + datatypeEnum + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", dimensionInfo=" + dimensionInfo + '}';
+        return "GeometryWrapper{" + "xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + ", srsURI=" + srsURI + ", datatypeEnum=" + geometryDatatypeURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", dimensionInfo=" + dimensionInfo + '}';
     }
 
 }

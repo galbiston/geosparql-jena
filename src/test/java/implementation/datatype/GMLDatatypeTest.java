@@ -76,7 +76,7 @@ public class GMLDatatypeTest {
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 2);
 
-        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GeoDatatypeEnum.GML, dimensionInfo);
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, GMLDatatype.URI, dimensionInfo);
 
         String result = instance.unparse(geometry);
 
@@ -103,7 +103,7 @@ public class GMLDatatypeTest {
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoDatatypeEnum.GML, dimensionInfo);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GMLDatatype.URI, dimensionInfo);
 
         assertEquals(expResult.toString(), result.toString());
     }
@@ -127,7 +127,7 @@ public class GMLDatatypeTest {
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 2);
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoDatatypeEnum.GML, dimensionInfo);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GMLDatatype.URI, dimensionInfo);
 
         assertThat(expResult, not(result));
     }
@@ -152,7 +152,7 @@ public class GMLDatatypeTest {
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 2);
 
-        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GeoDatatypeEnum.GML, dimensionInfo);
+        GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GMLDatatype.URI, dimensionInfo);
 
         assertThat(expResult, not(result));
     }
@@ -161,7 +161,7 @@ public class GMLDatatypeTest {
     public void testPointURL() throws JDOMException, IOException {
         GeometryWrapper geo = GML_DATATYPE.read("<gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.4 34.4</gml:pos></gml:Point>");
         Geometry test = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "-83.4 34.4"));
-        GeometryWrapper expResult = new GeometryWrapper(test, URL_SRS_NAMESPACE, GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 0));
+        GeometryWrapper expResult = new GeometryWrapper(test, URL_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
@@ -172,7 +172,7 @@ public class GMLDatatypeTest {
     public void testPointURN() throws JDOMException, IOException {
         GeometryWrapper geo = GML_DATATYPE.read("<gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:pos>-83.4 34.4</gml:pos></gml:Point>");
         Geometry test = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "-83.4 34.4"));
-        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 0));
+        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
@@ -183,7 +183,7 @@ public class GMLDatatypeTest {
     public void testLineString() throws JDOMException, IOException {
         GeometryWrapper geo = GML_DATATYPE.read("<gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\" xmlns:gml=\"http://www.opengis.net/ont/gml\"><gml:posList srsDimension=\"2\">-83.4 34.0 -83.3 34.3</gml:posList></gml:LineString>");
         Geometry test = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "-83.4 34.0, -83.3 34.3"));
-        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 1));
+        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 1));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
@@ -194,7 +194,7 @@ public class GMLDatatypeTest {
     public void testPolygon() throws JDOMException, IOException {
         GeometryWrapper geo = GML_DATATYPE.read("<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">30 10 40 40 20 40 10 20 30 10</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>");
         Geometry test = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "30 10, 40 40, 20 40, 10 20, 30 10"));
-        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 2));
+        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 2));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
@@ -207,7 +207,7 @@ public class GMLDatatypeTest {
         LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "30 10, 40 40, 20 40, 10 20, 30 10"));
         LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "20 30, 35 35, 30 20, 20 30"))};
         Geometry test = GEOMETRY_FACTORY.createPolygon(shell, holes);
-        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 2));
+        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 2));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
@@ -218,7 +218,7 @@ public class GMLDatatypeTest {
     public void testMultiPoint() throws JDOMException, IOException {
         GeometryWrapper geo = GML_DATATYPE.read("<gml:MultiPoint xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:PointMember><gml:Point><gml:pos>10 40</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point><gml:pos>40 30</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point><gml:pos>20 20</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point><gml:pos>30 10</gml:pos></gml:Point></gml:PointMember></gml:MultiPoint>");
         Geometry test = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "10 40, 40 30, 20 20, 30 10"));
-        GeometryWrapper expResult = new GeometryWrapper(test, "urn:ogc:def:crs:EPSG::27700", GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 0));
+        GeometryWrapper expResult = new GeometryWrapper(test, "urn:ogc:def:crs:EPSG::27700", GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
@@ -232,7 +232,7 @@ public class GMLDatatypeTest {
         lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "10 10, 20 20, 10 40"));
         lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "40 40, 30 30, 40 20, 30 10"));
         Geometry test = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
-        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 1));
+        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 1));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
@@ -248,7 +248,7 @@ public class GMLDatatypeTest {
         LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "30 20, 20 15, 20 25, 30 20"))};
         polygons[1] = GEOMETRY_FACTORY.createPolygon(shell, holes);
         Geometry test = GEOMETRY_FACTORY.createMultiPolygon(polygons);
-        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 2));
+        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 2));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
@@ -262,7 +262,7 @@ public class GMLDatatypeTest {
         geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "4 6"));
         geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "4 6,7 10"));
         Geometry test = GEOMETRY_FACTORY.createGeometryCollection(geometries);
-        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GeoDatatypeEnum.GML, new DimensionInfo(2, 2, 1));
+        GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 1));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);

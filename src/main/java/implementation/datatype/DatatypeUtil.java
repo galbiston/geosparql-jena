@@ -23,18 +23,6 @@ public class DatatypeUtil {
     private static final GMLDatatype GML_DATATYPE = GMLDatatype.INSTANCE;
     private static final String GML_DATATYPE_URI = GMLDatatype.INSTANCE.getURI();
 
-    public static final GeometryDatatype getDatatype(GeoDatatypeEnum datatypeEnum) {
-        switch (datatypeEnum) {
-            case GML:
-                return GMLDatatype.INSTANCE;
-            case WKT:
-                return WKTDatatype.INSTANCE;
-            default:
-                LOGGER.error("Unrecognised DatatypeEnum: {}", datatypeEnum);
-                throw new AssertionError("Unrecognised DatatypeEnum: " + datatypeEnum);
-        }
-    }
-
     public static final GeometryDatatype getDatatype(RDFDatatype rdfDatatype) {
         if (rdfDatatype.equals(WKTDatatype.INSTANCE)) {
             return WKTDatatype.INSTANCE;

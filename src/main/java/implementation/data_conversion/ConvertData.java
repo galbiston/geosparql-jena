@@ -8,7 +8,6 @@ package implementation.data_conversion;
 import implementation.GeoSPARQLSupport;
 import implementation.GeometryWrapper;
 import implementation.datatype.DatatypeUtil;
-import implementation.datatype.GeoDatatypeEnum;
 import implementation.datatype.GeometryDatatype;
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,18 +52,6 @@ public class ConvertData {
     }
 
     /**
-     * Convert the input model to the output datatype.
-     *
-     * @param inputModel
-     * @param outputDatatypeEnum
-     * @return
-     */
-    public static final Model convert(Model inputModel, GeoDatatypeEnum outputDatatypeEnum) {
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputDatatypeEnum);
-        return convertCRSDatatype(inputModel, null, datatype);
-    }
-
-    /**
      * Convert the input model to the output geometry literal datatype.
      *
      * @param inputModel
@@ -73,20 +60,6 @@ public class ConvertData {
      */
     public static final Model convert(Model inputModel, GeometryDatatype outputDatatype) {
         return convertCRSDatatype(inputModel, null, outputDatatype);
-    }
-
-    /**
-     * Convert the input model to the output coordinate reference system and
-     * geometry DatatypeEnum.
-     *
-     * @param inputModel
-     * @param outputSrsURI
-     * @param outputDatatypeEnum
-     * @return
-     */
-    public static final Model convert(Model inputModel, String outputSrsURI, GeoDatatypeEnum outputDatatypeEnum) {
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputDatatypeEnum);
-        return convertCRSDatatype(inputModel, outputSrsURI, datatype);
     }
 
     /**
@@ -195,36 +168,6 @@ public class ConvertData {
      * @param outputFile
      * @param outputLang
      * @param outputSrsURI
-     * @param outputDatatypeEnum
-     */
-    public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang, String outputSrsURI, GeoDatatypeEnum outputDatatypeEnum) {
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputDatatypeEnum);
-        convertFileCRSDatatype(inputFile, inputLang, outputFile, outputLang, outputSrsURI, datatype);
-    }
-
-    /**
-     * Converts all geometry literals (WKT or GML) to the specified datatype.
-     *
-     * @param inputFile
-     * @param inputLang
-     * @param outputFile
-     * @param outputLang
-     * @param outputDatatypeEnum
-     */
-    public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang, GeoDatatypeEnum outputDatatypeEnum) {
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputDatatypeEnum);
-        convertFileCRSDatatype(inputFile, inputLang, outputFile, outputLang, null, datatype);
-    }
-
-    /**
-     * Converts all geometry literals (WKT or GML) to current CRS to the
-     * specified CRS and datatype
-     *
-     * @param inputFile
-     * @param inputLang
-     * @param outputFile
-     * @param outputLang
-     * @param outputSrsURI
      * @param outputDatatype
      */
     public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
@@ -293,16 +236,6 @@ public class ConvertData {
         convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, null, null);
     }
 
-    public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, String outputSrsURI, GeoDatatypeEnum outputDatatypeEnum) {
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputDatatypeEnum);
-        convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, outputSrsURI, datatype);
-    }
-
-    public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, GeoDatatypeEnum outputDatatypeEnum) {
-        GeometryDatatype datatype = DatatypeUtil.getDatatype(outputDatatypeEnum);
-        convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, null, datatype);
-    }
-
     public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
         convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, outputSrsURI, outputDatatype);
     }
@@ -345,15 +278,15 @@ public class ConvertData {
      *
      * @param geometryLiterals
      * @param outputSrsURI Coordinate reference system URI
-     * @param outputDatatypeEnum
+     * @param outputDatatype
      * @return
      */
-    public static final List<String> convertGeometryLiterals(List<String> geometryLiterals, String outputSrsURI, GeoDatatypeEnum outputDatatypeEnum) {
+    public static final List<String> convertGeometryLiterals(List<String> geometryLiterals, String outputSrsURI, GeometryDatatype outputDatatype) {
 
         List<String> outputGeometryLiterals = new ArrayList<>(geometryLiterals.size());
 
         for (String geometryLiteral : geometryLiterals) {
-            String convertedGeometryLiteral = convertGeometryLiteral(geometryLiteral, outputSrsURI, outputDatatypeEnum);
+            String convertedGeometryLiteral = convertGeometryLiteral(geometryLiteral, outputSrsURI, outputDatatype);
             outputGeometryLiterals.add(convertedGeometryLiteral);
         }
 
@@ -366,14 +299,12 @@ public class ConvertData {
      *
      * @param geometryLiteral
      * @param outputSrsURI Coordinate reference system URI
-     * @param outputDatatypeEnum
+     * @param outputDatatype
      * @return
      */
-    public static final String convertGeometryLiteral(String geometryLiteral, String outputSrsURI, GeoDatatypeEnum outputDatatypeEnum) {
+    public static final String convertGeometryLiteral(String geometryLiteral, String outputSrsURI, GeometryDatatype outputDatatype) {
 
-        RDFDatatype datatype = DatatypeUtil.getDatatype(outputDatatypeEnum);
-
-        Literal lit = ResourceFactory.createTypedLiteral(geometryLiteral, datatype);
+        Literal lit = ResourceFactory.createTypedLiteral(geometryLiteral, outputDatatype);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(lit);
         try {
             GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(outputSrsURI);
