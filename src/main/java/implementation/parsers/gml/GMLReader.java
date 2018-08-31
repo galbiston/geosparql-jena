@@ -5,7 +5,7 @@
  */
 package implementation.parsers.gml;
 
-import com.vividsolutions.jts.geom.*;
+import org.locationtech.jts.geom.*;
 import implementation.jts.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.datatype.ParseException;

@@ -5,13 +5,14 @@
  */
 package implementation.index;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import implementation.index.expiring.ExpiringIndex;
+import implementation.jts.GeometryTransform;
 import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -70,8 +71,11 @@ public class GeometryTransformIndex {
         CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
         MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
         Geometry parsingGeometry = sourceGeometryWrapper.getParsingGeometry();
-        Geometry transformedGeometry = JTS.transform(parsingGeometry, transform);
 
+        //Transform the coordinates into a new Geometry.
+        Geometry transformedGeometry = GeometryTransform.perform(parsingGeometry, transform);
+
+        //Construct a new GeometryWrapper using info from original GeometryWrapper.
         String geometryDatatypeURI = sourceGeometryWrapper.getGeometryDatatypeURI();
         DimensionInfo dimensionInfo = sourceGeometryWrapper.getDimensionInfo();
         return new GeometryWrapper(transformedGeometry, srsURI, geometryDatatypeURI, dimensionInfo);

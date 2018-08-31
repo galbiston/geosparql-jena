@@ -5,11 +5,11 @@
  */
 package implementation.jts;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateSequence;
-import com.vividsolutions.jts.geom.Envelope;
 import java.io.Serializable;
 import java.util.Arrays;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.CoordinateSequence;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -157,6 +157,11 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
         this.coordinateDimension = dims[0];
         this.spatialDimension = dims[1];
 
+    }
+
+    @Override
+    public CoordinateSequence copy() {
+        return new CustomCoordinateSequence(x, y, z, m);
     }
 
     public int getSize() {

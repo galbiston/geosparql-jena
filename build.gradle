@@ -32,7 +32,7 @@ dependencies {
     compile group: 'org.apache.sis.core', name: 'sis-referencing', version: sisVersion
 
     //JTS Core
-    compile group: 'com.vividsolutions', name: 'jts-core', version: '1.14.0'
+    compile group: 'org.locationtech.jts', name: 'jts-core', version: '1.15.1'
 
     /*
     //Geotools: http://docs.geotools.org/latest/userguide.old/library/

@@ -5,7 +5,7 @@
  */
 package implementation.index;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import implementation.GeometryWrapper;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;

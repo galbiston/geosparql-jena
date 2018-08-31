@@ -36,7 +36,7 @@ public class CRSRegistry implements Serializable {
     private static final Map<String, Boolean> AXIS_XY_REGISTRY = Collections.synchronizedMap(new HashMap<>());
     private static final Map<String, UnitsOfMeasure> UNITS_OF_MEASURE_REGISTRY = Collections.synchronizedMap(new HashMap<>());
 
-    private static final String DEFAULT_WKT_CRS84 = "CRS:84";
+    public static final String DEFAULT_WKT_CRS84_CODE = "CRS:84";
     private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
 
     public static final UnitsOfMeasure getUnitsOfMeasure(String srsURI) {
@@ -96,7 +96,7 @@ public class CRSRegistry implements Serializable {
     public static final void setupDefaultCRS() {
 
         try {
-            CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84);
+            CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
             UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
             UnitsRegistry.addUnit(unitsOfMeasure);
 
@@ -118,7 +118,7 @@ public class CRSRegistry implements Serializable {
             UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.GEOCENTRIC_CARTESIAN, unitsOfMeasureCartesian);
 
         } catch (FactoryException ex) {
-            LOGGER.error("Invalid CRS code: {} - {}", DEFAULT_WKT_CRS84, ex.getMessage());
+            LOGGER.error("Invalid CRS code: {} - {}", DEFAULT_WKT_CRS84_CODE, ex.getMessage());
         }
     }
 

@@ -5,7 +5,7 @@
  */
 package implementation.datatype;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex;

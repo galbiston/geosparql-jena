@@ -5,7 +5,7 @@
  */
 package geof.topological;
 
-import com.vividsolutions.jts.geom.IntersectionMatrix;
+import org.locationtech.jts.geom.IntersectionMatrix;
 import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import org.apache.jena.graph.Node;
