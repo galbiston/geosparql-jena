@@ -12,7 +12,7 @@ import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import implementation.index.expiring.ExpiringIndex;
-import implementation.jts.GeometryTransform;
+import implementation.jts.GeometryTransformation;
 import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -73,7 +73,7 @@ public class GeometryTransformIndex {
         Geometry parsingGeometry = sourceGeometryWrapper.getParsingGeometry();
 
         //Transform the coordinates into a new Geometry.
-        Geometry transformedGeometry = GeometryTransform.perform(parsingGeometry, transform);
+        Geometry transformedGeometry = GeometryTransformation.transform(parsingGeometry, transform);
 
         //Construct a new GeometryWrapper using info from original GeometryWrapper.
         String geometryDatatypeURI = sourceGeometryWrapper.getGeometryDatatypeURI();
