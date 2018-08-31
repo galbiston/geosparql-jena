@@ -70,6 +70,9 @@ public class SpatialIndexTest {
         Boolean isDisjoint = false;
         CollisionResult expResult = CHECK_RELATION;
         CollisionResult result = SpatialIndex.checkCollision(sourceGeometryLiteral, targetGeometryLiteral, isDisjoint);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -86,6 +89,9 @@ public class SpatialIndexTest {
         Boolean isDisjoint = true;
         CollisionResult expResult = CHECK_RELATION;
         CollisionResult result = SpatialIndex.checkCollision(sourceGeometryLiteral, targetGeometryLiteral, isDisjoint);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -102,6 +108,9 @@ public class SpatialIndexTest {
         Boolean isDisjoint = false;
         CollisionResult expResult = FALSE_RELATION;
         CollisionResult result = SpatialIndex.checkCollision(sourceGeometryLiteral, targetGeometryLiteral, isDisjoint);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -118,6 +127,9 @@ public class SpatialIndexTest {
         Boolean isDisjoint = true;
         CollisionResult expResult = TRUE_RELATION;
         CollisionResult result = SpatialIndex.checkCollision(sourceGeometryLiteral, targetGeometryLiteral, isDisjoint);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 

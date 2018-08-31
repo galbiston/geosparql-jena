@@ -55,8 +55,8 @@ public class GeometryTransformTest {
      * @throws org.opengis.referencing.operation.TransformException
      */
     @Test
-    public void testPerform() throws FactoryException, MismatchedDimensionException, TransformException {
-        System.out.println("perform");
+    public void testTransformPoint() throws FactoryException, MismatchedDimensionException, TransformException {
+        System.out.println("transform_Point");
         Geometry sourceGeometry = WKTReader.extract("POINT ZM(5 10 8 3)").getGeometry();
 
         CoordinateReferenceSystem sourceCRS = CRS.forCode(SRS_URI.WGS84_CRS);
@@ -65,6 +65,32 @@ public class GeometryTransformTest {
 
         Geometry expResult = WKTReader.extract("POINT ZM(10 5 8 3)").getGeometry();
         Geometry result = GeometryTransformation.transform(sourceGeometry, transform);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of transform method, of class GeometryTransformation.
+     *
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    @Test
+    public void testTransform_Polygon() throws FactoryException, MismatchedDimensionException, TransformException {
+        System.out.println("transform_Polygon");
+        Geometry sourceGeometry = WKTReader.extract("POLYGON(5.0 5.0, 5.0 15.0, 15.0 15.0, 15.0 5.0, 5.0 5.0)").getGeometry();
+
+        CoordinateReferenceSystem sourceCRS = CRS.forCode(SRS_URI.WGS84_CRS);
+        CoordinateReferenceSystem targetCRS = CRS.forCode(CRSRegistry.DEFAULT_WKT_CRS84_CODE);
+        MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
+
+        Geometry expResult = WKTReader.extract("POLYGON(5.0 5.0, 15.0 5.0, 15.0 15.0, 5.0 15.0, 5.0 5.0)").getGeometry();
+        Geometry result = GeometryTransformation.transform(sourceGeometry, transform);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 

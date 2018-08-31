@@ -5,13 +5,6 @@
  */
 package implementation.datatype;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
-import org.locationtech.jts.geom.LinearRing;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
 import implementation.DimensionInfo;
 import implementation.GeoSPARQLSupport;
 import implementation.GeometryWrapper;
@@ -27,6 +20,13 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 /**
  *
@@ -105,7 +105,9 @@ public class GMLDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GMLDatatype.URI, dimensionInfo);
 
-        assertEquals(expResult.toString(), result.toString());
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + geo);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -129,6 +131,8 @@ public class GMLDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GMLDatatype.URI, dimensionInfo);
 
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + geo);
         assertThat(expResult, not(result));
     }
 
@@ -154,6 +158,8 @@ public class GMLDatatypeTest {
 
         GeometryWrapper expResult = new GeometryWrapper(expGeometry, expSRSName, GMLDatatype.URI, dimensionInfo);
 
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + geo);
         assertThat(expResult, not(result));
     }
 

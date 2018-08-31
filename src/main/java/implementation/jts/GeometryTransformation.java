@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package implementation.jts;
 
 import implementation.datatype.ParseException;
@@ -167,58 +166,58 @@ public class GeometryTransformation {
 
     private static CoordinateSequence transformCoordSeq(CoordinateSequence coordSeq, MathTransform transform) throws TransformException {
 
-            int size = coordSeq.size();
-            int sourceDims = transform.getSourceDimensions();
-            int targetDims = transform.getTargetDimensions();
+        int size = coordSeq.size();
+        int sourceDims = transform.getSourceDimensions();
+        int targetDims = transform.getTargetDimensions();
 
-            double[] sourcePts = new double[size * sourceDims];
-            double[] targetPts = new double[size * targetDims];
+        double[] sourcePts = new double[size * sourceDims];
+        double[] targetPts = new double[size * targetDims];
 
-            //Setup source array for transform.
-            boolean isZSource = sourceDims > 2;
-            for (int i = 0; i < size; i += sourceDims) {
-                Coordinate coord = coordSeq.getCoordinate(i);
-                sourcePts[i] = coord.getX();
-                sourcePts[i + 1] = coord.getY();
-                if (isZSource) {
-                    sourcePts[i + 2] = coord.getZ();
+        //Setup source array for transform.
+        boolean isZSource = sourceDims > 2;
+        for (int i = 0; i < size; i++) {
+            Coordinate coord = coordSeq.getCoordinate(i);
+            int j = i * targetDims;
+            sourcePts[j] = coord.getX();
+            sourcePts[j + 1] = coord.getY();
+            if (isZSource) {
+                sourcePts[j + 2] = coord.getZ();
+            }
+        }
+
+        //Transform the ordinates.
+        transform.transform(sourcePts, 0, targetPts, 0, size);
+
+        //Extract into coordiante sequence.
+        double[] x = new double[size];
+        double[] y = new double[size];
+        double[] z = new double[size];
+        double[] m = new double[size];
+
+        boolean isZTransformed = sourceDims > 2 && targetDims > 2;
+        for (int i = 0; i < size; i++) {
+            Coordinate coord = coordSeq.getCoordinate(i);
+            int j = i * targetDims;
+            x[i] = targetPts[j];
+            y[i] = targetPts[j + 1];
+            if (isZTransformed) {
+                z[i] = targetPts[j + 2];
+            } else {
+                if (coordSeq.hasZ()) {
+                    z[i] = coord.getZ();
+                } else {
+                    z[i] = Double.NaN;
                 }
             }
-
-            //Transform the ordinates.
-            transform.transform(sourcePts, 0, targetPts, 0, size);
-
-            //Extract into coordiante sequence.
-            double[] x = new double[size];
-            double[] y = new double[size];
-            double[] z = new double[size];
-            double[] m = new double[size];
-
-            boolean isZTransformed = sourceDims > 2 && targetDims > 2;
-            for (int i = 0; i < targetPts.length; i += targetDims) {
-                Coordinate coord = coordSeq.getCoordinate(i);
-
-                x[i] = targetPts[i];
-                y[i] = targetPts[i + 1];
-                if (isZTransformed) {
-                    z[i] = targetPts[i + 2];
-                } else {
-                    if (coordSeq.hasZ()) {
-                        z[i] = coord.getZ();
-                    } else {
-                        z[i] = Double.NaN;
-                    }
-                }
-                if (coordSeq.hasM()) {
-                    m[i] = coord.getM();
-                } else {
-                    m[i] = Double.NaN;
-                }
-
+            if (coordSeq.hasM()) {
+                m[i] = coord.getM();
+            } else {
+                m[i] = Double.NaN;
             }
+
+        }
 
         return new CustomCoordinateSequence(x, y, z, m);
     }
-
 
 }

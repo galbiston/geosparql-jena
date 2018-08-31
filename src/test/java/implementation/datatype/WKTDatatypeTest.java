@@ -75,7 +75,7 @@ public class WKTDatatypeTest {
 
         String result = WKT_DATATYPE.unparse(geometry);
 
-        ////System.out.println("Expected: " + expResult);
+        //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
         assertEquals(expResult, result);
 
