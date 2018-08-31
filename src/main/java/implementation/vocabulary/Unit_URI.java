@@ -11,39 +11,52 @@ package implementation.vocabulary;
  */
 public interface Unit_URI {
 
-    //NonLinear - degrees
-    public static final String DEGREE_ANGLE_URI = GeoSPARQL_URI.UOM_URI + "degree";
-    public static final String MINUTE_ANGLE_URI = GeoSPARQL_URI.UOM_URI + "minute";
-    public static final String SECOND_ANGLE_URI = GeoSPARQL_URI.UOM_URI + "second";
+    //Angular - radians
+    public static final String RADIAN_URL = GeoSPARQL_URI.UOM_URI + "radian";
+    public static final String MICRORADIAN_URL = GeoSPARQL_URI.UOM_URI + "microRadian";
+    public static final String DEGREE_URL = GeoSPARQL_URI.UOM_URI + "degree";
+    public static final String ARC_MINUTE_URL = GeoSPARQL_URI.UOM_URI + "minute";
+    public static final String ARC_SECOND_URL = GeoSPARQL_URI.UOM_URI + "second";
+    public static final String GRAD_URL = GeoSPARQL_URI.UOM_URI + "grad";
 
-    //NonLinear - radians
-    public static final String RADIAN_URI = GeoSPARQL_URI.UOM_URI + "radian";
-    public static final String CENTIRADIAN_URI = GeoSPARQL_URI.UOM_URI + "centiradian";
-    public static final String GRIDSPACING_URI = GeoSPARQL_URI.UOM_URI + "GridSpacing";
+    //Linear - SI
+    public static final String METRE_URL = GeoSPARQL_URI.UOM_URI + "metre";
+    public static final String METER_URL = GeoSPARQL_URI.UOM_URI + "meter";
+    public static final String KILOMETRE_URL = GeoSPARQL_URI.UOM_URI + "kilometre";
+    public static final String KILOMETER_URL = GeoSPARQL_URI.UOM_URI + "kilometer";
+    public static final String CENTIMETRE_URL = GeoSPARQL_URI.UOM_URI + "centimetre";
+    public static final String CENTIMETER_URL = GeoSPARQL_URI.UOM_URI + "centimeter";
+    public static final String MILLIMETRE_URL = GeoSPARQL_URI.UOM_URI + "millimetre";
+    public static final String MILLIMETER_URL = GeoSPARQL_URI.UOM_URI + "millimeter";
 
-    //Linear - metres
-    public static final String METRE_URI = GeoSPARQL_URI.UOM_URI + "metre";
-    public static final String METER_URI = GeoSPARQL_URI.UOM_URI + "meter";
-    public static final String KILOMETRE_URI = GeoSPARQL_URI.UOM_URI + "kilometre";
-    public static final String KILOMETER_URI = GeoSPARQL_URI.UOM_URI + "kilometer";
-    public static final String CENTIMETRE_URI = GeoSPARQL_URI.UOM_URI + "centimetre";
-    public static final String CENTIMETER_URI = GeoSPARQL_URI.UOM_URI + "centimeter";
-    public static final String MILLIMETRE_URI = GeoSPARQL_URI.UOM_URI + "millimetre";
-    public static final String MILLIMETER_URI = GeoSPARQL_URI.UOM_URI + "millimeter";
+    //Linear - Non-SI
+    public static final String MILE_URL = GeoSPARQL_URI.UOM_URI + "mile";
+    public static final String STATUTE_MILE_URL = GeoSPARQL_URI.UOM_URI + "statuteMile";
+    public static final String YARD_URL = GeoSPARQL_URI.UOM_URI + "yard";
+    public static final String FOOT_URL = GeoSPARQL_URI.UOM_URI + "foot";
+    public static final String INCH_URL = GeoSPARQL_URI.UOM_URI + "inch";
+    public static final String NAUTICAL_MILE_URL = GeoSPARQL_URI.UOM_URI + "nauticalMile";
+    public static final String US_SURVEY_FOOT_URL = GeoSPARQL_URI.UOM_URI + "surveyFootUS";
 
-    //Linear - miles
-    public static final String MILE_URI = GeoSPARQL_URI.UOM_URI + "mile";
-    public static final String YARD_URI = GeoSPARQL_URI.UOM_URI + "yard";
-    public static final String FOOT_URI = GeoSPARQL_URI.UOM_URI + "foot";
-    public static final String INCH_URI = GeoSPARQL_URI.UOM_URI + "inch";
-    public static final String FOOT_SURVEY_US_URI = GeoSPARQL_URI.UOM_URI + "footsurveyUS";
-    public static final String NAUTICAL_MILE_URI = GeoSPARQL_URI.UOM_URI + "nauticalmile";
+    //URN references in: https://sis.apache.org/apidocs/org/apache/sis/measure/Units.html
+    //Angular
+    public static final String RADIAN_URN = "urn:ogc:def:uom:EPSG::9101";
+    public static final String MICRORADIAN_URN = "urn:ogc:def:uom:EPSG::9109";
+    public static final String DEGREE_URN = "urn:ogc:def:uom:EPSG::9102";
+    public static final String ARC_MINUTE_URN = "urn:ogc:def:uom:EPSG::9103";
+    public static final String ARC_SECOND_URN = "urn:ogc:def:uom:EPSG::9104";
+    public static final String GRAD_URN = "urn:ogc:def:uom:EPSG::9105";
 
-    //Unity - ??
-    public static final String UNITY_URI = GeoSPARQL_URI.UOM_URI + "unity";
-
-    //URN references in: http://portal.opengeospatial.org/files/?artifact_id=21630
-    public static final String RADIAN_URN = "urn:ogc:def:uom:EPSG::9102";
-    public static final String DEGREE_ANGLE_URN = "urn:ogc:def:uom:EPSG::9101";
+    //Linear
     public static final String METRE_URN = "urn:ogc:def:uom:EPSG::9001";
+    public static final String KILOMETRE_URN = "urn:ogc:def:uom:EPSG::9036";
+    public static final String CENTIMETRE_URN = "urn:ogc:def:uom:EPSG::1033";
+    public static final String MILLIMETRE_URN = "urn:ogc:def:uom:EPSG::1025";
+    public static final String STATUTE_MILE_URN = "urn:ogc:def:uom:EPSG::9093";
+    public static final String FOOT_URN = "urn:ogc:def:uom:EPSG::9002";
+    public static final String YARD_URN = "urn:ogc:def:uom:EPSG::9096";
+    public static final String NAUTICAL_MILE_URN = "urn:ogc:def:uom:EPSG::9030";
+    public static final String US_SURVEY_FOOT_URN = "urn:ogc:def:uom:EPSG::9003";
+
+
 }
