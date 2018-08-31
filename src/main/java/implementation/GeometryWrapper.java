@@ -10,7 +10,6 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.IntersectionMatrix;
-import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
 import implementation.datatype.GMLDatatype;
@@ -33,6 +32,8 @@ import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
+import org.apache.sis.geometry.DirectPosition2D;
+import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
@@ -286,14 +287,16 @@ public class GeometryWrapper implements Serializable {
 
             //Find a point in the parsing geometry so can directly apply the CRS.
             Coordinate coord = parsingGeometry.getCoordinate();
-            Point point = GEOMETRY_FACTORY.createPoint(coord);
+            DirectPosition2D point = new DirectPosition2D(coord.x, coord.y);
+
             //Convert to WGS84.
             CoordinateReferenceSystem wgs84CRS = CRSRegistry.getCRS(SRS_URI.WGS84_CRS);
             MathTransform transform = MathTransformRegistry.getMathTransform(crs, wgs84CRS);
-            coord.            Point wgs84Point = (Point) JTS.transform(point, transform);
+
+            DirectPosition wgs84Point = transform.transform(point, null);
 
             //Find the UTM zone.
-            utmURI = CRSRegistry.findUTMZoneURIFromWGS84(wgs84Point.getX(), wgs84Point.getY());
+            utmURI = CRSRegistry.findUTMZoneURIFromWGS84(wgs84Point.getOrdinate(0), wgs84Point.getOrdinate(1));
 
         }
         return utmURI;
