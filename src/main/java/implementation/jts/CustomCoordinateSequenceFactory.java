@@ -5,10 +5,10 @@
  */
 package implementation.jts;
 
+import java.io.Serializable;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.CoordinateSequenceFactory;
-import java.io.Serializable;
 
 /**
  *
@@ -29,7 +29,7 @@ public class CustomCoordinateSequenceFactory implements CoordinateSequenceFactor
             copyCoordSeq = new CustomCoordinateSequence();
         } else if (coordSeq instanceof CustomCoordinateSequence) {
             CustomCoordinateSequence customCoordSeq = (CustomCoordinateSequence) coordSeq;
-            copyCoordSeq = customCoordSeq.clone();
+            copyCoordSeq = customCoordSeq.copy();
         } else {
             copyCoordSeq = new CustomCoordinateSequence(coordSeq.toCoordinateArray());
         }
