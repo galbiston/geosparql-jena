@@ -377,6 +377,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
     }
 
     @Override
+    @Deprecated
     public CustomCoordinateSequence clone() {
         return new CustomCoordinateSequence(x, y, z, m);
     }
