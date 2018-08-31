@@ -36,6 +36,7 @@ public class CRSRegistryTest {
 
     @BeforeClass
     public static void setUpClass() {
+        CRSRegistry.setupDefaultCRS();
     }
 
     @AfterClass
@@ -76,49 +77,24 @@ public class CRSRegistryTest {
             System.out.println("getDefaultWKTCRS");
             String srsURI = SRS_URI.DEFAULT_WKT_CRS84;
 
-            String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
-                    + "  DATUM[\"WGS_1984\", \n"
-                    + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
-                    + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
-                    + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
-                    + "  UNIT[\"degree\", 0.017453292519943295], \n"
-                    + "  AXIS[\"Geodetic longitude\", EAST], \n"
-                    + "  AXIS[\"Geodetic latitude\", NORTH], \n"
-                    + "  AUTHORITY[\"OGC\", 4326]]";
+            String default_CRS_WKT = "GeodeticCRS[\"WGS 84\",\n"
+                    + "  Datum[\"World Geodetic System 1984\",\n"
+                    + "    Ellipsoid[\"WGS 84\", 6378137.0, 298.257223563]],\n"
+                    + "  CS[ellipsoidal, 2],\n"
+                    + "    Axis[\"Geodetic longitude (Lon)\", east],\n"
+                    + "    Axis[\"Geodetic latitude (Lat)\", north],\n"
+                    + "    Unit[\"degree\", 0.017453292519943295],\n"
+                    + "  Scope[\"Horizontal component of 3D system. Used by the GPS satellite navigation system and for NATO military geodetic surveying.\"],\n"
+                    + "  Area[\"World.\"],\n"
+                    + "  BBox[-90.00, -180.00, 90.00, 180.00],\n"
+                    + "  Id[\"CRS\", 84, Citation[\"OGC:WMS\"], URI[\"urn:ogc:def:crs:OGC:1.3:CRS84\"]]]";
 
             CoordinateReferenceSystem expResult = CRS.fromWKT(default_CRS_WKT);
             CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
 
-            //System.out.println("Exp: " + expResult);
-            //System.out.println("Res: " + result);
-            assertEquals(expResult, result);
-        } catch (FactoryException ex) {
-            System.out.println("Default WKT CRS error: " + ex.getMessage());
-        }
-    }
-
-    @Test
-    public void testLookupWKTCRS() {
-        try {
-            System.out.println("lookupWKTCRS");
-            String srsURI = SRS_URI.DEFAULT_WKT_CRS84;
-
-            String default_CRS_WKT = "GEOGCS[\"CRS 84\", \n"
-                    + "  DATUM[\"WGS_1984\", \n"
-                    + "    SPHEROID[\"WGS 84\", 6378137.0, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], \n"
-                    + "    AUTHORITY[\"EPSG\",\"6326\"]], \n"
-                    + "  PRIMEM[\"Greenwich\", 0.0, AUTHORITY[\"EPSG\",\"8901\"]], \n"
-                    + "  UNIT[\"degree\", 0.017453292519943295], \n"
-                    + "  AXIS[\"Geodetic longitude\", EAST], \n"
-                    + "  AXIS[\"Geodetic latitude\", NORTH], \n"
-                    + "  AUTHORITY[\"OGC\", 4326]]";
-
-            CoordinateReferenceSystem expResult = CRS.fromWKT(default_CRS_WKT);
-            CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
-
-            //System.out.println("Exp: " + expResult);
-            //System.out.println("Res: " + result);
-            assertEquals(expResult, result);
+            System.out.println("Exp: " + expResult);
+            System.out.println("Res: " + result);
+            assertEquals(expResult.toWKT(), result.toWKT());
         } catch (FactoryException ex) {
             System.out.println("Default WKT CRS error: " + ex.getMessage());
         }
@@ -198,7 +174,7 @@ public class CRSRegistryTest {
     public void testCheckAxisXY_Geocentric() throws FactoryException {
         System.out.println("checkAxisXY_Geocentric");
         CoordinateReferenceSystem crs = CommonCRS.WGS84.geocentric();
-        Boolean expResult = false;
+        Boolean expResult = true;
         Boolean result = CRSRegistry.checkAxisXY(crs);
 
         //System.out.println("Exp: " + expResult);
@@ -213,7 +189,7 @@ public class CRSRegistryTest {
      */
     @Test
     public void testCheckAxisXY_CRS84() throws FactoryException {
-        System.out.println("checkAxisXY_Geocentric");
+        System.out.println("checkAxisXY_CRS84");
         CoordinateReferenceSystem crs = CRS.forCode("CRS:84");
         Boolean expResult = true;
         Boolean result = CRSRegistry.checkAxisXY(crs);
@@ -230,7 +206,7 @@ public class CRSRegistryTest {
      */
     @Test
     public void testCheckAxisXY_OSGB() throws FactoryException {
-        System.out.println("checkAxisXY_Geocentric");
+        System.out.println("checkAxisXY_OSGB");
         CoordinateReferenceSystem crs = CRS.forCode(SRS_URI.OSGB36_CRS);
         Boolean expResult = true;
         Boolean result = CRSRegistry.checkAxisXY(crs);
