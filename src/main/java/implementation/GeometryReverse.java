@@ -5,6 +5,7 @@
  */
 package implementation;
 
+import implementation.registry.CRSRegistry;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
@@ -12,7 +13,6 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Polygon;
-import implementation.registry.CRSRegistry;
 
 /**
  *
@@ -80,7 +80,7 @@ public class GeometryReverse {
                 break;
             case "MultiPoint":
                 coordinates = getReversedCoordinates(geometry);
-                finalGeometry = factory.createMultiPoint(coordinates);
+                finalGeometry = factory.createMultiPointFromCoords(coordinates);
                 break;
             case "Polygon":
                 finalGeometry = reversePolygon(geometry, factory);
