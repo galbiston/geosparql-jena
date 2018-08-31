@@ -29,14 +29,14 @@ dependencies {
 
     //Apache SIS Core
     ext.sisVersion = '0.8'
-    compile group: 'org.apache.sis.core', name: 'sis-referencing', version: sisVersion
+    implementation group: 'org.apache.sis.core', name: 'sis-referencing', version: sisVersion
 
     //Apache SIS EPSG database - allows full range of EPSG codes but download and licensing implications.
     //Use of EPSG data is incomptabile for bundling with Apache licence, see: http://sis.apache.org/epsg.html
-    compile group: 'org.apache.sis.non-free', name: 'sis-embedded-data', version: sisVersion
+    testImplementation group: 'org.apache.sis.non-free', name: 'sis-embedded-data', version: sisVersion
 
     //JTS Core
-    compile group: 'org.locationtech.jts', name: 'jts-core', version: '1.16.0-RC1'
+    implementation group: 'org.locationtech.jts', name: 'jts-core', version: '1.16.0-RC1'
 
     //JDON XML
     ext.jdomVersion = "2.0.6"
