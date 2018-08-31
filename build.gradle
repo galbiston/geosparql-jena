@@ -27,9 +27,6 @@ repositories {
 
 dependencies {
 
-    //Apache Lucene
-    //implementation 'org.apache.lucene:lucene-core:6.1.0'
-
     //Geotools: http://docs.geotools.org/latest/userguide.old/library/
     ext.geoToolsVersion = '19.0'
     api group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
@@ -45,7 +42,7 @@ dependencies {
     //Apache Jena
     ext.jenaVersion = "3.8.0"
     //api "org.apache.jena:apache-jena-libs:$jenaVersion"
-    //Issue resolving apache-jena-libs in Maven projects. Use individual modules as provide jars.
+    //Issue resolving apache-jena-libs in Gradle projects. Use individual modules as provide jars.
     api "org.apache.jena:jena-core:$jenaVersion"
     api "org.apache.jena:jena-arq:$jenaVersion"
     api "org.apache.jena:jena-iri:$jenaVersion"
