@@ -5,13 +5,6 @@
  */
 package implementation;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.IntersectionMatrix;
-import org.locationtech.jts.geom.prep.PreparedGeometry;
-import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.GeometryDatatype;
 import implementation.datatype.WKTDatatype;
@@ -33,6 +26,13 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.sis.geometry.DirectPosition2D;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.IntersectionMatrix;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
+import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -586,11 +586,18 @@ public class GeometryWrapper implements Serializable {
         return GMLDatatype.INSTANCE.read("");
     }
 
-    //If lexical form equals then the remainder is equals
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.lexicalForm);
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.lexicalForm);
+        hash = 67 * hash + Objects.hashCode(this.dimensionInfo);
+        hash = 67 * hash + Objects.hashCode(this.srsURI);
+        hash = 67 * hash + Objects.hashCode(this.isAxisXY);
+        hash = 67 * hash + Objects.hashCode(this.utmURI);
+        hash = 67 * hash + Objects.hashCode(this.geometryDatatypeURI);
+        hash = 67 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 67 * hash + Objects.hashCode(this.crs);
+        hash = 67 * hash + Objects.hashCode(this.xyGeometry);
         return hash;
     }
 
@@ -606,7 +613,31 @@ public class GeometryWrapper implements Serializable {
             return false;
         }
         final GeometryWrapper other = (GeometryWrapper) obj;
-        return Objects.equals(this.lexicalForm, other.lexicalForm);
+        if (!Objects.equals(this.lexicalForm, other.lexicalForm)) {
+            return false;
+        }
+        if (!Objects.equals(this.srsURI, other.srsURI)) {
+            return false;
+        }
+        if (!Objects.equals(this.utmURI, other.utmURI)) {
+            return false;
+        }
+        if (!Objects.equals(this.geometryDatatypeURI, other.geometryDatatypeURI)) {
+            return false;
+        }
+        if (!Objects.equals(this.dimensionInfo, other.dimensionInfo)) {
+            return false;
+        }
+        if (!Objects.equals(this.isAxisXY, other.isAxisXY)) {
+            return false;
+        }
+        if (!Objects.equals(this.unitsOfMeasure, other.unitsOfMeasure)) {
+            return false;
+        }
+        if (!Objects.equals(this.crs, other.crs)) {
+            return false;
+        }
+        return Objects.equals(this.xyGeometry, other.xyGeometry);
     }
 
     @Override
