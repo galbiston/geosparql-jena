@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.referencing.FactoryException;
+import org.opengis.util.FactoryException;
 
 /**
  *
@@ -145,7 +145,7 @@ public class ExpiringIndexTest {
     /**
      * Index Retrieval of class GeometryLiteral.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test
     public void testIndexRetrieval() throws FactoryException {

@@ -5,15 +5,15 @@
  */
 package implementation;
 
-import org.geotools.referencing.CRS;
+import org.apache.sis.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.util.FactoryException;
 
 /**
  *
@@ -43,14 +43,14 @@ public class UnitsOfMeasureTest {
     /**
      * Test of conversion method, of class UnitsOfMeasure.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test(expected = NullPointerException.class)
     public void testConversionRadianToMetre() throws FactoryException {
         System.out.println("conversionRadianToMetre");
         double distance = 0.5;
         String sourceDistanceUnitURI = "http://www.opengis.net/def/uom/OGC/1.0/radian";
-        CoordinateReferenceSystem crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/27700");  //OSGB - metres projected
+        CoordinateReferenceSystem crs = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/27700");  //OSGB - metres projected
 
         UnitsOfMeasure targetUnitsOfMeasure = new UnitsOfMeasure(crs);
         Double expResult = null;
@@ -64,14 +64,14 @@ public class UnitsOfMeasureTest {
     /**
      * Test of conversion method, of class UnitsOfMeasure.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test(expected = NullPointerException.class)
     public void testConversionMetreToDegree() throws FactoryException {
         System.out.println("conversionMetreToDegree");
         double distance = 100.0;
         String sourceDistanceUnitURI = "http://www.opengis.net/def/uom/OGC/1.0/metre";
-        CoordinateReferenceSystem crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/4326");  //OSGB - metres projected
+        CoordinateReferenceSystem crs = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/4326");  //OSGB - metres projected
 
         UnitsOfMeasure targetUnitsOfMeasure = new UnitsOfMeasure(crs);
         Double expResult = null;
@@ -85,14 +85,14 @@ public class UnitsOfMeasureTest {
     /**
      * Test of conversion method, of class UnitsOfMeasure.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test
     public void testConversionMetreToMetre() throws FactoryException {
         System.out.println("conversionMetreToMetre");
         double distance = 100.0;
         String sourceDistanceUnitURI = "http://www.opengis.net/def/uom/OGC/1.0/metre";
-        CoordinateReferenceSystem crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/27700");  //OSGB - metres projected
+        CoordinateReferenceSystem crs = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/27700");  //OSGB - metres projected
 
         UnitsOfMeasure targetUnitsOfMeasure = new UnitsOfMeasure(crs);
         double expResult = 100.0;
@@ -106,14 +106,14 @@ public class UnitsOfMeasureTest {
     /**
      * Test of conversion method, of class UnitsOfMeasure.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test
     public void testConversionDegreeToDegree() throws FactoryException {
         System.out.println("conversionDegreeToDegree");
         double distance = 100.0;
         String sourceDistanceUnitURI = "http://www.opengis.net/def/uom/OGC/1.0/degree";
-        CoordinateReferenceSystem crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/4326");  //WGS84 degrees non-projected
+        CoordinateReferenceSystem crs = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/4326");  //WGS84 degrees non-projected
 
         UnitsOfMeasure targetUnitsOfMeasure = new UnitsOfMeasure(crs);
         double expResult = 100.0;
@@ -127,14 +127,14 @@ public class UnitsOfMeasureTest {
     /**
      * Test of conversion method, of class UnitsOfMeasure.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test
     public void testConversionRadianToDegree() throws FactoryException {
         System.out.println("conversionRadianToDegree");
         double distance = 0.5;
         String sourceDistanceUnitURI = "http://www.opengis.net/def/uom/OGC/1.0/radian";
-        CoordinateReferenceSystem crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/4326");  //WGS84 degrees non-projected
+        CoordinateReferenceSystem crs = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/4326");  //WGS84 degrees non-projected
 
         UnitsOfMeasure targetUnitsOfMeasure = new UnitsOfMeasure(crs);
         double radsToDegrees = 180 / Math.PI;
@@ -149,14 +149,14 @@ public class UnitsOfMeasureTest {
     /**
      * Test of conversion method, of class UnitsOfMeasure.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test(expected = NullPointerException.class)
     public void testConversionDegreeToMetre() throws FactoryException {
         System.out.println("conversionDegreeToMetre");
         double distance = 10.0;
         String sourceDistanceUnitURI = "http://www.opengis.net/def/uom/OGC/1.0/degree";
-        CoordinateReferenceSystem crs = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/27700");  //OSGB metres projected
+        CoordinateReferenceSystem crs = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/27700");  //OSGB metres projected
 
         UnitsOfMeasure targetUnitsOfMeasure = new UnitsOfMeasure(crs);
 

@@ -9,8 +9,8 @@ import geof.topological.GenericFilterFunction;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
 
 /**
  *

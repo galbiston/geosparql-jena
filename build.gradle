@@ -27,17 +27,23 @@ repositories {
 
 dependencies {
 
-    //Apache Lucene
-    //implementation 'org.apache.lucene:lucene-core:6.1.0'
+    //Apache SIS
+    ext.sisVersion = '0.8'
+    compile group: 'org.apache.sis.core', name: 'sis-referencing', version: sisVersion
 
+    //JTS Core
+    compile group: 'com.vividsolutions', name: 'jts-core', version: '1.14.0'
+
+    /*
     //Geotools: http://docs.geotools.org/latest/userguide.old/library/
     ext.geoToolsVersion = '19.0'
     api group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
     api group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
     api (group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion){
-        exclude group: 'commons-logging', module: 'commons-logging'
+    exclude group: 'commons-logging', module: 'commons-logging'
     }
     api group: 'org.geotools', name: 'gt-main', version: geoToolsVersion
+     */
 
     ext.jdomVersion = "2.0.6"
     implementation group: 'org.jdom', name: 'jdom2', version: jdomVersion
@@ -45,7 +51,7 @@ dependencies {
     //Apache Jena
     ext.jenaVersion = "3.8.0"
     //api "org.apache.jena:apache-jena-libs:$jenaVersion"
-    //Issue resolving apache-jena-libs in Maven projects. Use individual modules as provide jars.
+    //Issue resolving apache-jena-libs in Gradle projects. Use individual modules as provide jars.
     api "org.apache.jena:jena-core:$jenaVersion"
     api "org.apache.jena:jena-arq:$jenaVersion"
     api "org.apache.jena:jena-iri:$jenaVersion"
