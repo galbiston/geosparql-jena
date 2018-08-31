@@ -89,8 +89,9 @@ public class CRSRegistry implements Serializable {
             return false;
         } else if (axisDirection.equals(AxisDirection.EAST) || axisDirection.equals(AxisDirection.WEST)) {
             return true;
-        } else
+        } else {
             return !OTHER_Y_AXIS_DIRECTIONS.contains(axisDirection);
+        }
     }
 
     public static final void setupDefaultCRS() {
@@ -107,14 +108,14 @@ public class CRSRegistry implements Serializable {
 
             //WGS_84 Legacy for CRS_84
             CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, crs);
-            AXIS_XY_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, Boolean.TRUE);
+            AXIS_XY_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, Boolean.TRUE);
             UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, unitsOfMeasure);
 
             //Geocentric Cartesian
             UnitsOfMeasure unitsOfMeasureCartesian = new UnitsOfMeasure(CommonCRS.WGS84.geocentric());
             UnitsRegistry.addUnit(unitsOfMeasureCartesian);
             CRS_REGISTRY.put(SRS_URI.GEOCENTRIC_CARTESIAN, CommonCRS.WGS84.geocentric());
-            AXIS_XY_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, Boolean.FALSE);
+            AXIS_XY_REGISTRY.put(SRS_URI.GEOCENTRIC_CARTESIAN, Boolean.FALSE);
             UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.GEOCENTRIC_CARTESIAN, unitsOfMeasureCartesian);
 
         } catch (FactoryException ex) {

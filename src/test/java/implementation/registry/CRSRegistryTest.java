@@ -155,10 +155,26 @@ public class CRSRegistryTest {
      */
     @Test
     public void testCheckAxisXY_WGS84() throws FactoryException {
-        System.out.println("checkAxisXY");
+        System.out.println("checkAxisXY_WGS84");
         CoordinateReferenceSystem crs = CRS.forCode(SRS_URI.WGS84_CRS);
         Boolean expResult = false;
         Boolean result = CRSRegistry.checkAxisXY(crs);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkAxisXY method, of class CRSRegistry.
+     *
+     */
+    @Test
+    public void testCheckAxisXY_WGS84URI() {
+        System.out.println("checkAxisXY_WGS84URI");
+        String srsURI = SRS_URI.WGS84_CRS;
+        Boolean expResult = false;
+        Boolean result = CRSRegistry.getAxisXY(srsURI);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -185,6 +201,22 @@ public class CRSRegistryTest {
     /**
      * Test of checkAxisXY method, of class CRSRegistry.
      *
+     */
+    @Test
+    public void testCheckAxisXY_GeocentricURI() {
+        System.out.println("checkAxisXY_GeocentricURI");
+        String srsURI = SRS_URI.GEOCENTRIC_CARTESIAN;
+        Boolean expResult = false;
+        Boolean result = CRSRegistry.getAxisXY(srsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkAxisXY method, of class CRSRegistry.
+     *
      * @throws org.opengis.util.FactoryException
      */
     @Test
@@ -202,14 +234,46 @@ public class CRSRegistryTest {
     /**
      * Test of checkAxisXY method, of class CRSRegistry.
      *
+     */
+    @Test
+    public void testCheckAxisXY_CRS84URI() {
+        System.out.println("checkAxisXY_CRS84URI");
+        String srsURI = SRS_URI.DEFAULT_WKT_CRS84;
+        Boolean expResult = true;
+        Boolean result = CRSRegistry.getAxisXY(srsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkAxisXY method, of class CRSRegistry.
+     *
      * @throws org.opengis.util.FactoryException
      */
     @Test
-    public void testCheckAxisXY_OSGB() throws FactoryException {
-        System.out.println("checkAxisXY_OSGB");
+    public void testCheckAxisXY_OSGB36() throws FactoryException {
+        System.out.println("checkAxisXY_OSGB36");
         CoordinateReferenceSystem crs = CRS.forCode(SRS_URI.OSGB36_CRS);
         Boolean expResult = true;
         Boolean result = CRSRegistry.checkAxisXY(crs);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkAxisXY method, of class CRSRegistry.
+     *
+     */
+    @Test
+    public void testCheckAxisXY_OSGB36URI() {
+        System.out.println("checkAxisXY_OSGB36URI");
+        String srsURI = SRS_URI.OSGB36_CRS;
+        Boolean expResult = true;
+        Boolean result = CRSRegistry.getAxisXY(srsURI);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
