@@ -43,7 +43,7 @@ public interface Unit_URI {
     public static final String UNITY_URI = GeoSPARQL_URI.UOM_URI + "unity";
 
     //URN references in: http://portal.opengeospatial.org/files/?artifact_id=21630
-    public static final String RADIAN_URN = "urn:ogc:def:uom:EPSG::9102";
-    public static final String DEGREE_ANGLE_URN = "urn:ogc:def:uom:EPSG::9101";
+    public static final String RADIAN_URN = "urn:ogc:def:uom:EPSG::9101";
+    public static final String DEGREE_ANGLE_URN = "urn:ogc:def:uom:EPSG::9102";
     public static final String METRE_URN = "urn:ogc:def:uom:EPSG::9001";
 }
