@@ -20,7 +20,6 @@ import org.locationtech.jts.geom.Polygon;
  */
 public class GeometryReverse {
 
-
     /**
      * Checks the spatial reference system URI for y,x and reverses the supplied
      * geometry coordinates.
@@ -62,6 +61,10 @@ public class GeometryReverse {
      * @return
      */
     private static Geometry reverseGeometry(Geometry geometry) {
+
+        if (geometry.isEmpty()) {
+            return geometry.copy();
+        }
 
         GeometryFactory factory = geometry.getFactory();
         Geometry finalGeometry;
