@@ -11,9 +11,9 @@ import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import javax.measure.unit.NonSI;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
+import javax.measure.Unit;
+import javax.measure.quantity.Length;
+import org.apache.sis.measure.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,36 +28,63 @@ public class UnitsRegistry {
     private static final Map<String, Unit> UNITS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
     private static final Map<Unit, String> UNITS_URI_REGISTRY = Collections.synchronizedMap(new HashMap<>());
 
+    private static final Unit<Length> YARD = Units.METRE.multiply(1.0936132983);
+
     static {
 
-        //SI Units
-        addUnit(Unit_URI.METRE_URI, SI.METER);
-        addUnit(Unit_URI.METER_URI, SI.METER);
-        addUnit(Unit_URI.KILOMETRE_URI, SI.KILOMETRE);
-        addUnit(Unit_URI.KILOMETER_URI, SI.KILOMETRE);
-        addUnit(Unit_URI.CENTIMETRE_URI, SI.CENTIMETRE);
-        addUnit(Unit_URI.CENTIMETER_URI, SI.CENTIMETRE);
-        addUnit(Unit_URI.MILLIMETRE_URI, SI.MILLIMETRE);
-        addUnit(Unit_URI.MILLIMETER_URI, SI.MILLIMETRE);
-        addUnit(Unit_URI.RADIAN_URI, SI.RADIAN);
+        //Linear Units
+        //URL        
+        addUnit(Unit_URI.METER_URL, Units.METRE);
+        addUnit(Unit_URI.METRE_URL, Units.METRE);
+        addUnit(Unit_URI.KILOMETER_URL, Units.KILOMETRE);
+        addUnit(Unit_URI.KILOMETRE_URL, Units.KILOMETRE);
+        addUnit(Unit_URI.CENTIMETER_URL, Units.CENTIMETRE);
+        addUnit(Unit_URI.CENTIMETRE_URL, Units.CENTIMETRE);
+        addUnit(Unit_URI.MILLIMETER_URL, Units.MILLIMETRE);
+        addUnit(Unit_URI.MILLIMETRE_URL, Units.MILLIMETRE);
 
-        //NonSI Units
-        addUnit(Unit_URI.DEGREE_ANGLE_URI, NonSI.DEGREE_ANGLE);
-        addUnit(Unit_URI.MINUTE_ANGLE_URI, NonSI.MINUTE_ANGLE);
-        addUnit(Unit_URI.SECOND_ANGLE_URI, NonSI.SECOND_ANGLE);
-        addUnit(Unit_URI.CENTIRADIAN_URI, NonSI.CENTIRADIAN);
-        addUnit(Unit_URI.MILE_URI, NonSI.MILE);
-        addUnit(Unit_URI.YARD_URI, NonSI.YARD);
-        addUnit(Unit_URI.FOOT_URI, NonSI.FOOT);
-        addUnit(Unit_URI.INCH_URI, NonSI.INCH);
-        addUnit(Unit_URI.FOOT_SURVEY_US_URI, NonSI.FOOT_SURVEY_US);
-        addUnit(Unit_URI.NAUTICAL_MILE_URI, NonSI.NAUTICAL_MILE);
+        //URN
+        addUnit(Unit_URI.METRE_URN, Units.METRE);
+        addUnit(Unit_URI.KILOMETRE_URN, Units.KILOMETRE);
+        addUnit(Unit_URI.CENTIMETRE_URN, Units.CENTIMETRE);
 
-        //URN references in: http://portal.opengeospatial.org/files/?artifact_id=21630
-        addUnit(Unit_URI.METRE_URN, SI.METER);
-        addUnit(Unit_URI.RADIAN_URN, SI.RADIAN);
-        addUnit(Unit_URI.DEGREE_ANGLE_URN, NonSI.DEGREE_ANGLE);
-    }
+        //Non-SI Linear Units
+        //URL
+        addUnit(Unit_URI.STATUTE_MILE_URL, Units.STATUTE_MILE);
+        addUnit(Unit_URI.MILE_URL, Units.STATUTE_MILE);
+        addUnit(Unit_URI.YARD_URL, YARD);
+        addUnit(Unit_URI.FOOT_URL, Units.FOOT);
+        addUnit(Unit_URI.INCH_URL, Units.INCH);
+        addUnit(Unit_URI.NAUTICAL_MILE_URL, Units.NAUTICAL_MILE);
+        addUnit(Unit_URI.US_SURVEY_FOOT_URL, Units.US_SURVEY_FOOT);
+
+        //URN
+        addUnit(Unit_URI.STATUTE_MILE_URN, Units.STATUTE_MILE);
+        addUnit(Unit_URI.FOOT_URN, Units.FOOT);
+        addUnit(Unit_URI.YARD_URN, YARD);
+        addUnit(Unit_URI.NAUTICAL_MILE_URN, Units.NAUTICAL_MILE);
+        addUnit(Unit_URI.US_SURVEY_FOOT_URN, Units.US_SURVEY_FOOT);
+
+        //Angular Units
+        //URL
+        addUnit(Unit_URI.RADIAN_URL, Units.RADIAN);
+        addUnit(Unit_URI.MICRORADIAN_URL, Units.MICRORADIAN);
+        addUnit(Unit_URI.DEGREE_URL, Units.DEGREE);
+        addUnit(Unit_URI.ARC_MINUTE_URL, Units.ARC_MINUTE);
+        addUnit(Unit_URI.ARC_SECOND_URL, Units.ARC_SECOND);
+        addUnit(Unit_URI.GRAD_URL, Units.GRAD);
+
+        //URN
+        addUnit(Unit_URI.RADIAN_URN, Units.RADIAN);
+        addUnit(Unit_URI.MICRORADIAN_URN, Units.MICRORADIAN);
+        addUnit(Unit_URI.DEGREE_URN, Units.DEGREE);
+        addUnit(Unit_URI.ARC_MINUTE_URN, Units.ARC_MINUTE);
+        addUnit(Unit_URI.ARC_SECOND_URN, Units.ARC_SECOND);
+        addUnit(Unit_URI.GRAD_URN, Units.GRAD);
+
+        //URN references from: https://sis.apache.org/apidocs/org/apache/sis/measure/Units.html
+        //TODO: EPSG also defined units URIs at https://epsg.io/9096-units. More exhaustive than OGC.
+    }    
 
     public static final void addUnit(String unitURI, Unit unit) {
         UNITS_REGISTRY.putIfAbsent(unitURI, unit);
@@ -85,9 +112,9 @@ public class UnitsRegistry {
         if (UNITS_REGISTRY.containsKey(unitURI)) {
 
             Unit unit = UNITS_REGISTRY.get(unitURI);
-            Unit unitSI = unit.getStandardUnit();
+            Unit unitSI = unit.getSystemUnit();
 
-            return unitSI.equals(SI.METER);
+            return unitSI.equals(Units.METRE);
         } else {
             LOGGER.error("Unrecognised unit URI: {}", unitURI);
             return null;

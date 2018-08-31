@@ -7,12 +7,14 @@ package implementation.registry;
 
 import implementation.vocabulary.SRS_URI;
 import java.lang.reflect.Type;
-import javax.measure.Measure;
+import javax.measure.Quantity;
+import javax.measure.Unit;
 import javax.measure.quantity.Angle;
 import javax.measure.quantity.Length;
-import javax.measure.unit.SI;
-import javax.measure.unit.Unit;
-import org.geotools.referencing.CRS;
+import org.apache.sis.measure.Quantities;
+import org.apache.sis.measure.Units;
+import org.apache.sis.referencing.CRS;
+import org.apache.sis.referencing.CommonCRS;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -20,8 +22,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.util.FactoryException;
 
 /**
  *
@@ -51,13 +53,13 @@ public class CRSRegistryTest {
     /**
      * Test of getCRS method, of class CRSRegistry.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test
     public void testGetCRS() throws FactoryException {
         System.out.println("getCRS");
         String srsURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
-        CoordinateReferenceSystem expResult = CRS.decode(srsURI);
+        CoordinateReferenceSystem expResult = CRS.forCode(srsURI);
         CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
 
         //System.out.println("Exp: " + expResult);
@@ -84,7 +86,7 @@ public class CRSRegistryTest {
                     + "  AXIS[\"Geodetic latitude\", NORTH], \n"
                     + "  AUTHORITY[\"OGC\", 4326]]";
 
-            CoordinateReferenceSystem expResult = CRS.parseWKT(default_CRS_WKT);
+            CoordinateReferenceSystem expResult = CRS.fromWKT(default_CRS_WKT);
             CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
 
             //System.out.println("Exp: " + expResult);
@@ -111,7 +113,7 @@ public class CRSRegistryTest {
                     + "  AXIS[\"Geodetic latitude\", NORTH], \n"
                     + "  AUTHORITY[\"OGC\", 4326]]";
 
-            CoordinateReferenceSystem expResult = CRS.parseWKT(default_CRS_WKT);
+            CoordinateReferenceSystem expResult = CRS.fromWKT(default_CRS_WKT);
             CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
 
             //System.out.println("Exp: " + expResult);
@@ -130,24 +132,24 @@ public class CRSRegistryTest {
 
         try {
             System.out.println("------------EPSG:4326 None");
-            CoordinateReferenceSystem wgs84CRS = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/4326");
+            CoordinateReferenceSystem wgs84CRS = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/4326");
             System.out.println(wgs84CRS);
 
             System.out.println("------------EPSG:27700 None - ");
-            CoordinateReferenceSystem osgbCRS = CRS.decode("http://www.opengis.net/def/crs/EPSG/0/27700");
+            CoordinateReferenceSystem osgbCRS = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/27700");
             System.out.println(osgbCRS);
 
             System.out.println("------------ Units - ");
 
-            Unit osgbUnit = CRS.getHorizontalCRS(osgbCRS).getCoordinateSystem().getAxis(0).getUnit();
+            Unit osgbUnit = CRS.getHorizontalComponent(osgbCRS).getCoordinateSystem().getAxis(0).getUnit();
             System.out.println(osgbUnit);
-            Unit wgs84Unit = CRS.getHorizontalCRS(wgs84CRS).getCoordinateSystem().getAxis(0).getUnit();
+            Unit wgs84Unit = CRS.getHorizontalComponent(wgs84CRS).getCoordinateSystem().getAxis(0).getUnit();
             System.out.println(wgs84Unit);
 
             System.out.println(osgbUnit);
 
             double distOSGB = 100;
-            Measure<Double, Length> dist = Measure.valueOf(distOSGB, osgbUnit);
+            Quantity<Length> dist = Quantities.create(distOSGB, osgbUnit);
 
             Class class1 = wgs84Unit.getClass();
             String name = class1.getName();
@@ -157,17 +159,85 @@ public class CRSRegistryTest {
             //UnitConverter converter = wgs84Unit.getConverterTo(osgbUnit);
             //UnitConverter converter2 = wgs84Unit.getConverterTo(SI.RADIAN);
             //UnitConverter converter3 = wgs84Unit.getConverterTo(SI.METER);
-            Measure<Double, Angle> angleDist = Measure.valueOf(distOSGB, wgs84Unit);
-            Measure<Double, Angle> radDist = angleDist.to(SI.RADIAN);
+            Quantity<Angle> angleDist = Quantities.create(distOSGB, wgs84Unit);
+            Quantity< Angle> radDist = angleDist.to(Units.RADIAN);
 
-            System.out.println("Proj WGS: " + CRS.getProjectedCRS(wgs84CRS) + " Proj OSGB: " + CRS.getProjectedCRS(osgbCRS));
-            System.out.println("WGS: " + wgs84Unit.isStandardUnit() + " OSGB: " + osgbUnit.isStandardUnit());
+            System.out.println("Proj WGS: " + wgs84CRS.getRemarks() + " Proj OSGB: " + osgbCRS.getRemarks());
+            System.out.println("WGS: " + wgs84Unit.getSystemUnit() + " OSGB: " + osgbUnit.getSystemUnit());
             System.out.println("Before: " + distOSGB + " After: " + radDist);
 
         } catch (FactoryException ex) {
             System.out.println("CRS Not Decoded");
         }
 
+    }
+
+    /**
+     * Test of checkAxisXY method, of class CRSRegistry.
+     *
+     * @throws org.opengis.util.FactoryException
+     */
+    @Test
+    public void testCheckAxisXY_WGS84() throws FactoryException {
+        System.out.println("checkAxisXY");
+        CoordinateReferenceSystem crs = CRS.forCode(SRS_URI.WGS84_CRS);
+        Boolean expResult = false;
+        Boolean result = CRSRegistry.checkAxisXY(crs);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkAxisXY method, of class CRSRegistry.
+     *
+     * @throws org.opengis.util.FactoryException
+     */
+    @Test
+    public void testCheckAxisXY_Geocentric() throws FactoryException {
+        System.out.println("checkAxisXY_Geocentric");
+        CoordinateReferenceSystem crs = CommonCRS.WGS84.geocentric();
+        Boolean expResult = false;
+        Boolean result = CRSRegistry.checkAxisXY(crs);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkAxisXY method, of class CRSRegistry.
+     *
+     * @throws org.opengis.util.FactoryException
+     */
+    @Test
+    public void testCheckAxisXY_CRS84() throws FactoryException {
+        System.out.println("checkAxisXY_Geocentric");
+        CoordinateReferenceSystem crs = CRS.forCode("CRS:84");
+        Boolean expResult = true;
+        Boolean result = CRSRegistry.checkAxisXY(crs);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of checkAxisXY method, of class CRSRegistry.
+     *
+     * @throws org.opengis.util.FactoryException
+     */
+    @Test
+    public void testCheckAxisXY_OSGB() throws FactoryException {
+        System.out.println("checkAxisXY_Geocentric");
+        CoordinateReferenceSystem crs = CRS.forCode(SRS_URI.OSGB36_CRS);
+        Boolean expResult = true;
+        Boolean result = CRSRegistry.checkAxisXY(crs);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

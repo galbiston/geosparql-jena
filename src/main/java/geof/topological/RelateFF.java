@@ -5,15 +5,15 @@
  */
 package geof.topological;
 
-import com.vividsolutions.jts.geom.IntersectionMatrix;
+import org.locationtech.jts.geom.IntersectionMatrix;
 import implementation.GeometryWrapper;
 import implementation.index.GeometryLiteralIndex.GeometryIndex;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

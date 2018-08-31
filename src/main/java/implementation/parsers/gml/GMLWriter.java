@@ -5,7 +5,7 @@
  */
 package implementation.parsers.gml;
 
-import com.vividsolutions.jts.geom.*;
+import org.locationtech.jts.geom.*;
 import implementation.GeometryWrapper;
 import implementation.datatype.ParseException;
 import implementation.jts.CustomCoordinateSequence;

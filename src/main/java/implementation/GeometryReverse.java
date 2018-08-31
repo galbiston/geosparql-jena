@@ -5,15 +5,14 @@
  */
 package implementation;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.Polygon;
-import org.geotools.referencing.CRS;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import implementation.registry.CRSRegistry;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Polygon;
 
 /**
  *
@@ -21,20 +20,36 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  */
 public class GeometryReverse {
 
+
     /**
-     * Checks the CRS for y,x and reverses the supplied geometry coordinates.
+     * Checks the spatial reference system URI for y,x and reverses the supplied
+     * geometry coordinates.
      *
      * @param geometry
-     * @param crs
+     * @param srsURI
      * @return
      */
-    public static final Geometry check(Geometry geometry, CoordinateReferenceSystem crs) {
+    public static final Geometry check(Geometry geometry, String srsURI) {
+
+        Boolean isAxisXY = CRSRegistry.getAxisXY(srsURI);
+        return check(geometry, isAxisXY);
+    }
+
+    /**
+     * Checks the spatial reference system URI for y,x and reverses the supplied
+     * geometry coordinates.
+     *
+     * @param geometry
+     * @param isAxisXY
+     * @return
+     */
+    public static final Geometry check(Geometry geometry, Boolean isAxisXY) {
 
         Geometry finalGeometry;
-        if (CRS.getAxisOrder(crs).equals(CRS.AxisOrder.NORTH_EAST)) {
-            finalGeometry = reverseGeometry(geometry);
-        } else {
+        if (isAxisXY) {
             finalGeometry = geometry;
+        } else {
+            finalGeometry = reverseGeometry(geometry);
         }
         return finalGeometry;
     }
@@ -65,7 +80,7 @@ public class GeometryReverse {
                 break;
             case "MultiPoint":
                 coordinates = getReversedCoordinates(geometry);
-                finalGeometry = factory.createMultiPoint(coordinates);
+                finalGeometry = factory.createMultiPointFromCoords(coordinates);
                 break;
             case "Polygon":
                 finalGeometry = reversePolygon(geometry, factory);

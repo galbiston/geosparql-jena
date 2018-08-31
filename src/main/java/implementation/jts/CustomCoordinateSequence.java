@@ -5,11 +5,11 @@
  */
 package implementation.jts;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateSequence;
-import com.vividsolutions.jts.geom.Envelope;
 import java.io.Serializable;
 import java.util.Arrays;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.CoordinateSequence;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -26,6 +26,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
     private final int size;
     private final int coordinateDimension;
     private final int spatialDimension;
+    private final int measuresDimension;
     private final CoordinateSequenceDimensions dimensions;
 
     public enum CoordinateSequenceDimensions {
@@ -41,6 +42,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
         this.coordinateDimension = 4;
         this.spatialDimension = 3;
         this.dimensions = CoordinateSequenceDimensions.XYZM;
+        this.measuresDimension = 1;
     }
 
     public CustomCoordinateSequence(int size, CoordinateSequenceDimensions dimensions) {
@@ -61,7 +63,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
         this.coordinateDimension = dims[0];
         this.spatialDimension = dims[1];
         this.dimensions = dimensions;
-
+        this.measuresDimension = dimensions.equals(CoordinateSequenceDimensions.XYM) || dimensions.equals(CoordinateSequenceDimensions.XYZM) ? 1 : 0;
     }
 
     public CustomCoordinateSequence(int size, int dimension) {
@@ -84,6 +86,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
         if (dimension == 4) {
             this.spatialDimension = 3;
             this.dimensions = CoordinateSequenceDimensions.XYZM;
+            this.measuresDimension = 1;
         } else {
             this.spatialDimension = dimension;
             if (dimension == 2) {
@@ -91,7 +94,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
             } else {
                 this.dimensions = CoordinateSequenceDimensions.XYZ;
             }
-
+            this.measuresDimension = 0;
         }
     }
 
@@ -156,7 +159,12 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
         int[] dims = getDimensionValues(dimensions);
         this.coordinateDimension = dims[0];
         this.spatialDimension = dims[1];
+        this.measuresDimension = dimensions.equals(CoordinateSequenceDimensions.XYM) || dimensions.equals(CoordinateSequenceDimensions.XYZM) ? 1 : 0;
+    }
 
+    @Override
+    public CustomCoordinateSequence copy() {
+        return new CustomCoordinateSequence(x, y, z, m);
     }
 
     public int getSize() {
@@ -198,9 +206,9 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
         this.m = new double[size];
 
         for (int i = 0; i < size; i++) {
-            this.x[i] = coordinates[i].x;
-            this.y[i] = coordinates[i].y;
-            this.z[i] = coordinates[i].z;
+            this.x[i] = coordinates[i].getX();
+            this.y[i] = coordinates[i].getY();
+            this.z[i] = coordinates[i].getZ();
             this.m[i] = Double.NaN;
         }
 
@@ -216,7 +224,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
             this.spatialDimension = 2;
             this.dimensions = CoordinateSequenceDimensions.XY;
         }
-
+        this.measuresDimension = 0;
     }
 
     public static final CustomCoordinateSequence createPoint(double x, double y) {
@@ -239,18 +247,22 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
             this.coordinateDimension = 2;
             this.spatialDimension = 2;
             this.dimensions = CoordinateSequenceDimensions.XY;
+            this.measuresDimension = 0;
         } else if (isZPresent && !isMPresent) {
             this.coordinateDimension = 3;
             this.spatialDimension = 3;
             this.dimensions = CoordinateSequenceDimensions.XYZ;
+            this.measuresDimension = 0;
         } else if (!isZPresent && isMPresent) {
             this.coordinateDimension = 3;
             this.spatialDimension = 2;
             this.dimensions = CoordinateSequenceDimensions.XYM;
+            this.measuresDimension = 1;
         } else {
             this.coordinateDimension = 4;
             this.spatialDimension = 3;
             this.dimensions = CoordinateSequenceDimensions.XYZM;
+            this.measuresDimension = 1;
         }
 
     }
@@ -268,6 +280,21 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
     @Override
     public int getDimension() {
         return coordinateDimension;
+    }
+
+    @Override
+    public int getMeasures() {
+        return measuresDimension;
+    }
+
+    @Override
+    public boolean hasZ() {
+        return spatialDimension > 2;
+    }
+
+    @Override
+    public boolean hasM() {
+        return measuresDimension == 1;
     }
 
     public CoordinateSequenceDimensions getDimensions() {
@@ -290,9 +317,9 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
 
     @Override
     public void getCoordinate(int index, Coordinate coord) {
-        coord.x = x[index];
-        coord.y = y[index];
-        coord.z = z[index];
+        coord.setX(x[index]);
+        coord.setY(y[index]);
+        coord.setZ(z[index]);
     }
 
     @Override
@@ -305,10 +332,12 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
         return y[index];
     }
 
+    @Override
     public double getZ(int index) {
         return z[index];
     }
 
+    @Override
     public double getM(int index) {
         return m[index];
     }
@@ -372,6 +401,8 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
     }
 
     @Override
+    @Deprecated
+    @SuppressWarnings("deprecation")
     public CustomCoordinateSequence clone() {
         return new CustomCoordinateSequence(x, y, z, m);
     }

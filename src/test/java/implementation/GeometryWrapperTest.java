@@ -5,9 +5,9 @@
  */
 package implementation;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
 import implementation.jts.CustomCoordinateSequence;
@@ -16,15 +16,15 @@ import implementation.vocabulary.SRS_URI;
 import implementation.vocabulary.Unit_URI;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.geotools.referencing.CRS;
+import org.apache.sis.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.util.FactoryException;
 
 /**
  *
@@ -83,7 +83,7 @@ public class GeometryWrapperTest {
     /**
      * Test of getCRS method, of class GeometryWrapper.
      *
-     * @throws org.opengis.referencing.FactoryException
+     * @throws org.opengis.util.FactoryException
      */
     @Test
     public void testGetCRS() throws FactoryException {
@@ -92,7 +92,7 @@ public class GeometryWrapperTest {
         String sourceSRSURI = SRS_URI.WGS84_CRS;
         GeometryWrapper instance = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
-        CoordinateReferenceSystem expResult = CRS.decode(sourceSRSURI);
+        CoordinateReferenceSystem expResult = CRS.forCode(sourceSRSURI);
         CoordinateReferenceSystem result = instance.getCRS();
 
         //System.out.println("Exp: " + expResult);
@@ -210,10 +210,10 @@ public class GeometryWrapperTest {
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //CRS is in metres.
-        String distanceUnitsURI = Unit_URI.METRE_URI;
+        String distanceUnitsURL = Unit_URI.METRE_URL;
 
         double expResult = 10.0;
-        double result = instance.distance(targetGeometry, distanceUnitsURI);
+        double result = instance.distance(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -238,10 +238,10 @@ public class GeometryWrapperTest {
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //CRS is in metres.
-        String distanceUnitsURI = Unit_URI.RADIAN_URI;
+        String distanceUnitsURL = Unit_URI.RADIAN_URL;
 
         double expResult = 0.025656; //Degree: 1.47
-        double result = instance.distance(targetGeometry, distanceUnitsURI);
+        double result = instance.distance(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -266,10 +266,10 @@ public class GeometryWrapperTest {
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //CRS is in degrees.
-        String distanceUnitsURI = Unit_URI.DEGREE_ANGLE_URI;
+        String distanceUnitsURL = Unit_URI.DEGREE_URL;
 
         double expResult = 10.0;
-        double result = instance.distance(targetGeometry, distanceUnitsURI);
+        double result = instance.distance(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -294,10 +294,10 @@ public class GeometryWrapperTest {
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         //CRS is in degrees.
-        String distanceUnitsURI = Unit_URI.METRE_URI;
+        String distanceUnitsURL = Unit_URI.METRE_URL;
 
         double expResult = 111318; //1.0 degree of longigtude at the equator is approx 111.32km.
-        double result = instance.distance(targetGeometry, distanceUnitsURI);
+        double result = instance.distance(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

@@ -15,8 +15,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.TransformException;
 
 /**
  *
@@ -41,7 +39,7 @@ public class SpatialIndexTest {
             SpatialIndex.insert(BOX_A, datatypeURI);
             SpatialIndex.insert(BOX_B, datatypeURI);
             SpatialIndex.insert(BOX_C, datatypeURI);
-        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+        } catch (MismatchedDimensionException ex) {
             ex.printStackTrace();
         }
     }

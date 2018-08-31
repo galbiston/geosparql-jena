@@ -12,8 +12,8 @@ import implementation.datatype.GeometryDatatype;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
 
 /**
  *

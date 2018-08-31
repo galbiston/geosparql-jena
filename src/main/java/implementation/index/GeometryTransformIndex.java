@@ -5,21 +5,21 @@
  */
 package implementation.index;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 import implementation.DimensionInfo;
 import implementation.GeometryWrapper;
 import static implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static implementation.index.IndexDefaultValues.NO_INDEX;
 import static implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import implementation.index.expiring.ExpiringIndex;
+import implementation.jts.GeometryTransformation;
 import implementation.registry.CRSRegistry;
 import implementation.registry.MathTransformRegistry;
-import org.geotools.geometry.jts.JTS;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
 
 /**
  *
@@ -38,11 +38,10 @@ public class GeometryTransformIndex {
      * @param srsURI
      * @param storeCRSTransform
      * @return
-     * @throws FactoryException
-     * @throws MismatchedDimensionException
      * @throws TransformException
+     * @throws org.opengis.util.FactoryException
      */
-    public static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeCRSTransform) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeCRSTransform) throws TransformException, FactoryException {
 
         GeometryWrapper transformedGeometryWrapper;
         String key = sourceGeometryWrapper.getLexicalForm() + "@" + srsURI;
@@ -67,13 +66,16 @@ public class GeometryTransformIndex {
 
     }
 
-    private static GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+    private static GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI) throws MismatchedDimensionException, FactoryException, TransformException {
         CoordinateReferenceSystem sourceCRS = sourceGeometryWrapper.getCRS();
         CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
         MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
         Geometry parsingGeometry = sourceGeometryWrapper.getParsingGeometry();
-        Geometry transformedGeometry = JTS.transform(parsingGeometry, transform);
 
+        //Transform the coordinates into a new Geometry.
+        Geometry transformedGeometry = GeometryTransformation.transform(parsingGeometry, transform);
+
+        //Construct a new GeometryWrapper using info from original GeometryWrapper.
         String geometryDatatypeURI = sourceGeometryWrapper.getGeometryDatatypeURI();
         DimensionInfo dimensionInfo = sourceGeometryWrapper.getDimensionInfo();
         return new GeometryWrapper(transformedGeometry, srsURI, geometryDatatypeURI, dimensionInfo);

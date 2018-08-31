@@ -5,7 +5,7 @@
  */
 package implementation.index;
 
-import com.vividsolutions.jts.geom.Envelope;
+import org.locationtech.jts.geom.Envelope;
 import implementation.GeometryWrapper;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
@@ -31,8 +31,8 @@ import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb.base.file.Location;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,7 +117,7 @@ public class SpatialIndex implements Serializable {
         return SpatialIndex.checkCollision(sourceLexicalForm, targetLexicalForm, isDisjoint);
     }
 
-    public static final CollisionResult checkCollision(String sourceGeometryLiteral, String targetGeometryLiteral, Boolean isDisjoint) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static final CollisionResult checkCollision(String sourceGeometryLiteral, String targetGeometryLiteral, Boolean isDisjoint) throws TransformException {
         if (!IS_ACTIVE) {
             return CHECK_RELATION;
         }
@@ -150,11 +150,8 @@ public class SpatialIndex implements Serializable {
      * @param lexicalForm
      * @param datatypeURI
      * @return
-     * @throws FactoryException
-     * @throws MismatchedDimensionException
-     * @throws TransformException
      */
-    public static Boolean addIfMissing(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
+    public static Boolean addIfMissing(String lexicalForm, String datatypeURI) {
         if (!IS_ACTIVE) {
             return false;
         }
@@ -179,23 +176,27 @@ public class SpatialIndex implements Serializable {
         return SPATIAL_INDEX.remove(geometryLiteral);
     }
 
-    public static final void insert(String lexicalForm, String datatypeURI) throws FactoryException, MismatchedDimensionException, TransformException {
-        if (!IS_ACTIVE) {
-            long timeNow = System.currentTimeMillis();
-            if (timeNow - WARNING_ISSUED_TIME > WARNING_DURATION) {
-                LOGGER.warn("Spatial Index is inactive and attempted to insert GeometryLiteral. Warning will be suppresed for {} milliseconds", WARNING_DURATION);
-                WARNING_ISSUED_TIME = timeNow;
+    public static final void insert(String lexicalForm, String datatypeURI) {
+        try {
+            if (!IS_ACTIVE) {
+                long timeNow = System.currentTimeMillis();
+                if (timeNow - WARNING_ISSUED_TIME > WARNING_DURATION) {
+                    LOGGER.warn("Spatial Index is inactive and attempted to insert GeometryLiteral. Warning will be suppresed for {} milliseconds", WARNING_DURATION);
+                    WARNING_ISSUED_TIME = timeNow;
+                }
+                return;
             }
-            return;
-        }
 
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(lexicalForm, datatypeURI);
-        Envelope envelope = extractEnvelope(geometryWrapper);
-        SPATIAL_INDEX.put(lexicalForm, envelope);
+            GeometryWrapper geometryWrapper = GeometryWrapper.extract(lexicalForm, datatypeURI);
+            Envelope envelope = extractEnvelope(geometryWrapper);
+            SPATIAL_INDEX.put(lexicalForm, envelope);
+        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+            LOGGER.error("Expection Inserting: {} {} - {}", lexicalForm, datatypeURI, ex.getMessage());
+        }
     }
 
     private static Envelope extractEnvelope(GeometryWrapper sourceGeometryWrapper) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometryWrapper = sourceGeometryWrapper.transform(SRS_URI.GEOTOOLS_GEOCENTRIC_CARTESIAN);
+        GeometryWrapper transformedGeometryWrapper = sourceGeometryWrapper.transform(SRS_URI.GEOCENTRIC_CARTESIAN);
         Envelope envelope = transformedGeometryWrapper.getEnvelope();
         return envelope;
     }
@@ -209,10 +210,10 @@ public class SpatialIndex implements Serializable {
         if (IS_ACTIVE) {
             LOGGER.info("Building Spatial Index for Dataset: Started");
             Model defaultModel = dataset.getDefaultModel();
-            SpatialIndex.build(defaultModel, "Default Model");
+            build(defaultModel, "Default Model");
 
             Model unionModel = dataset.getUnionModel();
-            SpatialIndex.build(unionModel, "Union Model");
+            build(unionModel, "Union Model");
             LOGGER.info("Building Spatial Index for Dataset: Completed");
         }
     }
@@ -221,20 +222,17 @@ public class SpatialIndex implements Serializable {
         if (IS_ACTIVE) {
             LOGGER.info("Building Spatial Index for {}: Started", graphName);
 
-            try {
-                NodeIterator nodeIt = model.listObjectsOfProperty(Geo.HAS_SERIALIZATION_PROP);
-                while (nodeIt.hasNext()) {
-                    RDFNode node = nodeIt.nextNode();
-                    if (node.isLiteral()) {
-                        Literal literal = node.asLiteral();
-                        String lexicalForm = literal.getLexicalForm();
-                        String datatypeURI = literal.getDatatypeURI();
-                        addIfMissing(lexicalForm, datatypeURI);
-                    }
+            NodeIterator nodeIt = model.listObjectsOfProperty(Geo.HAS_SERIALIZATION_PROP);
+            while (nodeIt.hasNext()) {
+                RDFNode node = nodeIt.nextNode();
+                if (node.isLiteral()) {
+                    Literal literal = node.asLiteral();
+                    String lexicalForm = literal.getLexicalForm();
+                    String datatypeURI = literal.getDatatypeURI();
+                    addIfMissing(lexicalForm, datatypeURI);
                 }
-            } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-                LOGGER.error("Build Spatial Index Exception: {}", ex.getMessage());
             }
+
             LOGGER.info("Building Spatial Index for {}: Completed- Index size: {}", graphName, SPATIAL_INDEX.size());
         }
     }

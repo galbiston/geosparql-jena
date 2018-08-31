@@ -27,15 +27,18 @@ repositories {
 
 dependencies {
 
-    //Geotools: http://docs.geotools.org/latest/userguide.old/library/
-    ext.geoToolsVersion = '19.0'
-    api group: 'org.geotools', name: 'gt-api', version: geoToolsVersion
-    api group: 'org.geotools', name: 'gt-epsg-hsql', version: geoToolsVersion
-    api (group: 'org.geotools', name: 'gt-jts-wrapper', version: geoToolsVersion){
-        exclude group: 'commons-logging', module: 'commons-logging'
-    }
-    api group: 'org.geotools', name: 'gt-main', version: geoToolsVersion
+    //Apache SIS Core
+    ext.sisVersion = '0.8'
+    implementation group: 'org.apache.sis.core', name: 'sis-referencing', version: sisVersion
 
+    //Apache SIS EPSG database - allows full range of EPSG codes but download and licensing implications.
+    //Use of EPSG data is incomptabile for bundling with Apache licence, see: http://sis.apache.org/epsg.html
+    testImplementation group: 'org.apache.sis.non-free', name: 'sis-embedded-data', version: sisVersion
+
+    //JTS Core
+    implementation group: 'org.locationtech.jts', name: 'jts-core', version: '1.16.0-RC1'
+
+    //JDON XML
     ext.jdomVersion = "2.0.6"
     implementation group: 'org.jdom', name: 'jdom2', version: jdomVersion
 
@@ -68,6 +71,7 @@ dependencies {
     ext.junitVersion = "4.12"
     testImplementation "junit:junit:$junitVersion"
 
+    //RDF Converter
     ext.rdfConverterVersion = "1.0.0"
     api "org.ntu:RDFConverter:$rdfConverterVersion"
 

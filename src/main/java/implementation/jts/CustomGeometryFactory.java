@@ -5,7 +5,7 @@
  */
 package implementation.jts;
 
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.GeometryFactory;
 import java.io.Serializable;
 
 /**

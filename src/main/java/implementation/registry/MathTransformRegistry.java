@@ -9,12 +9,12 @@ import java.lang.invoke.MethodHandles;
 import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.collections4.map.MultiKeyMap;
-import org.geotools.referencing.CRS;
+import org.apache.sis.referencing.CRS;
 import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class MathTransformRegistry {
         if (MATH_TRANSFORM_REGISTRY.containsKey(key)) {
             transform = MATH_TRANSFORM_REGISTRY.get(key);
         } else {
-            transform = CRS.findMathTransform(sourceCRS, targetCRS, true);
+            transform = CRS.findOperation(sourceCRS, targetCRS, null).getMathTransform();
             MATH_TRANSFORM_REGISTRY.put(key, transform);
         }
         return transform;

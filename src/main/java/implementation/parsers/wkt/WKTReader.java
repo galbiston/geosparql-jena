@@ -5,18 +5,18 @@
  */
 package implementation.parsers.wkt;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.Polygon;
-import implementation.jts.CustomGeometryFactory;
 import implementation.DimensionInfo;
 import implementation.datatype.ParseException;
 import implementation.jts.CustomCoordinateSequence;
 import implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import implementation.jts.CustomGeometryFactory;
 import java.util.Arrays;
 import java.util.Objects;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Polygon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +32,9 @@ public class WKTReader {
     private final CoordinateSequenceDimensions coordinateSequenceDimensions;
     private final Geometry geometry;
 
-    public WKTReader(String shape, String dimension, String coordinates) {
+    public WKTReader(String geometryType, String dimension, String coordinates) {
         this.coordinateSequenceDimensions = convertDimensions(dimension);
-        this.geometry = buildGeometry(shape, coordinates);
+        this.geometry = buildGeometry(geometryType, coordinates);
     }
 
     public WKTReader() {
@@ -93,12 +93,12 @@ public class WKTReader {
         }
     }
 
-    private Geometry buildGeometry(String shape, String coordinates) throws ParseException {
+    private Geometry buildGeometry(String geometryType, String coordinates) throws ParseException {
 
         Geometry geo;
 
         try {
-            switch (shape) {
+            switch (geometryType) {
                 case "point":
                     CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
                     geo = GEOMETRY_FACTORY.createPoint(pointSequence);
@@ -128,10 +128,10 @@ public class WKTReader {
                     geo = buildGeometryCollection(coordinates);
                     break;
                 default:
-                    throw new ParseException("Geometry shape not supported: " + shape);
+                    throw new ParseException("Geometry type not supported: " + geometryType);
             }
         } catch (ArrayIndexOutOfBoundsException | ParseException ex) {
-            LOGGER.error("Build WKT Geometry Exception - Shape: {}, Coordinates: {}", shape, coordinates);
+            LOGGER.error("Build WKT Geometry Exception - Type: {}, Coordinates: {}", geometryType, coordinates);
             throw new ParseException(ex.getMessage());
         }
         return geo;
@@ -248,7 +248,7 @@ public class WKTReader {
 
     public static WKTReader extract(String wktText) throws ParseException {
 
-        String shape = "point";
+        String goemetryType = "point";
         String dimension = "";
         String coordinates = "";
 
@@ -271,15 +271,15 @@ public class WKTReader {
             int firstSpace = remainder.indexOf(" ");
 
             if (firstSpace != -1) {
-                shape = remainder.substring(0, firstSpace);
+                goemetryType = remainder.substring(0, firstSpace);
                 dimension = remainder.substring(firstSpace + 1);
             } else {
-                shape = remainder;
+                goemetryType = remainder;
                 //dimension = ""; //Dimension already set to empty, but kept as a reminder.
             }
         }
 
-        return new WKTReader(shape, dimension, coordinates);
+        return new WKTReader(goemetryType, dimension, coordinates);
     }
 
     @Override
