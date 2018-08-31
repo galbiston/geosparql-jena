@@ -36,23 +36,23 @@ public class GeometryTransformation {
 
     public static final Geometry transform(Geometry sourceGeometry, MathTransform transform) throws TransformException {
 
-        String geometryType = sourceGeometry.getGeometryType().toLowerCase();
+        String geometryType = sourceGeometry.getGeometryType();
         switch (geometryType) {
-            case "point":
+            case "Point":
                 return transformPoint(sourceGeometry, transform);
-            case "linestring":
+            case "LineString":
                 return transformLineString(sourceGeometry, transform);
-            case "linearring":
+            case "LinearRing":
                 return transformLinearRing(sourceGeometry, transform);
-            case "polygon":
+            case "Polygon":
                 return transformPolygon(sourceGeometry, transform);
-            case "multipoint":
+            case "MultiPoint":
                 return transformMultiPoint(sourceGeometry, transform);
-            case "multilinestring":
+            case "MultiLineString":
                 return transformMultiLineString(sourceGeometry, transform);
-            case "multipolygon":
+            case "MultiPolygon":
                 return transformMultiPolygon(sourceGeometry, transform);
-            case "geometrycollection":
+            case "GeometryCollection":
                 return transformGeometryCollection(sourceGeometry, transform);
             default:
                 throw new ParseException("Geometry type not supported: " + geometryType);
