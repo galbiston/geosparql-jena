@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.sis.referencing.CRS;
-import org.apache.sis.referencing.CommonCRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.AxisDirection;
 import org.opengis.util.FactoryException;
@@ -110,13 +109,6 @@ public class CRSRegistry implements Serializable {
             CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, crs);
             AXIS_XY_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, Boolean.TRUE);
             UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, unitsOfMeasure);
-
-            //Geocentric Cartesian
-            UnitsOfMeasure unitsOfMeasureCartesian = new UnitsOfMeasure(CommonCRS.WGS84.geocentric());
-            UnitsRegistry.addUnit(unitsOfMeasureCartesian);
-            CRS_REGISTRY.put(SRS_URI.GEOCENTRIC_CARTESIAN, CommonCRS.WGS84.geocentric());
-            AXIS_XY_REGISTRY.put(SRS_URI.GEOCENTRIC_CARTESIAN, Boolean.FALSE);
-            UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.GEOCENTRIC_CARTESIAN, unitsOfMeasureCartesian);
 
         } catch (FactoryException ex) {
             LOGGER.error("Invalid CRS code: {} - {}", DEFAULT_WKT_CRS84_CODE, ex.getMessage());

@@ -5,7 +5,6 @@
  */
 package implementation.index;
 
-import org.locationtech.jts.geom.Envelope;
 import implementation.GeometryWrapper;
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
@@ -30,6 +29,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb.base.file.Location;
+import org.locationtech.jts.geom.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -196,7 +196,7 @@ public class SpatialIndex implements Serializable {
     }
 
     private static Envelope extractEnvelope(GeometryWrapper sourceGeometryWrapper) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometryWrapper = sourceGeometryWrapper.transform(SRS_URI.GEOCENTRIC_CARTESIAN);
+        GeometryWrapper transformedGeometryWrapper = sourceGeometryWrapper.transform(SRS_URI.WGS84_WORLD_MERCATOR_CRS);
         Envelope envelope = transformedGeometryWrapper.getEnvelope();
         return envelope;
     }

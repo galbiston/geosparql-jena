@@ -346,8 +346,8 @@ public class GeometryWrapper implements Serializable {
             preparedTargetGeometry = checkTransformCRS(targetGeometry);
         } else if (isTargetUnitsLinear) {
             //Source geometry is not linear but targets are so convert to linear CRS.
-            preparedSourceGeometry = transform(SRS_URI.GEOCENTRIC_CARTESIAN);
-            preparedTargetGeometry = targetGeometry.transform(SRS_URI.GEOCENTRIC_CARTESIAN);
+            preparedSourceGeometry = transform(SRS_URI.WGS84_WORLD_MERCATOR_CRS);
+            preparedTargetGeometry = targetGeometry.transform(SRS_URI.WGS84_WORLD_MERCATOR_CRS);
         } else {
             //Source geometry is linear but targets are not so convert to nonlinear CRS.
             preparedSourceGeometry = transform(SRS_URI.DEFAULT_WKT_CRS84);

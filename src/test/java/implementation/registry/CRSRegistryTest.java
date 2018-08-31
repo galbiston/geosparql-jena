@@ -14,7 +14,6 @@ import javax.measure.quantity.Length;
 import org.apache.sis.measure.Quantities;
 import org.apache.sis.measure.Units;
 import org.apache.sis.referencing.CRS;
-import org.apache.sis.referencing.CommonCRS;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -173,39 +172,6 @@ public class CRSRegistryTest {
     public void testCheckAxisXY_WGS84URI() {
         System.out.println("checkAxisXY_WGS84URI");
         String srsURI = SRS_URI.WGS84_CRS;
-        Boolean expResult = false;
-        Boolean result = CRSRegistry.getAxisXY(srsURI);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of checkAxisXY method, of class CRSRegistry.
-     *
-     * @throws org.opengis.util.FactoryException
-     */
-    @Test
-    public void testCheckAxisXY_Geocentric() throws FactoryException {
-        System.out.println("checkAxisXY_Geocentric");
-        CoordinateReferenceSystem crs = CommonCRS.WGS84.geocentric();
-        Boolean expResult = true;
-        Boolean result = CRSRegistry.checkAxisXY(crs);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of checkAxisXY method, of class CRSRegistry.
-     *
-     */
-    @Test
-    public void testCheckAxisXY_GeocentricURI() {
-        System.out.println("checkAxisXY_GeocentricURI");
-        String srsURI = SRS_URI.GEOCENTRIC_CARTESIAN;
         Boolean expResult = false;
         Boolean result = CRSRegistry.getAxisXY(srsURI);
 

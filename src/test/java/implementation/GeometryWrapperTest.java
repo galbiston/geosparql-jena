@@ -295,7 +295,7 @@ public class GeometryWrapperTest {
         //CRS is in degrees.
         String distanceUnitsURL = Unit_URI.METRE_URL;
 
-        double expResult = 111318; //1.0 degree of longigtude at the equator is approx 111.32km.
+        double expResult = 111319.49079327357; //1.0 degree of longigtude at the equator is approx 111.32km.
         double result = instance.distance(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);

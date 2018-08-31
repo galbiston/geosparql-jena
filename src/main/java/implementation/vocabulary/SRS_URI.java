@@ -36,15 +36,9 @@ public interface SRS_URI {
     public static final String EPSG_BASE_CRS_URI = "http://www.opengis.net/def/crs/EPSG/0/";
 
     /**
-     * An alias URI for the default Geocentric coordinate reference system with
-     * units of metres.
+     * WGS84 World Mercator SRS_URI Name used for Latitude, Longitude in
+     * Projected coordinate reference system with units of metres.
      */
-    public static final String GEOCENTRIC_CARTESIAN = "http://example.org/srs#DefaultGeocentricCartesian";
-
-    /**
-     * An alias URI for the default Geographic coordinate reference system with
-     * units of radians.
-     */
-    public static final String GEOGRAPHIC_WGS84 = "http://example.org/srs#DefaultGeocentricWGS84";
+    public static final String WGS84_WORLD_MERCATOR_CRS = "http://www.opengis.net/def/crs/EPSG/0/3395";
 
 }
