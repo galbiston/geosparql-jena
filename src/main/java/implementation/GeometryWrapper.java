@@ -46,17 +46,17 @@ import org.opengis.util.FactoryException;
  */
 public class GeometryWrapper implements Serializable {
 
-    private String lexicalForm;
     private final DimensionInfo dimensionInfo;
     private final String srsURI;
     private final Boolean isAxisXY;
-    private String utmURI = null;
-    private final String geometryDatatypeURI;
     private final UnitsOfMeasure unitsOfMeasure;
     private final CoordinateReferenceSystem crs;
     private final Geometry xyGeometry;
     private final Geometry parsingGeometry;
     private PreparedGeometry preparedGeometry;
+    private final String geometryDatatypeURI;
+    private String lexicalForm;
+    private String utmURI = null;
 
     public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo) {
         this(geometry, srsURI, geometryDatatypeURI, dimensionInfo, null);
@@ -588,16 +588,14 @@ public class GeometryWrapper implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.lexicalForm);
-        hash = 67 * hash + Objects.hashCode(this.dimensionInfo);
-        hash = 67 * hash + Objects.hashCode(this.srsURI);
-        hash = 67 * hash + Objects.hashCode(this.isAxisXY);
-        hash = 67 * hash + Objects.hashCode(this.utmURI);
-        hash = 67 * hash + Objects.hashCode(this.geometryDatatypeURI);
-        hash = 67 * hash + Objects.hashCode(this.unitsOfMeasure);
-        hash = 67 * hash + Objects.hashCode(this.crs);
-        hash = 67 * hash + Objects.hashCode(this.xyGeometry);
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.dimensionInfo);
+        hash = 47 * hash + Objects.hashCode(this.srsURI);
+        hash = 47 * hash + Objects.hashCode(this.isAxisXY);
+        hash = 47 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 47 * hash + Objects.hashCode(this.crs);
+        hash = 47 * hash + Objects.hashCode(this.xyGeometry);
+        hash = 47 * hash + Objects.hashCode(this.geometryDatatypeURI);
         return hash;
     }
 
@@ -613,13 +611,7 @@ public class GeometryWrapper implements Serializable {
             return false;
         }
         final GeometryWrapper other = (GeometryWrapper) obj;
-        if (!Objects.equals(this.lexicalForm, other.lexicalForm)) {
-            return false;
-        }
         if (!Objects.equals(this.srsURI, other.srsURI)) {
-            return false;
-        }
-        if (!Objects.equals(this.utmURI, other.utmURI)) {
             return false;
         }
         if (!Objects.equals(this.geometryDatatypeURI, other.geometryDatatypeURI)) {

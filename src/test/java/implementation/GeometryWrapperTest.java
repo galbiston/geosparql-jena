@@ -312,7 +312,7 @@ public class GeometryWrapperTest {
         System.out.println("emptyWKT");
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint();
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint(), "");
+        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.getEmptyWKT();
 
@@ -331,7 +331,7 @@ public class GeometryWrapperTest {
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint();
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint(), "");
+        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.getEmptyWKT();
 
@@ -350,7 +350,7 @@ public class GeometryWrapperTest {
 
         Geometry instanceGeo = GEOMETRY_FACTORY.createPoint();
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
-        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, GMLDatatype.URI, DimensionInfo.xyPoint(), "");
+        GeometryWrapper result = new GeometryWrapper(instanceGeo, instanceSRSURI, GMLDatatype.URI, DimensionInfo.xyPoint());
 
         GeometryWrapper expResult = GeometryWrapper.getEmptyGML();
 

@@ -91,8 +91,8 @@ public class CRSRegistryTest {
             CoordinateReferenceSystem expResult = CRS.fromWKT(default_CRS_WKT);
             CoordinateReferenceSystem result = CRSRegistry.getCRS(srsURI);
 
-            System.out.println("Exp: " + expResult);
-            System.out.println("Res: " + result);
+            //System.out.println("Exp: " + expResult);
+            //System.out.println("Res: " + result);
             assertEquals(expResult.toWKT(), result.toWKT());
         } catch (FactoryException ex) {
             System.out.println("Default WKT CRS error: " + ex.getMessage());
