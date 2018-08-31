@@ -44,30 +44,16 @@ public class CRSRegistry implements Serializable {
 
     public static final UnitsOfMeasure getUnitsOfMeasure(String srsURI) {
 
-        getCRS(srsURI);
+        storeCRS(srsURI);
         return UNITS_OF_MEASURE_REGISTRY.get(srsURI);
     }
 
     public static final CoordinateReferenceSystem getCRS(String srsURI) {
-        return storeCRS(srsURI, null);
+        return storeCRS(srsURI);
     }
 
-    public static final CoordinateReferenceSystem getCRS(String srsURI, String wktString) {
-
-        try {
-            CoordinateReferenceSystem crs = CRS.parseWKT(wktString);
-            return storeCRS(srsURI, crs);
-        } catch (FactoryException ex) {
-            LOGGER.error("Invalid WKT String: {} - {} - {}", srsURI, wktString, ex.getMessage());
-            return null;
-        }
-    }
-
-    public static final CoordinateReferenceSystem addCRS(String srsURI, CoordinateReferenceSystem crs) {
-        return storeCRS(srsURI, crs);
-    }
-
-    private static CoordinateReferenceSystem storeCRS(String srsURI, CoordinateReferenceSystem crs) {
+    private static CoordinateReferenceSystem storeCRS(String srsURI) {
+        CoordinateReferenceSystem crs;
 
         if (CRS_REGISTRY.containsKey(srsURI)) {
             crs = CRS_REGISTRY.get(srsURI);
