@@ -1,7 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2018 Greg Albiston
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package implementation.registry;
 
@@ -33,7 +43,7 @@ public class UnitsRegistry {
     static {
 
         //Linear Units
-        //URL        
+        //URL
         addUnit(Unit_URI.METER_URL, Units.METRE);
         addUnit(Unit_URI.METRE_URL, Units.METRE);
         addUnit(Unit_URI.KILOMETER_URL, Units.KILOMETRE);
@@ -84,7 +94,7 @@ public class UnitsRegistry {
 
         //URN references from: https://sis.apache.org/apidocs/org/apache/sis/measure/Units.html
         //TODO: EPSG also defined units URIs at https://epsg.io/9096-units. More exhaustive than OGC.
-    }    
+    }
 
     public static final void addUnit(String unitURI, Unit unit) {
         UNITS_REGISTRY.putIfAbsent(unitURI, unit);

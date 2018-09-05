@@ -1,26 +1,36 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2018 Greg Albiston
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package implementation.function_registration;
 
-import geo.topological.property_functions.rcc8.RccTangentialProperPartInversePF;
-import geo.topological.property_functions.rcc8.RccNonTangentialProperPartInversePF;
-import geo.topological.property_functions.rcc8.RccTangentialProperPartPF;
 import geo.topological.property_functions.rcc8.RccDisconnectedPF;
-import geo.topological.property_functions.rcc8.RccPartiallyOverlappingPF;
-import geo.topological.property_functions.rcc8.RccNonTangentialProperPartPF;
-import geo.topological.property_functions.rcc8.RccExternallyConnectedPF;
 import geo.topological.property_functions.rcc8.RccEqualsPF;
-import geof.topological.filter_functions.rcc8.RccExternallyConnectedFF;
-import geof.topological.filter_functions.rcc8.RccPartiallyOverlappingFF;
-import geof.topological.filter_functions.rcc8.RccNonTangentialProperPartFF;
-import geof.topological.filter_functions.rcc8.RccTangentialProperPartFF;
-import geof.topological.filter_functions.rcc8.RccTangentialProperPartInverseFF;
-import geof.topological.filter_functions.rcc8.RccNonTangentialProperPartInverseFF;
+import geo.topological.property_functions.rcc8.RccExternallyConnectedPF;
+import geo.topological.property_functions.rcc8.RccNonTangentialProperPartInversePF;
+import geo.topological.property_functions.rcc8.RccNonTangentialProperPartPF;
+import geo.topological.property_functions.rcc8.RccPartiallyOverlappingPF;
+import geo.topological.property_functions.rcc8.RccTangentialProperPartInversePF;
+import geo.topological.property_functions.rcc8.RccTangentialProperPartPF;
 import geof.topological.filter_functions.rcc8.RccDisconnectedFF;
 import geof.topological.filter_functions.rcc8.RccEqualsFF;
+import geof.topological.filter_functions.rcc8.RccExternallyConnectedFF;
+import geof.topological.filter_functions.rcc8.RccNonTangentialProperPartFF;
+import geof.topological.filter_functions.rcc8.RccNonTangentialProperPartInverseFF;
+import geof.topological.filter_functions.rcc8.RccPartiallyOverlappingFF;
+import geof.topological.filter_functions.rcc8.RccTangentialProperPartFF;
+import geof.topological.filter_functions.rcc8.RccTangentialProperPartInverseFF;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;
@@ -28,8 +38,8 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class RCC8 {
 

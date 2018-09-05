@@ -1,26 +1,36 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2018 Greg Albiston
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package implementation.function_registration;
 
-import geo.topological.property_functions.egenhofer.EhOverlapPF;
-import geo.topological.property_functions.egenhofer.EhMeetPF;
-import geo.topological.property_functions.egenhofer.EhCoversPF;
-import geo.topological.property_functions.egenhofer.EhEqualsPF;
-import geo.topological.property_functions.egenhofer.EhDisjointPF;
 import geo.topological.property_functions.egenhofer.EhContainsPF;
-import geo.topological.property_functions.egenhofer.EhInsidePF;
 import geo.topological.property_functions.egenhofer.EhCoveredByPF;
-import geof.topological.filter_functions.egenhofer.EhEqualsFF;
-import geof.topological.filter_functions.egenhofer.EhDisjointFF;
-import geof.topological.filter_functions.egenhofer.EhCoveredByFF;
-import geof.topological.filter_functions.egenhofer.EhInsideFF;
-import geof.topological.filter_functions.egenhofer.EhOverlapFF;
-import geof.topological.filter_functions.egenhofer.EhMeetFF;
-import geof.topological.filter_functions.egenhofer.EhCoversFF;
+import geo.topological.property_functions.egenhofer.EhCoversPF;
+import geo.topological.property_functions.egenhofer.EhDisjointPF;
+import geo.topological.property_functions.egenhofer.EhEqualsPF;
+import geo.topological.property_functions.egenhofer.EhInsidePF;
+import geo.topological.property_functions.egenhofer.EhMeetPF;
+import geo.topological.property_functions.egenhofer.EhOverlapPF;
 import geof.topological.filter_functions.egenhofer.EhContainsFF;
+import geof.topological.filter_functions.egenhofer.EhCoveredByFF;
+import geof.topological.filter_functions.egenhofer.EhCoversFF;
+import geof.topological.filter_functions.egenhofer.EhDisjointFF;
+import geof.topological.filter_functions.egenhofer.EhEqualsFF;
+import geof.topological.filter_functions.egenhofer.EhInsideFF;
+import geof.topological.filter_functions.egenhofer.EhMeetFF;
+import geof.topological.filter_functions.egenhofer.EhOverlapFF;
 import implementation.vocabulary.Geo;
 import implementation.vocabulary.Geof;
 import org.apache.jena.sparql.function.FunctionRegistry;
@@ -28,8 +38,8 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
  *
- * 
- * 
+ *
+ *
  */
 public class Egenhofer {
 

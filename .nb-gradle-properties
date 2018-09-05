@@ -12,4 +12,8 @@
       <task-jvm-args/>
     </task>
   </common-tasks>
+  <license-header>
+    <name>apache20</name>
+    <property name="organization"/>
+  </license-header>
 </gradle-project-properties>
