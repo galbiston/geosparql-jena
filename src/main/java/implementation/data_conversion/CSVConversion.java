@@ -17,7 +17,7 @@ package implementation.data_conversion;
 
 import implementation.datatype.GMLDatatype;
 import implementation.datatype.WKTDatatype;
-import rdfconverter.datatypes.DatatypeController;
+import rdftables.datatypes.DatatypeController;
 
 /**
  *

@@ -71,9 +71,9 @@ dependencies {
     ext.junitVersion = "4.12"
     testImplementation "junit:junit:$junitVersion"
 
-    //RDF Converter
-    ext.rdfConverterVersion = "1.0.0"
-    api "org.ntu:RDFConverter:$rdfConverterVersion"
+    //RDF Tables
+    ext.rdfTablesVersion = "1.0.0"
+    api "org.ntu:RDFTables:$rdfTablesVersion"
 
 }
 
