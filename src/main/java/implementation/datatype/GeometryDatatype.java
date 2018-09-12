@@ -45,10 +45,14 @@ public abstract class GeometryDatatype extends BaseDatatype implements DatatypeR
     public abstract GeometryWrapper parse(String lexicalForm, GeometryIndex targetIndex) throws DatatypeFormatException;
 
     private static final TypeMapper TYPE_MAPPER = TypeMapper.getInstance();
+    private static boolean isDatatypesRegistered = false;
 
     public static final void registerDatatypes() {
-        TYPE_MAPPER.registerDatatype(WKTDatatype.INSTANCE);
-        TYPE_MAPPER.registerDatatype(GMLDatatype.INSTANCE);
+        if (!isDatatypesRegistered) {
+            TYPE_MAPPER.registerDatatype(WKTDatatype.INSTANCE);
+            TYPE_MAPPER.registerDatatype(GMLDatatype.INSTANCE);
+            isDatatypesRegistered = true;
+        }
     }
 
     public static final GeometryDatatype get(RDFDatatype rdfDatatype) {
@@ -62,11 +66,13 @@ public abstract class GeometryDatatype extends BaseDatatype implements DatatypeR
     }
 
     public static final GeometryDatatype get(String datatypeURI) {
+        registerDatatypes();
         RDFDatatype rdfDatatype = TYPE_MAPPER.getTypeByName(datatypeURI);
         return GeometryDatatype.get(rdfDatatype);
     }
 
     public static final boolean checkURI(String datatypeURI) {
+        registerDatatypes();
         RDFDatatype rdfDatatype = TYPE_MAPPER.getTypeByName(datatypeURI);
         if (rdfDatatype != null) {
             return check(rdfDatatype);
