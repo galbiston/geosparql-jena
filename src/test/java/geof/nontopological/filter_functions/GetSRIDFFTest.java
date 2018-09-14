@@ -1,13 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
- * See the notice.md file distributed with this work for additional
- * information regarding copyright ownership.
+ * Copyright 2018 .
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +16,7 @@
 package geof.nontopological.filter_functions;
 
 import implementation.datatype.WKTDatatype;
+import implementation.vocabulary.SRS_URI;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -28,11 +27,11 @@ import org.junit.Test;
 
 /**
  *
- *
+ * @author Gerg
  */
-public class BoundaryFFTest {
+public class GetSRIDFFTest {
 
-    public BoundaryFFTest() {
+    public GetSRIDFFTest() {
     }
 
     @BeforeClass
@@ -52,15 +51,14 @@ public class BoundaryFFTest {
     }
 
     /**
-     * Test of exec method, of class BoundaryFF.
+     * Test of exec method, of class GetSRIDFF.
      */
     @Test
-    public void testExec_CRS84() {
-        System.out.println("exec_CRS84");
-
-        NodeValue v = NodeValue.makeNode("POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
-        BoundaryFF instance = new BoundaryFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING(30 40, 30 70, 90 70, 90 40, 30 40)", WKTDatatype.INSTANCE);
+    public void testExec_asserted() {
+        System.out.println("exec_asserted");
+        NodeValue v = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10 10)", WKTDatatype.INSTANCE);
+        GetSRIDFF instance = new GetSRIDFF();
+        NodeValue expResult = NodeValue.makeString("http://www.opengis.net/def/crs/EPSG/0/27700");
         NodeValue result = instance.exec(v);
 
         //System.out.println("Exp: " + expResult);
@@ -69,15 +67,14 @@ public class BoundaryFFTest {
     }
 
     /**
-     * Test of exec method, of class BoundaryFF.
+     * Test of exec method, of class GetSRIDFF.
      */
     @Test
-    public void testExec_WGS84() {
-        System.out.println("exec_WGS84");
-
-        NodeValue v = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
-        BoundaryFF instance = new BoundaryFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(30 40, 30 70, 90 70, 90 40, 30 40)", WKTDatatype.INSTANCE);
+    public void testExec_implied() {
+        System.out.println("exec_implied");
+        NodeValue v = NodeValue.makeNode("POINT(10 10)", WKTDatatype.INSTANCE);
+        GetSRIDFF instance = new GetSRIDFF();
+        NodeValue expResult = NodeValue.makeString(SRS_URI.DEFAULT_WKT_CRS84);
         NodeValue result = instance.exec(v);
 
         //System.out.println("Exp: " + expResult);
