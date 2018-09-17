@@ -1,0 +1,356 @@
+/*
+ * Copyright 2018 .
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package geosparql_jena.geo.topological;
+
+import geosparql_jena.geo.topological.property_functions.simple_features.SfContainsPF;
+import geosparql_jena.implementation.GeoSPARQLSupport;
+import geosparql_jena.implementation.datatype.WKTDatatype;
+import geosparql_jena.implementation.index.IndexConfiguration.IndexOption;
+import geosparql_jena.implementation.vocabulary.Geo;
+import org.apache.jena.graph.Graph;
+import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.vocabulary.RDF;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+/**
+ *
+ * @author Gerg
+ */
+public class GenericPropertyFunctionTest {
+
+    public GenericPropertyFunctionTest() {
+    }
+
+    private static final Model MODEL = ModelFactory.createDefaultModel();
+    private static final Resource GEOMETRY_A = ResourceFactory.createResource("http://example.org#GeometryA");
+    private static final Resource GEOMETRY_B = ResourceFactory.createResource("http://example.org#GeometryB");
+    private static final Resource GEOMETRY_C = ResourceFactory.createResource("http://example.org#GeometryC");
+    private static final Resource GEOMETRY_D = ResourceFactory.createResource("http://example.org#GeometryD");
+    private static final Resource GEOMETRY_E = ResourceFactory.createResource("http://example.org#GeometryE");
+    private static final Resource FEATURE_A = ResourceFactory.createResource("http://example.org#FeatureA");
+    private static final Resource FEATURE_B = ResourceFactory.createResource("http://example.org#FeatureB");
+    private static final Resource FEATURE_C = ResourceFactory.createResource("http://example.org#FeatureC");
+    private static final Resource FEATURE_D = ResourceFactory.createResource("http://example.org#FeatureD");
+
+    private static final Literal LITERAL_B = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(1 1)", WKTDatatype.INSTANCE);
+
+    @BeforeClass
+    public static void setUpClass() {
+
+        //Geometry
+        MODEL.add(GEOMETRY_A, Geo.HAS_SERIALIZATION_PROP, ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))", WKTDatatype.INSTANCE));
+        MODEL.add(GEOMETRY_B, Geo.HAS_SERIALIZATION_PROP, LITERAL_B);
+        MODEL.add(GEOMETRY_C, Geo.HAS_SERIALIZATION_PROP, ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(5 5)", WKTDatatype.INSTANCE));
+        MODEL.add(GEOMETRY_D, Geo.HAS_SERIALIZATION_PROP, ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(11 11)", WKTDatatype.INSTANCE));
+        MODEL.add(GEOMETRY_A, RDF.type, Geo.GEOMETRY_RES);
+        MODEL.add(GEOMETRY_B, RDF.type, Geo.GEOMETRY_RES);
+        MODEL.add(GEOMETRY_C, RDF.type, Geo.GEOMETRY_RES);
+        MODEL.add(GEOMETRY_D, RDF.type, Geo.GEOMETRY_RES);
+        MODEL.add(GEOMETRY_E, RDF.type, Geo.GEOMETRY_RES);
+
+        //Feature
+        MODEL.add(FEATURE_A, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_A);
+        MODEL.add(FEATURE_B, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_B);
+        MODEL.add(FEATURE_C, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_C);
+        MODEL.add(FEATURE_D, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_D);
+        MODEL.add(FEATURE_A, RDF.type, Geo.FEATURE_RES);
+        MODEL.add(FEATURE_B, RDF.type, Geo.FEATURE_RES);
+        MODEL.add(FEATURE_C, RDF.type, Geo.FEATURE_RES);
+        MODEL.add(FEATURE_D, RDF.type, Geo.FEATURE_RES);
+
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+    }
+
+    @Before
+    public void setUp() {
+    }
+
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_geometry_geometry() {
+        System.out.println("queryRewrite_geometry_geometry");
+        Graph graph = MODEL.getGraph();
+        Node subject = GEOMETRY_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = GEOMETRY_B.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = true;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_geometry_geometry_disabled() {
+        System.out.println("queryRewrite_geometry_geometry_disabled");
+        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.FALSE);
+        Graph graph = MODEL.getGraph();
+        Node subject = GEOMETRY_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = FEATURE_B.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = false;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.TRUE);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_feature_geometry() {
+        System.out.println("queryRewrite_feature_geometry");
+        Graph graph = MODEL.getGraph();
+        Node subject = FEATURE_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = GEOMETRY_B.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = true;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_feature_feature() {
+        System.out.println("queryRewrite_feature_feature");
+        Graph graph = MODEL.getGraph();
+        Node subject = FEATURE_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = FEATURE_B.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = true;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_geometry_feature() {
+        System.out.println("queryRewrite_geometry_feature");
+        Graph graph = MODEL.getGraph();
+        Node subject = GEOMETRY_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = FEATURE_B.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = true;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_geometry_feature_disabled() {
+        System.out.println("queryRewrite_geometry_feature_disabled");
+        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.FALSE);
+        Graph graph = MODEL.getGraph();
+        Node subject = GEOMETRY_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = FEATURE_B.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = false;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.TRUE);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_geometry_geometry_false() {
+        System.out.println("queryRewrite_geometry_geometry_false");
+        Graph graph = MODEL.getGraph();
+        Node subject = GEOMETRY_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = GEOMETRY_D.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = false;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_feature_geometry_false() {
+        System.out.println("queryRewrite_feature_geometry_false");
+        Graph graph = MODEL.getGraph();
+        Node subject = FEATURE_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = GEOMETRY_D.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = false;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_feature_feature_false() {
+        System.out.println("queryRewrite_feature_feature_false");
+        Graph graph = MODEL.getGraph();
+        Node subject = FEATURE_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = FEATURE_D.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = false;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_geometry_feature_false() {
+        System.out.println("queryRewrite_geometry_feature_false");
+        Graph graph = MODEL.getGraph();
+        Node subject = GEOMETRY_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = FEATURE_D.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = false;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of retrieveGeometryLiteral method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testRetrieveGeometryLiteral_geometry() {
+        System.out.println("retrieveGeometryLiteral_geometry");
+
+        Resource targetSpatialObject = GEOMETRY_B;
+        SpatialObjectGeometryLiteral expResult = new SpatialObjectGeometryLiteral(GEOMETRY_B, LITERAL_B);
+        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL, targetSpatialObject);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of retrieveGeometryLiteral method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testRetrieveGeometryLiteral_feature() {
+        System.out.println("retrieveGeometryLiteral_feature");
+
+        Resource targetSpatialObject = FEATURE_B;
+        SpatialObjectGeometryLiteral expResult = new SpatialObjectGeometryLiteral(FEATURE_B, LITERAL_B);
+        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL, targetSpatialObject);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of retrieveGeometryLiteral method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testRetrieveGeometryLiteral_missing_property() {
+        System.out.println("retrieveGeometryLiteral_missing_property");
+
+        Resource targetSpatialObject = ResourceFactory.createResource("http://example.org#GeometryE");
+        SpatialObjectGeometryLiteral expResult = null;
+        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL, targetSpatialObject);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of retrieveGeometryLiteral method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testRetrieveGeometryLiteral_not_feature_geometry() {
+        System.out.println("retrieveGeometryLiteral_not_feature_geometry");
+
+        Resource targetSpatialObject = ResourceFactory.createResource("http://example.org#X");
+        SpatialObjectGeometryLiteral expResult = null;
+        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL, targetSpatialObject);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+}

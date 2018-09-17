@@ -18,6 +18,7 @@
 package geosparql_jena.geo.topological;
 
 import geosparql_jena.geof.topological.GenericFilterFunction;
+import geosparql_jena.implementation.GeoSPARQLSupport;
 import geosparql_jena.implementation.index.QueryRewriteIndex;
 import geosparql_jena.implementation.vocabulary.Geo;
 import java.util.ArrayList;
@@ -85,24 +86,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             return QueryIterSingleton.create(binding, execCxt);
         }
 
-        Model model = ModelFactory.createModelForGraph(graph);
-        Resource subjectSpatialObject = ResourceFactory.createResource(subject.getURI());
-        SpatialObjectGeometryLiteral subjectSpatialLiteral = retrieveGeometryLiteral(model, subjectSpatialObject);
-        if (subjectSpatialLiteral == null) {
-            //Subject is not a Feature or a Geometry so exit.
-            return QueryIterNullIterator.create(execCxt);
-        }
-
-        Resource objectSpatialObject = ResourceFactory.createResource(object.getURI());
-        SpatialObjectGeometryLiteral objectSpatialLiteral = retrieveGeometryLiteral(model, objectSpatialObject);
-        if (objectSpatialLiteral == null) {
-            //Object is not a Feature or a Geometry so exit.
-            return QueryIterNullIterator.create(execCxt);
-        }
-
-        //Check the QueryRewriteIndex for the result.
-        Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
-        Boolean isPositiveResult = QueryRewriteIndex.test(subjectSpatialLiteral.getGeometryLiteral(), predicateProp, objectSpatialLiteral.getGeometryLiteral(), this);
+        Boolean isPositiveResult = queryRewrite(graph, subject, predicate, object);
         if (isPositiveResult) {
             //Filter function test succeded so retain binding.
             return QueryIterSingleton.create(binding, execCxt);
@@ -185,7 +169,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
      * @param targetSpatialObject
      * @return
      */
-    private SpatialObjectGeometryLiteral retrieveGeometryLiteral(Model model, Resource targetSpatialObject) {
+    protected static final SpatialObjectGeometryLiteral retrieveGeometryLiteral(Model model, Resource targetSpatialObject) {
 
         try {
             if (model.contains(targetSpatialObject, RDF.type, Geo.FEATURE_RES)) {
@@ -203,6 +187,35 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         //Target resource isn't a Feature or Geometry so ignore.
         return null;
 
+    }
+
+    protected Boolean queryRewrite(Graph graph, Node subject, Node predicate, Node object) {
+
+        //If query re-writing is disabled then exit.
+        if (!GeoSPARQLSupport.isQueryRewriteEnabled()) {
+            return false;
+        }
+
+        //Begin Query Re-write by finding the literals of the Feature or Geometry.
+        Model model = ModelFactory.createModelForGraph(graph);
+        Resource subjectSpatialObject = ResourceFactory.createResource(subject.getURI());
+        SpatialObjectGeometryLiteral subjectSpatialLiteral = retrieveGeometryLiteral(model, subjectSpatialObject);
+        if (subjectSpatialLiteral == null) {
+            //Subject is not a Feature or a Geometry so exit.
+            return false;
+        }
+
+        Resource objectSpatialObject = ResourceFactory.createResource(object.getURI());
+        SpatialObjectGeometryLiteral objectSpatialLiteral = retrieveGeometryLiteral(model, objectSpatialObject);
+        if (objectSpatialLiteral == null) {
+            //Object is not a Feature or a Geometry so exit.
+            return false;
+        }
+
+        //Check the QueryRewriteIndex for the result.
+        Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
+        Boolean isPositive = QueryRewriteIndex.test(subjectSpatialLiteral.getGeometryLiteral(), predicateProp, objectSpatialLiteral.getGeometryLiteral(), this);
+        return isPositive;
     }
 
     public Boolean testFilterFunction(Literal subjectGeometryLiteral, Literal objectGeometryLiteral) {

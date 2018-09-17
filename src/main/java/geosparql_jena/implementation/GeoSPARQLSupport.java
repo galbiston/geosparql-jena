@@ -50,6 +50,7 @@ public class GeoSPARQLSupport {
      */
     private static final String GEOSPARQL_SCHEMA = "schema/geosparql_vocab_all_v1_0_1_updated.rdf";
     private static Boolean IS_FUNCTIONS_REGISTERED = false;
+    private static Boolean IS_QUERY_REWRITE_ENABLED = true;
 
     /**
      * Prepare an empty GeoSPARQL model with RDFS reasoning.
@@ -149,11 +150,11 @@ public class GeoSPARQLSupport {
     /**
      * Initialise all GeoSPARQL property and filter functions with memory
      * indexing.
-     * <br>Use this for in-memory indexing GeoSPARQL setup.
+     * <br>Use this for in-memory indexing GeoSPARQL setup. Query re-write
+     * enabled.
      */
     public static final void loadFunctionsMemoryIndex() {
-        loadFunctions(IndexOption.MEMORY);
-        IndexConfiguration.setupMemoryIndex();
+        loadFunctions(IndexOption.MEMORY, true);
     }
 
     /**
@@ -167,7 +168,7 @@ public class GeoSPARQLSupport {
      * @param queryRewriteIndex
      */
     public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
-        loadFunctions(IndexOption.MEMORY);
+        loadFunctions(IndexOption.MEMORY, true);
         IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
     }
 
@@ -176,20 +177,18 @@ public class GeoSPARQLSupport {
      * <br>Use this for no indexing GeoSPARQL setup.
      */
     public static final void loadFunctionsNoIndex() {
-        loadFunctions(IndexOption.NONE);
+        loadFunctions(IndexOption.NONE, true);
     }
 
     /**
-     * Initialise all GeoSPARQL property and filter functions. Store any indexes
-     * in the specified folder.
-     * <br>Use this for persisting indexes such as a TDB setup or storing memory
-     * indexes to file at shutdown.
-     * <br>Warning: When set to NONE, any previously setup index folders will be
-     * deleted.
+     * Initialise all GeoSPARQL property and filter functions.
      *
      * @param indexOption
+     * @param isQueryRewriteEnabled
      */
-    public static final void loadFunctions(IndexOption indexOption) {
+    public static final void loadFunctions(IndexOption indexOption, Boolean isQueryRewriteEnabled) {
+
+        IS_QUERY_REWRITE_ENABLED = isQueryRewriteEnabled;
 
         //Set the configuration for indexing.
         IndexConfiguration.setConfig(indexOption);
@@ -228,6 +227,10 @@ public class GeoSPARQLSupport {
     public static final void resetIndexesAndRegistries() {
         //Convenience method so that setup and clearing in one class.
         IndexConfiguration.resetIndexesAndRegistries();
+    }
+
+    public static Boolean isQueryRewriteEnabled() {
+        return IS_QUERY_REWRITE_ENABLED;
     }
 
 }
