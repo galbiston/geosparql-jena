@@ -58,7 +58,6 @@ public class GeometryWrapperTest {
 
     @Before
     public void setUp() {
-        GeoSPARQLSupport.loadFunctionsNoIndex();
     }
 
     @After
