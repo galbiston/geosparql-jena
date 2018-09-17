@@ -17,6 +17,7 @@
  */
 package geosparql_jena.geo.topological;
 
+import java.util.Objects;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
 
@@ -40,6 +41,32 @@ public class SpatialObjectGeometryLiteral {
 
     public Literal getGeometryLiteral() {
         return geometryLiteral;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.spatialObject);
+        hash = 23 * hash + Objects.hashCode(this.geometryLiteral);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SpatialObjectGeometryLiteral other = (SpatialObjectGeometryLiteral) obj;
+        if (!Objects.equals(this.spatialObject, other.spatialObject)) {
+            return false;
+        }
+        return Objects.equals(this.geometryLiteral, other.geometryLiteral);
     }
 
     @Override
