@@ -180,18 +180,6 @@ public class GeoSPARQLSupport {
     }
 
     /**
-     * Switch off indexing when parsing Geometry Literals etc. No GeoSPARQL
-     * functions loaded.
-     */
-    public static final void noIndex() {
-        IndexConfiguration.setConfig(IndexOption.NONE);
-        //Setup Default Cordinate Reference Systems
-        CRSRegistry.setupDefaultCRS();
-        CSVConversion.registerDatatypes();
-        GeometryDatatype.registerDatatypes();
-    }
-
-    /**
      * Initialise all GeoSPARQL property and filter functions. Store any indexes
      * in the specified folder.
      * <br>Use this for persisting indexes such as a TDB setup or storing memory

@@ -94,7 +94,7 @@ public class ConvertData {
         }
 
         //Setup CRS registries but without indexing.
-        GeoSPARQLSupport.noIndex();
+        GeoSPARQLSupport.loadFunctionsNoIndex();
 
         //Iterate through all statements: convert geometry literals and just add the rest.
         Model outputModel = ModelFactory.createDefaultModel();

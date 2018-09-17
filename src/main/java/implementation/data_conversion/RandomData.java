@@ -69,7 +69,7 @@ public class RandomData {
             }
         }
 
-        GeoSPARQLSupport.noIndex();
+        GeoSPARQLSupport.loadFunctionsNoIndex();
         Model model = ModelFactory.createDefaultModel();
         Model geosparqlSchema = RDFDataMgr.loadModel(geosparpqlSchema.getAbsolutePath());
         InfModel infModel = ModelFactory.createRDFSModel(geosparqlSchema, model);
