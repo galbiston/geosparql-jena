@@ -55,6 +55,40 @@ public class EhCoveredByPFTest {
     //No Polygon-Point
     //No Polygon-Linestring
     @Test
+    public void testFilterFunction_point_polygon() {
+        System.out.println("filterFunction_point_polygon");
+
+        Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE);
+        Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
+
+        EhInsidePF instance = new EhInsidePF();
+
+        Boolean expResult = true;
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testFilterFunction_linestring_polygon() {
+        System.out.println("filterFunction_linestring_polygon");
+
+        Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 80 50)", WKTDatatype.INSTANCE);
+        Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
+
+        EhInsidePF instance = new EhInsidePF();
+
+        Boolean expResult = true;
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
     public void testFilterFunction_polygon_polygon() {
         System.out.println("filterFunction_polygon_polygon");
 

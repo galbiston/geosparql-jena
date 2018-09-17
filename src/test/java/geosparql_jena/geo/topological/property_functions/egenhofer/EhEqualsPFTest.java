@@ -28,12 +28,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Contains returns t (TRUE) if the second geometry is completely contained by
- * the first geometry.
+ * Equal returns t (TRUE) if two geometries of the same type have identical X,Y
+ * coordinate values.
  */
-public class EhContainsPFTest {
+public class EhEqualsPFTest {
 
-    public EhContainsPFTest() {
+    public EhEqualsPFTest() {
     }
 
     @BeforeClass
@@ -53,13 +53,13 @@ public class EhContainsPFTest {
     }
 
     @Test
-    public void testFilterFunction_polygon_point() {
-        System.out.println("filterFunction_polygon_point");
+    public void testFilterFunction_point_point() {
+        System.out.println("filterFunction_point_point");
 
-        Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
+        Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE);
 
-        EhContainsPF instance = new EhContainsPF();
+        EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = true;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
@@ -70,13 +70,13 @@ public class EhContainsPFTest {
     }
 
     @Test
-    public void testFilterFunction_polygon_linestring() {
-        System.out.println("filterFunction_polygon_linestring");
+    public void testFilterFunction_linestring_linestring() {
+        System.out.println("filterFunction_polygon_polygon");
 
-        Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
-        Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 80 50)", WKTDatatype.INSTANCE);
+        Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 80 50)", WKTDatatype.INSTANCE);
+        Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 60 50, 80 50)", WKTDatatype.INSTANCE);
 
-        EhContainsPF instance = new EhContainsPF();
+        EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = true;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
@@ -91,11 +91,45 @@ public class EhContainsPFTest {
         System.out.println("filterFunction_polygon_polygon");
 
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE);
-        Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((145 30, 145 40, 160 40, 160 30, 145 30))", WKTDatatype.INSTANCE);
+        Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE);
 
-        EhContainsPF instance = new EhContainsPF();
+        EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = true;
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testFilterFunction_point_point_false() {
+        System.out.println("filterFunction_point_point_false");
+
+        Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE);
+        Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(65 65)", WKTDatatype.INSTANCE);
+
+        EhEqualsPF instance = new EhEqualsPF();
+
+        Boolean expResult = false;
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testFilterFunction_linestring_linestring_false() {
+        System.out.println("filterFunction_linestring_linestring");
+
+        Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(50 50, 60 50, 80 50)", WKTDatatype.INSTANCE);
+        Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 60 50, 80 50)", WKTDatatype.INSTANCE);
+
+        EhEqualsPF instance = new EhEqualsPF();
+
+        Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
 
         //System.out.println("Exp: " + expResult);
@@ -110,7 +144,7 @@ public class EhContainsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(30 20)", WKTDatatype.INSTANCE);
 
-        EhContainsPF instance = new EhContainsPF();
+        EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
@@ -127,7 +161,7 @@ public class EhContainsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(75 60, 145 60)", WKTDatatype.INSTANCE);
 
-        EhContainsPF instance = new EhContainsPF();
+        EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
@@ -144,7 +178,7 @@ public class EhContainsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE);
 
-        EhContainsPF instance = new EhContainsPF();
+        EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
