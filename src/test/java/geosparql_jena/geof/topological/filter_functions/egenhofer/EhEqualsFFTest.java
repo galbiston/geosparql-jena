@@ -57,7 +57,7 @@ public class EhEqualsFFTest {
     }
 
     @Test
-    public void relate_point_point() throws FactoryException, MismatchedDimensionException, TransformException {
+    public void testrelate_point_point() throws FactoryException, MismatchedDimensionException, TransformException {
         System.out.println("filterFunction_point_point");
 
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE));
@@ -74,7 +74,7 @@ public class EhEqualsFFTest {
     }
 
     @Test
-    public void relate_linestring_linestring() throws FactoryException, MismatchedDimensionException, TransformException {
+    public void testrelate_linestring_linestring() throws FactoryException, MismatchedDimensionException, TransformException {
         System.out.println("filterFunction_polygon_polygon");
 
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 80 50)", WKTDatatype.INSTANCE));
@@ -91,7 +91,7 @@ public class EhEqualsFFTest {
     }
 
     @Test
-    public void relate_polygon_polygon() throws FactoryException, MismatchedDimensionException, TransformException {
+    public void testrelate_polygon_polygon() throws FactoryException, MismatchedDimensionException, TransformException {
         System.out.println("filterFunction_polygon_polygon");
 
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE));
@@ -108,7 +108,7 @@ public class EhEqualsFFTest {
     }
 
     @Test
-    public void relate_point_point_false() throws FactoryException, MismatchedDimensionException, TransformException {
+    public void testrelate_point_point_false() throws FactoryException, MismatchedDimensionException, TransformException {
         System.out.println("filterFunction_point_point_false");
 
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE));
@@ -125,7 +125,7 @@ public class EhEqualsFFTest {
     }
 
     @Test
-    public void relate_linestring_linestring_false() throws FactoryException, MismatchedDimensionException, TransformException {
+    public void testrelate_linestring_linestring_false() throws FactoryException, MismatchedDimensionException, TransformException {
         System.out.println("filterFunction_linestring_linestring");
 
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(50 50, 60 50, 80 50)", WKTDatatype.INSTANCE));
@@ -142,7 +142,7 @@ public class EhEqualsFFTest {
     }
 
     @Test
-    public void relate_polygon_point_false() throws FactoryException, MismatchedDimensionException, TransformException {
+    public void testrelate_polygon_point_false() throws FactoryException, MismatchedDimensionException, TransformException {
         System.out.println("filterFunction_polygon_point_false");
 
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE));
@@ -159,7 +159,7 @@ public class EhEqualsFFTest {
     }
 
     @Test
-    public void relate_polygon_linestring_false() throws FactoryException, MismatchedDimensionException, TransformException {
+    public void testrelate_polygon_linestring_false() throws FactoryException, MismatchedDimensionException, TransformException {
         System.out.println("filterFunction_polygon_linestring_false");
 
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE));
@@ -176,7 +176,7 @@ public class EhEqualsFFTest {
     }
 
     @Test
-    public void relate_polygon_polygon_false() throws FactoryException, MismatchedDimensionException, TransformException {
+    public void testrelate_polygon_polygon_false() throws FactoryException, MismatchedDimensionException, TransformException {
         System.out.println("filterFunction_polygon_polygon_false");
 
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE));
