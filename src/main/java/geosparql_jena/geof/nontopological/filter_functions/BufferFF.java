@@ -1,0 +1,73 @@
+/*
+ * Copyright 2018 the original author or authors.
+ * See the notice.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package geosparql_jena.geof.nontopological.filter_functions;
+
+import geosparql_jena.implementation.GeometryWrapper;
+import java.lang.invoke.MethodHandles;
+import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.expr.NodeValue;
+import org.apache.jena.sparql.function.FunctionBase3;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ *
+ * Return type ogc:geomLiteral ogc:geomLiteral can be a string value like
+ * "<gml:Point ...>...</gml:Point>"
+ *
+ *
+ *
+ */
+public class BufferFF extends FunctionBase3 {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    @Override
+    public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
+
+        try {
+            GeometryWrapper geometry = GeometryWrapper.extract(v1);
+            if (geometry == null) {
+                return NodeValue.nvEmptyString;
+            }
+
+            //Transfer the parameters as Nodes
+            if (!v2.isDouble()) {
+                return NodeValue.nvEmptyString;
+            }
+            Node node2 = v2.asNode();
+            double radius = Double.parseDouble(node2.getLiteralLexicalForm());
+
+            //Obtain the target distance units
+            if (!v3.isIRI()) {
+                return NodeValue.nvEmptyString;
+            }
+            String unitsURI = v3.getNode().getURI();
+            GeometryWrapper buffer = geometry.buffer(radius, unitsURI);
+
+            return buffer.asNode();
+        } catch (FactoryException | MismatchedDimensionException | TransformException dfx) {
+            LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, dfx.getMessage());
+            return NodeValue.nvEmptyString;
+        }
+
+    }
+}
