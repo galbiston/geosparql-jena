@@ -18,6 +18,7 @@
 package implementation.data_conversion;
 
 import implementation.datatype.GMLDatatype;
+import implementation.datatype.GeometryDatatype;
 import implementation.datatype.WKTDatatype;
 import rdftables.datatypes.DatatypeController;
 
@@ -30,6 +31,7 @@ public class CSVConversion {
     public static final void registerDatatypes() {
         DatatypeController.addPrefixDatatype("wkt", WKTDatatype.URI);
         DatatypeController.addPrefixDatatype("gml", GMLDatatype.URI);
+        GeometryDatatype.registerDatatypes();
     }
 
 }
