@@ -109,12 +109,52 @@ public class DimensionInfo implements Serializable {
         return "DimensionInfo{" + "coordinate=" + coordinate + ", spatial=" + spatial + ", topological=" + topological + '}';
     }
 
-    public static DimensionInfo xyPoint() {
+    public static DimensionInfo XY_POINT() {
         return new DimensionInfo(2, 2, 0);
     }
 
-    public static DimensionInfo xyzPoint() {
+    public static DimensionInfo XYZ_POINT() {
         return new DimensionInfo(3, 3, 0);
+    }
+
+    public static DimensionInfo XYM_POINT() {
+        return new DimensionInfo(3, 2, 0);
+    }
+
+    public static DimensionInfo XYZM_POINT() {
+        return new DimensionInfo(4, 3, 0);
+    }
+
+    public static DimensionInfo XY_LINESTRING() {
+        return new DimensionInfo(2, 2, 1);
+    }
+
+    public static DimensionInfo XYZ_LINESTRING() {
+        return new DimensionInfo(3, 3, 1);
+    }
+
+    public static DimensionInfo XYM_LINESTRING() {
+        return new DimensionInfo(3, 2, 1);
+    }
+
+    public static DimensionInfo XYZM_LINESTRING() {
+        return new DimensionInfo(4, 3, 1);
+    }
+
+    public static DimensionInfo XY_POLYGON() {
+        return new DimensionInfo(2, 2, 2);
+    }
+
+    public static DimensionInfo XYZ_POLYGON() {
+        return new DimensionInfo(3, 3, 2);
+    }
+
+    public static DimensionInfo XYM_POLYGON() {
+        return new DimensionInfo(3, 2, 2);
+    }
+
+    public static DimensionInfo XYZM_POLYGON() {
+        return new DimensionInfo(4, 3, 2);
     }
 
 }
