@@ -29,8 +29,8 @@ import rdftables.datatypes.DatatypeController;
 public class CSVConversion {
 
     public static final void registerDatatypes() {
-        DatatypeController.addPrefixDatatype("wkt", WKTDatatype.URI);
-        DatatypeController.addPrefixDatatype("gml", GMLDatatype.URI);
+        DatatypeController.addPrefixDatatype("wkt", WKTDatatype.INSTANCE);
+        DatatypeController.addPrefixDatatype("gml", GMLDatatype.INSTANCE);
         GeometryDatatype.registerDatatypes();
     }
 
