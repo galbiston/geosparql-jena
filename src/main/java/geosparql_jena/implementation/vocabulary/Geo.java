@@ -55,12 +55,21 @@ public interface Geo {
     public static final String SF_CONTAINS_NAME = GEO_URI + "sfContains";
     public static final String SF_INTERSECTS_NAME = GEO_URI + "sfIntersects";
     public static final String SF_EQUALS_NAME = GEO_URI + "sfEquals";
-
     public static final String SF_TOUCHES_NAME = GEO_URI + "sfTouches";
     public static final String SF_DISJOINT_NAME = GEO_URI + "sfDisjoint";
     public static final String SF_OVERLAPS_NAME = GEO_URI + "sfOverlaps";
     public static final String SF_CROSSES_NAME = GEO_URI + "sfCrosses";
     public static final String SF_WITHIN_NAME = GEO_URI + "sfWithin";
+
+    //Simple Feature Topological function properties:
+    public static final Property SF_CONTAINS_PROP = ResourceFactory.createProperty(SF_CONTAINS_NAME);
+    public static final Property SF_INTERSECTS_PROP = ResourceFactory.createProperty(SF_INTERSECTS_NAME);
+    public static final Property SF_EQUALS_PROP = ResourceFactory.createProperty(SF_EQUALS_NAME);
+    public static final Property SF_TOUCHES_PROP = ResourceFactory.createProperty(SF_TOUCHES_NAME);
+    public static final Property SF_DISJOINT_PROP = ResourceFactory.createProperty(SF_DISJOINT_NAME);
+    public static final Property SF_OVERLAPS_PROP = ResourceFactory.createProperty(SF_OVERLAPS_NAME);
+    public static final Property SF_CROSSES_PROP = ResourceFactory.createProperty(SF_CROSSES_NAME);
+    public static final Property SF_WITHIN_PROP = ResourceFactory.createProperty(SF_WITHIN_NAME);
 
     //Egenhofer Topological function names:
     public static final String EH_DISJOINT_NAME = GEO_URI + "ehDisjoint";
@@ -72,6 +81,16 @@ public interface Geo {
     public static final String EH_INSIDE_NAME = GEO_URI + "ehInside";
     public static final String EH_MEET_NAME = GEO_URI + "ehMeet";
 
+    //Egenhofer Topological function properties:
+    public static final Property EH_DISJOINT_PROP = ResourceFactory.createProperty(EH_DISJOINT_NAME);
+    public static final Property EH_CONTAINS_PROP = ResourceFactory.createProperty(EH_CONTAINS_NAME);
+    public static final Property EH_COVERED_BY_PROP = ResourceFactory.createProperty(EH_COVERED_BY_NAME);
+    public static final Property EH_EQUALS_PROP = ResourceFactory.createProperty(EH_EQUALS_NAME);
+    public static final Property EH_OVERLAP_PROP = ResourceFactory.createProperty(EH_OVERLAP_NAME);
+    public static final Property EH_COVERS_PROP = ResourceFactory.createProperty(EH_COVERS_NAME);
+    public static final Property EH_INSIDE_PROP = ResourceFactory.createProperty(EH_INSIDE_NAME);
+    public static final Property EH_MEET_PROP = ResourceFactory.createProperty(EH_MEET_NAME);
+
     //RCC8 Topological function names:
     public static final String RCC_DISCONNECTED_NAME = GEO_URI + "rcc8dc";
     public static final String RCC_NTANPROPERPART_NAME = GEO_URI + "rcc8ntpp";
@@ -81,6 +100,16 @@ public interface Geo {
     public static final String RCC_EQUALS_NAME = GEO_URI + "rcc8eq";
     public static final String RCC_PARTIALLY_OVERLAPPING_NAME = GEO_URI + "rcc8po";
     public static final String RCC_EXTERNALLY_CONNECTED_NAME = GEO_URI + "rcc8ec";
+
+    //RCC8 Topological function properties:
+    public static final Property RCC_DISCONNECTED_PROP = ResourceFactory.createProperty(RCC_DISCONNECTED_NAME);
+    public static final Property RCC_NTANPROPERPART_PROP = ResourceFactory.createProperty(RCC_NTANPROPERPART_NAME);
+    public static final Property RCC_NTANPROPERPARTINVERSE_PROP = ResourceFactory.createProperty(RCC_NTANPROPERPARTINVERSE_NAME);
+    public static final Property RCC_TANPROPERPART_PROP = ResourceFactory.createProperty(RCC_TANPROPERPART_NAME);
+    public static final Property RCC_TANPROPERPARTINVERSE_PROP = ResourceFactory.createProperty(RCC_TANPROPERPARTINVERSE_NAME);
+    public static final Property RCC_EQUALS_PROP = ResourceFactory.createProperty(RCC_EQUALS_NAME);
+    public static final Property RCC_PARTIALLY_OVERLAPPING_PROP = ResourceFactory.createProperty(RCC_PARTIALLY_OVERLAPPING_NAME);
+    public static final Property RCC_EXTERNALLY_CONNECTED_PROP = ResourceFactory.createProperty(RCC_EXTERNALLY_CONNECTED_NAME);
 
     //Topological DE-9IM function: relate
     public static final String RELATE_NAME = GEO_URI + "relate";
