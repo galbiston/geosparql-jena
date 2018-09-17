@@ -105,7 +105,7 @@ public class GeometryWrapper implements Serializable {
      * @param geometryDatatypeURI
      */
     public GeometryWrapper(Geometry geometry, String geometryDatatypeURI) {
-        this(geometry, "", geometryDatatypeURI, DimensionInfo.xyPoint());
+        this(geometry, "", geometryDatatypeURI, DimensionInfo.XY_POINT());
     }
 
     /**
@@ -116,7 +116,7 @@ public class GeometryWrapper implements Serializable {
      * @param geometryDatatypeURI
      */
     public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI) {
-        this(geometry, srsURI, geometryDatatypeURI, DimensionInfo.xyPoint());
+        this(geometry, srsURI, geometryDatatypeURI, DimensionInfo.XY_POINT());
     }
 
     transient private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
@@ -129,7 +129,7 @@ public class GeometryWrapper implements Serializable {
      * @param dimensionInfo
      */
     public GeometryWrapper(String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo) {
-        this(new CustomCoordinateSequence(DimensionInfo.xyPoint().getDimensions()), geometryDatatypeURI, srsURI);
+        this(new CustomCoordinateSequence(DimensionInfo.XY_POINT().getDimensions()), geometryDatatypeURI, srsURI);
     }
 
     /**
@@ -140,7 +140,7 @@ public class GeometryWrapper implements Serializable {
      * @param srsURI
      */
     public GeometryWrapper(CustomCoordinateSequence pointCoordinateSequence, String geometryDatatypeURI, String srsURI) {
-        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, geometryDatatypeURI, DimensionInfo.xyPoint());
+        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, geometryDatatypeURI, DimensionInfo.XY_POINT());
     }
 
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
