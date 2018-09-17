@@ -56,7 +56,6 @@ public abstract class GeometryDatatype extends BaseDatatype implements DatatypeR
     }
 
     public static final GeometryDatatype get(RDFDatatype rdfDatatype) {
-        registerDatatypes();
         if (rdfDatatype instanceof GeometryDatatype) {
             return (GeometryDatatype) rdfDatatype;
         } else {
