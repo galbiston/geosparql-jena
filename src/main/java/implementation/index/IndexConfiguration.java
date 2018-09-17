@@ -54,15 +54,12 @@ public class IndexConfiguration {
         GeometryLiteralIndex.setMaxSize(NO_INDEX);
         GeometryTransformIndex.setMaxSize(NO_INDEX);
         QueryRewriteIndex.setMaxSize(NO_INDEX);
-        SpatialIndex.setActive(false);
     }
 
     public static void setupMemoryIndex() {
         GeometryLiteralIndex.setMaxSize(UNLIMITED_INDEX);
         GeometryTransformIndex.setMaxSize(UNLIMITED_INDEX);
         QueryRewriteIndex.setMaxSize(UNLIMITED_INDEX);
-        //Spatial index switched off, needs  reactiviating in GenericFilterFunction:exec as well.
-        SpatialIndex.setActive(false);
     }
 
     /**
@@ -72,13 +69,11 @@ public class IndexConfiguration {
      * @param geometryLiteralIndex
      * @param geometryTransformIndex
      * @param queryRewriteIndex
-     * @param spatialIndexActive
      */
-    public static final void setIndexMaxSize(int geometryLiteralIndex, int geometryTransformIndex, int queryRewriteIndex, boolean spatialIndexActive) {
+    public static final void setIndexMaxSize(int geometryLiteralIndex, int geometryTransformIndex, int queryRewriteIndex) {
         GeometryLiteralIndex.setMaxSize(geometryLiteralIndex);
         GeometryTransformIndex.setMaxSize(geometryTransformIndex);
         QueryRewriteIndex.setMaxSize(queryRewriteIndex);
-        SpatialIndex.setActive(spatialIndexActive);
     }
 
     /**

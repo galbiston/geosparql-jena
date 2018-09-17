@@ -28,12 +28,9 @@ import implementation.function_registration.Relate;
 import implementation.function_registration.SimpleFeatures;
 import implementation.index.IndexConfiguration;
 import implementation.index.IndexConfiguration.IndexOption;
-import implementation.index.SpatialIndex;
 import implementation.registry.CRSRegistry;
 import implementation.vocabulary.Geo;
-import java.io.File;
 import java.io.InputStream;
-import org.apache.jena.query.Dataset;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -41,7 +38,6 @@ import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
-import org.apache.jena.tdb.TDBFactory;
 
 /**
  *
@@ -147,9 +143,6 @@ public class GeoSPARQLSupport {
         //Setup inference model.
         InfModel infModel = ModelFactory.createInfModel(reasoner, model);
 
-        //Build spatial index.
-        SpatialIndex.build(infModel, "Model");
-
         return infModel;
     }
 
@@ -172,11 +165,10 @@ public class GeoSPARQLSupport {
      * @param geometryLiteralIndex
      * @param geometryTransformIndex
      * @param queryRewriteIndex
-     * @param spatialIndexActive
      */
-    public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex, Boolean spatialIndexActive) {
+    public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
         loadFunctions(IndexOption.MEMORY);
-        IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex, spatialIndexActive);
+        IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
     }
 
     /**
@@ -197,16 +189,6 @@ public class GeoSPARQLSupport {
         CRSRegistry.setupDefaultCRS();
         CSVConversion.registerDatatypes();
         GeometryDatatype.registerDatatypes();
-    }
-
-    public static final void loadFunctions(IndexOption indexOption, File tdbFolder) {
-        Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
-        loadFunctions(indexOption, dataset);
-    }
-
-    public static final void loadFunctions(IndexOption indexOption, Dataset dataset) {
-        loadFunctions(indexOption);
-        SpatialIndex.prepare(dataset);
     }
 
     /**

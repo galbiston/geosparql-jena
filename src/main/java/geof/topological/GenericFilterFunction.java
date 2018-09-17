@@ -41,18 +41,7 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
         try {
-            //Spatial index switched off, needs  reactiviating in IndexConfiguration:setupMemoryIndex as well.
-            /*
-            //Check spatial index.
-            if (!isDisconnected()) {
-                CollisionResult collisionResult = SpatialIndex.checkCollision(v1, v2, isDisjoint());
-                if (collisionResult == CollisionResult.FALSE_RELATION) {
-                    return NodeValue.FALSE;
-                } else if (collisionResult == CollisionResult.TRUE_RELATION) {
-                    return NodeValue.TRUE;
-                }
-            }
-             */
+
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return NodeValue.FALSE;
@@ -79,17 +68,6 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
     public Boolean exec(Literal v1, Literal v2) {
         try {
 
-            //Spatial index switched off, needs  reactiviating in IndexConfiguration:setupMemoryIndex as well.
-            /*
-            if (!isDisconnected()) {
-                CollisionResult collisionResult = SpatialIndex.checkCollision(v1, v2, isDisjoint());
-                if (collisionResult == CollisionResult.FALSE_RELATION) {
-                    return Boolean.FALSE;
-                } else if (collisionResult == CollisionResult.TRUE_RELATION) {
-                    return Boolean.TRUE;
-                }
-            }
-             */
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
                 return Boolean.FALSE;

@@ -17,7 +17,6 @@
  */
 package implementation;
 
-import implementation.index.SpatialIndex;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -111,12 +110,6 @@ public class DatasetHandler {
         }
     }
 
-    public static void buildSpatialIndexTDB(File datasetFolder) {
-        Dataset dataset = TDBFactory.createDataset(datasetFolder.getAbsolutePath());
-        SpatialIndex.build(dataset);
-        SpatialIndex.write(datasetFolder);
-    }
-
     public static Boolean clearDataset(File datasetFolder) {
 
         Dataset dataset = TDBFactory.createDataset(datasetFolder.getAbsolutePath());
@@ -141,7 +134,6 @@ public class DatasetHandler {
 
         dataset.close();
         TDBFactory.release(dataset);
-        SpatialIndex.deleteIndexFile(datasetFolder);
         return isCleared;
     }
 
