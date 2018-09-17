@@ -31,7 +31,7 @@ import org.apache.jena.rdf.model.Property;
 public class QueryRewriteIndex {
 
     private static Boolean IS_INDEX_ACTIVE = true;
-    private static final String QUERY_REWRITE_LABEL = "Geometry Transform";
+    private static final String QUERY_REWRITE_LABEL = "Query Rewrite";
     private static ExpiringIndex<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, QUERY_REWRITE_LABEL);
     public static Long RETRIEVAL_COUNT = 0L;
 
