@@ -163,6 +163,17 @@ public class GeoSPARQLSupport {
         IndexConfiguration.setupMemoryIndex();
     }
 
+    /**
+     * Initialise all GeoSPARQL property and filter functions with memory
+     * indexing.
+     * <br>Use this for in-memory indexing GeoSPARQL setup and to control the
+     * index sizes.
+     *
+     * @param geometryLiteralIndex
+     * @param geometryTransformIndex
+     * @param queryRewriteIndex
+     * @param spatialIndexActive
+     */
     public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex, Boolean spatialIndexActive) {
         loadFunctions(IndexOption.MEMORY);
         IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex, spatialIndexActive);
@@ -171,7 +182,6 @@ public class GeoSPARQLSupport {
     /**
      * Initialise all GeoSPARQL property and filter functions with no indexing.
      * <br>Use this for no indexing GeoSPARQL setup.
-     * <br>Warning: Any previously setup index folders will be deleted.
      */
     public static final void loadFunctionsNoIndex() {
         loadFunctions(IndexOption.NONE);
