@@ -73,7 +73,7 @@ dependencies {
 
     //RDF Tables
     ext.rdfTablesVersion = "1.0.0"
-    api "org.ntu:RDFTables:$rdfTablesVersion"
+    api "io.github.galbiston:RDFTables:$rdfTablesVersion"
 
 }
 
