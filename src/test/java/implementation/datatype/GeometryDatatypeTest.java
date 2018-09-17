@@ -17,7 +17,6 @@
  */
 package implementation.datatype;
 
-import implementation.GeoSPARQLSupport;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
@@ -40,7 +39,6 @@ public class GeometryDatatypeTest {
 
     @BeforeClass
     public static void setUpClass() {
-        GeoSPARQLSupport.loadFunctionsNoIndex();
     }
 
     @AfterClass
