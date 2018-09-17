@@ -18,20 +18,12 @@
 package implementation.registry;
 
 import implementation.vocabulary.SRS_URI;
-import java.lang.reflect.Type;
-import javax.measure.Quantity;
-import javax.measure.Unit;
-import javax.measure.quantity.Angle;
-import javax.measure.quantity.Length;
-import org.apache.sis.measure.Quantities;
-import org.apache.sis.measure.Units;
 import org.apache.sis.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.util.FactoryException;
@@ -109,54 +101,6 @@ public class CRSRegistryTest {
         } catch (FactoryException ex) {
             System.out.println("Default WKT CRS error: " + ex.getMessage());
         }
-    }
-
-    @Ignore
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testCRS() {
-        System.out.println("extractCRSDistanceUnits");
-
-        try {
-            System.out.println("------------EPSG:4326 None");
-            CoordinateReferenceSystem wgs84CRS = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/4326");
-            System.out.println(wgs84CRS);
-
-            System.out.println("------------EPSG:27700 None - ");
-            CoordinateReferenceSystem osgbCRS = CRS.forCode("http://www.opengis.net/def/crs/EPSG/0/27700");
-            System.out.println(osgbCRS);
-
-            System.out.println("------------ Units - ");
-
-            Unit osgbUnit = CRS.getHorizontalComponent(osgbCRS).getCoordinateSystem().getAxis(0).getUnit();
-            System.out.println(osgbUnit);
-            Unit wgs84Unit = CRS.getHorizontalComponent(wgs84CRS).getCoordinateSystem().getAxis(0).getUnit();
-            System.out.println(wgs84Unit);
-
-            System.out.println(osgbUnit);
-
-            double distOSGB = 100;
-            Quantity<Length> dist = Quantities.create(distOSGB, osgbUnit);
-
-            Class class1 = wgs84Unit.getClass();
-            String name = class1.getName();
-            String typeName = class1.getTypeName();
-            Class[] interfaces = class1.getInterfaces();
-            Type[] types = class1.getGenericInterfaces();
-            //UnitConverter converter = wgs84Unit.getConverterTo(osgbUnit);
-            //UnitConverter converter2 = wgs84Unit.getConverterTo(SI.RADIAN);
-            //UnitConverter converter3 = wgs84Unit.getConverterTo(SI.METER);
-            Quantity<Angle> angleDist = Quantities.create(distOSGB, wgs84Unit);
-            Quantity< Angle> radDist = angleDist.to(Units.RADIAN);
-
-            System.out.println("Proj WGS: " + wgs84CRS.getRemarks() + " Proj OSGB: " + osgbCRS.getRemarks());
-            System.out.println("WGS: " + wgs84Unit.getSystemUnit() + " OSGB: " + osgbUnit.getSystemUnit());
-            System.out.println("Before: " + distOSGB + " After: " + radDist);
-
-        } catch (FactoryException ex) {
-            System.out.println("CRS Not Decoded");
-        }
-
     }
 
     /**
