@@ -110,7 +110,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_geometry_geometry");
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = true;
@@ -129,7 +129,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_geometry_geometry_blank");
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_C_BLANK.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = true;
@@ -169,7 +169,7 @@ public class GenericPropertyFunctionTest {
         GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.FALSE);
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = false;
@@ -189,7 +189,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_feature_geometry");
         Graph graph = MODEL.getGraph();
         Node subject = FEATURE_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = true;
@@ -208,7 +208,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_feature_feature");
         Graph graph = MODEL.getGraph();
         Node subject = FEATURE_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = true;
@@ -227,7 +227,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_geometry_feature");
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = true;
@@ -247,7 +247,7 @@ public class GenericPropertyFunctionTest {
         GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.FALSE);
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = false;
@@ -267,7 +267,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_geometry_geometry_false");
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = false;
@@ -286,7 +286,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_feature_geometry_false");
         Graph graph = MODEL.getGraph();
         Node subject = FEATURE_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = false;
@@ -305,7 +305,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_feature_feature_false");
         Graph graph = MODEL.getGraph();
         Node subject = FEATURE_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = false;
@@ -324,7 +324,7 @@ public class GenericPropertyFunctionTest {
         System.out.println("queryRewrite_geometry_feature_false");
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = false;
@@ -408,7 +408,7 @@ public class GenericPropertyFunctionTest {
 
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_F.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = true;
@@ -428,7 +428,7 @@ public class GenericPropertyFunctionTest {
         GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.FALSE);
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
-        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_F.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = true;

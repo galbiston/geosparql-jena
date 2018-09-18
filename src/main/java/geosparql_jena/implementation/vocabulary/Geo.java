@@ -71,6 +71,16 @@ public interface Geo {
     public static final Property SF_CROSSES_PROP = ResourceFactory.createProperty(SF_CROSSES_NAME);
     public static final Property SF_WITHIN_PROP = ResourceFactory.createProperty(SF_WITHIN_NAME);
 
+    //Simple Feature Topological function nodes:
+    public static final Node SF_CONTAINS_NODE = SF_CONTAINS_PROP.asNode();
+    public static final Node SF_INTERSECTS_NODE = SF_INTERSECTS_PROP.asNode();
+    public static final Node SF_EQUALS_NODE = SF_EQUALS_PROP.asNode();
+    public static final Node SF_TOUCHES_NODE = SF_TOUCHES_PROP.asNode();
+    public static final Node SF_DISJOINT_NODE = SF_DISJOINT_PROP.asNode();
+    public static final Node SF_OVERLAPS_NODE = SF_OVERLAPS_PROP.asNode();
+    public static final Node SF_CROSSES_NODE = SF_CROSSES_PROP.asNode();
+    public static final Node SF_WITHIN_NODE = SF_WITHIN_PROP.asNode();
+
     //Egenhofer Topological function names:
     public static final String EH_DISJOINT_NAME = GEO_URI + "ehDisjoint";
     public static final String EH_CONTAINS_NAME = GEO_URI + "ehContains";
@@ -90,6 +100,16 @@ public interface Geo {
     public static final Property EH_COVERS_PROP = ResourceFactory.createProperty(EH_COVERS_NAME);
     public static final Property EH_INSIDE_PROP = ResourceFactory.createProperty(EH_INSIDE_NAME);
     public static final Property EH_MEET_PROP = ResourceFactory.createProperty(EH_MEET_NAME);
+
+    //Egenhofer Topological function nodes:
+    public static final Node EH_DISJOINT_NODE = EH_DISJOINT_PROP.asNode();
+    public static final Node EH_CONTAINS_NODE = EH_CONTAINS_PROP.asNode();
+    public static final Node EH_COVERED_BY_NODE = EH_COVERED_BY_PROP.asNode();
+    public static final Node EH_EQUALS_NODE = EH_EQUALS_PROP.asNode();
+    public static final Node EH_OVERLAP_NODE = EH_OVERLAP_PROP.asNode();
+    public static final Node EH_COVERS_NODE = EH_COVERS_PROP.asNode();
+    public static final Node EH_INSIDE_NODE = EH_INSIDE_PROP.asNode();
+    public static final Node EH_MEET_NODE = EH_MEET_PROP.asNode();
 
     //RCC8 Topological function names:
     public static final String RCC_DISCONNECTED_NAME = GEO_URI + "rcc8dc";
@@ -111,6 +131,16 @@ public interface Geo {
     public static final Property RCC_PARTIALLY_OVERLAPPING_PROP = ResourceFactory.createProperty(RCC_PARTIALLY_OVERLAPPING_NAME);
     public static final Property RCC_EXTERNALLY_CONNECTED_PROP = ResourceFactory.createProperty(RCC_EXTERNALLY_CONNECTED_NAME);
 
+    //RCC8 Topological function nodes:
+    public static final Node RCC_DISCONNECTED_NODE = RCC_DISCONNECTED_PROP.asNode();
+    public static final Node RCC_NTANPROPERPART_NODE = RCC_NTANPROPERPART_PROP.asNode();
+    public static final Node RCC_NTANPROPERPARTINVERSE_NODE = RCC_NTANPROPERPARTINVERSE_PROP.asNode();
+    public static final Node RCC_TANPROPERPART_NODE = RCC_TANPROPERPART_PROP.asNode();
+    public static final Node RCC_TANPROPERPARTINVERSE_NODE = RCC_TANPROPERPARTINVERSE_PROP.asNode();
+    public static final Node RCC_EQUALS_NODE = RCC_EQUALS_PROP.asNode();
+    public static final Node RCC_PARTIALLY_OVERLAPPING_NODE = RCC_PARTIALLY_OVERLAPPING_PROP.asNode();
+    public static final Node RCC_EXTERNALLY_CONNECTED_NODE = RCC_EXTERNALLY_CONNECTED_PROP.asNode();
+
     //Topological DE-9IM function: relate
     public static final String RELATE_NAME = GEO_URI + "relate";
 
@@ -121,16 +151,16 @@ public interface Geo {
     public static final String IS_EMPTY = GEO_URI + "isEmpty";
     public static final String IS_SIMPLE = GEO_URI + "isSimple";
 
-    public static final Property DIMENSION_RES = ResourceFactory.createProperty(DIMENSION);
-    public static final Node DIMENSION_NODE = DIMENSION_RES.asNode();
-    public static final Property COORDINATE_DIMENSION_RES = ResourceFactory.createProperty(COORDINATE_DIMENSION);
-    public static final Node COORDINATE_DIMENSION_NODE = COORDINATE_DIMENSION_RES.asNode();
-    public static final Property SPATIAL_DIMENSION_RES = ResourceFactory.createProperty(SPATIAL_DIMENSION);
-    public static final Node SPATIAL_DIMENSION_NODE = SPATIAL_DIMENSION_RES.asNode();
-    public static final Property IS_EMPTY_RES = ResourceFactory.createProperty(IS_EMPTY);
-    public static final Node IS_EMPTY_NODE = IS_EMPTY_RES.asNode();
-    public static final Property IS_SIMPLE_RES = ResourceFactory.createProperty(IS_SIMPLE);
-    public static final Node IS_SIMPLE_NODE = IS_SIMPLE_RES.asNode();
+    public static final Property DIMENSION_PROP = ResourceFactory.createProperty(DIMENSION);
+    public static final Node DIMENSION_NODE = DIMENSION_PROP.asNode();
+    public static final Property COORDINATE_DIMENSION_PROP = ResourceFactory.createProperty(COORDINATE_DIMENSION);
+    public static final Node COORDINATE_DIMENSION_NODE = COORDINATE_DIMENSION_PROP.asNode();
+    public static final Property SPATIAL_DIMENSION_PROP = ResourceFactory.createProperty(SPATIAL_DIMENSION);
+    public static final Node SPATIAL_DIMENSION_NODE = SPATIAL_DIMENSION_PROP.asNode();
+    public static final Property IS_EMPTY_PROP = ResourceFactory.createProperty(IS_EMPTY);
+    public static final Node IS_EMPTY_NODE = IS_EMPTY_PROP.asNode();
+    public static final Property IS_SIMPLE_PROP = ResourceFactory.createProperty(IS_SIMPLE);
+    public static final Node IS_SIMPLE_NODE = IS_SIMPLE_PROP.asNode();
 
     //Geometry Literal Datatypes
     public static final String WKT = GEO_URI + "wktLiteral";
