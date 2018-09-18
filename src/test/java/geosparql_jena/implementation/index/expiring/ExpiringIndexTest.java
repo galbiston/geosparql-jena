@@ -162,7 +162,7 @@ public class ExpiringIndexTest {
     @Test
     public void testIndexRetrieval() throws FactoryException {
         System.out.println("Index Retrieval");
-        GeoSPARQLSupport.loadFunctionsMemoryIndex();
+        GeoSPARQLSupport.setupMemoryIndex();
         String testItem = "POINT EMPTY";
         GeometryWrapper result = GeometryLiteralIndex.retrieve(testItem, WKTDatatype.INSTANCE, GeometryLiteralIndex.GeometryIndex.PRIMARY);
 

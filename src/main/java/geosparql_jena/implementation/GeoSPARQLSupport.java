@@ -55,7 +55,7 @@ public class GeoSPARQLSupport {
     /**
      * Prepare an empty GeoSPARQL model with RDFS reasoning.
      * <br> In-memory indexing with no storing of indexes applied by default.
-     * This can be changed by calling loadFunctions methods.
+ This can be changed by calling setup methods.
      *
      * @return
      */
@@ -66,7 +66,7 @@ public class GeoSPARQLSupport {
     /**
      * Prepare a GeoSPARQL model from an existing model with RDFS reasoning.
      * <br> In-memory indexing with no storing of indexes applied by default.
-     * This can be changed by calling loadFunctions methods.
+ This can be changed by calling setup methods.
      *
      * @param model
      * @return
@@ -79,7 +79,7 @@ public class GeoSPARQLSupport {
      * Prepare a GeoSPARQL model from an existing model with alternative
      * Reasoner, e.g. OWL.
      * <br> In-memory indexing with no storing of indexes applied by default.
-     * This can be changed by calling loadFunctions methods.
+ This can be changed by calling setup methods.
      *
      * @param model
      * @param reasoner
@@ -93,7 +93,7 @@ public class GeoSPARQLSupport {
     /**
      * Prepare a GeoSPARQL model from file with RDFS reasoning.
      * <br> In-memory indexing with no storing of indexes applied by default.
-     * This can be changed by calling loadFunctions methods.
+ This can be changed by calling setup methods.
      *
      * @param inputStream
      * @return
@@ -105,7 +105,7 @@ public class GeoSPARQLSupport {
     /**
      * Prepare a GeoSPARQL model from file with alternative Reasoner, e.g. OWL.
      * <br> In-memory indexing with no storing of indexes applied by default.
-     * This can be changed by calling loadFunctions methods.
+ This can be changed by calling setup methods.
      *
      * @param inputStream
      * @param reasoner
@@ -122,7 +122,7 @@ public class GeoSPARQLSupport {
      * Prepare a model from an existing model with alternative GeoSPARQL schema
      * and Reasoner, e.g. OWL.
      * <br> In-memory indexing with no storing of indexes applied by default.
-     * This can be changed by calling loadFunctions methods.
+ This can be changed by calling setup methods.
      *
      * @param model
      * @param geosparqlSchemaInputStream
@@ -132,7 +132,7 @@ public class GeoSPARQLSupport {
     public static InfModel prepare(Model model, InputStream geosparqlSchemaInputStream, Reasoner reasoner) {
 
         //Register GeoSPARQL functions if required.
-        loadFunctionsMemoryIndex();
+        GeoSPARQLSupport.setupMemoryIndex();
 
         //Load GeoSPARQL Schema
         Model schema = ModelFactory.createDefaultModel();
@@ -153,8 +153,8 @@ public class GeoSPARQLSupport {
      * <br>Use this for in-memory indexing GeoSPARQL setup. Query re-write
      * enabled.
      */
-    public static final void loadFunctionsMemoryIndex() {
-        loadFunctions(IndexOption.MEMORY, true);
+    public static final void setupMemoryIndex() {
+        setup(IndexOption.MEMORY, true);
     }
 
     /**
@@ -167,8 +167,8 @@ public class GeoSPARQLSupport {
      * @param geometryTransformIndex
      * @param queryRewriteIndex
      */
-    public static final void loadFunctionsMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
-        loadFunctions(IndexOption.MEMORY, true);
+    public static final void setupMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
+        setup(IndexOption.MEMORY, true);
         IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
     }
 
@@ -176,8 +176,8 @@ public class GeoSPARQLSupport {
      * Initialise all GeoSPARQL property and filter functions with no indexing.
      * <br>Use this for no indexing GeoSPARQL setup.
      */
-    public static final void loadFunctionsNoIndex() {
-        loadFunctions(IndexOption.NONE, true);
+    public static final void setupNoIndex() {
+        setup(IndexOption.NONE, true);
     }
 
     /**
@@ -186,7 +186,7 @@ public class GeoSPARQLSupport {
      * @param indexOption
      * @param isQueryRewriteEnabled
      */
-    public static final void loadFunctions(IndexOption indexOption, Boolean isQueryRewriteEnabled) {
+    public static final void setup(IndexOption indexOption, Boolean isQueryRewriteEnabled) {
 
         IS_QUERY_REWRITE_ENABLED = isQueryRewriteEnabled;
 
@@ -224,7 +224,7 @@ public class GeoSPARQLSupport {
     /**
      * Empty all indexes and registries currently in use.
      */
-    public static final void resetIndexesAndRegistries() {
+    public static final void reset() {
         //Convenience method so that setup and clearing in one class.
         IndexConfiguration.resetIndexesAndRegistries();
     }

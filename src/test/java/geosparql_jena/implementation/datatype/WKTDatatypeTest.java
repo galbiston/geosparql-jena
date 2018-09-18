@@ -50,7 +50,7 @@ public class WKTDatatypeTest {
 
     @BeforeClass
     public static void setUpClass() {
-        GeoSPARQLSupport.loadFunctionsNoIndex();
+        GeoSPARQLSupport.setupNoIndex();
     }
 
     @AfterClass

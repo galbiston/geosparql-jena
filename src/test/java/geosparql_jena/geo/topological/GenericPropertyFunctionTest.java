@@ -166,7 +166,7 @@ public class GenericPropertyFunctionTest {
     @Test
     public void testQueryRewrite_geometry_geometry_disabled() {
         System.out.println("queryRewrite_geometry_geometry_disabled");
-        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.FALSE);
+        GeoSPARQLSupport.setup(IndexOption.MEMORY, Boolean.FALSE);
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
         Node predicate = Geo.SF_CONTAINS_NODE;
@@ -175,7 +175,7 @@ public class GenericPropertyFunctionTest {
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object);
 
-        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.TRUE);
+        GeoSPARQLSupport.setup(IndexOption.MEMORY, Boolean.TRUE);
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
@@ -244,7 +244,7 @@ public class GenericPropertyFunctionTest {
     @Test
     public void testQueryRewrite_geometry_feature_disabled() {
         System.out.println("queryRewrite_geometry_feature_disabled");
-        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.FALSE);
+        GeoSPARQLSupport.setup(IndexOption.MEMORY, Boolean.FALSE);
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
         Node predicate = Geo.SF_CONTAINS_NODE;
@@ -253,7 +253,7 @@ public class GenericPropertyFunctionTest {
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object);
 
-        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.TRUE);
+        GeoSPARQLSupport.setup(IndexOption.MEMORY, Boolean.TRUE);
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
@@ -425,7 +425,7 @@ public class GenericPropertyFunctionTest {
     @Test
     public void testQueryRewrite_geometry_geometry_asserted_disabled() {
         System.out.println("queryRewrite_geometry__geometry_asserted_disabled");
-        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.FALSE);
+        GeoSPARQLSupport.setup(IndexOption.MEMORY, Boolean.FALSE);
         Graph graph = MODEL.getGraph();
         Node subject = GEOMETRY_A.asNode();
         Node predicate = Geo.SF_CONTAINS_NODE;
@@ -434,7 +434,7 @@ public class GenericPropertyFunctionTest {
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object);
 
-        GeoSPARQLSupport.loadFunctions(IndexOption.MEMORY, Boolean.TRUE);
+        GeoSPARQLSupport.setup(IndexOption.MEMORY, Boolean.TRUE);
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);

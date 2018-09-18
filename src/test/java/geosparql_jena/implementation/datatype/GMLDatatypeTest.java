@@ -56,7 +56,7 @@ public class GMLDatatypeTest {
 
     @BeforeClass
     public static void setUpClass() {
-        GeoSPARQLSupport.loadFunctionsNoIndex();
+        GeoSPARQLSupport.setupNoIndex();
     }
 
     @AfterClass
