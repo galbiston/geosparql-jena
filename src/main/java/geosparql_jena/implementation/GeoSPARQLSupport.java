@@ -161,7 +161,7 @@ public class GeoSPARQLSupport {
      * Initialise all GeoSPARQL property and filter functions with memory
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup and to control the
-     * index sizes.
+     * index sizes. Expiry is defaulted to 5,000 milliseconds.
      *
      * @param geometryLiteralIndex
      * @param geometryTransformIndex
@@ -170,6 +170,41 @@ public class GeoSPARQLSupport {
     public static final void setupMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
         setup(IndexOption.MEMORY, true);
         IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
+    }
+
+    /**
+     * Initialise all GeoSPARQL property and filter functions with memory
+     * indexing.
+     * <br>Use this for in-memory indexing GeoSPARQL setup and to control the
+     * index expiry rate (milliseconds). Size is defaulted to unlimited.
+     *
+     * @param geometryLiteralIndex
+     * @param geometryTransformIndex
+     * @param queryRewriteIndex
+     */
+    public static final void setupMemoryIndex(Long geometryLiteralIndex, Long geometryTransformIndex, Long queryRewriteIndex) {
+        setup(IndexOption.MEMORY, true);
+        IndexConfiguration.setIndexExpiry(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
+    }
+
+    /**
+     * Initialise all GeoSPARQL property and filter functions with memory
+     * indexing.
+     * <br>Use this for in-memory indexing GeoSPARQL setup and to control the
+     * index sizes (default: unlimited) and expiry rate (default: 5,000
+     * milliseconds).
+     *
+     * @param geometryLiteralIndex
+     * @param geometryTransformIndex
+     * @param queryRewriteIndex
+     * @param geometryLiteralIndexExpiry
+     * @param geometryTransformIndexExpiry
+     * @param queryRewriteIndexExpiry
+     */
+    public static final void setupMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex, Long geometryLiteralIndexExpiry, Long geometryTransformIndexExpiry, Long queryRewriteIndexExpiry) {
+        setup(IndexOption.MEMORY, true);
+        IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
+        IndexConfiguration.setIndexExpiry(geometryLiteralIndexExpiry, geometryTransformIndexExpiry, queryRewriteIndexExpiry);
     }
 
     /**
