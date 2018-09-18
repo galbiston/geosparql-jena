@@ -55,7 +55,7 @@ public class GeoSPARQLSupport {
     /**
      * Prepare an empty GeoSPARQL model with RDFS reasoning.
      * <br> In-memory indexing with no storing of indexes applied by default.
- This can be changed by calling setup methods.
+     * This can be changed by calling setup methods.
      *
      * @return
      */
@@ -66,7 +66,7 @@ public class GeoSPARQLSupport {
     /**
      * Prepare a GeoSPARQL model from an existing model with RDFS reasoning.
      * <br> In-memory indexing with no storing of indexes applied by default.
- This can be changed by calling setup methods.
+     * This can be changed by calling setup methods.
      *
      * @param model
      * @return
@@ -79,7 +79,7 @@ public class GeoSPARQLSupport {
      * Prepare a GeoSPARQL model from an existing model with alternative
      * Reasoner, e.g. OWL.
      * <br> In-memory indexing with no storing of indexes applied by default.
- This can be changed by calling setup methods.
+     * This can be changed by calling setup methods.
      *
      * @param model
      * @param reasoner
@@ -93,7 +93,7 @@ public class GeoSPARQLSupport {
     /**
      * Prepare a GeoSPARQL model from file with RDFS reasoning.
      * <br> In-memory indexing with no storing of indexes applied by default.
- This can be changed by calling setup methods.
+     * This can be changed by calling setup methods.
      *
      * @param inputStream
      * @return
@@ -105,7 +105,7 @@ public class GeoSPARQLSupport {
     /**
      * Prepare a GeoSPARQL model from file with alternative Reasoner, e.g. OWL.
      * <br> In-memory indexing with no storing of indexes applied by default.
- This can be changed by calling setup methods.
+     * This can be changed by calling setup methods.
      *
      * @param inputStream
      * @param reasoner
@@ -122,7 +122,7 @@ public class GeoSPARQLSupport {
      * Prepare a model from an existing model with alternative GeoSPARQL schema
      * and Reasoner, e.g. OWL.
      * <br> In-memory indexing with no storing of indexes applied by default.
- This can be changed by calling setup methods.
+     * This can be changed by calling setup methods.
      *
      * @param model
      * @param geosparqlSchemaInputStream
@@ -178,6 +178,16 @@ public class GeoSPARQLSupport {
      */
     public static final void setupNoIndex() {
         setup(IndexOption.NONE, true);
+    }
+
+    /**
+     * Initialise all GeoSPARQL property and filter functions. Query rewrite
+     * enabled.
+     *
+     * @param indexOption
+     */
+    public static final void setup(IndexOption indexOption) {
+
     }
 
     /**
