@@ -217,6 +217,14 @@ public class GeoSPARQLSupport {
     }
 
     /**
+     * Initialise all GeoSPARQL property and filter functions with no indexing.
+     * <br>Use this for no indexing GeoSPARQL setup.
+     */
+    public static final void setupNoIndex(Boolean isQueryRewriteEnabled) {
+        setup(IndexOption.NONE, isQueryRewriteEnabled);
+    }
+
+    /**
      * Initialise all GeoSPARQL property and filter functions. Query rewrite
      * enabled.
      *
