@@ -63,7 +63,7 @@ public class RccTangentialProperPartPFTest {
         RccTangentialProperPartPF instance = new RccTangentialProperPartPF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -80,7 +80,7 @@ public class RccTangentialProperPartPFTest {
         RccTangentialProperPartPF instance = new RccTangentialProperPartPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

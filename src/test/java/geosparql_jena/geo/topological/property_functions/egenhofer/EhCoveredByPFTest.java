@@ -64,7 +64,7 @@ public class EhCoveredByPFTest {
         EhInsidePF instance = new EhInsidePF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -81,7 +81,7 @@ public class EhCoveredByPFTest {
         EhInsidePF instance = new EhInsidePF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -98,7 +98,7 @@ public class EhCoveredByPFTest {
         EhCoveredByPF instance = new EhCoveredByPF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -115,7 +115,7 @@ public class EhCoveredByPFTest {
         EhCoveredByPF instance = new EhCoveredByPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -132,7 +132,7 @@ public class EhCoveredByPFTest {
         EhCoveredByPF instance = new EhCoveredByPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -149,7 +149,7 @@ public class EhCoveredByPFTest {
         EhCoveredByPF instance = new EhCoveredByPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

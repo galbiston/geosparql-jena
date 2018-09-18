@@ -21,7 +21,6 @@ import geosparql_jena.geof.topological.GenericFilterFunction;
 import geosparql_jena.implementation.DimensionInfo;
 import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.datatype.GeometryDatatype;
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
@@ -46,16 +45,6 @@ public class EhEqualsFF extends GenericFilterFunction {
             }
         }
         return NodeValue.FALSE;
-    }
-
-    @Override
-    public Boolean exec(Literal v1, Literal v2) {
-        if (v1.getLexicalForm().equals(v2.getLexicalForm())) {
-            String datatypeURI = v1.getDatatypeURI();
-            return GeometryDatatype.checkURI(datatypeURI);
-        } else {
-            return super.exec(v1, v2);
-        }
     }
 
     //Simple Features and Egenhofer equals intersection patterns are the same, see GeoSPARQL standard page 11.

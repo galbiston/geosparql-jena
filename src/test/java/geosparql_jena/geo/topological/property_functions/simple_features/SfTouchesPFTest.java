@@ -63,7 +63,7 @@ public class SfTouchesPFTest {
         SfTouchesPF instance = new SfTouchesPF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -80,7 +80,7 @@ public class SfTouchesPFTest {
         SfTouchesPF instance = new SfTouchesPF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -97,7 +97,7 @@ public class SfTouchesPFTest {
         SfTouchesPF instance = new SfTouchesPF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -114,7 +114,7 @@ public class SfTouchesPFTest {
         SfTouchesPF instance = new SfTouchesPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -131,7 +131,7 @@ public class SfTouchesPFTest {
         SfTouchesPF instance = new SfTouchesPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -148,7 +148,7 @@ public class SfTouchesPFTest {
         SfTouchesPF instance = new SfTouchesPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

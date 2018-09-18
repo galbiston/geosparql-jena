@@ -62,7 +62,7 @@ public class EhEqualsPFTest {
         EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -79,7 +79,7 @@ public class EhEqualsPFTest {
         EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -96,7 +96,7 @@ public class EhEqualsPFTest {
         EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = true;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -113,7 +113,7 @@ public class EhEqualsPFTest {
         EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -130,7 +130,7 @@ public class EhEqualsPFTest {
         EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -147,7 +147,7 @@ public class EhEqualsPFTest {
         EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -164,7 +164,7 @@ public class EhEqualsPFTest {
         EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -181,7 +181,7 @@ public class EhEqualsPFTest {
         EhEqualsPF instance = new EhEqualsPF();
 
         Boolean expResult = false;
-        Boolean result = instance.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
+        Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

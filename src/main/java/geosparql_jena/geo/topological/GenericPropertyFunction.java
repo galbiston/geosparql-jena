@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.core.Var;
@@ -227,10 +226,6 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
         Boolean isPositive = QueryRewriteIndex.test(subjectSpatialLiteral.getGeometryLiteral(), predicateProp, objectSpatialLiteral.getGeometryLiteral(), this);
         return isPositive;
-    }
-
-    public Boolean testFilterFunction(Literal subjectGeometryLiteral, Literal objectGeometryLiteral) {
-        return filterFunction.exec(subjectGeometryLiteral, objectGeometryLiteral);
     }
 
     public Boolean testFilterFunction(Node subjectGeometryLiteral, Node objectGeometryLiteral) {
