@@ -569,6 +569,10 @@ public class GeometryWrapper implements Serializable {
         return extract(nodeValue, GeometryIndex.PRIMARY);
     }
 
+    public static final GeometryWrapper extract(Node node) {
+        return extract(node, GeometryIndex.PRIMARY);
+    }
+
     /**
      * Returns null if invalid literal provided.
      *

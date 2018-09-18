@@ -21,11 +21,6 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
@@ -49,18 +44,13 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
     @Override
     public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
-        if (subject.isBlank() || object.isBlank()) {
-            //These Property Functions do not accept blank nodes so exit quickly.
-            return QueryIterNullIterator.create(execCxt);
-        }
-
-        if (subject.isURI() && object.isLiteral()) {
+        if (subject.isConcrete() && object.isLiteral()) {
             //Both are bound.
             return bothBound(binding, subject, predicate, object, execCxt);
         } else if (subject.isVariable() && object.isVariable()) {
             //Both are unbound.
             return bothUnbound(binding, subject, predicate, object, execCxt);
-        } else if (subject.isURI() && object.isVariable()) {
+        } else if (subject.isConcrete() && object.isVariable()) {
             //Subject bound and object unbound.
             return objectUnbound(binding, subject, predicate, object, execCxt);
         } else {
@@ -70,30 +60,32 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
     }
 
-    private Literal getGeometryLiteral(Node subject, Node predicate, ExecutionContext execCxt) {
-        Graph graph = execCxt.getActiveGraph();
-
-        if (!graph.contains(subject, RDF.type.asNode(), Geo.GEOMETRY_NODE)) {
-            //Ensure that the subject is a Geometry, otherwise exit quickly.
-            return null;
-        }
-
-        Model model = ModelFactory.createModelForGraph(graph);
-        Resource subjectRes = ResourceFactory.createResource(subject.getURI());
+    protected Node getGeometryLiteral(Node subject, Node predicate, Graph graph) {
 
         //Check for the asserted value and return if found.
-        Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
-        if (model.contains(subjectRes, predicateProp)) {
-            Literal geometryLiteral = model.getRequiredProperty(subjectRes, predicateProp).getLiteral();
+        if (graph.contains(subject, predicate, null)) {
+            ExtendedIterator<Triple> iter = graph.find(subject, predicate, null);
+            Node geometryLiteral = extractObject(iter);
             return geometryLiteral;
         }
 
         //Check that the Geometry has a serialisation to use.
-        if (model.contains(subjectRes, Geo.HAS_SERIALIZATION_PROP)) {
-            Literal geomLiteral = model.getProperty(subjectRes, Geo.HAS_SERIALIZATION_PROP).getLiteral();
+        if (graph.contains(subject, Geo.HAS_SERIALIZATION_NODE, null)) {
+            ExtendedIterator<Triple> iter = graph.find(subject, Geo.HAS_SERIALIZATION_NODE, null);
+            Node geomLiteral = extractObject(iter);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLiteral);
             Literal geometryLiteral = applyPredicate(geometryWrapper);
-            return geometryLiteral;
+            return geometryLiteral.asNode();
+        } else {
+            return null;
+        }
+    }
+
+    private static Node extractObject(ExtendedIterator<Triple> iter) {
+
+        if (iter.hasNext()) {
+            Triple triple = iter.next();
+            return triple.getObject();
         } else {
             return null;
         }
@@ -101,10 +93,11 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
     private QueryIterator bothBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
-        Literal geometryLiteral = getGeometryLiteral(subject, predicate, execCxt);
-        Literal objectLiteral = ResourceFactory.createTypedLiteral(object.getLiteral().getLexicalForm(), object.getLiteral().getDatatype());
+        //Check that the subject and object binding are valid for the predicate.
+        Graph graph = execCxt.getActiveGraph();
+        Node geometryLiteral = getGeometryLiteral(subject, predicate, graph);
 
-        Boolean isEqual = objectLiteral.equals(geometryLiteral);
+        Boolean isEqual = object.matches(geometryLiteral);
 
         if (isEqual) {
             return QueryIterSingleton.create(binding, execCxt);
@@ -133,10 +126,11 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
     private QueryIterator objectUnbound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
-        Literal geometryLiteral = getGeometryLiteral(subject, predicate, execCxt);
+        Graph graph = execCxt.getActiveGraph();
+        Node geometryLiteral = getGeometryLiteral(subject, predicate, graph);
 
         if (geometryLiteral != null) {
-            return QueryIterSingleton.create(binding, Var.alloc(object.getName()), geometryLiteral.asNode(), execCxt);
+            return QueryIterSingleton.create(binding, Var.alloc(object.getName()), geometryLiteral, execCxt);
         } else {
             return QueryIterNullIterator.create(execCxt);
         }
