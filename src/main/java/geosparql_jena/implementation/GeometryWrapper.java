@@ -553,8 +553,13 @@ public class GeometryWrapper implements Serializable {
         if (!nodeValue.isLiteral()) {
             return null;
         }
-
         Node node = nodeValue.asNode();
+
+        return extract(node, targetIndex);
+    }
+
+    public static final GeometryWrapper extract(Node node, GeometryIndex targetIndex) {
+
         String datatypeURI = node.getLiteralDatatypeURI();
         String lexicalForm = node.getLiteralLexicalForm();
         return extract(lexicalForm, datatypeURI, targetIndex);

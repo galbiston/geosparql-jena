@@ -20,8 +20,10 @@ import geosparql_jena.implementation.GeoSPARQLSupport;
 import geosparql_jena.implementation.datatype.WKTDatatype;
 import geosparql_jena.implementation.index.IndexConfiguration.IndexOption;
 import geosparql_jena.implementation.vocabulary.Geo;
+import org.apache.jena.graph.BlankNodeId;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -47,7 +49,7 @@ public class GenericPropertyFunctionTest {
     private static final Model MODEL = ModelFactory.createDefaultModel();
     private static final Resource GEOMETRY_A = ResourceFactory.createResource("http://example.org#GeometryA");
     private static final Resource GEOMETRY_B = ResourceFactory.createResource("http://example.org#GeometryB");
-    private static final Resource GEOMETRY_C = ResourceFactory.createResource("http://example.org#GeometryC");
+    private static final Resource GEOMETRY_C_BLANK = ResourceFactory.createResource();
     private static final Resource GEOMETRY_D = ResourceFactory.createResource("http://example.org#GeometryD");
     private static final Resource GEOMETRY_E = ResourceFactory.createResource("http://example.org#GeometryE");
     private static final Resource GEOMETRY_F = ResourceFactory.createResource("http://example.org#GeometryF");
@@ -64,11 +66,11 @@ public class GenericPropertyFunctionTest {
         //Geometry
         MODEL.add(GEOMETRY_A, Geo.HAS_SERIALIZATION_PROP, ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))", WKTDatatype.INSTANCE));
         MODEL.add(GEOMETRY_B, Geo.HAS_SERIALIZATION_PROP, LITERAL_B);
-        MODEL.add(GEOMETRY_C, Geo.HAS_SERIALIZATION_PROP, ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(5 5)", WKTDatatype.INSTANCE));
+        MODEL.add(GEOMETRY_C_BLANK, Geo.HAS_SERIALIZATION_PROP, ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(5 5)", WKTDatatype.INSTANCE));
         MODEL.add(GEOMETRY_D, Geo.HAS_SERIALIZATION_PROP, ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(11 11)", WKTDatatype.INSTANCE));
         MODEL.add(GEOMETRY_A, RDF.type, Geo.GEOMETRY_RES);
         MODEL.add(GEOMETRY_B, RDF.type, Geo.GEOMETRY_RES);
-        MODEL.add(GEOMETRY_C, RDF.type, Geo.GEOMETRY_RES);
+        MODEL.add(GEOMETRY_C_BLANK, RDF.type, Geo.GEOMETRY_RES);
         MODEL.add(GEOMETRY_D, RDF.type, Geo.GEOMETRY_RES);
         MODEL.add(GEOMETRY_E, RDF.type, Geo.GEOMETRY_RES);
         MODEL.add(GEOMETRY_F, RDF.type, Geo.GEOMETRY_RES);
@@ -76,7 +78,7 @@ public class GenericPropertyFunctionTest {
         //Feature
         MODEL.add(FEATURE_A, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_A);
         MODEL.add(FEATURE_B, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_B);
-        MODEL.add(FEATURE_C, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_C);
+        MODEL.add(FEATURE_C, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_C_BLANK);
         MODEL.add(FEATURE_D, Geo.HAS_DEFAULT_GEOMETRY_PROP, GEOMETRY_D);
         MODEL.add(FEATURE_A, RDF.type, Geo.FEATURE_RES);
         MODEL.add(FEATURE_B, RDF.type, Geo.FEATURE_RES);
@@ -113,6 +115,45 @@ public class GenericPropertyFunctionTest {
         GenericPropertyFunction instance = new SfContainsPF();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_geometry_geometry_blank() {
+        System.out.println("queryRewrite_geometry_geometry_blank");
+        Graph graph = MODEL.getGraph();
+        Node subject = GEOMETRY_A.asNode();
+        Node predicate = Geo.SF_CONTAINS_PROP.asNode();
+        Node object = GEOMETRY_C_BLANK.asNode();
+        GenericPropertyFunction instance = new SfContainsPF();
+        Boolean expResult = true;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_blank() {
+        System.out.println("queryRewrite_blank");
+
+        Graph graph = MODEL.getGraph();
+
+        Boolean expResult = true;
+        BlankNodeId id = GEOMETRY_C_BLANK.asNode().getBlankNodeId();
+        Node node = NodeFactory.createBlankNode(id);
+
+        Boolean result = graph.contains(node, RDF.type.asNode(), Geo.GEOMETRY_NODE);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -302,8 +343,8 @@ public class GenericPropertyFunctionTest {
         System.out.println("retrieveGeometryLiteral_geometry");
 
         Resource targetSpatialObject = GEOMETRY_B;
-        SpatialObjectGeometryLiteral expResult = new SpatialObjectGeometryLiteral(GEOMETRY_B, LITERAL_B);
-        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL, targetSpatialObject);
+        SpatialObjectGeometryLiteral expResult = new SpatialObjectGeometryLiteral(GEOMETRY_B.asNode(), LITERAL_B.asNode());
+        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL.getGraph(), targetSpatialObject.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -318,8 +359,8 @@ public class GenericPropertyFunctionTest {
         System.out.println("retrieveGeometryLiteral_feature");
 
         Resource targetSpatialObject = FEATURE_B;
-        SpatialObjectGeometryLiteral expResult = new SpatialObjectGeometryLiteral(FEATURE_B, LITERAL_B);
-        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL, targetSpatialObject);
+        SpatialObjectGeometryLiteral expResult = new SpatialObjectGeometryLiteral(FEATURE_B.asNode(), LITERAL_B.asNode());
+        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL.getGraph(), targetSpatialObject.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -335,10 +376,10 @@ public class GenericPropertyFunctionTest {
 
         Resource targetSpatialObject = ResourceFactory.createResource("http://example.org#GeometryE");
         SpatialObjectGeometryLiteral expResult = null;
-        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL, targetSpatialObject);
+        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL.getGraph(), targetSpatialObject.asNode());
 
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -351,7 +392,7 @@ public class GenericPropertyFunctionTest {
 
         Resource targetSpatialObject = ResourceFactory.createResource("http://example.org#X");
         SpatialObjectGeometryLiteral expResult = null;
-        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL, targetSpatialObject);
+        SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL.getGraph(), targetSpatialObject.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

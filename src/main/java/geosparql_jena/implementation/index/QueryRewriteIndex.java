@@ -22,7 +22,7 @@ import static geosparql_jena.implementation.index.IndexDefaultValues.INDEX_EXPIR
 import static geosparql_jena.implementation.index.IndexDefaultValues.NO_INDEX;
 import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import geosparql_jena.implementation.index.expiring.ExpiringIndex;
-import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Property;
 
 /**
@@ -43,10 +43,14 @@ public class QueryRewriteIndex {
      * @param propertyFunction
      * @return
      */
-    public static final Boolean test(Literal subjectGeometryLiteral, Property predicate, Literal objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
+    public static final Boolean test(Node subjectGeometryLiteral, Property predicate, Node objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
+
+        if (!subjectGeometryLiteral.isLiteral() || !objectGeometryLiteral.isLiteral()) {
+            return false;
+        }
 
         Boolean result;
-        String key = subjectGeometryLiteral.getLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLexicalForm();
+        String key = subjectGeometryLiteral.getLiteralLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLiteralLexicalForm();
         RETRIEVAL_COUNT++;
         if (IS_INDEX_ACTIVE) {
             try {

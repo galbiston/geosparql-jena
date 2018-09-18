@@ -27,12 +27,8 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.shared.PropertyNotFoundException;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
@@ -60,12 +56,12 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
     @Override
     public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
-        if (object.isLiteral() || subject.isBlank() || object.isBlank()) {
-            //These Property Functions do not accept literals as objects or blank nodes so exit quickly.
+        if (object.isLiteral()) {
+            //These Property Functions do not accept literals as objects so exit quickly.
             return QueryIterNullIterator.create(execCxt);
         }
 
-        if (subject.isURI() && object.isURI()) {
+        if (subject.isConcrete() && object.isConcrete()) {
             //Both are bound.
             return bothBound(binding, subject, predicate, object, execCxt);
         } else if (subject.isVariable() && object.isVariable()) {
@@ -123,7 +119,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         Node boundNode;
         Node unboundNode;
         Boolean isSubjectBound;
-        if (subject.isURI()) {
+        if (subject.isConcrete()) {
             //Subject is bound, object is unbound.
             boundNode = subject;
             unboundNode = object;
@@ -161,28 +157,45 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     /**
      * Retrieve the default geometry for Feature or Geometry.
      *
-     * @param model
+     * @param graph
      * @param targetSpatialObject
      * @return
      */
-    protected static final SpatialObjectGeometryLiteral retrieveGeometryLiteral(Model model, Resource targetSpatialObject) {
+    protected static final SpatialObjectGeometryLiteral retrieveGeometryLiteral(Graph graph, Node targetSpatialObject) {
 
-        try {
-            if (model.contains(targetSpatialObject, RDF.type, Geo.FEATURE_RES)) {
-                Resource geometry = model.getRequiredProperty(targetSpatialObject, Geo.HAS_DEFAULT_GEOMETRY_PROP).getResource();
-                Literal geometryLiteral = geometry.getRequiredProperty(Geo.HAS_SERIALIZATION_PROP).getLiteral();
-                return new SpatialObjectGeometryLiteral(targetSpatialObject, geometryLiteral);
-            } else if (model.contains(targetSpatialObject, RDF.type, Geo.GEOMETRY_RES)) {
-                Literal geometryLiteral = model.getRequiredProperty(targetSpatialObject, Geo.HAS_SERIALIZATION_PROP).getLiteral();
-                return new SpatialObjectGeometryLiteral(targetSpatialObject, geometryLiteral);
-            }
-        } catch (PropertyNotFoundException ex) {
-            //LOGGER.warn("Property Not Found Exception: {} for {}", ex.getMessage(), targetSpatialObject);
-            return null;
+        Node geometry;
+        if (graph.contains(targetSpatialObject, RDF.type.asNode(), Geo.FEATURE_NODE)) {
+            //Target is Feature - find the default Geometry.
+            ExtendedIterator<Triple> geomIter = graph.find(targetSpatialObject, Geo.HAS_DEFAULT_GEOMETRY_NODE, null);
+            geometry = extractObject(geomIter);
+        } else if (graph.contains(targetSpatialObject, RDF.type.asNode(), Geo.GEOMETRY_NODE)) {
+            //Target is a Geometry.
+            geometry = targetSpatialObject;
+        } else {
+            //Target is not a Feature or Geometry.
+            geometry = null;
         }
-        //Target resource isn't a Feature or Geometry so ignore.
+
+        if (geometry != null) {
+            //Find the Geometry Literal of the Geometry.
+            ExtendedIterator<Triple> iter = graph.find(geometry, Geo.HAS_SERIALIZATION_NODE, null);
+            Node literalNode = extractObject(iter);
+            if (literalNode != null) {
+                return new SpatialObjectGeometryLiteral(targetSpatialObject, literalNode);
+            }
+        }
         return null;
 
+    }
+
+    private static Node extractObject(ExtendedIterator<Triple> iter) {
+
+        if (iter.hasNext()) {
+            Triple triple = iter.next();
+            return triple.getObject();
+        } else {
+            return null;
+        }
     }
 
     protected Boolean queryRewrite(Graph graph, Node subject, Node predicate, Node object) {
@@ -198,16 +211,13 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
 
         //Begin Query Re-write by finding the literals of the Feature or Geometry.
-        Model model = ModelFactory.createModelForGraph(graph);
-        Resource subjectSpatialObject = ResourceFactory.createResource(subject.getURI());
-        SpatialObjectGeometryLiteral subjectSpatialLiteral = retrieveGeometryLiteral(model, subjectSpatialObject);
+        SpatialObjectGeometryLiteral subjectSpatialLiteral = retrieveGeometryLiteral(graph, subject);
         if (subjectSpatialLiteral == null) {
             //Subject is not a Feature or a Geometry so exit.
             return false;
         }
 
-        Resource objectSpatialObject = ResourceFactory.createResource(object.getURI());
-        SpatialObjectGeometryLiteral objectSpatialLiteral = retrieveGeometryLiteral(model, objectSpatialObject);
+        SpatialObjectGeometryLiteral objectSpatialLiteral = retrieveGeometryLiteral(graph, object);
         if (objectSpatialLiteral == null) {
             //Object is not a Feature or a Geometry so exit.
             return false;
@@ -220,6 +230,10 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     }
 
     public Boolean testFilterFunction(Literal subjectGeometryLiteral, Literal objectGeometryLiteral) {
+        return filterFunction.exec(subjectGeometryLiteral, objectGeometryLiteral);
+    }
+
+    public Boolean testFilterFunction(Node subjectGeometryLiteral, Node objectGeometryLiteral) {
         return filterFunction.exec(subjectGeometryLiteral, objectGeometryLiteral);
     }
 

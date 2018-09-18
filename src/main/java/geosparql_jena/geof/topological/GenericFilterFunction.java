@@ -20,6 +20,7 @@ package geosparql_jena.geof.topological;
 import geosparql_jena.implementation.DimensionInfo;
 import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
+import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -39,33 +40,36 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
+        boolean result = exec(v1.asNode(), v2.asNode());
+        return NodeValue.makeBoolean(result);
+    }
 
+    public Boolean exec(Literal v1, Literal v2) {
         try {
 
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
-                return NodeValue.FALSE;
+                return Boolean.FALSE;
             }
 
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
             if (geometry2 == null) {
-                return NodeValue.FALSE;
+                return Boolean.FALSE;
             }
 
             if (!permittedTopology(geometry1.getDimensionInfo(), geometry2.getDimensionInfo())) {
-                return NodeValue.FALSE;
+                return Boolean.FALSE;
             }
 
             boolean result = relate(geometry1, geometry2);
-
-            return NodeValue.makeBoolean(result);
+            return result;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {}", ex.getMessage());
-            return NodeValue.FALSE;
+            return Boolean.FALSE;
         }
     }
 
-    public Boolean exec(Literal v1, Literal v2) {
+    public Boolean exec(Node v1, Node v2) {
         try {
 
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
