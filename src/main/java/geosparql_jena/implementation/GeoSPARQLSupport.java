@@ -200,9 +200,10 @@ public class GeoSPARQLSupport {
      * @param geometryLiteralIndexExpiry
      * @param geometryTransformIndexExpiry
      * @param queryRewriteIndexExpiry
+     * @param isQueryRewriteEnabled
      */
-    public static final void setupMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex, Long geometryLiteralIndexExpiry, Long geometryTransformIndexExpiry, Long queryRewriteIndexExpiry) {
-        setup(IndexOption.MEMORY, true);
+    public static final void setupMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex, Long geometryLiteralIndexExpiry, Long geometryTransformIndexExpiry, Long queryRewriteIndexExpiry, Boolean isQueryRewriteEnabled) {
+        setup(IndexOption.MEMORY, isQueryRewriteEnabled);
         IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
         IndexConfiguration.setIndexExpiry(geometryLiteralIndexExpiry, geometryTransformIndexExpiry, queryRewriteIndexExpiry);
     }
