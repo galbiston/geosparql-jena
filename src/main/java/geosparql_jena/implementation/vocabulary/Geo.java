@@ -113,30 +113,30 @@ public interface Geo {
 
     //RCC8 Topological function names:
     public static final String RCC_DISCONNECTED_NAME = GEO_URI + "rcc8dc";
-    public static final String RCC_NTANPROPERPART_NAME = GEO_URI + "rcc8ntpp";
-    public static final String RCC_NTANPROPERPARTINVERSE_NAME = GEO_URI + "rcc8ntppi";
-    public static final String RCC_TANPROPERPART_NAME = GEO_URI + "rcc8tpp";
-    public static final String RCC_TANPROPERPARTINVERSE_NAME = GEO_URI + "rcc8tppi";
+    public static final String RCC_NON_TAN_PROPER_PART_NAME = GEO_URI + "rcc8ntpp";
+    public static final String RCC_NON_TAN_PROPER_PART_INVERSE_NAME = GEO_URI + "rcc8ntppi";
+    public static final String RCC_TAN_PROPER_PART_NAME = GEO_URI + "rcc8tpp";
+    public static final String RCC_TAN_PROPER_PART_INVERSE_NAME = GEO_URI + "rcc8tppi";
     public static final String RCC_EQUALS_NAME = GEO_URI + "rcc8eq";
     public static final String RCC_PARTIALLY_OVERLAPPING_NAME = GEO_URI + "rcc8po";
     public static final String RCC_EXTERNALLY_CONNECTED_NAME = GEO_URI + "rcc8ec";
 
     //RCC8 Topological function properties:
     public static final Property RCC_DISCONNECTED_PROP = ResourceFactory.createProperty(RCC_DISCONNECTED_NAME);
-    public static final Property RCC_NTANPROPERPART_PROP = ResourceFactory.createProperty(RCC_NTANPROPERPART_NAME);
-    public static final Property RCC_NTANPROPERPARTINVERSE_PROP = ResourceFactory.createProperty(RCC_NTANPROPERPARTINVERSE_NAME);
-    public static final Property RCC_TANPROPERPART_PROP = ResourceFactory.createProperty(RCC_TANPROPERPART_NAME);
-    public static final Property RCC_TANPROPERPARTINVERSE_PROP = ResourceFactory.createProperty(RCC_TANPROPERPARTINVERSE_NAME);
+    public static final Property RCC_NON_TAN_PROPER_PART_PROP = ResourceFactory.createProperty(RCC_NON_TAN_PROPER_PART_NAME);
+    public static final Property RCC_NON_TAN_PROPER_PART_INVERSE_PROP = ResourceFactory.createProperty(RCC_NON_TAN_PROPER_PART_INVERSE_NAME);
+    public static final Property RCC_TAN_PROPER_PART_PROP = ResourceFactory.createProperty(RCC_TAN_PROPER_PART_NAME);
+    public static final Property RCC_TAN_PROPER_PART_INVERSE_PROP = ResourceFactory.createProperty(RCC_TAN_PROPER_PART_INVERSE_NAME);
     public static final Property RCC_EQUALS_PROP = ResourceFactory.createProperty(RCC_EQUALS_NAME);
     public static final Property RCC_PARTIALLY_OVERLAPPING_PROP = ResourceFactory.createProperty(RCC_PARTIALLY_OVERLAPPING_NAME);
     public static final Property RCC_EXTERNALLY_CONNECTED_PROP = ResourceFactory.createProperty(RCC_EXTERNALLY_CONNECTED_NAME);
 
     //RCC8 Topological function nodes:
     public static final Node RCC_DISCONNECTED_NODE = RCC_DISCONNECTED_PROP.asNode();
-    public static final Node RCC_NTANPROPERPART_NODE = RCC_NTANPROPERPART_PROP.asNode();
-    public static final Node RCC_NTANPROPERPARTINVERSE_NODE = RCC_NTANPROPERPARTINVERSE_PROP.asNode();
-    public static final Node RCC_TANPROPERPART_NODE = RCC_TANPROPERPART_PROP.asNode();
-    public static final Node RCC_TANPROPERPARTINVERSE_NODE = RCC_TANPROPERPARTINVERSE_PROP.asNode();
+    public static final Node RCC_NON_TAN_PROPER_PART_NODE = RCC_NON_TAN_PROPER_PART_PROP.asNode();
+    public static final Node RCC_NON_TAN_PROPER_PART_INVERSE_NODE = RCC_NON_TAN_PROPER_PART_INVERSE_PROP.asNode();
+    public static final Node RCC_TAN_PROPER_PART_NODE = RCC_TAN_PROPER_PART_PROP.asNode();
+    public static final Node RCC_TAN_PROPER_PART_INVERSE_NODE = RCC_TAN_PROPER_PART_INVERSE_PROP.asNode();
     public static final Node RCC_EQUALS_NODE = RCC_EQUALS_PROP.asNode();
     public static final Node RCC_PARTIALLY_OVERLAPPING_NODE = RCC_PARTIALLY_OVERLAPPING_PROP.asNode();
     public static final Node RCC_EXTERNALLY_CONNECTED_NODE = RCC_EXTERNALLY_CONNECTED_PROP.asNode();

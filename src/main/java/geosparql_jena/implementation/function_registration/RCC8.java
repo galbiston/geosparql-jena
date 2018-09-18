@@ -57,11 +57,11 @@ public class RCC8 {
         registry.put(Geo.RCC_DISCONNECTED_NAME, RccDisconnectedPF.class);
         registry.put(Geo.RCC_EQUALS_NAME, RccEqualsPF.class);
         registry.put(Geo.RCC_EXTERNALLY_CONNECTED_NAME, RccExternallyConnectedPF.class);
-        registry.put(Geo.RCC_NTANPROPERPARTINVERSE_NAME, RccNonTangentialProperPartInversePF.class);
-        registry.put(Geo.RCC_NTANPROPERPART_NAME, RccNonTangentialProperPartPF.class);
+        registry.put(Geo.RCC_NON_TAN_PROPER_PART_INVERSE_NAME, RccNonTangentialProperPartInversePF.class);
+        registry.put(Geo.RCC_NON_TAN_PROPER_PART_NAME, RccNonTangentialProperPartPF.class);
         registry.put(Geo.RCC_PARTIALLY_OVERLAPPING_NAME, RccPartiallyOverlappingPF.class);
-        registry.put(Geo.RCC_TANPROPERPARTINVERSE_NAME, RccTangentialProperPartInversePF.class);
-        registry.put(Geo.RCC_TANPROPERPART_NAME, RccTangentialProperPartPF.class);
+        registry.put(Geo.RCC_TAN_PROPER_PART_INVERSE_NAME, RccTangentialProperPartInversePF.class);
+        registry.put(Geo.RCC_TAN_PROPER_PART_NAME, RccTangentialProperPartPF.class);
     }
 
     /**
