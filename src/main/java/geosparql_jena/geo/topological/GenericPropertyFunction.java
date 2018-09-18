@@ -81,12 +81,8 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     private QueryIterator bothBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
         Graph graph = execCxt.getActiveGraph();
-        if (graph.contains(subject, predicate, object)) {
-            //The graph contains the asserted triple, return the current binding.
-            return QueryIterSingleton.create(binding, execCxt);
-        }
-
         Boolean isPositiveResult = queryRewrite(graph, subject, predicate, object);
+
         if (isPositiveResult) {
             //Filter function test succeded so retain binding.
             return QueryIterSingleton.create(binding, execCxt);
@@ -191,7 +187,12 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
     protected Boolean queryRewrite(Graph graph, Node subject, Node predicate, Node object) {
 
-        //If query re-writing is disabled then exit.
+        if (graph.contains(subject, predicate, object)) {
+            //The graph contains the asserted triple, return the current binding.
+            return true;
+        }
+
+        //If query re-writing is disabled then exit - graph does not contain the asserted relation.
         if (!GeoSPARQLSupport.isQueryRewriteEnabled()) {
             return false;
         }
