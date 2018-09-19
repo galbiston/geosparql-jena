@@ -23,10 +23,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.vocabulary.RDFS;
@@ -42,22 +44,16 @@ public class GeoSPARQLPredicates {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     /**
-     * Infer and add GeoSPARQL predicates to the model. geo:hasDefaultGeometry,
-     * geo:hasGeometry, geo:asWKT, geo:asGML. TODO - only geo:hasDefaultGeometry
-     * applied based on single geo:hasGeometry.
+     * Every subProperty of hasGeometry is made a subProperty of
+     * hasDefaultGeometry.<br>
+     * Assumption that each Feature has a single hasGeometry property.<br>
+     * Requires inferencing to propagate through the data.
      *
      * @param model
      */
-    public static final void apply(Model model) {
+    public static final void applySubPropertyDefaultGeometry(Model model) {
 
-        //TODO - only applying Assumption1 as that is needed in test data. Ideally insert update method would be best.
-        //Assumption 1: that each geo:Feature has one geo:hasGeometry relationship so that geo:hasDefaultGeometry only exists once for each.
-        //Assumption 2: that Feature predicate1 Thing and Thing predicate2 (wktLiteral||gmlLiteral) makes Thing a geo:Geometry.
-        //Find the gmlLiteral and wktLiteral datatypes in the data. Then find
         try {
-            //String insertString = QueryLoader.readResource("sparql_query/InsertDatatypeSubProperty.spl");
-            //UpdateAction.parseExecute(insertString, model);
-
             ResIterator resIt = model.listResourcesWithProperty(RDFS.subPropertyOf, Geo.HAS_GEOMETRY_PROP);
             while (resIt.hasNext()) {
                 Resource res = resIt.nextResource();
@@ -69,6 +65,29 @@ public class GeoSPARQLPredicates {
         }
     }
 
+    /**
+     * Apply hasDefaultGeometry for every Feature with a single hasGeometry
+     * property.
+     *
+     * @param model
+     */
+    public static final void applyDefaultGeometry(Model model) {
+
+        ResIterator featureIt = model.listResourcesWithProperty(Geo.HAS_GEOMETRY_PROP);
+        while (featureIt.hasNext()) {
+            Resource feature = featureIt.nextResource();
+            List<Statement> statement = feature.listProperties(Geo.HAS_GEOMETRY_PROP).toList();
+            if (statement.size() == 1) {
+                try {
+                    Resource geometry = statement.get(0).getResource();
+                    feature.addProperty(Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
+                } catch (Exception ex) {
+                    LOGGER.error("Error creating default geometry: {}", ex.getMessage());
+                }
+            }
+        }
+    }
+
     public static final void applyFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang) {
 
         LOGGER.info("Applying Predicates from File: {} to {} - Started", inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
@@ -76,7 +95,7 @@ public class GeoSPARQLPredicates {
         Model model = ModelFactory.createDefaultModel();
         try (FileInputStream inputStream = new FileInputStream(inputFile)) {
             RDFDataMgr.read(model, inputStream, inputLang);
-            apply(model);
+            applySubPropertyDefaultGeometry(model);
             //Write the output.
             writeOutputModel(model, outputFile, outputLang, inputFile);
         } catch (IOException ex) {
