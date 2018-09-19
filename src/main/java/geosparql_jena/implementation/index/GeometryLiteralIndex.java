@@ -21,6 +21,7 @@ import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.datatype.DatatypeReader;
 import static geosparql_jena.implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static geosparql_jena.implementation.index.IndexDefaultValues.NO_INDEX;
+import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_EXPIRY;
 import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import geosparql_jena.implementation.index.expiring.ExpiringIndex;
 import java.util.Map;
@@ -139,7 +140,7 @@ public class GeometryLiteralIndex {
     public static final void setExpiry(long expiryInterval) {
 
         if (IS_INDEX_ACTIVE) {
-            if (expiryInterval > 0) {
+            if (expiryInterval > UNLIMITED_EXPIRY) {
                 PRIMARY_INDEX.stopExpiry();
                 PRIMARY_INDEX.setExpiryInterval(expiryInterval);
                 PRIMARY_INDEX.startExpiry();

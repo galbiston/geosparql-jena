@@ -24,6 +24,7 @@ package geosparql_jena.implementation.index;
 public interface IndexDefaultValues {
 
     public static final int UNLIMITED_INDEX = -1;
+    public static final long UNLIMITED_EXPIRY = 0;
 
     public static final int NO_INDEX = 0;
     public static final long INDEX_EXPIRY_INTERVAL = 5000l;

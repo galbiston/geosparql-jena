@@ -21,6 +21,7 @@ import geosparql_jena.implementation.DimensionInfo;
 import geosparql_jena.implementation.GeometryWrapper;
 import static geosparql_jena.implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static geosparql_jena.implementation.index.IndexDefaultValues.NO_INDEX;
+import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_EXPIRY;
 import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import geosparql_jena.implementation.index.expiring.ExpiringIndex;
 import geosparql_jena.implementation.jts.GeometryTransformation;
@@ -132,7 +133,7 @@ public class GeometryTransformIndex {
     public static final void setExpiry(long expiryInterval) {
 
         if (IS_INDEX_ACTIVE) {
-            if (expiryInterval > 0) {
+            if (expiryInterval > UNLIMITED_EXPIRY) {
                 GEOMETRY_TRANSFORM_INDEX.stopExpiry();
                 GEOMETRY_TRANSFORM_INDEX.setExpiryInterval(expiryInterval);
                 GEOMETRY_TRANSFORM_INDEX.startExpiry();

@@ -20,6 +20,7 @@ package geosparql_jena.implementation.index;
 import geosparql_jena.geo.topological.GenericPropertyFunction;
 import static geosparql_jena.implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
 import static geosparql_jena.implementation.index.IndexDefaultValues.NO_INDEX;
+import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_EXPIRY;
 import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import geosparql_jena.implementation.index.expiring.ExpiringIndex;
 import org.apache.jena.graph.Node;
@@ -108,7 +109,7 @@ public class QueryRewriteIndex {
     public static final void setExpiry(long expiryInterval) {
 
         if (IS_INDEX_ACTIVE) {
-            if (expiryInterval > 0) {
+            if (expiryInterval > UNLIMITED_EXPIRY) {
                 QUERY_REWRITE_INDEX.stopExpiry();
                 QUERY_REWRITE_INDEX.setExpiryInterval(expiryInterval);
                 QUERY_REWRITE_INDEX.startExpiry();
