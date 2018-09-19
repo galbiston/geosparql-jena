@@ -35,8 +35,8 @@ public class GeometryLiteralIndex {
     private static Boolean IS_INDEX_ACTIVE = true;
     private static final String PRIMARY_INDEX_LABEL = "Primary Geometry Literal Index";
     private static final String SECONDARY_INDEX_LABEL = "Secondary Geometry Literal Index";
-    private static ExpiringIndex<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, PRIMARY_INDEX_LABEL);
-    private static ExpiringIndex<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, SECONDARY_INDEX_LABEL);
+    private static ExpiringIndex<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringIndex<>(PRIMARY_INDEX_LABEL, UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL);
+    private static ExpiringIndex<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringIndex<>(SECONDARY_INDEX_LABEL, UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL);
     private static Long RETRIEVAL_COUNT = 0L;
 
     public enum GeometryIndex {
@@ -116,9 +116,9 @@ public class GeometryLiteralIndex {
                 PRIMARY_INDEX.stopExpiry();
                 SECONDARY_INDEX.stopExpiry();
             }
-            PRIMARY_INDEX = new ExpiringIndex<>(maxSize, INDEX_EXPIRY_INTERVAL, PRIMARY_INDEX_LABEL);
+            PRIMARY_INDEX = new ExpiringIndex<>(PRIMARY_INDEX_LABEL, maxSize, INDEX_EXPIRY_INTERVAL);
             PRIMARY_INDEX.startExpiry();
-            SECONDARY_INDEX = new ExpiringIndex<>(maxSize, INDEX_EXPIRY_INTERVAL, SECONDARY_INDEX_LABEL);
+            SECONDARY_INDEX = new ExpiringIndex<>(SECONDARY_INDEX_LABEL, maxSize, INDEX_EXPIRY_INTERVAL);
             SECONDARY_INDEX.startExpiry();
         } else {
             if (PRIMARY_INDEX != null) {

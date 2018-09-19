@@ -21,6 +21,8 @@ import geosparql_jena.implementation.GeoSPARQLSupport;
 import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.datatype.WKTDatatype;
 import geosparql_jena.implementation.index.GeometryLiteralIndex;
+import static geosparql_jena.implementation.index.IndexDefaultValues.INDEX_CLEANER_INTERVAL;
+import static geosparql_jena.implementation.index.IndexDefaultValues.MINIMUM_INDEX_CLEANER_INTERVAL;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -66,7 +68,7 @@ public class ExpiringIndexTest {
         long expiryInterval = 5000l;
         long halfExpiryInterval = expiryInterval / 2;
 
-        ExpiringIndex<String, String> instance = new ExpiringIndex<>(5, expiryInterval, halfExpiryInterval, "Test");
+        ExpiringIndex<String, String> instance = new ExpiringIndex<>("Test", 5, expiryInterval, halfExpiryInterval);
         instance.startExpiry();
         instance.put("key1", "value1");
         instance.put("key2", "value2");
@@ -100,7 +102,7 @@ public class ExpiringIndexTest {
         long halfExpiryInterval = expiryInterval / 2;
         long quarterExpiryInterval = expiryInterval / 3 * 4;
 
-        ExpiringIndex<String, String> instance = new ExpiringIndex<>(5, expiryInterval, halfExpiryInterval, "Test");
+        ExpiringIndex<String, String> instance = new ExpiringIndex<>("Test", 5, expiryInterval, halfExpiryInterval);
         instance.startExpiry();
         instance.put("key1", "value1");
         instance.put("key2", "value2");
@@ -133,7 +135,7 @@ public class ExpiringIndexTest {
         long expiryInterval = 2000l;
         long halfExpiryInterval = expiryInterval / 2;
 
-        ExpiringIndex<String, String> instance = new ExpiringIndex<>(5, expiryInterval, halfExpiryInterval, "Test");
+        ExpiringIndex<String, String> instance = new ExpiringIndex<>("Test", 5, expiryInterval, halfExpiryInterval);
         instance.startExpiry();
         instance.put("key1", "value1");
         instance.put("key2", "value2");
@@ -170,6 +172,77 @@ public class ExpiringIndexTest {
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of setCleanerInterval method, of class ExpiringIndex.
+     */
+    @Test
+    public void testSetCleanerInterval() {
+        System.out.println("setCleanerInterval");
+        long cleanerInterval = 2000L;
+        ExpiringIndex instance = new ExpiringIndex<>("Test", 5);
+        instance.setCleanerInterval(cleanerInterval);
+        long expResult = cleanerInterval;
+        long result = instance.getCleanerInterval();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of setCleanerInterval method, of class ExpiringIndex.
+     */
+    @Test
+    public void testSetCleanerInterval_minimum() {
+        System.out.println("setCleanerInterval_minimum");
+        long cleanerInterval = 0L;
+        ExpiringIndex instance = new ExpiringIndex<>("Test", 5);
+        instance.setCleanerInterval(cleanerInterval);
+        long expResult = MINIMUM_INDEX_CLEANER_INTERVAL;
+        long result = instance.getCleanerInterval();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of setExpiryInterval method, of class ExpiringIndex.
+     */
+    @Test
+    public void testSetExpiryInterval() {
+        System.out.println("setExpiryInterval");
+        long expiryInterval = 2000L;
+        ExpiringIndex instance = new ExpiringIndex<>("Test", 5);
+        instance.setExpiryInterval(expiryInterval);
+        long expResult = expiryInterval;
+        long result = instance.getExpiryInterval();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of setExpiryInterval method, of class ExpiringIndex.
+     */
+    @Test
+    public void testSetExpiryInterval_minimum() {
+        System.out.println("setExpiryInterval_minimum");
+        long expiryInterval = 0L;
+        ExpiringIndex instance = new ExpiringIndex<>("Test", 5);
+        instance.setExpiryInterval(expiryInterval);
+        long expResult = INDEX_CLEANER_INTERVAL + 1;
+        long result = instance.getExpiryInterval();
+
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
         assertEquals(expResult, result);
 
     }

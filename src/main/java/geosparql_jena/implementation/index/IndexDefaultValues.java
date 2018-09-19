@@ -28,8 +28,8 @@ public interface IndexDefaultValues {
 
     public static final int NO_INDEX = 0;
     public static final long INDEX_EXPIRY_INTERVAL = 5000l;
-    public static final long FULL_INDEX_WARNING_INTERVAL = 30000l;
     public static final long INDEX_CLEANER_INTERVAL = 1000l;
+    public static final long FULL_INDEX_WARNING_INTERVAL = 30000l;
     public static final long MINIMUM_INDEX_CLEANER_INTERVAL = 100l;
     public static final int UNLIMITED_INITIAL_CAPACITY = 50000;
 }

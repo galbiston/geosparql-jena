@@ -33,7 +33,7 @@ public class QueryRewriteIndex {
 
     private static Boolean IS_INDEX_ACTIVE = true;
     private static final String QUERY_REWRITE_LABEL = "Query Rewrite";
-    private static ExpiringIndex<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, QUERY_REWRITE_LABEL);
+    private static ExpiringIndex<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringIndex<>(QUERY_REWRITE_LABEL, UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL);
     public static Long RETRIEVAL_COUNT = 0L;
 
     /**
@@ -90,7 +90,7 @@ public class QueryRewriteIndex {
             if (QUERY_REWRITE_INDEX != null) {
                 QUERY_REWRITE_INDEX.stopExpiry();
             }
-            QUERY_REWRITE_INDEX = new ExpiringIndex<>(maxSize, INDEX_EXPIRY_INTERVAL, QUERY_REWRITE_LABEL);
+            QUERY_REWRITE_INDEX = new ExpiringIndex<>(QUERY_REWRITE_LABEL, maxSize, INDEX_EXPIRY_INTERVAL);
             QUERY_REWRITE_INDEX.startExpiry();
         } else {
             if (QUERY_REWRITE_INDEX != null) {

@@ -42,7 +42,7 @@ public class GeometryTransformIndex {
 
     private static Boolean IS_INDEX_ACTIVE = true;
     private static final String GEOMETRY_TRANSFORM_LABEL = "Geometry Transform";
-    private static ExpiringIndex<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL, GEOMETRY_TRANSFORM_LABEL);
+    private static ExpiringIndex<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(GEOMETRY_TRANSFORM_LABEL, UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL);
     public static Long RETRIEVAL_COUNT = 0L;
 
     /**
@@ -114,7 +114,7 @@ public class GeometryTransformIndex {
             if (GEOMETRY_TRANSFORM_INDEX != null) {
                 GEOMETRY_TRANSFORM_INDEX.stopExpiry();
             }
-            GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(maxSize, INDEX_EXPIRY_INTERVAL, GEOMETRY_TRANSFORM_LABEL);
+            GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(GEOMETRY_TRANSFORM_LABEL, maxSize, INDEX_EXPIRY_INTERVAL);
             GEOMETRY_TRANSFORM_INDEX.startExpiry();
         } else {
             if (GEOMETRY_TRANSFORM_INDEX != null) {

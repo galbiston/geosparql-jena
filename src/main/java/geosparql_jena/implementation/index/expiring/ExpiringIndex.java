@@ -38,31 +38,77 @@ import org.slf4j.LoggerFactory;
 public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private String label;
     private long maxSize;
     private long expiryInterval;
+    private long cleanerInterval;
     private long fullIndexWarningInterval;
     private long fullIndexWarning;
-    private String label;
     private ExpiringIndexCleaner indexCleaner;
     private Timer cleanerTimer;
-    private long cleanerInterval = INDEX_CLEANER_INTERVAL;
 
-    public ExpiringIndex(int maxSize, String label) {
-        this(maxSize, INDEX_EXPIRY_INTERVAL, FULL_INDEX_WARNING_INTERVAL, label);
+    /**
+     * Instance of Expiring Index that will remove items after a period of time
+     * which have not been accessed.
+     *
+     * @param label Name of the index.
+     * @param maxSize Maximum size of the index when items will no longer be
+     * added. Unlimited size (-1) will still remove expired items.
+     */
+    public ExpiringIndex(String label, int maxSize) {
+        this(label, maxSize, INDEX_EXPIRY_INTERVAL, INDEX_CLEANER_INTERVAL, FULL_INDEX_WARNING_INTERVAL);
     }
 
-    public ExpiringIndex(int maxSize, long expiryInterval, String label) {
-        this(maxSize, expiryInterval, FULL_INDEX_WARNING_INTERVAL, label);
+    /**
+     * Instance of Expiring Index that will remove items after a period of time
+     * which have not been accessed.
+     *
+     * @param label Name of the index.
+     * @param maxSize Maximum size of the index when items will no longer be
+     * added. Unlimited size (-1) will still remove expired items.
+     * @param expiryInterval Duration that items remain in index.
+     */
+    public ExpiringIndex(String label, int maxSize, long expiryInterval) {
+        this(label, maxSize, expiryInterval, INDEX_CLEANER_INTERVAL, FULL_INDEX_WARNING_INTERVAL);
     }
 
-    public ExpiringIndex(int maxSize, long expiryInterval, long fullIndexWarningInterval, String label) {
+    /**
+     * Instance of Expiring Index that will remove items after a period of time
+     * which have not been accessed.
+     *
+     * @param label Name of the index.
+     * @param maxSize Maximum size of the index when items will no longer be
+     * added. Unlimited size (-1) will still remove expired items.
+     * @param expiryInterval Duration that items remain in index.
+     * @param cleanerInterval Frequency that items are checked for removal from
+     * index.
+     */
+    public ExpiringIndex(String label, int maxSize, long expiryInterval, long cleanerInterval) {
+        this(label, maxSize, expiryInterval, cleanerInterval, FULL_INDEX_WARNING_INTERVAL);
+    }
+
+    /**
+     * Instance of Expiring Index that will remove items after a period of time
+     * which have not been accessed.
+     *
+     * @param label Name of the index.
+     * @param maxSize Maximum size of the index when items will no longer be
+     * added. Unlimited size (-1) will still remove expired items.
+     * @param expiryInterval Duration that items remain in index.
+     * @param cleanerInterval Frequency that items are checked for removal from
+     * index.
+     * @param fullIndexWarningInterval Full index warning frequency.
+     */
+    public ExpiringIndex(String label, int maxSize, long expiryInterval, long cleanerInterval, long fullIndexWarningInterval) {
         super(maxSize > UNLIMITED_INDEX ? maxSize : UNLIMITED_INITIAL_CAPACITY);
+        this.label = label;
         this.maxSize = maxSize > UNLIMITED_INDEX ? maxSize : Long.MAX_VALUE;
-        this.expiryInterval = expiryInterval;
+        setCleanerInterval(cleanerInterval);
+        setExpiryInterval(expiryInterval);
         this.fullIndexWarningInterval = fullIndexWarningInterval;
         this.fullIndexWarning = System.currentTimeMillis();
-        this.label = label;
         this.indexCleaner = new ExpiringIndexCleaner(this, expiryInterval);
+
         this.cleanerTimer = null;
     }
 
@@ -115,19 +161,36 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
         this.maxSize = maxSize > UNLIMITED_INDEX ? maxSize : Long.MAX_VALUE;
     }
 
+    public long getCleanerInterval() {
+        return cleanerInterval;
+    }
+
+    public final void setCleanerInterval(long cleanerInterval) {
+        if (MINIMUM_INDEX_CLEANER_INTERVAL < cleanerInterval) {
+            this.cleanerInterval = cleanerInterval;
+        } else {
+            LOGGER.warn("Cleaner Interval: {} less than minimum: {}. Setting to minimum.", cleanerInterval, MINIMUM_INDEX_CLEANER_INTERVAL);
+            this.cleanerInterval = MINIMUM_INDEX_CLEANER_INTERVAL;
+        }
+    }
+
     public long getExpiryInterval() {
         return expiryInterval;
     }
 
-    public void setExpiryInterval(long expiryInterval) {
+    public final void setExpiryInterval(long expiryInterval) {
 
-        if (expiryInterval < cleanerInterval) {
-            this.expiryInterval = cleanerInterval * 2;
-            LOGGER.warn("Expiry Interval: {} cannot be less than Cleaner Interval: {}. Setting to twice the Cleaner Interval: {}", expiryInterval, cleanerInterval, expiryInterval);
+        long minimum_interval = cleanerInterval + 1;
+        if (expiryInterval < minimum_interval) {
+            LOGGER.warn("Expiry Interval: {} cannot be less than Cleaner Interval: {}. Setting to Minimum Interval: {}", expiryInterval, cleanerInterval, minimum_interval);
+            this.expiryInterval = minimum_interval;
         } else {
             this.expiryInterval = expiryInterval;
         }
-        this.indexCleaner.setExpiryInterval(this.expiryInterval);
+
+        if (this.indexCleaner != null) {
+            this.indexCleaner.setExpiryInterval(this.expiryInterval);
+        }
     }
 
     public long getFullIndexWarningInterval() {
@@ -160,12 +223,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
 
     public void startExpiry(long cleanerInterval) {
         if (cleanerTimer == null) {
-            if (MINIMUM_INDEX_CLEANER_INTERVAL < cleanerInterval) {
-                this.cleanerInterval = cleanerInterval;
-            } else {
-                LOGGER.warn("Cleaner Interval: {} less than minimum: {}. Setting to minimum.", cleanerInterval, MINIMUM_INDEX_CLEANER_INTERVAL);
-                this.cleanerInterval = MINIMUM_INDEX_CLEANER_INTERVAL;
-            }
+            setCleanerInterval(cleanerInterval);
             cleanerTimer = new Timer(label, true);
             indexCleaner = new ExpiringIndexCleaner(indexCleaner);
             cleanerTimer.scheduleAtFixedRate(indexCleaner, this.cleanerInterval, this.cleanerInterval);
@@ -181,7 +239,7 @@ public class ExpiringIndex<K, V> extends ConcurrentHashMap<K, V> {
 
     @Override
     public String toString() {
-        return "ExpiringIndex{" + "maxSize=" + maxSize + ", expiryInterval=" + expiryInterval + ", fullIndexWarningInterval=" + fullIndexWarningInterval + ", fullIndexWarning=" + fullIndexWarning + ", label=" + label + ", indexCleaner=" + indexCleaner + ", cleanerTimer=" + cleanerTimer + '}';
+        return "ExpiringIndex{" + "label=" + label + ", maxSize=" + maxSize + ", expiryInterval=" + expiryInterval + ", cleanerInterval=" + cleanerInterval + ", fullIndexWarningInterval=" + fullIndexWarningInterval + ", fullIndexWarning=" + fullIndexWarning + ", indexCleaner=" + indexCleaner + ", cleanerTimer=" + cleanerTimer + '}';
     }
 
 }
