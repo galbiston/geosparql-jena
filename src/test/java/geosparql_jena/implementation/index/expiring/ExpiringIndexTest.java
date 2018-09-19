@@ -17,7 +17,7 @@
  */
 package geosparql_jena.implementation.index.expiring;
 
-import geosparql_jena.implementation.GeoSPARQLSupport;
+import geosparql_jena.implementation.GeoSPARQLConfig;
 import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.datatype.WKTDatatype;
 import geosparql_jena.implementation.index.GeometryLiteralIndex;
@@ -164,7 +164,7 @@ public class ExpiringIndexTest {
     @Test
     public void testIndexRetrieval() throws FactoryException {
         System.out.println("Index Retrieval");
-        GeoSPARQLSupport.setupMemoryIndex();
+        GeoSPARQLConfig.setupMemoryIndex();
         String testItem = "POINT EMPTY";
         GeometryWrapper result = GeometryLiteralIndex.retrieve(testItem, WKTDatatype.INSTANCE, GeometryLiteralIndex.GeometryIndex.PRIMARY);
 

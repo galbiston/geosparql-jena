@@ -17,7 +17,7 @@
  */
 package geosparql_jena.implementation.data_conversion;
 
-import geosparql_jena.implementation.GeoSPARQLSupport;
+import geosparql_jena.implementation.GeoSPARQLConfig;
 import geosparql_jena.implementation.vocabulary.Geo;
 import geosparql_jena.implementation.vocabulary.GeoSPARQL_URI;
 import geosparql_jena.implementation.vocabulary.Other_URI;
@@ -69,7 +69,7 @@ public class RandomData {
             }
         }
 
-        GeoSPARQLSupport.setupNoIndex();
+        GeoSPARQLConfig.setupNoIndex();
         Model model = ModelFactory.createDefaultModel();
         Model geosparqlSchema = RDFDataMgr.loadModel(geosparpqlSchema.getAbsolutePath());
         InfModel infModel = ModelFactory.createRDFSModel(geosparqlSchema, model);

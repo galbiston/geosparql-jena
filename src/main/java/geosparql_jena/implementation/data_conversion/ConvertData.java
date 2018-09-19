@@ -17,7 +17,7 @@
  */
 package geosparql_jena.implementation.data_conversion;
 
-import geosparql_jena.implementation.GeoSPARQLSupport;
+import geosparql_jena.implementation.GeoSPARQLConfig;
 import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.datatype.GeometryDatatype;
 import java.io.File;
@@ -94,7 +94,7 @@ public class ConvertData {
         }
 
         //Setup CRS registries but without indexing.
-        GeoSPARQLSupport.setupNoIndex();
+        GeoSPARQLConfig.setupNoIndex();
 
         //Iterate through all statements: convert geometry literals and just add the rest.
         Model outputModel = ModelFactory.createDefaultModel();

@@ -18,7 +18,7 @@
 package geosparql_jena.geo.topological;
 
 import geosparql_jena.geof.topological.GenericFilterFunction;
-import geosparql_jena.implementation.GeoSPARQLSupport;
+import geosparql_jena.implementation.GeoSPARQLConfig;
 import geosparql_jena.implementation.index.QueryRewriteIndex;
 import geosparql_jena.implementation.vocabulary.Geo;
 import java.util.ArrayList;
@@ -205,7 +205,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
 
         //If query re-writing is disabled then exit - graph does not contain the asserted relation.
-        if (!GeoSPARQLSupport.isQueryRewriteEnabled()) {
+        if (!GeoSPARQLConfig.isQueryRewriteEnabled()) {
             return false;
         }
 

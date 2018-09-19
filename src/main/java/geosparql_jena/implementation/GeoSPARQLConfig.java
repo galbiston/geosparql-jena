@@ -43,7 +43,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
  *
  *
  */
-public class GeoSPARQLSupport {
+public class GeoSPARQLConfig {
 
     /**
      * GeoSPARQL schema
@@ -60,7 +60,7 @@ public class GeoSPARQLSupport {
      * @return
      */
     public static InfModel prepare() {
-        return GeoSPARQLSupport.prepareRDFS(ModelFactory.createDefaultModel());
+        return GeoSPARQLConfig.prepareRDFS(ModelFactory.createDefaultModel());
     }
 
     /**
@@ -86,7 +86,7 @@ public class GeoSPARQLSupport {
      * @return
      */
     public static InfModel prepare(Model model, Reasoner reasoner) {
-        InputStream geosparqlSchemaInputStream = GeoSPARQLSupport.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA);
+        InputStream geosparqlSchemaInputStream = GeoSPARQLConfig.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA);
         return prepare(model, geosparqlSchemaInputStream, reasoner);
     }
 
@@ -99,7 +99,7 @@ public class GeoSPARQLSupport {
      * @return
      */
     public static InfModel prepareRDFS(InputStream inputStream) {
-        return GeoSPARQLSupport.prepare(inputStream, ReasonerRegistry.getRDFSReasoner());
+        return GeoSPARQLConfig.prepare(inputStream, ReasonerRegistry.getRDFSReasoner());
     }
 
     /**
@@ -115,7 +115,7 @@ public class GeoSPARQLSupport {
         Model model = ModelFactory.createDefaultModel();
         model.read(inputStream, null);
 
-        return GeoSPARQLSupport.prepare(model, reasoner);
+        return GeoSPARQLConfig.prepare(model, reasoner);
     }
 
     /**
@@ -132,7 +132,7 @@ public class GeoSPARQLSupport {
     public static InfModel prepare(Model model, InputStream geosparqlSchemaInputStream, Reasoner reasoner) {
 
         //Register GeoSPARQL functions if required.
-        GeoSPARQLSupport.setupMemoryIndex();
+        GeoSPARQLConfig.setupMemoryIndex();
 
         //Load GeoSPARQL Schema
         Model schema = ModelFactory.createDefaultModel();
