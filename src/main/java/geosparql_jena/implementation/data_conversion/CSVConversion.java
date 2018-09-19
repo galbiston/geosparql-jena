@@ -20,7 +20,7 @@ package geosparql_jena.implementation.data_conversion;
 import geosparql_jena.implementation.datatype.GMLDatatype;
 import geosparql_jena.implementation.datatype.GeometryDatatype;
 import geosparql_jena.implementation.datatype.WKTDatatype;
-import rdftables.datatypes.DatatypeController;
+import rdf_tables.datatypes.DatatypeController;
 
 /**
  *
