@@ -63,7 +63,7 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
             boolean result = relate(geometry1, geometry2);
             return result;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Filter Function Exception: {}", ex.getMessage());
+            LOGGER.error("Filter Function Exception: {} - NodeValue1: {}, NodeValue2: {}", ex.getMessage(), v1, v2);
             return Boolean.FALSE;
         }
     }
