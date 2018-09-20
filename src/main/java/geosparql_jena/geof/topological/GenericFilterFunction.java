@@ -47,12 +47,15 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
         try {
 
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
-            if (geometry1 == null) {
+
+            //Check if the first literal is unparseable or geometry is empty (always fails).
+            if (geometry1 == null || geometry1.isEmpty()) {
                 return Boolean.FALSE;
             }
 
+            //Check if the second literal is unparseable or geometry is empty (always fails).
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
-            if (geometry2 == null) {
+            if (geometry2 == null || geometry2.isEmpty()) {
                 return Boolean.FALSE;
             }
 
