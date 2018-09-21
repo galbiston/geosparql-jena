@@ -18,7 +18,7 @@
 package geosparql_jena.geo.topological;
 
 import geosparql_jena.geof.topological.GenericFilterFunction;
-import geosparql_jena.implementation.GeoSPARQLConfig;
+import geosparql_jena.configuration.GeoSPARQLConfig;
 import geosparql_jena.implementation.index.QueryRewriteIndex;
 import geosparql_jena.implementation.vocabulary.Geo;
 import java.util.ArrayList;

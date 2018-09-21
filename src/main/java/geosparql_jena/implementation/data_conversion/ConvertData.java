@@ -17,7 +17,7 @@
  */
 package geosparql_jena.implementation.data_conversion;
 
-import geosparql_jena.implementation.GeoSPARQLConfig;
+import geosparql_jena.configuration.GeoSPARQLConfig;
 import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.datatype.GeometryDatatype;
 import java.io.File;
@@ -217,7 +217,7 @@ public class ConvertData {
         LOGGER.info("Converting File: {} to {} in srs URI: {} - Completed", inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), outputSrsURI);
     }
 
-    protected static void writeOutputModel(Model outputModel, File outputFile, Lang outputLang, File inputFile) {
+    public static void writeOutputModel(Model outputModel, File outputFile, Lang outputLang, File inputFile) {
         if (!outputModel.isEmpty()) {
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 RDFDataMgr.write(outputStream, outputModel, outputLang);

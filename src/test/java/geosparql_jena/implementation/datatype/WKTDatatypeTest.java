@@ -18,7 +18,7 @@
 package geosparql_jena.implementation.datatype;
 
 import geosparql_jena.implementation.DimensionInfo;
-import geosparql_jena.implementation.GeoSPARQLConfig;
+import geosparql_jena.configuration.GeoSPARQLConfig;
 import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import geosparql_jena.implementation.jts.CustomGeometryFactory;

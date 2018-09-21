@@ -17,7 +17,7 @@
  */
 package geosparql_jena.implementation.data_conversion;
 
-import geosparql_jena.implementation.GeoSPARQLConfig;
+import geosparql_jena.configuration.GeoSPARQLConfig;
 import geosparql_jena.implementation.vocabulary.Geo;
 import geosparql_jena.implementation.vocabulary.GeoSPARQL_URI;
 import geosparql_jena.implementation.vocabulary.Other_URI;

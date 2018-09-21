@@ -16,7 +16,7 @@
 package geosparql_jena.geo.topological;
 
 import geosparql_jena.geo.topological.property_functions.simple_features.SfContainsPF;
-import geosparql_jena.implementation.GeoSPARQLConfig;
+import geosparql_jena.configuration.GeoSPARQLConfig;
 import geosparql_jena.implementation.datatype.WKTDatatype;
 import geosparql_jena.implementation.index.IndexConfiguration.IndexOption;
 import geosparql_jena.implementation.vocabulary.Geo;
