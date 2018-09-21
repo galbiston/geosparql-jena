@@ -17,7 +17,7 @@
  */
 package geosparql_jena.implementation.index.expiring;
 
-import geosparql_jena.implementation.GeoSPARQLConfig;
+import geosparql_jena.configuration.GeoSPARQLConfig;
 import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.datatype.WKTDatatype;
 import geosparql_jena.implementation.index.GeometryLiteralIndex;
@@ -65,24 +65,26 @@ public class ExpiringIndexTest {
     public void testExpiry() throws InterruptedException {
         System.out.println("expiry");
 
-        long expiryInterval = 5000l;
+        long expiryInterval = 2000l;
+        long cleanerInterval = 1000l;
         long halfExpiryInterval = expiryInterval / 2;
 
-        ExpiringIndex<String, String> instance = new ExpiringIndex<>("Test", 5, expiryInterval, halfExpiryInterval);
-        instance.startExpiry();
+        ExpiringIndex<String, String> instance = new ExpiringIndex<>("Test", 5, expiryInterval, cleanerInterval);
+
         instance.put("key1", "value1");
         instance.put("key2", "value2");
         instance.put("key3", "value3");
         instance.put("key4", "value4");
-        Thread.sleep(halfExpiryInterval);
-        instance.put("key5", "value5");
+        instance.startExpiry();
+        Thread.sleep(halfExpiryInterval + 100);
+        instance.put("key5", "value5"); //Should be rejected.
         instance.put("key6", "value6");
         //System.out.println("Size Before: " + instance.size());
-        Thread.sleep(expiryInterval);
+        Thread.sleep(halfExpiryInterval + cleanerInterval);
+        instance.stopExpiry();
         //System.out.println("Size After: " + instance.size());
         int result = instance.size();
         int expResult = 1;
-        instance.stopExpiry();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -103,20 +105,21 @@ public class ExpiringIndexTest {
         long quarterExpiryInterval = expiryInterval / 3 * 4;
 
         ExpiringIndex<String, String> instance = new ExpiringIndex<>("Test", 5, expiryInterval, halfExpiryInterval);
-        instance.startExpiry();
+
         instance.put("key1", "value1");
         instance.put("key2", "value2");
         instance.put("key3", "value3");
         instance.put("key4", "value4");
+        instance.startExpiry();
         Thread.sleep(halfExpiryInterval + quarterExpiryInterval);
         instance.put("key1", "value1");
         instance.put("key2", "value2");
         //System.out.println("Size Before: " + instance.size());
         Thread.sleep(halfExpiryInterval);
+        instance.stopExpiry();
         //System.out.println("Size After: " + instance.size());
         int result = instance.size();
         int expResult = 2;
-        instance.stopExpiry();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -133,23 +136,25 @@ public class ExpiringIndexTest {
         System.out.println("empty");
 
         long expiryInterval = 2000l;
+        long cleanerInterval = 1000l;
         long halfExpiryInterval = expiryInterval / 2;
 
-        ExpiringIndex<String, String> instance = new ExpiringIndex<>("Test", 5, expiryInterval, halfExpiryInterval);
-        instance.startExpiry();
+        ExpiringIndex<String, String> instance = new ExpiringIndex<>("Test", 5, expiryInterval, cleanerInterval);
+
         instance.put("key1", "value1");
         instance.put("key2", "value2");
         instance.put("key3", "value3");
         instance.put("key4", "value4");
+        instance.startExpiry();
         Thread.sleep(halfExpiryInterval);
         instance.put("key1", "value1");
         instance.put("key2", "value2");
         //System.out.println("Size Before: " + instance.size());
-        Thread.sleep(expiryInterval * 2);
+        Thread.sleep(expiryInterval + cleanerInterval);
+        instance.stopExpiry();
         //System.out.println("Size After: " + instance.size());
         int result = instance.size();
         int expResult = 0;
-        instance.stopExpiry();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -190,7 +195,6 @@ public class ExpiringIndexTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -208,7 +212,6 @@ public class ExpiringIndexTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -226,7 +229,6 @@ public class ExpiringIndexTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
     /**
@@ -241,10 +243,9 @@ public class ExpiringIndexTest {
         long expResult = INDEX_CLEANER_INTERVAL + 1;
         long result = instance.getExpiryInterval();
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-
     }
 
 }
