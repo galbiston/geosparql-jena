@@ -443,7 +443,7 @@ public class GeometryWrapper implements Serializable {
         return this.xyGeometry.equalsTopo(transformedGeometry.xyGeometry);
     }
 
-    public boolean equals(GeometryWrapper targetGeometry, double tolerance) throws FactoryException, MismatchedDimensionException, TransformException {
+    public boolean equalsExact(GeometryWrapper targetGeometry, double tolerance) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.equalsExact(transformedGeometry.xyGeometry, tolerance);
     }

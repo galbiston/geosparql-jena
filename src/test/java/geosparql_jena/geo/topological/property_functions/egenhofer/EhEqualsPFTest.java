@@ -17,6 +17,7 @@
  */
 package geosparql_jena.geo.topological.property_functions.egenhofer;
 
+import geosparql_jena.implementation.GeometryWrapper;
 import geosparql_jena.implementation.datatype.WKTDatatype;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -28,8 +29,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Equal returns t (TRUE) if two geometries of the same type have identical X,Y
- * coordinate values.
+ * Equal returns t (TRUE) if two geometries have at least one point in common,
+ * and no point of either geometry lies in the exterior of the other geometry.
  */
 public class EhEqualsPFTest {
 
@@ -182,6 +183,46 @@ public class EhEqualsPFTest {
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Empty geometries are not spatially equal.
+     */
+    @Test
+    public void testFilterFunction_emptyWKT_emptyGML() {
+        System.out.println("filterFunction_emptyWKT_emptyGML");
+
+        Literal emptyWKT = GeometryWrapper.getEmptyWKT().asLiteral();
+        Literal emptyGML = GeometryWrapper.getEmptyGML().asLiteral();
+
+        EhEqualsPF instance = new EhEqualsPF();
+
+        Boolean expResult = false;
+        Boolean result = instance.testFilterFunction(emptyWKT.asNode(), emptyGML.asNode());
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Empty geometries are not spatially equal.
+     */
+    @Test
+    public void testFilterFunction_emptyWKT_emptyWKT() {
+        System.out.println("filterFunction_empty_empty");
+
+        Literal emptyWKT = GeometryWrapper.getEmptyWKT().asLiteral();
+        Literal emptyWKT2 = GeometryWrapper.getEmptyWKT().asLiteral();
+
+        EhEqualsPF instance = new EhEqualsPF();
+
+        Boolean expResult = false;
+        Boolean result = instance.testFilterFunction(emptyWKT.asNode(), emptyWKT2.asNode());
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
