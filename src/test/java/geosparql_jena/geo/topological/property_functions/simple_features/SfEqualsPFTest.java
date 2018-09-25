@@ -72,7 +72,7 @@ public class SfEqualsPFTest {
 
     @Test
     public void testFilterFunction_linestring_linestring() {
-        System.out.println("filterFunction_polygon_polygon");
+        System.out.println("filterFunction_linestring_linestring");
 
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 80 50)", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 60 50, 80 50)", WKTDatatype.INSTANCE);
