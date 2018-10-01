@@ -17,7 +17,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.vocabulary;
 
-import static geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEOF_URI;
+import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEOF_URI;
 
 /**
  *

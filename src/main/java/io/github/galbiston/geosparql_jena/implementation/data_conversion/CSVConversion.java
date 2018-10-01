@@ -20,7 +20,7 @@ package io.github.galbiston.geosparql_jena.implementation.data_conversion;
 import io.github.galbiston.geosparql_jena.implementation.datatype.GMLDatatype;
 import io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
-import rdf_tables.datatypes.DatatypeController;
+import io.github.galbiston.rdf_tables.datatypes.DatatypeController;
 
 /**
  *

@@ -19,7 +19,7 @@ package io.github.galbiston.geosparql_jena.implementation.registry;
 
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
-import static geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_CRS_URI;
+import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_CRS_URI;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
