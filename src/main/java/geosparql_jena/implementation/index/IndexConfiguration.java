@@ -17,10 +17,10 @@
  */
 package geosparql_jena.implementation.index;
 
-import static geosparql_jena.implementation.index.IndexDefaultValues.NO_INDEX;
-import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
 import geosparql_jena.implementation.registry.CRSRegistry;
 import geosparql_jena.implementation.registry.MathTransformRegistry;
+import static io.github.galbiston.expiring_index.IndexDefaultValues.NO_INDEX;
+import static io.github.galbiston.expiring_index.IndexDefaultValues.UNLIMITED_INDEX;
 import java.util.UUID;
 
 /**

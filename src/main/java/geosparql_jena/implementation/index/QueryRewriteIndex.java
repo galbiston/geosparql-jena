@@ -18,11 +18,11 @@
 package geosparql_jena.implementation.index;
 
 import geosparql_jena.geo.topological.GenericPropertyFunction;
-import static geosparql_jena.implementation.index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
-import static geosparql_jena.implementation.index.IndexDefaultValues.NO_INDEX;
-import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_EXPIRY;
-import static geosparql_jena.implementation.index.IndexDefaultValues.UNLIMITED_INDEX;
-import geosparql_jena.implementation.index.expiring.ExpiringIndex;
+import io.github.galbiston.expiring_index.ExpiringIndex;
+import static io.github.galbiston.expiring_index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
+import static io.github.galbiston.expiring_index.IndexDefaultValues.NO_INDEX;
+import static io.github.galbiston.expiring_index.IndexDefaultValues.UNLIMITED_EXPIRY;
+import static io.github.galbiston.expiring_index.IndexDefaultValues.UNLIMITED_INDEX;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Property;
 

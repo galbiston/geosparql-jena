@@ -59,6 +59,9 @@ dependencies {
     ext.rdfTablesVersion = "1.0.0"
     api "io.github.galbiston:rdf-tables:$rdfTablesVersion"
 
+    //Expiring Index
+    ext.expiringIndexVersion = "1.0.0"
+    api "io.github.galbiston:expiring-index:$expiringIndexVersion"
 }
 
 gradle.projectsEvaluated {
