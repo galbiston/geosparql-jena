@@ -71,11 +71,11 @@ gradle.projectsEvaluated {
 }
 
 apply plugin: 'maven-publish'
+group = 'io.github.galbiston'
+version = '1.0.0'
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            group = 'io.github.galbiston'
-            version = '1.0.0'
             artifactId = 'geosparql-jena'
             from components.java
         }
