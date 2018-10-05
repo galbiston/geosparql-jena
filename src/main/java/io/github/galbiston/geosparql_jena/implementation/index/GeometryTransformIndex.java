@@ -17,16 +17,16 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.index;
 
+import io.github.galbiston.expiring_map.ExpiringMap;
+import static io.github.galbiston.expiring_map.MapDefaultValues.MAP_EXPIRY_INTERVAL;
+import static io.github.galbiston.expiring_map.MapDefaultValues.NO_MAP;
+import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_EXPIRY;
+import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.jts.GeometryTransformation;
 import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.registry.MathTransformRegistry;
-import io.github.galbiston.expiring_index.ExpiringIndex;
-import static io.github.galbiston.expiring_index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
-import static io.github.galbiston.expiring_index.IndexDefaultValues.NO_INDEX;
-import static io.github.galbiston.expiring_index.IndexDefaultValues.UNLIMITED_EXPIRY;
-import static io.github.galbiston.expiring_index.IndexDefaultValues.UNLIMITED_INDEX;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -42,7 +42,7 @@ public class GeometryTransformIndex {
 
     private static Boolean IS_INDEX_ACTIVE = true;
     private static final String GEOMETRY_TRANSFORM_LABEL = "Geometry Transform";
-    private static ExpiringIndex<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(GEOMETRY_TRANSFORM_LABEL, UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL);
+    private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(GEOMETRY_TRANSFORM_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
     public static Long RETRIEVAL_COUNT = 0L;
 
     /**
@@ -108,13 +108,13 @@ public class GeometryTransformIndex {
      * @param maxSize : use -1 for unlimited size
      */
     public static final void setMaxSize(int maxSize) {
-        IS_INDEX_ACTIVE = NO_INDEX != maxSize;
+        IS_INDEX_ACTIVE = NO_MAP != maxSize;
 
         if (IS_INDEX_ACTIVE) {
             if (GEOMETRY_TRANSFORM_INDEX != null) {
                 GEOMETRY_TRANSFORM_INDEX.stopExpiry();
             }
-            GEOMETRY_TRANSFORM_INDEX = new ExpiringIndex<>(GEOMETRY_TRANSFORM_LABEL, maxSize, INDEX_EXPIRY_INTERVAL);
+            GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(GEOMETRY_TRANSFORM_LABEL, maxSize, MAP_EXPIRY_INTERVAL);
             GEOMETRY_TRANSFORM_INDEX.startExpiry();
         } else {
             if (GEOMETRY_TRANSFORM_INDEX != null) {

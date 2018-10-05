@@ -17,12 +17,12 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.index;
 
+import io.github.galbiston.expiring_map.ExpiringMap;
+import static io.github.galbiston.expiring_map.MapDefaultValues.MAP_EXPIRY_INTERVAL;
+import static io.github.galbiston.expiring_map.MapDefaultValues.NO_MAP;
+import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_EXPIRY;
+import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
 import io.github.galbiston.geosparql_jena.geo.topological.GenericPropertyFunction;
-import io.github.galbiston.expiring_index.ExpiringIndex;
-import static io.github.galbiston.expiring_index.IndexDefaultValues.INDEX_EXPIRY_INTERVAL;
-import static io.github.galbiston.expiring_index.IndexDefaultValues.NO_INDEX;
-import static io.github.galbiston.expiring_index.IndexDefaultValues.UNLIMITED_EXPIRY;
-import static io.github.galbiston.expiring_index.IndexDefaultValues.UNLIMITED_INDEX;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Property;
 
@@ -33,7 +33,7 @@ public class QueryRewriteIndex {
 
     private static Boolean IS_INDEX_ACTIVE = true;
     private static final String QUERY_REWRITE_LABEL = "Query Rewrite";
-    private static ExpiringIndex<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringIndex<>(QUERY_REWRITE_LABEL, UNLIMITED_INDEX, INDEX_EXPIRY_INTERVAL);
+    private static ExpiringMap<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringMap<>(QUERY_REWRITE_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
     public static Long RETRIEVAL_COUNT = 0L;
 
     /**
@@ -84,13 +84,13 @@ public class QueryRewriteIndex {
      * @param maxSize : use -1 for unlimited size
      */
     public static final void setMaxSize(int maxSize) {
-        IS_INDEX_ACTIVE = NO_INDEX != maxSize;
+        IS_INDEX_ACTIVE = NO_MAP != maxSize;
 
         if (IS_INDEX_ACTIVE) {
             if (QUERY_REWRITE_INDEX != null) {
                 QUERY_REWRITE_INDEX.stopExpiry();
             }
-            QUERY_REWRITE_INDEX = new ExpiringIndex<>(QUERY_REWRITE_LABEL, maxSize, INDEX_EXPIRY_INTERVAL);
+            QUERY_REWRITE_INDEX = new ExpiringMap<>(QUERY_REWRITE_LABEL, maxSize, MAP_EXPIRY_INTERVAL);
             QUERY_REWRITE_INDEX.startExpiry();
         } else {
             if (QUERY_REWRITE_INDEX != null) {
