@@ -1,8 +1,3 @@
-rootProject.name = 'GeoSPARQLJena'
+rootProject.name = 'geosparql-jena'
 
 enableFeaturePreview('STABLE_PUBLISHING')
-
-//Gradle doesn't yet support including builds which contain included builds.
-//TODO Need to develop the data_conversion.CSVConversion methods for tabular data.
-//TODO RDFConverter needs to be published to local or remote Maven and declared as a normal dependency.
-//includeBuild '../rdfconverter'
