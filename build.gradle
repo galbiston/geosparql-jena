@@ -89,7 +89,7 @@ publishing {
                 artifact javadocJar
                 pom {
                     name = 'GeoSPARQL Jena'
-                    description = 'Conversion of delimited value/tabular files into RDF serialisation.'
+                    description = 'API implemenation of GeoSPARQL 1.0 standard using Apache Jena.'
                     url = 'https://github.com/galbiston/geosparql-jena'
                     licenses {
                         license {
