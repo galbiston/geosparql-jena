@@ -90,7 +90,7 @@ publishing {
                 pom {
                     name = 'GeoSPARQL Jena'
                     description = 'Conversion of delimited value/tabular files into RDF serialisation.'
-                    url = 'https://github.com/galbiston/rdf-tables'
+                    url = 'https://github.com/galbiston/geosparql-jena'
                     licenses {
                         license {
                             name = 'The Apache License, Version 2.0'
@@ -104,9 +104,9 @@ publishing {
                         }
                     }
                     scm {
-                        connection = 'scm:git:git://github.com/galbiston/rdf-tables.git'
-                        developerConnection = 'scm:git:ssh://git@github.com:galbiston/rdf-tables.git'
-                        url = 'https://github.com/galbiston/rdf-tables.git'
+                        connection = 'scm:git:git://github.com/galbiston/geosparql-jena.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:galbiston/geosparql-jena.git'
+                        url = 'https://github.com/galbiston/geosparql-jena.git'
                     }
                 }
             }
