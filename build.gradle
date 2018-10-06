@@ -1,4 +1,6 @@
 apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -64,22 +66,72 @@ dependencies {
     api "io.github.galbiston:expiring-map:$expiringMapVersion"
 }
 
-gradle.projectsEvaluated {
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    }
-}
-
-apply plugin: 'maven-publish'
 group = 'io.github.galbiston'
 version = '1.0.0'
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'geosparql-jena'
-            from components.java
+            pom {
+                artifactId = 'geosparql-jena'
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+                pom {
+                    name = 'GeoSPARQL Jena'
+                    description = 'Conversion of delimited value/tabular files into RDF serialisation.'
+                    url = 'https://github.com/galbiston/rdf-tables'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            name = 'Greg Albiston'
+                            email = 'galbiston@mail.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/galbiston/rdf-tables.git'
+                        developerConnection = 'scm:git:ssh://git@github.com:galbiston/rdf-tables.git'
+                        url = 'https://github.com/galbiston/rdf-tables.git'
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
+            }
         }
     }
 }
 
 build.finalizedBy(publishToMavenLocal)
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html4', true)
+    }
+}
