@@ -19,6 +19,7 @@ The WKT (as described in 11-052r4) and GML 2.0 Simple Features Profile (11-100r3
 Additional serialisations can be implemented by extending the `io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype`.
 
 All three spatial relation families are supported: Simple Feature, Egenhofer and RCC8.
+
 Indexing and caching of spatial objects and relations is performed _on-demand_ during query execution.
 Therefore, set-up delays should be minimal.
 
@@ -27,7 +28,7 @@ The benchmarking used the Geographica query and dataset (http://geographica.di.u
 Publication of the benchmarking results are forthcoming.
 
 ##Additional Features
-Support is also provided for:
+The following additional features are also provided:
 
 * Geometry properties are automatically calculated and do not need to be asserted in the dataset.
 * Conversion between EPSG spatial/coordinate reference systems is applied automatically. Therefore, mixed datasets or querying can be applied. This is reliant upon local installation of Apache SIS EPSG dataset, see below.
@@ -132,19 +133,29 @@ A corrected version of the schema is available in the `Resources` folder.
 The GeoSPARQL and Simple Features standard both define the DE-9IM intersection patterns for the three spatial relation families.
 However, these patterns are not consistent with the patterns stated by the JTS library for certain relations.
 
-For example, GeoSPARQL/Simple Features use “TFFFTFFFT” _equals_ relations in Simple Features, Egenhofer and RCC8.
+For example, GeoSPARQL/Simple Features use `TFFFTFFFT` _equals_ relations in Simple Features, Egenhofer and RCC8.
 However, this does not yield a true result when comparing a pair of point geometries.
 The Simple Features standard states that the boundary of a point is empty.
 Therefore, the boundary intersection of two points would also be empty.
 
-JTS, and others, use the alternative intersection pattern of “T*F**FFF*”.
+JTS, and others, use the alternative intersection pattern of `T*F**FFF*`.
 This is a combination of the _within_ and _contains_ relations and yields the expected results for all geometry types.
 
 The spatial relations utilised by JTS have been applied in the library but feedback on this choice is welcome.
 A user can supply their own DE-9IM intersection patterns by using the `geof:relate` filter function.
 
+### Spatial Relations and Geometry Shapes/Types
+The spatial relations for the three spatial families do not apply to all combinations of the geometry shapes (`Point`, `LineString`, `Polygon`) and their collections  (`MultiPoint`, `MultiLineString`, `MultiPolygon`).
+Therefore, some queries may not produce all the results that may initially be expected.
+
+In some relations there may only be results when the collection is being used, e.g. two multi points can overlap but two points cannot.
+A relation may only apply for one combination but not its reciprocal, e.g. a line may cross a polygon but a polygon may not cross a line.
+The _RCC8_ family only applies to `Polygon` and `MultiPolygon` types.
+
+Refer to pages 8-10 of 11-052r4 GeoSPARQL standard for more details.
+
 ### Equals Relations
-The three equals relations (sfEquals, ehEquals and rccEquals) use spatial equality and not lexical equality.
+The three equals relations (_sfEquals_, _ehEquals_ and _rccEquals_) use spatial equality and not lexical equality.
 Therefore, some comparisons using these relations may not be as expected.
 
 - True if two geometries have at least one point in common and no point of either geometry lies in the exterior of the other geometry.
