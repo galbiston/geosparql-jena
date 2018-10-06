@@ -18,7 +18,7 @@ It implements the six Conformance classes described in the GeoSPARQL document:
 The WKT (as described in 11-052r4) and GML 2.0 Simple Features Profile (11-100r3) serialisations are supported.
 Additional serialisations can be implemented by extending the `io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype`.
 
-All three spatial relation families are supported: Simple Feature, Egenhofer and RCC8.
+All three spatial relation families are supported: _Simple Feature_, _Egenhofer_ and _RCC8_.
 
 Indexing and caching of spatial objects and relations is performed _on-demand_ during query execution.
 Therefore, set-up delays should be minimal.
@@ -133,7 +133,7 @@ A corrected version of the schema is available in the `Resources` folder.
 The GeoSPARQL and Simple Features standard both define the DE-9IM intersection patterns for the three spatial relation families.
 However, these patterns are not consistent with the patterns stated by the JTS library for certain relations.
 
-For example, GeoSPARQL/Simple Features use `TFFFTFFFT` _equals_ relations in Simple Features, Egenhofer and RCC8.
+For example, GeoSPARQL/Simple Features use `TFFFTFFFT` _equals_ relations in _Simple Feature_, _Egenhofer_ and _RCC8_.
 However, this does not yield a true result when comparing a pair of point geometries.
 The Simple Features standard states that the boundary of a point is empty.
 Therefore, the boundary intersection of two points would also be empty.
