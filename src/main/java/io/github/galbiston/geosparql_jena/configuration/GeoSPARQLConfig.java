@@ -65,7 +65,7 @@ public class GeoSPARQLConfig {
      * @param geometryTransformIndex
      * @param queryRewriteIndex
      */
-    public static final void setupMemoryIndex(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
+    public static final void setupMemoryIndexSize(Integer geometryLiteralIndex, Integer geometryTransformIndex, Integer queryRewriteIndex) {
         setup(IndexOption.MEMORY, true);
         IndexConfiguration.setIndexMaxSize(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
     }
@@ -80,7 +80,7 @@ public class GeoSPARQLConfig {
      * @param geometryTransformIndex
      * @param queryRewriteIndex
      */
-    public static final void setupMemoryIndex(Long geometryLiteralIndex, Long geometryTransformIndex, Long queryRewriteIndex) {
+    public static final void setupMemoryIndexExpiry(Long geometryLiteralIndex, Long geometryTransformIndex, Long queryRewriteIndex) {
         setup(IndexOption.MEMORY, true);
         IndexConfiguration.setIndexExpiry(geometryLiteralIndex, geometryTransformIndex, queryRewriteIndex);
     }
