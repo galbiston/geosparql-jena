@@ -62,12 +62,14 @@ public class GMLReader {
 
     /**
      * Based on GML Simple Features Profile 2.0: 10-100R3. All point geometries
-     * must use <gml:pos> child element and all other geometries <gml:posList>.
-     * "srsDimension" attribute found on the <gml:posList> element. Supporting
-     * the same geometries found as in WKT: Point, LineString and Polygon.
+     * must use {@code <gml:pos>} child element and all other geometries
+     * {@code <gml:posList>}. "srsDimension" attribute found on the
+     * {@code <gml:posList>} element. Supporting     * the same geometries found as in WKT: Point, LineString and Polygon.
      *
-     * @link https://en.wikipedia.org/wiki/Geography_Markup_Language#GML_Simple_Features_Profile
-     * @link https://portal.opengeospatial.org/files/?artifact_id=42729
+     * @see
+     * <a href="https://en.wikipedia.org/wiki/Geography_Markup_Language#GML_Simple_Features_Profile"></a>
+     * @see
+     * <a href="https://portal.opengeospatial.org/files/?artifact_id=42729"></a>
      *
      * @param gmlElement
      * @throws ParseException

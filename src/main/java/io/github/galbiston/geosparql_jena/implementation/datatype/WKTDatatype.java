@@ -86,9 +86,9 @@ public class WKTDatatype extends GeometryDatatype {
      * defined in [RFC 2396], one or more spaces (Unicode U+0020 character) as a
      * separator, and a WKT string as defined in Simple Features [ISO 19125-1].
      *
-     * Req 11 The URI <http://www.opengis.net/def/crs/OGC/1.3/CRS84> shall be
-     * assumed as the spatial reference system for geo:wktLiterals that do not
-     * specify an explicit spatial reference system URI.
+     * Req 11 The URI {@code <http://www.opengis.net/def/crs/OGC/1.3/CRS84>}
+     * shall be assumed as the spatial reference system for geo:wktLiterals that
+     * do not     * specify an explicit spatial reference system URI.
      *
      *
      * @param lexicalForm - the WKT literal to be parsed

@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * Return type ogc:geomLiteral ogc:geomLiteral can be a string value like
- * "<gml:Point ...>...</gml:Point>"
+ * {@code "<gml:Point ...>...</gml:Point>"}
  *
  *
  *
