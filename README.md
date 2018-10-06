@@ -148,9 +148,10 @@ A user can supply their own DE-9IM intersection patterns by using the `geof:rela
 The spatial relations for the three spatial families do not apply to all combinations of the geometry shapes (`Point`, `LineString`, `Polygon`) and their collections  (`MultiPoint`, `MultiLineString`, `MultiPolygon`).
 Therefore, some queries may not produce all the results that may initially be expected.
 
-In some relations there may only be results when the collection is being used, e.g. two multi points can overlap but two points cannot.
-A relation may only apply for one combination but not its reciprocal, e.g. a line may cross a polygon but a polygon may not cross a line.
-The _RCC8_ family only applies to `Polygon` and `MultiPolygon` types.
+Some examples are:
+* In some relations there may only be results when the collection is being used, e.g. two multi points can overlap but two points cannot.
+* A relation may only apply for one combination but not its reciprocal, e.g. a line may cross a polygon but a polygon may not cross a line.
+* The _RCC8_ family only applies to `Polygon` and `MultiPolygon` types.
 
 Refer to pages 8-10 of 11-052r4 GeoSPARQL standard for more details.
 
@@ -158,7 +159,8 @@ Refer to pages 8-10 of 11-052r4 GeoSPARQL standard for more details.
 The three equals relations (_sfEquals_, _ehEquals_ and _rccEquals_) use spatial equality and not lexical equality.
 Therefore, some comparisons using these relations may not be as expected.
 
-- True if two geometries have at least one point in common and no point of either geometry lies in the exterior of the other geometry.
+The JTS description of _sfEquals_ is:
+* True if two geometries have at least one point in common and no point of either geometry lies in the exterior of the other geometry.
 
 Therefore, two empty geometries are not spatially equal and will return false.
 Shapes which differ in the number of points but have the same geometry are equal and will return true.
@@ -203,7 +205,7 @@ These conversions can be applied to files, folders and Jena Models.
 
 ## Future Work
 
-* GeoJSON serialisation (https://tools.ietf.org/html/rfc7946)
+* Implementing GeoJSON as a `GeometryLiteral` serialisation (https://tools.ietf.org/html/rfc7946).
 
 ## Contributors
 The following individuals have made contributions to this project:
@@ -228,3 +230,4 @@ Performs indexing and caching on-demand which reduces set-up time and only perfo
 Uses JTS which does not truncate coordinate precision and applies spatial equality.|May truncate coordinate precision and apply lexical equality, which is quicker but does not comply with the standards.
 
 ![Powered by Apache Jena](https://www.apache.org/logos/comdev-test/poweredby/jena.png "Powered by Apache Jena")
+<img src="https://www.apache.org/logos/comdev-test/poweredby/jena.png" width="100" height="100">
