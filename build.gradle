@@ -58,7 +58,7 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
 
     //RDF Tables
-    ext.rdfTablesVersion = "1.0.0"
+    ext.rdfTablesVersion = "1.0.1"
     api "io.github.galbiston:rdf-tables:$rdfTablesVersion"
 
     //Expiring Map
