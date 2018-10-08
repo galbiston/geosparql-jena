@@ -27,7 +27,7 @@ Benchmarking of the implementation against Strabon and Parliament has found it t
 The benchmarking used was the Geographica query and dataset (http://geographica.di.uoa.gr/).
 Publication of the benchmarking results are forthcoming.
 
-##Additional Features
+## Additional Features
 The following additional features are also provided:
 
 * Geometry properties are automatically calculated and do not need to be asserted in the dataset.
@@ -244,7 +244,7 @@ The following individuals have made contributions to this project:
 * Haozhe Chen
 * Taha Osman
 
-##Why Use This Implementation
+## Why Use This Implementation
 There are several implementations of the GeoSPARQL standard.
 The conformance and completeness of these implementations is difficult to ascertain and varies between points.
 
