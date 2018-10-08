@@ -1,6 +1,6 @@
 # GeoSPARQL Jena #
 
-API implemenation of GeoSPARQL 1.0 standard using Apache Jena.
+Implemenation of GeoSPARQL 1.0 standard using Apache Jena for SPARQL query or API.
 
 ## Features
 This implementation follows the 11-052r4 OGC GeoSPARQL standard (http://www.opengeospatial.org/standards/geosparql).
