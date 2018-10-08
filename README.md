@@ -24,7 +24,7 @@ Indexing and caching of spatial objects and relations is performed _on-demand_ d
 Therefore, set-up delays should be minimal.
 
 Benchmarking of the implementation against Strabon and Parliament has found it to be comparable or quicker.
-The benchmarking used the Geographica query and dataset (http://geographica.di.uoa.gr/).
+The benchmarking used was the Geographica query and dataset (http://geographica.di.uoa.gr/).
 Publication of the benchmarking results are forthcoming.
 
 ##Additional Features
@@ -36,7 +36,9 @@ The following additional features are also provided:
 * Geometry, transformation and spatial relation results are stored in persistent and configurable time-limited caches to improve response times and reduce recalculations.
 * Dataset conversion between serialisations and spatial/coordinate reference systems. Tabular data can also be loaded, see RDF Tables project (https://github.com/galbiston/rdf-tables).
 
-## Getting The API
+## Getting Started
+
+### Maven Dependency
 GeoSPARQL Jena can be accessed as a library using Maven etc. from Maven Central.
 
 ```
@@ -49,10 +51,10 @@ GeoSPARQL Jena can be accessed as a library using Maven etc. from Maven Central.
 
 An HTTP server (SPARQL endpoint) using Apache Jena's Fuseki is available from the GeoSPARQL Fuseki project (https://github.com/galbiston/geosparql-fuseki).
 
-## Configuration
-The process for setting up the library requires one line of code.
+### SPARQL Query Configuration
+Using the library for SPARQL querying requires one line of code.
 All indexing and caching is performed during query execution and so there should be minimal delay during initialisation.
-This will load the required functionality for SPARQL querying and configure the _indexes_ used for time-limited caching.
+This will registers the Property Functions with ARQ query engine and configures the _indexes_ used for time-limited caching.
 
 There are three _indexes_ which can be configured independently or switched off.
 These _indexes_ retain data that may be required again when a query is being executed but may not be required between different queries.
@@ -80,6 +82,35 @@ The _indexes_ can be configured by size, retention duration and frequency of cle
 
 A variety of configuration methods are provided in `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig`.
 Caching of frequently used but small quantity data is also applied in several _registries_, e.g. coordinate reference systems and mathematical transformations.
+
+Example query:
+
+```
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+SELECT ?obj
+WHERE{
+    ?subj geo:sfContains ?obj
+}ORDER by ?obj
+```
+
+### API
+The library can be used as an API in Java.
+The main class to handle geometries and their spatial relations is the `GeometryWrapper`.
+This can be obtained by parsing the string representation of a geometry using the appropriate datatype (WKT or GML).
+There is overlap between spatial relation families so repeated methods are not specified.
+
+* Parse a `Geometry Literal`: `GeometryWrapper geometryWrapper = WKTDatatype.INSTANCE.parse("POINT(1 1)");`
+
+* Extract from a Jena Literal: `GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryLiteral);`
+
+* Convert CRS/SRS: `GeometryWrapper otherGeometryWrapper = geometryWrapper.convertCRS("http://www.opengis.net/def/crs/EPSG/0/27700")`
+
+* Spatial Relation: `boolean isCrossing = geometryWrapper.crosses(otherGeometryWrapper);`
+
+* DE-9IM Intersection Pattern: `boolean isRelated = geometryWrapper.relate(otherGeometryWrapper, "TFFFTFFFT");`
+
+* Geometry Property: `boolean isEmpty = geometryWrapper.isEmpty();`
 
 ## Key Dependencies
 
@@ -196,6 +227,7 @@ Methods are available to apply the `hasDefaultGeometry` property to every `Geome
 Depending upon the spatial relation, queries may include the specified `Feature` and `Geometry` in the results.
 e.g. FeatureA is bound in a query on a dataset only containing FeatureA and GeometryA. The results FeatureA and GeometryA are returned rather than no results.
 Therefore, filtering using `FILTER(!sameTerm(?subj, ?obj))` etc. may be needed in some cases.
+The query rewrite functionality can be switched off in the library configuration.
 
 ### Dataset Conversion
 Methods to convert datasets between serialisations and spatial/coordinate reference systems are available in:
@@ -218,7 +250,7 @@ The following individuals have made contributions to this project:
 There are several implementations of the GeoSPARQL standard.
 The conformance and completeness of these implementations is difficult to ascertain and varies between points.
 
-However, the following may be of interest when considering whether to use this implementation.
+However, the following may be of interest when considering whether to use this implementation based on reviewing several alternatives.
 
 This Implementation|Other Implementations
 ------------------------------------------------ | -------------------------------------------------
