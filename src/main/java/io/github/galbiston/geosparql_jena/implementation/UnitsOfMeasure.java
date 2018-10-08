@@ -69,7 +69,7 @@ public class UnitsOfMeasure implements Serializable {
      * @param sourceDistance
      * @param sourceDistanceUnitsURI
      * @param targetDistanceUnitsURI
-     * @return
+     * @return Distance after conversion.
      */
     @SuppressWarnings("unchecked")
     public static final Double conversion(double sourceDistance, String sourceDistanceUnitsURI, String targetDistanceUnitsURI) {

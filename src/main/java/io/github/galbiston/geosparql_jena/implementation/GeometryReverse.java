@@ -38,7 +38,7 @@ public class GeometryReverse {
      *
      * @param geometry
      * @param srsURI
-     * @return
+     * @return Geometry in x,y coordinate order.
      */
     public static final Geometry check(Geometry geometry, String srsURI) {
 
@@ -52,7 +52,7 @@ public class GeometryReverse {
      *
      * @param geometry
      * @param isAxisXY
-     * @return
+     * @return Geometry in x,y coordinate order.
      */
     public static final Geometry check(Geometry geometry, Boolean isAxisXY) {
 
@@ -70,7 +70,7 @@ public class GeometryReverse {
      * geometry.
      *
      * @param geometry
-     * @return
+     * @return Geometry in x,y coordinate order.
      */
     private static Geometry reverseGeometry(Geometry geometry) {
 

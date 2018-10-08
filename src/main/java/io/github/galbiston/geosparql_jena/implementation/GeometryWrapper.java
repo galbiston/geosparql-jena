@@ -143,6 +143,11 @@ public class GeometryWrapper implements Serializable {
         this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, geometryDatatypeURI, DimensionInfo.XY_POINT());
     }
 
+    /**
+     * Copy GeometryWrapper.
+     *
+     * @param geometryWrapper
+     */
     public GeometryWrapper(GeometryWrapper geometryWrapper) {
 
         this.xyGeometry = geometryWrapper.xyGeometry;
@@ -164,7 +169,7 @@ public class GeometryWrapper implements Serializable {
      * current GeometryWrapper SRS_URI.
      *
      * @param targetGeometryWrapper
-     * @return
+     * @return GeometryWrapper after transformation.
      * @throws FactoryException
      * @throws MismatchedDimensionException
      * @throws TransformException
@@ -182,11 +187,31 @@ public class GeometryWrapper implements Serializable {
         return transformedGeometryWrapper;
     }
 
-    public GeometryWrapper transform(String srsURI) throws MismatchedDimensionException, TransformException, FactoryException {
+    /**
+     * Transform the GeometryWrapper into another spatial reference system.
+     *
+     * @param srsURI
+     * @return GeometryWrapper after transformation.
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     * @throws FactoryException
+     */
+    protected GeometryWrapper transform(String srsURI) throws MismatchedDimensionException, TransformException, FactoryException {
         return transform(srsURI, true);
     }
 
-    public GeometryWrapper transform(String srsURI, Boolean storeCRSTransform) throws MismatchedDimensionException, TransformException, FactoryException {
+    /**
+     * Transform the GeometryWrapper into another spatial reference system.<br>
+     * Option to store the resulting GeometryWrapper in the index.
+     *
+     * @param srsURI
+     * @param storeCRSTransform
+     * @return GeometryWrapper after transformation.
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     * @throws FactoryException
+     */
+    protected GeometryWrapper transform(String srsURI, Boolean storeCRSTransform) throws MismatchedDimensionException, TransformException, FactoryException {
         return GeometryTransformIndex.transform(this, srsURI, storeCRSTransform);
     }
 
@@ -204,7 +229,7 @@ public class GeometryWrapper implements Serializable {
      * Returns this geometry wrapper converted to the SRS_URI URI.
      *
      * @param srsURI
-     * @return
+     * @return GeometryWrapper after conversion.
      * @throws FactoryException
      * @throws MismatchedDimensionException
      * @throws TransformException
@@ -213,46 +238,64 @@ public class GeometryWrapper implements Serializable {
         return transform(srsURI);
     }
 
+    /**
+     *
+     * @return Coordinate/Spatial reference system of the GeometryWrapper.
+     */
     public CoordinateReferenceSystem getCRS() {
         return crs;
     }
 
     /**
-     * Geometry with coordinates in x,y order, regardless of SRS_URI.
      *
-     * @return
+     * @return Geometry with coordinates in x,y order, regardless of SRS_URI.
      */
     public Geometry getXYGeometry() {
         return xyGeometry;
     }
 
     /**
-     * Geometry with coordinates as originally provided.
      *
-     * @return
+     * @return Geometry with coordinates as originally provided.
      */
     public Geometry getParsingGeometry() {
         return parsingGeometry;
     }
 
+    /**
+     *
+     * @return Coordinate/Spatial reference system URI.
+     */
     public String getSrsURI() {
         return srsURI;
     }
 
     /**
-     * getSRID used in GeoSPARQL Standard page 22 to refer to srsURI. i.e.
-     * getSrsURI and getSRID are the same.
      *
-     * @return
+     * @return getSRID used in GeoSPARQL Standard page 22 to refer to srsURI.
+     * i.e. getSrsURI and getSRID are the same.
      */
     public String getSRID() {
         return srsURI;
     }
 
+    /**
+     *
+     * @return Datatype URI of the literal.
+     */
     public String getGeometryDatatypeURI() {
         return geometryDatatypeURI;
     }
 
+    /**
+     *
+     * @param distance
+     * @param targetDistanceUnitsURI
+     * @return Buffer around GeometryWrapper according the provided distance.
+     * @throws FactoryException
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     */
     public GeometryWrapper buffer(double distance, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
 
         //Check whether the source geometry is linear units for cartesian calculation. If not then transform to relevant UTM CRS GeometryWrapper.
@@ -293,6 +336,13 @@ public class GeometryWrapper implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return URI of the GeometryWrapper's UTM zone
+     * @throws FactoryException
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     */
     public String getUTMZoneURI() throws FactoryException, MismatchedDimensionException, TransformException {
 
         if (utmURI == null) {
@@ -314,36 +364,41 @@ public class GeometryWrapper implements Serializable {
         return utmURI;
     }
 
-    public GeometryWrapper convexHull() {
-        Geometry xyGeo = this.xyGeometry.convexHull();
-        Geometry parsingGeo = GeometryReverse.check(xyGeo, isAxisXY);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
-    }
-
-    public GeometryWrapper difference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
-        Geometry xyGeo = this.xyGeometry.difference(transformedGeometry.xyGeometry);
-        Geometry parsingGeo = GeometryReverse.check(xyGeo, isAxisXY);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
-    }
 
     /**
      * Distance defaulting to metres.
      *
      * @param targetGeometry
-     * @return
-     * @throws FactoryException
-     * @throws MismatchedDimensionException
-     * @throws TransformException
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
      */
     public double distance(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         return distance(targetGeometry, Unit_URI.METRE_URL);
     }
 
+    /**
+     * Distance in the Units of Measure.
+     *
+     * @param targetGeometry
+     * @param unitsOfMeasure
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public double distance(GeometryWrapper targetGeometry, UnitsOfMeasure unitsOfMeasure) throws FactoryException, MismatchedDimensionException, TransformException {
         return distance(targetGeometry, unitsOfMeasure.getUnitURI());
     }
 
+    /**
+     * Distance in the Units of Measure stated in URI.
+     *
+     * @param targetGeometry
+     * @param targetDistanceUnitsURI
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public double distance(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
 
         Boolean isUnitsLinear = unitsOfMeasure.isLinearUnits();
@@ -373,22 +428,65 @@ public class GeometryWrapper implements Serializable {
         return targetDistance;
     }
 
+    /**
+     *
+     * @return Boundary of GeometryWrapper
+     */
     public GeometryWrapper boundary() {
         Geometry xyGeo = this.xyGeometry.getBoundary();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, isAxisXY);
         return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
+    /**
+     *
+     * @return Convex Hull of GeometryWrapper
+     */
+    public GeometryWrapper convexHull() {
+        Geometry xyGeo = this.xyGeometry.convexHull();
+        Geometry parsingGeo = GeometryReverse.check(xyGeo, isAxisXY);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
+    }
+
+    /**
+     *
+     * @param targetGeometry
+     * @return Difference of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    public GeometryWrapper difference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+        GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
+        Geometry xyGeo = this.xyGeometry.difference(transformedGeometry.xyGeometry);
+        Geometry parsingGeo = GeometryReverse.check(xyGeo, isAxisXY);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
+    }
+
+    /**
+     *
+     * @return Envelope of GeometryWrapper
+     */
     public GeometryWrapper envelope() {
         Geometry xyGeo = this.xyGeometry.getEnvelope();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, isAxisXY);
         return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
+    /**
+     *
+     * @return Envelope of GeometryWrapper
+     */
     public Envelope getEnvelope() {
         return this.xyGeometry.getEnvelopeInternal();
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return Intersection of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public GeometryWrapper intersection(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.intersection(transformedGeometry.xyGeometry);
@@ -396,16 +494,38 @@ public class GeometryWrapper implements Serializable {
         return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return Intersection Matrix of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public IntersectionMatrix relate(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return xyGeometry.relate(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @param intersectionPattern
+     * @return Relation of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean relate(GeometryWrapper targetGeometry, String intersectionPattern) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return xyGeometry.relate(transformedGeometry.xyGeometry, intersectionPattern);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return Symmetric Difference of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public GeometryWrapper symDifference(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.symDifference(transformedGeometry.xyGeometry);
@@ -413,6 +533,13 @@ public class GeometryWrapper implements Serializable {
         return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return Union of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public GeometryWrapper union(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.union(transformedGeometry.xyGeometry);
@@ -420,68 +547,148 @@ public class GeometryWrapper implements Serializable {
         return new GeometryWrapper(parsingGeo, xyGeo, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return sfContains of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean contains(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.contains(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return sfCrosses of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean crosses(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.crosses(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return sfDisjoint of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean disjoint(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.disjoint(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return sfEquals of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean equals(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.equalsTopo(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return Equals exactly of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean equalsExact(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.equalsExact(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @param tolerance
+     * @return Equals exactly of GeometryWrapper with target using provided
+     * tolerance.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean equalsExact(GeometryWrapper targetGeometry, double tolerance) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.xyGeometry.equalsExact(transformedGeometry.xyGeometry, tolerance);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return sfIntersects of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean intersects(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.intersects(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return sfOverlaps of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean overlaps(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.overlaps(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return sfTouches of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean touches(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.touches(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @param targetGeometry
+     * @return sfWithin of GeometryWrapper with target.
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
     public boolean within(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         this.checkPreparedGeometry();
         GeometryWrapper transformedGeometry = checkTransformCRS(targetGeometry);
         return this.preparedGeometry.within(transformedGeometry.xyGeometry);
     }
 
+    /**
+     *
+     * @return GeometryWrapper as NodeValue
+     */
     public NodeValue asNode() throws DatatypeFormatException {
         Literal literal = asLiteral();
         return NodeValue.makeNode(literal.getLexicalForm(), literal.getDatatype());
     }
 
+    /**
+     *
+     * @return GeometryWrapper as Literal
+     */
     public Literal asLiteral() throws DatatypeFormatException {
 
         GeometryDatatype datatype = GeometryDatatype.get(geometryDatatypeURI);
@@ -494,40 +701,79 @@ public class GeometryWrapper implements Serializable {
         return literal;
     }
 
+    /**
+     *
+     * @param outputGeometryDatatypeURI
+     * @return GeometryWrapper as Literal in datatype form.
+     */
     public Literal asLiteral(String outputGeometryDatatypeURI) throws DatatypeFormatException {
         GeometryDatatype datatype = GeometryDatatype.get(outputGeometryDatatypeURI);
         return asLiteral(datatype);
     }
 
+    /**
+     *
+     * @param datatype
+     * @return GeometryWrapper as Literal
+     */
     public Literal asLiteral(GeometryDatatype datatype) {
         String tempLexicalForm = datatype.unparse(this);
         return ResourceFactory.createTypedLiteral(tempLexicalForm, datatype);
     }
 
+    /**
+     *
+     * @return Coordinate dimension, i.e. 2 (x,y), 3 (x,y,z or x,y,m) or 4
+     * (x,y,z,m)
+     */
     public int getCoordinateDimension() {
         return dimensionInfo.getCoordinate();
     }
 
+    /**
+     *
+     * @return Spatial dimension, i.e. 2 or 3
+     */
     public int getSpatialDimension() {
         return dimensionInfo.getSpatial();
     }
 
+    /**
+     *
+     * @return Topological dimension, i.e. 0, 1 or 2
+     */
     public int getTopologicalDimension() {
         return dimensionInfo.getTopological();
     }
 
+    /**
+     *
+     * @return Enum of coordinate dimensions.
+     */
     public CoordinateSequenceDimensions getCoordinateSequenceDimensions() {
         return dimensionInfo.getDimensions();
     }
 
+    /**
+     *
+     * @return Units of Measure for the GeometryWrapper SRS.
+     */
     public UnitsOfMeasure getUnitsOfMeasure() {
         return unitsOfMeasure;
     }
 
+    /**
+     *
+     * @return GeometryWrapper's coordinate, spatial and topological dimensions.
+     */
     public DimensionInfo getDimensionInfo() {
         return dimensionInfo;
     }
 
+    /**
+     *
+     * @return String literal of Geometry Wrapper.
+     */
     public String getLexicalForm() {
 
         if (lexicalForm != null) {
@@ -538,20 +784,29 @@ public class GeometryWrapper implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return GeometryWrapper is empty of coordinates.
+     */
     public boolean isEmpty() {
         return this.xyGeometry.isEmpty();
     }
 
+    /**
+     *
+     * @return GeometryWrapper is in simple form.
+     */
     public boolean isSimple() {
         return this.xyGeometry.isSimple();
     }
 
     /**
+     * Extract Geometry Wrapper from Geometry Literal.<br>
      * Returns null if invalid node value provided.
      *
      * @param nodeValue
      * @param targetIndex
-     * @return
+     * @return Geometry Wrapper of the Geometry Literal.
      */
     public static final GeometryWrapper extract(NodeValue nodeValue, GeometryIndex targetIndex) {
 
@@ -563,6 +818,14 @@ public class GeometryWrapper implements Serializable {
         return extract(node, targetIndex);
     }
 
+    /**
+     * Extract Geometry Wrapper from Geometry Literal.<br>
+     * Returns null if invalid node value provided.
+     *
+     * @param node
+     * @param targetIndex
+     * @return Geometry Wrapper of the Geometry Literal.
+     */
     public static final GeometryWrapper extract(Node node, GeometryIndex targetIndex) {
 
         String datatypeURI = node.getLiteralDatatypeURI();
@@ -570,33 +833,71 @@ public class GeometryWrapper implements Serializable {
         return extract(lexicalForm, datatypeURI, targetIndex);
     }
 
+    /**
+     * Extract Geometry Wrapper from Geometry Literal.<br>
+     * Returns null if invalid node value provided.
+     *
+     * @param nodeValue
+     * @return Geometry Wrapper of the Geometry Literal.
+     */
     public static final GeometryWrapper extract(NodeValue nodeValue) {
         return extract(nodeValue, GeometryIndex.PRIMARY);
     }
 
+    /**
+     * Extract Geometry Wrapper from Geometry Literal.<br>
+     * Returns null if invalid node value provided.
+     *
+     * @param node
+     * @return Geometry Wrapper of the Geometry Literal.
+     */
     public static final GeometryWrapper extract(Node node) {
         return extract(node, GeometryIndex.PRIMARY);
+    }
+
+    /**
+     * Extract Geometry Wrapper from Geometry Literal.<br>
+     * Returns null if invalid literal provided.
+     *
+     * @param geometryLiteral
+     * @param targetIndex
+     * @return Geometry Wrapper of the Geometry Literal.
+     */
+    public static final GeometryWrapper extract(Literal geometryLiteral, GeometryIndex targetIndex) {
+        return extract(geometryLiteral.getLexicalForm(), geometryLiteral.getDatatypeURI(), targetIndex);
     }
 
     /**
      * Returns null if invalid literal provided.
      *
      * @param geometryLiteral
-     * @param targetIndex
-     * @return
+     * @return Geometry Wrapper of the Geometry Literal.
      */
-    public static final GeometryWrapper extract(Literal geometryLiteral, GeometryIndex targetIndex) {
-        return extract(geometryLiteral.getLexicalForm(), geometryLiteral.getDatatypeURI(), targetIndex);
-    }
-
     public static final GeometryWrapper extract(Literal geometryLiteral) {
         return extract(geometryLiteral, GeometryIndex.PRIMARY);
     }
 
+    /**
+     * Extract Geometry Wrapper from Geometry Literal.<br>
+     * Returns null if invalid literal provided.
+     *
+     * @param lexicalForm
+     * @param datatypeURI
+     * @return Geometry Wrapper of the Geometry Literal.
+     */
     public static GeometryWrapper extract(String lexicalForm, String datatypeURI) {
         return extract(lexicalForm, datatypeURI, GeometryIndex.PRIMARY);
     }
 
+    /**
+     * Extract Geometry Wrapper from Geometry Literal.<br>
+     * Returns null if invalid literal provided.
+     *
+     * @param lexicalForm
+     * @param datatypeURI
+     * @param targetIndex
+     * @return Geometry Wrapper of the Geometry Literal.
+     */
     public static GeometryWrapper extract(String lexicalForm, String datatypeURI, GeometryIndex targetIndex) {
 
         GeometryDatatype datatype = GeometryDatatype.get(datatypeURI);
@@ -604,10 +905,18 @@ public class GeometryWrapper implements Serializable {
         return geometry;
     }
 
+    /**
+     *
+     * @return Empty GeometryWrapper in WKT datatype.
+     */
     public static final GeometryWrapper getEmptyWKT() {
         return WKTDatatype.INSTANCE.read("");
     }
 
+    /**
+     *
+     * @return Empty GeometryWrapper in GML datatype.
+     */
     public static final GeometryWrapper getEmptyGML() {
         return GMLDatatype.INSTANCE.read("");
     }

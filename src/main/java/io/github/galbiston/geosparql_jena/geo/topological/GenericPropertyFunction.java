@@ -17,8 +17,8 @@
  */
 package io.github.galbiston.geosparql_jena.geo.topological;
 
-import io.github.galbiston.geosparql_jena.geof.topological.GenericFilterFunction;
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
+import io.github.galbiston.geosparql_jena.geof.topological.GenericFilterFunction;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import java.util.ArrayList;
@@ -154,11 +154,12 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     }
 
     /**
-     * Retrieve the default geometry for Feature or Geometry.
+     * Retrieve the default Geometry Literal for Feature or Geometry (Spatial
+     * Objects).
      *
      * @param graph
      * @param targetSpatialObject
-     * @return
+     * @return SpatialObject/GeometryLiteral pair.
      */
     protected static final SpatialObjectGeometryLiteral retrieveGeometryLiteral(Graph graph, Node targetSpatialObject) {
 

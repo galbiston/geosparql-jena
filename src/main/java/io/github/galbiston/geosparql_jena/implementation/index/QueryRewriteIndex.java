@@ -42,7 +42,7 @@ public class QueryRewriteIndex {
      * @param predicate
      * @param objectGeometryLiteral
      * @param propertyFunction
-     * @return
+     * @return Result of relation between subject and object.
      */
     public static final Boolean test(Node subjectGeometryLiteral, Property predicate, Node objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
 

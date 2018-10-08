@@ -155,7 +155,7 @@ public class GeoSPARQLOperations {
      *
      * @param inputFile
      * @param inputLang
-     * @return
+     * @return Output model.
      */
     public static final Model applyDefaultGeometry(File inputFile, Lang inputLang) {
         Model model = ModelFactory.createDefaultModel();
@@ -211,7 +211,7 @@ public class GeoSPARQLOperations {
     /**
      * Load GeoSPARQL v1.0 (corrected version) as a Model.
      *
-     * @return
+     * @return Output model.
      */
     public static Model loadGeoSPARQLSchema() {
         Model geosparqlSchema = ModelFactory.createDefaultModel();
@@ -309,7 +309,7 @@ public class GeoSPARQLOperations {
      * <br> In-memory indexing applied by default.
      * <br> This can be changed by calling GeoSPARQLConfig methods.
      *
-     * @return
+     * @return Output model.
      */
     public static InfModel prepare() {
         return prepareRDFS(ModelFactory.createDefaultModel());
@@ -321,7 +321,7 @@ public class GeoSPARQLOperations {
      * <br> This can be changed by calling GeoSPARQLConfig methods.
      *
      * @param model
-     * @return
+     * @return Output model.
      */
     public static InfModel prepareRDFS(Model model) {
         return prepare(model, ReasonerRegistry.getRDFSReasoner());
@@ -335,7 +335,7 @@ public class GeoSPARQLOperations {
      *
      * @param model
      * @param reasoner
-     * @return
+     * @return Output model.
      */
     public static InfModel prepare(Model model, Reasoner reasoner) {
         InputStream geosparqlSchemaInputStream = GeoSPARQLOperations.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA_FILE);
@@ -348,7 +348,7 @@ public class GeoSPARQLOperations {
      * <br> This can be changed by calling GeoSPARQLConfig methods.
      *
      * @param inputStream
-     * @return
+     * @return Output model.
      */
     public static InfModel prepareRDFS(InputStream inputStream) {
         return prepare(inputStream, ReasonerRegistry.getRDFSReasoner());
@@ -361,7 +361,7 @@ public class GeoSPARQLOperations {
      *
      * @param inputStream
      * @param reasoner
-     * @return
+     * @return Output model.
      */
     public static InfModel prepare(InputStream inputStream, Reasoner reasoner) {
         Model model = ModelFactory.createDefaultModel();
@@ -379,7 +379,7 @@ public class GeoSPARQLOperations {
      * @param geosparqlSchemaInputStream
      * @param model
      * @param reasoner
-     * @return
+     * @return Output model.
      */
     public static InfModel prepare(InputStream geosparqlSchemaInputStream, Model model, Reasoner reasoner) {
 

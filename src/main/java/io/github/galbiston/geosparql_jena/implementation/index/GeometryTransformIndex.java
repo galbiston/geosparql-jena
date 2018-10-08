@@ -50,7 +50,7 @@ public class GeometryTransformIndex {
      * @param sourceGeometryWrapper
      * @param srsURI
      * @param storeCRSTransform
-     * @return
+     * @return GeometryWrapper following transformation.
      * @throws TransformException
      * @throws org.opengis.util.FactoryException
      */

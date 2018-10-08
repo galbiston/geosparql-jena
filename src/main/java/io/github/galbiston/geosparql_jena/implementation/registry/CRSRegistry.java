@@ -139,12 +139,12 @@ public class CRSRegistry implements Serializable {
     private static final DecimalFormat ZONE_FORMATTER = new DecimalFormat("##");
 
     /**
-     * Find UTM CRS from WGS84 coordinates.<br>
+     * Find UTM CRS/SRS from WGS84 coordinates.<br>
      * Based on calculation from Stack Overflow.
      *
      * @param latitude
      * @param longitude
-     * @return
+     * @return URI of UTM zone CRS/SRS.
      * @see
      * <a href="https://stackoverflow.com/questions/176137/java-convert-lat-lon-to-utm">Stack
      * Overflow question relating to WGS84 to UTM conversion.</a>

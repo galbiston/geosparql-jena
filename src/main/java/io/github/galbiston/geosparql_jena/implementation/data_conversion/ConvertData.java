@@ -56,7 +56,7 @@ public class ConvertData {
      *
      * @param inputModel
      * @param outputSrsURI
-     * @return
+     * @return Output of conversion.
      */
     public static final Model convert(Model inputModel, String outputSrsURI) {
         return convertCRSDatatype(inputModel, outputSrsURI, null);
@@ -67,7 +67,7 @@ public class ConvertData {
      *
      * @param inputModel
      * @param outputDatatype
-     * @return
+     * @return Output of conversion.
      */
     public static final Model convert(Model inputModel, GeometryDatatype outputDatatype) {
         return convertCRSDatatype(inputModel, null, outputDatatype);
@@ -80,7 +80,7 @@ public class ConvertData {
      * @param inputModel
      * @param outputSrsURI
      * @param outputDatatype
-     * @return
+     * @return Output of conversion.
      */
     public static final Model convert(Model inputModel, String outputSrsURI, GeometryDatatype outputDatatype) {
         return convertCRSDatatype(inputModel, outputSrsURI, outputDatatype);
@@ -243,14 +243,44 @@ public class ConvertData {
         convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, outputSrsURI, null);
     }
 
+    /**
+     * Only RDF files should be in the input folder and must all be the same RDF
+     * language.
+     *
+     * @param inputFolder
+     * @param inputLang
+     * @param outputFolder
+     * @param outputLang
+     */
     public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang) {
         convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, null, null);
     }
 
+    /**
+     * Only RDF files should be in the input folder and must all be the same RDF
+     * language. Output will be in the specified SRS and datatype/serialisation.
+     *
+     * @param inputFolder
+     * @param inputLang
+     * @param outputFolder
+     * @param outputLang
+     * @param outputSrsURI
+     * @param outputDatatype
+     */
     public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
         convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, outputSrsURI, outputDatatype);
     }
 
+    /**
+     * Only RDF files should be in the input folder and must all be the same RDF
+     * language. Output will be in the specified datatype/serialisation.
+     *
+     * @param inputFolder
+     * @param inputLang
+     * @param outputFolder
+     * @param outputLang
+     * @param outputDatatype
+     */
     public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, GeometryDatatype outputDatatype) {
         convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, null, outputDatatype);
     }
@@ -290,7 +320,7 @@ public class ConvertData {
      * @param geometryLiterals
      * @param outputSrsURI Coordinate reference system URI
      * @param outputDatatype
-     * @return
+     * @return Output of conversion.
      */
     public static final List<String> convertGeometryLiterals(List<String> geometryLiterals, String outputSrsURI, GeometryDatatype outputDatatype) {
 
@@ -311,7 +341,7 @@ public class ConvertData {
      * @param geometryLiteral
      * @param outputSrsURI Coordinate reference system URI
      * @param outputDatatype
-     * @return
+     * @return Output of conversion.
      */
     public static final String convertGeometryLiteral(String geometryLiteral, String outputSrsURI, GeometryDatatype outputDatatype) {
 
