@@ -37,8 +37,6 @@ The following additional features are also provided:
 * Dataset conversion between serialisations and spatial/coordinate reference systems. Tabular data can also be loaded, see RDF Tables project (https://github.com/galbiston/rdf-tables).
 
 ## Getting Started
-
-### Maven Dependency
 GeoSPARQL Jena can be accessed as a library using Maven etc. from Maven Central.
 
 ```
@@ -49,7 +47,7 @@ GeoSPARQL Jena can be accessed as a library using Maven etc. from Maven Central.
 </dependency>
 ```
 
-An HTTP server (SPARQL endpoint) using Apache Jena's Fuseki is available from the GeoSPARQL Fuseki project (https://github.com/galbiston/geosparql-fuseki).
+A HTTP server (SPARQL endpoint) using Apache Jena's Fuseki is available from the GeoSPARQL Fuseki project (https://github.com/galbiston/geosparql-fuseki).
 
 ### SPARQL Query Configuration
 Using the library for SPARQL querying requires one line of code.
