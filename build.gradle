@@ -38,7 +38,6 @@ dependencies {
     api "org.apache.jena:jena-tdb:$jenaVersion"
     implementation (group: 'org.apache.jena', name: 'jena-cmds', version: jenaVersion){
         exclude group: "org.apache.jena", module: "apache-jena-libs"
-        exclude group: "org.slf4j", module: "slf4j-log4j12"
     }
 
     //Apache Commons Collections
@@ -48,7 +47,6 @@ dependencies {
     //Logging Framework
     ext.slf4jVersion = "1.7.25"
     implementation "org.slf4j:slf4j-api:$slf4jVersion"
-    implementation "org.slf4j:log4j-over-slf4j:$slf4jVersion"
 
     ext.logbackVersion = "1.2.3"
     testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
@@ -63,7 +61,7 @@ dependencies {
 
     //Expiring Map
     ext.expiringMapVersion = "1.0.0"
-    api "io.github.galbiston:expiring-map:$expiringMapVersion"
+    implementation "io.github.galbiston:expiring-map:$expiringMapVersion"
 }
 
 group = 'io.github.galbiston'
