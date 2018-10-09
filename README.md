@@ -127,16 +127,16 @@ This error has been deemed acceptable due to the simplification in calculation i
 A Java framework for building Semantic Web and Linked Data applications.
 The framework provides standard compliance for RDF and SPARQL and include extensions for persistent storage (TDB) and HTTP server (Fuseki).
 
-### Apache SIS
+### Apache SIS/SIS_DATA Environment Variable
 Apache Spatial Information System (SIS) is a free software, Java language library for developing geospatial applications.
 SIS provides data structures for geographic features and associated metadata along with methods to manipulate those data structures.
 The library is an implementation of GeoAPI 3.0 interfaces and can be used for desktop or server applications.
 
 A subset of the EPSG spatial/coordinate reference systems are included by default.
-The full EPSG dataset is not distributed due to the the EPSG terms of use being incompatible with the Apache Licence.
+The full EPSG dataset is not distributed due to the EPSG terms of use being incompatible with the Apache Licence.
 Several options are available to include the EPSG dataset by setting the `SIS_DATA` environment variable (http://sis.apache.org/epsg.html).
 
-An embedded dataset can be included in a Gradle application by adding the following to `build.gradle`:
+An embedded EPSG dataset can be included in a Gradle application by adding the following dependency to `build.gradle`:
 ```
 ext.sisVersion = "0.8"
 implementation "org.apache.sis.non-free:sis-embedded-data:$sisVersion"
