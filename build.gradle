@@ -63,6 +63,10 @@ dependencies {
     //Expiring Map
     ext.expiringMapVersion = "1.0.0"
     implementation "io.github.galbiston:expiring-map:$expiringMapVersion"
+
+    //JAXB-API Resolves issue relating to JDK11 and Apache Jena dependency.
+    ext.jaxbapiVersion = "2.3.1"
+    implementation "javax.xml.bind:jaxb-api:$jaxbapiVersion"
 }
 
 group = 'io.github.galbiston'
