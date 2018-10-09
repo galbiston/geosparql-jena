@@ -251,7 +251,7 @@ The conformance and completeness of these implementations is difficult to ascert
 However, the following may be of interest when considering whether to use this implementation based on reviewing several alternatives.
 
 This Implementation|Other Implementations
------------------------------------------- | -------------------------------------------------
+---------- | ----------
 Implements all six components of the GeoSPARQL standard.|Generally partially implement the Geometry Topology and Geometry Extensions. Do not implement the Query Rewrite Extension.
 Pure Java and does not require a supporting relational database. Configuration requires a single line of code (although Apache SIS may some need setting up, see above).|Require setting up a database, configuring a geospatial extension and setting environment variables.
 Uses Apache Jena, which conforms to the W3C standards for RDF and SPARQL. New versions of the standards will quickly feed through.|Not fully RDF and SPARQL compliant, e.g. RDFS/OWL inferencing or SPARQL syntax. Adding your own schema probably won't produce inferences.
