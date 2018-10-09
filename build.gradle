@@ -38,6 +38,7 @@ dependencies {
     api "org.apache.jena:jena-tdb:$jenaVersion"
     implementation (group: 'org.apache.jena', name: 'jena-cmds', version: jenaVersion){
         exclude group: "org.apache.jena", module: "apache-jena-libs"
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
     }
 
     //Apache Commons Collections
@@ -65,7 +66,7 @@ dependencies {
 }
 
 group = 'io.github.galbiston'
-version = '1.0.1'
+version = '1.0.2'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
