@@ -60,6 +60,7 @@ public class GeometryWrapper implements Serializable {
 
     private final DimensionInfo dimensionInfo;
     private final String srsURI;
+    private final Boolean isSRSRecognised;
     private final Boolean isAxisXY;
     private final UnitsOfMeasure unitsOfMeasure;
     private final CoordinateReferenceSystem crs;
@@ -91,6 +92,7 @@ public class GeometryWrapper implements Serializable {
         }
         this.srsURI = srsURI;
         this.crs = CRSRegistry.getCRS(srsURI);
+        this.isSRSRecognised = this.crs == null;
         this.isAxisXY = CRSRegistry.getAxisXY(srsURI);
         this.unitsOfMeasure = CRSRegistry.getUnitsOfMeasure(srsURI);
 
@@ -157,6 +159,7 @@ public class GeometryWrapper implements Serializable {
         this.utmURI = geometryWrapper.utmURI;
         this.geometryDatatypeURI = geometryWrapper.geometryDatatypeURI;
 
+        this.isSRSRecognised = geometryWrapper.isSRSRecognised;
         this.crs = geometryWrapper.crs;
         this.isAxisXY = geometryWrapper.isAxisXY;
         this.unitsOfMeasure = geometryWrapper.unitsOfMeasure;
@@ -277,6 +280,15 @@ public class GeometryWrapper implements Serializable {
      */
     public String getSRID() {
         return srsURI;
+    }
+
+    /**
+     *
+     * @return Whether the SRS URI has been recognised. Operations may fail or
+     * not perform correctly when false.
+     */
+    public Boolean isSRSRecognised() {
+        return isSRSRecognised;
     }
 
     /**
@@ -969,6 +981,7 @@ public class GeometryWrapper implements Serializable {
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "lexicalForm=" + lexicalForm + ", dimensionInfo=" + dimensionInfo + ", srsURI=" + srsURI + ", isAxisXY=" + isAxisXY + ", utmURI=" + utmURI + ", geometryDatatypeURI=" + geometryDatatypeURI + ", unitsOfMeasure=" + unitsOfMeasure + ", crs=" + crs + ", xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + '}';
+        return "GeometryWrapper{" + "dimensionInfo=" + dimensionInfo + ", srsURI=" + srsURI + ", isSRSRecognised=" + isSRSRecognised + ", isAxisXY=" + isAxisXY + ", unitsOfMeasure=" + unitsOfMeasure + ", crs=" + crs + ", xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + ", preparedGeometry=" + preparedGeometry + ", geometryDatatypeURI=" + geometryDatatypeURI + ", lexicalForm=" + lexicalForm + ", utmURI=" + utmURI + '}';
     }
+
 }

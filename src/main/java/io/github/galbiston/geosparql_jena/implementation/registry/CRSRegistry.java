@@ -75,7 +75,7 @@ public class CRSRegistry implements Serializable {
             try {
                 crs = CRS.forCode(srsURI);
             } catch (FactoryException ex) {
-                LOGGER.error("SRS URI Unrecognised: {} - {}", srsURI, ex.getMessage());
+                LOGGER.error("SRS URI not recognised - Operations may not complete correctly: {} - {}", srsURI, ex.getMessage());
                 return null;
             }
 

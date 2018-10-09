@@ -43,6 +43,10 @@ public class GeometryReverse {
     public static final Geometry check(Geometry geometry, String srsURI) {
 
         Boolean isAxisXY = CRSRegistry.getAxisXY(srsURI);
+        if (isAxisXY == null) {
+            return geometry;
+        }
+
         return check(geometry, isAxisXY);
     }
 
