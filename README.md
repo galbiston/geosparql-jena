@@ -81,7 +81,7 @@ The _indexes_ can be configured by size, retention duration and frequency of cle
 A variety of configuration methods are provided in `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig`.
 Caching of frequently used but small quantity data is also applied in several _registries_, e.g. coordinate reference systems and mathematical transformations.
 
-Example query:
+Example GeoSPARQL query:
 
 ```
 PREFIX geo: <http://www.opengis.net/ont/geosparql#>
@@ -91,6 +91,28 @@ WHERE{
     ?subj geo:sfContains ?obj
 }ORDER by ?obj
 ```
+
+### Example SPARQL Query
+
+The setup of GeoSPARQL Jena only needs to be performed once in an application.
+After it is setup then perform querying using Apache Jena's standard query methods.
+
+To query a Model with GeoSPARQL or standard SPARQL:
+
+```
+GeoSPARQLConfig.setupMemoryIndex();
+Model model = .....;
+String query = ....;
+
+try (QueryExecution qe = QueryExecutionFactory.create(query, model)) {
+    ResultSet rs = qe.execSelect();
+    ResultSetFormatter.outputAsTSV(rs);
+}
+```
+
+More information on SPARQL querying using Apache Jena can be found on their website (https://jena.apache.org/tutorials/sparql.html).
+If your dataset needs to be separate from your application and accessed over HTTP then you probably need the GeoSPARQL Fuseki project(https://github.com/galbiston/geosparql-fuseki).
+The GeoSPARQL functionality needs to be setup where the dataset is located.
 
 ### API
 The library can be used as an API in Java.
