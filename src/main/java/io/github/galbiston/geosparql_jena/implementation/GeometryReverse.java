@@ -43,11 +43,19 @@ public class GeometryReverse {
     public static final Geometry check(Geometry geometry, String srsURI) {
 
         Boolean isAxisXY = CRSRegistry.getAxisXY(srsURI);
-        if (isAxisXY == null) {
-            return geometry;
-        }
-
         return check(geometry, isAxisXY);
+    }
+
+    /**
+     * Checks the spatial reference system URI for y,x and reverses the supplied
+     * geometry coordinates.
+     *
+     * @param geometry
+     * @param crsInfo
+     * @return Geometry in x,y coordinate order.
+     */
+    public static final Geometry check(Geometry geometry, CRSInfo crsInfo) {
+        return check(geometry, crsInfo.isAxisXY());
     }
 
     /**

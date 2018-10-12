@@ -17,6 +17,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.registry;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_CRS_URI;
@@ -43,53 +44,51 @@ public class CRSRegistry implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final Map<String, CoordinateReferenceSystem> CRS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<String, Boolean> AXIS_XY_REGISTRY = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<String, UnitsOfMeasure> UNITS_OF_MEASURE_REGISTRY = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, CRSInfo> CRS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
 
-    public static final String DEFAULT_WKT_CRS84_CODE = "CRS:84";
     private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
 
     public static final UnitsOfMeasure getUnitsOfMeasure(String srsURI) {
-        storeCRS(srsURI);
-        return UNITS_OF_MEASURE_REGISTRY.get(srsURI);
+        CRSInfo crsInfo = storeCRS(srsURI);
+        return crsInfo.getUnitsOfMeasure();
     }
 
     public static final Boolean getAxisXY(String srsURI) {
-        storeCRS(srsURI);
-        return AXIS_XY_REGISTRY.get(srsURI);
+        CRSInfo crsInfo = storeCRS(srsURI);
+        return crsInfo.isAxisXY();
     }
 
     public static final CoordinateReferenceSystem getCRS(String srsURI) {
+        CRSInfo crsInfo = storeCRS(srsURI);
+        return crsInfo.getCrs();
+    }
+
+    public static final CRSInfo getCRSInfo(String srsURI) {
         return storeCRS(srsURI);
     }
 
-    private static CoordinateReferenceSystem storeCRS(String srsURI) {
+    private static CRSInfo storeCRS(String srsURI) {
 
-        CoordinateReferenceSystem crs;
+        CRSInfo crsInfo;
         if (CRS_REGISTRY.containsKey(srsURI)) {
-            crs = CRS_REGISTRY.get(srsURI);
+            crsInfo = CRS_REGISTRY.get(srsURI);
         } else {
 
             //Find the CRS based on the SRS.
             try {
-                crs = CRS.forCode(srsURI);
+                CoordinateReferenceSystem crs = CRS.forCode(srsURI);
+                Boolean isAxisXY = checkAxisXY(crs);
+                UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
+                crsInfo = new CRSInfo(srsURI, crs, unitsOfMeasure, isAxisXY, true);
             } catch (FactoryException ex) {
                 LOGGER.error("SRS URI not recognised - Operations may not complete correctly: {} - {}", srsURI, ex.getMessage());
-                return null;
+                crsInfo = CRSInfo.getUnrecognised(srsURI);
             }
 
-            CRS_REGISTRY.put(srsURI, crs);
-
-            Boolean isAxisXY = checkAxisXY(crs);
-            AXIS_XY_REGISTRY.put(srsURI, isAxisXY);
-
-            UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-            UNITS_OF_MEASURE_REGISTRY.put(srsURI, unitsOfMeasure);
-            UnitsRegistry.addUnit(unitsOfMeasure);
+            CRS_REGISTRY.put(srsURI, crsInfo);
         }
 
-        return crs;
+        return crsInfo;
     }
 
     protected static final Boolean checkAxisXY(CoordinateReferenceSystem crs) {
@@ -107,30 +106,19 @@ public class CRSRegistry implements Serializable {
 
     public static final void setupDefaultCRS() {
 
-        try {
-            CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
-            UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-            UnitsRegistry.addUnit(unitsOfMeasure);
+        //CRS_84
+        CRSInfo crsInfo = CRSInfo.getDefaultWktCRS84(SRS_URI.DEFAULT_WKT_CRS84);
+        CRS_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, crsInfo);
 
-            //CRS_84
-            CRS_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, crs);
-            AXIS_XY_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, Boolean.TRUE);
-            UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, unitsOfMeasure);
+        //WGS_84 Legacy for CRS_84
+        CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, CRSInfo.getDefaultWktCRS84(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY));
 
-            //WGS_84 Legacy for CRS_84
-            CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, crs);
-            AXIS_XY_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, Boolean.TRUE);
-            UNITS_OF_MEASURE_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, unitsOfMeasure);
-
-        } catch (FactoryException ex) {
-            LOGGER.error("Invalid CRS code: {} - {}", DEFAULT_WKT_CRS84_CODE, ex.getMessage());
-        }
+        //Add the Units of Measure
+        UnitsRegistry.addUnit(crsInfo.getUnitsOfMeasure());
     }
 
     public static final void reset() {
         CRS_REGISTRY.clear();
-        AXIS_XY_REGISTRY.clear();
-        UNITS_OF_MEASURE_REGISTRY.clear();
         setupDefaultCRS();
     }
 
