@@ -1,6 +1,6 @@
 # GeoSPARQL Jena #
 
-Implemenation of GeoSPARQL 1.0 standard using Apache Jena for SPARQL query or API.
+Implementation of GeoSPARQL 1.0 standard using Apache Jena for SPARQL query or API.
 
 ## Features
 This implementation follows the 11-052r4 OGC GeoSPARQL standard (http://www.opengeospatial.org/standards/geosparql).
@@ -59,7 +59,7 @@ These _indexes_ retain data that may be required again when a query is being exe
 Therefore, the memory usage will grow during query execution and then recede as data is not re-used.
 All the _indexes_ support concurrency and can be set to a maximum size or allowed to increase capacity as required.
 
-* _Geometry Literal_: Geometry objects following deserialisation from `Geometry Literal`.
+* _Geometry Literal_: Geometry objects following de-serialisation from `Geometry Literal`.
 * _Geometry Transform_: Geometry objects resulting from coordinate transformations.
 * _Query Rewrite_: results of spatial relations between `Feature` and `Geometry` spatial objects.
 
@@ -151,7 +151,7 @@ The framework provides standard compliance for RDF and SPARQL and include extens
 
 ### Apache SIS/SIS_DATA Environment Variable
 Apache Spatial Information System (SIS) is a free software, Java language library for developing geospatial applications.
-SIS provides data structures for geographic features and associated metadata along with methods to manipulate those data structures.
+SIS provides data structures for geographic features and associated meta-data along with methods to manipulate those data structures.
 The library is an implementation of GeoAPI 3.0 interfaces and can be used for desktop or server applications.
 
 A subset of the EPSG spatial/coordinate reference systems are included by default.
