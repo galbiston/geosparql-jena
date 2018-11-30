@@ -6,7 +6,7 @@ Implementation of GeoSPARQL 1.0 standard using Apache Jena for SPARQL query or A
 This implementation follows the 11-052r4 OGC GeoSPARQL standard (http://www.opengeospatial.org/standards/geosparql).
 The implementation is pure Java and does not require any set-up or configuration of any third party relational databases and geospatial extensions.
 
-It implements the six Conformance classes described in the GeoSPARQL document:
+It implements the six Conformance Classes described in the GeoSPARQL document:
 
 * Core
 * Topology Vocabulary
