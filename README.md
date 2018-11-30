@@ -52,7 +52,7 @@ A HTTP server (SPARQL endpoint) using Apache Jena's Fuseki is available from the
 ### SPARQL Query Configuration
 Using the library for SPARQL querying requires one line of code.
 All indexing and caching is performed during query execution and so there should be minimal delay during initialisation.
-This will registers the Property Functions with ARQ query engine and configures the _indexes_ used for time-limited caching.
+This will register the Property Functions with ARQ query engine and configures the _indexes_ used for time-limited caching.
 
 There are three _indexes_ which can be configured independently or switched off.
 These _indexes_ retain data that may be required again when a query is being executed but may not be required between different queries.
@@ -92,10 +92,10 @@ WHERE{
 }ORDER by ?obj
 ```
 
-### Example SPARQL Query
+### Querying Datasets & Models with SPARQL
 
 The setup of GeoSPARQL Jena only needs to be performed once in an application.
-After it is setup then perform querying using Apache Jena's standard query methods.
+After it is setup querying is performed using Apache Jena's standard query methods.
 
 To query a Model with GeoSPARQL or standard SPARQL:
 
@@ -111,8 +111,8 @@ try (QueryExecution qe = QueryExecutionFactory.create(query, model)) {
 ```
 
 More information on SPARQL querying using Apache Jena can be found on their website (https://jena.apache.org/tutorials/sparql.html).
-If your dataset needs to be separate from your application and accessed over HTTP then you probably need the GeoSPARQL Fuseki project(https://github.com/galbiston/geosparql-fuseki).
-The GeoSPARQL functionality needs to be setup where the dataset is located.
+If your dataset needs to be separate from your application and accessed over HTTP then you probably need the GeoSPARQL Fuseki project (https://github.com/galbiston/geosparql-fuseki).
+The GeoSPARQL functionality needs to be setup in the application or Fuseki server where the dataset is located.
 
 ### API
 The library can be used as an API in Java.
@@ -131,6 +131,8 @@ There is overlap between spatial relation families so repeated methods are not s
 * DE-9IM Intersection Pattern: `boolean isRelated = geometryWrapper.relate(otherGeometryWrapper, "TFFFTFFFT");`
 
 * Geometry Property: `boolean isEmpty = geometryWrapper.isEmpty();`
+
+The GeoSPARQL standard specifies that WKT Geometry Literals without an SRS URI are defaulted to CRS84 "http://www.opengis.net/def/crs/OGC/1.3/CRS84".
 
 ## Key Dependencies
 
@@ -189,7 +191,7 @@ However, this does not yield a true result when comparing a pair of point geomet
 The Simple Features standard states that the boundary of a point is empty.
 Therefore, the boundary intersection of two points would also be empty.
 
-JTS, and others, use the alternative intersection pattern of `T*F**FFF*`.
+JTS, and other libraries, use the alternative intersection pattern of `T*F**FFF*`.
 This is a combination of the _within_ and _contains_ relations and yields the expected results for all geometry types.
 
 The spatial relations utilised by JTS have been applied in the library but feedback on this choice is welcome.
@@ -200,7 +202,7 @@ The spatial relations for the three spatial families do not apply to all combina
 Therefore, some queries may not produce all the results that may initially be expected.
 
 Some examples are:
-* In some relations there may only be results when the collection is being used, e.g. two multi points can overlap but two points cannot.
+* In some relations there may only be results when a collection of shapes is being used, e.g. two multi-points can overlap but two points cannot.
 * A relation may only apply for one combination but not its reciprocal, e.g. a line may cross a polygon but a polygon may not cross a line.
 * The _RCC8_ family only applies to `Polygon` and `MultiPolygon` types.
 
@@ -213,7 +215,7 @@ Therefore, some comparisons using these relations may not be as expected.
 The JTS description of _sfEquals_ is:
 * True if two geometries have at least one point in common and no point of either geometry lies in the exterior of the other geometry.
 
-Therefore, two empty geometries are not spatially equal and will return false.
+Therefore, two empty geometries will return false as they are not spatially equal.
 Shapes which differ in the number of points but have the same geometry are equal and will return true.
 
 e.g. `LINESTRING (0 0, 0 10)` and `LINESTRING (0 0, 0 5, 0 10)` are spatially equal.
@@ -247,7 +249,7 @@ Methods are available to apply the `hasDefaultGeometry` property to every `Geome
 Depending upon the spatial relation, queries may include the specified `Feature` and `Geometry` in the results.
 e.g. FeatureA is bound in a query on a dataset only containing FeatureA and GeometryA. The results FeatureA and GeometryA are returned rather than no results.
 Therefore, filtering using `FILTER(!sameTerm(?subj, ?obj))` etc. may be needed in some cases.
-The query rewrite functionality can be switched off in the library configuration.
+The query rewrite functionality can be switched off in the library configuration, see `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig`.
 
 ### Dataset Conversion
 Methods to convert datasets between serialisations and spatial/coordinate reference systems are available in:
@@ -268,7 +270,7 @@ The following individuals have made contributions to this project:
 
 ## Why Use This Implementation
 There are several implementations of the GeoSPARQL standard.
-The conformance and completeness of these implementations is difficult to ascertain and varies between points.
+The conformance and completeness of these implementations is difficult to ascertain and varies between features.
 
 However, the following may be of interest when considering whether to use this implementation based on reviewing several alternatives.
 
@@ -276,9 +278,9 @@ This Implementation|Other Implementations
 ---------- | ----------
 Implements all six components of the GeoSPARQL standard.|Generally partially implement the Geometry Topology and Geometry Extensions. Do not implement the Query Rewrite Extension.
 Pure Java and does not require a supporting relational database. Configuration requires a single line of code (although Apache SIS may need some setting up, see above).|Require setting up a database, configuring a geospatial extension and setting environment variables.
-Uses Apache Jena, which conforms to the W3C standards for RDF and SPARQL. New versions of the standards will quickly feed through.|Not fully RDF and SPARQL compliant, e.g. RDFS/OWL inferencing or SPARQL syntax. Adding your own schema probably won't produce inferences.
+Uses Apache Jena, which conforms to the W3C standards for RDF and SPARQL. New versions of the standards will quickly feed through.|Not fully RDF and SPARQL compliant, e.g. RDFS/OWL inferencing or SPARQL syntax. Adding your own schema may not produce inferences.
 Automatically determines geometry properties and handles mixed cases of units or coordinate reference systems. The GeoSPARQL standard suggests this approach but does not require it.|Tend to produce errors or no results in these situations.
 Performs indexing and caching on-demand which reduces set-up time and only performs calculations that are required.|Perform indexing in the data loading phase and initialisation phase, which can lead to lengthy delays (even on relatively small datasets).
-Uses JTS which does not truncate coordinate precision and applies spatial equality.|May truncate coordinate precision and apply lexical equality, which is quicker but does not comply with the standards.
+Uses JTS which does not truncate coordinate precision and applies spatial equality.|May truncate coordinate precision and apply lexical equality, which is quicker but does not comply with the GeoSPARQL standard.
 
 ![Powered by Apache Jena](https://www.apache.org/logos/comdev-test/poweredby/jena.png "Powered by Apache Jena")
