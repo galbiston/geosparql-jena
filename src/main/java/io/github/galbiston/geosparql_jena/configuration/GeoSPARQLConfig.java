@@ -59,7 +59,7 @@ public class GeoSPARQLConfig {
      * Initialise all GeoSPARQL property and filter functions with memory
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup. Query re-write
-     * enabled.
+     * optional.
      *
      * @param isQueryRewriteEnabled
      */
