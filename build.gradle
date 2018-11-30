@@ -57,11 +57,11 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
 
     //RDF Tables
-    ext.rdfTablesVersion = "1.0.2"
+    ext.rdfTablesVersion = "1.0.3"
     api "io.github.galbiston:rdf-tables:$rdfTablesVersion"
 
     //Expiring Map
-    ext.expiringMapVersion = "1.0.0"
+    ext.expiringMapVersion = "1.0.1"
     implementation "io.github.galbiston:expiring-map:$expiringMapVersion"
 
     //JAXB-API Resolves issue relating to JDK11 and Apache Jena dependency.
