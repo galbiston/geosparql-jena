@@ -58,6 +58,18 @@ public class GeoSPARQLConfig {
     /**
      * Initialise all GeoSPARQL property and filter functions with memory
      * indexing.
+     * <br>Use this for in-memory indexing GeoSPARQL setup. Query re-write
+     * enabled.
+     *
+     * @param isQueryRewriteEnabled
+     */
+    public static final void setupMemoryIndex(Boolean isQueryRewriteEnabled) {
+        setup(IndexOption.MEMORY, isQueryRewriteEnabled);
+    }
+
+    /**
+     * Initialise all GeoSPARQL property and filter functions with memory
+     * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup and to control the
      * index sizes. Expiry is defaulted to 5,000 milliseconds.
      *
