@@ -16,7 +16,7 @@ It implements the six Conformance Classes described in the GeoSPARQL document:
 * Query Rewrite Extension
 
 The WKT (as described in 11-052r4) and GML 2.0 Simple Features Profile (11-100r3) serialisations are supported.
-Additional serialisations can be implemented by extending the `io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype`.
+Additional serialisations can be implemented by extending the `io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype` and registering with Apache Jena's `org.apache.jena.datatypes.TypeMapper`.
 
 All three spatial relation families are supported: _Simple Feature_, _Egenhofer_ and _RCC8_.
 
