@@ -53,7 +53,7 @@ public class DistanceFF extends FunctionBase3 {
             }
 
             if (!v3.isIRI()) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v3.asNode()));
+                throw new ExprEvalException("Not a IRI: " + FmtUtils.stringForNode(v3.asNode()));
             }
 
             double distance = geometry1.distance(geometry2, v3.asNode().getURI());
