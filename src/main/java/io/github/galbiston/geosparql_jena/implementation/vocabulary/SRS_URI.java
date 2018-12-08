@@ -27,7 +27,7 @@ public interface SRS_URI {
     public static final String GREEK_GRID_CRS = "http://www.opengis.net/def/crs/EPSG/0/2100";
     /**
      * Default SRS_URI Name as GeoSPARQL Standard. Equivalent to WGS84 with axis
-     * reversed.
+     * reversed, i.e. Longitude, Latitude.
      */
     public static final String DEFAULT_WKT_CRS84 = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
