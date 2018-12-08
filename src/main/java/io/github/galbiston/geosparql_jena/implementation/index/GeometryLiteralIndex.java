@@ -23,7 +23,7 @@ import static io.github.galbiston.expiring_map.MapDefaultValues.NO_MAP;
 import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_EXPIRY;
 import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.datatype.DatatypeReader;
+import io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype;
 import java.util.Map;
 
 /**
@@ -43,21 +43,21 @@ public class GeometryLiteralIndex {
         PRIMARY, SECONDARY
     }
 
-    public static final GeometryWrapper retrieve(String geometryLiteral, DatatypeReader datatypeReader, GeometryIndex targetIndex) {
+    public static final GeometryWrapper retrieve(String geometryLiteral, GeometryDatatype geometryDatatype, GeometryIndex targetIndex) {
         GeometryWrapper geometryWrapper;
 
         switch (targetIndex) {
             case SECONDARY:
-                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader, SECONDARY_INDEX, PRIMARY_INDEX);
+                geometryWrapper = retrieveMemoryIndex(geometryLiteral, geometryDatatype, SECONDARY_INDEX, PRIMARY_INDEX);
                 break;
             default:
-                geometryWrapper = retrieveMemoryIndex(geometryLiteral, datatypeReader, PRIMARY_INDEX, SECONDARY_INDEX);
+                geometryWrapper = retrieveMemoryIndex(geometryLiteral, geometryDatatype, PRIMARY_INDEX, SECONDARY_INDEX);
         }
 
         return geometryWrapper;
     }
 
-    private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, DatatypeReader datatypeReader, Map<String, GeometryWrapper> index, Map<String, GeometryWrapper> otherIndex) {
+    private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, GeometryDatatype geometryDatatype, Map<String, GeometryWrapper> index, Map<String, GeometryWrapper> otherIndex) {
 
         GeometryWrapper geometryWrapper;
 
@@ -72,7 +72,7 @@ public class GeometryLiteralIndex {
                     if (otherIndex.containsKey(geometryLiteral)) {
                         geometryWrapper = otherIndex.get(geometryLiteral);
                     } else {
-                        geometryWrapper = datatypeReader.read(geometryLiteral);
+                        geometryWrapper = geometryDatatype.read(geometryLiteral);
                     }
                     index.put(geometryLiteral, geometryWrapper);
 
@@ -84,7 +84,7 @@ public class GeometryLiteralIndex {
             }
         }
 
-        return datatypeReader.read(geometryLiteral);
+        return geometryDatatype.read(geometryLiteral);
 
     }
 

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public abstract class GeometryDatatype extends BaseDatatype implements DatatypeReader {
+public abstract class GeometryDatatype extends BaseDatatype {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -40,13 +40,15 @@ public abstract class GeometryDatatype extends BaseDatatype implements DatatypeR
         super(uri);
     }
 
+    public abstract GeometryWrapper read(String geometryLiteral);
+
     /**
-     * This method Parses the GML literal to the JTS Geometry
+     * This method Parses the Geometry Literal to the JTS Geometry
      *
-     * @param lexicalForm - the GML literal to be parsed
-     * @return geometry - if the GML literal is valid.
-     * <br> empty geometry - if the GML literal is empty.
-     * <br> null - if the GML literal is invalid.
+     * @param lexicalForm - the Geometry Literal to be parsed
+     * @return geometry - if the Geometry Literal is valid.
+     * <br> empty geometry - if the Geometry Literal is empty.
+     * <br> null - if the Geometry Literal is invalid.
      */
     @Override
     public final GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
