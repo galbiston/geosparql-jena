@@ -19,13 +19,10 @@ package io.github.galbiston.geosparql_jena.implementation.datatype;
 
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
-import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import io.github.galbiston.geosparql_jena.implementation.parsers.wkt.WKTReader;
 import io.github.galbiston.geosparql_jena.implementation.parsers.wkt.WKTWriter;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
-import org.apache.jena.datatypes.DatatypeFormatException;
 import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +30,17 @@ import org.slf4j.LoggerFactory;
 /**
  * WKTDatatype class allows the URI "geo:wktLiteral" to be used as a datatype
  * and it will parse that datatype to a JTS Geometry.
+ *
+ * Req 10 All RDFS Literals of type geo:wktLiteral shall consist of an optional
+ * URI identifying the coordinate reference system followed by Simple Features
+ * Well Known Text (WKT) describing a geometric value. Valid geo:wktLiterals are
+ * formed by concatenating a valid, absolute URI as defined in [RFC 2396], one
+ * or more spaces (Unicode U+0020 character) as a separator, and a WKT string as
+ * defined in Simple Features [ISO 19125-1].
+ *
+ * Req 11 The URI {@code <http://www.opengis.net/def/crs/OGC/1.3/CRS84>} shall
+ * be assumed as the spatial reference system for geo:wktLiterals that do not *
+ * specify an explicit spatial reference system URI.
  */
 public class WKTDatatype extends GeometryDatatype {
 
@@ -72,41 +80,6 @@ public class WKTDatatype extends GeometryDatatype {
             return WKTWriter.write(geometryWrapper);
         } else {
             throw new AssertionError("Object passed to WKTDatatype is not a GeometryWrapper: " + geometry);
-        }
-    }
-
-    /**
-     * This method Parses the WKT literal to the JTS Geometry
-     *
-     *
-     * Req 10 All RDFS Literals of type geo:wktLiteral shall consist of an
-     * optional URI identifying the coordinate reference system followed by
-     * Simple Features Well Known Text (WKT) describing a geometric value. Valid
-     * geo:wktLiterals are formed by concatenating a valid, absolute URI as
-     * defined in [RFC 2396], one or more spaces (Unicode U+0020 character) as a
-     * separator, and a WKT string as defined in Simple Features [ISO 19125-1].
-     *
-     * Req 11 The URI {@code <http://www.opengis.net/def/crs/OGC/1.3/CRS84>}
-     * shall be assumed as the spatial reference system for geo:wktLiterals that
-     * do not     * specify an explicit spatial reference system URI.
-     *
-     *
-     * @param lexicalForm - the WKT literal to be parsed
-     * @return geometry - if the WKT literal is valid. empty geometry - if the
-     * WKT literal is empty. null - if the WKT literal is invalid.
-     */
-    @Override
-    public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
-        return parse(lexicalForm, GeometryIndex.PRIMARY);
-    }
-
-    @Override
-    public GeometryWrapper parse(String lexicalForm, GeometryIndex targetIndex) throws DatatypeFormatException {
-        try {
-            return GeometryLiteralIndex.retrieve(lexicalForm, this, targetIndex);
-        } catch (ParseException | IllegalArgumentException ex) {
-            LOGGER.error("{} - Illegal WKT literal: {} ", ex.getMessage(), lexicalForm);
-            throw new DatatypeFormatException(ex.getMessage() + " - Illegal WKT literal: " + lexicalForm);
         }
     }
 

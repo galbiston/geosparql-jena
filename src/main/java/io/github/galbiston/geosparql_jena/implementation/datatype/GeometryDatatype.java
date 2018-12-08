@@ -18,6 +18,7 @@
 package io.github.galbiston.geosparql_jena.implementation.datatype;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import java.lang.invoke.MethodHandles;
 import org.apache.jena.datatypes.BaseDatatype;
@@ -39,10 +40,29 @@ public abstract class GeometryDatatype extends BaseDatatype implements DatatypeR
         super(uri);
     }
 
+    /**
+     * This method Parses the GML literal to the JTS Geometry
+     *
+     * @param lexicalForm - the GML literal to be parsed
+     * @return geometry - if the GML literal is valid.
+     * <br> empty geometry - if the GML literal is empty.
+     * <br> null - if the GML literal is invalid.
+     */
     @Override
-    public abstract GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException;
+    public final GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
+        return parse(lexicalForm, GeometryIndex.PRIMARY);
+    }
 
-    public abstract GeometryWrapper parse(String lexicalForm, GeometryIndex targetIndex) throws DatatypeFormatException;
+    public final GeometryWrapper parse(String lexicalForm, GeometryIndex targetIndex) throws DatatypeFormatException {
+        //Check the Geometry Literal Index to see if been previously read and cached.
+        //DatatypeReader interface used to instruct index on how to obtain the GeometryWrapper.
+        try {
+            return GeometryLiteralIndex.retrieve(lexicalForm, this, targetIndex);
+        } catch (ParseException | IllegalArgumentException ex) {
+            LOGGER.error("{} - Illegal Geometry Literal: {} ", ex.getMessage(), lexicalForm);
+            throw new DatatypeFormatException(ex.getMessage() + " - Illegal Geometry Literal: " + lexicalForm);
+        }
+    }
 
     private static final TypeMapper TYPE_MAPPER = TypeMapper.getInstance();
     private static boolean isDatatypesRegistered = false;

@@ -19,8 +19,6 @@ package io.github.galbiston.geosparql_jena.implementation.datatype;
 
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
-import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import io.github.galbiston.geosparql_jena.implementation.parsers.gml.GMLReader;
 import io.github.galbiston.geosparql_jena.implementation.parsers.gml.GMLWriter;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
@@ -77,31 +75,6 @@ public class GMLDatatype extends GeometryDatatype {
             return GMLWriter.write(geometryWrapper);
         } else {
             throw new AssertionError("Object passed to GMLDatatype is not a GeometryWrapper: " + geometry);
-        }
-    }
-
-    /**
-     * This method Parses the GML literal to the JTS Geometry
-     *
-     * @param lexicalForm - the GML literal to be parsed
-     * @return geometry - if the GML literal is valid.
-     * <br> empty geometry - if the GML literal is empty.
-     * <br> null - if the GML literal is invalid.
-     */
-    @Override
-    public GeometryWrapper parse(String lexicalForm) throws DatatypeFormatException {
-        return parse(lexicalForm, GeometryIndex.PRIMARY);
-    }
-
-    @Override
-    public GeometryWrapper parse(String lexicalForm, GeometryIndex targetIndex) throws DatatypeFormatException {
-        //Check the Geometry Literal Index to see if been previously read and cached.
-        //DatatypeReader interface used to instruct index on how to obtain the GeometryWrapper.
-        try {
-            return GeometryLiteralIndex.retrieve(lexicalForm, this, targetIndex);
-        } catch (ParseException | IllegalArgumentException ex) {
-            LOGGER.error("{} - Illegal WKT literal: {} ", ex.getMessage(), lexicalForm);
-            throw new DatatypeFormatException(ex.getMessage() + " - Illegal WKT literal: " + lexicalForm);
         }
     }
 
