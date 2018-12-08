@@ -117,13 +117,15 @@ public class GeoSPARQLOperations {
         ResIterator featureIt = model.listResourcesWithProperty(Geo.HAS_GEOMETRY_PROP);
         while (featureIt.hasNext()) {
             Resource feature = featureIt.nextResource();
-            List<Statement> statement = feature.listProperties(Geo.HAS_GEOMETRY_PROP).toList();
-            if (statement.size() == 1) {
-                try {
-                    Resource geometry = statement.get(0).getResource();
-                    feature.addProperty(Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
-                } catch (Exception ex) {
-                    LOGGER.error("Error creating default geometry: {}", ex.getMessage());
+            if (!feature.hasProperty(Geo.HAS_DEFAULT_GEOMETRY_PROP)) {
+                List<Statement> statement = feature.listProperties(Geo.HAS_GEOMETRY_PROP).toList();
+                if (statement.size() == 1) {
+                    try {
+                        Resource geometry = statement.get(0).getResource();
+                        feature.addProperty(Geo.HAS_DEFAULT_GEOMETRY_PROP, geometry);
+                    } catch (Exception ex) {
+                        LOGGER.error("Error creating default geometry: {}", ex.getMessage());
+                    }
                 }
             }
         }
@@ -173,7 +175,7 @@ public class GeoSPARQLOperations {
      * Apply (to a folder of RDF files) hasDefaultGeometry for every Feature
      * with a single hasGeometry property.
      * <br> Only RDF files should be in the input folder and must all be the
-     * same RDF     * language.
+     * same RDF * language.
      *
      * @param inputFolder
      * @param inputLang
