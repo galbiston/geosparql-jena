@@ -18,6 +18,7 @@
 package io.github.galbiston.geosparql_jena.implementation.vocabulary;
 
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEOF_URI;
+import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.SPATIAL_URI;
 
 /**
  *
@@ -71,4 +72,6 @@ public interface Geof {
     public static final String CONVEXHULL_NAME = GEOF_URI + "convexHull";
     public static final String GETSRID_NAME = GEOF_URI + "getSRID";
 
+    //Jena Spatial Extension
+    public static final String CONVERT_LAT_LON = SPATIAL_URI + "convertLatLon";
 }
