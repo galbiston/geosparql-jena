@@ -65,7 +65,7 @@ public class RCC8 {
     }
 
     /**
-     * This method loads all the RCC8 Topological Expression Functions
+     * This method loads all the RCC8 Topological Filter Functions
      *
      * @param functionRegistry
      */

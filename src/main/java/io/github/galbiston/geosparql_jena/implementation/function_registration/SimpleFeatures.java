@@ -65,7 +65,7 @@ public class SimpleFeatures {
     }
 
     /**
-     * This method loads all the Simple Feature Topological Expression Functions
+     * This method loads all the Simple Feature Topological Filter Functions
      *
      * @param functionRegistry
      */

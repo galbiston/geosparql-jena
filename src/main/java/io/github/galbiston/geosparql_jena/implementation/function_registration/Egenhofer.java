@@ -65,7 +65,7 @@ public class Egenhofer {
     }
 
     /**
-     * This method loads all the Egenhofer Topological Expression Functions
+     * This method loads all the Egenhofer Topological Filter Functions
      *
      * @param functionRegistry
      */
