@@ -20,8 +20,10 @@ package io.github.galbiston.geosparql_jena.geof.nontopological.filter_functions;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import java.lang.invoke.MethodHandles;
 import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
+import org.apache.jena.sparql.util.FmtUtils;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -46,27 +48,27 @@ public class BufferFF extends FunctionBase3 {
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v1);
             if (geometry == null) {
-                return NodeValue.nvEmptyString;
+                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1.asNode()));
             }
 
             //Transfer the parameters as Nodes
             if (!v2.isDouble()) {
-                return NodeValue.nvEmptyString;
+                throw new ExprEvalException("Not a Double: " + FmtUtils.stringForNode(v2.asNode()));
             }
             Node node2 = v2.asNode();
             double radius = Double.parseDouble(node2.getLiteralLexicalForm());
 
             //Obtain the target distance units
             if (!v3.isIRI()) {
-                return NodeValue.nvEmptyString;
+                throw new ExprEvalException("Not a IRI: " + FmtUtils.stringForNode(v3.asNode()));
             }
             String unitsURI = v3.getNode().getURI();
             GeometryWrapper buffer = geometry.buffer(radius, unitsURI);
 
             return buffer.asNode();
-        } catch (FactoryException | MismatchedDimensionException | TransformException dfx) {
-            LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, dfx.getMessage());
-            return NodeValue.nvEmptyString;
+        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+            LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, ex.getMessage());
+            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()));
         }
 
     }

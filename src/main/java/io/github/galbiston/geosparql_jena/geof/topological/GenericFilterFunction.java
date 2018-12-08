@@ -21,8 +21,10 @@ import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
+import org.apache.jena.sparql.util.FmtUtils;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -49,13 +51,21 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
 
             //Check if the first literal is unparseable or geometry is empty (always fails).
-            if (geometry1 == null || geometry1.isEmpty()) {
+            if (geometry1 == null) {
+                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1));
+            }
+
+            if (geometry1.isEmpty()) {
                 return Boolean.FALSE;
             }
 
             //Check if the second literal is unparseable or geometry is empty (always fails).
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
-            if (geometry2 == null || geometry2.isEmpty()) {
+            if (geometry2 == null) {
+                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v2));
+            }
+
+            if (geometry2.isEmpty()) {
                 return Boolean.FALSE;
             }
 
@@ -66,8 +76,8 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
             boolean result = relate(geometry1, geometry2);
             return result;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Filter Function Exception: {} - NodeValue1: {}, NodeValue2: {}", ex.getMessage(), v1, v2);
-            return Boolean.FALSE;
+            LOGGER.error("Filter Function Exception: {} - {}, {}", ex.getMessage(), v1, v2);
+            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1) + ", " + FmtUtils.stringForNode(v2));
         }
     }
 

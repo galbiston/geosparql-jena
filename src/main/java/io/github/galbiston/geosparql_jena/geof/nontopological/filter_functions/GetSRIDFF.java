@@ -18,8 +18,10 @@
 package io.github.galbiston.geosparql_jena.geof.nontopological.filter_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
+import org.apache.jena.sparql.util.FmtUtils;
 
 /**
  *
@@ -33,7 +35,7 @@ public class GetSRIDFF extends FunctionBase1 {
 
         GeometryWrapper geometry = GeometryWrapper.extract(v);
         if (geometry == null) {
-            return NodeValue.nvEmptyString;
+            throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v.asNode()));
         }
 
         String srid = geometry.getSRID();

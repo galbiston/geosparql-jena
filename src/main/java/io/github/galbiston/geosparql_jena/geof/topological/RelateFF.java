@@ -20,8 +20,10 @@ package io.github.galbiston.geosparql_jena.geof.topological;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import org.apache.jena.graph.Node;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
+import org.apache.jena.sparql.util.FmtUtils;
 import org.locationtech.jts.geom.IntersectionMatrix;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
@@ -44,17 +46,17 @@ public class RelateFF extends FunctionBase3 {
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
-                return NodeValue.FALSE;
+                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1.asNode()));
             }
 
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
             if (geometry2 == null) {
-                return NodeValue.FALSE;
+                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v2.asNode()));
             }
 
             Node node3 = v3.asNode();
             if (!node3.isLiteral()) {
-                return NodeValue.FALSE;
+                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v3.asNode()));
             }
 
             String compareMatrix = node3.getLiteral().getLexicalForm();
@@ -65,7 +67,7 @@ public class RelateFF extends FunctionBase3 {
             return NodeValue.makeBoolean(result);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {}", ex.getMessage());
-            return NodeValue.FALSE;
+            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()));
         }
 
     }

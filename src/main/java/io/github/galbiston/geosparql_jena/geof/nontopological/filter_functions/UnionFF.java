@@ -20,8 +20,10 @@ package io.github.galbiston.geosparql_jena.geof.nontopological.filter_functions;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import java.lang.invoke.MethodHandles;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
+import org.apache.jena.sparql.util.FmtUtils;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -43,20 +45,20 @@ public class UnionFF extends FunctionBase2 {
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
             if (geometry1 == null) {
-                return NodeValue.nvEmptyString;
+                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1.asNode()));
             }
 
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
             if (geometry2 == null) {
-                return NodeValue.nvEmptyString;
+                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v2.asNode()));
             }
 
             GeometryWrapper union = geometry1.union(geometry2);
             return union.asNode();
 
-        } catch (FactoryException | MismatchedDimensionException | TransformException dfx) {
-            LOGGER.error("Exception: {}, {}, {}", v1, v2, dfx.getMessage());
-            return NodeValue.nvEmptyString;
+        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+            LOGGER.error("Exception: {}, {}, {}", v1, v2, ex.getMessage());
+            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()));
         }
 
     }
