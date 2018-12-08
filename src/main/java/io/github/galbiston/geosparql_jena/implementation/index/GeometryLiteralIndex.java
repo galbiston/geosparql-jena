@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class GeometryLiteralIndex {
 
-    private static Boolean IS_INDEX_ACTIVE = true;
+    private static Boolean INDEX_ACTIVE = true;
     private static final String PRIMARY_INDEX_LABEL = "Primary Geometry Literal Index";
     private static final String SECONDARY_INDEX_LABEL = "Secondary Geometry Literal Index";
     private static ExpiringMap<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringMap<>(PRIMARY_INDEX_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
@@ -63,7 +63,7 @@ public class GeometryLiteralIndex {
 
         RETRIEVAL_COUNT++;
 
-        if (IS_INDEX_ACTIVE) {
+        if (INDEX_ACTIVE) {
 
             try {
                 if (index.containsKey(geometryLiteral)) {
@@ -109,9 +109,9 @@ public class GeometryLiteralIndex {
      */
     public static final void setMaxSize(int maxSize) {
 
-        IS_INDEX_ACTIVE = NO_MAP != maxSize;
+        INDEX_ACTIVE = NO_MAP != maxSize;
 
-        if (IS_INDEX_ACTIVE) {
+        if (INDEX_ACTIVE) {
             if (PRIMARY_INDEX != null) {
                 PRIMARY_INDEX.stopExpiry();
                 SECONDARY_INDEX.stopExpiry();
@@ -139,7 +139,7 @@ public class GeometryLiteralIndex {
      */
     public static final void setExpiry(long expiryInterval) {
 
-        if (IS_INDEX_ACTIVE) {
+        if (INDEX_ACTIVE) {
             if (expiryInterval > UNLIMITED_EXPIRY) {
                 PRIMARY_INDEX.stopExpiry();
                 PRIMARY_INDEX.setExpiryInterval(expiryInterval);
@@ -172,6 +172,14 @@ public class GeometryLiteralIndex {
 
     public static final Long getRetrievalCount() {
         return RETRIEVAL_COUNT;
+    }
+
+    public static Boolean isIndexActive() {
+        return INDEX_ACTIVE;
+    }
+
+    public static void setIndexActive(Boolean indexActive) {
+        INDEX_ACTIVE = indexActive;
     }
 
 }

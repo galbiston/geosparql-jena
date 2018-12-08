@@ -17,7 +17,9 @@
  */
 package io.github.galbiston.geosparql_jena.configuration;
 
+import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.data_conversion.ConvertData;
+import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,8 +31,11 @@ import java.util.List;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.InfModel;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
@@ -399,6 +404,72 @@ public class GeoSPARQLOperations {
         InfModel infModel = ModelFactory.createInfModel(reasoner, model);
 
         return infModel;
+    }
+
+    /**
+     * Validate Geometry Literal in Dataset.
+     *
+     * @param dataset
+     * @return
+     */
+    public static boolean validateGeometryLiteral(Dataset dataset) {
+
+        boolean isValid = true;
+
+        LOGGER.info("Validate Geometry Literal - Started");
+        //Default Model
+        dataset.begin(ReadWrite.READ);
+        Model defaultModel = dataset.getDefaultModel();
+        GeoSPARQLOperations.validateGeometryLiteral(defaultModel);
+
+        //Named Models
+        Iterator<String> graphNames = dataset.listNames();
+        while (graphNames.hasNext()) {
+            String graphName = graphNames.next();
+            Model namedModel = dataset.getNamedModel(graphName);
+            boolean isModelValid = GeoSPARQLOperations.validateGeometryLiteral(namedModel);
+
+            if (!isModelValid) {
+                isValid = false;
+            }
+        }
+
+        LOGGER.info("Validate Geometry Literal - Completed");
+        dataset.end();
+
+        return isValid;
+    }
+
+    /**
+     * Validate Geometry Literal in Model.
+     *
+     * @param model
+     * @return
+     */
+    public static final boolean validateGeometryLiteral(Model model) {
+
+        //Get current state of index and switch it off temporarily.
+        boolean isIndexActive = GeometryLiteralIndex.isIndexActive();
+        GeometryLiteralIndex.setIndexActive(false);
+
+        boolean isValid = true;
+        NodeIterator nodeIt = model.listObjectsOfProperty(Geo.HAS_DEFAULT_GEOMETRY_PROP);
+        while (nodeIt.hasNext()) {
+            RDFNode node = nodeIt.nextNode();
+
+            try {
+                Literal geometryLiteral = node.asLiteral();
+                GeometryWrapper.extract(geometryLiteral);
+            } catch (Exception ex) {
+                //Error messages should already have been issued. Catch exception so can continue on whole dataset.
+                isValid = false;
+            }
+        }
+
+        //Switch index back on if it was on.
+        GeometryLiteralIndex.setIndexActive(isIndexActive);
+
+        return isValid;
     }
 
 }
