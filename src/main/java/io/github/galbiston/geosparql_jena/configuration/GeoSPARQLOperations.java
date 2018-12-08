@@ -410,7 +410,7 @@ public class GeoSPARQLOperations {
      * Validate Geometry Literal in Dataset.
      *
      * @param dataset
-     * @return
+     * @return Whether dataset is valid.
      */
     public static boolean validateGeometryLiteral(Dataset dataset) {
 
@@ -444,7 +444,7 @@ public class GeoSPARQLOperations {
      * Validate Geometry Literal in Model.
      *
      * @param model
-     * @return
+     * @return Whether model is valid.
      */
     public static final boolean validateGeometryLiteral(Model model) {
 
