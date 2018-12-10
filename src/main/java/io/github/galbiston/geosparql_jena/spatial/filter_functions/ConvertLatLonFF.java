@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase2;
@@ -33,12 +34,12 @@ public class ConvertLatLonFF extends FunctionBase2 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
-        if (!v1.isFloat()) {
-            throw new ExprEvalException("Not a xsd:float: " + FmtUtils.stringForNode(v1.asNode()));
+        if (!v1.isNumber()) {
+            throw new ExprEvalException("Not a number: " + FmtUtils.stringForNode(v1.asNode()));
         }
 
-        if (!v2.isFloat()) {
-            throw new ExprEvalException("Not a xsd:float: " + FmtUtils.stringForNode(v2.asNode()));
+        if (!v2.isNumber()) {
+            throw new ExprEvalException("Not a number: " + FmtUtils.stringForNode(v2.asNode()));
         }
 
         float lat = v1.getFloat();
@@ -48,4 +49,9 @@ public class ConvertLatLonFF extends FunctionBase2 {
         return NodeValue.makeNode(wktPoint, WKTDatatype.INSTANCE);
     }
 
+    public static final Node convert(Node n1, Node n2) {
+        ConvertLatLonFF convertLatLonFF = new ConvertLatLonFF();
+        NodeValue result = convertLatLonFF.exec(NodeValue.makeNode(n1), NodeValue.makeNode(n2));
+        return result.asNode();
+    }
 }
