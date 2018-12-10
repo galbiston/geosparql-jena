@@ -129,10 +129,9 @@ public class SpatialIndex {
                 Literal geometryLiteral = nodeIt.nextNode().asLiteral();
                 GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryLiteral);
 
-                GeometryWrapper transformedGeometryWrapper;
                 try {
                     //Ensure all entries in the index are WGS84 SRS.
-                    transformedGeometryWrapper = geometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
+                    GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
 
                     Envelope envelope = transformedGeometryWrapper.getEnvelope();
                     SpatialIndexItem item = new SpatialIndexItem(envelope, feature);
