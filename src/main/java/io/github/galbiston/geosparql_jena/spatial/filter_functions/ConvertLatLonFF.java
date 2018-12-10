@@ -44,9 +44,13 @@ public class ConvertLatLonFF extends FunctionBase2 {
 
         float lat = v1.getFloat();
         float lon = v2.getFloat();
-        String wktPoint = PREFIX + lat + " " + lon + ")";
+        String wktPoint = toWKT(lat, lon);
 
         return NodeValue.makeNode(wktPoint, WKTDatatype.INSTANCE);
+    }
+
+    public static final String toWKT(float lat, float lon) {
+        return PREFIX + lat + " " + lon + ")";
     }
 
     public static final Node convert(Node n1, Node n2) {

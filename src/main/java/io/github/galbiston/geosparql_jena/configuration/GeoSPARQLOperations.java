@@ -19,8 +19,12 @@ package io.github.galbiston.geosparql_jena.configuration;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.data_conversion.ConvertData;
+import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEO_URI;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,6 +32,7 @@ import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.InfModel;
@@ -38,6 +43,7 @@ import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
@@ -470,6 +476,61 @@ public class GeoSPARQLOperations {
         GeometryLiteralIndex.setIndexActive(isIndexActive);
 
         return isValid;
+    }
+
+    /**
+     * Convert Geo Predicates (Lat/Lon) in Dataset to WKT Geometry Literal.
+     *
+     * @param dataset
+     *
+     */
+    public static void convertGeoPredicates(Dataset dataset) {
+
+        LOGGER.info("Convert Geo Predicates - Started");
+        //Default Model
+        dataset.begin(ReadWrite.WRITE);
+        Model defaultModel = dataset.getDefaultModel();
+        convertGeoPredicates(defaultModel);
+
+        //Named Models
+        Iterator<String> graphNames = dataset.listNames();
+        while (graphNames.hasNext()) {
+            String graphName = graphNames.next();
+            Model namedModel = dataset.getNamedModel(graphName);
+            convertGeoPredicates(namedModel);
+        }
+
+        LOGGER.info("Convert Geo Predicates - Completed");
+        dataset.commit();
+        dataset.end();
+    }
+
+    public static void convertGeoPredicates(Model model) {
+
+        if (model.containsResource(SpatialExtension.GEO_LAT_PROP)) {
+
+            ResIterator resIt = model.listSubjectsWithProperty(SpatialExtension.GEO_LAT_PROP);
+            while (resIt.hasNext()) {
+                Resource feature = resIt.nextResource();
+                if (feature.hasProperty(SpatialExtension.GEO_LONG_PROP)) {
+
+                    //Create a GeometryLiteral from Lat/Lon
+                    Literal lat = feature.getProperty(SpatialExtension.GEO_LAT_PROP).getLiteral();
+                    Literal lon = feature.getProperty(SpatialExtension.GEO_LONG_PROP).getLiteral();
+                    String wktPoint = ConvertLatLonFF.toWKT(lat.getFloat(), lon.getFloat());
+                    Literal point = ResourceFactory.createTypedLiteral(wktPoint, WKTDatatype.INSTANCE);
+
+                    //Create a Geometry.
+                    String geometryURI = GEO_URI + "Geometry-" + UUID.randomUUID().toString();
+                    Resource geometry = ResourceFactory.createResource(geometryURI);
+
+                    //Add Geometry to Feature and GeometryLiteral to Geometry.
+                    feature.addProperty(Geo.HAS_GEOMETRY_PROP, geometry);
+                    geometry.addLiteral(Geo.HAS_SERIALIZATION_PROP, point);
+                }
+            }
+        }
+
     }
 
 }
