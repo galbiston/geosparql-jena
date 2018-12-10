@@ -26,10 +26,14 @@ import io.github.galbiston.geosparql_jena.implementation.function_registration.N
 import io.github.galbiston.geosparql_jena.implementation.function_registration.RCC8;
 import io.github.galbiston.geosparql_jena.implementation.function_registration.Relate;
 import io.github.galbiston.geosparql_jena.implementation.function_registration.SimpleFeatures;
+import io.github.galbiston.geosparql_jena.implementation.function_registration.Spatial;
 import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguration;
 import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguration.IndexOption;
 import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import java.io.File;
+import org.apache.jena.query.Dataset;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
@@ -197,6 +201,15 @@ public class GeoSPARQLConfig {
 
     public static Boolean isQueryRewriteEnabled() {
         return IS_QUERY_REWRITE_ENABLED;
+    }
+
+    public static final void setupSpatial(Dataset dataset, File spatialIndexFile) {
+
+        PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
+        FunctionRegistry functionRegistry = FunctionRegistry.get();
+        Spatial.loadPropertyFunctions(propertyRegistry);
+        Spatial.loadFilterFunctions(functionRegistry);
+        SpatialIndex.buildSpatialIndex(dataset, spatialIndexFile);
     }
 
 }
