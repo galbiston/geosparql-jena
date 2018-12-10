@@ -37,6 +37,7 @@ public class GeoSPARQL_URI {
     public static final String UOM_URI = "http://www.opengis.net/def/uom/OGC/1.0/";
     public static final String SPATIAL_URI = "http://jena.apache.org/spatial#";
     public static final String SPATIAL_FUNCTION_URI = "http://jena.apache.org/function/spatial#";
+    public static final String GEO_POS_URI = "http://www.w3.org/2003/01/geo/wgs84_pos#";
 
     private static final HashMap<String, String> PREFIXES = new HashMap<>();
 
@@ -53,6 +54,8 @@ public class GeoSPARQL_URI {
             PREFIXES.put("uom", UOM_URI);
             PREFIXES.put("spatial", SPATIAL_URI);
             PREFIXES.put("spatial-f", SPATIAL_FUNCTION_URI);
+            PREFIXES.put("geo-pos", GEO_POS_URI);
+
         }
         return PREFIXES;
     }

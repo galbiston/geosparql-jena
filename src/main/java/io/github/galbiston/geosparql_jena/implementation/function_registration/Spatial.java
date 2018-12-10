@@ -15,8 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.function_registration;
 
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialFunction;
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialProp;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.NearbyGeomPF;
@@ -37,10 +36,10 @@ public class Spatial {
      */
     public static void loadPropertyFunctions(PropertyFunctionRegistry registry) {
 
-        registry.put(SpatialProp.NEARBY, NearbyPF.class);
-        registry.put(SpatialProp.NEARBY_GEOM, NearbyGeomPF.class);
-        registry.put(SpatialProp.WITHIN_CIRCLE, NearbyPF.class);
-        registry.put(SpatialProp.NEARBY_GEOM, NearbyGeomPF.class);
+        registry.put(SpatialExtension.NEARBY_PROP, NearbyPF.class);
+        registry.put(SpatialExtension.NEARBY_GEOM_PROP, NearbyGeomPF.class);
+        registry.put(SpatialExtension.WITHIN_CIRCLE_PROP, NearbyPF.class);
+        registry.put(SpatialExtension.NEARBY_GEOM_PROP, NearbyGeomPF.class);
     }
 
     /**
@@ -50,9 +49,9 @@ public class Spatial {
      */
     public static void loadFilterFunctions(FunctionRegistry functionRegistry) {
 
-        functionRegistry.put(SpatialFunction.CONVERT_LAT_LON, ConvertLatLonFF.class);
-        functionRegistry.put(SpatialFunction.NEARBY, NearbyFF.class);
-        functionRegistry.put(SpatialFunction.WITHIN_CIRCLE, NearbyFF.class);
+        functionRegistry.put(SpatialExtension.CONVERT_LAT_LON, ConvertLatLonFF.class);
+        functionRegistry.put(SpatialExtension.NEARBY, NearbyFF.class);
+        functionRegistry.put(SpatialExtension.WITHIN_CIRCLE, NearbyFF.class);
     }
 
 }
