@@ -18,6 +18,7 @@
 package io.github.galbiston.geosparql_jena.implementation;
 
 import io.github.galbiston.geosparql_jena.implementation.registry.UnitsRegistry;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.measure.Quantity;
@@ -45,8 +46,17 @@ public class UnitsOfMeasure implements Serializable {
     private final String unitURI;
     private final boolean isLinearUnits;
 
+    public static final UnitsOfMeasure METRE_UNITS = new UnitsOfMeasure(Unit_URI.METRE_URL);
+    public static final UnitsOfMeasure DEGREE_UNITS = new UnitsOfMeasure(Unit_URI.DEGREE_URL);
+
     public UnitsOfMeasure(CoordinateReferenceSystem crs) {
         this.unit = crs.getCoordinateSystem().getAxis(0).getUnit();
+        this.unitURI = UnitsRegistry.getUnitURI(unit);
+        this.isLinearUnits = UnitsRegistry.isLinearUnits(unitURI);
+    }
+
+    public UnitsOfMeasure(String unitURI) {
+        this.unit = UnitsRegistry.getUnit(unitURI);
         this.unitURI = UnitsRegistry.getUnitURI(unit);
         this.isLinearUnits = UnitsRegistry.isLinearUnits(unitURI);
     }
@@ -74,27 +84,42 @@ public class UnitsOfMeasure implements Serializable {
     @SuppressWarnings("unchecked")
     public static final Double conversion(double sourceDistance, String sourceDistanceUnitsURI, String targetDistanceUnitsURI) {
 
-        Boolean isSourceUnitsLinear = UnitsRegistry.isLinearUnits(sourceDistanceUnitsURI);
-        Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
+        return conversion(sourceDistance, new UnitsOfMeasure(sourceDistanceUnitsURI), new UnitsOfMeasure(targetDistanceUnitsURI));
+    }
+
+    /**
+     * Conversion from target distance in units to source Units Of Measure.
+     *
+     * @param sourceDistance
+     * @param sourceUnits
+     * @param targetUnits
+     * @return Distance after conversion.
+     */
+    @SuppressWarnings("unchecked")
+    public static final Double conversion(double sourceDistance, UnitsOfMeasure sourceUnits, UnitsOfMeasure targetUnits) {
+
+        Boolean isSourceUnitsLinear = sourceUnits.isLinearUnits();
+        Boolean isTargetUnitsLinear = targetUnits.isLinearUnits();
 
         if (!isSourceUnitsLinear.equals(isTargetUnitsLinear)) {
-            LOGGER.error("Conversion between linear and non-linear units not supported: {} and {}", sourceDistanceUnitsURI, targetDistanceUnitsURI);
+            LOGGER.error("Conversion between linear and non-linear units not supported: {} and {}", sourceUnits.unitURI, targetUnits.unitURI);
             return null;
         }
 
         //Source and Target are the same units, so return the source distance.
-        if (sourceDistanceUnitsURI.equals(targetDistanceUnitsURI)) {
+        if (sourceUnits.unitURI.equals(targetUnits.unitURI)) {
             return sourceDistance;
         }
 
         //Find which type of measure for the distance is being used.
-        Unit sourceUnit = UnitsRegistry.getUnit(sourceDistanceUnitsURI);
-        Unit targetUnit = UnitsRegistry.getUnit(targetDistanceUnitsURI);
+        Unit sourceUnit = sourceUnits.getUnit();
+        Unit targetUnit = targetUnits.getUnit();
 
         Quantity<Length> distance = Quantities.create(sourceDistance, sourceUnit);
         Quantity<Length> targetDistance = distance.to(targetUnit);
 
         return targetDistance.getValue().doubleValue();
+
     }
 
     @Override
@@ -112,7 +137,8 @@ public class UnitsOfMeasure implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj
+    ) {
         if (this == obj) {
             return true;
         }
