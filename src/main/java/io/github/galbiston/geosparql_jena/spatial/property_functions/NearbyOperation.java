@@ -142,18 +142,21 @@ public class NearbyOperation {
     private static Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper, double radius, String units) {
 
         try {
-            GeometryWrapper wgsGeometryWrapper = geometryWrapper.convertCRS(SRS_URI.WGS84_CRS); //Convert to WGS84.
 
+            //Get the envelope of the target GeometryWrapper and convert that to WGS84, in case it is a complex polygon.
+            GeometryWrapper envelopeGeometryWrapper = geometryWrapper.envelope();
+            //Convert to WGS84.
+            GeometryWrapper wgsGeometryWrapper = envelopeGeometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
+            Envelope envelope = wgsGeometryWrapper.getEnvelope();
+
+            //Expand the envelope by the radius distance in all directions,
+            //i.e. a bigger box rather than circle. More precise checks made later.
+            Envelope searchEnvelope = new Envelope(envelope);
             double latitude = findLatitude(wgsGeometryWrapper);
             double degreeRadius = DistanceToDegrees.convert(radius, units, latitude);
-            Envelope envelope = wgsGeometryWrapper.getEnvelope();
-            //Expand the envelope by the radius distance.
-            double x1 = envelope.getMinX() - degreeRadius;
-            double x2 = envelope.getMaxX() + degreeRadius;
-            double y1 = envelope.getMinY() - degreeRadius;
-            double y2 = envelope.getMaxY() + degreeRadius;
+            searchEnvelope.expandBy(degreeRadius);
 
-            return new Envelope(x1, x2, y1, y2);
+            return searchEnvelope;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Exception: {}, {}, {}, {}", geometryWrapper.asLiteral(), ex.getMessage());
             throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral());
