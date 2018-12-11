@@ -29,6 +29,7 @@ public class SpatialExtension {
 
     //Filter Functions
     public static final String CONVERT_LAT_LON = SPATIAL_FUNCTION_URI + "convertLatLon";
+    public static final String CONVERT_LAT_LON_BOX = SPATIAL_FUNCTION_URI + "convertLatLonBox";
     public static final String NEARBY = SPATIAL_FUNCTION_URI + "nearby";
     public static final String WITHIN_CIRCLE = SPATIAL_FUNCTION_URI + "withinCircle";
 
