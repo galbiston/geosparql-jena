@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
+import io.github.galbiston.geosparql_jena.spatial.DistanceToDegrees;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import java.util.List;
 import org.apache.jena.graph.Node;
@@ -25,7 +26,6 @@ import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.pfunction.PFuncSimpleAndList;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
 
@@ -33,7 +33,7 @@ import org.apache.jena.sparql.util.FmtUtils;
  *
  *
  */
-public class NearbyPF extends PFuncSimpleAndList {
+public class NearbyPF extends NearbyGeomPF {
 
     private static final int LAT_POS = 0;
     private static final int LON_POS = 1;
@@ -63,10 +63,9 @@ public class NearbyPF extends PFuncSimpleAndList {
             throw new ExprEvalException("Arguments are not all concrete: " + FmtUtils.stringForNode(lat) + ", " + FmtUtils.stringForNode(lon) + ", " + FmtUtils.stringForNode(radiusNode.asNode()));
         }
 
-        double radius = radiusNode.getDouble();
+        radius = radiusNode.getDouble();
 
         //Obtain optional arguments.
-        String unitsURI;
         if (objectArgs.size() > UNITS_POS) {
             Node unitsNode = objectArgs.get(UNITS_POS);
             if (!unitsNode.isURI()) {
@@ -78,7 +77,6 @@ public class NearbyPF extends PFuncSimpleAndList {
         }
 
         //Subject is unbound so find the number to the limit.
-        int limit;
         if (objectArgs.size() > LIMIT_POS) {
             NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
             if (!limitNode.isInteger()) {
@@ -90,9 +88,11 @@ public class NearbyPF extends PFuncSimpleAndList {
         }
 
         Node geometryNode = ConvertLatLonFF.convert(lat, lon);
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
+        geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-        return NearbyOperation.exec(binding, execCxt, subject, geometryWrapper, radius, unitsURI, limit);
+        envelope = DistanceToDegrees.buildSearchEnvelope(geometryWrapper, radius, unitsURI);
+
+        return exec(binding, execCxt, subject, limit);
     }
 
 }
