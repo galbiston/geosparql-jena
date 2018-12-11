@@ -365,7 +365,6 @@ public class GeometryWrapper implements Serializable {
         return utmURI;
     }
 
-
     /**
      * Distance defaulting to metres.
      *
