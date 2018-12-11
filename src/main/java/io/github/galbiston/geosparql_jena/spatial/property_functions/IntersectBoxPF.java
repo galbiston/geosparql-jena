@@ -32,7 +32,7 @@ import org.apache.jena.sparql.util.FmtUtils;
  *
  *
  */
-public class IntersectBoxPF extends NearbyGeomPF {
+public class IntersectBoxPF extends IntersectBoxGeomPF {
 
     private static final int LAT_MIN_POS = 0;
     private static final int LON_MIN_POS = 1;
@@ -76,7 +76,7 @@ public class IntersectBoxPF extends NearbyGeomPF {
         Node geometryNode = ConvertLatLonBoxFF.convert(latMin, lonMin, latMax, lonMax);
         geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-        envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        envelope = SearchEnvelope.build(geometryWrapper);
 
         return exec(binding, execCxt, subject, limit);
     }
