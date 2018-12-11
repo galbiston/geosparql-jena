@@ -15,7 +15,6 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
