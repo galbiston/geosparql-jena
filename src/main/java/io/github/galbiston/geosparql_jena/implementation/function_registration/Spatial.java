@@ -19,6 +19,8 @@ import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExten
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.IntersectBoxGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.IntersectBoxPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.NearbyGeomPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.NearbyPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.WithinBoxGeomPF;
@@ -45,6 +47,8 @@ public class Spatial {
         registry.put(SpatialExtension.WITHIN_CIRCLE_GEOM_PROP, NearbyGeomPF.class);
         registry.put(SpatialExtension.WITHIN_BOX_PROP, WithinBoxPF.class);
         registry.put(SpatialExtension.WITHIN_BOX_GEOM_PROP, WithinBoxGeomPF.class);
+        registry.put(SpatialExtension.INTERSECT_BOX_PROP, IntersectBoxPF.class);
+        registry.put(SpatialExtension.INTERSECT_BOX_GEOM_PROP, IntersectBoxGeomPF.class);
     }
 
     /**

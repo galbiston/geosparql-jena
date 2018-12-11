@@ -37,9 +37,11 @@ public class SpatialExtension {
     public static final String NEARBY_PROP = SPATIAL_URI + "nearby";
     public static final String WITHIN_CIRCLE_PROP = SPATIAL_URI + "withinCircle";
     public static final String WITHIN_BOX_PROP = SPATIAL_URI + "withinBox";
+    public static final String INTERSECT_BOX_PROP = SPATIAL_URI + "intersectBox";
     public static final String NEARBY_GEOM_PROP = SPATIAL_URI + "nearbyGeom";
     public static final String WITHIN_CIRCLE_GEOM_PROP = SPATIAL_URI + "withinCircleGeom";
     public static final String WITHIN_BOX_GEOM_PROP = SPATIAL_URI + "withinBoxGeom";
+    public static final String INTERSECT_BOX_GEOM_PROP = SPATIAL_URI + "intersectBoxGeom";
 
     //Lat/Lon
     public static final String GEO_POS_LAT = GEO_POS_URI + "lat";
