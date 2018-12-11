@@ -81,4 +81,47 @@ public class SearchEnvelope {
         }
     }
 
+    /**
+     * Note: East and West don't wrap across the 180/-180 boundary, which
+     * follows the original implementation.
+     *
+     * @param geometryWrapper
+     * @param direction
+     * @return
+     */
+    public static Envelope build(GeometryWrapper geometryWrapper, CardinalDirection direction) {
+
+        try {
+            //Get the envelope of the target GeometryWrapper and convert that to WGS84, in case it is a complex polygon.
+            GeometryWrapper envelopeGeometryWrapper = geometryWrapper.envelope();
+            //Convert to WGS84.
+            GeometryWrapper wgsGeometryWrapper = envelopeGeometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
+            Envelope envelope = wgsGeometryWrapper.getEnvelope();
+
+            double x1 = -180;
+            double x2 = 180;
+            double y1 = -90;
+            double y2 = 90;
+            switch (direction) {
+                case NORTH:
+                    y1 = envelope.getMinY();
+                    break;
+                case SOUTH:
+                    y2 = envelope.getMaxY();
+                    break;
+                case EAST:
+                    x1 = envelope.getMinX();
+                    break;
+                case WEST:
+                    x2 = envelope.getMaxX();
+                    break;
+            }
+
+            return new Envelope(x1, x2, y1, y2);
+        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+            LOGGER.error("Exception: {}, {}, {}, {}", geometryWrapper.asLiteral(), ex.getMessage());
+            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral());
+        }
+    }
+
 }
