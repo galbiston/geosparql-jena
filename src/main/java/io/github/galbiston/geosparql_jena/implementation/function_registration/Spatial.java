@@ -21,10 +21,18 @@ import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLon
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxGeomPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxPF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.nearby.NearbyGeomPF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.nearby.NearbyPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.WithinBoxGeomPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.WithinBoxPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal.EastGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal.EastPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal.NorthGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal.NorthPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal.SouthGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal.SouthPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal.WestGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal.WestPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.nearby.NearbyGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.nearby.NearbyPF;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
@@ -49,6 +57,14 @@ public class Spatial {
         registry.put(SpatialExtension.WITHIN_BOX_GEOM_PROP, WithinBoxGeomPF.class);
         registry.put(SpatialExtension.INTERSECT_BOX_PROP, IntersectBoxPF.class);
         registry.put(SpatialExtension.INTERSECT_BOX_GEOM_PROP, IntersectBoxGeomPF.class);
+        registry.put(SpatialExtension.NORTH_PROP, NorthPF.class);
+        registry.put(SpatialExtension.NORTH_GEOM_PROP, NorthGeomPF.class);
+        registry.put(SpatialExtension.SOUTH_PROP, SouthPF.class);
+        registry.put(SpatialExtension.SOUTH_GEOM_PROP, SouthGeomPF.class);
+        registry.put(SpatialExtension.EAST_PROP, EastPF.class);
+        registry.put(SpatialExtension.EAST_GEOM_PROP, EastGeomPF.class);
+        registry.put(SpatialExtension.WEST_PROP, WestPF.class);
+        registry.put(SpatialExtension.WEST_GEOM_PROP, WestGeomPF.class);
     }
 
     /**
