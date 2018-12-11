@@ -87,7 +87,7 @@ public class SearchEnvelope {
      *
      * @param geometryWrapper
      * @param direction
-     * @return
+     * @return Envelope covering rest of the world.
      */
     public static Envelope build(GeometryWrapper geometryWrapper, CardinalDirection direction) {
 

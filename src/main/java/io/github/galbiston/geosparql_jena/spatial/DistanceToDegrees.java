@@ -39,7 +39,7 @@ public class DistanceToDegrees {
      * @param distance
      * @param unitsURI
      * @param latitude
-     * @return
+     * @return Converted distance in the provided units.
      */
     public static final double convert(double distance, String unitsURI, double latitude) {
 
