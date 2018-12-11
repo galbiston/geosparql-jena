@@ -16,7 +16,7 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.spatial.DistanceToDegrees;
+import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import java.util.List;
 import org.apache.jena.graph.Node;
@@ -92,7 +92,7 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
             throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(geomLit));
         }
 
-        envelope = DistanceToDegrees.buildSearchEnvelope(geometryWrapper, radius, unitsURI);
+        envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         return exec(binding, execCxt, subject, limit);
     }

@@ -17,7 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
-import io.github.galbiston.geosparql_jena.spatial.DistanceToDegrees;
+import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import java.util.List;
 import org.apache.jena.graph.Node;
@@ -90,7 +90,7 @@ public class NearbyPF extends NearbyGeomPF {
         Node geometryNode = ConvertLatLonFF.convert(lat, lon);
         geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-        envelope = DistanceToDegrees.buildSearchEnvelope(geometryWrapper, radius, unitsURI);
+        envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         return exec(binding, execCxt, subject, limit);
     }
