@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.galbiston.geosparql_jena.spatial.property_functions.nearby;
+package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -34,16 +31,12 @@ import org.locationtech.jts.geom.Envelope;
  *
  *
  */
-public class NearbyGeomPF extends GenericSpatialPropertyFunction {
+public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialPropertyFunction {
 
     private static final int GEOM_POS = 0;
-    private static final int RADIUS_POS = 1;
-    private static final int UNITS_POS = 2;
-    private static final int LIMIT_POS = 3;
+    private static final int LIMIT_POS = 1;
 
     protected GeometryWrapper geometryWrapper;
-    protected double radius;
-    protected String unitsURI;
     protected Envelope envelope;
     protected int limit;
 
@@ -52,30 +45,12 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
-        if (objectArgs.size() < 2) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 2 arguments.");
-        } else if (objectArgs.size() > 4) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 4 arguments.");
+        if (objectArgs.size() < 1) {
+            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 1 arguments.");
+        } else if (objectArgs.size() > 2) {
+            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 2 arguments.");
         }
         Node geomLit = object.getArg(GEOM_POS);
-        NodeValue radiusNode = NodeValue.makeNode(objectArgs.get(RADIUS_POS));
-
-        if (!radiusNode.isDouble()) {
-            throw new ExprEvalException("Not a xsd:double: " + FmtUtils.stringForNode(radiusNode.asNode()));
-        }
-
-        radius = radiusNode.getDouble();
-
-        //Obtain optional arguments.
-        if (objectArgs.size() > UNITS_POS) {
-            Node unitsNode = objectArgs.get(UNITS_POS);
-            if (!unitsNode.isURI()) {
-                throw new ExprEvalException("Not a URI: " + FmtUtils.stringForNode(unitsNode));
-            }
-            unitsURI = unitsNode.getURI();
-        } else {
-            unitsURI = NearbyPF.DEFAULT_UNITS;
-        }
 
         //Subject is unbound so find the number to the limit.
         if (objectArgs.size() > LIMIT_POS) {
@@ -93,19 +68,15 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
             throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(geomLit));
         }
 
-        envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        envelope = buildSearchEnvelope(geometryWrapper);
 
         return search(binding, execCxt, subject, limit);
     }
 
-    @Override
-    protected boolean testRelation(GeometryWrapper targetGeometryWrapper) {
-        return NearbyFF.relate(geometryWrapper, targetGeometryWrapper, radius, unitsURI);
-    }
+    protected abstract Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper);
 
     @Override
     protected Envelope getSearchEnvelope() {
         return envelope;
     }
-
 }

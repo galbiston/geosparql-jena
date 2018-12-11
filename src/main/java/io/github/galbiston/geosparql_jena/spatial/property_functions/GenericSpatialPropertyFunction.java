@@ -43,11 +43,13 @@ import org.locationtech.jts.geom.Envelope;
  */
 public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList {
 
+    public static final int DEFAULT_LIMIT = -1;
+
     protected abstract boolean testRelation(GeometryWrapper targetGeometryWrapper);
 
     protected abstract Envelope getSearchEnvelope();
 
-    public QueryIterator exec(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
+    public QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 
         //Subject is bound
         if (subject.isURI()) {

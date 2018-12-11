@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.galbiston.geosparql_jena.spatial.property_functions.nearby;
+package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -33,46 +32,33 @@ import org.apache.jena.sparql.util.FmtUtils;
  *
  *
  */
-public class NearbyPF extends NearbyGeomPF {
+public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGeomPropertyFunction {
 
-    private static final int LAT_POS = 0;
-    private static final int LON_POS = 1;
-    private static final int RADIUS_POS = 2;
-    private static final int UNITS_POS = 3;
+    private static final int LAT_MIN_POS = 0;
+    private static final int LON_MIN_POS = 1;
+    private static final int LAT_MAX_POS = 2;
+    private static final int LON_MAX_POS = 3;
     private static final int LIMIT_POS = 4;
-    public static final String DEFAULT_UNITS = Unit_URI.KILOMETRE_URL;
 
     @Override
     public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
-        if (objectArgs.size() < 3) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 3 arguments.");
+        if (objectArgs.size() < 4) {
+            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 4 arguments.");
         } else if (objectArgs.size() > 5) {
             throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 5 arguments.");
         }
 
-        Node lat = objectArgs.get(LAT_POS);
-        Node lon = objectArgs.get(LON_POS);
-        NodeValue radiusNode = NodeValue.makeNode(objectArgs.get(RADIUS_POS));
+        Node latMin = objectArgs.get(LAT_MIN_POS);
+        Node lonMin = objectArgs.get(LON_MIN_POS);
+        Node latMax = objectArgs.get(LAT_MAX_POS);
+        Node lonMax = objectArgs.get(LON_MAX_POS);
 
         //Check minimum arguments are all bound.
-        if (lat.isVariable() || lon.isVariable() || !radiusNode.isDouble()) {
-            throw new ExprEvalException("Arguments are not all concrete: " + FmtUtils.stringForNode(lat) + ", " + FmtUtils.stringForNode(lon) + ", " + FmtUtils.stringForNode(radiusNode.asNode()));
-        }
-
-        radius = radiusNode.getDouble();
-
-        //Obtain optional arguments.
-        if (objectArgs.size() > UNITS_POS) {
-            Node unitsNode = objectArgs.get(UNITS_POS);
-            if (!unitsNode.isURI()) {
-                throw new ExprEvalException("Not a URI: " + FmtUtils.stringForNode(unitsNode));
-            }
-            unitsURI = unitsNode.getURI();
-        } else {
-            unitsURI = DEFAULT_UNITS;
+        if (latMin.isVariable() || lonMin.isVariable() || latMax.isVariable() || lonMax.isVariable()) {
+            throw new ExprEvalException("Arguments are not all concrete: " + FmtUtils.stringForNode(latMin) + ", " + FmtUtils.stringForNode(lonMin) + FmtUtils.stringForNode(latMax) + ", " + FmtUtils.stringForNode(lonMax));
         }
 
         //Subject is unbound so find the number to the limit.
@@ -86,12 +72,11 @@ public class NearbyPF extends NearbyGeomPF {
             limit = DEFAULT_LIMIT;
         }
 
-        Node geometryNode = ConvertLatLonFF.convert(lat, lon);
+        Node geometryNode = ConvertLatLonBoxFF.convert(latMin, lonMin, latMax, lonMax);
         geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-        envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        envelope = SearchEnvelope.build(geometryWrapper);
 
         return search(binding, execCxt, subject, limit);
     }
-
 }

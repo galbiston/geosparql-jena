@@ -17,18 +17,9 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.nearby.NearbyPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialGeomPropertyFunction;
 import java.lang.invoke.MethodHandles;
-import java.util.List;
-import org.apache.jena.graph.Node;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.expr.ExprEvalException;
-import org.apache.jena.sparql.expr.NodeValue;
-import org.apache.jena.sparql.pfunction.PropFuncArg;
-import org.apache.jena.sparql.util.FmtUtils;
 import org.locationtech.jts.geom.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
@@ -40,49 +31,9 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class WithinBoxGeomPF extends GenericSpatialPropertyFunction {
+public class WithinBoxGeomPF extends GenericSpatialGeomPropertyFunction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    private static final int GEOM_POS = 0;
-    private static final int LIMIT_POS = 1;
-
-    protected GeometryWrapper geometryWrapper;
-    protected Envelope envelope;
-    protected int limit;
-
-    @Override
-    public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
-
-        //Check minimum arguments.
-        List<Node> objectArgs = object.getArgList();
-        if (objectArgs.size() < 1) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 1 arguments.");
-        } else if (objectArgs.size() > 2) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 2 arguments.");
-        }
-        Node geomLit = object.getArg(GEOM_POS);
-
-        //Subject is unbound so find the number to the limit.
-        if (objectArgs.size() > LIMIT_POS) {
-            NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
-            if (!limitNode.isInteger()) {
-                throw new ExprEvalException("Not an integer: " + FmtUtils.stringForNode(limitNode.asNode()));
-            }
-            limit = limitNode.getInteger().intValue();
-        } else {
-            limit = NearbyPF.DEFAULT_LIMIT;
-        }
-
-        geometryWrapper = GeometryWrapper.extract(geomLit);
-        if (geometryWrapper == null) {
-            throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(geomLit));
-        }
-
-        envelope = SearchEnvelope.build(geometryWrapper);
-
-        return exec(binding, execCxt, subject, limit);
-    }
 
     @Override
     protected boolean testRelation(GeometryWrapper targetGeometryWrapper) {
@@ -96,8 +47,7 @@ public class WithinBoxGeomPF extends GenericSpatialPropertyFunction {
     }
 
     @Override
-    protected Envelope getSearchEnvelope() {
-        return envelope;
+    protected Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
+        return SearchEnvelope.build(geometryWrapper);
     }
-
 }
