@@ -73,7 +73,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
 
         Graph graph = execCxt.getActiveGraph();
 
-        IteratorChain<Triple> geometryLiteralTriples = new IteratorChain();
+        IteratorChain<Triple> geometryLiteralTriples = new IteratorChain<>();
         if (graph.contains(subject, Geo.HAS_GEOMETRY_NODE, null)) {
             //A Feature can have many geometries so add each of them. The check Geo.HAS_DEFAULT_GEOMETRY_NODE will only return one but requires the data to have these present.
             Iterator<Triple> geometryTriples = graph.find(subject, Geo.HAS_GEOMETRY_NODE, null);

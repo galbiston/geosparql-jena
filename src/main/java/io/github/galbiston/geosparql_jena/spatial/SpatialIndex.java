@@ -75,6 +75,7 @@ public class SpatialIndex {
         SPATIAL_INDEX.insert(envelope, item);
     }
 
+    @SuppressWarnings("unchecked")
     public static List<Resource> query(Envelope searchEnvelope) {
         return SPATIAL_INDEX.query(searchEnvelope);
     }
