@@ -96,7 +96,7 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
 
     @Override
     protected boolean testRelation(GeometryWrapper targetGeometryWrapper) {
-        return NearbyFF.check(geometryWrapper, targetGeometryWrapper, radius, unitsURI);
+        return NearbyFF.relate(geometryWrapper, targetGeometryWrapper, radius, unitsURI);
     }
 
     @Override

@@ -67,12 +67,12 @@ public class NearbyFF extends FunctionBase4 {
 
         double radius = v3.getDouble();
 
-        boolean result = check(geometry1, geometry2, radius, v4.getString());
+        boolean result = relate(geometry1, geometry2, radius, v4.getString());
         return NodeValue.makeBoolean(result);
 
     }
 
-    public static final boolean check(GeometryWrapper geometry1, GeometryWrapper geometry2, double radius, String unitsURI) {
+    public static final boolean relate(GeometryWrapper geometry1, GeometryWrapper geometry2, double radius, String unitsURI) {
         try {
             double distance = geometry1.distance(geometry2, unitsURI);
             return distance < radius;
