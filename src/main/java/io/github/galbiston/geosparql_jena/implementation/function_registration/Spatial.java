@@ -19,12 +19,12 @@ import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExten
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.IntersectBoxGeomPF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.IntersectBoxPF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.NearbyGeomPF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.NearbyPF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.WithinBoxGeomPF;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.WithinBoxPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.nearby.NearbyGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.nearby.NearbyPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.box.WithinBoxGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.box.WithinBoxPF;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
