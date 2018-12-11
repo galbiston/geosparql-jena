@@ -18,6 +18,8 @@ package io.github.galbiston.geosparql_jena.spatial;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,6 +35,7 @@ import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
@@ -58,7 +61,7 @@ public class SpatialIndex {
         SPATIAL_INDEX = new STRtree(capacity);
     }
 
-    public static void intialiseSpatialIndex(List<SpatialIndexItem> spatialIndexItems) {
+    public static void intialiseSpatialIndex(Collection<SpatialIndexItem> spatialIndexItems) {
         SPATIAL_INDEX = new STRtree(spatialIndexItems.size());
         insertItems(spatialIndexItems);
     }
@@ -97,14 +100,14 @@ public class SpatialIndex {
         //Default Model
         dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
-        List<SpatialIndexItem> items = buildSpatialIndex(defaultModel);
+        Collection<SpatialIndexItem> items = buildSpatialIndex(defaultModel);
 
         //Named Models
         Iterator<String> graphNames = dataset.listNames();
         while (graphNames.hasNext()) {
             String graphName = graphNames.next();
             Model namedModel = dataset.getNamedModel(graphName);
-            List<SpatialIndexItem> graphItems = buildSpatialIndex(namedModel);
+            Collection<SpatialIndexItem> graphItems = buildSpatialIndex(namedModel);
             items.addAll(graphItems);
         }
 
@@ -114,10 +117,26 @@ public class SpatialIndex {
         dataset.end();
     }
 
-    public static final List<SpatialIndexItem> buildSpatialIndex(Model model) {
+    public static final Collection<SpatialIndexItem> buildSpatialIndex(Model model) {
 
         List<SpatialIndexItem> items = new ArrayList<>();
-        //Get current state of index and switch it off temporarily.
+
+        //Only add one set of statements as a converted dataset will duplicate the same info.
+        if (model.contains(null, Geo.HAS_GEOMETRY_PROP, (Resource) null)) {
+            LOGGER.info("Feature-hasGeometry-Geometry statements found. Any Geo predicates will not be added to index.");
+            Collection<SpatialIndexItem> geometryLiteralItems = buildGeometryLiteralIndex(model);
+            items.addAll(geometryLiteralItems);
+        } else if (model.contains(null, SpatialExtension.GEO_LAT_PROP, (Literal) null)) {
+            LOGGER.info("Geo predicate statements found.");
+            Collection<SpatialIndexItem> geoPredicateItems = buildGeoPredicateIndex(model);
+            items.addAll(geoPredicateItems);
+        }
+
+        return items;
+    }
+
+    private static Collection<SpatialIndexItem> buildGeometryLiteralIndex(Model model) {
+        List<SpatialIndexItem> items = new ArrayList<>();
         StmtIterator stmtIt = model.listStatements(null, Geo.HAS_GEOMETRY_PROP, (Resource) null);
         while (stmtIt.hasNext()) {
             Statement stmt = stmtIt.nextStatement();
@@ -142,6 +161,26 @@ public class SpatialIndex {
                 }
 
             }
+        }
+        return items;
+    }
+
+    private static Collection<SpatialIndexItem> buildGeoPredicateIndex(Model model) {
+        List<SpatialIndexItem> items = new ArrayList<>();
+        ResIterator resIt = model.listResourcesWithProperty(SpatialExtension.GEO_LAT_PROP);
+
+        while (resIt.hasNext()) {
+            Resource feature = resIt.nextResource();
+
+            Literal lat = feature.getProperty(SpatialExtension.GEO_LAT_PROP).getLiteral();
+            Literal lon = feature.getProperty(SpatialExtension.GEO_LONG_PROP).getLiteral();
+
+            Literal latLonPoint = ConvertLatLonFF.toLiteral(lat.getFloat(), lon.getFloat());
+            GeometryWrapper geometryWrapper = GeometryWrapper.extract(latLonPoint);
+
+            Envelope envelope = geometryWrapper.getEnvelope();
+            SpatialIndexItem item = new SpatialIndexItem(envelope, feature);
+            items.add(item);
         }
         return items;
     }

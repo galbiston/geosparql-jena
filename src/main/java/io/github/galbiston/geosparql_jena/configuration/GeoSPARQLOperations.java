@@ -19,7 +19,6 @@ package io.github.galbiston.geosparql_jena.configuration;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.data_conversion.ConvertData;
-import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEO_URI;
@@ -517,8 +516,7 @@ public class GeoSPARQLOperations {
                     //Create a GeometryLiteral from Lat/Lon
                     Literal lat = feature.getProperty(SpatialExtension.GEO_LAT_PROP).getLiteral();
                     Literal lon = feature.getProperty(SpatialExtension.GEO_LONG_PROP).getLiteral();
-                    String wktPoint = ConvertLatLonFF.toWKT(lat.getFloat(), lon.getFloat());
-                    Literal point = ResourceFactory.createTypedLiteral(wktPoint, WKTDatatype.INSTANCE);
+                    Literal latLonPoint = ConvertLatLonFF.toLiteral(lat.getFloat(), lon.getFloat());
 
                     //Create a Geometry.
                     String geometryURI = GEO_URI + "Geometry-" + UUID.randomUUID().toString();
@@ -526,7 +524,7 @@ public class GeoSPARQLOperations {
 
                     //Add Geometry to Feature and GeometryLiteral to Geometry.
                     feature.addProperty(Geo.HAS_GEOMETRY_PROP, geometry);
-                    geometry.addLiteral(Geo.HAS_SERIALIZATION_PROP, point);
+                    geometry.addLiteral(Geo.HAS_SERIALIZATION_PROP, latLonPoint);
                 }
             }
         }
