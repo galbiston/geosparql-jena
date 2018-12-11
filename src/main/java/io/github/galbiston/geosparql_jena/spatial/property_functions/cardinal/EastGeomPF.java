@@ -18,6 +18,9 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.CardinalDirection;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import java.util.List;
+import org.apache.jena.rdf.model.Resource;
 import org.locationtech.jts.geom.Envelope;
 
 /**
@@ -26,9 +29,21 @@ import org.locationtech.jts.geom.Envelope;
  */
 public class EastGeomPF extends GenericCardinalGeomPropertyFunction {
 
+    private Envelope wrapEnvelope;
+
     @Override
     protected Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
-        return SearchEnvelope.build(geometryWrapper, CardinalDirection.EAST);
+        Envelope searchEnvelope = SearchEnvelope.build(geometryWrapper, CardinalDirection.EAST);
+        wrapEnvelope = SearchEnvelope.buildWrap(geometryWrapper, CardinalDirection.EAST);
+        return searchEnvelope;
+    }
+
+    @Override
+    protected List<Resource> testSearchEnvelope() {
+        List<Resource> features = SpatialIndex.query(envelope);
+        List<Resource> wrapFeatures = SpatialIndex.query(wrapEnvelope);
+        features.addAll(wrapFeatures);
+        return features;
     }
 
 }

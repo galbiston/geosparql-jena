@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
+import static io.github.galbiston.geosparql_jena.spatial.SearchEnvelope.OUT_BOUNDS;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -95,7 +96,23 @@ public class SearchEnvelopeTest {
         System.out.println("build_EAST");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.EAST;
-        Envelope expResult = new Envelope(20, X2, Y1, Y2);
+        Envelope expResult = new Envelope(20, 180, Y1, Y2);
+        Envelope result = SearchEnvelope.build(geometryWrapper, direction);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of build method, of class SearchEnvelope.
+     */
+    @Test
+    public void testBuild_EAST2() {
+        System.out.println("build_EAST2");
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 -20.0)", WKTDatatype.URI);
+        CardinalDirection direction = CardinalDirection.EAST;
+        Envelope expResult = new Envelope(-20, 160, Y1, Y2);
         Envelope result = SearchEnvelope.build(geometryWrapper, direction);
 
         //System.out.println("Exp: " + expResult);
@@ -111,8 +128,88 @@ public class SearchEnvelopeTest {
         System.out.println("build_WEST");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.WEST;
-        Envelope expResult = new Envelope(X1, 20, Y1, Y2);
+        Envelope expResult = new Envelope(-160, 20, Y1, Y2);
         Envelope result = SearchEnvelope.build(geometryWrapper, direction);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of build method, of class SearchEnvelope.
+     */
+    @Test
+    public void testBuild_WEST2() {
+        System.out.println("build_WEST2");
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 -20.0)", WKTDatatype.URI);
+        CardinalDirection direction = CardinalDirection.WEST;
+        Envelope expResult = new Envelope(-180, -20, Y1, Y2);
+        Envelope result = SearchEnvelope.build(geometryWrapper, direction);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of build method, of class SearchEnvelope.
+     */
+    @Test
+    public void testBuildWrap_EAST() {
+        System.out.println("buildWrap_EAST");
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.URI);
+        CardinalDirection direction = CardinalDirection.EAST;
+        Envelope expResult = new Envelope(-180, -160, Y1, Y2);
+        Envelope result = SearchEnvelope.buildWrap(geometryWrapper, direction);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of build method, of class SearchEnvelope.
+     */
+    @Test
+    public void testBuildWrap_EAST2() {
+        System.out.println("buildWrap_EAST2");
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 -20.0)", WKTDatatype.URI);
+        CardinalDirection direction = CardinalDirection.EAST;
+        Envelope expResult = new Envelope(OUT_BOUNDS, OUT_BOUNDS, OUT_BOUNDS, OUT_BOUNDS);
+        Envelope result = SearchEnvelope.buildWrap(geometryWrapper, direction);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of build method, of class SearchEnvelope.
+     */
+    @Test
+    public void testBuildWrap_WEST() {
+        System.out.println("buildWrap_WEST");
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.URI);
+        CardinalDirection direction = CardinalDirection.WEST;
+        Envelope expResult = new Envelope(160, 180, Y1, Y2);
+        Envelope result = SearchEnvelope.buildWrap(geometryWrapper, direction);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of build method, of class SearchEnvelope.
+     */
+    @Test
+    public void testBuildWrap_WEST2() {
+        System.out.println("buildWrap_WEST");
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 -20.0)", WKTDatatype.URI);
+        CardinalDirection direction = CardinalDirection.WEST;
+        Envelope expResult = new Envelope(OUT_BOUNDS, OUT_BOUNDS, OUT_BOUNDS, OUT_BOUNDS);
+        Envelope result = SearchEnvelope.buildWrap(geometryWrapper, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

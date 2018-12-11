@@ -17,10 +17,12 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.nearby;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction;
 import java.util.List;
 import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
 import org.apache.jena.sparql.engine.binding.Binding;
@@ -104,8 +106,9 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
     }
 
     @Override
-    protected Envelope getSearchEnvelope() {
-        return envelope;
+    protected List<Resource> testSearchEnvelope() {
+        List<Resource> features = SpatialIndex.query(envelope);
+        return features;
     }
 
 }
