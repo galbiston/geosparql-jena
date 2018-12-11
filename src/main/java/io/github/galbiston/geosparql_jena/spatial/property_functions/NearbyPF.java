@@ -49,9 +49,9 @@ public class NearbyPF extends NearbyGeomPF {
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
         if (objectArgs.size() < 3) {
-            throw new ExprEvalException("Minimum of 3 arguments.");
+            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 3 arguments.");
         } else if (objectArgs.size() > 5) {
-            throw new ExprEvalException("Maximum of 5 arguments.");
+            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 5 arguments.");
         }
 
         Node lat = objectArgs.get(LAT_POS);
@@ -80,7 +80,7 @@ public class NearbyPF extends NearbyGeomPF {
         if (objectArgs.size() > LIMIT_POS) {
             NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
             if (!limitNode.isInteger()) {
-                throw new ExprEvalException("Not a literal: " + FmtUtils.stringForNode(limitNode.getNode()));
+                throw new ExprEvalException("Not an integer: " + FmtUtils.stringForNode(limitNode.getNode()));
             }
             limit = limitNode.getInteger().intValue();
         } else {

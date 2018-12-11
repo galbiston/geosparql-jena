@@ -51,9 +51,9 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
         if (objectArgs.size() < 2) {
-            throw new ExprEvalException("Minimum of 2 arguments.");
+            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 2 arguments.");
         } else if (objectArgs.size() > 4) {
-            throw new ExprEvalException("Maximum of 4 arguments.");
+            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 4 arguments.");
         }
         Node geomLit = object.getArg(GEOM_POS);
         NodeValue radiusNode = NodeValue.makeNode(objectArgs.get(RADIUS_POS));
@@ -79,7 +79,7 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
         if (objectArgs.size() > LIMIT_POS) {
             NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
             if (!limitNode.isInteger()) {
-                throw new ExprEvalException("Not a literal: " + FmtUtils.stringForNode(limitNode.asNode()));
+                throw new ExprEvalException("Not an integer: " + FmtUtils.stringForNode(limitNode.asNode()));
             }
             limit = limitNode.getInteger().intValue();
         } else {
