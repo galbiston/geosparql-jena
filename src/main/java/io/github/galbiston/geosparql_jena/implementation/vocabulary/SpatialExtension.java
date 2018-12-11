@@ -38,10 +38,18 @@ public class SpatialExtension {
     public static final String WITHIN_CIRCLE_PROP = SPATIAL_URI + "withinCircle";
     public static final String WITHIN_BOX_PROP = SPATIAL_URI + "withinBox";
     public static final String INTERSECT_BOX_PROP = SPATIAL_URI + "intersectBox";
+    public static final String NORTH_PROP = SPATIAL_URI + "north";
+    public static final String SOUTH_PROP = SPATIAL_URI + "south";
+    public static final String EAST_PROP = SPATIAL_URI + "east";
+    public static final String WEST_PROP = SPATIAL_URI + "west";
     public static final String NEARBY_GEOM_PROP = SPATIAL_URI + "nearbyGeom";
     public static final String WITHIN_CIRCLE_GEOM_PROP = SPATIAL_URI + "withinCircleGeom";
     public static final String WITHIN_BOX_GEOM_PROP = SPATIAL_URI + "withinBoxGeom";
     public static final String INTERSECT_BOX_GEOM_PROP = SPATIAL_URI + "intersectBoxGeom";
+    public static final String NORTH_GEOM_PROP = SPATIAL_URI + "northGeom";
+    public static final String SOUTH_GEOM_PROP = SPATIAL_URI + "southGeom";
+    public static final String EAST_GEOM_PROP = SPATIAL_URI + "eastGeom";
+    public static final String WEST_GEOM_PROP = SPATIAL_URI + "westGeom";
 
     //Lat/Lon
     public static final String GEO_POS_LAT = GEO_POS_URI + "lat";
