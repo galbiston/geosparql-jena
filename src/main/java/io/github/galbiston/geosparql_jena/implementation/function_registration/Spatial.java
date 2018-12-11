@@ -21,6 +21,8 @@ import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLon
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.NearbyGeomPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.NearbyPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.WithinBoxGeomPF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.WithinBoxPF;
 import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
@@ -40,7 +42,9 @@ public class Spatial {
         registry.put(SpatialExtension.NEARBY_PROP, NearbyPF.class);
         registry.put(SpatialExtension.NEARBY_GEOM_PROP, NearbyGeomPF.class);
         registry.put(SpatialExtension.WITHIN_CIRCLE_PROP, NearbyPF.class);
-        registry.put(SpatialExtension.NEARBY_GEOM_PROP, NearbyGeomPF.class);
+        registry.put(SpatialExtension.WITHIN_CIRCLE_GEOM_PROP, NearbyGeomPF.class);
+        registry.put(SpatialExtension.WITHIN_BOX_PROP, WithinBoxPF.class);
+        registry.put(SpatialExtension.WITHIN_BOX_GEOM_PROP, WithinBoxGeomPF.class);
     }
 
     /**
