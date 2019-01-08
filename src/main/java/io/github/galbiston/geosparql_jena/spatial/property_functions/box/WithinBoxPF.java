@@ -37,6 +37,8 @@ public class WithinBoxPF extends GenericSpatialBoxPropertyFunction {
 
     @Override
     protected boolean testRelation(GeometryWrapper targetGeometryWrapper) {
+        GeometryWrapper geometryWrapper = getGeometryWrapper();
+
         try {
             return targetGeometryWrapper.within(geometryWrapper);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {

@@ -51,6 +51,7 @@ public abstract class GenericCardinalGeomPropertyFunction extends GenericSpatial
 
     @Override
     public QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
+        GeometryWrapper geometryWrapper = getGeometryWrapper();
         originalSearchEnvelope = geometryWrapper.envelope();
         return super.search(binding, execCxt, subject, limit);
     }

@@ -36,6 +36,7 @@ import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.pfunction.PFuncSimpleAndList;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -46,7 +47,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     public static final int DEFAULT_LIMIT = -1;
 
     private SpatialIndex spatialIndex;
-    private int limit;
+    private SpatialArguments spatialArguments;
 
     protected abstract boolean testRelation(GeometryWrapper targetGeometryWrapper);
 
@@ -56,8 +57,8 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
 
         spatialIndex = SpatialIndex.retrieve(execCxt);
-        limit = extractObjectArguments(predicate, object);
-        return search(binding, execCxt, subject, limit);
+        spatialArguments = extractObjectArguments(predicate, object);
+        return search(binding, execCxt, subject, spatialArguments.limit);
     }
 
     /**
@@ -65,9 +66,10 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
      *
      * @param predicate
      * @param object
-     * @return Limit of search, i.e. number of items. Default of -1;
+     * @return Spatial arguments extracted from the object according to the
+     * predicate.
      */
-    protected abstract int extractObjectArguments(Node predicate, PropFuncArg object);
+    protected abstract SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object);
 
     public QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 
@@ -155,8 +157,19 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         return spatialIndex;
     }
 
-    public int getLimit() {
-        return limit;
+    public SpatialArguments getSpatialArguments() {
+        return spatialArguments;
     }
 
+    public GeometryWrapper getGeometryWrapper() {
+        return spatialArguments.geometryWrapper;
+    }
+
+    public Envelope getEnvelope() {
+        return spatialArguments.envelope;
+    }
+
+    public int getLimit() {
+        return spatialArguments.limit;
+    }
 }

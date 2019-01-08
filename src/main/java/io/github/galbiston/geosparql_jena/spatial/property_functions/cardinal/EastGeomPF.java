@@ -41,6 +41,7 @@ public class EastGeomPF extends GenericCardinalGeomPropertyFunction {
     @Override
     protected List<Resource> testSearchEnvelope() {
         SpatialIndex spatialIndex = getSpatialIndex();
+        Envelope envelope = getEnvelope();
         List<Resource> features = spatialIndex.query(envelope);
         List<Resource> wrapFeatures = spatialIndex.query(wrapEnvelope);
         features.addAll(wrapFeatures);

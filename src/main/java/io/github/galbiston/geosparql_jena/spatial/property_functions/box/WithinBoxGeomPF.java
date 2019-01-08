@@ -37,6 +37,7 @@ public class WithinBoxGeomPF extends GenericSpatialGeomPropertyFunction {
 
     @Override
     protected boolean testRelation(GeometryWrapper targetGeometryWrapper) {
+        GeometryWrapper geometryWrapper = getGeometryWrapper();
 
         try {
             return targetGeometryWrapper.within(geometryWrapper);

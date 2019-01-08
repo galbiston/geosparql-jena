@@ -18,12 +18,14 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import static io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction.DEFAULT_LIMIT;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -36,7 +38,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
     private static final int LIMIT_POS = 2;
 
     @Override
-    protected int extractObjectArguments(Node predicate, PropFuncArg object) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -67,11 +69,11 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
         }
 
         Node geometryNode = ConvertLatLonFF.convert(lat, lon);
-        geometryWrapper = GeometryWrapper.extract(geometryNode);
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-        envelope = buildSearchEnvelope(geometryWrapper);
+        Envelope envelope = buildSearchEnvelope(geometryWrapper);
 
-        return limit;
+        return new SpatialArguments(limit, geometryWrapper, envelope);
     }
 
 }

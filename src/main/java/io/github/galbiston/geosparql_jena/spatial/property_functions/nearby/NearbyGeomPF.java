@@ -20,6 +20,7 @@ import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Resource;
@@ -40,13 +41,11 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
     private static final int UNITS_POS = 2;
     private static final int LIMIT_POS = 3;
 
-    protected GeometryWrapper geometryWrapper;
     protected double radius;
     protected String unitsURI;
-    protected Envelope envelope;
 
     @Override
-    protected int extractObjectArguments(Node predicate, PropFuncArg object) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -87,24 +86,26 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
             limit = DEFAULT_LIMIT;
         }
 
-        geometryWrapper = GeometryWrapper.extract(geomLit);
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLit);
         if (geometryWrapper == null) {
             throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(geomLit));
         }
 
-        envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        return limit;
+        return new SpatialArguments(limit, geometryWrapper, envelope);
     }
 
     @Override
     protected boolean testRelation(GeometryWrapper targetGeometryWrapper) {
+        GeometryWrapper geometryWrapper = getGeometryWrapper();
         return NearbyFF.relate(geometryWrapper, targetGeometryWrapper, radius, unitsURI);
     }
 
     @Override
     protected List<Resource> testSearchEnvelope() {
         SpatialIndex spatialIndex = getSpatialIndex();
+        Envelope envelope = getEnvelope();
         List<Resource> features = spatialIndex.query(envelope);
         return features;
     }

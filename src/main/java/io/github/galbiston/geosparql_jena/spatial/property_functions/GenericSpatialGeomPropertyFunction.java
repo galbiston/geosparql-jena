@@ -35,11 +35,8 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
     private static final int GEOM_POS = 0;
     private static final int LIMIT_POS = 1;
 
-    protected GeometryWrapper geometryWrapper;
-    protected Envelope envelope;
-
     @Override
-    protected int extractObjectArguments(Node predicate, PropFuncArg object) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -62,14 +59,14 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
             limit = DEFAULT_LIMIT;
         }
 
-        geometryWrapper = GeometryWrapper.extract(geomLit);
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLit);
         if (geometryWrapper == null) {
             throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(geomLit));
         }
 
-        envelope = buildSearchEnvelope(geometryWrapper);
+        Envelope envelope = buildSearchEnvelope(geometryWrapper);
 
-        return limit;
+        return new SpatialArguments(limit, geometryWrapper, envelope);
     }
 
     protected abstract Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper);
@@ -77,6 +74,7 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
     @Override
     protected List<Resource> testSearchEnvelope() {
         SpatialIndex spatialIndex = getSpatialIndex();
+        Envelope envelope = getEnvelope();
         List<Resource> features = spatialIndex.query(envelope);
         return features;
     }

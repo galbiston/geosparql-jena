@@ -24,6 +24,7 @@ import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -38,7 +39,7 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
     private static final int LIMIT_POS = 4;
 
     @Override
-    protected int extractObjectArguments(Node predicate, PropFuncArg object) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -71,10 +72,10 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
         }
 
         Node geometryNode = ConvertLatLonBoxFF.convert(latMin, lonMin, latMax, lonMax);
-        geometryWrapper = GeometryWrapper.extract(geometryNode);
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-        envelope = SearchEnvelope.build(geometryWrapper);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper);
 
-        return limit;
+        return new SpatialArguments(limit, geometryWrapper, envelope);
     }
 }

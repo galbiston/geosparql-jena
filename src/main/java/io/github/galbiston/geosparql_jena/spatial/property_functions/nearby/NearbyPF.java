@@ -19,12 +19,14 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -40,7 +42,7 @@ public class NearbyPF extends NearbyGeomPF {
     public static final String DEFAULT_UNITS = Unit_URI.KILOMETRE_URL;
 
     @Override
-    protected int extractObjectArguments(Node predicate, PropFuncArg object) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -85,11 +87,11 @@ public class NearbyPF extends NearbyGeomPF {
         }
 
         Node geometryNode = ConvertLatLonFF.convert(lat, lon);
-        geometryWrapper = GeometryWrapper.extract(geometryNode);
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-        envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        return limit;
+        return new SpatialArguments(limit, geometryWrapper, envelope);
     }
 
 }
