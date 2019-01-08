@@ -65,7 +65,7 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
 
             radius = radiusNode.getDouble();
 
-            //Obtain optional arguments.
+            //Find the units.
             if (objectArgs.size() > UNITS_POS) {
                 Node unitsNode = objectArgs.get(UNITS_POS);
                 if (!unitsNode.isURI()) {
@@ -76,7 +76,7 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
                 unitsURI = NearbyPF.DEFAULT_UNITS;
             }
 
-            //Subject is unbound so find the number to the limit.
+            //Find the limit.
             int limit;
             if (objectArgs.size() > LIMIT_POS) {
                 NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));

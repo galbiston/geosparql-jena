@@ -60,7 +60,7 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
                 throw new ExprEvalException("Arguments are not all concrete: " + FmtUtils.stringForNode(latMin) + ", " + FmtUtils.stringForNode(lonMin) + FmtUtils.stringForNode(latMax) + ", " + FmtUtils.stringForNode(lonMax));
             }
 
-            //Subject is unbound so find the number to the limit.
+            //Find the limit.
             int limit;
             if (objectArgs.size() > LIMIT_POS) {
                 NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));

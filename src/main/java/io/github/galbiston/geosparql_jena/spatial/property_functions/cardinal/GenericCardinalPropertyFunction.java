@@ -58,7 +58,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
                 throw new ExprEvalException("Arguments are not all concrete: " + FmtUtils.stringForNode(lat) + ", " + FmtUtils.stringForNode(lon));
             }
 
-            //Subject is unbound so find the number to the limit.
+            //Find the limit.
             int limit;
             if (objectArgs.size() > LIMIT_POS) {
                 NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
