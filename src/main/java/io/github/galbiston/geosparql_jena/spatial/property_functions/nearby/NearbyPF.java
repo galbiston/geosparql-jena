@@ -21,9 +21,6 @@ import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import java.util.List;
 import org.apache.jena.graph.Node;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
@@ -43,7 +40,7 @@ public class NearbyPF extends NearbyGeomPF {
     public static final String DEFAULT_UNITS = Unit_URI.KILOMETRE_URL;
 
     @Override
-    public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
+    protected int extractArguments(Node subject, Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -76,6 +73,7 @@ public class NearbyPF extends NearbyGeomPF {
         }
 
         //Subject is unbound so find the number to the limit.
+        int limit;
         if (objectArgs.size() > LIMIT_POS) {
             NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
             if (!limitNode.isInteger()) {
@@ -91,7 +89,7 @@ public class NearbyPF extends NearbyGeomPF {
 
         envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        return search(binding, execCxt, subject, limit);
+        return limit;
     }
 
 }

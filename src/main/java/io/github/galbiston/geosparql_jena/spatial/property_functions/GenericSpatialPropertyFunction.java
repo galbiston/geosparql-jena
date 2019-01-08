@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.collections4.iterators.IteratorChain;
@@ -33,6 +34,7 @@ import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.pfunction.PFuncSimpleAndList;
+import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
 
 /**
@@ -43,9 +45,29 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
 
     public static final int DEFAULT_LIMIT = -1;
 
+    private SpatialIndex index;
+    private int limit;
+
     protected abstract boolean testRelation(GeometryWrapper targetGeometryWrapper);
 
     protected abstract List<Resource> testSearchEnvelope();
+
+    @Override
+    public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
+
+        //TODO get spatial index from the context or the global version. Then use to query.
+        limit = extractArguments(subject, predicate, object);
+        return search(binding, execCxt, subject, limit);
+    }
+
+    /**
+     *
+     * @param subject
+     * @param predicate
+     * @param object
+     * @return Limit of search, i.e. number of items. Default of -1;
+     */
+    protected abstract int extractArguments(Node subject, Node predicate, PropFuncArg object);
 
     public QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 
@@ -127,6 +149,14 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
             }
         }
         return queryIterConcat;
+    }
+
+    public SpatialIndex getIndex() {
+        return index;
+    }
+
+    public int getLimit() {
+        return limit;
     }
 
 }

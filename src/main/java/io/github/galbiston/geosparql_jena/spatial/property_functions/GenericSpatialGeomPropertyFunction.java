@@ -20,9 +20,6 @@ import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
@@ -40,10 +37,9 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
 
     protected GeometryWrapper geometryWrapper;
     protected Envelope envelope;
-    protected int limit;
 
     @Override
-    public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
+    protected int extractArguments(Node subject, Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -55,6 +51,7 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
         Node geomLit = object.getArg(GEOM_POS);
 
         //Subject is unbound so find the number to the limit.
+        int limit;
         if (objectArgs.size() > LIMIT_POS) {
             NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
             if (!limitNode.isInteger()) {
@@ -72,7 +69,7 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
 
         envelope = buildSearchEnvelope(geometryWrapper);
 
-        return search(binding, execCxt, subject, limit);
+        return limit;
     }
 
     protected abstract Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper);

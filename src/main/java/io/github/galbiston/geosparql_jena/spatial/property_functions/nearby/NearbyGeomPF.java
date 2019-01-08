@@ -23,9 +23,6 @@ import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpat
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
@@ -47,10 +44,9 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
     protected double radius;
     protected String unitsURI;
     protected Envelope envelope;
-    protected int limit;
 
     @Override
-    public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
+    protected int extractArguments(Node subject, Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -80,6 +76,7 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
         }
 
         //Subject is unbound so find the number to the limit.
+        int limit;
         if (objectArgs.size() > LIMIT_POS) {
             NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
             if (!limitNode.isInteger()) {
@@ -97,7 +94,7 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
 
         envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        return search(binding, execCxt, subject, limit);
+        return limit;
     }
 
     @Override

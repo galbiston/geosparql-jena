@@ -20,9 +20,6 @@ import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLon
 import static io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction.DEFAULT_LIMIT;
 import java.util.List;
 import org.apache.jena.graph.Node;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.binding.Binding;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
@@ -39,7 +36,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
     private static final int LIMIT_POS = 2;
 
     @Override
-    public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
+    protected int extractArguments(Node subject, Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
@@ -58,6 +55,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
         }
 
         //Subject is unbound so find the number to the limit.
+        int limit;
         if (objectArgs.size() > LIMIT_POS) {
             NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
             if (!limitNode.isInteger()) {
@@ -73,7 +71,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
 
         envelope = buildSearchEnvelope(geometryWrapper);
 
-        return search(binding, execCxt, subject, limit);
+        return limit;
     }
 
 }
