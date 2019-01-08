@@ -16,6 +16,7 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import java.util.Objects;
 import org.locationtech.jts.geom.Envelope;
 
 /**
@@ -49,6 +50,36 @@ public class SpatialArguments {
     @Override
     public String toString() {
         return "SpatialArguments{" + "limit=" + limit + ", geometryWrapper=" + geometryWrapper + ", envelope=" + envelope + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 43 * hash + this.limit;
+        hash = 43 * hash + Objects.hashCode(this.geometryWrapper);
+        hash = 43 * hash + Objects.hashCode(this.envelope);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SpatialArguments other = (SpatialArguments) obj;
+        if (this.limit != other.limit) {
+            return false;
+        }
+        if (!Objects.equals(this.geometryWrapper, other.geometryWrapper)) {
+            return false;
+        }
+        return Objects.equals(this.envelope, other.envelope);
     }
 
 }
