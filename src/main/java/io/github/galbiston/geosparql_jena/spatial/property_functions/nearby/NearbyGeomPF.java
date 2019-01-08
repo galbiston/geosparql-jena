@@ -46,7 +46,7 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
     protected Envelope envelope;
 
     @Override
-    protected int extractArguments(Node subject, Node predicate, PropFuncArg object) {
+    protected int extractObjectArguments(Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();

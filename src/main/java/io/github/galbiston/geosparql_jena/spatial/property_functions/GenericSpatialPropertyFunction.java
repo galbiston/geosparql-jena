@@ -56,18 +56,18 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
 
         //TODO get spatial index from the context or the global version. Then use to query.
-        limit = extractArguments(subject, predicate, object);
+        limit = extractObjectArguments(predicate, object);
         return search(binding, execCxt, subject, limit);
     }
 
     /**
      *
-     * @param subject
+     *
      * @param predicate
      * @param object
      * @return Limit of search, i.e. number of items. Default of -1;
      */
-    protected abstract int extractArguments(Node subject, Node predicate, PropFuncArg object);
+    protected abstract int extractObjectArguments(Node predicate, PropFuncArg object);
 
     public QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 

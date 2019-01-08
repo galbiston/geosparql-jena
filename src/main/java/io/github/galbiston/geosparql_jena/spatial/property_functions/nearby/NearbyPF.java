@@ -40,7 +40,7 @@ public class NearbyPF extends NearbyGeomPF {
     public static final String DEFAULT_UNITS = Unit_URI.KILOMETRE_URL;
 
     @Override
-    protected int extractArguments(Node subject, Node predicate, PropFuncArg object) {
+    protected int extractObjectArguments(Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();

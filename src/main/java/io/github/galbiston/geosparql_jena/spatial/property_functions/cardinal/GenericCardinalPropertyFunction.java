@@ -36,7 +36,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
     private static final int LIMIT_POS = 2;
 
     @Override
-    protected int extractArguments(Node subject, Node predicate, PropFuncArg object) {
+    protected int extractObjectArguments(Node predicate, PropFuncArg object) {
 
         //Check minimum arguments.
         List<Node> objectArgs = object.getArgList();
