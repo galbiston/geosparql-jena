@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.geo.topological;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -29,6 +30,7 @@ import org.apache.jena.sparql.engine.binding.BindingFactory;
 import org.apache.jena.sparql.engine.iterator.QueryIterConcat;
 import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.pfunction.PFuncSimple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.RDF;
@@ -62,22 +64,26 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
     protected Node getGeometryLiteral(Node subject, Node predicate, Graph graph) {
 
-        //Check for the asserted value and return if found.
-        if (graph.contains(subject, predicate, null)) {
-            ExtendedIterator<Triple> iter = graph.find(subject, predicate, null);
-            Node geometryLiteral = extractObject(iter);
-            return geometryLiteral;
-        }
+        try {
+            //Check for the asserted value and return if found.
+            if (graph.contains(subject, predicate, null)) {
+                ExtendedIterator<Triple> iter = graph.find(subject, predicate, null);
+                Node geometryLiteral = extractObject(iter);
+                return geometryLiteral;
+            }
 
-        //Check that the Geometry has a serialisation to use.
-        if (graph.contains(subject, Geo.HAS_SERIALIZATION_NODE, null)) {
-            ExtendedIterator<Triple> iter = graph.find(subject, Geo.HAS_SERIALIZATION_NODE, null);
-            Node geomLiteral = extractObject(iter);
-            GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLiteral);
-            Literal geometryLiteral = applyPredicate(geometryWrapper);
-            return geometryLiteral.asNode();
-        } else {
-            return null;
+            //Check that the Geometry has a serialisation to use.
+            if (graph.contains(subject, Geo.HAS_SERIALIZATION_NODE, null)) {
+                ExtendedIterator<Triple> iter = graph.find(subject, Geo.HAS_SERIALIZATION_NODE, null);
+                Node geomLiteral = extractObject(iter);
+                GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLiteral);
+                Literal geometryLiteral = applyPredicate(geometryWrapper);
+                return geometryLiteral.asNode();
+            } else {
+                return null;
+            }
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         }
     }
 
@@ -97,13 +103,13 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
         Graph graph = execCxt.getActiveGraph();
         Node geometryLiteral = getGeometryLiteral(subject, predicate, graph);
 
-        Boolean isEqual = object.matches(geometryLiteral);
-
-        if (isEqual) {
-            return QueryIterSingleton.create(binding, execCxt);
-        } else {
-            return QueryIterNullIterator.create(execCxt);
+        if (geometryLiteral != null) {
+            if (object.matches(geometryLiteral)) {
+                return QueryIterSingleton.create(binding, execCxt);
+            }
         }
+
+        return QueryIterNullIterator.create(execCxt);
     }
 
     private QueryIterator subjectUnbound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {

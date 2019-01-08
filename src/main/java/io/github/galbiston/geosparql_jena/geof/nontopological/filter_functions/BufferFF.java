@@ -19,6 +19,7 @@ package io.github.galbiston.geosparql_jena.geof.nontopological.filter_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import java.lang.invoke.MethodHandles;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -47,9 +48,6 @@ public class BufferFF extends FunctionBase3 {
 
         try {
             GeometryWrapper geometry = GeometryWrapper.extract(v1);
-            if (geometry == null) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1.asNode()));
-            }
 
             //Transfer the parameters as Nodes
             if (!v2.isDouble()) {
@@ -66,6 +64,8 @@ public class BufferFF extends FunctionBase3 {
             GeometryWrapper buffer = geometry.buffer(radius, unitsURI);
 
             return buffer.asNode();
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, ex.getMessage());
             throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()));

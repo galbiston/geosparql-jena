@@ -20,6 +20,7 @@ package io.github.galbiston.geosparql_jena.geof.nontopological.filter_functions;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import java.lang.invoke.MethodHandles;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -44,13 +45,7 @@ public class DistanceFF extends FunctionBase3 {
 
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
-            if (geometry1 == null) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1.asNode()));
-            }
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
-            if (geometry2 == null) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v2.asNode()));
-            }
 
             if (!v3.isIRI()) {
                 throw new ExprEvalException("Not a IRI: " + FmtUtils.stringForNode(v3.asNode()));
@@ -59,6 +54,8 @@ public class DistanceFF extends FunctionBase3 {
             double distance = geometry1.distance(geometry2, v3.asNode().getURI());
 
             return NodeValue.makeDouble(distance);
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, ex.getMessage());
             throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()));

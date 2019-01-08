@@ -22,6 +22,7 @@ import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.List;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.expr.ExprEvalException;
@@ -47,53 +48,54 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
     @Override
     protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
 
-        //Check minimum arguments.
-        List<Node> objectArgs = object.getArgList();
-        if (objectArgs.size() < 2) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 2 arguments.");
-        } else if (objectArgs.size() > 4) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 4 arguments.");
-        }
-        Node geomLit = object.getArg(GEOM_POS);
-        NodeValue radiusNode = NodeValue.makeNode(objectArgs.get(RADIUS_POS));
-
-        if (!radiusNode.isDouble()) {
-            throw new ExprEvalException("Not a xsd:double: " + FmtUtils.stringForNode(radiusNode.asNode()));
-        }
-
-        radius = radiusNode.getDouble();
-
-        //Obtain optional arguments.
-        if (objectArgs.size() > UNITS_POS) {
-            Node unitsNode = objectArgs.get(UNITS_POS);
-            if (!unitsNode.isURI()) {
-                throw new ExprEvalException("Not a URI: " + FmtUtils.stringForNode(unitsNode));
+        try {
+            //Check minimum arguments.
+            List<Node> objectArgs = object.getArgList();
+            if (objectArgs.size() < 2) {
+                throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 2 arguments.");
+            } else if (objectArgs.size() > 4) {
+                throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 4 arguments.");
             }
-            unitsURI = unitsNode.getURI();
-        } else {
-            unitsURI = NearbyPF.DEFAULT_UNITS;
-        }
+            Node geomLit = object.getArg(GEOM_POS);
+            NodeValue radiusNode = NodeValue.makeNode(objectArgs.get(RADIUS_POS));
 
-        //Subject is unbound so find the number to the limit.
-        int limit;
-        if (objectArgs.size() > LIMIT_POS) {
-            NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
-            if (!limitNode.isInteger()) {
-                throw new ExprEvalException("Not an integer: " + FmtUtils.stringForNode(limitNode.asNode()));
+            if (!radiusNode.isDouble()) {
+                throw new ExprEvalException("Not a xsd:double: " + FmtUtils.stringForNode(radiusNode.asNode()));
             }
-            limit = limitNode.getInteger().intValue();
-        } else {
-            limit = DEFAULT_LIMIT;
+
+            radius = radiusNode.getDouble();
+
+            //Obtain optional arguments.
+            if (objectArgs.size() > UNITS_POS) {
+                Node unitsNode = objectArgs.get(UNITS_POS);
+                if (!unitsNode.isURI()) {
+                    throw new ExprEvalException("Not a URI: " + FmtUtils.stringForNode(unitsNode));
+                }
+                unitsURI = unitsNode.getURI();
+            } else {
+                unitsURI = NearbyPF.DEFAULT_UNITS;
+            }
+
+            //Subject is unbound so find the number to the limit.
+            int limit;
+            if (objectArgs.size() > LIMIT_POS) {
+                NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
+                if (!limitNode.isInteger()) {
+                    throw new ExprEvalException("Not an integer: " + FmtUtils.stringForNode(limitNode.asNode()));
+                }
+                limit = limitNode.getInteger().intValue();
+            } else {
+                limit = DEFAULT_LIMIT;
+            }
+
+            GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLit);
+
+            Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+
+            return new SpatialArguments(limit, geometryWrapper, envelope);
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         }
-
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLit);
-        if (geometryWrapper == null) {
-            throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(geomLit));
-        }
-
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
-
-        return new SpatialArguments(limit, geometryWrapper, envelope);
     }
 
     @Override

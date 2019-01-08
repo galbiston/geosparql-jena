@@ -19,6 +19,7 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import java.util.List;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -40,42 +41,45 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
 
     @Override
     protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
-
-        //Check minimum arguments.
-        List<Node> objectArgs = object.getArgList();
-        if (objectArgs.size() < 4) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 4 arguments.");
-        } else if (objectArgs.size() > 5) {
-            throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 5 arguments.");
-        }
-
-        Node latMin = objectArgs.get(LAT_MIN_POS);
-        Node lonMin = objectArgs.get(LON_MIN_POS);
-        Node latMax = objectArgs.get(LAT_MAX_POS);
-        Node lonMax = objectArgs.get(LON_MAX_POS);
-
-        //Check minimum arguments are all bound.
-        if (latMin.isVariable() || lonMin.isVariable() || latMax.isVariable() || lonMax.isVariable()) {
-            throw new ExprEvalException("Arguments are not all concrete: " + FmtUtils.stringForNode(latMin) + ", " + FmtUtils.stringForNode(lonMin) + FmtUtils.stringForNode(latMax) + ", " + FmtUtils.stringForNode(lonMax));
-        }
-
-        //Subject is unbound so find the number to the limit.
-        int limit;
-        if (objectArgs.size() > LIMIT_POS) {
-            NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
-            if (!limitNode.isInteger()) {
-                throw new ExprEvalException("Not an integer: " + FmtUtils.stringForNode(limitNode.getNode()));
+        try {
+            //Check minimum arguments.
+            List<Node> objectArgs = object.getArgList();
+            if (objectArgs.size() < 4) {
+                throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Minimum of 4 arguments.");
+            } else if (objectArgs.size() > 5) {
+                throw new ExprEvalException(FmtUtils.stringForNode(predicate) + ": Maximum of 5 arguments.");
             }
-            limit = limitNode.getInteger().intValue();
-        } else {
-            limit = DEFAULT_LIMIT;
+
+            Node latMin = objectArgs.get(LAT_MIN_POS);
+            Node lonMin = objectArgs.get(LON_MIN_POS);
+            Node latMax = objectArgs.get(LAT_MAX_POS);
+            Node lonMax = objectArgs.get(LON_MAX_POS);
+
+            //Check minimum arguments are all bound.
+            if (latMin.isVariable() || lonMin.isVariable() || latMax.isVariable() || lonMax.isVariable()) {
+                throw new ExprEvalException("Arguments are not all concrete: " + FmtUtils.stringForNode(latMin) + ", " + FmtUtils.stringForNode(lonMin) + FmtUtils.stringForNode(latMax) + ", " + FmtUtils.stringForNode(lonMax));
+            }
+
+            //Subject is unbound so find the number to the limit.
+            int limit;
+            if (objectArgs.size() > LIMIT_POS) {
+                NodeValue limitNode = NodeValue.makeNode(objectArgs.get(LIMIT_POS));
+                if (!limitNode.isInteger()) {
+                    throw new ExprEvalException("Not an integer: " + FmtUtils.stringForNode(limitNode.getNode()));
+                }
+                limit = limitNode.getInteger().intValue();
+            } else {
+                limit = DEFAULT_LIMIT;
+            }
+
+            Node geometryNode = ConvertLatLonBoxFF.convert(latMin, lonMin, latMax, lonMax);
+            GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
+
+            Envelope envelope = SearchEnvelope.build(geometryWrapper);
+
+            return new SpatialArguments(limit, geometryWrapper, envelope);
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         }
-
-        Node geometryNode = ConvertLatLonBoxFF.convert(latMin, lonMin, latMax, lonMax);
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
-
-        Envelope envelope = SearchEnvelope.build(geometryWrapper);
-
-        return new SpatialArguments(limit, geometryWrapper, envelope);
     }
 }

@@ -21,6 +21,7 @@ import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.collections4.iterators.IteratorChain;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -93,37 +94,41 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
 
     private boolean checkBound(ExecutionContext execCxt, Node subject) {
 
-        Graph graph = execCxt.getActiveGraph();
+        try {
+            Graph graph = execCxt.getActiveGraph();
 
-        IteratorChain<Triple> geometryLiteralTriples = new IteratorChain<>();
-        if (graph.contains(subject, Geo.HAS_GEOMETRY_NODE, null)) {
-            //A Feature can have many geometries so add each of them. The check Geo.HAS_DEFAULT_GEOMETRY_NODE will only return one but requires the data to have these present.
-            Iterator<Triple> geometryTriples = graph.find(subject, Geo.HAS_GEOMETRY_NODE, null);
-            while (geometryTriples.hasNext()) {
-                Node geometry = geometryTriples.next().getObject();
-                geometryLiteralTriples.addIterator(graph.find(geometry, Geo.HAS_SERIALIZATION_NODE, null));
+            IteratorChain<Triple> geometryLiteralTriples = new IteratorChain<>();
+            if (graph.contains(subject, Geo.HAS_GEOMETRY_NODE, null)) {
+                //A Feature can have many geometries so add each of them. The check Geo.HAS_DEFAULT_GEOMETRY_NODE will only return one but requires the data to have these present.
+                Iterator<Triple> geometryTriples = graph.find(subject, Geo.HAS_GEOMETRY_NODE, null);
+                while (geometryTriples.hasNext()) {
+                    Node geometry = geometryTriples.next().getObject();
+                    geometryLiteralTriples.addIterator(graph.find(geometry, Geo.HAS_SERIALIZATION_NODE, null));
+                }
+
+            } else {
+                //No GeometryLiteral so return false.
+                return false;
             }
 
-        } else {
-            //No GeometryLiteral so return false.
-            return false;
-        }
+            //Check through each Geometry and stop if one is nearby.
+            boolean isMatched = false;
+            while (geometryLiteralTriples.hasNext()) {
 
-        //Check through each Geometry and stop if one is nearby.
-        boolean isMatched = false;
-        while (geometryLiteralTriples.hasNext()) {
-
-            Triple triple = geometryLiteralTriples.next();
-            Node geometryLiteral = triple.getObject();
-            GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(geometryLiteral);
-            isMatched = testRelation(targetGeometryWrapper);
-            if (isMatched) {
-                //Stop checking when match is true.
-                break;
+                Triple triple = geometryLiteralTriples.next();
+                Node geometryLiteral = triple.getObject();
+                GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(geometryLiteral);
+                isMatched = testRelation(targetGeometryWrapper);
+                if (isMatched) {
+                    //Stop checking when match is true.
+                    break;
+                }
             }
-        }
 
-        return isMatched;
+            return isMatched;
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
+        }
     }
 
     private QueryIterator checkUnbound(Binding binding, ExecutionContext execCxt, Node subject, int limit) {

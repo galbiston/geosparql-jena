@@ -18,10 +18,10 @@
 package io.github.galbiston.geosparql_jena.geof.nontopological.filter_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase1;
-import org.apache.jena.sparql.util.FmtUtils;
 
 /**
  *
@@ -33,14 +33,14 @@ public class EnvelopFF extends FunctionBase1 {
     @Override
     public NodeValue exec(NodeValue v) {
 
-        GeometryWrapper geometry = GeometryWrapper.extract(v);
-        if (geometry == null) {
-            throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v.asNode()));
+        try {
+            GeometryWrapper geometry = GeometryWrapper.extract(v);
+
+            GeometryWrapper envelope = geometry.envelope();
+            return envelope.asNode();
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         }
-
-        GeometryWrapper envelope = geometry.envelope();
-        return envelope.asNode();
-
     }
 
 }

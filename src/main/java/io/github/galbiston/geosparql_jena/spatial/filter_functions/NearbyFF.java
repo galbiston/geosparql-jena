@@ -18,6 +18,7 @@ package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
 import java.lang.invoke.MethodHandles;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase4;
@@ -39,37 +40,25 @@ public class NearbyFF extends FunctionBase4 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3, NodeValue v4) {
 
-        GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryLiteralIndex.GeometryIndex.PRIMARY);
-        if (geometry1 == null) {
-            throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1.asNode()));
+        try {
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryLiteralIndex.GeometryIndex.PRIMARY);
+            GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryLiteralIndex.GeometryIndex.SECONDARY);
+
+            if (!v3.isNumber()) {
+                throw new ExprEvalException("Not a number: " + FmtUtils.stringForNode(v3.asNode()));
+            }
+
+            if (!v4.isIRI()) {
+                throw new ExprEvalException("Not a IRI: " + FmtUtils.stringForNode(v4.asNode()));
+            }
+
+            double radius = v3.getDouble();
+
+            boolean result = relate(geometry1, geometry2, radius, v4.getString());
+            return NodeValue.makeBoolean(result);
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         }
-
-        if (geometry1.isEmpty()) {
-            return NodeValue.FALSE;
-        }
-
-        GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryLiteralIndex.GeometryIndex.SECONDARY);
-        if (geometry2 == null) {
-            throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v2.asNode()));
-        }
-
-        if (geometry2.isEmpty()) {
-            return NodeValue.FALSE;
-        }
-
-        if (!v3.isNumber()) {
-            throw new ExprEvalException("Not a number: " + FmtUtils.stringForNode(v3.asNode()));
-        }
-
-        if (!v4.isIRI()) {
-            throw new ExprEvalException("Not a IRI: " + FmtUtils.stringForNode(v4.asNode()));
-        }
-
-        double radius = v3.getDouble();
-
-        boolean result = relate(geometry1, geometry2, radius, v4.getString());
-        return NodeValue.makeBoolean(result);
-
     }
 
     public static final boolean relate(GeometryWrapper geometry1, GeometryWrapper geometry2, double radius, String unitsURI) {

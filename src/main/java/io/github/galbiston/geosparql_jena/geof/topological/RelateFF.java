@@ -19,7 +19,7 @@ package io.github.galbiston.geosparql_jena.geof.topological;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
-import org.apache.jena.graph.Node;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase3;
@@ -45,26 +45,20 @@ public class RelateFF extends FunctionBase3 {
 
         try {
             GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
-            if (geometry1 == null) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1.asNode()));
-            }
-
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
-            if (geometry2 == null) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v2.asNode()));
+
+            if (!v3.isString()) {
+                throw new ExprEvalException("Not a String: " + FmtUtils.stringForNode(v3.asNode()));
             }
 
-            Node node3 = v3.asNode();
-            if (!node3.isLiteral()) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v3.asNode()));
-            }
-
-            String compareMatrix = node3.getLiteral().getLexicalForm();
+            String compareMatrix = v3.getString();
 
             IntersectionMatrix matrix = geometry1.relate(geometry2);
             boolean result = matrix.matches(compareMatrix);
 
             return NodeValue.makeBoolean(result);
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {}", ex.getMessage());
             throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()));

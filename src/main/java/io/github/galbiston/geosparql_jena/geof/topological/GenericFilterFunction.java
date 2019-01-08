@@ -20,6 +20,7 @@ package io.github.galbiston.geosparql_jena.geof.topological;
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -48,12 +49,8 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
     public Boolean exec(Node v1, Node v2) {
         try {
 
-            GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
-
             //Check if the first literal is unparseable or geometry is empty (always fails).
-            if (geometry1 == null) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v1));
-            }
+            GeometryWrapper geometry1 = GeometryWrapper.extract(v1, GeometryIndex.PRIMARY);
 
             if (geometry1.isEmpty()) {
                 return Boolean.FALSE;
@@ -61,9 +58,6 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
             //Check if the second literal is unparseable or geometry is empty (always fails).
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
-            if (geometry2 == null) {
-                throw new ExprEvalException("Not a GeometryLiteral: " + FmtUtils.stringForNode(v2));
-            }
 
             if (geometry2.isEmpty()) {
                 return Boolean.FALSE;
@@ -75,6 +69,8 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
             boolean result = relate(geometry1, geometry2);
             return result;
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage());
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             LOGGER.error("Filter Function Exception: {} - {}, {}", ex.getMessage(), v1, v2);
             throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1) + ", " + FmtUtils.stringForNode(v2));

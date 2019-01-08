@@ -32,6 +32,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.InfModel;
@@ -465,7 +466,7 @@ public class GeoSPARQLOperations {
             try {
                 Literal geometryLiteral = node.asLiteral();
                 GeometryWrapper.extract(geometryLiteral);
-            } catch (Exception ex) {
+            } catch (DatatypeFormatException ex) {
                 //Error messages should already have been issued. Catch exception so can continue on whole dataset.
                 isValid = false;
             }
