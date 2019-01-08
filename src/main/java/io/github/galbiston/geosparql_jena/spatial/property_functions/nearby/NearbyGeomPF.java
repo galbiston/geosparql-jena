@@ -104,7 +104,8 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
 
     @Override
     protected List<Resource> testSearchEnvelope() {
-        List<Resource> features = SpatialIndex.query(envelope);
+        SpatialIndex spatialIndex = getSpatialIndex();
+        List<Resource> features = spatialIndex.query(envelope);
         return features;
     }
 

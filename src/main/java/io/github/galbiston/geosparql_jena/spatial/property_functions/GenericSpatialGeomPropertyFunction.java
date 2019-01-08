@@ -76,7 +76,8 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
 
     @Override
     protected List<Resource> testSearchEnvelope() {
-        List<Resource> features = SpatialIndex.query(envelope);
+        SpatialIndex spatialIndex = getSpatialIndex();
+        List<Resource> features = spatialIndex.query(envelope);
         return features;
     }
 }

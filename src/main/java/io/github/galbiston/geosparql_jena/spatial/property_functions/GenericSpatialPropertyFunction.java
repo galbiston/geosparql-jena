@@ -45,7 +45,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
 
     public static final int DEFAULT_LIMIT = -1;
 
-    private SpatialIndex index;
+    private SpatialIndex spatialIndex;
     private int limit;
 
     protected abstract boolean testRelation(GeometryWrapper targetGeometryWrapper);
@@ -151,8 +151,8 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         return queryIterConcat;
     }
 
-    public SpatialIndex getIndex() {
-        return index;
+    public SpatialIndex getSpatialIndex() {
+        return spatialIndex;
     }
 
     public int getLimit() {

@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +40,9 @@ import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.sparql.engine.ExecutionContext;
+import org.apache.jena.sparql.util.Context;
+import org.apache.jena.sparql.util.Symbol;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.index.strtree.STRtree;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -51,80 +55,122 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class SpatialIndex {
+public class SpatialIndex implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static org.locationtech.jts.index.SpatialIndex SPATIAL_INDEX;
+    public static final Symbol SPATIAL_INDEX_SYMBOL = Symbol.create("http://jena.apache.org/spatial#index");
+    private final org.locationtech.jts.index.strtree.STRtree strTree;
+    private boolean isBuilt;
+    private static SpatialIndex SPATIAL_INDEX = new SpatialIndex();
 
-    public static void intialiseSpatialIndex(int capacity) {
-        SPATIAL_INDEX = new STRtree(capacity);
+    private SpatialIndex() {
+        strTree = new STRtree(0);
+        isBuilt = false;
     }
 
-    public static void intialiseSpatialIndex(Collection<SpatialIndexItem> spatialIndexItems) {
-        SPATIAL_INDEX = new STRtree(spatialIndexItems.size());
+    public SpatialIndex(int capacity) {
+        strTree = new STRtree(capacity);
+        isBuilt = false;
+    }
+
+    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems) {
+        strTree = new STRtree(spatialIndexItems.size());
         insertItems(spatialIndexItems);
+        strTree.build();
+        isBuilt = true;
     }
 
-    public static void insertItems(Collection<SpatialIndexItem> indexItems) {
+    public boolean isEmpty() {
+        return strTree.isEmpty();
+    }
+
+    public boolean isBuilt() {
+        return isBuilt;
+    }
+
+    public void build() {
+        if (!isBuilt) {
+            strTree.build();
+            isBuilt = true;
+        }
+    }
+
+    public final void insertItems(Collection<SpatialIndexItem> indexItems) {
 
         for (SpatialIndexItem indexItem : indexItems) {
             insertItem(indexItem.getEnvelope(), indexItem.getItem());
         }
-
     }
 
-    public static void insertItem(Envelope envelope, Resource item) {
-        SPATIAL_INDEX.insert(envelope, item);
+    public final void insertItem(Envelope envelope, Resource item) {
+        strTree.insert(envelope, item);
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Resource> query(Envelope searchEnvelope) {
-        return SPATIAL_INDEX.query(searchEnvelope);
+    public List<Resource> query(Envelope searchEnvelope) {
+        if (!strTree.isEmpty()) {
+            return strTree.query(searchEnvelope);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
-    public static void buildSpatialIndex(Dataset dataset, File spatialIndexFile) {
+    public static final SpatialIndex retrieve(ExecutionContext execCxt) {
+        Context context = execCxt.getContext();
+        SpatialIndex spatialIndex = (SpatialIndex) context.get(SPATIAL_INDEX_SYMBOL, SPATIAL_INDEX);
 
-        boolean isLoaded = load(spatialIndexFile);
+        return spatialIndex;
+    }
 
-        if (!isLoaded) {
-            buildSpatialIndex(dataset);
-            save(spatialIndexFile);
+    public static final void setGlobalSpatialIndex(SpatialIndex spatialIndex) {
+        SPATIAL_INDEX = spatialIndex;
+    }
+
+    public static SpatialIndex buildSpatialIndex(Dataset dataset, File spatialIndexFile) {
+
+        SpatialIndex spatialIndex = load(spatialIndexFile);
+
+        if (spatialIndex.isEmpty()) {
+            spatialIndex = buildSpatialIndex(dataset);
+            save(spatialIndexFile, spatialIndex);
         }
 
+        return spatialIndex;
     }
 
-    public static void buildSpatialIndex(Dataset dataset) {
+    public static SpatialIndex buildSpatialIndex(Dataset dataset) {
         LOGGER.info("Building Spatial Index - Started");
 
         //Default Model
         dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
-        Collection<SpatialIndexItem> items = buildSpatialIndex(defaultModel);
+        Collection<SpatialIndexItem> items = getSpatialIndexItems(defaultModel);
 
         //Named Models
         Iterator<String> graphNames = dataset.listNames();
         while (graphNames.hasNext()) {
             String graphName = graphNames.next();
             Model namedModel = dataset.getNamedModel(graphName);
-            Collection<SpatialIndexItem> graphItems = buildSpatialIndex(namedModel);
+            Collection<SpatialIndexItem> graphItems = getSpatialIndexItems(namedModel);
             items.addAll(graphItems);
         }
 
-        intialiseSpatialIndex(items);
-
         LOGGER.info("Building Spatial Index - Completed");
         dataset.end();
+        SpatialIndex spatialIndex = new SpatialIndex(items);
+        spatialIndex.build();
+        return spatialIndex;
     }
 
-    public static final Collection<SpatialIndexItem> buildSpatialIndex(Model model) {
+    public static final Collection<SpatialIndexItem> getSpatialIndexItems(Model model) {
 
         List<SpatialIndexItem> items = new ArrayList<>();
 
         //Only add one set of statements as a converted dataset will duplicate the same info.
         if (model.contains(null, Geo.HAS_GEOMETRY_PROP, (Resource) null)) {
             LOGGER.info("Feature-hasGeometry-Geometry statements found. Any Geo predicates will not be added to index.");
-            Collection<SpatialIndexItem> geometryLiteralItems = buildGeometryLiteralIndex(model);
+            Collection<SpatialIndexItem> geometryLiteralItems = getGeometryLiteralIndexItems(model);
             items.addAll(geometryLiteralItems);
         } else if (model.contains(null, SpatialExtension.GEO_LAT_PROP, (Literal) null)) {
             LOGGER.info("Geo predicate statements found.");
@@ -135,7 +181,7 @@ public class SpatialIndex {
         return items;
     }
 
-    private static Collection<SpatialIndexItem> buildGeometryLiteralIndex(Model model) {
+    private static Collection<SpatialIndexItem> getGeometryLiteralIndexItems(Model model) {
         List<SpatialIndexItem> items = new ArrayList<>();
         StmtIterator stmtIt = model.listStatements(null, Geo.HAS_GEOMETRY_PROP, (Resource) null);
         while (stmtIt.hasNext()) {
@@ -185,27 +231,27 @@ public class SpatialIndex {
         return items;
     }
 
-    public static final boolean load(File spatialIndexFile) {
+    public static final SpatialIndex load(File spatialIndexFile) {
 
-        boolean isLoaded = false;
         if (spatialIndexFile != null && spatialIndexFile.exists()) {
 
             try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(spatialIndexFile))) {
-                SPATIAL_INDEX = (STRtree) in.readObject();
+                SpatialIndex spatialIndex = (SpatialIndex) in.readObject();
+                spatialIndex.build();
+                return spatialIndex;
             } catch (Exception ex) {
                 LOGGER.error("Spatial Index Load Exception: {}", ex.getMessage());
-            }
-            isLoaded = true;
-        }
 
-        return isLoaded;
+            }
+        }
+        return new SpatialIndex();
     }
 
-    public static final void save(File spatialIndexFile) {
+    public static final void save(File spatialIndexFile, SpatialIndex spatialIndex) {
 
         if (spatialIndexFile != null) {
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(spatialIndexFile))) {
-                out.writeObject(SPATIAL_INDEX);
+                out.writeObject(spatialIndex);
             } catch (Exception ex) {
                 LOGGER.error("Spatial Index Save Exception: {}", ex.getMessage());
             }

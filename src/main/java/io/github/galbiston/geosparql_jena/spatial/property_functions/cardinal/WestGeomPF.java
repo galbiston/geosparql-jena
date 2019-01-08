@@ -40,8 +40,9 @@ public class WestGeomPF extends GenericCardinalGeomPropertyFunction {
 
     @Override
     protected List<Resource> testSearchEnvelope() {
-        List<Resource> features = SpatialIndex.query(envelope);
-        List<Resource> wrapFeatures = SpatialIndex.query(wrapEnvelope);
+        SpatialIndex spatialIndex = getSpatialIndex();
+        List<Resource> features = spatialIndex.query(envelope);
+        List<Resource> wrapFeatures = spatialIndex.query(wrapEnvelope);
         features.addAll(wrapFeatures);
         return features;
     }
