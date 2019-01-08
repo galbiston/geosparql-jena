@@ -518,8 +518,13 @@ public class GeoSPARQLOperations {
                     Literal lon = feature.getProperty(SpatialExtension.GEO_LONG_PROP).getLiteral();
                     Literal latLonPoint = ConvertLatLonFF.toLiteral(lat.getFloat(), lon.getFloat());
 
-                    //Create a Geometry.
-                    String geometryURI = GEO_URI + "Geometry-" + UUID.randomUUID().toString();
+                    //Create a Geometry - re-use Feature if a URI or build a URI for blank node.
+                    String geometryURI;
+                    if (feature.isURIResource()) {
+                        geometryURI = feature.getURI() + "-Geom-" + UUID.randomUUID().toString();
+                    } else {
+                        geometryURI = GEO_URI + "Geom-" + UUID.randomUUID().toString();
+                    }
                     Resource geometry = ResourceFactory.createResource(geometryURI);
 
                     //Add Geometry to Feature and GeometryLiteral to Geometry.
