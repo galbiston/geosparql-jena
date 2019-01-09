@@ -60,9 +60,10 @@ public class SpatialIndex implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static final Symbol SPATIAL_INDEX_SYMBOL = Symbol.create("http://jena.apache.org/spatial#index");
-    private final org.locationtech.jts.index.strtree.STRtree strTree;
+    private static SpatialIndex GLOBAL_SPATIAL_INDEX = null; //Initialise if used.
+
+    private final STRtree strTree;
     private boolean isBuilt;
-    private static SpatialIndex SPATIAL_INDEX = new SpatialIndex();
 
     private SpatialIndex() {
         strTree = new STRtree(0);
@@ -117,14 +118,25 @@ public class SpatialIndex implements Serializable {
     }
 
     public static final SpatialIndex retrieve(ExecutionContext execCxt) {
+        //Check whether global index has been set, otherwise create an empty one.
+        getGlobalSpatialIndex();
+
         Context context = execCxt.getContext();
-        SpatialIndex spatialIndex = (SpatialIndex) context.get(SPATIAL_INDEX_SYMBOL, SPATIAL_INDEX);
+        SpatialIndex spatialIndex = (SpatialIndex) context.get(SPATIAL_INDEX_SYMBOL, GLOBAL_SPATIAL_INDEX);
 
         return spatialIndex;
     }
 
     public static final void setGlobalSpatialIndex(SpatialIndex spatialIndex) {
-        SPATIAL_INDEX = spatialIndex;
+        GLOBAL_SPATIAL_INDEX = spatialIndex;
+    }
+
+    public static final SpatialIndex getGlobalSpatialIndex() {
+        if (GLOBAL_SPATIAL_INDEX == null) {
+            GLOBAL_SPATIAL_INDEX = new SpatialIndex();
+        }
+
+        return GLOBAL_SPATIAL_INDEX;
     }
 
     public static final void setSpatialIndex(Dataset dataset, SpatialIndex spatialIndex) {
