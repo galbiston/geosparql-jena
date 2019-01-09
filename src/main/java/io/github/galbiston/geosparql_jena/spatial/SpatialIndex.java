@@ -127,6 +127,11 @@ public class SpatialIndex implements Serializable {
         SPATIAL_INDEX = spatialIndex;
     }
 
+    public static final void setSpatialIndex(Dataset dataset, SpatialIndex spatialIndex) {
+        Context context = dataset.getContext();
+        context.set(SPATIAL_INDEX_SYMBOL, spatialIndex);
+    }
+
     public static SpatialIndex buildSpatialIndex(Dataset dataset, File spatialIndexFile) {
 
         SpatialIndex spatialIndex = load(spatialIndexFile);
