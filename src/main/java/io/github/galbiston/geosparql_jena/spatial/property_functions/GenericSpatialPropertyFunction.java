@@ -52,7 +52,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
 
     protected abstract boolean testRelation(GeometryWrapper targetGeometryWrapper);
 
-    protected abstract List<Resource> testSearchEnvelope();
+    protected abstract List<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope);
 
     @Override
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
@@ -139,7 +139,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         }
 
         //Find all Features in the spatial index which are within the rough search envelope.
-        List<Resource> features = testSearchEnvelope();
+        List<Resource> features = checkSearchEnvelope(spatialIndex, spatialArguments.envelope);
 
         Var subjectVar = Var.alloc(subject.getName());
         int count = 0;

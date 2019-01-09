@@ -39,9 +39,7 @@ public class EastPF extends GenericCardinalPropertyFunction {
     }
 
     @Override
-    protected List<Resource> testSearchEnvelope() {
-        SpatialIndex spatialIndex = getSpatialIndex();
-        Envelope envelope = getEnvelope();
+    protected List<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope) {
         List<Resource> features = spatialIndex.query(envelope);
         List<Resource> wrapFeatures = spatialIndex.query(wrapEnvelope);
         features.addAll(wrapFeatures);
