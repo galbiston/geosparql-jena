@@ -178,6 +178,8 @@ public class SpatialIndex implements Serializable {
         dataset.end();
         SpatialIndex spatialIndex = new SpatialIndex(items);
         spatialIndex.build();
+        setSpatialIndex(dataset, spatialIndex);
+
         return spatialIndex;
     }
 
