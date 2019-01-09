@@ -18,6 +18,8 @@ package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase4;
@@ -33,6 +35,11 @@ public class ConvertLatLonBoxFF extends FunctionBase4 {
 
     public static final String toWKT(float latMin, float lonMin, float latMax, float lonMax) {
         return PREFIX + latMin + " " + lonMin + ", " + latMin + " " + lonMax + ", " + latMax + " " + lonMax + ", " + latMax + " " + lonMin + ", " + latMin + " " + lonMin + ")";
+    }
+
+    public static final Literal toLiteral(float latMin, float lonMin, float latMax, float lonMax) {
+        String wktPolygon = toWKT(latMin, lonMin, latMax, lonMax);
+        return ResourceFactory.createTypedLiteral(wktPolygon, WKTDatatype.INSTANCE);
     }
 
     public static final Node convert(Node n1, Node n2, Node n3, Node n4) {
