@@ -19,6 +19,8 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
@@ -39,11 +42,11 @@ import org.locationtech.jts.geom.Envelope;
 
 /**
  *
- *
+ * @author Gerg
  */
-public class NearbyPFTest {
+public class NearbyGeomPFTest {
 
-    public NearbyPFTest() {
+    public NearbyGeomPFTest() {
     }
 
     @BeforeClass
@@ -63,132 +66,12 @@ public class NearbyPFTest {
     }
 
     /**
-     * Test of extractObjectArguments method, of class NearbyPF.
-     */
-    @Test
-    public void testExtractObjectArguments_5args() {
-        System.out.println("extractObjectArguments_5args");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
-
-        float lat = 0;
-        float lon = 1;
-        float radius = 5000;
-        String unitsURI = Unit_URI.METRE_URL;
-        int limit = 10;
-
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode());
-        PropFuncArg object = new PropFuncArg(objectNodes);
-
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
-
-        NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of extractObjectArguments method, of class NearbyPF.
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
      */
     @Test
     public void testExtractObjectArguments_4args() {
         System.out.println("extractObjectArguments_4args");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
-
-        float lat = 0;
-        float lon = 1;
-        float radius = 5000;
-        String unitsURI = Unit_URI.METRE_URL;
-        int limit = -1;
-
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI));
-        PropFuncArg object = new PropFuncArg(objectNodes);
-
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
-
-        NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of extractObjectArguments method, of class NearbyPF.
-     */
-    @Test
-    public void testExtractObjectArguments_3args() {
-        System.out.println("extractObjectArguments_3args");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
-
-        float lat = 0;
-        float lon = 1;
-        float radius = 5;
-        String unitsURI = Unit_URI.KILOMETER_URL;
-        int limit = -1;
-
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode());
-        PropFuncArg object = new PropFuncArg(objectNodes);
-
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
-
-        NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of extractObjectArguments method, of class NearbyPF.
-     */
-    @Test(expected = ExprEvalException.class)
-    public void testExtractObjectArguments_2args_fail() {
-        System.out.println("extractObjectArguments_2args_fail");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
-
-        float lat = 0;
-        float lon = 1;
-        float radius = 5;
-        String unitsURI = Unit_URI.KILOMETER_URL;
-        int limit = -1;
-
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode());
-        PropFuncArg object = new PropFuncArg(objectNodes);
-
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
-
-        NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        //assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of extractObjectArguments method, of class NearbyPF.
-     */
-    @Test(expected = ExprEvalException.class)
-    public void testExtractObjectArguments_6args_fail() {
-        System.out.println("extractObjectArguments_6args_fail");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
 
         float lat = 0;
         float lon = 1;
@@ -197,13 +80,103 @@ public class NearbyPFTest {
         int limit = 10;
 
         Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode(), NodeValue.makeBoolean(false).asNode());
+        List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        NearbyPF instance = new NearbyPF();
+        NearbyGeomPF instance = new NearbyGeomPF();
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
+     */
+    @Test
+    public void testExtractObjectArguments_3args() {
+        System.out.println("extractObjectArguments_3args");
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
+
+        float lat = 0;
+        float lon = 1;
+        float radius = 5000;
+        String unitsURI = Unit_URI.METRE_URL;
+        int limit = -1;
+
+        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI));
+        PropFuncArg object = new PropFuncArg(objectNodes);
+
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+
+        NearbyGeomPF instance = new NearbyGeomPF();
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
+     */
+    @Test
+    public void testExtractObjectArguments_2args() {
+        System.out.println("extractObjectArguments_2args");
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
+
+        float lat = 0;
+        float lon = 1;
+        float radius = 5;
+        String unitsURI = Unit_URI.KILOMETER_URL;
+        int limit = -1;
+
+        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeFloat(radius).asNode());
+        PropFuncArg object = new PropFuncArg(objectNodes);
+
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+
+        NearbyGeomPF instance = new NearbyGeomPF();
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
+     */
+    @Test(expected = ExprEvalException.class)
+    public void testExtractObjectArguments_1args_fail() {
+        System.out.println("extractObjectArguments_1args_fail");
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
+
+        float lat = 0;
+        float lon = 1;
+        float radius = 5;
+        String unitsURI = Unit_URI.KILOMETER_URL;
+        int limit = -1;
+
+        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        List<Node> objectNodes = Arrays.asList(geometry.asNode());
+        PropFuncArg object = new PropFuncArg(objectNodes);
+
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+
+        NearbyGeomPF instance = new NearbyGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
@@ -213,12 +186,42 @@ public class NearbyPFTest {
     }
 
     /**
-     * Test of extractObjectArguments method, of class NearbyPF.
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
      */
     @Test(expected = ExprEvalException.class)
-    public void testExtractObjectArguments_5args_pos0_fail() {
-        System.out.println("extractObjectArguments_5args_pos0_fail");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
+    public void testExtractObjectArguments_5args_fail() {
+        System.out.println("extractObjectArguments_5args_fail");
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
+
+        float lat = 0;
+        float lon = 1;
+        float radius = 5000;
+        String unitsURI = Unit_URI.METRE_URL;
+        int limit = 10;
+
+        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode(), NodeValue.makeBoolean(false).asNode());
+        PropFuncArg object = new PropFuncArg(objectNodes);
+
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+
+        NearbyGeomPF instance = new NearbyGeomPF();
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        //assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
+     */
+    @Test(expected = ExprEvalException.class)
+    public void testExtractObjectArguments_4args_pos0_fail() {
+        System.out.println("extractObjectArguments_4args_pos0_fail");
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
 
         float lat = 0;
         float lon = 1;
@@ -233,7 +236,7 @@ public class NearbyPFTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        NearbyPF instance = new NearbyPF();
+        NearbyGeomPF instance = new NearbyGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
@@ -243,12 +246,12 @@ public class NearbyPFTest {
     }
 
     /**
-     * Test of extractObjectArguments method, of class NearbyPF.
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
      */
     @Test(expected = ExprEvalException.class)
-    public void testExtractObjectArguments_5args_pos1_fail() {
-        System.out.println("extractObjectArguments_5args_pos1_fail");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
+    public void testExtractObjectArguments_4args_pos1_fail() {
+        System.out.println("extractObjectArguments_4args_pos1_fail");
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
 
         float lat = 0;
         float lon = 1;
@@ -263,7 +266,7 @@ public class NearbyPFTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        NearbyPF instance = new NearbyPF();
+        NearbyGeomPF instance = new NearbyGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
@@ -273,12 +276,12 @@ public class NearbyPFTest {
     }
 
     /**
-     * Test of extractObjectArguments method, of class NearbyPF.
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
      */
     @Test(expected = ExprEvalException.class)
-    public void testExtractObjectArguments_5args_pos2_fail() {
-        System.out.println("extractObjectArguments_5args_pos2_fail");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
+    public void testExtractObjectArguments_4args_pos2_fail() {
+        System.out.println("extractObjectArguments_4args_pos2_fail");
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
 
         float lat = 0;
         float lon = 1;
@@ -287,13 +290,13 @@ public class NearbyPFTest {
         int limit = 10;
 
         Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeString("5000").asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode());
+        List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeString("5000").asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        NearbyPF instance = new NearbyPF();
+        NearbyGeomPF instance = new NearbyGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
@@ -303,12 +306,12 @@ public class NearbyPFTest {
     }
 
     /**
-     * Test of extractObjectArguments method, of class NearbyPF.
+     * Test of extractObjectArguments method, of class NearbyGeomPF.
      */
     @Test(expected = ExprEvalException.class)
-    public void testExtractObjectArguments_5args_pos3_fail() {
-        System.out.println("extractObjectArguments_5args_pos3_fail");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
+    public void testExtractObjectArguments_4args_pos3_fail() {
+        System.out.println("extractObjectArguments_4args_pos3_fail");
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
 
         float lat = 0;
         float lon = 1;
@@ -317,13 +320,13 @@ public class NearbyPFTest {
         int limit = 10;
 
         Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeValue.makeString(unitsURI).asNode(), NodeValue.makeInteger(limit).asNode());
+        List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeFloat(radius).asNode(), NodeValue.makeString(unitsURI).asNode(), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-        NearbyPF instance = new NearbyPF();
+        NearbyGeomPF instance = new NearbyGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
@@ -333,32 +336,129 @@ public class NearbyPFTest {
     }
 
     /**
-     * Test of extractObjectArguments method, of class NearbyPF.
+     * Test of testRelation method, of class NearbyGeomPF.
      */
-    @Test(expected = ExprEvalException.class)
-    public void testExtractObjectArguments_5args_pos4_fail() {
-        System.out.println("extractObjectArguments_5args_pos4_fail");
-        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_PROP);
+    @Test
+    public void testTestRelation() {
+        System.out.println("testRelation");
 
+        NearbyGeomPF instance = new NearbyGeomPF();
+
+        //Property Function
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
+
+        //Geometry and Envelope parameters
         float lat = 0;
         float lon = 1;
-        float radius = 5000;
-        String unitsURI = Unit_URI.METRE_URL;
-        int limit = 10;
+        float radius = 5;
 
         Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeString("10").asNode());
+        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat + 0.0001f, lon);
+
+        List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeFloat(radius).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
+        //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
 
-        NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+        //Test arguments
+        instance.extractObjectArguments(predicate, object);
+        boolean expResult = true;
+        boolean result = instance.testRelation(geometryWrapper, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        //assertEquals(expResult, result);
+        assertEquals(expResult, result);
     }
+
+    /**
+     * Test of testRelation method, of class NearbyGeomPF.
+     */
+    @Test
+    public void testTestRelation_fail() {
+        System.out.println("testRelation_fail");
+
+        NearbyGeomPF instance = new NearbyGeomPF();
+
+        //Property Function
+        Node predicate = NodeFactory.createURI(SpatialExtension.NEARBY_GEOM_PROP);
+
+        //Geometry and Envelope parameters
+        float lat = 0;
+        float lon = 1;
+        float radius = 5;
+
+        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat + 10f, lon);
+
+        List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeFloat(radius).asNode());
+        PropFuncArg object = new PropFuncArg(objectNodes);
+
+        //Function arguments
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
+
+        //Test arguments
+        instance.extractObjectArguments(predicate, object);
+        boolean expResult = false;
+        boolean result = instance.testRelation(geometryWrapper, targetGeometryWrapper);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of testSearchEnvelope method, of class NearbyGeomPF.
+     */
+    @Test
+    public void testCheckSearchEnvelope() {
+        System.out.println("checkSearchEnvelope");
+        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
+
+        //Paris
+        float lat = 48.857487f;
+        float lon = 2.373047f;
+        float radius = 200;
+        String unitsURI = Unit_URI.KILOMETER_URL;
+        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+
+        NearbyGeomPF instance = new NearbyGeomPF();
+        List<Resource> expResult = Arrays.asList(SpatialIndexTestData.LONDON_FEATURE);
+        List<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of testSearchEnvelope method, of class NearbyGeomPF.
+     */
+    @Test
+    public void testCheckSearchEnvelope_empty() {
+        System.out.println("checkSearchEnvelope_empty");
+        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
+
+        //Paris
+        float lat = 48.857487f;
+        float lon = 2.373047f;
+        float radius = 2;
+        String unitsURI = Unit_URI.KILOMETER_URL;
+        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+
+        NearbyGeomPF instance = new NearbyGeomPF();
+        List<Resource> expResult = Arrays.asList();
+        List<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
 }
