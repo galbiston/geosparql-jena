@@ -203,12 +203,16 @@ public class GeoSPARQLConfig {
         return IS_QUERY_REWRITE_ENABLED;
     }
 
-    public static final void setupSpatial(Dataset dataset, File spatialIndexFile) {
-
+    public static final void setupSpatial() {
         PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
         FunctionRegistry functionRegistry = FunctionRegistry.get();
         Spatial.loadPropertyFunctions(propertyRegistry);
         Spatial.loadFilterFunctions(functionRegistry);
+
+    }
+
+    public static final void setupSpatial(Dataset dataset, File spatialIndexFile) {
+        setupSpatial();
         SpatialIndex.buildSpatialIndex(dataset, spatialIndexFile);
     }
 

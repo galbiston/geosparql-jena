@@ -62,7 +62,7 @@ public class WestPFTest {
     @Test
     public void testBuildSearchEnvelope() {
         System.out.println("buildSearchEnvelope");
-        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY;
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_LITERAL;
         WestPF instance = new WestPF();
         Envelope expResult = SearchEnvelope.build(geometryWrapper, CardinalDirection.WEST);
         Envelope result = instance.buildSearchEnvelope(geometryWrapper);
@@ -81,7 +81,7 @@ public class WestPFTest {
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
 
         //Search Envelope
-        GeometryWrapper geometryWrapper = SpatialIndexTestData.PERTH_GEOMETRY;
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.PERTH_GEOMETRY_LITERAL;
         WestPF instance = new WestPF();
         Envelope envelope = instance.buildSearchEnvelope(geometryWrapper); //Needed to initialise the search.
         HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.LONDON_FEATURE, SpatialIndexTestData.PERTH_FEATURE));
@@ -101,7 +101,7 @@ public class WestPFTest {
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
 
         //Search Envelope
-        GeometryWrapper geometryWrapper = SpatialIndexTestData.HONOLULU_GEOMETRY;
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.HONOLULU_GEOMETRY_LITERAL;
         WestPF instance = new WestPF();
         Envelope envelope = instance.buildSearchEnvelope(geometryWrapper); //Needed to initialise the search.
         HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.AUCKLAND_FEATURE, SpatialIndexTestData.PERTH_FEATURE, SpatialIndexTestData.HONOLULU_FEATURE));

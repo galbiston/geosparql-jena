@@ -417,7 +417,7 @@ public class NearbyGeomPFTest {
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
 
         //Search Envelope
-        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY;
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_LITERAL;
         float radius = 200;
         String unitsURI = Unit_URI.KILOMETER_URL;
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
@@ -441,7 +441,7 @@ public class NearbyGeomPFTest {
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
 
         //Search Envelope
-        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY;
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_LITERAL;
         float radius = 2;
         String unitsURI = Unit_URI.KILOMETER_URL;
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);

@@ -11,6 +11,8 @@
     <logger name="org.apache.jena.tdb.transaction.NodeTableTrans" level="ERROR" />
     <logger name="org.apache.jena.tdb.transaction.TransactionManager" level="ERROR" />
     <logger name="org.apache.jena.util.LocationMapper" level="ERROR" />
+    <logger name="org.apache.jena.sparql.core.mem.PMapTripleTable" level="ERROR" />
+    <logger name="org.apache.jena.sparql.core.mem.PMapQuadTable" level="ERROR" />
     <logger name="TDB" level="ERROR" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

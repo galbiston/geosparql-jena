@@ -72,7 +72,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
      */
     protected abstract SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object);
 
-    public QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
+    private QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 
         //Subject is bound
         if (subject.isURI()) {
@@ -158,23 +158,4 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         return queryIterConcat;
     }
 
-    public SpatialIndex getSpatialIndex() {
-        return spatialIndex;
-    }
-
-    public SpatialArguments getSpatialArguments() {
-        return spatialArguments;
-    }
-
-    public GeometryWrapper getGeometryWrapper() {
-        return spatialArguments.geometryWrapper;
-    }
-
-    public Envelope getEnvelope() {
-        return spatialArguments.envelope;
-    }
-
-    public int getLimit() {
-        return spatialArguments.limit;
-    }
 }
