@@ -16,10 +16,16 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.jena.graph.Node;
-import org.apache.jena.sparql.engine.ExecutionContext;
-import org.apache.jena.sparql.engine.QueryIterator;
-import org.apache.jena.sparql.engine.binding.Binding;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.sparql.expr.NodeValue;
+import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -59,32 +65,59 @@ public class GenericCardinalGeomPropertyFunctionTest {
     @Test
     public void testTestRelation() {
         System.out.println("testRelation");
-        GeometryWrapper geometryWrapper = null;
-        GeometryWrapper targetGeometryWrapper = null;
-        NorthGeomPF instance = new NorthGeomPF();
-        boolean expResult = false;
-        boolean result = instance.testRelation(geometryWrapper, targetGeometryWrapper);
+
+        //Property Function
+        Node predicate = NodeFactory.createURI(SpatialExtension.NORTH_GEOM_PROP);
+
+        //Geometry and Envelope parameters
+        float lat = 0;
+        float lon = 1;
+        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat, lon);
+
+        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode());
+        PropFuncArg object = new PropFuncArg(objectNodes);
+
+        GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
+        NorthPF instance = new NorthPF();
+        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object);
+
+        boolean expResult = true;
+        boolean result = instance.testRelation(spatialArgumemts, targetGeometryWrapper);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
-     * Test of search method, of class GenericCardinalGeomPropertyFunction.
+     * Test of testRelation method, of class
+     * GenericCardinalGeomPropertyFunction.
      */
     @Test
-    public void testSearch() {
-        System.out.println("search");
-        Binding binding = null;
-        ExecutionContext execCxt = null;
-        Node subject = null;
-        int limit = 0;
-        NorthGeomPF instance = new NorthGeomPF();
-        QueryIterator expResult = null;
-        QueryIterator result = instance.search(binding, execCxt, subject, limit);
+    public void testTestRelation_fail() {
+        System.out.println("testRelation_fail");
+
+        //Property Function
+        Node predicate = NodeFactory.createURI(SpatialExtension.NORTH_GEOM_PROP);
+
+        //Geometry and Envelope parameters
+        float lat = 0;
+        float lon = 1;
+        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat + 10f, lon);
+
+        List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode());
+        PropFuncArg object = new PropFuncArg(objectNodes);
+
+        GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
+        NorthPF instance = new NorthPF();
+        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object);
+
+        boolean expResult = false;
+        boolean result = instance.testRelation(spatialArgumemts, targetGeometryWrapper);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
 }
