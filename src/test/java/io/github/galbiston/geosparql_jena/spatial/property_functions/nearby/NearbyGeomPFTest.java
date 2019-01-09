@@ -418,15 +418,13 @@ public class NearbyGeomPFTest {
         System.out.println("checkSearchEnvelope");
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
 
-        //Paris
-        float lat = 48.857487f;
-        float lon = 2.373047f;
+        //Search Envelope
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY;
         float radius = 200;
         String unitsURI = Unit_URI.KILOMETER_URL;
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
+        //Function Test
         NearbyGeomPF instance = new NearbyGeomPF();
         HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.LONDON_FEATURE));
         HashSet<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
@@ -444,15 +442,13 @@ public class NearbyGeomPFTest {
         System.out.println("checkSearchEnvelope_empty");
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
 
-        //Paris
-        float lat = 48.857487f;
-        float lon = 2.373047f;
+        //Search Envelope
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY;
         float radius = 2;
         String unitsURI = Unit_URI.KILOMETER_URL;
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
+        //Function Test
         NearbyGeomPF instance = new NearbyGeomPF();
         HashSet<Resource> expResult = new HashSet<>();
         HashSet<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);

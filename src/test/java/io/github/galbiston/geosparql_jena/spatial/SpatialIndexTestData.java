@@ -32,7 +32,7 @@ public class SpatialIndexTestData {
     public static final Resource NEW_YORK_FEATURE = ResourceFactory.createResource("http://example.org/Feature#NewYork");
     public static final GeometryWrapper NEW_YORK_GEOMETRY = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(40.697150 -73.979635)", WKTDatatype.URI);
 
-    public static final Resource HONOLULU_FEATURE = ResourceFactory.createResource("http://example.org/Feature#NewYork");
+    public static final Resource HONOLULU_FEATURE = ResourceFactory.createResource("http://example.org/Feature#Honolulu");
     public static final GeometryWrapper HONOLULU_GEOMETRY = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(21.325532 -157.801363)", WKTDatatype.URI);
 
     public static final Resource PERTH_FEATURE = ResourceFactory.createResource("http://example.org/Feature#Perth");
@@ -40,6 +40,8 @@ public class SpatialIndexTestData {
 
     public static final Resource AUCKLAND_FEATURE = ResourceFactory.createResource("http://example.org/Feature#Auckland");
     public static final GeometryWrapper AUCKLAND_GEOMETRY = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(-36.854760 174.763470)", WKTDatatype.URI);
+
+    public static final GeometryWrapper PARIS_GEOMETRY = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(48.857487 2.373047)", WKTDatatype.URI);
 
     private static SpatialIndex TEST_SPATIAL_INDEX = null;
 
