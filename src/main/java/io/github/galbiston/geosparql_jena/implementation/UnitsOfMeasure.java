@@ -103,7 +103,7 @@ public class UnitsOfMeasure implements Serializable {
 
         if (!isSourceUnitsLinear.equals(isTargetUnitsLinear)) {
             LOGGER.error("Conversion between linear and non-linear units not supported: {} and {}", sourceUnits.unitURI, targetUnits.unitURI);
-            return null;
+            throw new UnitsConversionException("Conversion between linear and non-linear units not supported: " + sourceUnits.unitURI + " and " + targetUnits.unitURI);
         }
 
         //Source and Target are the same units, so return the source distance.

@@ -43,7 +43,7 @@ public class QueryLoader {
             return buffer.lines().collect(Collectors.joining(System.lineSeparator()));
         } catch (NullPointerException | IOException ex) {
             LOGGER.error("Could not open query file: {}", queryFilename);
-            return null;
+            throw new QueryLoadException("Could not open query file: " + queryFilename);
         }
     }
 
@@ -52,8 +52,8 @@ public class QueryLoader {
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(input))) {
             return buffer.lines().collect(Collectors.joining(System.lineSeparator()));
         } catch (NullPointerException | IOException ex) {
-            LOGGER.error("Could not open query file: {}", input.toString());
-            return null;
+            LOGGER.error("Could not open query input stream: {}", input.toString());
+            throw new QueryLoadException("Could not open query input stream: " + input.toString());
         }
     }
 
@@ -63,7 +63,7 @@ public class QueryLoader {
             return buffer.lines().collect(Collectors.joining(System.lineSeparator()));
         } catch (NullPointerException | IOException ex) {
             LOGGER.error("Could not open query file: {}", inputFile.getPath());
-            return null;
+            throw new QueryLoadException("Could not open query file: " + inputFile);
         }
     }
 

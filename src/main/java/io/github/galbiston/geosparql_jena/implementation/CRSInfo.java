@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.galbiston.geosparql_jena.implementation;
 
 import java.lang.invoke.MethodHandles;
@@ -80,9 +79,9 @@ public class CRSInfo {
             return new CRSInfo(srsURI, crs, unitsOfMeasure, true, true);
         } catch (FactoryException ex) {
             LOGGER.error("Invalid CRS code: {} - {}", DEFAULT_WKT_CRS84_CODE, ex.getMessage());
+            throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage());
         }
 
-        return null;
     }
 
     /**
@@ -100,9 +99,8 @@ public class CRSInfo {
             return new CRSInfo(srsURI, crs, unitsOfMeasure, true, false);
         } catch (FactoryException ex) {
             LOGGER.error("Invalid CRS code: {} - {}", DEFAULT_WKT_CRS84_CODE, ex.getMessage());
+            throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage());
         }
-
-        return null;
     }
 
     @Override

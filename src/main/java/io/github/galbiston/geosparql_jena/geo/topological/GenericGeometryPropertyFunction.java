@@ -76,12 +76,15 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
             if (graph.contains(subject, Geo.HAS_SERIALIZATION_NODE, null)) {
                 ExtendedIterator<Triple> iter = graph.find(subject, Geo.HAS_SERIALIZATION_NODE, null);
                 Node geomLiteral = extractObject(iter);
-                GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLiteral);
-                Literal geometryLiteral = applyPredicate(geometryWrapper);
-                return geometryLiteral.asNode();
-            } else {
-                return null;
+
+                if (geomLiteral != null) {
+                    GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLiteral);
+                    Literal geometryLiteral = applyPredicate(geometryWrapper);
+                    return geometryLiteral.asNode();
+                }
             }
+            return null;
+
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage());
         }

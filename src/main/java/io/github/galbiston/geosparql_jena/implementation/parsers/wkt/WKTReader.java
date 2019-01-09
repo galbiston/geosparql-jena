@@ -18,12 +18,12 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.wkt;
 
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
-import io.github.galbiston.geosparql_jena.implementation.datatype.ParseException;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import java.util.Arrays;
 import java.util.Objects;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
@@ -105,7 +105,7 @@ public class WKTReader {
         }
     }
 
-    private Geometry buildGeometry(String geometryType, String coordinates) throws ParseException {
+    private Geometry buildGeometry(String geometryType, String coordinates) throws DatatypeFormatException {
 
         Geometry geo;
 
@@ -140,11 +140,11 @@ public class WKTReader {
                     geo = buildGeometryCollection(coordinates);
                     break;
                 default:
-                    throw new ParseException("Geometry type not supported: " + geometryType);
+                    throw new DatatypeFormatException("Geometry type not supported: " + geometryType);
             }
-        } catch (ArrayIndexOutOfBoundsException | ParseException ex) {
+        } catch (ArrayIndexOutOfBoundsException ex) {
             LOGGER.error("Build WKT Geometry Exception - Type: {}, Coordinates: {}", geometryType, coordinates);
-            throw new ParseException(ex.getMessage());
+            throw new DatatypeFormatException(ex.getMessage());
         }
         return geo;
     }
@@ -153,7 +153,7 @@ public class WKTReader {
         return unclean.replace(")", "").replace("(", "").trim();
     }
 
-    private Geometry buildGeometryCollection(String coordinates) throws ParseException {
+    private Geometry buildGeometryCollection(String coordinates) throws DatatypeFormatException {
 
         if (coordinates.isEmpty()) {
             return GEOMETRY_FACTORY.createGeometryCollection(new Geometry[0]);
@@ -258,7 +258,7 @@ public class WKTReader {
 
     }
 
-    public static WKTReader extract(String wktText) throws ParseException {
+    public static WKTReader extract(String wktText) throws DatatypeFormatException {
 
         String goemetryType = "point";
         String dimension = "";

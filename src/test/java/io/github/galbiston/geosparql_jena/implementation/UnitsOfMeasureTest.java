@@ -57,7 +57,7 @@ public class UnitsOfMeasureTest {
      *
      * @throws org.opengis.util.FactoryException
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = UnitsConversionException.class)
     public void testConversionRadianToMetre() throws FactoryException {
         System.out.println("conversionRadianToMetre");
         double distance = 0.5;
@@ -78,7 +78,7 @@ public class UnitsOfMeasureTest {
      *
      * @throws org.opengis.util.FactoryException
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = UnitsConversionException.class)
     public void testConversionMetreToDegree() throws FactoryException {
         System.out.println("conversionMetreToDegree");
         double distance = 100.0;
@@ -163,7 +163,7 @@ public class UnitsOfMeasureTest {
      *
      * @throws org.opengis.util.FactoryException
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = UnitsConversionException.class)
     public void testConversionDegreeToMetre() throws FactoryException {
         System.out.println("conversionDegreeToMetre");
         double distance = 10.0;

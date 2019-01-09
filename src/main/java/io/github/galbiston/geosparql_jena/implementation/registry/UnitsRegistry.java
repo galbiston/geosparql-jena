@@ -129,7 +129,7 @@ public class UnitsRegistry {
             return unitSI.equals(Units.METRE);
         } else {
             LOGGER.error("Unrecognised unit URI: {}", unitURI);
-            return null;
+            throw new UnitsURIException("Unrecognised unit URI: " + unitURI);
         }
     }
 

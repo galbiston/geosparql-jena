@@ -17,9 +17,9 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.jts;
 
-import io.github.galbiston.geosparql_jena.implementation.datatype.ParseException;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.Geometry;
@@ -66,7 +66,7 @@ public class GeometryTransformation {
             case "GeometryCollection":
                 return transformGeometryCollection(sourceGeometry, transform);
             default:
-                throw new ParseException("Geometry type not supported: " + geometryType);
+                throw new DatatypeFormatException("Geometry type not supported: " + geometryType);
         }
     }
 

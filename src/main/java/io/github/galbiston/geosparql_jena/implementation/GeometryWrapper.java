@@ -31,6 +31,7 @@ import io.github.galbiston.geosparql_jena.implementation.registry.UnitsRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import java.io.Serializable;
+import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
@@ -51,6 +52,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -66,6 +69,8 @@ public class GeometryWrapper implements Serializable {
     private final String geometryDatatypeURI;
     private String lexicalForm;
     private String utmURI = null;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo) {
         this(geometry, srsURI, geometryDatatypeURI, dimensionInfo, null);
@@ -810,9 +815,6 @@ public class GeometryWrapper implements Serializable {
      */
     public static final GeometryWrapper extract(NodeValue nodeValue, GeometryIndex targetIndex) {
 
-        if (!nodeValue.isLiteral()) {
-            return null;
-        }
         Node node = nodeValue.asNode();
 
         return extract(node, targetIndex);
@@ -827,6 +829,11 @@ public class GeometryWrapper implements Serializable {
      * @return Geometry Wrapper of the Geometry Literal.
      */
     public static final GeometryWrapper extract(Node node, GeometryIndex targetIndex) {
+
+        if (!node.isLiteral()) {
+            LOGGER.error("GeometryWrapper extraction: Not a Literal - " + node);
+            throw new DatatypeFormatException("Not a Literal: " + node);
+        }
 
         String datatypeURI = node.getLiteralDatatypeURI();
         String lexicalForm = node.getLiteralLexicalForm();
@@ -899,6 +906,11 @@ public class GeometryWrapper implements Serializable {
      * @return Geometry Wrapper of the Geometry Literal.
      */
     public static GeometryWrapper extract(String lexicalForm, String datatypeURI, GeometryIndex targetIndex) {
+
+        if (lexicalForm == null || datatypeURI == null) {
+            LOGGER.error("GeometryWrapper extraction: arguments cannot be null - " + lexicalForm + ", " + datatypeURI);
+            throw new DatatypeFormatException("GeometryWrapper extraction: arguments cannot be null - " + lexicalForm + ", " + datatypeURI);
+        }
 
         GeometryDatatype datatype = GeometryDatatype.get(datatypeURI);
         GeometryWrapper geometry = datatype.parse(lexicalForm, targetIndex);

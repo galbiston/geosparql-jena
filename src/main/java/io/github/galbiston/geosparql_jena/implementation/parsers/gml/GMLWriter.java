@@ -18,9 +18,9 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.gml;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.datatype.ParseException;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.output.XMLOutputter;
@@ -80,7 +80,7 @@ public class GMLWriter {
                 gmlElement = buildGeometryCollection(geometryCollection, srsDimension, dimensions, srsName);
                 break;
             default:
-                throw new ParseException("Geometry type not supported: " + geometry.getGeometryType());
+                throw new DatatypeFormatException("Geometry type not supported: " + geometry.getGeometryType());
 
         }
         return gmlElement;

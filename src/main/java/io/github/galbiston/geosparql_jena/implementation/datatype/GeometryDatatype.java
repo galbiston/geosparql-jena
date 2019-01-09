@@ -60,7 +60,7 @@ public abstract class GeometryDatatype extends BaseDatatype {
         //DatatypeReader interface used to instruct index on how to obtain the GeometryWrapper.
         try {
             return GeometryLiteralIndex.retrieve(lexicalForm, this, targetIndex);
-        } catch (ParseException | IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             LOGGER.error("{} - Illegal Geometry Literal: {} ", ex.getMessage(), lexicalForm);
             throw new DatatypeFormatException(ex.getMessage() + " - Illegal Geometry Literal: " + lexicalForm);
         }
@@ -87,8 +87,9 @@ public abstract class GeometryDatatype extends BaseDatatype {
     }
 
     public static final GeometryDatatype get(String datatypeURI) {
-        registerDatatypes();
+        checkURI(datatypeURI);
         RDFDatatype rdfDatatype = TYPE_MAPPER.getTypeByName(datatypeURI);
+
         return GeometryDatatype.get(rdfDatatype);
     }
 
@@ -99,7 +100,7 @@ public abstract class GeometryDatatype extends BaseDatatype {
             return check(rdfDatatype);
         } else {
             LOGGER.error("Unrecognised Datatype: {} - Ensure that GeoSPARQLSupport is enabled and Datatype has been registered.", datatypeURI);
-            throw new NullPointerException("Datatype not found: " + datatypeURI);
+            throw new DatatypeFormatException("Datatype not found: " + datatypeURI);
         }
     }
 

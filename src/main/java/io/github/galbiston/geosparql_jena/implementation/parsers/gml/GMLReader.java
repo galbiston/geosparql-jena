@@ -18,7 +18,6 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.gml;
 
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
-import io.github.galbiston.geosparql_jena.implementation.datatype.ParseException;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
@@ -30,6 +29,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -64,7 +64,8 @@ public class GMLReader {
      * Based on GML Simple Features Profile 2.0: 10-100R3. All point geometries
      * must use {@code <gml:pos>} child element and all other geometries
      * {@code <gml:posList>}. "srsDimension" attribute found on the
-     * {@code <gml:posList>} element. Supporting     * the same geometries found as in WKT: Point, LineString and Polygon.
+     * {@code <gml:posList>} element. Supporting * the same geometries found as
+     * in WKT: Point, LineString and Polygon.
      *
      * @see
      * <a href="https://en.wikipedia.org/wiki/Geography_Markup_Language#GML_Simple_Features_Profile"></a>
@@ -72,9 +73,9 @@ public class GMLReader {
      * <a href="https://portal.opengeospatial.org/files/?artifact_id=42729"></a>
      *
      * @param gmlElement
-     * @throws ParseException
+     * @throws GeometryDatatypeException
      */
-    public GMLReader(Element gmlElement) throws ParseException {
+    public GMLReader(Element gmlElement) throws DatatypeFormatException {
         this.srsName = getSRSName(gmlElement);
         this.crs = CRSRegistry.getCRS(srsName);
         this.srsDimension = getSRSDimension(gmlElement, crs);
@@ -151,7 +152,7 @@ public class GMLReader {
         }
     }
 
-    private Geometry buildGeometry(String shape, Element gmlElement) throws ParseException {
+    private Geometry buildGeometry(String shape, Element gmlElement) throws DatatypeFormatException {
 
         Geometry geo;
         try {
@@ -178,11 +179,11 @@ public class GMLReader {
                     geo = buildGeometryCollection(gmlElement);
                     break;
                 default:
-                    throw new ParseException("Geometry shape not supported: " + shape);
+                    throw new DatatypeFormatException("Geometry shape not supported: " + shape);
             }
-        } catch (ArrayIndexOutOfBoundsException | ParseException ex) {
+        } catch (ArrayIndexOutOfBoundsException ex) {
             LOGGER.error("Build GML Geometry Exception - Shape: {}, Element: {}", shape, gmlElement);
-            throw new ParseException(ex.getMessage());
+            throw new DatatypeFormatException(ex.getMessage());
         }
 
         return geo;
@@ -208,7 +209,7 @@ public class GMLReader {
         int mod = coordinates.length % srsDimension;
         if (mod != 0) {
             LOGGER.error("GML Pos List does not divide into srs dimension: {} divide {} remainder {}.", coordinates.length, srsDimension, mod);
-            throw new ParseException("GML Pos List does not divide into srs dimension: " + coordinates.length + " divide " + srsDimension + " remainder " + mod + ".");
+            throw new DatatypeFormatException("GML Pos List does not divide into srs dimension: " + coordinates.length + " divide " + srsDimension + " remainder " + mod + ".");
         }
 
         int finalCoordinate = coordinates.length - 1;
