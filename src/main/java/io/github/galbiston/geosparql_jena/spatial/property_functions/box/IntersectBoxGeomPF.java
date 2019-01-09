@@ -16,12 +16,9 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialGeomPropertyFunction;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.lang.invoke.MethodHandles;
 import org.apache.jena.sparql.expr.ExprEvalException;
-import org.locationtech.jts.geom.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -32,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class IntersectBoxGeomPF extends GenericSpatialGeomPropertyFunction {
+public class IntersectBoxGeomPF extends GenericSpatialGeomBoxPropertyFunction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -45,11 +42,6 @@ public class IntersectBoxGeomPF extends GenericSpatialGeomPropertyFunction {
             LOGGER.error("Exception: {}, {}, {}", targetGeometryWrapper.asLiteral(), geometryWrapper.asLiteral(), ex.getMessage());
             throw new ExprEvalException(ex.getMessage() + ": " + targetGeometryWrapper.asLiteral() + ", " + geometryWrapper.asLiteral());
         }
-    }
-
-    @Override
-    protected Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
-        return SearchEnvelope.build(geometryWrapper);
     }
 
 }

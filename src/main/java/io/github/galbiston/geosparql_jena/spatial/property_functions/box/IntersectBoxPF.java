@@ -16,11 +16,9 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.lang.invoke.MethodHandles;
 import org.apache.jena.sparql.expr.ExprEvalException;
-import org.locationtech.jts.geom.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -46,8 +44,4 @@ public class IntersectBoxPF extends GenericSpatialBoxPropertyFunction {
         }
     }
 
-    @Override
-    protected Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
-        return SearchEnvelope.build(geometryWrapper);
-    }
 }
