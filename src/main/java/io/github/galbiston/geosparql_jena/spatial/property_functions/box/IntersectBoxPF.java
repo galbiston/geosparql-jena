@@ -17,7 +17,6 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialBoxPropertyFunction;
 import java.lang.invoke.MethodHandles;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.locationtech.jts.geom.Envelope;
