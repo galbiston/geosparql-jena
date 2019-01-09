@@ -148,14 +148,23 @@ public class SearchEnvelope {
             double x2 = 180;
             double y1 = -90;
             double y2 = 90;
+
             switch (direction) {
                 case EAST:
-                    double diff = - 180 + envelope.getMinX();
-                    x2 = diff < 0 && diff > -180 ? diff : x1;
+                    double x = envelope.getMaxX();
+                    if (x <= 0) {
+                        x2 = x1;
+                    } else {
+                        x2 = x1 + x;
+                    }
                     break;
                 case WEST:
-                    diff = 180 - envelope.getMaxX();
-                    x1 = diff > 0 && diff < 180 ? diff : x2;
+                    x = envelope.getMinX();
+                    if (x >= 0) {
+                        x1 = x2;
+                    } else {
+                        x1 = x2 + x;
+                    }
                     break;
                 default:
                     LOGGER.warn("Only EAST and WEST permitted for buildWrap. Direction: {}", direction);
