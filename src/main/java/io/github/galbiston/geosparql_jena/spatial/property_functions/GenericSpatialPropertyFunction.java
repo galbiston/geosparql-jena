@@ -50,7 +50,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     private SpatialIndex spatialIndex;
     private SpatialArguments spatialArguments;
 
-    protected abstract boolean testRelation(GeometryWrapper geometryWrapper, GeometryWrapper targetGeometryWrapper);
+    protected abstract boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper);
 
     protected abstract HashSet<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope);
 
@@ -76,8 +76,8 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
 
         //Subject is bound
         if (subject.isURI()) {
-            boolean isNearby = checkBound(execCxt, subject);
-            if (isNearby) {
+            boolean isMatched = checkBound(execCxt, subject);
+            if (isMatched) {
                 return QueryIterSingleton.create(binding, execCxt);
             } else {
                 return QueryIterNullIterator.create(execCxt);
@@ -111,14 +111,14 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
                 return false;
             }
 
-            //Check through each Geometry and stop if one is nearby.
+            //Check through each Geometry and stop if one is accepted.
             boolean isMatched = false;
             while (geometryLiteralTriples.hasNext()) {
 
                 Triple triple = geometryLiteralTriples.next();
                 Node geometryLiteral = triple.getObject();
                 GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(geometryLiteral);
-                isMatched = testRelation(spatialArguments.geometryWrapper, targetGeometryWrapper);
+                isMatched = testRelation(spatialArguments, targetGeometryWrapper);
                 if (isMatched) {
                     //Stop checking when match is true.
                     break;

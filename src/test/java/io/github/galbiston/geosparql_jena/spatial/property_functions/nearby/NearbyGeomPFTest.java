@@ -360,13 +360,12 @@ public class NearbyGeomPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        SpatialArguments spatialArguments = instance.extractObjectArguments(predicate, object);
         GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
 
         //Test arguments
-        instance.extractObjectArguments(predicate, object);
         boolean expResult = true;
-        boolean result = instance.testRelation(geometryWrapper, targetGeometryWrapper);
+        boolean result = instance.testRelation(spatialArguments, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -397,13 +396,12 @@ public class NearbyGeomPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
+        SpatialArguments spatialArguments = instance.extractObjectArguments(predicate, object);
         GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
 
         //Test arguments
-        instance.extractObjectArguments(predicate, object);
         boolean expResult = false;
-        boolean result = instance.testRelation(geometryWrapper, targetGeometryWrapper);
+        boolean result = instance.testRelation(spatialArguments, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

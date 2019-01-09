@@ -100,7 +100,8 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
     }
 
     @Override
-    protected boolean testRelation(GeometryWrapper geometryWrapper, GeometryWrapper targetGeometryWrapper) {
+    protected boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
+        GeometryWrapper geometryWrapper = spatialArguments.getGeometryWrapper();
         return NearbyFF.relate(geometryWrapper, targetGeometryWrapper, radius, unitsURI);
     }
 
