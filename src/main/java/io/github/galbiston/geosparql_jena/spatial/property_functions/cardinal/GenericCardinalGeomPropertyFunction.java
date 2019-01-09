@@ -39,7 +39,7 @@ public abstract class GenericCardinalGeomPropertyFunction extends GenericSpatial
     protected GeometryWrapper originalSearchEnvelope;
 
     @Override
-    protected boolean testRelation(GeometryWrapper targetGeometryWrapper) {
+    protected boolean testRelation(GeometryWrapper geometryWrapper, GeometryWrapper targetGeometryWrapper) {
         //Test against the target against the search envelope in the original SRS.
         try {
             return originalSearchEnvelope.within(targetGeometryWrapper);

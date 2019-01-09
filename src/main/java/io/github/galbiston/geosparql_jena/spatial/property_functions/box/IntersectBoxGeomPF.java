@@ -36,8 +36,7 @@ public class IntersectBoxGeomPF extends GenericSpatialGeomPropertyFunction {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
-    protected boolean testRelation(GeometryWrapper targetGeometryWrapper) {
-        GeometryWrapper geometryWrapper = getGeometryWrapper();
+    protected boolean testRelation(GeometryWrapper geometryWrapper, GeometryWrapper targetGeometryWrapper) {
 
         try {
             return geometryWrapper.intersects(targetGeometryWrapper);

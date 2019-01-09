@@ -50,7 +50,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     private SpatialIndex spatialIndex;
     private SpatialArguments spatialArguments;
 
-    protected abstract boolean testRelation(GeometryWrapper targetGeometryWrapper);
+    protected abstract boolean testRelation(GeometryWrapper geometryWrapper, GeometryWrapper targetGeometryWrapper);
 
     protected abstract List<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope);
 
@@ -118,7 +118,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
                 Triple triple = geometryLiteralTriples.next();
                 Node geometryLiteral = triple.getObject();
                 GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(geometryLiteral);
-                isMatched = testRelation(targetGeometryWrapper);
+                isMatched = testRelation(spatialArguments.geometryWrapper, targetGeometryWrapper);
                 if (isMatched) {
                     //Stop checking when match is true.
                     break;
