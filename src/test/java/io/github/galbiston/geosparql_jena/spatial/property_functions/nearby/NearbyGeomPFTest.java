@@ -24,6 +24,7 @@ import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
@@ -427,8 +428,8 @@ public class NearbyGeomPFTest {
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyGeomPF instance = new NearbyGeomPF();
-        List<Resource> expResult = Arrays.asList(SpatialIndexTestData.LONDON_FEATURE);
-        List<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
+        HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.LONDON_FEATURE));
+        HashSet<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -453,8 +454,8 @@ public class NearbyGeomPFTest {
         Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyGeomPF instance = new NearbyGeomPF();
-        List<Resource> expResult = Arrays.asList();
-        List<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
+        HashSet<Resource> expResult = new HashSet<>();
+        HashSet<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

@@ -29,6 +29,7 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.jena.query.Dataset;
@@ -109,11 +110,11 @@ public class SpatialIndex implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Resource> query(Envelope searchEnvelope) {
+    public HashSet<Resource> query(Envelope searchEnvelope) {
         if (!strTree.isEmpty()) {
-            return strTree.query(searchEnvelope);
+            return new HashSet<>(strTree.query(searchEnvelope));
         } else {
-            return new ArrayList<>();
+            return new HashSet<>();
         }
     }
 

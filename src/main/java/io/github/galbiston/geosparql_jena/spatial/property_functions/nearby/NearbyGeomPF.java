@@ -21,6 +21,7 @@ import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
+import java.util.HashSet;
 import java.util.List;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
@@ -104,8 +105,8 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
     }
 
     @Override
-    protected List<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope) {
-        List<Resource> features = spatialIndex.query(envelope);
+    protected HashSet<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope) {
+        HashSet<Resource> features = spatialIndex.query(envelope);
         return features;
     }
 

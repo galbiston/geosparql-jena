@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import java.util.HashSet;
 import java.util.List;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
@@ -74,8 +75,8 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
     protected abstract Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper);
 
     @Override
-    protected List<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope) {
-        List<Resource> features = spatialIndex.query(envelope);
+    protected HashSet<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope) {
+        HashSet<Resource> features = spatialIndex.query(envelope);
         return features;
     }
 }
