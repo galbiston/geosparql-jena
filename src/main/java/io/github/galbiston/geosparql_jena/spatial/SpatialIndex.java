@@ -113,6 +113,11 @@ public class SpatialIndex implements Serializable {
         }
     }
 
+    @Override
+    public String toString() {
+        return "SpatialIndex{" + "strTree=" + strTree + ", isBuilt=" + isBuilt + '}';
+    }
+
     public static final SpatialIndex retrieve(ExecutionContext execCxt) throws SpatialIndexException {
 
         Context context = execCxt.getContext();
