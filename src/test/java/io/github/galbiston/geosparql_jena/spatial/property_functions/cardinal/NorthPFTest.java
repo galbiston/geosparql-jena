@@ -58,7 +58,7 @@ public class NorthPFTest {
     @Test
     public void testBuildSearchEnvelope() {
         System.out.println("buildSearchEnvelope");
-        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_LITERAL;
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
         NorthPF instance = new NorthPF();
         Envelope expResult = SearchEnvelope.build(geometryWrapper, CardinalDirection.NORTH);
         Envelope result = instance.buildSearchEnvelope(geometryWrapper);

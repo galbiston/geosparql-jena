@@ -58,7 +58,7 @@ public class SouthGeomPFTest {
     @Test
     public void testBuildSearchEnvelope() {
         System.out.println("buildSearchEnvelope");
-        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_LITERAL;
+        GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
         SouthGeomPF instance = new SouthGeomPF();
         Envelope expResult = SearchEnvelope.build(geometryWrapper, CardinalDirection.SOUTH);
         Envelope result = instance.buildSearchEnvelope(geometryWrapper);
