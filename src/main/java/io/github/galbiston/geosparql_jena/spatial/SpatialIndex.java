@@ -62,15 +62,9 @@ public class SpatialIndex implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static final Symbol SPATIAL_INDEX_SYMBOL = Symbol.create("http://jena.apache.org/spatial#index");
-    private static SpatialIndex GLOBAL_SPATIAL_INDEX = null; //Initialise if used.
 
     private final STRtree strTree;
     private boolean isBuilt;
-
-    private SpatialIndex() {
-        strTree = new STRtree(0);
-        isBuilt = false;
-    }
 
     public SpatialIndex(int capacity) {
         strTree = new STRtree(capacity);
@@ -119,26 +113,17 @@ public class SpatialIndex implements Serializable {
         }
     }
 
-    public static final SpatialIndex retrieve(ExecutionContext execCxt) {
-        //Check whether global index has been set, otherwise create an empty one.
-        getGlobalSpatialIndex();
+    public static final SpatialIndex retrieve(ExecutionContext execCxt) throws SpatialIndexException {
 
         Context context = execCxt.getContext();
-        SpatialIndex spatialIndex = (SpatialIndex) context.get(SPATIAL_INDEX_SYMBOL, GLOBAL_SPATIAL_INDEX);
+        SpatialIndex spatialIndex = (SpatialIndex) context.get(SPATIAL_INDEX_SYMBOL, null);
 
-        return spatialIndex;
-    }
-
-    public static final void setGlobalSpatialIndex(SpatialIndex spatialIndex) {
-        GLOBAL_SPATIAL_INDEX = spatialIndex;
-    }
-
-    public static final SpatialIndex getGlobalSpatialIndex() {
-        if (GLOBAL_SPATIAL_INDEX == null) {
-            GLOBAL_SPATIAL_INDEX = new SpatialIndex();
+        if (spatialIndex == null) {
+            LOGGER.error("Dataset Context does not contain SpatialIndex.");
+            throw new SpatialIndexException("Dataset Context does not contain SpatialIndex.");
         }
 
-        return GLOBAL_SPATIAL_INDEX;
+        return spatialIndex;
     }
 
     public static final void setSpatialIndex(Dataset dataset, SpatialIndex spatialIndex) {
@@ -275,7 +260,7 @@ public class SpatialIndex implements Serializable {
         return items;
     }
 
-    public static final SpatialIndex load(File spatialIndexFile) {
+    public static final SpatialIndex load(File spatialIndexFile) throws SpatialIndexException {
 
         if (spatialIndexFile != null && spatialIndexFile.exists()) {
 
@@ -285,10 +270,11 @@ public class SpatialIndex implements Serializable {
                 return spatialIndex;
             } catch (Exception ex) {
                 LOGGER.error("Spatial Index Load Exception: {}", ex.getMessage());
-
+                throw new SpatialIndexException("Loading Exception: " + ex.getMessage());
             }
+        } else {
+            throw new SpatialIndexException("File is null or does not exist.");
         }
-        return new SpatialIndex();
     }
 
     public static final void save(File spatialIndexFile, SpatialIndex spatialIndex) {
