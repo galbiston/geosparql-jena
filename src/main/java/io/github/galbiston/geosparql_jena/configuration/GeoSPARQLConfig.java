@@ -49,6 +49,7 @@ public class GeoSPARQLConfig {
     private static Boolean IS_FUNCTIONS_REGISTERED = false;
     private static Boolean IS_SPATIAL_FUNCTIONS_REGISTERED = false;
     private static Boolean IS_QUERY_REWRITE_ENABLED = true;
+    private static Boolean IS_SUPPORT_SETUP = false;
 
     /**
      * Initialise all GeoSPARQL property and filter functions with memory
@@ -167,15 +168,7 @@ public class GeoSPARQLConfig {
         //Only register functions once.
         if (!IS_FUNCTIONS_REGISTERED) {
 
-            //Setup Default Cordinate Reference Systems
-            CRSRegistry.setupDefaultCRS();
-
-            //Register GeometryLiteral datatypes for CSV conversion
-            CSVConversion.registerDatatypes();
-
-            //Register GeometryDatatypes with the TypeMapper.
-            GeometryDatatype.registerDatatypes();
-
+            setupSupport();
             PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
             FunctionRegistry functionRegistry = FunctionRegistry.get();
             NonTopological.loadFilterFunctions(functionRegistry);
@@ -189,6 +182,20 @@ public class GeoSPARQLConfig {
             Relate.loadRelateFunction(functionRegistry);
             GeometryProperty.loadPropertyFunctions(propertyRegistry);
             IS_FUNCTIONS_REGISTERED = true;
+        }
+    }
+
+    private static void setupSupport() {
+        if (!IS_SUPPORT_SETUP) {
+            //Setup Default Cordinate Reference Systems
+            CRSRegistry.setupDefaultCRS();
+
+            //Register GeometryLiteral datatypes for CSV conversion
+            CSVConversion.registerDatatypes();
+
+            //Register GeometryDatatypes with the TypeMapper.
+            GeometryDatatype.registerDatatypes();
+            IS_SUPPORT_SETUP = true;
         }
     }
 
@@ -207,6 +214,7 @@ public class GeoSPARQLConfig {
     public static final void setupSpatial() {
         //Only register functions once.
         if (!IS_SPATIAL_FUNCTIONS_REGISTERED) {
+            setupSupport();
             PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
             FunctionRegistry functionRegistry = FunctionRegistry.get();
             Spatial.loadPropertyFunctions(propertyRegistry);
