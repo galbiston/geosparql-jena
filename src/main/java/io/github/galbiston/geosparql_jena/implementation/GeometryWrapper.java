@@ -44,6 +44,7 @@ import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.IntersectionMatrix;
+import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import org.opengis.geometry.DirectPosition;
@@ -69,6 +70,7 @@ public class GeometryWrapper implements Serializable {
     private final String geometryDatatypeURI;
     private String lexicalForm;
     private String utmURI = null;
+    private Double latitude = null;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -154,6 +156,7 @@ public class GeometryWrapper implements Serializable {
         this.parsingGeometry = geometryWrapper.parsingGeometry;
         this.preparedGeometry = geometryWrapper.preparedGeometry;
         this.utmURI = geometryWrapper.utmURI;
+        this.latitude = geometryWrapper.latitude;
         this.geometryDatatypeURI = geometryWrapper.geometryDatatypeURI;
 
         this.crsInfo = geometryWrapper.crsInfo;
@@ -371,6 +374,29 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
+     * Latitude in WGS84.<br>
+     * Used to convert between linear and non-linear units of measure.
+     *
+     * @return
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    public Double getLatitude() throws FactoryException, MismatchedDimensionException, TransformException {
+
+        if (latitude == null) {
+
+            GeometryWrapper wgsGeometryWrapper = convertCRS(SRS_URI.WGS84_CRS);
+
+            //Latitude is Y-axis in WGS84.
+            Geometry geometry = wgsGeometryWrapper.getXYGeometry();
+            Point point = geometry.getCentroid();
+            latitude = point.getY();
+
+        }
+        return latitude;
+    }
+
+    /**
      * Distance defaulting to metres.
      *
      * @param targetGeometry
@@ -409,26 +435,18 @@ public class GeometryWrapper implements Serializable {
         Boolean isUnitsLinear = crsInfo.getUnitsOfMeasure().isLinearUnits();
         Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
 
-        GeometryWrapper preparedSourceGeometry;
-        GeometryWrapper preparedTargetGeometry;
+        GeometryWrapper transformedTargetGeometry = checkTransformCRS(targetGeometry);
 
+        double distance = xyGeometry.distance(transformedTargetGeometry.xyGeometry);
+        String unitsURI = crsInfo.getUnitsOfMeasure().getUnitURI();
+
+        double targetDistance;
         if (isUnitsLinear.equals(isTargetUnitsLinear)) {
-            //Source geometry and target units are both the same. Convert the target geometry if required.
-            preparedSourceGeometry = this;
-            preparedTargetGeometry = checkTransformCRS(targetGeometry);
-        } else if (isTargetUnitsLinear) {
-            //Source geometry is not linear but targets are so convert to linear CRS.
-            preparedSourceGeometry = transform(SRS_URI.WGS84_WORLD_MERCATOR_CRS);
-            preparedTargetGeometry = targetGeometry.transform(SRS_URI.WGS84_WORLD_MERCATOR_CRS);
+            //Units are same so straight conversion.
+            targetDistance = UnitsOfMeasure.conversion(distance, unitsURI, targetDistanceUnitsURI);
         } else {
-            //Source geometry is linear but targets are not so convert to nonlinear CRS.
-            preparedSourceGeometry = transform(SRS_URI.DEFAULT_WKT_CRS84);
-            preparedTargetGeometry = targetGeometry.transform(SRS_URI.DEFAULT_WKT_CRS84);
+            targetDistance = UnitsOfMeasure.convertBetween(distance, unitsURI, targetDistanceUnitsURI, isTargetUnitsLinear, getLatitude());
         }
-
-        double distance = preparedSourceGeometry.xyGeometry.distance(preparedTargetGeometry.xyGeometry);
-        String unitsURI = preparedSourceGeometry.crsInfo.getUnitsOfMeasure().getUnitURI();
-        double targetDistance = UnitsOfMeasure.conversion(distance, unitsURI, targetDistanceUnitsURI);
 
         return targetDistance;
     }
@@ -969,7 +987,7 @@ public class GeometryWrapper implements Serializable {
 
     @Override
     public String toString() {
-        return "GeometryWrapper{" + "dimensionInfo=" + dimensionInfo + ", crsInfo=" + crsInfo + ", xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + ", preparedGeometry=" + preparedGeometry + ", geometryDatatypeURI=" + geometryDatatypeURI + ", lexicalForm=" + lexicalForm + ", utmURI=" + utmURI + '}';
+        return "GeometryWrapper{" + "dimensionInfo=" + dimensionInfo + ", geometryDatatypeURI=" + geometryDatatypeURI + ", lexicalForm=" + lexicalForm + ", utmURI=" + utmURI + ", latitude=" + latitude + ", xyGeometry=" + xyGeometry + ", parsingGeometry=" + parsingGeometry + ", preparedGeometry=" + preparedGeometry + ", crsInfo=" + crsInfo + '}';
     }
 
 }

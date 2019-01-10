@@ -255,7 +255,7 @@ public class GeometryWrapperTest {
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        assertEquals(expResult, result, 0.000001);
+        assertEquals(expResult, result, 0.001);
     }
 
     /**
@@ -306,12 +306,12 @@ public class GeometryWrapperTest {
         //CRS is in degrees.
         String distanceUnitsURL = Unit_URI.METRE_URL;
 
-        double expResult = 111319.49079327357; //1.0 degree of longigtude at the equator is approx 111.32km.
+        double expResult = 111320; //1.0 degree of longigtude at the equator is approx 111.32km.
         double result = instance.distance(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        assertEquals(expResult, result, 0.1);
+        assertEquals(expResult, result, 1);
     }
 
     /**

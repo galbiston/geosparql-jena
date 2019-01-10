@@ -16,12 +16,11 @@
 package io.github.galbiston.geosparql_jena.spatial;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import java.lang.invoke.MethodHandles;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -49,8 +48,8 @@ public class SearchEnvelope {
             //Expand the envelope by the radius distance in all directions,
             //i.e. a bigger box rather than circle. More precise checks made later.
             Envelope searchEnvelope = new Envelope(envelope);
-            double latitude = findLatitude(wgsGeometryWrapper);
-            double degreeRadius = DistanceToDegrees.convert(radius, units, latitude);
+            double latitude = wgsGeometryWrapper.getLatitude();
+            double degreeRadius = UnitsOfMeasure.convertToDegrees(radius, units, latitude);
             searchEnvelope.expandBy(degreeRadius);
 
             return searchEnvelope;
@@ -58,13 +57,6 @@ public class SearchEnvelope {
             LOGGER.error("Exception: {}, {}, {}, {}", geometryWrapper.asLiteral(), ex.getMessage());
             throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral());
         }
-    }
-
-    private static double findLatitude(GeometryWrapper wgsGeometryWrapper) {
-        //Latitude is Y-axis in WGS84.
-        Geometry geometry = wgsGeometryWrapper.getXYGeometry();
-        Point point = geometry.getCentroid();
-        return point.getY();
     }
 
     public static Envelope build(GeometryWrapper geometryWrapper) {

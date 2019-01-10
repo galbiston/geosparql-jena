@@ -122,6 +122,72 @@ public class UnitsOfMeasure implements Serializable {
 
     }
 
+    /**
+     * Convert between linear and non-linear units and vice versa.<br>
+     * Will convert linear/linear and non-linear/non-linear units.
+     *
+     * @param distance
+     * @param unitsURI
+     * @param targetDistanceUnitsURI
+     * @param isTargetUnitsLinear
+     * @param latitude
+     * @return
+     */
+    public static final double convertBetween(double distance, String unitsURI, String targetDistanceUnitsURI, boolean isTargetUnitsLinear, double latitude) {
+        double targetDistance;
+        if (isTargetUnitsLinear) {
+            double metresDistance = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
+            targetDistance = UnitsOfMeasure.conversion(metresDistance, Unit_URI.METRE_URL, targetDistanceUnitsURI);
+        } else {
+            double degreesDistance = UnitsOfMeasure.convertToDegrees(distance, unitsURI, latitude);
+            targetDistance = UnitsOfMeasure.conversion(degreesDistance, Unit_URI.DEGREE_URL, targetDistanceUnitsURI);
+        }
+
+        return targetDistance;
+    }
+
+    //https://en.wikipedia.org/wiki/Decimal_degrees
+    private static final double EQUATORIAL_METRES = 111319.9;
+
+    /**
+     * Provides conversion of linear units to degrees.
+     * <br> Conversion from linear (i.e. metres) to degrees based on equatorial
+     * radius of 111.32km.
+     * <br> Therefore, this should only be used for rough bounding area before
+     * using more precise distance methods of GeometryWrapper.
+     *
+     * @param distance
+     * @param unitsURI
+     * @param latitude
+     * @return Converted distance in the provided units.
+     */
+    public static final double convertToDegrees(double distance, String unitsURI, double latitude) {
+
+        UnitsOfMeasure units = new UnitsOfMeasure(unitsURI);
+
+        if (units.isLinearUnits()) {
+            double latitudeRadians = Math.toRadians(latitude);
+            double longitudeRatio = Math.cos(latitudeRadians) * EQUATORIAL_METRES;
+            double metreDistance = UnitsOfMeasure.conversion(distance, units, METRE_UNITS);
+            return metreDistance / longitudeRatio;
+        } else {
+            return UnitsOfMeasure.conversion(distance, units, DEGREE_UNITS);
+        }
+
+    }
+
+    public static final double convertToMetres(double distance, String unitsURI, double latitude) {
+        UnitsOfMeasure units = new UnitsOfMeasure(unitsURI);
+        if (!units.isLinearUnits()) {
+            double latitudeRadians = Math.toRadians(latitude);
+            double longitudeRatio = Math.cos(latitudeRadians) * EQUATORIAL_METRES;
+            double degreeDistance = UnitsOfMeasure.conversion(distance, units, DEGREE_UNITS);
+            return degreeDistance * longitudeRatio;
+        } else {
+            return UnitsOfMeasure.conversion(distance, units, METRE_UNITS);
+        }
+    }
+
     @Override
     public String toString() {
         return "UnitsOfMeasure{" + "unit=" + unit + ", unitURI=" + unitURI + ", isLinearUnits=" + isLinearUnits + '}';

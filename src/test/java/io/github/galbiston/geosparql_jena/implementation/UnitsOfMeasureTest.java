@@ -17,6 +17,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation;
 
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import org.apache.sis.referencing.CRS;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -178,6 +179,176 @@ public class UnitsOfMeasureTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result, 0.0);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_0_degree() {
+        System.out.println("convert_0_degree");
+        double distance = 111319.9;
+        String unitsURI = Unit_URI.METRE_URL;
+        double latitude = 0.0;
+        double expResult = 1.0;
+        double result = UnitsOfMeasure.convertToDegrees(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.00001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_23_degree() {
+        System.out.println("convert_23_degree");
+        double distance = 102470.508;
+        String unitsURI = Unit_URI.METRE_URL;
+        double latitude = 23.0;
+        double expResult = 1.0;
+        double result = UnitsOfMeasure.convertToDegrees(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.00001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_45_degree() {
+        System.out.println("convert_45_degree");
+        double distance = 78715.05;
+        String unitsURI = Unit_URI.METRE_URL;
+        double latitude = 45.0;
+        double expResult = 1.0;
+        double result = UnitsOfMeasure.convertToDegrees(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.00001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_67_degree() {
+        System.out.println("convert_67_degree");
+        double distance = 43496.15;
+        String unitsURI = Unit_URI.METRE_URL;
+        double latitude = 67.0;
+        double expResult = 1.0;
+        double result = UnitsOfMeasure.convertToDegrees(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.00001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_67_degree2() {
+        System.out.println("convert_67_degree2");
+        double distance = 1.0;
+        String unitsURI = Unit_URI.DEGREE_URL;
+        double latitude = 67.0;
+        double expResult = 1.0;
+        double result = UnitsOfMeasure.convertToDegrees(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.00001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_0_degree_metres() {
+        System.out.println("convert_0_degree_metres");
+        double distance = 1.0;
+        String unitsURI = Unit_URI.DEGREE_URL;
+        double latitude = 0.0;
+        double expResult = 111319.9;
+        double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_23_degree_metres() {
+        System.out.println("convert_23_degree_metres");
+        double distance = 1.0;
+        String unitsURI = Unit_URI.DEGREE_URL;
+        double latitude = 23.0;
+        double expResult = 102470.508;
+        double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_45_degree_metres() {
+        System.out.println("convert_45_degree_metres");
+        double distance = 1.0;
+        String unitsURI = Unit_URI.DEGREE_URL;
+        double latitude = 45.0;
+        double expResult = 78715.056;
+        double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_67_degree_metres() {
+        System.out.println("convert_67_degree_metres");
+        double distance = 1.0;
+        String unitsURI = Unit_URI.DEGREE_URL;
+        double latitude = 67.0;
+        double expResult = 43496.15;
+        double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.001);
+    }
+
+    /**
+     * Test of convert method, of class DistanceToDegrees.
+     */
+    @Test
+    public void testConvert_67_degree2_metres() {
+        System.out.println("convert_67_degree2_metres");
+        double distance = 43496.15;
+        String unitsURI = Unit_URI.METRE_URL;
+        double latitude = 67.0;
+        double expResult = 43496.15;
+        double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.001);
     }
 
 }
