@@ -81,12 +81,12 @@ public class DistanceFFTest {
         NodeValue v2 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(90 60)", WKTDatatype.INSTANCE);
         NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(Unit_URI.RADIAN_URL));
         DistanceFF instance = new DistanceFF();
-        double expResult = 7.2449E-6;
+        double expResult = 7.2822E-6;
         double result = instance.exec(v1, v2, v3).getDouble();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        assertEquals(expResult, result, 1E-10);
+        assertEquals(expResult, result, 0.0001);
     }
 
 }
