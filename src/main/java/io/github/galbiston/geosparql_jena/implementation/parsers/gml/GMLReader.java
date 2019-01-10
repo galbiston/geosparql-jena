@@ -182,8 +182,7 @@ public class GMLReader {
                     throw new DatatypeFormatException("Geometry shape not supported: " + shape);
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
-            LOGGER.error("Build GML Geometry Exception - Shape: {}, Element: {}", shape, gmlElement);
-            throw new DatatypeFormatException(ex.getMessage());
+            throw new DatatypeFormatException("Build GML Geometry Exception - Shape: " + shape + ", Element: " + gmlElement + ". " + ex.getMessage());
         }
 
         return geo;
@@ -208,7 +207,6 @@ public class GMLReader {
 
         int mod = coordinates.length % srsDimension;
         if (mod != 0) {
-            LOGGER.error("GML Pos List does not divide into srs dimension: {} divide {} remainder {}.", coordinates.length, srsDimension, mod);
             throw new DatatypeFormatException("GML Pos List does not divide into srs dimension: " + coordinates.length + " divide " + srsDimension + " remainder " + mod + ".");
         }
 

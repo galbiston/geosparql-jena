@@ -39,7 +39,7 @@ public class EnvelopFF extends FunctionBase1 {
             GeometryWrapper envelope = geometry.envelope();
             return envelope.asNode();
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 

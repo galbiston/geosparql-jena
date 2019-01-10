@@ -26,8 +26,6 @@ import javax.measure.Unit;
 import javax.measure.quantity.Length;
 import org.apache.sis.measure.Quantities;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Based on:
@@ -39,8 +37,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class UnitsOfMeasure implements Serializable {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnitsOfMeasure.class);
 
     private final Unit unit;
     private final String unitURI;
@@ -102,8 +98,7 @@ public class UnitsOfMeasure implements Serializable {
         Boolean isTargetUnitsLinear = targetUnits.isLinearUnits();
 
         if (!isSourceUnitsLinear.equals(isTargetUnitsLinear)) {
-            LOGGER.error("Conversion between linear and non-linear units not supported: {} and {}", sourceUnits.unitURI, targetUnits.unitURI);
-            throw new UnitsConversionException("Conversion between linear and non-linear units not supported: " + sourceUnits.unitURI + " and " + targetUnits.unitURI);
+            throw new UnitsConversionException("Conversion between linear and non-linear units not supported (convertBetween method): " + sourceUnits.unitURI + " and " + targetUnits.unitURI);
         }
 
         //Source and Target are the same units, so return the source distance.

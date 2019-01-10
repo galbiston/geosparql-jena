@@ -95,7 +95,7 @@ public class NearbyPF extends NearbyGeomPF {
 
             return new SpatialArguments(limit, geometryWrapper, envelope);
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 

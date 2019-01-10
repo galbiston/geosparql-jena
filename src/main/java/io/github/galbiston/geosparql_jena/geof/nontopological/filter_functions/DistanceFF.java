@@ -19,7 +19,6 @@ package io.github.galbiston.geosparql_jena.geof.nontopological.filter_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
-import java.lang.invoke.MethodHandles;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -28,8 +27,6 @@ import org.apache.jena.sparql.util.FmtUtils;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,8 +34,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class DistanceFF extends FunctionBase3 {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
@@ -55,10 +50,9 @@ public class DistanceFF extends FunctionBase3 {
 
             return NodeValue.makeDouble(distance);
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Exception: {}, {}, {}, {}", v1, v2, v3, ex.getMessage());
-            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()));
+            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()), ex);
         }
 
     }

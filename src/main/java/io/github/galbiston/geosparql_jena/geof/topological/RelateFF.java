@@ -28,8 +28,6 @@ import org.locationtech.jts.geom.IntersectionMatrix;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,8 +35,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class RelateFF extends FunctionBase3 {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RelateFF.class);
 
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3) {
@@ -58,10 +54,9 @@ public class RelateFF extends FunctionBase3 {
 
             return NodeValue.makeBoolean(result);
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Filter Function Exception: {}", ex.getMessage());
-            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()));
+            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1.asNode()) + ", " + FmtUtils.stringForNode(v2.asNode()) + ", " + FmtUtils.stringForNode(v3.asNode()), ex);
         }
 
     }

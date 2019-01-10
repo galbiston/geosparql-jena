@@ -24,4 +24,8 @@ public class QueryLoadException extends RuntimeException {
     public QueryLoadException(String msg) {
         super(msg);
     }
+
+    public QueryLoadException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

@@ -18,21 +18,16 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialGeomPropertyFunction;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
-import java.lang.invoke.MethodHandles;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  *
  */
 public abstract class GenericCardinalGeomPropertyFunction extends GenericSpatialGeomPropertyFunction {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
     protected boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
@@ -42,8 +37,7 @@ public abstract class GenericCardinalGeomPropertyFunction extends GenericSpatial
         try {
             return geometryWrapper.equals(targetGeometryWrapper);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Exception: {}, {}, {}", targetGeometryWrapper.asLiteral(), geometryWrapper.asLiteral(), ex.getMessage());
-            throw new ExprEvalException(ex.getMessage() + ": " + targetGeometryWrapper.asLiteral() + ", " + geometryWrapper.asLiteral());
+            throw new ExprEvalException(ex.getMessage() + ": " + targetGeometryWrapper.asLiteral() + ", " + geometryWrapper.asLiteral(), ex);
         }
     }
 

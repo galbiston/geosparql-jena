@@ -39,7 +39,7 @@ public class BoundaryFF extends FunctionBase1 {
             GeometryWrapper boundary = geometry.boundary();
             return boundary.asNode();
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 }

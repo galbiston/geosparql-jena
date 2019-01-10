@@ -24,4 +24,8 @@ public class UnitsURIException extends RuntimeException {
     public UnitsURIException(String msg) {
         super(msg);
     }
+
+    public UnitsURIException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

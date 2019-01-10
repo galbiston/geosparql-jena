@@ -54,8 +54,7 @@ public class SearchEnvelope {
 
             return searchEnvelope;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Exception: {}, {}, {}, {}", geometryWrapper.asLiteral(), ex.getMessage());
-            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral());
+            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral(), ex);
         }
     }
 
@@ -69,8 +68,7 @@ public class SearchEnvelope {
             Envelope envelope = wgsGeometryWrapper.getEnvelope();
             return new Envelope(envelope);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Exception: {}, {}, {}, {}", geometryWrapper.asLiteral(), ex.getMessage());
-            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral());
+            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral(), ex);
         }
     }
 
@@ -115,8 +113,7 @@ public class SearchEnvelope {
 
             return new Envelope(x1, x2, y1, y2);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Exception: {}, {}, {}, {}", geometryWrapper.asLiteral(), ex.getMessage());
-            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral());
+            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral(), ex);
         }
     }
 
@@ -169,8 +166,7 @@ public class SearchEnvelope {
             }
 
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            LOGGER.error("Exception: {}, {}, {}, {}", geometryWrapper.asLiteral(), ex.getMessage());
-            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral());
+            throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral(), ex);
         }
     }
 

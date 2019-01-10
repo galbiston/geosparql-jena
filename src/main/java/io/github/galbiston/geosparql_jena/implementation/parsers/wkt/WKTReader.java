@@ -29,8 +29,6 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Polygon;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -38,7 +36,6 @@ import org.slf4j.LoggerFactory;
  */
 public class WKTReader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WKTReader.class);
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     private final CoordinateSequenceDimensions coordinateSequenceDimensions;
@@ -143,8 +140,7 @@ public class WKTReader {
                     throw new DatatypeFormatException("Geometry type not supported: " + geometryType);
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
-            LOGGER.error("Build WKT Geometry Exception - Type: {}, Coordinates: {}", geometryType, coordinates);
-            throw new DatatypeFormatException(ex.getMessage());
+            throw new DatatypeFormatException("Build WKT Geometry Exception - Type: " + geometryType + ", Coordinates: " + coordinates + ". " + ex.getMessage());
         }
         return geo;
     }

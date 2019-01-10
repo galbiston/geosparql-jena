@@ -39,7 +39,7 @@ public class GetSRIDFF extends FunctionBase1 {
             String srid = geometry.getSRID();
             return NodeValue.makeNodeString(srid);
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 

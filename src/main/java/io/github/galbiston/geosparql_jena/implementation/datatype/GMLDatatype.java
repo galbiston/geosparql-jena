@@ -87,8 +87,7 @@ public class GMLDatatype extends GeometryDatatype {
 
             return new GeometryWrapper(geometry, gmlReader.getSrsName(), URI, dimensionInfo, geometryLiteral);
         } catch (JDOMException | IOException ex) {
-            LOGGER.error("{} - Illegal GML literal: {} ", ex.getMessage(), geometryLiteral);
-            throw new DatatypeFormatException("Illegal GML literal:" + geometryLiteral);
+            throw new DatatypeFormatException("Illegal GML literal:" + geometryLiteral + ". " + ex.getMessage());
         }
     }
 

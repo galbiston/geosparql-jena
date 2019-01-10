@@ -24,4 +24,8 @@ public class SpatialIndexException extends RuntimeException {
     public SpatialIndexException(String msg) {
         super(msg);
     }
+
+    public SpatialIndexException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

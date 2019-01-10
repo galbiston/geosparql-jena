@@ -127,7 +127,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
 
             return isMatched;
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 
@@ -144,6 +144,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         Var subjectVar = Var.alloc(subject.getName());
         int count = 0;
         for (Resource feature : features) {
+            //Check all the serialiazations of the Feature in a fine-grained test.
             boolean isMatched = checkBound(execCxt, feature.asNode());
 
             if (isMatched) {

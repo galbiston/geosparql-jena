@@ -39,7 +39,7 @@ public class ConvexHullFF extends FunctionBase1 {
             GeometryWrapper convexHull = geometry.convexHull();
             return convexHull.asNode();
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 

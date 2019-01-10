@@ -81,7 +81,7 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
 
             return new SpatialArguments(limit, geometryWrapper, envelope);
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 }

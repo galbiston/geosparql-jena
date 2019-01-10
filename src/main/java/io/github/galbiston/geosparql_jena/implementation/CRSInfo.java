@@ -15,21 +15,16 @@
  */
 package io.github.galbiston.geosparql_jena.implementation;
 
-import java.lang.invoke.MethodHandles;
 import java.util.Objects;
 import org.apache.sis.referencing.CRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.util.FactoryException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  *
  */
 public class CRSInfo {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private final String srsURI;
     private final CoordinateReferenceSystem crs;
@@ -78,8 +73,7 @@ public class CRSInfo {
             UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
             return new CRSInfo(srsURI, crs, unitsOfMeasure, true, true);
         } catch (FactoryException ex) {
-            LOGGER.error("Invalid CRS code: {} - {}", DEFAULT_WKT_CRS84_CODE, ex.getMessage());
-            throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage());
+            throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage(), ex);
         }
 
     }
@@ -98,8 +92,7 @@ public class CRSInfo {
             UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
             return new CRSInfo(srsURI, crs, unitsOfMeasure, true, false);
         } catch (FactoryException ex) {
-            LOGGER.error("Invalid CRS code: {} - {}", DEFAULT_WKT_CRS84_CODE, ex.getMessage());
-            throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage());
+            throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage(), ex);
         }
     }
 

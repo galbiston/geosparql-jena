@@ -24,16 +24,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  *
  */
 public class QueryLoader {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(QueryLoader.class);
 
     public static String readResource(String queryFilename) {
 
@@ -42,8 +38,7 @@ public class QueryLoader {
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(input))) {
             return buffer.lines().collect(Collectors.joining(System.lineSeparator()));
         } catch (NullPointerException | IOException ex) {
-            LOGGER.error("Could not open query file: {}", queryFilename);
-            throw new QueryLoadException("Could not open query file: " + queryFilename);
+            throw new QueryLoadException("Could not open query file: " + queryFilename, ex);
         }
     }
 
@@ -52,8 +47,7 @@ public class QueryLoader {
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(input))) {
             return buffer.lines().collect(Collectors.joining(System.lineSeparator()));
         } catch (NullPointerException | IOException ex) {
-            LOGGER.error("Could not open query input stream: {}", input.toString());
-            throw new QueryLoadException("Could not open query input stream: " + input.toString());
+            throw new QueryLoadException("Could not open query input stream: " + input.toString(), ex);
         }
     }
 
@@ -62,8 +56,7 @@ public class QueryLoader {
         try (BufferedReader buffer = new BufferedReader(new FileReader(inputFile))) {
             return buffer.lines().collect(Collectors.joining(System.lineSeparator()));
         } catch (NullPointerException | IOException ex) {
-            LOGGER.error("Could not open query file: {}", inputFile.getPath());
-            throw new QueryLoadException("Could not open query file: " + inputFile);
+            throw new QueryLoadException("Could not open query file: " + inputFile, ex);
         }
     }
 

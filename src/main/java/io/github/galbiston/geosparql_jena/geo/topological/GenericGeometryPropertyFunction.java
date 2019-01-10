@@ -86,7 +86,7 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
             return null;
 
         } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage());
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 

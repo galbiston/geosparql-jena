@@ -24,4 +24,8 @@ public class UnitsConversionException extends RuntimeException {
     public UnitsConversionException(String msg) {
         super(msg);
     }
+
+    public UnitsConversionException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

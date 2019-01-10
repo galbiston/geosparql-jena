@@ -24,4 +24,8 @@ public class CRSInfoException extends RuntimeException {
     public CRSInfoException(String msg) {
         super(msg);
     }
+
+    public CRSInfoException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

@@ -23,6 +23,7 @@ import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLon
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -124,7 +125,6 @@ public class SpatialIndex implements Serializable {
         SpatialIndex spatialIndex = (SpatialIndex) context.get(SPATIAL_INDEX_SYMBOL, null);
 
         if (spatialIndex == null) {
-            LOGGER.error("Dataset Context does not contain SpatialIndex.");
             throw new SpatialIndexException("Dataset Context does not contain SpatialIndex.");
         }
 
@@ -237,7 +237,7 @@ public class SpatialIndex implements Serializable {
                     SpatialIndexItem item = new SpatialIndexItem(envelope, feature);
                     items.add(item);
                 } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-                    LOGGER.error("Transformation Exception: {}, {}", geometryLiteral, ex.getMessage());
+                    throw new SpatialIndexException("Transformation Exception: " + geometryLiteral + ". " + ex.getMessage());
                 }
 
             }
@@ -273,9 +273,8 @@ public class SpatialIndex implements Serializable {
                 SpatialIndex spatialIndex = (SpatialIndex) in.readObject();
                 spatialIndex.build();
                 return spatialIndex;
-            } catch (Exception ex) {
-                LOGGER.error("Spatial Index Load Exception: {}", ex.getMessage());
-                throw new SpatialIndexException("Loading Exception: " + ex.getMessage());
+            } catch (ClassNotFoundException | IOException ex) {
+                throw new SpatialIndexException("Loading Exception: " + ex.getMessage(), ex);
             }
         } else {
             throw new SpatialIndexException("File is null or does not exist.");
@@ -288,7 +287,7 @@ public class SpatialIndex implements Serializable {
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(spatialIndexFile))) {
                 out.writeObject(spatialIndex);
             } catch (Exception ex) {
-                LOGGER.error("Spatial Index Save Exception: {}", ex.getMessage());
+                throw new SpatialIndexException("Save Exception: " + ex.getMessage());
             }
         }
     }

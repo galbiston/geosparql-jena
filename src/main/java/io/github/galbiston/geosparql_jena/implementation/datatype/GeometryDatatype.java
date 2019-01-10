@@ -20,21 +20,16 @@ package io.github.galbiston.geosparql_jena.implementation.datatype;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
-import java.lang.invoke.MethodHandles;
 import org.apache.jena.datatypes.BaseDatatype;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.TypeMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  *
  */
 public abstract class GeometryDatatype extends BaseDatatype {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public GeometryDatatype(String uri) {
         super(uri);
@@ -61,7 +56,6 @@ public abstract class GeometryDatatype extends BaseDatatype {
         try {
             return GeometryLiteralIndex.retrieve(lexicalForm, this, targetIndex);
         } catch (IllegalArgumentException ex) {
-            LOGGER.error("{} - Illegal Geometry Literal: {} ", ex.getMessage(), lexicalForm);
             throw new DatatypeFormatException(ex.getMessage() + " - Illegal Geometry Literal: " + lexicalForm);
         }
     }
@@ -81,8 +75,7 @@ public abstract class GeometryDatatype extends BaseDatatype {
         if (rdfDatatype instanceof GeometryDatatype) {
             return (GeometryDatatype) rdfDatatype;
         } else {
-            LOGGER.error("Unrecognised Geometry Datatype: {}. Ensure that Datatype is extending GeometryDatatype.", rdfDatatype.getURI());
-            throw new DatatypeFormatException("Unrecognised Geometry Datatype: " + rdfDatatype.getURI());
+            throw new DatatypeFormatException("Unrecognised Geometry Datatype: " + rdfDatatype.getURI() + " Ensure that Datatype is extending GeometryDatatype.");
         }
     }
 
@@ -99,8 +92,7 @@ public abstract class GeometryDatatype extends BaseDatatype {
         if (rdfDatatype != null) {
             return check(rdfDatatype);
         } else {
-            LOGGER.error("Unrecognised Datatype: {} - Ensure that GeoSPARQLSupport is enabled and Datatype has been registered.", datatypeURI);
-            throw new DatatypeFormatException("Datatype not found: " + datatypeURI);
+            throw new DatatypeFormatException("Datatype not found: " + datatypeURI + " Ensure that GeoSPARQLSupport is enabled and Datatype has been registered.");
         }
     }
 

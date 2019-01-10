@@ -19,23 +19,18 @@ package io.github.galbiston.geosparql_jena.implementation.registry;
 
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
-import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.measure.Unit;
 import javax.measure.quantity.Length;
 import org.apache.sis.measure.Units;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  *
  */
 public class UnitsRegistry {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final Map<String, Unit> UNITS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
     private static final Map<Unit, String> UNITS_URI_REGISTRY = Collections.synchronizedMap(new HashMap<>());
@@ -128,7 +123,6 @@ public class UnitsRegistry {
 
             return unitSI.equals(Units.METRE);
         } else {
-            LOGGER.error("Unrecognised unit URI: {}", unitURI);
             throw new UnitsURIException("Unrecognised unit URI: " + unitURI);
         }
     }
