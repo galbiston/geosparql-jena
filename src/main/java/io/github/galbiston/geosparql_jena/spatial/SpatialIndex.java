@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
@@ -154,9 +155,17 @@ public class SpatialIndex implements Serializable {
             save(spatialIndexFile, spatialIndex);
         }
 
+        setSpatialIndex(dataset, spatialIndex);
         return spatialIndex;
     }
 
+    /**
+     * Build Spatial Index from all graphs in Dataset.<br>
+     * Dataset contains SpatialIndex in Context.
+     *
+     * @param dataset
+     * @return SpatialIndex constructed.
+     */
     public static SpatialIndex buildSpatialIndex(Dataset dataset) {
         LOGGER.info("Building Spatial Index - Started");
 
@@ -181,6 +190,21 @@ public class SpatialIndex implements Serializable {
         setSpatialIndex(dataset, spatialIndex);
 
         return spatialIndex;
+    }
+
+    /**
+     * Wrap Model in a Dataset and build SpatialIndex.
+     *
+     * @param model
+     * @return Dataset with default Model and SpatialIndex in Context.
+     */
+    public static final Dataset wrapModel(Model model) {
+
+        Dataset dataset = DatasetFactory.createTxnMem();
+        dataset.setDefaultModel(model);
+        buildSpatialIndex(dataset);
+
+        return dataset;
     }
 
     public static final Collection<SpatialIndexItem> getSpatialIndexItems(Model model) {
