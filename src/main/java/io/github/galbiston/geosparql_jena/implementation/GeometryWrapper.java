@@ -38,7 +38,6 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.sis.geometry.DirectPosition2D;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -352,8 +351,8 @@ public class GeometryWrapper implements Serializable {
         if (utmURI == null) {
 
             //Find a point in the parsing geometry so can directly apply the CRS.
-            Coordinate coord = parsingGeometry.getCoordinate();
-            DirectPosition2D point = new DirectPosition2D(coord.x, coord.y);
+            Point coord = parsingGeometry.getCentroid();
+            DirectPosition2D point = new DirectPosition2D(coord.getX(), coord.getY());
 
             //Convert to WGS84.
             CoordinateReferenceSystem wgs84CRS = CRSRegistry.getCRS(SRS_URI.WGS84_CRS);
