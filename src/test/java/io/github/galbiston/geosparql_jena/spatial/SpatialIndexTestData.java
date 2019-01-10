@@ -54,6 +54,7 @@ public class SpatialIndexTestData {
     public static final GeometryWrapper PARIS_GEOMETRY_LITERAL = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(48.857487 2.373047)", WKTDatatype.URI);
 
     private static SpatialIndex TEST_SPATIAL_INDEX = null;
+    private static Dataset TEST_DATASET = null;
 
     public static final SpatialIndex createTestIndex() {
 
@@ -74,21 +75,27 @@ public class SpatialIndexTestData {
 
     public static final Dataset createTestDataset() {
 
-        Dataset dataset = DatasetFactory.createTxnMem();
-        Model model = ModelFactory.createDefaultModel();
-        model.add(LONDON_FEATURE, Geo.HAS_GEOMETRY_PROP, LONDON_GEOMETRY);
-        model.add(NEW_YORK_FEATURE, Geo.HAS_GEOMETRY_PROP, NEW_YORK_GEOMETRY);
-        model.add(HONOLULU_FEATURE, Geo.HAS_GEOMETRY_PROP, HONOLULU_GEOMETRY);
-        model.add(PERTH_FEATURE, Geo.HAS_GEOMETRY_PROP, PERTH_GEOMETRY);
-        model.add(AUCKLAND_FEATURE, Geo.HAS_GEOMETRY_PROP, AUCKLAND_GEOMETRY);
-        model.add(LONDON_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, LONDON_GEOMETRY_LITERAL.asLiteral());
-        model.add(NEW_YORK_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, NEW_YORK_GEOMETRY_LITERAL.asLiteral());
-        model.add(HONOLULU_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, HONOLULU_GEOMETRY_LITERAL.asLiteral());
-        model.add(PERTH_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, PERTH_GEOMETRY_LITERAL.asLiteral());
-        model.add(AUCKLAND_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, AUCKLAND_GEOMETRY_LITERAL.asLiteral());
+        if (TEST_DATASET == null) {
+            Dataset dataset = DatasetFactory.createTxnMem();
+            Model model = ModelFactory.createDefaultModel();
+            model.add(LONDON_FEATURE, Geo.HAS_GEOMETRY_PROP, LONDON_GEOMETRY);
+            model.add(NEW_YORK_FEATURE, Geo.HAS_GEOMETRY_PROP, NEW_YORK_GEOMETRY);
+            model.add(HONOLULU_FEATURE, Geo.HAS_GEOMETRY_PROP, HONOLULU_GEOMETRY);
+            model.add(PERTH_FEATURE, Geo.HAS_GEOMETRY_PROP, PERTH_GEOMETRY);
+            model.add(AUCKLAND_FEATURE, Geo.HAS_GEOMETRY_PROP, AUCKLAND_GEOMETRY);
+            model.add(LONDON_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, LONDON_GEOMETRY_LITERAL.asLiteral());
+            model.add(NEW_YORK_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, NEW_YORK_GEOMETRY_LITERAL.asLiteral());
+            model.add(HONOLULU_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, HONOLULU_GEOMETRY_LITERAL.asLiteral());
+            model.add(PERTH_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, PERTH_GEOMETRY_LITERAL.asLiteral());
+            model.add(AUCKLAND_GEOMETRY, Geo.HAS_SERIALIZATION_PROP, AUCKLAND_GEOMETRY_LITERAL.asLiteral());
 
-        dataset.setDefaultModel(model);
-        return dataset;
+            dataset.setDefaultModel(model);
+            SpatialIndex spatialIndex = createTestIndex();
+            SpatialIndex.setSpatialIndex(dataset, spatialIndex);
+            TEST_DATASET = dataset;
+        }
+
+        return TEST_DATASET;
     }
 
 }
