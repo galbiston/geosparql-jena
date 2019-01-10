@@ -47,6 +47,7 @@ public class GeoSPARQLConfig {
      * GeoSPARQL schema
      */
     private static Boolean IS_FUNCTIONS_REGISTERED = false;
+    private static Boolean IS_SPATIAL_FUNCTIONS_REGISTERED = false;
     private static Boolean IS_QUERY_REWRITE_ENABLED = true;
 
     /**
@@ -204,10 +205,14 @@ public class GeoSPARQLConfig {
     }
 
     public static final void setupSpatial() {
-        PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
-        FunctionRegistry functionRegistry = FunctionRegistry.get();
-        Spatial.loadPropertyFunctions(propertyRegistry);
-        Spatial.loadFilterFunctions(functionRegistry);
+        //Only register functions once.
+        if (!IS_SPATIAL_FUNCTIONS_REGISTERED) {
+            PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
+            FunctionRegistry functionRegistry = FunctionRegistry.get();
+            Spatial.loadPropertyFunctions(propertyRegistry);
+            Spatial.loadFilterFunctions(functionRegistry);
+            IS_SPATIAL_FUNCTIONS_REGISTERED = true;
+        }
 
     }
 
