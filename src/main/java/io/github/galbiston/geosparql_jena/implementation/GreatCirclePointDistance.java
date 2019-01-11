@@ -108,11 +108,50 @@ public class GreatCirclePointDistance {
         return lonRad + Math.atan2(Math.sin(bearingRad) * sinAngDistance * cosStartLat, cosAngDistance - sinStartLat * Math.sin(endLatRad));
     }
 
+    /**
+     * Convert Lat/Lon in radians to Point in degrees.<br>
+     * Longitude normalised between -180 and 180.
+     *
+     * @param latRad
+     * @param lonRad
+     * @return Lat/Lon Point in degrees.
+     */
     public static final Point radToPoint(double latRad, double lonRad) {
+        return radToPoint(latRad, lonRad, true);
+    }
+
+    /**
+     * Convert Lat/Lon in radians to Point in degrees.
+     *
+     * @param latRad
+     * @param lonRad
+     * @param isNormaliseLon Normalise Longitude between -180 and 180.
+     * @return Lat/Lon Point in degrees.
+     */
+    public static final Point radToPoint(double latRad, double lonRad, boolean isNormaliseLon) {
         double lat = Math.toDegrees(latRad);
-        double lon = (Math.toDegrees(lonRad) + 540) % 360 - 180; //Normalise to -180 -> 180.
+        double lon = Math.toDegrees(lonRad);
+        if (isNormaliseLon) {
+            lon = normaliseLongitude(lon);
+        }
         Point point = GEOMETRY_FACTORY.createPoint(new Coordinate(lat, lon));
         return point;
+    }
+
+    /**
+     * Normalise Longitude in degrees to -180 -> 180 range.
+     *
+     * @param lonDegrees
+     * @return Lat/Lon Point in degrees.
+     */
+    public static double normaliseLongitude(double lonDegrees) {
+        if (lonDegrees > 180) {
+            return lonDegrees - 360;
+        } else if (lonDegrees < -180) {
+            return lonDegrees + 380;
+        }
+        return lonDegrees;
+
     }
 
     /**
