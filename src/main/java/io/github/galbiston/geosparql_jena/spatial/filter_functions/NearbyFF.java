@@ -49,13 +49,13 @@ public class NearbyFF extends FunctionBase4 {
 
             double radius = v3.getDouble();
 
-            String unitURI;
+            String unitsURI;
             if (v4.isIRI()) {
-                unitURI = v4.asNode().getURI();
+                unitsURI = v4.asNode().getURI();
             } else {
-                unitURI = v4.asString();
+                unitsURI = v4.asString();
             }
-            boolean result = relate(geometry1, geometry2, radius, unitURI);
+            boolean result = relate(geometry1, geometry2, radius, unitsURI);
             return NodeValue.makeBoolean(result);
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);
