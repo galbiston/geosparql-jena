@@ -17,6 +17,17 @@ package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
@@ -101,6 +112,39 @@ public class ConvertLatLonFFTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         //assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of exec method, of class ConvertLatLonFF.
+     */
+    @Test
+    public void testExec_query() {
+        System.out.println("exec_query");
+
+        Dataset dataset = SpatialIndexTestData.createTestDataset();
+
+        String query = "PREFIX spatialF: <http://jena.apache.org/function/spatial#>\n"
+                + "\n"
+                + "SELECT ?result\n"
+                + "WHERE{\n"
+                + "    BIND( spatialF:convertLatLon(0.0, 10.0) AS ?result) \n"
+                + "}ORDER by ?result";
+
+        List<Literal> results = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Literal result = qs.getLiteral("result");
+                results.add(result);
+            }
+        }
+
+        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(0.0 10.0)", WKTDatatype.INSTANCE));
+
+        //System.out.println("Exp: " + expResults);
+        //System.out.println("Res: " + results);
+        assertEquals(expResults, results);
     }
 
 }
