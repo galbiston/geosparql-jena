@@ -15,10 +15,21 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
+import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.CardinalDirection;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Resource;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -37,6 +48,7 @@ public class SouthPFTest {
 
     @BeforeClass
     public static void setUpClass() {
+        GeoSPARQLConfig.setupSpatial();
     }
 
     @AfterClass
@@ -67,4 +79,38 @@ public class SouthPFTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Test of execEvaluated method, of class SouthPF.
+     */
+    @Test
+    public void testExecEvaluated() {
+        System.out.println("execEvaluated");
+
+        Dataset dataset = SpatialIndexTestData.createTestDataset();
+        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
+        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
+
+        String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
+                + "\n"
+                + "SELECT ?subj\n"
+                + "WHERE{\n"
+                + "    ?subj spatial:south(48.857487 2.373047) .\n"
+                + "}ORDER by ?subj";
+
+        List<Resource> result = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Resource feature = qs.getResource("subj");
+                result.add(feature);
+            }
+        }
+
+        List<Resource> expResult = Arrays.asList(SpatialIndexTestData.AUCKLAND_FEATURE, SpatialIndexTestData.HONOLULU_FEATURE, SpatialIndexTestData.NEW_YORK_FEATURE, SpatialIndexTestData.PERTH_FEATURE);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 }

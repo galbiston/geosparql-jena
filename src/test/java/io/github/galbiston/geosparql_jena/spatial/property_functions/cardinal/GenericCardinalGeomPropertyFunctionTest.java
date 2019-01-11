@@ -103,7 +103,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
         //Geometry and Envelope parameters
         float lat = 0;
         float lon = 1;
-        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat + 10f, lon);
+        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat - 10f, lon);
 
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);

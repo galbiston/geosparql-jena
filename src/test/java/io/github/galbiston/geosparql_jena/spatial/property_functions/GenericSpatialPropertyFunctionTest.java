@@ -134,8 +134,8 @@ public class GenericSpatialPropertyFunctionTest {
      * Test of execEvaluated method, of class GenericSpatialPropertyFunction.
      */
     @Test
-    public void testExecEvaluated_West() {
-        System.out.println("execEvaluated_West");
+    public void testExecEvaluated_Nearby_one_bound() {
+        System.out.println("execEvaluated_Nearby_one_bound");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
@@ -145,7 +145,8 @@ public class GenericSpatialPropertyFunctionTest {
                 + "\n"
                 + "SELECT ?subj\n"
                 + "WHERE{\n"
-                + "    ?subj spatial:west(48.857487 2.373047) .\n"
+                + "    BIND(<http://example.org/Feature#London> AS ?subj) \n"
+                + "    ?subj spatial:nearby(48.857487 2.373047 350) .\n"
                 + "}ORDER by ?subj";
 
         List<Resource> result = new ArrayList<>();
@@ -158,7 +159,7 @@ public class GenericSpatialPropertyFunctionTest {
             }
         }
 
-        List<Resource> expResult = Arrays.asList(SpatialIndexTestData.HONOLULU_FEATURE, SpatialIndexTestData.LONDON_FEATURE, SpatialIndexTestData.NEW_YORK_FEATURE);
+        List<Resource> expResult = Arrays.asList(SpatialIndexTestData.LONDON_FEATURE);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -169,8 +170,8 @@ public class GenericSpatialPropertyFunctionTest {
      * Test of execEvaluated method, of class GenericSpatialPropertyFunction.
      */
     @Test
-    public void testExecEvaluated_East() {
-        System.out.println("execEvaluated_East");
+    public void testExecEvaluated_Nearby_one_bound_fail() {
+        System.out.println("execEvaluated_Nearby_one_bound_fail");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
@@ -180,7 +181,8 @@ public class GenericSpatialPropertyFunctionTest {
                 + "\n"
                 + "SELECT ?subj\n"
                 + "WHERE{\n"
-                + "    ?subj spatial:east(48.857487 2.373047) .\n"
+                + "    BIND(<http://example.org/Feature#NewYork> AS ?subj) \n"
+                + "    ?subj spatial:nearby(48.857487 2.373047 350) .\n"
                 + "}ORDER by ?subj";
 
         List<Resource> result = new ArrayList<>();
@@ -193,7 +195,7 @@ public class GenericSpatialPropertyFunctionTest {
             }
         }
 
-        List<Resource> expResult = Arrays.asList(SpatialIndexTestData.AUCKLAND_FEATURE, SpatialIndexTestData.PERTH_FEATURE);
+        List<Resource> expResult = new ArrayList<>();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
