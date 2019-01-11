@@ -15,11 +15,23 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
+import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
@@ -40,6 +52,7 @@ public class NearbyFFTest {
 
     @BeforeClass
     public static void setUpClass() {
+        GeoSPARQLConfig.setupSpatial();
     }
 
     @AfterClass
@@ -106,8 +119,8 @@ public class NearbyFFTest {
         NodeValue expResult = NodeValue.makeBoolean(true);
         NodeValue result = instance.exec(v1, v2, v3, v4);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -259,5 +272,75 @@ public class NearbyFFTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         //assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of exec method, of class NearbyFF.
+     */
+    @Test
+    public void testExec_query() {
+        System.out.println("exec_query");
+
+        Dataset dataset = SpatialIndexTestData.createTestDataset();
+
+        String query = "PREFIX spatialF: <http://jena.apache.org/function/spatial#>\n"
+                + "\n"
+                + "SELECT ?result\n"
+                + "WHERE{\n"
+                + "    BIND( \"<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(51.50853 -0.12574)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?geom1)"
+                + "    BIND( \"<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(48.857487 2.373047)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?geom2)"
+                + "    BIND( spatialF:nearby(?geom1, ?geom2, 345, <http://www.opengis.net/def/uom/OGC/1.0/kilometer>) AS ?result) \n"
+                + "}ORDER by ?result";
+
+        List<Literal> results = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Literal result = qs.getLiteral("result");
+                results.add(result);
+            }
+        }
+
+        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral(Boolean.TRUE.toString(), XSDDatatype.XSDboolean));
+
+        //System.out.println("Exp: " + expResults);
+        //System.out.println("Res: " + results);
+        assertEquals(expResults, results);
+    }
+
+    /**
+     * Test of exec method, of class NearbyFF.
+     */
+    @Test
+    public void testExec_query_false() {
+        System.out.println("exec_query_false");
+
+        Dataset dataset = SpatialIndexTestData.createTestDataset();
+
+        String query = "PREFIX spatialF: <http://jena.apache.org/function/spatial#>\n"
+                + "\n"
+                + "SELECT ?result\n"
+                + "WHERE{\n"
+                + "    BIND( \"<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(51.50853 -0.12574)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?geom1)"
+                + "    BIND( \"<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(48.857487 2.373047)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?geom2)"
+                + "    BIND( spatialF:nearby(?geom1, ?geom2, 200, <http://www.opengis.net/def/uom/OGC/1.0/kilometer>) AS ?result) \n"
+                + "}ORDER by ?result";
+
+        List<Literal> results = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Literal result = qs.getLiteral("result");
+                results.add(result);
+            }
+        }
+
+        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral(Boolean.FALSE.toString(), XSDDatatype.XSDboolean));
+
+        //System.out.println("Exp: " + expResults);
+        //System.out.println("Res: " + results);
+        assertEquals(expResults, results);
     }
 }
