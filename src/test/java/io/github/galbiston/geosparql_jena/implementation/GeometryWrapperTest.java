@@ -448,8 +448,8 @@ public class GeometryWrapperTest {
         double expResult = 344.155;
         double result = instance.distanceGreatCircle(testGeometryWrapper, unitsURI);
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result, 0.1);
     }
 
