@@ -16,9 +16,13 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import io.github.galbiston.geosparql_jena.spatial.CardinalDirection;
+import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialGeomPropertyFunction;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import org.apache.jena.sparql.expr.ExprEvalException;
+import org.locationtech.jts.geom.Envelope;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -29,15 +33,32 @@ import org.opengis.util.FactoryException;
  */
 public abstract class GenericCardinalGeomPropertyFunction extends GenericSpatialGeomPropertyFunction {
 
+    protected abstract CardinalDirection getCardinalDirection();
+
+    @Override
+    protected SearchEnvelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
+        CardinalDirection direction = getCardinalDirection();
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, direction);
+
+        return searchEnvelope;
+    }
+
     @Override
     protected boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
         //Test Geometry against the Geometry from Object to see if it is a match.
         //Used when checking against bound Subjects.
-        GeometryWrapper geometryWrapper = spatialArguments.getGeometryWrapper();
+        SearchEnvelope searchEnvelope = spatialArguments.getSearchEnvelope();
+
         try {
-            return geometryWrapper.equals(targetGeometryWrapper);
+
+            GeometryWrapper wgsTargetGeometryWrapper = targetGeometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
+            Envelope targetEnvelope = wgsTargetGeometryWrapper.getEnvelope();
+
+            boolean result = searchEnvelope.check(targetEnvelope);
+
+            return result;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-            throw new ExprEvalException(ex.getMessage() + ": " + targetGeometryWrapper.asLiteral() + ", " + geometryWrapper.asLiteral(), ex);
+            throw new ExprEvalException(ex.getMessage() + ": " + targetGeometryWrapper.asLiteral(), ex);
         }
     }
 

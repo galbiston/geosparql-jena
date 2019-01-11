@@ -73,6 +73,15 @@ public class SearchEnvelope {
         return features;
     }
 
+    public boolean check(Envelope envelope) {
+        boolean result = mainEnvelope.intersects(envelope);
+
+        if (!result && wrapEnvelope != null) {
+            result = wrapEnvelope.intersects(envelope);
+        }
+        return result;
+    }
+
     @Override
     public String toString() {
         return "SearchEnvelope{" + "envelope=" + mainEnvelope + ", wrappedEnvelope=" + wrapEnvelope + '}';
