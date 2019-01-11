@@ -95,8 +95,12 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
         }
     }
 
+    protected boolean requireSecondFilter() {
+        return true;
+    }
+
     @Override
-    protected boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
+    protected boolean checkSecondFilter(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
         GeometryWrapper geometryWrapper = spatialArguments.getGeometryWrapper();
         return NearbyFF.relate(geometryWrapper, targetGeometryWrapper, radius, unitsURI);
     }

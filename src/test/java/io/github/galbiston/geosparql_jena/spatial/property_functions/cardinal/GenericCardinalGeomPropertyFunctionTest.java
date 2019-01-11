@@ -59,12 +59,12 @@ public class GenericCardinalGeomPropertyFunctionTest {
     }
 
     /**
-     * Test of testRelation method, of class
+     * Test of checkSecondFilter method, of class
      * GenericCardinalGeomPropertyFunction.
      */
     @Test
-    public void testTestRelation() {
-        System.out.println("testRelation");
+    public void testCheckSecondFilter() {
+        System.out.println("checkSecondFilter");
 
         //Property Function
         Node predicate = NodeFactory.createURI(SpatialExtension.NORTH_GEOM_PROP);
@@ -82,7 +82,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
         SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object);
 
         boolean expResult = true;
-        boolean result = instance.testRelation(spatialArgumemts, targetGeometryWrapper);
+        boolean result = instance.checkSecondFilter(spatialArgumemts, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -90,12 +90,12 @@ public class GenericCardinalGeomPropertyFunctionTest {
     }
 
     /**
-     * Test of testRelation method, of class
+     * Test of checkSecondFilter method, of class
      * GenericCardinalGeomPropertyFunction.
      */
     @Test
-    public void testTestRelation_fail() {
-        System.out.println("testRelation_fail");
+    public void testCheckSecondFilter_fail() {
+        System.out.println("checkSecondFilter_fail");
 
         //Property Function
         Node predicate = NodeFactory.createURI(SpatialExtension.NORTH_GEOM_PROP);
@@ -113,7 +113,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
         SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object);
 
         boolean expResult = false;
-        boolean result = instance.testRelation(spatialArgumemts, targetGeometryWrapper);
+        boolean result = instance.checkSecondFilter(spatialArgumemts, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

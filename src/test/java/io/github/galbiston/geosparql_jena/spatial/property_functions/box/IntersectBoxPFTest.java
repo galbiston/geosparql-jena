@@ -69,11 +69,11 @@ public class IntersectBoxPFTest {
     }
 
     /**
-     * Test of testRelation method, of class IntersectBoxPF.
+     * Test of checkSecondFilter method, of class IntersectBoxPF.
      */
     @Test
-    public void testTestRelation() {
-        System.out.println("testRelation");
+    public void testCheckSecondFilter() {
+        System.out.println("checkSecondFilter");
 
         IntersectBoxPF instance = new IntersectBoxPF();
 
@@ -99,7 +99,7 @@ public class IntersectBoxPFTest {
 
         //Test arguments
         boolean expResult = true;
-        boolean result = instance.testRelation(spatialArguments, targetGeometryWrapper);
+        boolean result = instance.checkSecondFilter(spatialArguments, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -107,11 +107,11 @@ public class IntersectBoxPFTest {
     }
 
     /**
-     * Test of testRelation method, of class IntersectBoxPF.
+     * Test of checkSecondFilter method, of class IntersectBoxPF.
      */
     @Test
-    public void testTestRelation_fail() {
-        System.out.println("testRelation_fail");
+    public void testCheckSecondFilter_fail() {
+        System.out.println("checkSecondFilter_fail");
 
         IntersectBoxPF instance = new IntersectBoxPF();
 
@@ -137,7 +137,7 @@ public class IntersectBoxPFTest {
 
         //Test arguments
         boolean expResult = false;
-        boolean result = instance.testRelation(spatialArguments, targetGeometryWrapper);
+        boolean result = instance.checkSecondFilter(spatialArguments, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

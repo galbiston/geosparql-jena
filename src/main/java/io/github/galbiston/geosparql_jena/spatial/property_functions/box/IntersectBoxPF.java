@@ -29,7 +29,7 @@ import org.opengis.util.FactoryException;
 public class IntersectBoxPF extends GenericSpatialBoxPropertyFunction {
 
     @Override
-    protected boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
+    protected boolean checkSecondFilter(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
         GeometryWrapper geometryWrapper = spatialArguments.getGeometryWrapper();
         try {
             return geometryWrapper.intersects(targetGeometryWrapper);

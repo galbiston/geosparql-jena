@@ -29,7 +29,7 @@ import org.opengis.util.FactoryException;
 public class WithinBoxGeomPF extends GenericSpatialGeomBoxPropertyFunction {
 
     @Override
-    protected boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
+    protected boolean checkSecondFilter(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
         GeometryWrapper geometryWrapper = spatialArguments.getGeometryWrapper();
         try {
             return targetGeometryWrapper.within(geometryWrapper);

@@ -44,7 +44,7 @@ public abstract class GenericCardinalGeomPropertyFunction extends GenericSpatial
     }
 
     @Override
-    protected boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
+    protected boolean checkSecondFilter(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
         //Test Geometry against the Geometry from Object to see if it is a match.
         //Used when checking against bound Subjects.
         SearchEnvelope searchEnvelope = spatialArguments.getSearchEnvelope();

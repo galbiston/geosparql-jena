@@ -35,6 +35,11 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
     private static final int LIMIT_POS = 1;
 
     @Override
+    protected boolean requireSecondFilter() {
+        return false;
+    }
+
+    @Override
     protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
 
         try {

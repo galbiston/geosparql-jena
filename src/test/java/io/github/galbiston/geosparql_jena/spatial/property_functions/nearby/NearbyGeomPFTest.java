@@ -342,11 +342,11 @@ public class NearbyGeomPFTest {
     }
 
     /**
-     * Test of testRelation method, of class NearbyGeomPF.
+     * Test of checkSecondFilter method, of class NearbyGeomPF.
      */
     @Test
-    public void testTestRelation() {
-        System.out.println("testRelation");
+    public void testCheckSecondFilter() {
+        System.out.println("checkSecondFilter");
 
         NearbyGeomPF instance = new NearbyGeomPF();
 
@@ -370,7 +370,7 @@ public class NearbyGeomPFTest {
 
         //Test arguments
         boolean expResult = true;
-        boolean result = instance.testRelation(spatialArguments, targetGeometryWrapper);
+        boolean result = instance.checkSecondFilter(spatialArguments, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -378,11 +378,11 @@ public class NearbyGeomPFTest {
     }
 
     /**
-     * Test of testRelation method, of class NearbyGeomPF.
+     * Test of checkSecondFilter method, of class NearbyGeomPF.
      */
     @Test
-    public void testTestRelation_fail() {
-        System.out.println("testRelation_fail");
+    public void testCheckSecondFilter_fail() {
+        System.out.println("checkSecondFilter_fail");
 
         NearbyGeomPF instance = new NearbyGeomPF();
 
@@ -406,7 +406,7 @@ public class NearbyGeomPFTest {
 
         //Test arguments
         boolean expResult = false;
-        boolean result = instance.testRelation(spatialArguments, targetGeometryWrapper);
+        boolean result = instance.checkSecondFilter(spatialArguments, targetGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

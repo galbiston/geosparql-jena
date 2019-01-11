@@ -50,8 +50,6 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     private SpatialIndex spatialIndex;
     private SpatialArguments spatialArguments;
 
-    protected abstract boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper);
-
     @Override
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
 
@@ -116,7 +114,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
                 Triple triple = geometryLiteralTriples.next();
                 Node geometryLiteral = triple.getObject();
                 GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(geometryLiteral);
-                isMatched = testRelation(spatialArguments, targetGeometryWrapper);
+                isMatched = checkSecondFilter(spatialArguments, targetGeometryWrapper);
                 if (isMatched) {
                     //Stop checking when match is true.
                     break;
@@ -128,6 +126,24 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
             throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
+
+    /**
+     * Closer check of relation of target GeometryWrapper.
+     *
+     * @param spatialArguments
+     * @param targetGeometryWrapper
+     * @return
+     */
+    protected abstract boolean checkSecondFilter(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper);
+
+    /**
+     * Unbound values being retrieved may require a closer check.<br>
+     * SpatialIndex uses bounding box to retrieve objects which may be over
+     * generous or produce some false positives. Seconds
+     *
+     * @return
+     */
+    protected abstract boolean requireSecondFilter();
 
     private QueryIterator checkUnbound(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 
@@ -143,8 +159,16 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         Var subjectVar = Var.alloc(subject.getName());
         int count = 0;
         for (Resource feature : features) {
-            //Check all the serialiazations of the Feature in a fine-grained test.
-            boolean isMatched = checkBound(execCxt, feature.asNode());
+
+            boolean isMatched;
+
+            if (requireSecondFilter()) {
+                //Check all the GeometryLiterals of the Feature in a fine-grained test.
+                isMatched = checkBound(execCxt, feature.asNode());
+            } else {
+                //Second filter is not required so accept the case.
+                isMatched = true;
+            }
 
             if (isMatched) {
                 count++; //Exit on limit of zero.
