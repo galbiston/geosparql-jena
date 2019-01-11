@@ -30,12 +30,12 @@ import org.apache.jena.sparql.util.FmtUtils;
  */
 public class ConvertLatLonBox {
 
-    private static final String PREFIX = "<" + SRS_URI.WGS84_CRS + "> POLYGON(";
+    private static final String PREFIX = "<" + SRS_URI.WGS84_CRS + "> POLYGON((";
 
     public static final String toWKT(float latMin, float lonMin, float latMax, float lonMax) {
         ConvertLatLon.checkBounds(latMin, lonMin);
         ConvertLatLon.checkBounds(latMax, lonMax);
-        return PREFIX + latMin + " " + lonMin + ", " + latMin + " " + lonMax + ", " + latMax + " " + lonMax + ", " + latMax + " " + lonMin + ", " + latMin + " " + lonMin + ")";
+        return PREFIX + latMin + " " + lonMin + ", " + latMax + " " + lonMin + ", " + latMax + " " + lonMax + ", " + latMin + " " + lonMax + ", " + latMin + " " + lonMin + "))";
     }
 
     public static final Literal toLiteral(float latMin, float lonMin, float latMax, float lonMax) {
