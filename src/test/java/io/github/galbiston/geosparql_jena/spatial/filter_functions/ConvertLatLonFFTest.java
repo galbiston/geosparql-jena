@@ -16,10 +16,6 @@
 package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
@@ -103,54 +99,6 @@ public class ConvertLatLonFFTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         //assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of toWKT method, of class ConvertLatLonFF.
-     */
-    @Test
-    public void testToWKT() {
-        System.out.println("toWKT");
-        float lat = 10.0F;
-        float lon = 20.0F;
-        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)";
-        String result = ConvertLatLonFF.toWKT(lat, lon);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of toLiteral method, of class ConvertLatLonFF.
-     */
-    @Test
-    public void testToLiteral() {
-        System.out.println("toLiteral");
-        float lat = 10.0F;
-        float lon = 20.0F;
-        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
-        Literal result = ConvertLatLonFF.toLiteral(lat, lon);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of convert method, of class ConvertLatLonFF.
-     */
-    @Test
-    public void testConvert() {
-        System.out.println("convert");
-        Node n1 = NodeValue.makeFloat(10.0f).asNode();
-        Node n2 = NodeValue.makeFloat(20.0f).asNode();
-        Node expResult = NodeFactory.createLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
-        Node result = ConvertLatLonFF.convert(n1, n2);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
     }
 
 }

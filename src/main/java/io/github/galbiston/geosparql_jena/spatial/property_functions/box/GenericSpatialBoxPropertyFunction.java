@@ -16,8 +16,8 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLonBox;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialGeomPropertyFunction;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.List;
@@ -73,7 +73,7 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
                 limit = DEFAULT_LIMIT;
             }
 
-            Node geometryNode = ConvertLatLonBoxFF.convert(latMin, lonMin, latMax, lonMax);
+            Node geometryNode = ConvertLatLonBox.convert(latMin, lonMin, latMax, lonMax);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
             SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);

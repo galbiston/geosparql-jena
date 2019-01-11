@@ -17,8 +17,8 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLonBox;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.Arrays;
 import java.util.List;
@@ -83,7 +83,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
@@ -118,7 +118,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
@@ -153,7 +153,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
@@ -188,7 +188,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
@@ -223,7 +223,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
@@ -258,7 +258,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
@@ -293,7 +293,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
@@ -328,7 +328,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
@@ -363,7 +363,7 @@ public class GenericSpatialBoxPropertyFunctionTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
         SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 

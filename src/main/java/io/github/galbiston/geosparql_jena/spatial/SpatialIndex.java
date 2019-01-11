@@ -19,7 +19,6 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -255,7 +254,7 @@ public class SpatialIndex implements Serializable {
             Literal lat = feature.getProperty(SpatialExtension.GEO_LAT_PROP).getLiteral();
             Literal lon = feature.getProperty(SpatialExtension.GEO_LONG_PROP).getLiteral();
 
-            Literal latLonPoint = ConvertLatLonFF.toLiteral(lat.getFloat(), lon.getFloat());
+            Literal latLonPoint = ConvertLatLon.toLiteral(lat.getFloat(), lon.getFloat());
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(latLonPoint);
 
             Envelope envelope = geometryWrapper.getEnvelope();

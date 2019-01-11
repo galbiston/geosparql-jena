@@ -16,8 +16,8 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import static io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction.DEFAULT_LIMIT;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.List;
@@ -70,7 +70,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
                 limit = DEFAULT_LIMIT;
             }
 
-            Node geometryNode = ConvertLatLonFF.convert(lat, lon);
+            Node geometryNode = ConvertLatLon.convert(lat, lon);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
             SearchEnvelope searchEnvelope = buildSearchEnvelope(geometryWrapper);

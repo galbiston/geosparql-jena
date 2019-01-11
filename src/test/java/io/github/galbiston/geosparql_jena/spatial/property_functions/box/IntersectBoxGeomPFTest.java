@@ -18,10 +18,10 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLonBox;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,8 +89,8 @@ public class IntersectBoxGeomPFTest {
         float latMax = 2;
         float lonMax = 2;
 
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
-        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal targetGeometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList(geometry.asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
@@ -128,8 +128,8 @@ public class IntersectBoxGeomPFTest {
         float latMax = 2;
         float lonMax = 2;
 
-        Literal geometry = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
-        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
+        Literal targetGeometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList(geometry.asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);

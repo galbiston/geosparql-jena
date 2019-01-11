@@ -19,10 +19,10 @@ import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,7 +86,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.METRE_URL;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -116,7 +116,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.METRE_URL;
         int limit = -1;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI));
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -146,7 +146,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.KILOMETER_URL;
         int limit = -1;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -176,7 +176,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.KILOMETER_URL;
         int limit = -1;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -206,7 +206,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.METRE_URL;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode(), NodeValue.makeBoolean(false).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -236,7 +236,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.METRE_URL;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeString("0").asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -266,7 +266,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.METRE_URL;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeString("1").asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -296,7 +296,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.METRE_URL;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeString("5000").asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -326,7 +326,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.METRE_URL;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeValue.makeString(unitsURI).asNode(), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 
@@ -356,7 +356,7 @@ public class NearbyPFTest {
         String unitsURI = Unit_URI.METRE_URL;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode(), NodeValue.makeFloat(radius).asNode(), NodeFactory.createURI(unitsURI), NodeValue.makeString("10").asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
 

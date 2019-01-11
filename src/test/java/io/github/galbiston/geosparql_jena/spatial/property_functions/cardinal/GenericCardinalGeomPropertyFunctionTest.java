@@ -17,7 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +72,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
         //Geometry and Envelope parameters
         float lat = 0;
         float lon = 1;
-        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal targetGeometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
@@ -103,7 +103,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
         //Geometry and Envelope parameters
         float lat = 0;
         float lon = 1;
-        Literal targetGeometry = ConvertLatLonFF.toLiteral(lat - 10f, lon);
+        Literal targetGeometry = ConvertLatLon.toLiteral(lat - 10f, lon);
 
         List<Node> objectNodes = Arrays.asList(NodeValue.makeFloat(lat).asNode(), NodeValue.makeFloat(lon).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);

@@ -16,10 +16,6 @@
 package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
@@ -52,60 +48,6 @@ public class ConvertLatLonBoxFFTest {
 
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of toWKT method, of class ConvertLatLonBoxFF.
-     */
-    @Test
-    public void testToWKT() {
-        System.out.println("toWKT");
-        float latMin = 0.0F;
-        float lonMin = 0.0F;
-        float latMax = 10.0F;
-        float lonMax = 10.0F;
-        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON(0.0 0.0, 0.0 10.0, 10.0 10.0, 10.0 0.0, 0.0 0.0)";
-        String result = ConvertLatLonBoxFF.toWKT(latMin, lonMin, latMax, lonMax);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of toLiteral method, of class ConvertLatLonBoxFF.
-     */
-    @Test
-    public void testToLiteral() {
-        System.out.println("toLiteral");
-        float latMin = 0.0F;
-        float lonMin = 0.0F;
-        float latMax = 10.0F;
-        float lonMax = 10.0F;
-        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON(0.0 0.0, 0.0 10.0, 10.0 10.0, 10.0 0.0, 0.0 0.0)", WKTDatatype.INSTANCE);
-        Literal result = ConvertLatLonBoxFF.toLiteral(latMin, lonMin, latMax, lonMax);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of convert method, of class ConvertLatLonBoxFF.
-     */
-    @Test
-    public void testConvert() {
-        System.out.println("convert");
-        Node n1 = NodeValue.makeFloat(0.0f).asNode();
-        Node n2 = NodeValue.makeFloat(0.0f).asNode();
-        Node n3 = NodeValue.makeFloat(10.0f).asNode();
-        Node n4 = NodeValue.makeFloat(10.0f).asNode();
-        Node expResult = NodeFactory.createLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON(0.0 0.0, 0.0 10.0, 10.0 10.0, 10.0 0.0, 0.0 0.0)", WKTDatatype.INSTANCE);
-        Node result = ConvertLatLonBoxFF.convert(n1, n2, n3, n4);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
     }
 
     /**

@@ -17,8 +17,8 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxGeomPF;
 import java.util.Arrays;
 import java.util.List;
@@ -75,7 +75,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
         float lon = 1.0f;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
@@ -108,7 +108,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
         float lon = 1.0f;
         int limit = -1;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList(geometry.asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
@@ -141,7 +141,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
         float lon = 1.0f;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList();
         PropFuncArg object = new PropFuncArg(objectNodes);
@@ -174,7 +174,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
         float lon = 1.0f;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeInteger(limit).asNode(), NodeValue.makeBoolean(false).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
@@ -207,7 +207,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
         float lon = 1.0f;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList(NodeValue.makeString("Geometry").asNode(), NodeValue.makeInteger(limit).asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);
@@ -240,7 +240,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
         float lon = 1.0f;
         int limit = 10;
 
-        Literal geometry = ConvertLatLonFF.toLiteral(lat, lon);
+        Literal geometry = ConvertLatLon.toLiteral(lat, lon);
 
         List<Node> objectNodes = Arrays.asList(geometry.asNode(), NodeValue.makeString("10").asNode());
         PropFuncArg object = new PropFuncArg(objectNodes);

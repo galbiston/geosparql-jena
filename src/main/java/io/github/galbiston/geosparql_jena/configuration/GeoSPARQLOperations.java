@@ -23,7 +23,7 @@ import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIn
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEO_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -512,25 +512,29 @@ public class GeoSPARQLOperations {
             ResIterator resIt = model.listSubjectsWithProperty(SpatialExtension.GEO_LAT_PROP);
             while (resIt.hasNext()) {
                 Resource feature = resIt.nextResource();
-                if (feature.hasProperty(SpatialExtension.GEO_LONG_PROP)) {
+                if (feature.hasProperty(SpatialExtension.GEO_LONG_PROP) && feature.hasProperty(SpatialExtension.GEO_LAT_PROP)) {
 
                     //Create a GeometryLiteral from Lat/Lon
                     Literal lat = feature.getProperty(SpatialExtension.GEO_LAT_PROP).getLiteral();
                     Literal lon = feature.getProperty(SpatialExtension.GEO_LONG_PROP).getLiteral();
-                    Literal latLonPoint = ConvertLatLonFF.toLiteral(lat.getFloat(), lon.getFloat());
+                    try {
+                        Literal latLonPoint = ConvertLatLon.toLiteral(lat.getFloat(), lon.getFloat());
 
-                    //Create a Geometry - re-use Feature if a URI or build a URI for blank node.
-                    String geometryURI;
-                    if (feature.isURIResource()) {
-                        geometryURI = feature.getURI() + "-Geom-" + UUID.randomUUID().toString();
-                    } else {
-                        geometryURI = GEO_URI + "Geom-" + UUID.randomUUID().toString();
+                        //Create a Geometry - re-use Feature if a URI or build a URI for blank node.
+                        String geometryURI;
+                        if (feature.isURIResource()) {
+                            geometryURI = feature.getURI() + "-Geom-" + UUID.randomUUID().toString();
+                        } else {
+                            geometryURI = GEO_URI + "Geom-" + UUID.randomUUID().toString();
+                        }
+                        Resource geometry = ResourceFactory.createResource(geometryURI);
+
+                        //Add Geometry to Feature and GeometryLiteral to Geometry.
+                        feature.addProperty(Geo.HAS_GEOMETRY_PROP, geometry);
+                        geometry.addLiteral(Geo.HAS_SERIALIZATION_PROP, latLonPoint);
+                    } catch (DatatypeFormatException ex) {
+                        LOGGER.error("Feature: {} has geo lat/lon out of bounds. Lat: {}, Lon: {}", feature, lat, lon);
                     }
-                    Resource geometry = ResourceFactory.createResource(geometryURI);
-
-                    //Add Geometry to Feature and GeometryLiteral to Geometry.
-                    feature.addProperty(Geo.HAS_GEOMETRY_PROP, geometry);
-                    geometry.addLiteral(Geo.HAS_SERIALIZATION_PROP, latLonPoint);
                 }
             }
         }

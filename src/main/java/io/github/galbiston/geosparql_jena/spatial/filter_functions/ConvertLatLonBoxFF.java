@@ -15,15 +15,11 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
-import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
-import org.apache.jena.graph.Node;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLonBox;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.function.FunctionBase4;
-import org.apache.jena.sparql.util.FmtUtils;
 
 /**
  *
@@ -31,47 +27,13 @@ import org.apache.jena.sparql.util.FmtUtils;
  */
 public class ConvertLatLonBoxFF extends FunctionBase4 {
 
-    private static final String PREFIX = "<" + SRS_URI.WGS84_CRS + "> POLYGON(";
-
-    public static final String toWKT(float latMin, float lonMin, float latMax, float lonMax) {
-        return PREFIX + latMin + " " + lonMin + ", " + latMin + " " + lonMax + ", " + latMax + " " + lonMax + ", " + latMax + " " + lonMin + ", " + latMin + " " + lonMin + ")";
-    }
-
-    public static final Literal toLiteral(float latMin, float lonMin, float latMax, float lonMax) {
-        String wktPolygon = toWKT(latMin, lonMin, latMax, lonMax);
-        return ResourceFactory.createTypedLiteral(wktPolygon, WKTDatatype.INSTANCE);
-    }
-
-    public static final Node convert(Node n1, Node n2, Node n3, Node n4) {
-        ConvertLatLonBoxFF convertLatLonBoxFF = new ConvertLatLonBoxFF();
-        NodeValue result = convertLatLonBoxFF.exec(NodeValue.makeNode(n1), NodeValue.makeNode(n2), NodeValue.makeNode(n3), NodeValue.makeNode(n4));
-        return result.asNode();
-    }
-
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3, NodeValue v4) {
-        if (!v1.isNumber()) {
-            throw new ExprEvalException("Not a number: " + FmtUtils.stringForNode(v1.asNode()));
+        try {
+            NodeValue result = ConvertLatLonBox.convert(v1, v2, v3, v4);
+            return result;
+        } catch (DatatypeFormatException ex) {
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
-
-        if (!v2.isNumber()) {
-            throw new ExprEvalException("Not a number: " + FmtUtils.stringForNode(v2.asNode()));
-        }
-
-        if (!v3.isNumber()) {
-            throw new ExprEvalException("Not a number: " + FmtUtils.stringForNode(v3.asNode()));
-        }
-
-        if (!v4.isNumber()) {
-            throw new ExprEvalException("Not a number: " + FmtUtils.stringForNode(v4.asNode()));
-        }
-
-        float latMin = v1.getFloat();
-        float lonMin = v2.getFloat();
-        float latMax = v3.getFloat();
-        float lonMax = v4.getFloat();
-        String wktPolygon = toWKT(latMin, lonMin, latMax, lonMax);
-
-        return NodeValue.makeNode(wktPolygon, WKTDatatype.INSTANCE);
     }
 }
