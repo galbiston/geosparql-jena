@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,7 +38,6 @@ import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.pfunction.PFuncSimpleAndList;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -51,8 +51,6 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     private SpatialArguments spatialArguments;
 
     protected abstract boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper);
-
-    protected abstract HashSet<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope);
 
     @Override
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
@@ -139,7 +137,8 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         }
 
         //Find all Features in the spatial index which are within the rough search envelope.
-        HashSet<Resource> features = checkSearchEnvelope(spatialIndex, spatialArguments.envelope);
+        SearchEnvelope searchEnvelope = spatialArguments.searchEnvelope;
+        HashSet<Resource> features = searchEnvelope.check(spatialIndex);
 
         Var subjectVar = Var.alloc(subject.getName());
         int count = 0;

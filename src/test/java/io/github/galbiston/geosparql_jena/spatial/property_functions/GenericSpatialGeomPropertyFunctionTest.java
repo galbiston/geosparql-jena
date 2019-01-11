@@ -34,7 +34,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -83,10 +82,10 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -116,10 +115,10 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -149,10 +148,10 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -182,10 +181,10 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -215,10 +214,10 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -248,10 +247,10 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);

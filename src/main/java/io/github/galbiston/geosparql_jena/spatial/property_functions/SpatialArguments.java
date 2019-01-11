@@ -16,8 +16,8 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import java.util.Objects;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -27,12 +27,12 @@ public class SpatialArguments {
 
     protected final int limit;
     protected final GeometryWrapper geometryWrapper;
-    protected final Envelope envelope;
+    protected final SearchEnvelope searchEnvelope;
 
-    public SpatialArguments(int limit, GeometryWrapper geometryWrapper, Envelope envelope) {
+    public SpatialArguments(int limit, GeometryWrapper geometryWrapper, SearchEnvelope searchEnvelope) {
         this.limit = limit;
         this.geometryWrapper = geometryWrapper;
-        this.envelope = envelope;
+        this.searchEnvelope = searchEnvelope;
     }
 
     public int getLimit() {
@@ -43,21 +43,21 @@ public class SpatialArguments {
         return geometryWrapper;
     }
 
-    public Envelope getEnvelope() {
-        return envelope;
+    public SearchEnvelope getSearchEnvelope() {
+        return searchEnvelope;
     }
 
     @Override
     public String toString() {
-        return "SpatialArguments{" + "limit=" + limit + ", geometryWrapper=" + geometryWrapper + ", envelope=" + envelope + '}';
+        return "SpatialArguments{" + "limit=" + limit + ", geometryWrapper=" + geometryWrapper + ", searchEnvelope=" + searchEnvelope + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 43 * hash + this.limit;
-        hash = 43 * hash + Objects.hashCode(this.geometryWrapper);
-        hash = 43 * hash + Objects.hashCode(this.envelope);
+        int hash = 5;
+        hash = 53 * hash + this.limit;
+        hash = 53 * hash + Objects.hashCode(this.geometryWrapper);
+        hash = 53 * hash + Objects.hashCode(this.searchEnvelope);
         return hash;
     }
 
@@ -79,7 +79,7 @@ public class SpatialArguments {
         if (!Objects.equals(this.geometryWrapper, other.geometryWrapper)) {
             return false;
         }
-        return Objects.equals(this.envelope, other.envelope);
+        return Objects.equals(this.searchEnvelope, other.searchEnvelope);
     }
 
 }

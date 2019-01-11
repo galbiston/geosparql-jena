@@ -17,17 +17,13 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
-import java.util.HashSet;
 import java.util.List;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -65,21 +61,16 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
 
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLit);
 
-            Envelope envelope = buildSearchEnvelope(geometryWrapper);
+            SearchEnvelope searchEnvelope = buildSearchEnvelope(geometryWrapper);
 
-            return new SpatialArguments(limit, geometryWrapper, envelope);
+            return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);
         }
     }
 
-    protected Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
+    protected SearchEnvelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
         return SearchEnvelope.build(geometryWrapper);
     }
 
-    @Override
-    protected HashSet<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope) {
-        HashSet<Resource> features = spatialIndex.query(envelope);
-        return features;
-    }
 }

@@ -16,6 +16,7 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import static io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction.DEFAULT_LIMIT;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
@@ -26,7 +27,6 @@ import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -73,9 +73,9 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
             Node geometryNode = ConvertLatLonFF.convert(lat, lon);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-            Envelope envelope = buildSearchEnvelope(geometryWrapper);
+            SearchEnvelope searchEnvelope = buildSearchEnvelope(geometryWrapper);
 
-            return new SpatialArguments(limit, geometryWrapper, envelope);
+            return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);
         }

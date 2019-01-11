@@ -29,7 +29,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -64,8 +63,8 @@ public class WestPFTest {
         System.out.println("buildSearchEnvelope");
         GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
         WestPF instance = new WestPF();
-        Envelope expResult = SearchEnvelope.build(geometryWrapper, CardinalDirection.WEST);
-        Envelope result = instance.buildSearchEnvelope(geometryWrapper);
+        SearchEnvelope expResult = SearchEnvelope.build(geometryWrapper, CardinalDirection.WEST);
+        SearchEnvelope result = instance.buildSearchEnvelope(geometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -83,9 +82,9 @@ public class WestPFTest {
         //Search Envelope
         GeometryWrapper geometryWrapper = SpatialIndexTestData.PERTH_GEOMETRY_WRAPPER;
         WestPF instance = new WestPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper); //Needed to initialise the search.
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper); //Needed to initialise the search.
         HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.LONDON_FEATURE, SpatialIndexTestData.PERTH_FEATURE));
-        HashSet<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
+        HashSet<Resource> result = searchEnvelope.check(spatialIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -103,9 +102,9 @@ public class WestPFTest {
         //Search Envelope
         GeometryWrapper geometryWrapper = SpatialIndexTestData.HONOLULU_GEOMETRY_WRAPPER;
         WestPF instance = new WestPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper); //Needed to initialise the search.
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper); //Needed to initialise the search.
         HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.AUCKLAND_FEATURE, SpatialIndexTestData.PERTH_FEATURE, SpatialIndexTestData.HONOLULU_FEATURE));
-        HashSet<Resource> result = instance.checkSearchEnvelope(spatialIndex, envelope);
+        HashSet<Resource> result = searchEnvelope.check(spatialIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

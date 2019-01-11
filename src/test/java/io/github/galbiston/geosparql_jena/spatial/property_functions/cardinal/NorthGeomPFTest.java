@@ -25,7 +25,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -60,8 +59,8 @@ public class NorthGeomPFTest {
         System.out.println("buildSearchEnvelope");
         GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
         NorthGeomPF instance = new NorthGeomPF();
-        Envelope expResult = SearchEnvelope.build(geometryWrapper, CardinalDirection.NORTH);
-        Envelope result = instance.buildSearchEnvelope(geometryWrapper);
+        SearchEnvelope expResult = SearchEnvelope.build(geometryWrapper, CardinalDirection.NORTH);
+        SearchEnvelope result = instance.buildSearchEnvelope(geometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

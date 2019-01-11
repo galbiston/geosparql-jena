@@ -27,7 +27,6 @@ import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -91,9 +90,9 @@ public class NearbyPF extends NearbyGeomPF {
             Node geometryNode = ConvertLatLonFF.convert(lat, lon);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-            Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+            SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-            return new SpatialArguments(limit, geometryWrapper, envelope);
+            return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);
         }

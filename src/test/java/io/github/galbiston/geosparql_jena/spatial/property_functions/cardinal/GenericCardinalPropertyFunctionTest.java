@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.Arrays;
@@ -33,7 +34,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -81,8 +81,8 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper);
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -111,8 +111,8 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper);
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -141,8 +141,8 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper);
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -171,8 +171,8 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper);
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -201,8 +201,8 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper);
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -231,8 +231,8 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper);
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -261,8 +261,8 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        Envelope envelope = instance.buildSearchEnvelope(geometryWrapper);
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);

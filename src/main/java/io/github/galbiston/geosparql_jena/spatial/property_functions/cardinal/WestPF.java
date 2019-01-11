@@ -18,10 +18,6 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.CardinalDirection;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
-import java.util.HashSet;
-import org.apache.jena.rdf.model.Resource;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -29,21 +25,10 @@ import org.locationtech.jts.geom.Envelope;
  */
 public class WestPF extends GenericCardinalPropertyFunction {
 
-    private Envelope wrapEnvelope;
-
     @Override
-    protected Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
-        Envelope searchEnvelope = SearchEnvelope.build(geometryWrapper, CardinalDirection.WEST);
-        wrapEnvelope = SearchEnvelope.buildWrap(geometryWrapper, CardinalDirection.WEST);
+    protected SearchEnvelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, CardinalDirection.WEST);
         return searchEnvelope;
-    }
-
-    @Override
-    protected HashSet<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope) {
-        HashSet<Resource> features = spatialIndex.query(envelope);
-        HashSet<Resource> wrapFeatures = spatialIndex.query(wrapEnvelope);
-        features.addAll(wrapFeatures);
-        return features;
     }
 
 }

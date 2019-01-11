@@ -17,20 +17,16 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.nearby;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
-import java.util.HashSet;
 import java.util.List;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -91,9 +87,9 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
 
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLit);
 
-            Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+            SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
-            return new SpatialArguments(limit, geometryWrapper, envelope);
+            return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);
         }
@@ -103,12 +99,6 @@ public class NearbyGeomPF extends GenericSpatialPropertyFunction {
     protected boolean testRelation(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
         GeometryWrapper geometryWrapper = spatialArguments.getGeometryWrapper();
         return NearbyFF.relate(geometryWrapper, targetGeometryWrapper, radius, unitsURI);
-    }
-
-    @Override
-    protected HashSet<Resource> checkSearchEnvelope(SpatialIndex spatialIndex, Envelope envelope) {
-        HashSet<Resource> features = spatialIndex.query(envelope);
-        return features;
     }
 
 }

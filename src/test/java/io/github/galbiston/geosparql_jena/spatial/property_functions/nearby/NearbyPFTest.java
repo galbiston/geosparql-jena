@@ -35,7 +35,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -81,10 +80,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -111,10 +110,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -141,10 +140,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -171,10 +170,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -201,10 +200,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -231,10 +230,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -261,10 +260,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -291,10 +290,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -321,10 +320,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);
@@ -351,10 +350,10 @@ public class NearbyPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        Envelope envelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, radius, unitsURI);
 
         NearbyPF instance = new NearbyPF();
-        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, envelope);
+        SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         SpatialArguments result = instance.extractObjectArguments(predicate, object);
 
         //System.out.println("Exp: " + expResult);

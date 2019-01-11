@@ -27,7 +27,6 @@ import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PropFuncArg;
 import org.apache.jena.sparql.util.FmtUtils;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -77,9 +76,9 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
             Node geometryNode = ConvertLatLonBoxFF.convert(latMin, lonMin, latMax, lonMax);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-            Envelope envelope = SearchEnvelope.build(geometryWrapper);
+            SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
 
-            return new SpatialArguments(limit, geometryWrapper, envelope);
+            return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);
         }

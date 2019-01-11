@@ -18,7 +18,6 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.CardinalDirection;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import org.locationtech.jts.geom.Envelope;
 
 /**
  *
@@ -27,7 +26,7 @@ import org.locationtech.jts.geom.Envelope;
 public class NorthGeomPF extends GenericCardinalGeomPropertyFunction {
 
     @Override
-    protected Envelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
+    protected SearchEnvelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
         return SearchEnvelope.build(geometryWrapper, CardinalDirection.NORTH);
     }
 
