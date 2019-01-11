@@ -1,0 +1,158 @@
+/*
+ * Copyright 2019 .
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.github.galbiston.geosparql_jena.implementation;
+
+import static io.github.galbiston.geosparql_jena.implementation.GreatCircleDistance.EARTH_RADIUS;
+import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+
+/**
+ *
+ *
+ */
+public class GreatCirclePointDistance {
+
+    private final double distance;
+    private final double angDistance;
+    private final double startLat;
+    private final double startLon;
+    private final double latRad;
+    private final double lonRad;
+    private final double sinStartLat;
+    private final double cosStartLat;
+    private final double sinAngDistance;
+    private final double cosAngDistance;
+
+    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
+
+    public GreatCirclePointDistance(double startLat, double startLon, double distance) {
+        this.distance = distance;
+        this.startLat = startLat;
+        this.startLon = startLon;
+
+        this.angDistance = distance / EARTH_RADIUS;
+        this.latRad = Math.toRadians(startLat);
+        this.lonRad = Math.toRadians(startLon);
+
+        this.sinStartLat = Math.sin(latRad);
+        this.cosStartLat = Math.cos(latRad);
+        this.sinAngDistance = Math.sin(angDistance);
+        this.cosAngDistance = Math.cos(angDistance);
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public double getAngDistance() {
+        return angDistance;
+    }
+
+    public double getStartLat() {
+        return startLat;
+    }
+
+    public double getStartLon() {
+        return startLon;
+    }
+
+    public double getLatRad() {
+        return latRad;
+    }
+
+    public double getLonRad() {
+        return lonRad;
+    }
+
+    public double getSinStartLat() {
+        return sinStartLat;
+    }
+
+    public double getCosStartLat() {
+        return cosStartLat;
+    }
+
+    public double getSinAngDistance() {
+        return sinAngDistance;
+    }
+
+    public double getCosAngDistance() {
+        return cosAngDistance;
+    }
+
+    @Override
+    public String toString() {
+        return "GreatCirclePointDistance{" + "distance=" + distance + ", angDistance=" + angDistance + ", startLat=" + startLat + ", startLon=" + startLon + ", latRad=" + latRad + ", lonRad=" + lonRad + ", sinStartLat=" + sinStartLat + ", cosStartLat=" + cosStartLat + ", sinAngDistance=" + sinAngDistance + ", cosAngDistance=" + cosAngDistance + '}';
+    }
+
+    public double latitude(double bearingRad) {
+        return Math.asin(sinStartLat * cosAngDistance + cosStartLat * sinAngDistance * Math.cos(bearingRad));
+    }
+
+    public double longitude(double endLatRad, double bearingRad) {
+        return lonRad + Math.atan2(Math.sin(bearingRad) * sinAngDistance * cosStartLat, cosAngDistance - sinStartLat * Math.sin(endLatRad));
+    }
+
+    public static final Point radToPoint(double latRad, double lonRad) {
+        double lat = Math.toDegrees(latRad);
+        double lon = (Math.toDegrees(lonRad) + 540) % 360 - 180; //Normalise to -180 -> 180.
+        Point point = GEOMETRY_FACTORY.createPoint(new Coordinate(lat, lon));
+        return point;
+    }
+
+    /**
+     * Point (Lat/x,Lon/y) from start Point (Lat/x,Lon/y) following bearing
+     * degrees (clockwise from north) and distance (metres).
+     *
+     * @param startPoint
+     * @param distance
+     * @param bearing
+     * @return
+     */
+    public static final Point getPoint(Point startPoint, double distance, double bearing) {
+
+        double startLat = startPoint.getX();
+        double startLon = startPoint.getY();
+
+        return GreatCirclePointDistance.getPoint(startLat, startLon, distance, bearing);
+    }
+
+    /**
+     * Point (Lat/x,Lon/y) from start Lat/x,Lon/y following bearing degrees
+     * (clockwise from north) and distance (metres).
+     *
+     * @param startLat
+     * @param startLon
+     * @param distance
+     * @param bearing
+     * @return
+     */
+    public static final Point getPoint(double startLat, double startLon, double distance, double bearing) {
+        //Based on: https://www.movable-type.co.uk/scripts/latlong.html
+        double bearingRad = Math.toRadians(bearing);
+        GreatCirclePointDistance pointDistance = new GreatCirclePointDistance(startLat, startLon, distance);
+
+        double endLatRad = pointDistance.latitude(bearingRad);
+
+        double endLonRad = pointDistance.longitude(endLatRad, bearingRad);
+
+        Point endPoint = radToPoint(endLatRad, endLonRad);
+        return endPoint;
+    }
+
+}

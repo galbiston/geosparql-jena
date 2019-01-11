@@ -45,6 +45,7 @@ public class GenericSpatialPropertyFunctionTest {
 
     @BeforeClass
     public static void setUpClass() {
+        GeoSPARQLConfig.setupSpatial();
     }
 
     @AfterClass
@@ -63,33 +64,65 @@ public class GenericSpatialPropertyFunctionTest {
      * Test of execEvaluated method, of class GenericSpatialPropertyFunction.
      */
     @Test
-    public void testExecEvaluated() {
-        System.out.println("execEvaluated");
+    public void testExecEvaluated_none() {
+        System.out.println("execEvaluated_none");
 
-        GeoSPARQLConfig.setupSpatial();
         Dataset dataset = SpatialIndexTestData.createTestDataset();
         SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
         SpatialIndex.setSpatialIndex(dataset, spatialIndex);
 
-        dataset.begin();
-        String query = "PREFIX spatial: <http://jena.apache.org/function/spatial#>\n"
+        String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
                 + "\n"
-                + "SELECT ?subject\n"
+                + "SELECT ?subj\n"
                 + "WHERE{\n"
-                + "    ?subject spatial:nearby(48.857487 2.373047 200) .\n"
-                + "}ORDER by ?subject";
+                + "    ?subj spatial:nearby(48.857487 2.373047 200) .\n"
+                + "}ORDER by ?subj";
 
         List<Resource> result = new ArrayList<>();
         try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
             ResultSet rs = qe.execSelect();
             while (rs.hasNext()) {
                 QuerySolution qs = rs.nextSolution();
-                Resource feature = qs.getResource("feature");
+                Resource feature = qs.getResource("subj");
                 result.add(feature);
             }
         }
 
-        dataset.end();
+        List<Resource> expResult = new ArrayList<>();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of execEvaluated method, of class GenericSpatialPropertyFunction.
+     */
+    @Test
+    public void testExecEvaluated_one() {
+        System.out.println("execEvaluated_one");
+
+        Dataset dataset = SpatialIndexTestData.createTestDataset();
+        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
+        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
+
+        String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
+                + "\n"
+                + "SELECT ?subj\n"
+                + "WHERE{\n"
+                + "    ?subj spatial:nearby(48.857487 2.373047 350) .\n"
+                + "}ORDER by ?subj";
+
+        List<Resource> result = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Resource feature = qs.getResource("subj");
+                result.add(feature);
+            }
+        }
+
         List<Resource> expResult = Arrays.asList(SpatialIndexTestData.LONDON_FEATURE);
 
         //System.out.println("Exp: " + expResult);

@@ -18,6 +18,7 @@ package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -84,6 +85,44 @@ public class NearbyFFTest {
         NodeValue v4 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
         NearbyFF instance = new NearbyFF();
         NodeValue expResult = NodeValue.makeBoolean(true);
+        NodeValue result = instance.exec(v1, v2, v3, v4);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of exec method, of class NearbyFF.
+     */
+    @Test
+    public void testExec_Paris_London() {
+        System.out.println("exec_Paris_London");
+        NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNode();
+        NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNode();
+        NodeValue v3 = NodeValue.makeFloat(345);
+        NodeValue v4 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
+        NearbyFF instance = new NearbyFF();
+        NodeValue expResult = NodeValue.makeBoolean(true);
+        NodeValue result = instance.exec(v1, v2, v3, v4);
+
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of exec method, of class NearbyFF.
+     */
+    @Test
+    public void testExec_Paris_London_fail() {
+        System.out.println("exec_Paris_London_fail");
+        NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNode();
+        NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNode();
+        NodeValue v3 = NodeValue.makeFloat(200);
+        NodeValue v4 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
+        NearbyFF instance = new NearbyFF();
+        NodeValue expResult = NodeValue.makeBoolean(false);
         NodeValue result = instance.exec(v1, v2, v3, v4);
 
         //System.out.println("Exp: " + expResult);

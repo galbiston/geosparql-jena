@@ -64,7 +64,7 @@ public class NearbyFF extends FunctionBase4 {
 
     public static final boolean relate(GeometryWrapper geometry1, GeometryWrapper geometry2, double radius, String unitsURI) {
         try {
-            double distance = geometry1.distance(geometry2, unitsURI);
+            double distance = geometry1.distanceGreatCircle(geometry2, unitsURI);
             return distance < radius;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             throw new ExprEvalException(ex.getMessage() + ": " + geometry1.asLiteral() + ", " + geometry2.asLiteral() + ", " + Double.toString(radius) + ", " + unitsURI, ex);

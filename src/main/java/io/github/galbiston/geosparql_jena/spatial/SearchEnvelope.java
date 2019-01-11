@@ -16,11 +16,13 @@
 package io.github.galbiston.geosparql_jena.spatial;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.GreatCirclePointDistance;
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import java.lang.invoke.MethodHandles;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Point;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -36,7 +38,7 @@ public class SearchEnvelope {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     public static final double OUT_BOUNDS = -9999;
 
-    public static Envelope build(GeometryWrapper geometryWrapper, double radius, String units) {
+    public static Envelope build(GeometryWrapper geometryWrapper, double radius, String unitsURI) {
 
         try {
             //Get the envelope of the target GeometryWrapper and convert that to WGS84, in case it is a complex polygon.
@@ -44,18 +46,68 @@ public class SearchEnvelope {
             //Convert to WGS84.
             GeometryWrapper wgsGeometryWrapper = envelopeGeometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
             Envelope envelope = wgsGeometryWrapper.getEnvelope();
+            double radiusMetres = UnitsOfMeasure.convertToMetres(radius, unitsURI, wgsGeometryWrapper.getLatitude());
 
             //Expand the envelope by the radius distance in all directions,
             //i.e. a bigger box rather than circle. More precise checks made later.
-            Envelope searchEnvelope = new Envelope(envelope);
-            double latitude = wgsGeometryWrapper.getLatitude();
-            double degreeRadius = UnitsOfMeasure.convertToDegrees(radius, units, latitude);
-            searchEnvelope.expandBy(degreeRadius);
+            Envelope searchEnvelope = expandEnvelope(envelope, radiusMetres);
 
             return searchEnvelope;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral(), ex);
         }
+    }
+
+    private static final double NORTH_BEARING = 0;
+    private static final double SOUTH_BEARING = Math.toRadians(180);
+    private static final double EAST_BEARING = Math.toRadians(90);
+    private static final double WEST_BEARING = Math.toRadians(270);
+
+    private static Envelope expandEnvelope(Envelope envelope, double distance) {
+        //Travel out by the radius in the cardinal directions.
+
+        //Envelope is in X/Y coordinate order.
+        double minLon = envelope.getMinX();
+        double minLat = envelope.getMinY();
+        double maxLon = envelope.getMaxX();
+        double maxLat = envelope.getMaxY();
+
+        //Find the extreme values for Lat and Lon.
+        double extLat = Math.abs(maxLat) > Math.abs(minLat) ? maxLat : minLat;
+        double extLon = Math.abs(maxLon) > Math.abs(minLon) ? maxLon : minLon;
+
+        //Find the greatest change: in North then use North bearing or in South then use South bearing.
+        double latBearing;
+        if (extLat > 0) {
+            latBearing = NORTH_BEARING;
+        } else {
+            latBearing = SOUTH_BEARING;
+        }
+
+        //Find the greatest change: in East then use East bearing or in West then use West bearing.
+        double lonBearing;
+        if (extLon > 0) {
+            lonBearing = EAST_BEARING;
+        } else {
+            lonBearing = WEST_BEARING;
+        }
+
+        //Find the new latitiude and longitude by moving the radius distance.
+        //Splitting the calculation will oversize the bounding box by up to a few kilometres for a 100km distance.
+        //However, only calculating what is needed. More precise checks done later.
+        GreatCirclePointDistance pointDistance = new GreatCirclePointDistance(extLat, extLon, distance);
+        double latRad = pointDistance.latitude(latBearing);
+        double lonRad = pointDistance.longitude(latRad, lonBearing);
+
+        Point point = GreatCirclePointDistance.radToPoint(latRad, lonRad);
+
+        //Find the difference between the outer point and the extreme values.
+        double latDiff = Math.abs(extLat - point.getX());
+        double lonDiff = Math.abs(extLon - point.getY());
+
+        //Apply the differences to expand the envelope.
+        Envelope expandedEnvelope = new Envelope(minLon - lonDiff, maxLon + lonDiff, minLat - latDiff, maxLat + latDiff);
+        return expandedEnvelope;
     }
 
     public static Envelope build(GeometryWrapper geometryWrapper) {

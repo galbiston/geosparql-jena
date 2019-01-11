@@ -159,8 +159,8 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Transforms, if necessary, the provided GeometryWrapper according to the
-     * current GeometryWrapper SRS_URI.
+     * Transforms, if necessary, the provided target GeometryWrapper according
+     * to this GeometryWrapper SRS_URI.
      *
      * @param targetGeometryWrapper
      * @return GeometryWrapper after transformation.
@@ -391,7 +391,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Distance defaulting to metres.
+     * Distance (Euclidean) defaulting to metres.
      *
      * @param targetGeometry
      * @return Distance
@@ -403,7 +403,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Distance in the Units of Measure.
+     * Distance (Euclidean) in the Units of Measure.
      *
      * @param targetGeometry
      * @param unitsOfMeasure
@@ -416,7 +416,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Distance in the Units of Measure stated in URI.
+     * Distance (Euclidean) in the Units of Measure stated in URI.
      *
      * @param targetGeometry
      * @param targetDistanceUnitsURI
@@ -440,6 +440,65 @@ public class GeometryWrapper implements Serializable {
             targetDistance = UnitsOfMeasure.conversion(distance, unitsURI, targetDistanceUnitsURI);
         } else {
             targetDistance = UnitsOfMeasure.convertBetween(distance, unitsURI, targetDistanceUnitsURI, isTargetUnitsLinear, getLatitude());
+        }
+
+        return targetDistance;
+    }
+
+    /**
+     * Distance (Great Circle) defaulting to metres from centroid.
+     *
+     * @param targetGeometry
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    public double distanceGreatCircle(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+        return distanceGreatCircle(targetGeometry, Unit_URI.METRE_URL);
+    }
+
+    /**
+     * Distance (Great Circle) in the Units of Measure from centroid.
+     *
+     * @param targetGeometry
+     * @param unitsOfMeasure
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    public double distanceGreatCircle(GeometryWrapper targetGeometry, UnitsOfMeasure unitsOfMeasure) throws FactoryException, MismatchedDimensionException, TransformException {
+        return distanceGreatCircle(targetGeometry, unitsOfMeasure.getUnitURI());
+    }
+
+    /**
+     * Distance (Great Circle) in the Units of Measure stated in URI from
+     * centroid.
+     *
+     * @param targetGeometry
+     * @param targetDistanceUnitsURI
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    public double distanceGreatCircle(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
+
+        GeometryWrapper transformedSourceGeometry = this.transform(SRS_URI.WGS84_CRS);
+        GeometryWrapper transformedTargetGeometry = transformedSourceGeometry.checkTransformCRS(targetGeometry);
+
+        //Find Centroid of shape. Centroid returns in Lon/Lon order.
+        Point point1 = transformedSourceGeometry.xyGeometry.getCentroid();
+        Point point2 = transformedTargetGeometry.xyGeometry.getCentroid();
+
+        double distance = GreatCircleDistance.vincentyFormula(point1.getY(), point1.getX(), point2.getY(), point2.getX());
+
+        double targetDistance;
+        if (isTargetUnitsLinear) {
+            //Target units are linear so straight conversion. Distance is in metres already.
+            targetDistance = UnitsOfMeasure.conversion(distance, Unit_URI.METRE_URL, targetDistanceUnitsURI);
+        } else {
+            targetDistance = UnitsOfMeasure.convertBetween(distance, Unit_URI.METRE_URL, targetDistanceUnitsURI, isTargetUnitsLinear, getLatitude());
         }
 
         return targetDistance;

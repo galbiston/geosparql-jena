@@ -22,6 +22,7 @@ import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.sis.referencing.CRS;
@@ -34,7 +35,9 @@ import org.junit.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
 
 /**
@@ -427,6 +430,27 @@ public class GeometryWrapperTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of distanceGreatCircle method, of class GeometryWrapper.
+     *
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    @Test
+    public void testDistanceGreatCircle() throws FactoryException, MismatchedDimensionException, TransformException {
+        System.out.println("distanceGreatCircle");
+        GeometryWrapper instance = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
+        GeometryWrapper testGeometryWrapper = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER;
+        String unitsURI = Unit_URI.KILOMETER_URL;
+
+        double expResult = 344.155;
+        double result = instance.distanceGreatCircle(testGeometryWrapper, unitsURI);
+
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.1);
     }
 
 }
