@@ -132,7 +132,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     private QueryIterator checkUnbound(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 
         QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
-        if (limit == -1) {
+        if (limit < 0) {
             limit = Integer.MAX_VALUE;
         }
 
