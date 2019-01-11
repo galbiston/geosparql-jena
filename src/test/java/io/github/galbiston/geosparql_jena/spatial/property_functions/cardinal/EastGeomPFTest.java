@@ -128,8 +128,6 @@ public class EastGeomPFTest {
         System.out.println("execEvaluated");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
-        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
-        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
 
         String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
                 + "\n"

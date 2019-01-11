@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
+import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.expr.NodeValue;
@@ -36,6 +37,7 @@ public class ConvertLatLonBoxFFTest {
 
     @BeforeClass
     public static void setUpClass() {
+        GeoSPARQLConfig.setupSpatial();
     }
 
     @AfterClass

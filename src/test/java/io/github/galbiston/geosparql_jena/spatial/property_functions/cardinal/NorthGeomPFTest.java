@@ -19,7 +19,6 @@ import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.CardinalDirection;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,8 +86,6 @@ public class NorthGeomPFTest {
         System.out.println("execEvaluated");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
-        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
-        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
 
         String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
                 + "\n"

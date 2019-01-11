@@ -16,7 +16,6 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
-import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,8 +67,6 @@ public class GenericSpatialPropertyFunctionTest {
         System.out.println("execEvaluated_Nearby_none");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
-        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
-        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
 
         String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
                 + "\n"
@@ -103,8 +100,6 @@ public class GenericSpatialPropertyFunctionTest {
         System.out.println("execEvaluated_Nearby_one");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
-        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
-        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
 
         String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
                 + "\n"
@@ -138,8 +133,6 @@ public class GenericSpatialPropertyFunctionTest {
         System.out.println("execEvaluated_Nearby_one_bound");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
-        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
-        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
 
         String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
                 + "\n"
@@ -174,8 +167,6 @@ public class GenericSpatialPropertyFunctionTest {
         System.out.println("execEvaluated_Nearby_one_bound_fail");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
-        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
-        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
 
         String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
                 + "\n"

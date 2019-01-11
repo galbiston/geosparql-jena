@@ -21,7 +21,6 @@ import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExten
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.ArrayList;
@@ -422,8 +421,6 @@ public class NearbyGeomPFTest {
         System.out.println("execEvaluated");
 
         Dataset dataset = SpatialIndexTestData.createTestDataset();
-        SpatialIndex spatialIndex = SpatialIndexTestData.createTestIndex();
-        SpatialIndex.setSpatialIndex(dataset, spatialIndex);
 
         String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
                 + "\n"
