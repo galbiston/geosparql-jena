@@ -403,4 +403,38 @@ public class NearbyPFTest {
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of execEvaluated method, of class NearbyPF.<br>
+     * Close enough for first filter but rejected by second filter.
+     */
+    @Test
+    public void testExecEvaluated_fail() {
+        System.out.println("execEvaluated_fail");
+
+        Dataset dataset = SpatialIndexTestData.createTestDataset();
+
+        String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
+                + "\n"
+                + "SELECT ?subj\n"
+                + "WHERE{\n"
+                + "    ?subj spatial:nearby(48.857487 2.373047 340) .\n"
+                + "}ORDER by ?subj";
+
+        List<Resource> result = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Resource feature = qs.getResource("subj");
+                result.add(feature);
+            }
+        }
+
+        List<Resource> expResult = new ArrayList<>();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 }

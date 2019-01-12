@@ -447,4 +447,39 @@ public class NearbyGeomPFTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Test of execEvaluated method, of class NearbyGeomPF.<br>
+     * Close enough for first filter but rejected by second filter.
+     */
+    @Test
+    public void testExecEvaluated_fail() {
+        System.out.println("execEvaluated_fail");
+
+        Dataset dataset = SpatialIndexTestData.createTestDataset();
+
+        String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
+                + "\n"
+                + "SELECT ?subj\n"
+                + "WHERE{\n"
+                + "    BIND( \"<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(48.857487 2.373047)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?geom)"
+                + "    ?subj spatial:nearbyGeom(?geom 340) .\n"
+                + "}ORDER by ?subj";
+
+        List<Resource> result = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Resource feature = qs.getResource("subj");
+                result.add(feature);
+            }
+        }
+
+        List<Resource> expResult = new ArrayList<>();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
 }
