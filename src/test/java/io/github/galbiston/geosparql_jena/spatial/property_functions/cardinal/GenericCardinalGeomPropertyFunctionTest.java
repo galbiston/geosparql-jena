@@ -18,6 +18,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +80,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
 
         GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
         NorthPF instance = new NorthPF();
-        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object);
+        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         boolean expResult = true;
         boolean result = instance.checkSecondFilter(spatialArgumemts, targetGeometryWrapper);
@@ -110,7 +111,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
 
         GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
         NorthPF instance = new NorthPF();
-        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object);
+        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         boolean expResult = false;
         boolean result = instance.checkSecondFilter(spatialArgumemts, targetGeometryWrapper);

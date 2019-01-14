@@ -15,10 +15,11 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.GreatCirclePointDistance;
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Objects;
 import org.apache.jena.rdf.model.Resource;
@@ -28,6 +29,8 @@ import org.locationtech.jts.geom.Point;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,22 +40,52 @@ public class SearchEnvelope {
 
     private final Envelope mainEnvelope;
     private final Envelope wrapEnvelope;
+    private final CRSInfo crsInfo;
 
-    protected SearchEnvelope(Envelope envelope) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-        //Check whether Envelope exceeds bounds so requires wrapping.
-        double minX = envelope.getMinX();
-        double maxX = envelope.getMaxX();
-        if (minX < -180) {
-            this.mainEnvelope = new Envelope(-180, maxX, envelope.getMinY(), envelope.getMaxY());
-            this.wrapEnvelope = new Envelope(minX + 360, 180, envelope.getMinY(), envelope.getMaxY());
-        } else if (maxX > 180) {
-            this.mainEnvelope = new Envelope(minX, 180, envelope.getMinY(), envelope.getMaxY());
-            this.wrapEnvelope = new Envelope(-180, maxX - 360, envelope.getMinY(), envelope.getMaxY());
+    protected SearchEnvelope(Envelope envelope, CRSInfo crsInfo) {
+        this.crsInfo = crsInfo;
+
+        //Find the valid range for the envelope.
+        Envelope domainEnvelope = crsInfo.getDomainEnvelope();
+        double domMinX = domainEnvelope.getMinX();
+        double domMaxX = domainEnvelope.getMaxX();
+
+        if (crsInfo.isGeographic()) {
+
+            double domRange = Math.abs(domMaxX) + Math.abs(domMinX);
+
+            //Check whether Envelope exceeds bounds so requires wrapping.
+            double minX = envelope.getMinX();
+            double maxX = envelope.getMaxX();
+            if (minX < domMinX) {
+                this.mainEnvelope = new Envelope(domMinX, maxX, envelope.getMinY(), envelope.getMaxY());
+                this.wrapEnvelope = new Envelope(minX + domRange, domMaxX, envelope.getMinY(), envelope.getMaxY());
+            } else if (maxX > domMaxX) {
+                this.mainEnvelope = new Envelope(minX, domMaxX, envelope.getMinY(), envelope.getMaxY());
+                this.wrapEnvelope = new Envelope(domMinX, maxX - domRange, envelope.getMinY(), envelope.getMaxY());
+            } else {
+                this.mainEnvelope = envelope;
+                this.wrapEnvelope = null;
+            }
+
+            double envRange = Math.abs(minX) + Math.abs(maxX);
+            if (envRange > domRange * 2) {
+                //Will trigger if the envelope tries to wrap around twice.
+                LOGGER.warn("Search Envelope {} is outside of valid domain {} for SRS URI {}.", envelope, domainEnvelope, crsInfo.getSrsURI());
+            }
         } else {
+            //No wrapping required, accept the provided envelope.
             this.mainEnvelope = envelope;
             this.wrapEnvelope = null;
+            double minX = envelope.getMinX();
+            double maxX = envelope.getMaxX();
+            if (minX < domMinX || maxX > domMaxX) {
+                LOGGER.warn("Search Envelope {} is outside of valid domain {} for SRS URI {}.", envelope, domainEnvelope, crsInfo.getSrsURI());
+            }
         }
+
     }
 
     public Envelope getMainEnvelope() {
@@ -61,6 +94,14 @@ public class SearchEnvelope {
 
     public Envelope getWrapEnvelope() {
         return wrapEnvelope;
+    }
+
+    public String getSrsURI() {
+        return crsInfo.getSrsURI();
+    }
+
+    public CRSInfo getCrsInfo() {
+        return crsInfo;
     }
 
     public HashSet<Resource> check(SpatialIndex spatialIndex) {
@@ -113,20 +154,27 @@ public class SearchEnvelope {
         return Objects.equals(this.wrapEnvelope, other.wrapEnvelope);
     }
 
-    public static SearchEnvelope build(GeometryWrapper geometryWrapper, double radius, String unitsURI) {
+    public static SearchEnvelope build(GeometryWrapper geometryWrapper, CRSInfo crsInfo, double radius, String unitsURI) {
 
         try {
-            //Get the envelope of the target GeometryWrapper and convert that to WGS84, in case it is a complex polygon.
+            //Get the envelope of the target GeometryWrapper and convert to SRS URI, in case it is a complex polygon.
             GeometryWrapper envelopeGeometryWrapper = geometryWrapper.envelope();
-            //Convert to WGS84.
-            GeometryWrapper wgsGeometryWrapper = envelopeGeometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
-            Envelope envelope = wgsGeometryWrapper.getEnvelope();
-            double radiusMetres = UnitsOfMeasure.convertToMetres(radius, unitsURI, wgsGeometryWrapper.getLatitude());
+            //Convert to SRS URI.
+            GeometryWrapper srsGeometryWrapper = envelopeGeometryWrapper.convertCRS(crsInfo.getSrsURI());
+            Envelope envelope = srsGeometryWrapper.getEnvelope();
 
             //Expand the envelope by the radius distance in all directions,
             //i.e. a bigger box rather than circle. More precise checks made later.
-            SearchEnvelope searchEnvelope = expandEnvelope(envelope, radiusMetres);
+            SearchEnvelope searchEnvelope;
 
+            if (crsInfo.isGeographic()) {
+                double radiusMetres = UnitsOfMeasure.convertToMetres(radius, unitsURI, srsGeometryWrapper.getLatitude());
+                searchEnvelope = expandGeographicEnvelope(envelope, radiusMetres, crsInfo);
+            } else {
+                String targetUnitsURI = crsInfo.getUnitsOfMeasure().getUnitURI();
+                double targetRadius = UnitsOfMeasure.conversion(radius, unitsURI, targetUnitsURI);
+                searchEnvelope = expandEnvelope(envelope, targetRadius, crsInfo);
+            }
             return searchEnvelope;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral(), ex);
@@ -138,7 +186,7 @@ public class SearchEnvelope {
     private static final double SOUTH_BEARING = Math.toRadians(180);
     private static final double WEST_BEARING = Math.toRadians(270);
 
-    private static SearchEnvelope expandEnvelope(Envelope envelope, double distance) {
+    private static SearchEnvelope expandGeographicEnvelope(Envelope envelope, double distanceMetres, CRSInfo crsInfo) {
         //Travel out by the radius in the cardinal directions.
 
         //Envelope is in X/Y coordinate order.
@@ -170,7 +218,7 @@ public class SearchEnvelope {
         //Find the new latitiude and longitude by moving the radius distance.
         //Splitting the calculation will oversize the bounding box by up to a few kilometres for a 100km distance.
         //However, only calculating what is needed. More precise checks done later.
-        GreatCirclePointDistance pointDistance = new GreatCirclePointDistance(extLat, extLon, distance);
+        GreatCirclePointDistance pointDistance = new GreatCirclePointDistance(extLat, extLon, distanceMetres);
         double latRad = pointDistance.latitude(latBearing);
         double lonRad = pointDistance.longitude(latRad, lonBearing);
 
@@ -187,19 +235,42 @@ public class SearchEnvelope {
         //Apply the differences to expand the envelope.
         Envelope expandedEnvelope = new Envelope(normMinLon, normMaxLon, minLat - latDiff, maxLat + latDiff);
 
-        SearchEnvelope searchEnvelope = new SearchEnvelope(expandedEnvelope);
+        SearchEnvelope searchEnvelope = new SearchEnvelope(expandedEnvelope, crsInfo);
         return searchEnvelope;
     }
 
-    public static SearchEnvelope build(GeometryWrapper geometryWrapper) {
+    private static SearchEnvelope expandEnvelope(Envelope envelope, double distance, CRSInfo crsInfo) {
+        //Travel out by the radius in the cardinal directions.
+
+        //Envelope is in X/Y coordinate order.
+        double x1 = envelope.getMinX() - distance;
+        double y1 = envelope.getMinY() - distance;
+        double x2 = envelope.getMaxX() + distance;
+        double y2 = envelope.getMaxY() + distance;
+
+        Envelope expandedEnvelope = new Envelope(x1, x2, y1, y2);
+
+        SearchEnvelope searchEnvelope = new SearchEnvelope(expandedEnvelope, crsInfo);
+        return searchEnvelope;
+    }
+
+    /**
+     *
+     * @param geometryWrapper
+     * @param crsInfo
+     * @return Search envelope of the geometry in target CRS.
+     */
+    public static SearchEnvelope build(GeometryWrapper geometryWrapper, CRSInfo crsInfo) {
 
         try {
-            //Get the envelope of the target GeometryWrapper and convert that to WGS84, in case it is a complex polygon.
+            //Get the envelope of the target GeometryWrapper and convert that to SRS URI, in case it is a complex polygon.
             GeometryWrapper envelopeGeometryWrapper = geometryWrapper.envelope();
-            //Convert to WGS84.
-            GeometryWrapper wgsGeometryWrapper = envelopeGeometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
-            Envelope envelope = wgsGeometryWrapper.getEnvelope();
-            SearchEnvelope searchEnvelope = new SearchEnvelope(envelope);
+
+            //Convert to SRS URI.
+            GeometryWrapper srsGeometryWrapper = envelopeGeometryWrapper.convertCRS(crsInfo.getSrsURI());
+
+            Envelope envelope = srsGeometryWrapper.getEnvelope();
+            SearchEnvelope searchEnvelope = new SearchEnvelope(envelope, crsInfo);
             return searchEnvelope;
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral(), ex);
@@ -207,27 +278,32 @@ public class SearchEnvelope {
     }
 
     /**
-     * East and West don't wrap across the 180/-180 boundary, see buildWrap().
+     * Build search envelope in the indicated cardinal direction.<br>
+     * Geographic CRS will wrap for half world in East/West directions.<br>
+     * Other CRS will extend to the valid domain.
      *
      * @param geometryWrapper
+     * @param crsInfo
      * @param direction
-     * @return Envelope covering rest of the world.
+     * @return Search envelope in cardinal direction.
      */
-    public static SearchEnvelope build(GeometryWrapper geometryWrapper, CardinalDirection direction) {
+    public static SearchEnvelope build(GeometryWrapper geometryWrapper, CRSInfo crsInfo, CardinalDirection direction) {
 
         try {
-            //Get the envelope of the target GeometryWrapper and convert that to WGS84, in case it is a complex polygon.
+            //Get the envelope of the target GeometryWrapper and convert to SRS URI, in case it is a complex polygon.
             GeometryWrapper envelopeGeometryWrapper = geometryWrapper.envelope();
-            //Convert to WGS84.
-            GeometryWrapper wgsGeometryWrapper = envelopeGeometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
-            Envelope envelope = wgsGeometryWrapper.getEnvelope();
+            //Convert to SRS URI.
+            GeometryWrapper srsGeometryWrapper = envelopeGeometryWrapper.convertCRS(crsInfo.getSrsURI());
+            Envelope envelope = srsGeometryWrapper.getEnvelope();
 
-            double x1 = -180;
-            double x2 = 180;
-            double y1 = -90;
-            double y2 = 90;
+            Envelope domEnvelope = crsInfo.getDomainEnvelope();
 
-            //Exclusive search so anything within or on same axis as a Polygon is excluded.
+            double x1 = domEnvelope.getMinX();
+            double x2 = domEnvelope.getMaxX();
+            double y1 = domEnvelope.getMinY();
+            double y2 = domEnvelope.getMaxY();
+
+            //Exclusive search so anything within envelope of a LineString or Polygon is excluded.
             switch (direction) {
                 case NORTH:
                     y1 = envelope.getMaxY();
@@ -237,17 +313,24 @@ public class SearchEnvelope {
                     break;
                 case EAST:
                     x1 = envelope.getMaxX();
-                    x2 = x1 + 180;
+                    if (crsInfo.isGeographic()) {
+                        //Extend to the Eastern half from the origin.
+                        x2 = x1 + domEnvelope.getMaxX();
+                    }
+
                     break;
                 case WEST:
                     x2 = envelope.getMinX();
-                    x1 = x2 - 180;
+                    if (crsInfo.isGeographic()) {
+                        //Extend to the West half from the origin.
+                        x1 = x2 + domEnvelope.getMinX();
+                    }
                     break;
             }
 
             Envelope cardinalEnvelope = new Envelope(x1, x2, y1, y2);
 
-            return new SearchEnvelope(cardinalEnvelope);
+            return new SearchEnvelope(cardinalEnvelope, crsInfo);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
             throw new ExprEvalException(ex.getMessage() + ": " + geometryWrapper.asLiteral(), ex);
         }

@@ -19,6 +19,7 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxGeomPF;
 import java.util.Arrays;
 import java.util.List;
@@ -82,11 +83,11 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -115,11 +116,11 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -148,11 +149,11 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -181,11 +182,11 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -214,11 +215,11 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -247,11 +248,11 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //Function arguments
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
-        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         GenericSpatialGeomPropertyFunction instance = new IntersectBoxGeomPF();
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

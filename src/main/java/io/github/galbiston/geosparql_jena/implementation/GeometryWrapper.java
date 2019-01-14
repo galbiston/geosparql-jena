@@ -368,7 +368,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Latitude in WGS84.<br>
+     * Latitude if Geographic SRS or in WGS84.<br>
      * Used to convert between linear and non-linear units of measure.
      *
      * @return
@@ -378,11 +378,18 @@ public class GeometryWrapper implements Serializable {
     public Double getLatitude() throws FactoryException, MismatchedDimensionException, TransformException {
 
         if (latitude == null) {
-            //Use WGS84 and not CRS84 as assuming WGS8 is more prevalent.
-            GeometryWrapper wgsGeometryWrapper = convertCRS(SRS_URI.WGS84_CRS);
+            GeometryWrapper geoGeometryWrapper;
 
-            //Latitude is Y-axis in WGS84.
-            Geometry geometry = wgsGeometryWrapper.getXYGeometry();
+            if (crsInfo.isGeographic()) {
+                //Already a geographic CRS.
+                geoGeometryWrapper = this;
+            } else {
+                //Use WGS84 and not CRS84 as assuming WGS8 is more prevalent.
+                geoGeometryWrapper = convertCRS(SRS_URI.WGS84_CRS);
+            }
+
+            //Latitude is Y-axis.
+            Geometry geometry = geoGeometryWrapper.getXYGeometry();
             Point point = geometry.getCentroid();
             latitude = point.getY();
 
@@ -482,10 +489,15 @@ public class GeometryWrapper implements Serializable {
      */
     public double distanceGreatCircle(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
 
-        Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
+        GeometryWrapper transformedSourceGeometry;
+        if (crsInfo.isGeographic()) {
+            //Already a geographic CRS.
+            transformedSourceGeometry = this;
+        } else {
+            //Use WGS84 and not CRS84 as assuming WGS8 is more prevalent.
+            transformedSourceGeometry = this.transform(SRS_URI.WGS84_CRS);
+        }
 
-        //Use WGS84 and not CRS84 as assuming WGS8 is more prevalent.
-        GeometryWrapper transformedSourceGeometry = this.transform(SRS_URI.WGS84_CRS);
         GeometryWrapper transformedTargetGeometry = transformedSourceGeometry.checkTransformCRS(targetGeometry);
 
         //Find Centroid of shape. Centroid returns in Lon/Lon order.
@@ -494,12 +506,13 @@ public class GeometryWrapper implements Serializable {
 
         double distance = GreatCircleDistance.vincentyFormula(point1.getY(), point1.getX(), point2.getY(), point2.getX());
 
+        Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
         double targetDistance;
         if (isTargetUnitsLinear) {
             //Target units are linear so straight conversion. Distance is in metres already.
             targetDistance = UnitsOfMeasure.conversion(distance, Unit_URI.METRE_URL, targetDistanceUnitsURI);
         } else {
-            targetDistance = UnitsOfMeasure.convertBetween(distance, Unit_URI.METRE_URL, targetDistanceUnitsURI, isTargetUnitsLinear, getLatitude());
+            targetDistance = UnitsOfMeasure.convertBetween(distance, Unit_URI.METRE_URL, targetDistanceUnitsURI, isTargetUnitsLinear, transformedSourceGeometry.getLatitude());
         }
 
         return targetDistance;
@@ -540,6 +553,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
+     * Envelope of GeometryWrapper with original coordinate order.
      *
      * @return Envelope of GeometryWrapper
      */
@@ -550,6 +564,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
+     * Envelope of GeometryWrapper in XY order.
      *
      * @return Envelope of GeometryWrapper
      */

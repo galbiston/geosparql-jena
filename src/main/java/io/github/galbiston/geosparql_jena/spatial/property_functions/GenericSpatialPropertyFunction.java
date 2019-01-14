@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
@@ -54,7 +55,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
 
         spatialIndex = SpatialIndex.retrieve(execCxt);
-        spatialArguments = extractObjectArguments(predicate, object);
+        spatialArguments = extractObjectArguments(predicate, object, spatialIndex.getCrsInfo());
         return search(binding, execCxt, subject, spatialArguments.limit);
     }
 
@@ -63,10 +64,11 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
      *
      * @param predicate
      * @param object
+     * @param indexCRSInfo
      * @return Spatial arguments extracted from the object according to the
      * predicate.
      */
-    protected abstract SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object);
+    protected abstract SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object, CRSInfo indexCRSInfo);
 
     private QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 

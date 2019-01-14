@@ -94,7 +94,7 @@ public class WithinBoxPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        SpatialArguments spatialArguments = instance.extractObjectArguments(predicate, object);
+        SpatialArguments spatialArguments = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
         GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
 
         //Test arguments
@@ -132,7 +132,7 @@ public class WithinBoxPFTest {
         PropFuncArg object = new PropFuncArg(objectNodes);
 
         //Function arguments
-        SpatialArguments spatialArguments = instance.extractObjectArguments(predicate, object);
+        SpatialArguments spatialArguments = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
         GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
 
         //Test arguments

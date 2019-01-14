@@ -224,9 +224,9 @@ public class GeoSPARQLConfig {
 
     }
 
-    public static final void setupSpatial(Dataset dataset, File spatialIndexFile) {
+    public static final void setupSpatial(Dataset dataset, String srsURI, File spatialIndexFile) {
         setupSpatial();
-        SpatialIndex.buildSpatialIndex(dataset, spatialIndexFile);
+        SpatialIndex.buildSpatialIndex(dataset, srsURI, spatialIndexFile);
     }
 
 }

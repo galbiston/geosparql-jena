@@ -15,9 +15,15 @@
  */
 package io.github.galbiston.geosparql_jena.implementation;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import org.apache.sis.referencing.CRS;
+import org.locationtech.jts.geom.Envelope;
+import org.opengis.geometry.DirectPosition;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.crs.GeographicCRS;
+import org.opengis.referencing.cs.AxisDirection;
 import org.opengis.util.FactoryException;
 
 /**
@@ -30,15 +36,74 @@ public class CRSInfo {
     private final CoordinateReferenceSystem crs;
     private final UnitsOfMeasure unitsOfMeasure;
     private final Boolean isAxisXY;
+    private final Boolean isGeographic;
     private final Boolean isSRSRecognised;
+    private final Envelope domainEnvelope;
     public static final String DEFAULT_WKT_CRS84_CODE = "CRS:84";
 
-    public CRSInfo(String srsURI, CoordinateReferenceSystem crs, UnitsOfMeasure unitsOfMeasure, Boolean isAxisXY, Boolean isSRSRecognised) {
+    private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
+
+    public CRSInfo(String srsURI) {
+        this.srsURI = srsURI;
+
+        try {
+            this.crs = CRS.forCode(srsURI);
+            this.isAxisXY = checkAxisXY(crs);
+            this.unitsOfMeasure = new UnitsOfMeasure(crs);
+            this.isSRSRecognised = true;
+            this.isGeographic = crs instanceof GeographicCRS;
+            this.domainEnvelope = buildDomainEnvelope(crs, isAxisXY);
+        } catch (FactoryException ex) {
+            throw new CRSInfoException("Invalid CRS code: " + srsURI + " - " + ex.getMessage(), ex);
+        }
+    }
+
+    private CRSInfo(String srsURI, CoordinateReferenceSystem crs, boolean isSRSRecognised) {
         this.srsURI = srsURI;
         this.crs = crs;
-        this.unitsOfMeasure = unitsOfMeasure;
-        this.isAxisXY = isAxisXY;
+        this.isAxisXY = checkAxisXY(crs);
+        this.unitsOfMeasure = new UnitsOfMeasure(crs);
         this.isSRSRecognised = isSRSRecognised;
+        this.isGeographic = crs instanceof GeographicCRS;
+        this.domainEnvelope = buildDomainEnvelope(crs, isAxisXY);
+    }
+
+    protected static final Boolean checkAxisXY(CoordinateReferenceSystem crs) {
+
+        AxisDirection axisDirection = crs.getCoordinateSystem().getAxis(0).getDirection();
+
+        if (axisDirection.equals(AxisDirection.NORTH) || axisDirection.equals(AxisDirection.SOUTH)) {
+            return false;
+        } else if (axisDirection.equals(AxisDirection.EAST) || axisDirection.equals(AxisDirection.WEST)) {
+            return true;
+        } else {
+            return !OTHER_Y_AXIS_DIRECTIONS.contains(axisDirection);
+        }
+    }
+
+    protected static final Envelope buildDomainEnvelope(CoordinateReferenceSystem crs, Boolean isAxisXY) {
+
+        org.opengis.geometry.Envelope crsDomain = CRS.getDomainOfValidity(crs);
+        DirectPosition lowerCorner = crsDomain.getLowerCorner();
+        DirectPosition upperCorner = crsDomain.getUpperCorner();
+
+        int xAxis;
+        int yAxis;
+        if (isAxisXY) {
+            xAxis = 0;
+            yAxis = 1;
+        } else {
+            xAxis = 1;
+            yAxis = 0;
+        }
+
+        double x1 = lowerCorner.getOrdinate(xAxis);
+        double y1 = lowerCorner.getOrdinate(yAxis);
+        double x2 = upperCorner.getOrdinate(xAxis);
+        double y2 = upperCorner.getOrdinate(yAxis);
+
+        Envelope envelope = new Envelope(x1, x2, y1, y2);
+        return envelope;
     }
 
     /**
@@ -89,6 +154,24 @@ public class CRSInfo {
     }
 
     /**
+     * Check if the CRS is geographic (i.e. latitude, longitude on a sphere).
+     *
+     * @return
+     */
+    public Boolean isGeographic() {
+        return isGeographic;
+    }
+
+    /**
+     * Domain of validity in XY coordinate order.
+     *
+     * @return
+     */
+    public Envelope getDomainEnvelope() {
+        return domainEnvelope;
+    }
+
+    /**
      *
      * @param srsURI Allows alternative srsURI to be associated with CRS84.
      * @return CRSInfo with default setup for WKT without SRS URI.
@@ -97,12 +180,10 @@ public class CRSInfo {
 
         try {
             CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
-            UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-            return new CRSInfo(srsURI, crs, unitsOfMeasure, true, true);
+            return new CRSInfo(srsURI, crs, true);
         } catch (FactoryException ex) {
             throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage(), ex);
         }
-
     }
 
     /**
@@ -116,26 +197,26 @@ public class CRSInfo {
 
         try {
             CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
-            UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-            return new CRSInfo(srsURI, crs, unitsOfMeasure, true, false);
+            return new CRSInfo(srsURI, crs, false);
         } catch (FactoryException ex) {
-            throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage(), ex);
+            throw new CRSInfoException("Invalid CRS code: " + srsURI + " - " + ex.getMessage(), ex);
         }
     }
 
     @Override
     public String toString() {
-        return "CRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isSRSRecognised=" + isSRSRecognised + '}';
+        return "CRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isSRSRecognised=" + isSRSRecognised + ", domainEnvelope=" + domainEnvelope + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 47 * hash + Objects.hashCode(this.srsURI);
-        hash = 47 * hash + Objects.hashCode(this.crs);
-        hash = 47 * hash + Objects.hashCode(this.unitsOfMeasure);
-        hash = 47 * hash + Objects.hashCode(this.isAxisXY);
-        hash = 47 * hash + Objects.hashCode(this.isSRSRecognised);
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.srsURI);
+        hash = 23 * hash + Objects.hashCode(this.crs);
+        hash = 23 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 23 * hash + Objects.hashCode(this.isAxisXY);
+        hash = 23 * hash + Objects.hashCode(this.isSRSRecognised);
+        hash = 23 * hash + Objects.hashCode(this.domainEnvelope);
         return hash;
     }
 
@@ -163,7 +244,10 @@ public class CRSInfo {
         if (!Objects.equals(this.isAxisXY, other.isAxisXY)) {
             return false;
         }
-        return Objects.equals(this.isSRSRecognised, other.isSRSRecognised);
+        if (!Objects.equals(this.isSRSRecognised, other.isSRSRecognised)) {
+            return false;
+        }
+        return Objects.equals(this.domainEnvelope, other.domainEnvelope);
     }
 
 }

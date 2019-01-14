@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
@@ -39,7 +40,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
     private static final int LIMIT_POS = 2;
 
     @Override
-    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object, CRSInfo indexCRSInfo) {
 
         try {
             //Check minimum arguments.
@@ -73,7 +74,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
             Node geometryNode = ConvertLatLon.convert(lat, lon);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-            SearchEnvelope searchEnvelope = buildSearchEnvelope(geometryWrapper);
+            SearchEnvelope searchEnvelope = buildSearchEnvelope(geometryWrapper, indexCRSInfo);
 
             return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {

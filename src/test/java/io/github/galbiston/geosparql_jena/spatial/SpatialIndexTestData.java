@@ -15,9 +15,11 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.Model;
@@ -53,13 +55,16 @@ public class SpatialIndexTestData {
 
     public static final GeometryWrapper PARIS_GEOMETRY_WRAPPER = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(48.85341 2.34880)", WKTDatatype.URI);
 
+    public static final CRSInfo WGS_84_CRS_INFO = new CRSInfo(SRS_URI.WGS84_CRS);
+    public static final CRSInfo OSGB_CRS_INFO = new CRSInfo(SRS_URI.OSGB36_CRS);
+
     private static SpatialIndex TEST_SPATIAL_INDEX = null;
     private static Dataset TEST_DATASET = null;
 
     public static final SpatialIndex createTestIndex() {
 
         if (TEST_SPATIAL_INDEX == null) {
-            SpatialIndex spatialIndex = new SpatialIndex(100);
+            SpatialIndex spatialIndex = new SpatialIndex(100, SRS_URI.WGS84_CRS);
             spatialIndex.insertItem(LONDON_GEOMETRY_WRAPPER.getEnvelope(), LONDON_FEATURE);
             spatialIndex.insertItem(NEW_YORK_GEOMETRY_WRAPPER.getEnvelope(), NEW_YORK_FEATURE);
             spatialIndex.insertItem(HONOLULU_GEOMETRY_WRAPPER.getEnvelope(), HONOLULU_FEATURE);

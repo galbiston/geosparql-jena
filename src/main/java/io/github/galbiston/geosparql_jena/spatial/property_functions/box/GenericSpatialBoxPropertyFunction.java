@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.ConvertLatLonBox;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
@@ -41,7 +42,7 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
     private static final int LIMIT_POS = 4;
 
     @Override
-    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object, CRSInfo indexCRSInfo) {
         try {
             //Check minimum arguments.
             List<Node> objectArgs = object.getArgList();
@@ -76,7 +77,7 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
             Node geometryNode = ConvertLatLonBox.convert(latMin, lonMin, latMax, lonMax);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-            SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper);
+            SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, indexCRSInfo);
 
             return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {

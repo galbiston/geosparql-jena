@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import java.util.List;
@@ -40,7 +41,7 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
     }
 
     @Override
-    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object, CRSInfo indexCRSInfo) {
 
         try {
             //Check minimum arguments.
@@ -66,7 +67,7 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
 
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLit);
 
-            SearchEnvelope searchEnvelope = buildSearchEnvelope(geometryWrapper);
+            SearchEnvelope searchEnvelope = buildSearchEnvelope(geometryWrapper, indexCRSInfo);
 
             return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {
@@ -74,8 +75,8 @@ public abstract class GenericSpatialGeomPropertyFunction extends GenericSpatialP
         }
     }
 
-    protected SearchEnvelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
-        return SearchEnvelope.build(geometryWrapper);
+    protected SearchEnvelope buildSearchEnvelope(GeometryWrapper geometryWrapper, CRSInfo indexCRSInfo) {
+        return SearchEnvelope.build(geometryWrapper, indexCRSInfo);
     }
 
 }

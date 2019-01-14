@@ -72,8 +72,8 @@ public class WestGeomPFTest {
         System.out.println("buildSearchEnvelope");
         GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
         WestGeomPF instance = new WestGeomPF();
-        SearchEnvelope expResult = SearchEnvelope.build(geometryWrapper, CardinalDirection.WEST);
-        SearchEnvelope result = instance.buildSearchEnvelope(geometryWrapper);
+        SearchEnvelope expResult = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, CardinalDirection.WEST);
+        SearchEnvelope result = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -91,7 +91,7 @@ public class WestGeomPFTest {
         //Search Envelope
         GeometryWrapper geometryWrapper = SpatialIndexTestData.PERTH_GEOMETRY_WRAPPER;
         WestGeomPF instance = new WestGeomPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper); //Needed to initialise the search.
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO); //Needed to initialise the search.
         HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.LONDON_FEATURE, SpatialIndexTestData.PERTH_FEATURE));
         HashSet<Resource> result = searchEnvelope.check(spatialIndex);
 
@@ -111,7 +111,7 @@ public class WestGeomPFTest {
         //Search Envelope
         GeometryWrapper geometryWrapper = SpatialIndexTestData.HONOLULU_GEOMETRY_WRAPPER;
         WestGeomPF instance = new WestGeomPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper); //Needed to initialise the search.
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO); //Needed to initialise the search.
         HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.AUCKLAND_FEATURE, SpatialIndexTestData.PERTH_FEATURE, SpatialIndexTestData.HONOLULU_FEATURE));
         HashSet<Resource> result = searchEnvelope.check(spatialIndex);
 

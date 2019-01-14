@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.spatial.CardinalDirection;
@@ -36,17 +37,18 @@ public abstract class GenericCardinalGeomPropertyFunction extends GenericSpatial
     protected abstract CardinalDirection getCardinalDirection();
 
     @Override
-    protected SearchEnvelope buildSearchEnvelope(GeometryWrapper geometryWrapper) {
+    protected SearchEnvelope buildSearchEnvelope(GeometryWrapper geometryWrapper, CRSInfo indexCRSInfo) {
         CardinalDirection direction = getCardinalDirection();
-        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, direction);
+        SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, indexCRSInfo, direction);
 
         return searchEnvelope;
     }
 
     @Override
     protected boolean checkSecondFilter(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper) {
-        //Test Geometry against the Geometry from Object to see if it is a match.
+        //Test Geometry against the Geometry from Object to see if it is a success.
         //Used when checking against bound Subjects.
+        //Cardinal functions only check against the search envelope.
         SearchEnvelope searchEnvelope = spatialArguments.getSearchEnvelope();
 
         try {

@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.property_functions.box;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialGeomPropertyFunction;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import org.apache.jena.graph.Node;
@@ -28,7 +29,7 @@ public abstract class GenericSpatialGeomBoxPropertyFunction extends GenericSpati
 
     //This is to simplify testing process by providing access to protected method for unit tests.
     @Override
-    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object) {
-        return super.extractObjectArguments(predicate, object);
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object, CRSInfo indexCRSInfo) {
+        return super.extractObjectArguments(predicate, object, indexCRSInfo);
     }
 }

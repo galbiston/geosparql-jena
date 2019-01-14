@@ -15,9 +15,10 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
+import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,19 +64,26 @@ public class SpatialIndex implements Serializable {
 
     public static final Symbol SPATIAL_INDEX_SYMBOL = Symbol.create("http://jena.apache.org/spatial#index");
 
-    private final STRtree strTree;
+    private final CRSInfo crsInfo;
     private boolean isBuilt;
+    private final STRtree strTree;
 
-    public SpatialIndex(int capacity) {
-        strTree = new STRtree(capacity);
-        isBuilt = false;
+    public SpatialIndex(int capacity, String srsURI) {
+        this.strTree = new STRtree(capacity);
+        this.isBuilt = false;
+        this.crsInfo = CRSRegistry.getCRSInfo(srsURI);
     }
 
-    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems) {
-        strTree = new STRtree(spatialIndexItems.size());
+    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
+        this.strTree = new STRtree(spatialIndexItems.size());
         insertItems(spatialIndexItems);
-        strTree.build();
-        isBuilt = true;
+        this.strTree.build();
+        this.isBuilt = true;
+        this.crsInfo = CRSRegistry.getCRSInfo(srsURI);
+    }
+
+    public CRSInfo getCrsInfo() {
+        return crsInfo;
     }
 
     public boolean isEmpty() {
@@ -115,7 +123,7 @@ public class SpatialIndex implements Serializable {
 
     @Override
     public String toString() {
-        return "SpatialIndex{" + "strTree=" + strTree + ", isBuilt=" + isBuilt + '}';
+        return "SpatialIndex{" + "crsInfo=" + crsInfo + ", isBuilt=" + isBuilt + ", strTree=" + strTree + '}';
     }
 
     public static final SpatialIndex retrieve(ExecutionContext execCxt) throws SpatialIndexException {
@@ -135,12 +143,12 @@ public class SpatialIndex implements Serializable {
         context.set(SPATIAL_INDEX_SYMBOL, spatialIndex);
     }
 
-    public static SpatialIndex buildSpatialIndex(Dataset dataset, File spatialIndexFile) {
+    public static SpatialIndex buildSpatialIndex(Dataset dataset, String srsURI, File spatialIndexFile) {
 
         SpatialIndex spatialIndex = load(spatialIndexFile);
 
         if (spatialIndex.isEmpty()) {
-            spatialIndex = buildSpatialIndex(dataset);
+            spatialIndex = buildSpatialIndex(dataset, srsURI);
             save(spatialIndexFile, spatialIndex);
         }
 
@@ -153,28 +161,29 @@ public class SpatialIndex implements Serializable {
      * Dataset contains SpatialIndex in Context.
      *
      * @param dataset
+     * @param srsURI
      * @return SpatialIndex constructed.
      */
-    public static SpatialIndex buildSpatialIndex(Dataset dataset) {
+    public static SpatialIndex buildSpatialIndex(Dataset dataset, String srsURI) {
         LOGGER.info("Building Spatial Index - Started");
 
         //Default Model
         dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
-        Collection<SpatialIndexItem> items = getSpatialIndexItems(defaultModel);
+        Collection<SpatialIndexItem> items = getSpatialIndexItems(defaultModel, srsURI);
 
         //Named Models
         Iterator<String> graphNames = dataset.listNames();
         while (graphNames.hasNext()) {
             String graphName = graphNames.next();
             Model namedModel = dataset.getNamedModel(graphName);
-            Collection<SpatialIndexItem> graphItems = getSpatialIndexItems(namedModel);
+            Collection<SpatialIndexItem> graphItems = getSpatialIndexItems(namedModel, srsURI);
             items.addAll(graphItems);
         }
 
         LOGGER.info("Building Spatial Index - Completed");
         dataset.end();
-        SpatialIndex spatialIndex = new SpatialIndex(items);
+        SpatialIndex spatialIndex = new SpatialIndex(items, srsURI);
         spatialIndex.build();
         setSpatialIndex(dataset, spatialIndex);
 
@@ -185,36 +194,37 @@ public class SpatialIndex implements Serializable {
      * Wrap Model in a Dataset and build SpatialIndex.
      *
      * @param model
+     * @param srsURI
      * @return Dataset with default Model and SpatialIndex in Context.
      */
-    public static final Dataset wrapModel(Model model) {
+    public static final Dataset wrapModel(Model model, String srsURI) {
 
         Dataset dataset = DatasetFactory.createTxnMem();
         dataset.setDefaultModel(model);
-        buildSpatialIndex(dataset);
+        buildSpatialIndex(dataset, srsURI);
 
         return dataset;
     }
 
-    public static final Collection<SpatialIndexItem> getSpatialIndexItems(Model model) {
+    public static final Collection<SpatialIndexItem> getSpatialIndexItems(Model model, String srsURI) {
 
         List<SpatialIndexItem> items = new ArrayList<>();
 
         //Only add one set of statements as a converted dataset will duplicate the same info.
         if (model.contains(null, Geo.HAS_GEOMETRY_PROP, (Resource) null)) {
             LOGGER.info("Feature-hasGeometry-Geometry statements found. Any Geo predicates will not be added to index.");
-            Collection<SpatialIndexItem> geometryLiteralItems = getGeometryLiteralIndexItems(model);
+            Collection<SpatialIndexItem> geometryLiteralItems = getGeometryLiteralIndexItems(model, srsURI);
             items.addAll(geometryLiteralItems);
         } else if (model.contains(null, SpatialExtension.GEO_LAT_PROP, (Literal) null)) {
             LOGGER.info("Geo predicate statements found.");
-            Collection<SpatialIndexItem> geoPredicateItems = buildGeoPredicateIndex(model);
+            Collection<SpatialIndexItem> geoPredicateItems = buildGeoPredicateIndex(model, srsURI);
             items.addAll(geoPredicateItems);
         }
 
         return items;
     }
 
-    private static Collection<SpatialIndexItem> getGeometryLiteralIndexItems(Model model) {
+    private static Collection<SpatialIndexItem> getGeometryLiteralIndexItems(Model model, String srsURI) {
         List<SpatialIndexItem> items = new ArrayList<>();
         StmtIterator stmtIt = model.listStatements(null, Geo.HAS_GEOMETRY_PROP, (Resource) null);
         while (stmtIt.hasNext()) {
@@ -229,8 +239,8 @@ public class SpatialIndex implements Serializable {
                 GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryLiteral);
 
                 try {
-                    //Ensure all entries in the index are WGS84 SRS.
-                    GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
+                    //Ensure all entries in the target SRS URI.
+                    GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(srsURI);
 
                     Envelope envelope = transformedGeometryWrapper.getEnvelope();
                     SpatialIndexItem item = new SpatialIndexItem(envelope, feature);
@@ -244,7 +254,8 @@ public class SpatialIndex implements Serializable {
         return items;
     }
 
-    private static Collection<SpatialIndexItem> buildGeoPredicateIndex(Model model) {
+//TODO - force conversion to GeometryLiteral. These won't get picked up in the query search.
+    private static Collection<SpatialIndexItem> buildGeoPredicateIndex(Model model, String srsURI) {
         List<SpatialIndexItem> items = new ArrayList<>();
         ResIterator resIt = model.listResourcesWithProperty(SpatialExtension.GEO_LAT_PROP);
 
@@ -257,9 +268,16 @@ public class SpatialIndex implements Serializable {
             Literal latLonPoint = ConvertLatLon.toLiteral(lat.getFloat(), lon.getFloat());
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(latLonPoint);
 
-            Envelope envelope = geometryWrapper.getEnvelope();
-            SpatialIndexItem item = new SpatialIndexItem(envelope, feature);
-            items.add(item);
+            try {
+                //Ensure all entries in the target SRS URI.
+                GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(srsURI);
+
+                Envelope envelope = transformedGeometryWrapper.getEnvelope();
+                SpatialIndexItem item = new SpatialIndexItem(envelope, feature);
+                items.add(item);
+            } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+                throw new SpatialIndexException("Transformation Exception: " + geometryWrapper.getLexicalForm() + ". " + ex.getMessage());
+            }
         }
         return items;
     }

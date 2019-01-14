@@ -18,21 +18,17 @@
 package io.github.galbiston.geosparql_jena.implementation.registry;
 
 import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
+import io.github.galbiston.geosparql_jena.implementation.CRSInfoException;
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_CRS_URI;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import org.apache.sis.referencing.CRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.cs.AxisDirection;
-import org.opengis.util.FactoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +41,6 @@ public class CRSRegistry implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final Map<String, CRSInfo> CRS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
-
-    private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
 
     public static final UnitsOfMeasure getUnitsOfMeasure(String srsURI) {
         CRSInfo crsInfo = storeCRS(srsURI);
@@ -76,11 +70,8 @@ public class CRSRegistry implements Serializable {
 
             //Find the CRS based on the SRS.
             try {
-                CoordinateReferenceSystem crs = CRS.forCode(srsURI);
-                Boolean isAxisXY = checkAxisXY(crs);
-                UnitsOfMeasure unitsOfMeasure = new UnitsOfMeasure(crs);
-                crsInfo = new CRSInfo(srsURI, crs, unitsOfMeasure, isAxisXY, true);
-            } catch (FactoryException ex) {
+                crsInfo = new CRSInfo(srsURI);
+            } catch (CRSInfoException ex) {
                 LOGGER.error("SRS URI not recognised - Operations may not complete correctly: {} - {}", srsURI, ex.getMessage());
                 crsInfo = CRSInfo.getUnrecognised(srsURI);
             }
@@ -89,19 +80,6 @@ public class CRSRegistry implements Serializable {
         }
 
         return crsInfo;
-    }
-
-    protected static final Boolean checkAxisXY(CoordinateReferenceSystem crs) {
-
-        AxisDirection axisDirection = crs.getCoordinateSystem().getAxis(0).getDirection();
-
-        if (axisDirection.equals(AxisDirection.NORTH) || axisDirection.equals(AxisDirection.SOUTH)) {
-            return false;
-        } else if (axisDirection.equals(AxisDirection.EAST) || axisDirection.equals(AxisDirection.WEST)) {
-            return true;
-        } else {
-            return !OTHER_Y_AXIS_DIRECTIONS.contains(axisDirection);
-        }
     }
 
     public static final void setupDefaultCRS() {
