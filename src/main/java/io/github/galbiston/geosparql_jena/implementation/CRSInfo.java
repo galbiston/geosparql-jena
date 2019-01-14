@@ -41,22 +41,49 @@ public class CRSInfo {
         this.isSRSRecognised = isSRSRecognised;
     }
 
+    /**
+     * URI of the Spatial Reference System<br>
+     * Identical values to SRID.
+     *
+     * @return
+     */
     public String getSrsURI() {
         return srsURI;
     }
 
+    /**
+     * OpenGIS Coordinate Reference System.
+     *
+     * @return
+     */
     public CoordinateReferenceSystem getCrs() {
         return crs;
     }
 
+    /**
+     * Units of Measure for the coordinate reference system.
+     *
+     * @return
+     */
     public UnitsOfMeasure getUnitsOfMeasure() {
         return unitsOfMeasure;
     }
 
+    /**
+     * Check if axis is in XY order.
+     *
+     * @return
+     */
     public Boolean isAxisXY() {
         return isAxisXY;
     }
 
+    /**
+     * Check if the SRS URI is recognised as a OpenGIS coordinate reference
+     * system.
+     *
+     * @return
+     */
     public Boolean isSRSRecognised() {
         return isSRSRecognised;
     }
