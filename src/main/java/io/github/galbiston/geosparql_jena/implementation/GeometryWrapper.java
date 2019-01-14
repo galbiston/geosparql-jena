@@ -500,7 +500,7 @@ public class GeometryWrapper implements Serializable {
 
         GeometryWrapper transformedTargetGeometry = transformedSourceGeometry.checkTransformCRS(targetGeometry);
 
-        //Find Centroid of shape. Centroid returns in Lon/Lon order.
+        //Find Centroid of shape. Centroid returned in Lon/Lat order.
         Point point1 = transformedSourceGeometry.xyGeometry.getCentroid();
         Point point2 = transformedTargetGeometry.xyGeometry.getCentroid();
 
