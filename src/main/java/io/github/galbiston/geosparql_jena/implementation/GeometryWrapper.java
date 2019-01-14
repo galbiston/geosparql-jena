@@ -354,7 +354,7 @@ public class GeometryWrapper implements Serializable {
             Point coord = parsingGeometry.getCentroid();
             DirectPosition2D point = new DirectPosition2D(coord.getX(), coord.getY());
 
-            //Convert to WGS84.
+            //Convert to WGS84. Use WGS84 and not CRS84 as assuming WGS8 is more prevalent.
             CoordinateReferenceSystem wgs84CRS = CRSRegistry.getCRS(SRS_URI.WGS84_CRS);
             MathTransform transform = MathTransformRegistry.getMathTransform(crsInfo.getCrs(), wgs84CRS);
 
@@ -378,7 +378,7 @@ public class GeometryWrapper implements Serializable {
     public Double getLatitude() throws FactoryException, MismatchedDimensionException, TransformException {
 
         if (latitude == null) {
-
+            //Use WGS84 and not CRS84 as assuming WGS8 is more prevalent.
             GeometryWrapper wgsGeometryWrapper = convertCRS(SRS_URI.WGS84_CRS);
 
             //Latitude is Y-axis in WGS84.
@@ -484,6 +484,7 @@ public class GeometryWrapper implements Serializable {
 
         Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
 
+        //Use WGS84 and not CRS84 as assuming WGS8 is more prevalent.
         GeometryWrapper transformedSourceGeometry = this.transform(SRS_URI.WGS84_CRS);
         GeometryWrapper transformedTargetGeometry = transformedSourceGeometry.checkTransformCRS(targetGeometry);
 
