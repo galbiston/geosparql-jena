@@ -206,13 +206,13 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of distance same SRS_URI method, of class GeometryWrapper.
+     * Test of distanceEuclidean same SRS_URI method, of class GeometryWrapper.
      *
      * @throws java.lang.Exception
      */
     @Test
     public void testDistanceSameCRSSameUnit() throws Exception {
-        System.out.println("distance, same CRS, same Unit");
+        System.out.println("distanceEuclidean, same CRS, same Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         String targetSRSURI = SRS_URI.OSGB36_CRS;
@@ -226,7 +226,7 @@ public class GeometryWrapperTest {
         String distanceUnitsURL = Unit_URI.METRE_URL;
 
         double expResult = 10.0;
-        double result = instance.distance(targetGeometry, distanceUnitsURL);
+        double result = instance.distanceEuclidean(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -234,13 +234,13 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of distance same SRS_URI method, of class GeometryWrapper.
+     * Test of distanceEuclidean same SRS_URI method, of class GeometryWrapper.
      *
      * @throws java.lang.Exception
      */
     @Test
     public void testDistanceSameCRSDifferentUnit() throws Exception {
-        System.out.println("distance, same CRS, different Unit");
+        System.out.println("distanceEuclidean, same CRS, different Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(385458, 156785)); //LatLon - 51.31, -2.21
         String targetSRSURI = SRS_URI.OSGB36_CRS;
@@ -254,7 +254,7 @@ public class GeometryWrapperTest {
         String distanceUnitsURL = Unit_URI.RADIAN_URL;
 
         double expResult = 0.025656; //Degree: 1.47
-        double result = instance.distance(targetGeometry, distanceUnitsURL);
+        double result = instance.distanceEuclidean(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -262,13 +262,14 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of distance different SRS_URI method, of class GeometryWrapper.
+     * Test of distanceEuclidean different SRS_URI method, of class
+     * GeometryWrapper.
      *
      * @throws java.lang.Exception
      */
     @Test
     public void testDistanceDifferentCRSSameUnit() throws Exception {
-        System.out.println("distance, different CRS, same Unit");
+        System.out.println("distanceEuclidean, different CRS, same Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         String targetSRSURI = SRS_URI.WGS84_CRS;
@@ -282,7 +283,7 @@ public class GeometryWrapperTest {
         String distanceUnitsURL = Unit_URI.DEGREE_URL;
 
         double expResult = 10.0;
-        double result = instance.distance(targetGeometry, distanceUnitsURL);
+        double result = instance.distanceEuclidean(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -290,13 +291,14 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of distance different SRS_URI method, of class GeometryWrapper.
+     * Test of distanceEuclidean different SRS_URI method, of class
+     * GeometryWrapper.
      *
      * @throws java.lang.Exception
      */
     @Test
     public void testDistanceDifferentCRSDifferentUnit() throws Exception {
-        System.out.println("distance, different CRS, different Unit");
+        System.out.println("distanceEuclidean, different CRS, different Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(0.0, 1.0));
         String targetSRSURI = SRS_URI.WGS84_CRS;
@@ -310,7 +312,7 @@ public class GeometryWrapperTest {
         String distanceUnitsURL = Unit_URI.METRE_URL;
 
         double expResult = 111320; //1.0 degree of longigtude at the equator is approx 111.32km.
-        double result = instance.distance(targetGeometry, distanceUnitsURL);
+        double result = instance.distanceEuclidean(targetGeometry, distanceUnitsURL);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

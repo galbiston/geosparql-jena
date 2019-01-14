@@ -123,6 +123,24 @@ public class DistanceFFTest {
     /**
      * Test of exec method, of class DistanceFF.
      */
+    @Test
+    public void testExec_OSGB() {
+        System.out.println("exec_OSGB");
+        NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(0.0 0.0)", WKTDatatype.INSTANCE);
+        NodeValue v2 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10000.0 0.0)", WKTDatatype.INSTANCE);
+        NodeValue v3 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
+        DistanceFF instance = new DistanceFF();
+        double expResult = 10;
+        double result = instance.exec(v1, v2, v3).getDouble();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.0001);
+    }
+
+    /**
+     * Test of exec method, of class DistanceFF.
+     */
     @Test(expected = ExprEvalException.class)
     public void testExec_pos0_fail() {
         System.out.println("exec_pos0_fail");

@@ -49,7 +49,7 @@ public class DistanceFF extends FunctionBase3 {
             } else {
                 unitsURI = v3.asString();
             }
-            double distance = geometry1.distanceGreatCircle(geometry2, unitsURI);
+            double distance = geometry1.distance(geometry2, unitsURI);
             return NodeValue.makeDouble(distance);
         } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);

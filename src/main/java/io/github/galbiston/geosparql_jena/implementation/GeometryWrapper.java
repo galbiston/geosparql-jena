@@ -405,8 +405,8 @@ public class GeometryWrapper implements Serializable {
      * @throws org.opengis.util.FactoryException
      * @throws org.opengis.referencing.operation.TransformException
      */
-    public double distance(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return distance(targetGeometry, Unit_URI.METRE_URL);
+    public double distanceEuclidean(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+        return distanceEuclidean(targetGeometry, Unit_URI.METRE_URL);
     }
 
     /**
@@ -418,8 +418,8 @@ public class GeometryWrapper implements Serializable {
      * @throws org.opengis.util.FactoryException
      * @throws org.opengis.referencing.operation.TransformException
      */
-    public double distance(GeometryWrapper targetGeometry, UnitsOfMeasure unitsOfMeasure) throws FactoryException, MismatchedDimensionException, TransformException {
-        return distance(targetGeometry, unitsOfMeasure.getUnitURI());
+    public double distanceEuclidean(GeometryWrapper targetGeometry, UnitsOfMeasure unitsOfMeasure) throws FactoryException, MismatchedDimensionException, TransformException {
+        return distanceEuclidean(targetGeometry, unitsOfMeasure.getUnitURI());
     }
 
     /**
@@ -431,7 +431,7 @@ public class GeometryWrapper implements Serializable {
      * @throws org.opengis.util.FactoryException
      * @throws org.opengis.referencing.operation.TransformException
      */
-    public double distance(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+    public double distanceEuclidean(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
 
         Boolean isUnitsLinear = crsInfo.getUnitsOfMeasure().isLinearUnits();
         Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
@@ -513,6 +513,55 @@ public class GeometryWrapper implements Serializable {
             targetDistance = UnitsOfMeasure.conversion(distance, Unit_URI.METRE_URL, targetDistanceUnitsURI);
         } else {
             targetDistance = UnitsOfMeasure.convertBetween(distance, Unit_URI.METRE_URL, targetDistanceUnitsURI, isTargetUnitsLinear, transformedSourceGeometry.getLatitude());
+        }
+
+        return targetDistance;
+    }
+
+    /**
+     * Distance (Euclidean or Great Circle depending on Geometry SRS URI)
+     * defaulting to metres.
+     *
+     * @param targetGeometry
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    public double distance(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+        return distance(targetGeometry, Unit_URI.METRE_URL);
+    }
+
+    /**
+     * Distance (Euclidean or Great Circle depending on Geometry SRS URI) in the
+     * Units of Measure.
+     *
+     * @param targetGeometry
+     * @param unitsOfMeasure
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    public double distance(GeometryWrapper targetGeometry, UnitsOfMeasure unitsOfMeasure) throws FactoryException, MismatchedDimensionException, TransformException {
+        return distance(targetGeometry, unitsOfMeasure.getUnitURI());
+    }
+
+    /**
+     * Distance (Euclidean or Great Circle depending on Geometry SRS URI) in the
+     * Units of Measure stated in URI.
+     *
+     * @param targetGeometry
+     * @param targetDistanceUnitsURI
+     * @return Distance
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    public double distance(GeometryWrapper targetGeometry, String targetDistanceUnitsURI) throws FactoryException, MismatchedDimensionException, TransformException {
+
+        double targetDistance;
+        if (crsInfo.isGeographic()) {
+            targetDistance = distanceGreatCircle(targetGeometry, targetDistanceUnitsURI);
+        } else {
+            targetDistance = distanceEuclidean(targetGeometry, targetDistanceUnitsURI);
         }
 
         return targetDistance;

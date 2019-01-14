@@ -184,6 +184,42 @@ public class NearbyFFTest {
      * Test of relate method, of class NearbyFF.
      */
     @Test
+    public void testRelate_OSGB() {
+        System.out.println("relate_OSGB");
+        GeometryWrapper geometry1 = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(0.0 0.0)", WKTDatatype.URI);
+        GeometryWrapper geometry2 = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10000.0 0.0)", WKTDatatype.URI);;
+        double radius = 10.1;
+        String unitsURI = Unit_URI.KILOMETER_URL;
+        boolean expResult = true;
+        boolean result = NearbyFF.relate(geometry1, geometry2, radius, unitsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of relate method, of class NearbyFF.
+     */
+    @Test
+    public void testRelate_OSGB_fail() {
+        System.out.println("relate_OSGB_fail");
+        GeometryWrapper geometry1 = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(0.0 0.0)", WKTDatatype.URI);
+        GeometryWrapper geometry2 = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10000.0 0.0)", WKTDatatype.URI);;
+        double radius = 9.9;
+        String unitsURI = Unit_URI.KILOMETER_URL;
+        boolean expResult = false;
+        boolean result = NearbyFF.relate(geometry1, geometry2, radius, unitsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of relate method, of class NearbyFF.
+     */
+    @Test
     public void testRelate_fail() {
         System.out.println("relate_fail");
         GeometryWrapper geometry1 = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.URI);
