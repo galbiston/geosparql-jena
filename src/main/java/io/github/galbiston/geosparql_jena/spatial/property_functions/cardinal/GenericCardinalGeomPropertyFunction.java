@@ -17,7 +17,6 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions.cardinal;
 
 import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.spatial.CardinalDirection;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialGeomPropertyFunction;
@@ -53,8 +52,8 @@ public abstract class GenericCardinalGeomPropertyFunction extends GenericSpatial
 
         try {
 
-            GeometryWrapper wgsTargetGeometryWrapper = targetGeometryWrapper.convertCRS(SRS_URI.WGS84_CRS);
-            Envelope targetEnvelope = wgsTargetGeometryWrapper.getEnvelope();
+            GeometryWrapper srs = targetGeometryWrapper.convertCRS(searchEnvelope.getSrsURI());
+            Envelope targetEnvelope = srs.getEnvelope();
 
             boolean result = searchEnvelope.check(targetEnvelope);
 
