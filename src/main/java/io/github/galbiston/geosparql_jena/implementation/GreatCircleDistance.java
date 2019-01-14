@@ -28,7 +28,7 @@ public class GreatCircleDistance {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static final double EARTH_RADIUS = 6378.137e3; //WGS84 Ellipsoid radius in metres.
+    public static final double EARTH_RADIUS = 6378137; //WGS84 Ellipsoid radius in metres.
     //public static final double EARTH_RADIUS = 6371e3;
 
     /**
