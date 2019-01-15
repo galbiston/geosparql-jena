@@ -244,11 +244,19 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
     }
 
     public CustomCoordinateSequence(double[] x, double[] y, double[] z, double[] m) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.m = m;
+
         this.size = x.length;
+        this.x = new double[size];
+        this.y = new double[size];
+        this.z = new double[size];
+        this.m = new double[size];
+
+        for (int i = 0; i < size; i++) {
+            this.x[i] = x[i];
+            this.y[i] = y[i];
+            this.z[i] = z[i];
+            this.m[i] = m[i];
+        }
 
         //Check the dimensionality
         boolean isZPresent = checkDimensionality(this.z);
