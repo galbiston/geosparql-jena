@@ -20,7 +20,7 @@ package io.github.galbiston.geosparql_jena.implementation.parsers.gml;
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
-import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
+import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -73,11 +73,11 @@ public class GMLReader {
      * <a href="https://portal.opengeospatial.org/files/?artifact_id=42729"></a>
      *
      * @param gmlElement
-     * @throws GeometryDatatypeException
+     * @throws DatatypeFormatException
      */
     public GMLReader(Element gmlElement) throws DatatypeFormatException {
         this.srsName = getSRSName(gmlElement);
-        this.crs = CRSRegistry.getCRS(srsName);
+        this.crs = SRSRegistry.getCRS(srsName);
         this.srsDimension = getSRSDimension(gmlElement, crs);
         this.coordinateSequenceDimensions = convertDimensions(srsDimension);
         String shape = gmlElement.getName();
@@ -116,7 +116,7 @@ public class GMLReader {
         if (srsNameURI == null) {
             srsNameURI = SRS_URI.DEFAULT_WKT_CRS84;
             if (!isSRSNameWarningIssued) {
-                LOGGER.warn("GML Literal with no srsName. Defaulting to CRS84 {} used as WKT default CRS. This warning will be issued once.", srsNameURI);
+                LOGGER.warn("GML Literal with no srsName. Defaulting to CRS84 {} used as WKT default SRS. This warning will be issued once.", srsNameURI);
                 isSRSNameWarningIssued = true;
             }
 

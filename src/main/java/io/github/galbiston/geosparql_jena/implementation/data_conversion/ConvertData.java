@@ -59,7 +59,7 @@ public class ConvertData {
      * @return Output of conversion.
      */
     public static final Model convert(Model inputModel, String outputSrsURI) {
-        return convertCRSDatatype(inputModel, outputSrsURI, null);
+        return convertSRSDatatype(inputModel, outputSrsURI, null);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ConvertData {
      * @return Output of conversion.
      */
     public static final Model convert(Model inputModel, GeometryDatatype outputDatatype) {
-        return convertCRSDatatype(inputModel, null, outputDatatype);
+        return convertSRSDatatype(inputModel, null, outputDatatype);
     }
 
     /**
@@ -83,17 +83,17 @@ public class ConvertData {
      * @return Output of conversion.
      */
     public static final Model convert(Model inputModel, String outputSrsURI, GeometryDatatype outputDatatype) {
-        return convertCRSDatatype(inputModel, outputSrsURI, outputDatatype);
+        return convertSRSDatatype(inputModel, outputSrsURI, outputDatatype);
     }
 
-    private static Model convertCRSDatatype(Model inputModel, String outputSrsURI, GeometryDatatype outputDatatype) {
+    private static Model convertSRSDatatype(Model inputModel, String outputSrsURI, GeometryDatatype outputDatatype) {
 
         if (!GeometryDatatype.check(outputDatatype)) {
             LOGGER.error("Output datatype {} is not a recognised Geometry Literal", outputDatatype);
             return null;
         }
 
-        //Setup CRS registries but without indexing.
+        //Setup SRS registries but without indexing.
         GeoSPARQLConfig.setupNoIndex();
 
         //Iterate through all statements: convert geometry literals and just add the rest.
@@ -123,12 +123,12 @@ public class ConvertData {
             try {
 
                 if (outputSrsURI != null) {
-                    convertedGeom = originalGeom.convertCRS(outputSrsURI);
+                    convertedGeom = originalGeom.convertSRS(outputSrsURI);
                 } else {
                     convertedGeom = originalGeom;
                 }
             } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
-                LOGGER.error("CRS Conversion Exception: {} - Literal: {}, Output SRS URI: {}. Reusing original literal for output.", ex.getMessage(), literal, outputSrsURI);
+                LOGGER.error("SRS Conversion Exception: {} - Literal: {}, Output SRS URI: {}. Reusing original literal for output.", ex.getMessage(), literal, outputSrsURI);
                 convertedGeom = originalGeom;
             }
 
@@ -145,8 +145,8 @@ public class ConvertData {
     }
 
     /**
-     * Converts all geometry literals (WKT or GML) from current CRS to the
-     * specified CRS.
+     * Converts all geometry literals (WKT or GML) from current SRS to the
+     * specified SRS.
      *
      * @param inputFile
      * @param inputLang
@@ -155,7 +155,7 @@ public class ConvertData {
      * @param outputSrsURI
      */
     public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang, String outputSrsURI) {
-        convertFileCRSDatatype(inputFile, inputLang, outputFile, outputLang, outputSrsURI, null);
+        convertFileSRSDatatype(inputFile, inputLang, outputFile, outputLang, outputSrsURI, null);
     }
 
     /**
@@ -167,12 +167,12 @@ public class ConvertData {
      * @param outputLang
      */
     public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang) {
-        convertFileCRSDatatype(inputFile, inputLang, outputFile, outputLang, null, null);
+        convertFileSRSDatatype(inputFile, inputLang, outputFile, outputLang, null, null);
     }
 
     /**
-     * Converts all geometry literals (WKT or GML) from current CRS to the
-     * specified CRS and datatype.
+     * Converts all geometry literals (WKT or GML) from current SRS to the
+     * specified SRS and datatype.
      *
      * @param inputFile
      * @param inputLang
@@ -182,7 +182,7 @@ public class ConvertData {
      * @param outputDatatype
      */
     public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
-        convertFileCRSDatatype(inputFile, inputLang, outputFile, outputLang, outputSrsURI, outputDatatype);
+        convertFileSRSDatatype(inputFile, inputLang, outputFile, outputLang, outputSrsURI, outputDatatype);
     }
 
     /**
@@ -195,10 +195,10 @@ public class ConvertData {
      * @param outputDatatype
      */
     public static final void convertFile(File inputFile, Lang inputLang, File outputFile, Lang outputLang, GeometryDatatype outputDatatype) {
-        convertFileCRSDatatype(inputFile, inputLang, outputFile, outputLang, null, outputDatatype);
+        convertFileSRSDatatype(inputFile, inputLang, outputFile, outputLang, null, outputDatatype);
     }
 
-    private static void convertFileCRSDatatype(File inputFile, Lang inputLang, File outputFile, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
+    private static void convertFileSRSDatatype(File inputFile, Lang inputLang, File outputFile, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
 
         LOGGER.info("Converting File: {} to {} in srs URI: {} - Started", inputFile.getAbsolutePath(), outputFile.getAbsolutePath(), outputSrsURI);
 
@@ -209,7 +209,7 @@ public class ConvertData {
             LOGGER.error("Input File IO Exception: {} - {}", inputFile.getAbsolutePath(), ex.getMessage());
         }
 
-        Model outputModel = convertCRSDatatype(inputModel, outputSrsURI, outputDatatype);
+        Model outputModel = convertSRSDatatype(inputModel, outputSrsURI, outputDatatype);
 
         //Write the output.
         writeOutputModel(outputModel, outputFile, outputLang, inputFile);
@@ -240,7 +240,7 @@ public class ConvertData {
      * @param outputSrsURI
      */
     public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, String outputSrsURI) {
-        convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, outputSrsURI, null);
+        convertFolderSRSDatatype(inputFolder, inputLang, outputFolder, outputLang, outputSrsURI, null);
     }
 
     /**
@@ -253,7 +253,7 @@ public class ConvertData {
      * @param outputLang
      */
     public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang) {
-        convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, null, null);
+        convertFolderSRSDatatype(inputFolder, inputLang, outputFolder, outputLang, null, null);
     }
 
     /**
@@ -268,7 +268,7 @@ public class ConvertData {
      * @param outputDatatype
      */
     public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
-        convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, outputSrsURI, outputDatatype);
+        convertFolderSRSDatatype(inputFolder, inputLang, outputFolder, outputLang, outputSrsURI, outputDatatype);
     }
 
     /**
@@ -282,10 +282,10 @@ public class ConvertData {
      * @param outputDatatype
      */
     public static final void convertFolder(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, GeometryDatatype outputDatatype) {
-        convertFolderCRSDatatype(inputFolder, inputLang, outputFolder, outputLang, null, outputDatatype);
+        convertFolderSRSDatatype(inputFolder, inputLang, outputFolder, outputLang, null, outputDatatype);
     }
 
-    private static void convertFolderCRSDatatype(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
+    private static void convertFolderSRSDatatype(File inputFolder, Lang inputLang, File outputFolder, Lang outputLang, String outputSrsURI, GeometryDatatype outputDatatype) {
 
         LOGGER.info("Converting Folder {} to {} in srs URI: {} - Started", inputFolder.getAbsolutePath(), outputFolder.getAbsolutePath(), outputSrsURI);
         if (inputFolder.exists()) {
@@ -348,7 +348,7 @@ public class ConvertData {
         Literal lit = ResourceFactory.createTypedLiteral(geometryLiteral, outputDatatype);
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(lit);
         try {
-            GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(outputSrsURI);
+            GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertSRS(outputSrsURI);
             Literal transformedLit = transformedGeometryWrapper.asLiteral();
             return transformedLit.getLexicalForm();
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {

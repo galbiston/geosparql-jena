@@ -25,8 +25,8 @@ import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.jts.GeometryTransformation;
-import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.registry.MathTransformRegistry;
+import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import org.locationtech.jts.geom.Geometry;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -49,18 +49,18 @@ public class GeometryTransformIndex {
      *
      * @param sourceGeometryWrapper
      * @param srsURI
-     * @param storeCRSTransform
+     * @param storeSRSTransform
      * @return GeometryWrapper following transformation.
      * @throws TransformException
      * @throws org.opengis.util.FactoryException
      */
-    public static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeCRSTransform) throws TransformException, FactoryException {
+    public static final GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI, Boolean storeSRSTransform) throws TransformException, FactoryException {
 
         GeometryWrapper transformedGeometryWrapper;
         String key = sourceGeometryWrapper.getLexicalForm() + "@" + srsURI;
         RETRIEVAL_COUNT++;
 
-        if (IS_INDEX_ACTIVE && storeCRSTransform) {
+        if (IS_INDEX_ACTIVE && storeSRSTransform) {
             try {
                 if (GEOMETRY_TRANSFORM_INDEX.containsKey(key)) {
 
@@ -81,7 +81,7 @@ public class GeometryTransformIndex {
 
     private static GeometryWrapper transform(GeometryWrapper sourceGeometryWrapper, String srsURI) throws MismatchedDimensionException, FactoryException, TransformException {
         CoordinateReferenceSystem sourceCRS = sourceGeometryWrapper.getCRS();
-        CoordinateReferenceSystem targetCRS = CRSRegistry.getCRS(srsURI);
+        CoordinateReferenceSystem targetCRS = SRSRegistry.getCRS(srsURI);
         MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
         Geometry parsingGeometry = sourceGeometryWrapper.getParsingGeometry();
 

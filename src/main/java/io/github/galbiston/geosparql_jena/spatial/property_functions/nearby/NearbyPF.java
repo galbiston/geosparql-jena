@@ -15,8 +15,8 @@
  */
 package io.github.galbiston.geosparql_jena.spatial.property_functions.nearby;
 
-import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
@@ -43,7 +43,7 @@ public class NearbyPF extends NearbyGeomPF {
     public static final String DEFAULT_UNITS = Unit_URI.KILOMETRE_URL;
 
     @Override
-    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object, CRSInfo indexCRSInfo) {
+    protected SpatialArguments extractObjectArguments(Node predicate, PropFuncArg object, SRSInfo indexSRSInfo) {
 
         try {
             //Check minimum arguments.
@@ -91,7 +91,7 @@ public class NearbyPF extends NearbyGeomPF {
             Node geometryNode = ConvertLatLon.convert(lat, lon);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
-            SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, indexCRSInfo, radius, unitsURI);
+            SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, indexSRSInfo, radius, unitsURI);
 
             return new SpatialArguments(limit, geometryWrapper, searchEnvelope);
         } catch (DatatypeFormatException ex) {

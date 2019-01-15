@@ -82,9 +82,9 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO);
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -112,9 +112,9 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO);
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -142,9 +142,9 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO);
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -172,9 +172,9 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO);
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -202,9 +202,9 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO);
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -232,9 +232,9 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO);
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -262,9 +262,9 @@ public class GenericCardinalPropertyFunctionTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometry);
 
         NorthPF instance = new NorthPF();
-        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope searchEnvelope = instance.buildSearchEnvelope(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO);
         SpatialArguments expResult = new SpatialArguments(limit, geometryWrapper, searchEnvelope);
-        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments result = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

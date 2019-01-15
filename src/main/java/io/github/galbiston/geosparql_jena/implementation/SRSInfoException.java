@@ -19,13 +19,13 @@ package io.github.galbiston.geosparql_jena.implementation;
  *
  *
  */
-public class CRSInfoException extends RuntimeException {
+public class SRSInfoException extends RuntimeException {
 
-    public CRSInfoException(String msg) {
+    public SRSInfoException(String msg) {
         super(msg);
     }
 
-    public CRSInfoException(String msg, Throwable cause) {
+    public SRSInfoException(String msg, Throwable cause) {
         super(msg, cause);
     }
 }

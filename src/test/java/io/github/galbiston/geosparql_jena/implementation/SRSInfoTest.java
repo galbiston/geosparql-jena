@@ -31,9 +31,9 @@ import org.opengis.util.FactoryException;
  *
  *
  */
-public class CRSInfoTest {
+public class SRSInfoTest {
 
-    public CRSInfoTest() {
+    public SRSInfoTest() {
     }
 
     @BeforeClass
@@ -53,7 +53,7 @@ public class CRSInfoTest {
     }
 
     /**
-     * Test of buildDomainEnvelope method, of class CRSInfo.
+     * Test of buildDomainEnvelope method, of class SRSInfo.
      *
      * @throws org.opengis.util.FactoryException
      */
@@ -62,9 +62,9 @@ public class CRSInfoTest {
         System.out.println("buildDomainEnvelope_WGS84");
         String srsURI = SRS_URI.WGS84_CRS;
         CoordinateReferenceSystem crs = CRS.forCode(srsURI);
-        Boolean isAxisXY = CRSInfo.checkAxisXY(crs);
+        Boolean isAxisXY = SRSInfo.checkAxisXY(crs);
         Envelope expResult = new Envelope(-180, 180, -90, 90);
-        Envelope result = CRSInfo.buildDomainEnvelope(crs, isAxisXY);
+        Envelope result = SRSInfo.buildDomainEnvelope(crs, isAxisXY);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -72,7 +72,7 @@ public class CRSInfoTest {
     }
 
     /**
-     * Test of buildDomainEnvelope method, of class CRSInfo.
+     * Test of buildDomainEnvelope method, of class SRSInfo.
      *
      * @throws org.opengis.util.FactoryException
      */
@@ -81,10 +81,10 @@ public class CRSInfoTest {
         System.out.println("buildDomainEnvelope_CRS84");
         String srsURI = SRS_URI.DEFAULT_WKT_CRS84;
         CoordinateReferenceSystem crs = CRS.forCode(srsURI);
-        Boolean isAxisXY = CRSInfo.checkAxisXY(crs);
+        Boolean isAxisXY = SRSInfo.checkAxisXY(crs);
 
         Envelope expResult = new Envelope(-180, 180, -90, 90);
-        Envelope result = CRSInfo.buildDomainEnvelope(crs, isAxisXY);
+        Envelope result = SRSInfo.buildDomainEnvelope(crs, isAxisXY);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -92,7 +92,7 @@ public class CRSInfoTest {
     }
 
     /**
-     * Test of buildDomainEnvelope method, of class CRSInfo.
+     * Test of buildDomainEnvelope method, of class SRSInfo.
      *
      * @throws org.opengis.util.FactoryException
      */
@@ -101,10 +101,10 @@ public class CRSInfoTest {
         System.out.println("buildDomainEnvelope_OSGB36");
         String srsURI = SRS_URI.OSGB36_CRS;
         CoordinateReferenceSystem crs = CRS.forCode(srsURI);
-        Boolean isAxisXY = CRSInfo.checkAxisXY(crs);
+        Boolean isAxisXY = SRSInfo.checkAxisXY(crs);
 
         Envelope expResult = new Envelope(-118397.00138845091, 751441.7790901454, -16627.734375018626, 1272149.3463499574);
-        Envelope result = CRSInfo.buildDomainEnvelope(crs, isAxisXY);
+        Envelope result = SRSInfo.buildDomainEnvelope(crs, isAxisXY);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -112,7 +112,7 @@ public class CRSInfoTest {
     }
 
     /**
-     * Test of checkAxisXY method, of class CRSRegistry.
+     * Test of checkAxisXY method, of class SRSInfo.
      *
      * @throws org.opengis.util.FactoryException
      */
@@ -121,7 +121,7 @@ public class CRSInfoTest {
         System.out.println("checkAxisXY_WGS84");
         CoordinateReferenceSystem crs = CRS.forCode(SRS_URI.WGS84_CRS);
         Boolean expResult = false;
-        Boolean result = CRSInfo.checkAxisXY(crs);
+        Boolean result = SRSInfo.checkAxisXY(crs);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -129,7 +129,7 @@ public class CRSInfoTest {
     }
 
     /**
-     * Test of checkAxisXY method, of class CRSRegistry.
+     * Test of checkAxisXY method, of class SRSInfo.
      *
      * @throws org.opengis.util.FactoryException
      */
@@ -138,7 +138,7 @@ public class CRSInfoTest {
         System.out.println("checkAxisXY_CRS84");
         CoordinateReferenceSystem crs = CRS.forCode("CRS:84");
         Boolean expResult = true;
-        Boolean result = CRSInfo.checkAxisXY(crs);
+        Boolean result = SRSInfo.checkAxisXY(crs);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -146,7 +146,7 @@ public class CRSInfoTest {
     }
 
     /**
-     * Test of checkAxisXY method, of class CRSRegistry.
+     * Test of checkAxisXY method, of class SRSInfo.
      *
      * @throws org.opengis.util.FactoryException
      */
@@ -155,7 +155,7 @@ public class CRSInfoTest {
         System.out.println("checkAxisXY_OSGB36");
         CoordinateReferenceSystem crs = CRS.forCode(SRS_URI.OSGB36_CRS);
         Boolean expResult = true;
-        Boolean result = CRSInfo.checkAxisXY(crs);
+        Boolean result = SRSInfo.checkAxisXY(crs);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

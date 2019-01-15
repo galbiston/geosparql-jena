@@ -72,8 +72,8 @@ public class SearchEnvelopeTest {
         System.out.println("build_NORTH");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.NORTH;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(X1, X2, 10, Y2), SpatialIndexTestData.WGS_84_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(X1, X2, 10, Y2), SpatialIndexTestData.WGS_84_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -88,8 +88,8 @@ public class SearchEnvelopeTest {
         System.out.println("build_SOUTH");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.SOUTH;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(X1, X2, Y1, 10), SpatialIndexTestData.WGS_84_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(X1, X2, Y1, 10), SpatialIndexTestData.WGS_84_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -104,8 +104,8 @@ public class SearchEnvelopeTest {
         System.out.println("build_EAST");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 -20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.EAST;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-20, 160, Y1, Y2), SpatialIndexTestData.WGS_84_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-20, 160, Y1, Y2), SpatialIndexTestData.WGS_84_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -120,8 +120,8 @@ public class SearchEnvelopeTest {
         System.out.println("build_WEST");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.WEST;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-160, 20, Y1, Y2), SpatialIndexTestData.WGS_84_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-160, 20, Y1, Y2), SpatialIndexTestData.WGS_84_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -136,8 +136,8 @@ public class SearchEnvelopeTest {
         System.out.println("buildWrap_EAST");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 100.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.EAST;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(100, 280, Y1, Y2), SpatialIndexTestData.WGS_84_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(100, 280, Y1, Y2), SpatialIndexTestData.WGS_84_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -152,8 +152,8 @@ public class SearchEnvelopeTest {
         System.out.println("buildWrap_WEST");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 -20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.WEST;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-200, -20, Y1, Y2), SpatialIndexTestData.WGS_84_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-200, -20, Y1, Y2), SpatialIndexTestData.WGS_84_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -168,8 +168,8 @@ public class SearchEnvelopeTest {
         System.out.println("build_NORTH_OSGB");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.NORTH;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(OS_X1, OS_X2, 20, OS_Y2), SpatialIndexTestData.OSGB_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(OS_X1, OS_X2, 20, OS_Y2), SpatialIndexTestData.OSGB_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -184,8 +184,8 @@ public class SearchEnvelopeTest {
         System.out.println("build_SOUTH_OSGB");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.SOUTH;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(OS_X1, OS_X2, OS_Y1, 20), SpatialIndexTestData.OSGB_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(OS_X1, OS_X2, OS_Y1, 20), SpatialIndexTestData.OSGB_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -200,8 +200,8 @@ public class SearchEnvelopeTest {
         System.out.println("build_EAST_OSGB");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.EAST;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(10, OS_X2, OS_Y1, OS_Y2), SpatialIndexTestData.OSGB_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(10, OS_X2, OS_Y1, OS_Y2), SpatialIndexTestData.OSGB_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -216,8 +216,8 @@ public class SearchEnvelopeTest {
         System.out.println("build_WEST_OSGB");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10.0 20.0)", WKTDatatype.URI);
         CardinalDirection direction = CardinalDirection.WEST;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(OS_X1, 10, OS_Y1, OS_Y2), SpatialIndexTestData.OSGB_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_CRS_INFO, direction);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(OS_X1, 10, OS_Y1, OS_Y2), SpatialIndexTestData.OSGB_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_SRS_INFO, direction);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -230,7 +230,7 @@ public class SearchEnvelopeTest {
     @Test
     public void testGetMainEnvelope() {
         System.out.println("getMainEnvelope");
-        SearchEnvelope instance = new SearchEnvelope(new Envelope(0, 10, 0, 10), SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope instance = new SearchEnvelope(new Envelope(0, 10, 0, 10), SpatialIndexTestData.WGS_84_SRS_INFO);
         Envelope expResult = new Envelope(0, 10, 0, 10);
         Envelope result = instance.getMainEnvelope();
 
@@ -245,7 +245,7 @@ public class SearchEnvelopeTest {
     @Test
     public void testGetMainEnvelope2() {
         System.out.println("getMainEnvelope2");
-        SearchEnvelope instance = new SearchEnvelope(new Envelope(40, 220, 0, 10), SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope instance = new SearchEnvelope(new Envelope(40, 220, 0, 10), SpatialIndexTestData.WGS_84_SRS_INFO);
         Envelope expResult = new Envelope(40, 180, 0, 10);
         Envelope result = instance.getMainEnvelope();
 
@@ -260,7 +260,7 @@ public class SearchEnvelopeTest {
     @Test
     public void testGetMainEnvelope3() {
         System.out.println("getMainEnvelope3");
-        SearchEnvelope instance = new SearchEnvelope(new Envelope(-220, -40, 0, 10), SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope instance = new SearchEnvelope(new Envelope(-220, -40, 0, 10), SpatialIndexTestData.WGS_84_SRS_INFO);
         Envelope expResult = new Envelope(-180, -40, 0, 10);
         Envelope result = instance.getMainEnvelope();
 
@@ -275,7 +275,7 @@ public class SearchEnvelopeTest {
     @Test
     public void testGetMainEnvelope_OSGB() {
         System.out.println("getMainEnvelope_OSGB");
-        SearchEnvelope instance = new SearchEnvelope(new Envelope(-220, -40, 0, 10), SpatialIndexTestData.OSGB_CRS_INFO);
+        SearchEnvelope instance = new SearchEnvelope(new Envelope(-220, -40, 0, 10), SpatialIndexTestData.OSGB_SRS_INFO);
         Envelope expResult = new Envelope(-220, -40, 0, 10);
         Envelope result = instance.getMainEnvelope();
 
@@ -290,7 +290,7 @@ public class SearchEnvelopeTest {
     @Test
     public void testGetWrapEnvelope() {
         System.out.println("getWrapEnvelope");
-        SearchEnvelope instance = new SearchEnvelope(new Envelope(0, 10, 0, 10), SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope instance = new SearchEnvelope(new Envelope(0, 10, 0, 10), SpatialIndexTestData.WGS_84_SRS_INFO);
 
         Envelope expResult = null;
         Envelope result = instance.getWrapEnvelope();
@@ -306,7 +306,7 @@ public class SearchEnvelopeTest {
     @Test
     public void testGetWrapEnvelope2() {
         System.out.println("getWrapEnvelope2");
-        SearchEnvelope instance = new SearchEnvelope(new Envelope(40, 220, 0, 10), SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope instance = new SearchEnvelope(new Envelope(40, 220, 0, 10), SpatialIndexTestData.WGS_84_SRS_INFO);
 
         Envelope expResult = new Envelope(-180, -140, 0, 10);
         Envelope result = instance.getWrapEnvelope();
@@ -322,7 +322,7 @@ public class SearchEnvelopeTest {
     @Test
     public void testGetWrapEnvelope3() {
         System.out.println("getWrapEnvelope3");
-        SearchEnvelope instance = new SearchEnvelope(new Envelope(-220, -40, 0, 10), SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope instance = new SearchEnvelope(new Envelope(-220, -40, 0, 10), SpatialIndexTestData.WGS_84_SRS_INFO);
 
         Envelope expResult = new Envelope(140, 180, 0, 10);
         Envelope result = instance.getWrapEnvelope();
@@ -338,7 +338,7 @@ public class SearchEnvelopeTest {
     @Test
     public void testGetWrapEnvelope_OSGB() {
         System.out.println("getWrapEnvelope_OSGB");
-        SearchEnvelope instance = new SearchEnvelope(new Envelope(-220, -40, 0, 10), SpatialIndexTestData.OSGB_CRS_INFO);
+        SearchEnvelope instance = new SearchEnvelope(new Envelope(-220, -40, 0, 10), SpatialIndexTestData.OSGB_SRS_INFO);
         Envelope expResult = null;
         Envelope result = instance.getWrapEnvelope();
 
@@ -356,8 +356,8 @@ public class SearchEnvelopeTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(0 0)", WKTDatatype.URI);
         double radius = 10;
         String unitsURI = Unit_URI.KILOMETER_URL;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-0.08993216059187306, 0.08993216059187306, -0.08993216059187306, 0.08993216059187306), SpatialIndexTestData.WGS_84_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, radius, unitsURI);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-0.08993216059187306, 0.08993216059187306, -0.08993216059187306, 0.08993216059187306), SpatialIndexTestData.WGS_84_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, radius, unitsURI);
 
         //System.out.println("Exp: " + expResult);
         // System.out.println("Res: " + result);
@@ -373,8 +373,8 @@ public class SearchEnvelopeTest {
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(0 0)", WKTDatatype.URI);
         double radius = 10;
         String unitsURI = Unit_URI.KILOMETER_URL;
-        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-10000, 10000, -10000, 10000), SpatialIndexTestData.OSGB_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_CRS_INFO, radius, unitsURI);
+        SearchEnvelope expResult = new SearchEnvelope(new Envelope(-10000, 10000, -10000, 10000), SpatialIndexTestData.OSGB_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.OSGB_SRS_INFO, radius, unitsURI);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -388,8 +388,8 @@ public class SearchEnvelopeTest {
     public void testBuild_GeometryWrapper() {
         System.out.println("build");
         GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
-        SearchEnvelope expResult = new SearchEnvelope(geometryWrapper.getEnvelope(), SpatialIndexTestData.WGS_84_CRS_INFO);
-        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SearchEnvelope expResult = new SearchEnvelope(geometryWrapper.getEnvelope(), SpatialIndexTestData.WGS_84_SRS_INFO);
+        SearchEnvelope result = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -408,7 +408,7 @@ public class SearchEnvelopeTest {
         GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
         float radius = 345;
         String unitsURI = Unit_URI.KILOMETER_URL;
-        SearchEnvelope instance = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, radius, unitsURI);
+        SearchEnvelope instance = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, radius, unitsURI);
 
         //Function Test
         HashSet<Resource> expResult = new HashSet<>(Arrays.asList(SpatialIndexTestData.LONDON_FEATURE));
@@ -431,7 +431,7 @@ public class SearchEnvelopeTest {
         GeometryWrapper geometryWrapper = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER;
         float radius = 2;
         String unitsURI = Unit_URI.KILOMETER_URL;
-        SearchEnvelope instance = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_CRS_INFO, radius, unitsURI);
+        SearchEnvelope instance = SearchEnvelope.build(geometryWrapper, SpatialIndexTestData.WGS_84_SRS_INFO, radius, unitsURI);
 
         //Function Test
         HashSet<Resource> expResult = new HashSet<>();

@@ -15,7 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
-import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
@@ -55,8 +55,8 @@ public class SpatialIndexTestData {
 
     public static final GeometryWrapper PARIS_GEOMETRY_WRAPPER = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(48.85341 2.34880)", WKTDatatype.URI);
 
-    public static final CRSInfo WGS_84_CRS_INFO = new CRSInfo(SRS_URI.WGS84_CRS);
-    public static final CRSInfo OSGB_CRS_INFO = new CRSInfo(SRS_URI.OSGB36_CRS);
+    public static final SRSInfo WGS_84_SRS_INFO = new SRSInfo(SRS_URI.WGS84_CRS);
+    public static final SRSInfo OSGB_SRS_INFO = new SRSInfo(SRS_URI.OSGB36_CRS);
 
     private static SpatialIndex TEST_SPATIAL_INDEX = null;
     private static Dataset TEST_DATASET = null;

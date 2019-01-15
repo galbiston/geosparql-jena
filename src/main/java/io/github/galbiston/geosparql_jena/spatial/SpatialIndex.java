@@ -15,9 +15,9 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
-import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
+import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import java.io.File;
@@ -64,14 +64,14 @@ public class SpatialIndex implements Serializable {
 
     public static final Symbol SPATIAL_INDEX_SYMBOL = Symbol.create("http://jena.apache.org/spatial#index");
 
-    private final CRSInfo crsInfo;
+    private final SRSInfo srsInfo;
     private boolean isBuilt;
     private final STRtree strTree;
 
     public SpatialIndex(int capacity, String srsURI) {
         this.strTree = new STRtree(capacity);
         this.isBuilt = false;
-        this.crsInfo = CRSRegistry.getCRSInfo(srsURI);
+        this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
     }
 
     public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
@@ -79,11 +79,11 @@ public class SpatialIndex implements Serializable {
         insertItems(spatialIndexItems);
         this.strTree.build();
         this.isBuilt = true;
-        this.crsInfo = CRSRegistry.getCRSInfo(srsURI);
+        this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
     }
 
-    public CRSInfo getCrsInfo() {
-        return crsInfo;
+    public SRSInfo getCrsInfo() {
+        return srsInfo;
     }
 
     public boolean isEmpty() {
@@ -123,7 +123,7 @@ public class SpatialIndex implements Serializable {
 
     @Override
     public String toString() {
-        return "SpatialIndex{" + "crsInfo=" + crsInfo + ", isBuilt=" + isBuilt + ", strTree=" + strTree + '}';
+        return "SpatialIndex{" + "srsInfo=" + srsInfo + ", isBuilt=" + isBuilt + ", strTree=" + strTree + '}';
     }
 
     public static final SpatialIndex retrieve(ExecutionContext execCxt) throws SpatialIndexException {
@@ -240,7 +240,7 @@ public class SpatialIndex implements Serializable {
 
                 try {
                     //Ensure all entries in the target SRS URI.
-                    GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(srsURI);
+                    GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertSRS(srsURI);
 
                     Envelope envelope = transformedGeometryWrapper.getEnvelope();
                     SpatialIndexItem item = new SpatialIndexItem(envelope, feature);
@@ -270,7 +270,7 @@ public class SpatialIndex implements Serializable {
 
             try {
                 //Ensure all entries in the target SRS URI.
-                GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertCRS(srsURI);
+                GeometryWrapper transformedGeometryWrapper = geometryWrapper.convertSRS(srsURI);
 
                 Envelope envelope = transformedGeometryWrapper.getEnvelope();
                 SpatialIndexItem item = new SpatialIndexItem(envelope, feature);

@@ -17,11 +17,10 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.registry;
 
-import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
-import io.github.galbiston.geosparql_jena.implementation.CRSInfoException;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfoException;
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
-import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_CRS_URI;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
@@ -31,77 +30,78 @@ import java.util.Map;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_SRS_URI;
 
 /**
  *
  *
  */
-public class CRSRegistry implements Serializable {
+public class SRSRegistry implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static final Map<String, CRSInfo> CRS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, SRSInfo> SRS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
 
     public static final UnitsOfMeasure getUnitsOfMeasure(String srsURI) {
-        CRSInfo crsInfo = storeCRS(srsURI);
-        return crsInfo.getUnitsOfMeasure();
+        SRSInfo srsInfo = storeSRS(srsURI);
+        return srsInfo.getUnitsOfMeasure();
     }
 
     public static final Boolean getAxisXY(String srsURI) {
-        CRSInfo crsInfo = storeCRS(srsURI);
-        return crsInfo.isAxisXY();
+        SRSInfo srsInfo = storeSRS(srsURI);
+        return srsInfo.isAxisXY();
     }
 
     public static final CoordinateReferenceSystem getCRS(String srsURI) {
-        CRSInfo crsInfo = storeCRS(srsURI);
-        return crsInfo.getCrs();
+        SRSInfo srsInfo = storeSRS(srsURI);
+        return srsInfo.getCrs();
     }
 
-    public static final CRSInfo getCRSInfo(String srsURI) {
-        return storeCRS(srsURI);
+    public static final SRSInfo getSRSInfo(String srsURI) {
+        return storeSRS(srsURI);
     }
 
-    private static CRSInfo storeCRS(String srsURI) {
+    private static SRSInfo storeSRS(String srsURI) {
 
-        CRSInfo crsInfo;
-        if (CRS_REGISTRY.containsKey(srsURI)) {
-            crsInfo = CRS_REGISTRY.get(srsURI);
+        SRSInfo srsInfo;
+        if (SRS_REGISTRY.containsKey(srsURI)) {
+            srsInfo = SRS_REGISTRY.get(srsURI);
         } else {
 
-            //Find the CRS based on the SRS.
+            //Find the SRS based on the SRS URI.
             try {
-                crsInfo = new CRSInfo(srsURI);
-            } catch (CRSInfoException ex) {
+                srsInfo = new SRSInfo(srsURI);
+            } catch (SRSInfoException ex) {
                 LOGGER.error("SRS URI not recognised - Operations may not complete correctly: {} - {}", srsURI, ex.getMessage());
-                crsInfo = CRSInfo.getUnrecognised(srsURI);
+                srsInfo = SRSInfo.getUnrecognised(srsURI);
             }
 
-            CRS_REGISTRY.put(srsURI, crsInfo);
+            SRS_REGISTRY.put(srsURI, srsInfo);
         }
 
-        return crsInfo;
+        return srsInfo;
     }
 
-    public static final void setupDefaultCRS() {
+    public static final void setupDefaultSRS() {
 
         //CRS_84
-        CRSInfo crsInfo = CRSInfo.getDefaultWktCRS84(SRS_URI.DEFAULT_WKT_CRS84);
-        CRS_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, crsInfo);
+        SRSInfo srsInfo = SRSInfo.getDefaultWktCRS84(SRS_URI.DEFAULT_WKT_CRS84);
+        SRS_REGISTRY.put(SRS_URI.DEFAULT_WKT_CRS84, srsInfo);
 
         //WGS_84 Legacy for CRS_84
-        CRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, CRSInfo.getDefaultWktCRS84(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY));
+        SRS_REGISTRY.put(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY, SRSInfo.getDefaultWktCRS84(SRS_URI.WGS84_CRS_GEOSPARQL_LEGACY));
 
         //Add the Units of Measure
-        UnitsRegistry.addUnit(crsInfo.getUnitsOfMeasure());
+        UnitsRegistry.addUnit(srsInfo.getUnitsOfMeasure());
     }
 
     public static final void reset() {
-        CRS_REGISTRY.clear();
-        setupDefaultCRS();
+        SRS_REGISTRY.clear();
+        setupDefaultSRS();
     }
 
-    private static final String NORTH_UTM_EPSG = EPSG_BASE_CRS_URI + "326";
-    private static final String SOUTH_UTM_EPSG = EPSG_BASE_CRS_URI + "327";
+    private static final String NORTH_UTM_EPSG = EPSG_BASE_SRS_URI + "326";
+    private static final String SOUTH_UTM_EPSG = EPSG_BASE_SRS_URI + "327";
     private static final DecimalFormat ZONE_FORMATTER = new DecimalFormat("##");
 
     /**

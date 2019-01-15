@@ -68,16 +68,16 @@ public class GeometryWrapperTest {
     }
 
     /**
-     * Test of checkTransformCRS method, of class GeometryWrapper.
+     * Test of checkTransformSRS method, of class GeometryWrapper.
      *
      * @throws java.lang.Exception
      */
     @Test
-    public void testCheckCRS() throws Exception {
-        System.out.println("checkCRS");
+    public void testCheckTransformSRS() throws Exception {
+        System.out.println("checkTransformSRS");
         Geometry geometry = GEOMETRY_FACTORY.createPoint(new Coordinate(1.0, 2.0));
         String sourceSRSURI = SRS_URI.WGS84_CRS;
-        GeometryWrapper sourceCRSGeometry = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.XY_POINT());
+        GeometryWrapper sourceSRSGeometry = new GeometryWrapper(geometry, sourceSRSURI, WKTDatatype.URI, DimensionInfo.XY_POINT());
 
         //Only the SRS_URI is important in the instance.
         String targetSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
@@ -86,7 +86,7 @@ public class GeometryWrapperTest {
         //Expecting the coordinates to be reveresed.
         Geometry geometryTarget = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         GeometryWrapper expResult = new GeometryWrapper(geometryTarget, targetSRSURI, WKTDatatype.URI, DimensionInfo.XY_POINT());
-        GeometryWrapper result = instance.checkTransformCRS(sourceCRSGeometry);
+        GeometryWrapper result = instance.checkTransformSRS(sourceSRSGeometry);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -231,8 +231,8 @@ public class GeometryWrapperTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testDistanceSameCRSSameUnit() throws Exception {
-        System.out.println("distanceEuclidean, same CRS, same Unit");
+    public void testDistanceSameSRSSameUnit() throws Exception {
+        System.out.println("distanceEuclidean, same SRS, same Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         String targetSRSURI = SRS_URI.OSGB36_CRS;
@@ -242,7 +242,7 @@ public class GeometryWrapperTest {
         String instanceSRSURI = SRS_URI.OSGB36_CRS;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.XY_POINT());
 
-        //CRS is in metres.
+        //SRS is in metres.
         String distanceUnitsURL = Unit_URI.METRE_URL;
 
         double expResult = 10.0;
@@ -259,8 +259,8 @@ public class GeometryWrapperTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testDistanceSameCRSDifferentUnit() throws Exception {
-        System.out.println("distanceEuclidean, same CRS, different Unit");
+    public void testDistanceSameSRSDifferentUnit() throws Exception {
+        System.out.println("distanceEuclidean, same SRS, different Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(385458, 156785)); //LatLon - 51.31, -2.21
         String targetSRSURI = SRS_URI.OSGB36_CRS;
@@ -270,7 +270,7 @@ public class GeometryWrapperTest {
         String instanceSRSURI = SRS_URI.OSGB36_CRS;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.XY_POINT());
 
-        //CRS is in metres.
+        //SRS is in metres.
         String distanceUnitsURL = Unit_URI.RADIAN_URL;
 
         double expResult = 0.025656; //Degree: 1.47
@@ -288,8 +288,8 @@ public class GeometryWrapperTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testDistanceDifferentCRSSameUnit() throws Exception {
-        System.out.println("distanceEuclidean, different CRS, same Unit");
+    public void testDistanceDifferentSRSSameUnit() throws Exception {
+        System.out.println("distanceEuclidean, different SRS, same Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(2.0, 1.0));
         String targetSRSURI = SRS_URI.WGS84_CRS;
@@ -299,7 +299,7 @@ public class GeometryWrapperTest {
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.XY_POINT());
 
-        //CRS is in degrees.
+        //SRS is in degrees.
         String distanceUnitsURL = Unit_URI.DEGREE_URL;
 
         double expResult = 10.0;
@@ -317,8 +317,8 @@ public class GeometryWrapperTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testDistanceDifferentCRSDifferentUnit() throws Exception {
-        System.out.println("distanceEuclidean, different CRS, different Unit");
+    public void testDistanceDifferentSRSDifferentUnit() throws Exception {
+        System.out.println("distanceEuclidean, different SRS, different Unit");
 
         Geometry targetGeo = GEOMETRY_FACTORY.createPoint(new Coordinate(0.0, 1.0));
         String targetSRSURI = SRS_URI.WGS84_CRS;
@@ -328,7 +328,7 @@ public class GeometryWrapperTest {
         String instanceSRSURI = SRS_URI.DEFAULT_WKT_CRS84;
         GeometryWrapper instance = new GeometryWrapper(instanceGeo, instanceSRSURI, WKTDatatype.URI, DimensionInfo.XY_POINT());
 
-        //CRS is in degrees.
+        //SRS is in degrees.
         String distanceUnitsURL = Unit_URI.METRE_URL;
 
         double expResult = 111320; //1.0 degree of longigtude at the equator is approx 111.32km.
@@ -545,7 +545,7 @@ public class GeometryWrapperTest {
         System.out.println("translateXYGeometry_non_geographic");
         GeometryWrapper instance = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((10.0 -180.0, 20.0 -180.0, 20.0 -170.0, 10.0 -170.0, 10.0 -180.0))", WKTDatatype.URI);
 
-        //Exp Result is unchanged as only geographic CRS are translated.
+        //Exp Result is unchanged as only geographic SRS are translated.
         Geometry expResult = instance.getXYGeometry();
         Geometry result = instance.translateXYGeometry();
 

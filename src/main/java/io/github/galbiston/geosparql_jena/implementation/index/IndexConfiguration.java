@@ -17,7 +17,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.index;
 
-import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
+import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.registry.MathTransformRegistry;
 import static io.github.galbiston.expiring_map.MapDefaultValues.NO_MAP;
 import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
@@ -92,7 +92,7 @@ public class IndexConfiguration {
     public static final void resetIndexesAndRegistries() {
         GeometryLiteralIndex.clear();
         QueryRewriteIndex.clear();
-        CRSRegistry.reset();
+        SRSRegistry.reset();
         MathTransformRegistry.clear();
     }
 

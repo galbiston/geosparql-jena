@@ -80,7 +80,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
 
         GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
         NorthPF instance = new NorthPF();
-        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         boolean expResult = true;
         boolean result = instance.checkSecondFilter(spatialArgumemts, targetGeometryWrapper);
@@ -111,7 +111,7 @@ public class GenericCardinalGeomPropertyFunctionTest {
 
         GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(targetGeometry);
         NorthPF instance = new NorthPF();
-        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_CRS_INFO);
+        SpatialArguments spatialArgumemts = instance.extractObjectArguments(predicate, object, SpatialIndexTestData.WGS_84_SRS_INFO);
 
         boolean expResult = false;
         boolean result = instance.checkSecondFilter(spatialArgumemts, targetGeometryWrapper);

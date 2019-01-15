@@ -17,7 +17,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation;
 
-import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
+import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
@@ -42,7 +42,7 @@ public class GeometryReverse {
      */
     public static final Geometry check(Geometry geometry, String srsURI) {
 
-        Boolean isAxisXY = CRSRegistry.getAxisXY(srsURI);
+        Boolean isAxisXY = SRSRegistry.getAxisXY(srsURI);
         return check(geometry, isAxisXY);
     }
 
@@ -51,11 +51,11 @@ public class GeometryReverse {
      * geometry coordinates.
      *
      * @param geometry
-     * @param crsInfo
+     * @param srsInfo
      * @return Geometry in x,y coordinate order.
      */
-    public static final Geometry check(Geometry geometry, CRSInfo crsInfo) {
-        return check(geometry, crsInfo.isAxisXY());
+    public static final Geometry check(Geometry geometry, SRSInfo srsInfo) {
+        return check(geometry, srsInfo.isAxisXY());
     }
 
     /**

@@ -17,7 +17,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.jts;
 
-import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.parsers.wkt.WKTReader;
 import io.github.galbiston.geosparql_jena.implementation.registry.MathTransformRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
@@ -72,7 +72,7 @@ public class GeometryTransformTest {
         Geometry sourceGeometry = WKTReader.extract("POINT ZM(5 10 8 3)").getGeometry();
 
         CoordinateReferenceSystem sourceCRS = CRS.forCode(SRS_URI.WGS84_CRS);
-        CoordinateReferenceSystem targetCRS = CRS.forCode(CRSInfo.DEFAULT_WKT_CRS84_CODE);
+        CoordinateReferenceSystem targetCRS = CRS.forCode(SRSInfo.DEFAULT_WKT_CRS84_CODE);
         MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
 
         Geometry expResult = WKTReader.extract("POINT ZM(10 5 8 3)").getGeometry();
@@ -95,7 +95,7 @@ public class GeometryTransformTest {
         Geometry sourceGeometry = WKTReader.extract("POLYGON(5.0 5.0, 5.0 15.0, 15.0 15.0, 15.0 5.0, 5.0 5.0)").getGeometry();
 
         CoordinateReferenceSystem sourceCRS = CRS.forCode(SRS_URI.WGS84_CRS);
-        CoordinateReferenceSystem targetCRS = CRS.forCode(CRSInfo.DEFAULT_WKT_CRS84_CODE);
+        CoordinateReferenceSystem targetCRS = CRS.forCode(SRSInfo.DEFAULT_WKT_CRS84_CODE);
         MathTransform transform = MathTransformRegistry.getMathTransform(sourceCRS, targetCRS);
 
         Geometry expResult = WKTReader.extract("POLYGON(5.0 5.0, 15.0 5.0, 15.0 15.0, 5.0 15.0, 5.0 5.0)").getGeometry();

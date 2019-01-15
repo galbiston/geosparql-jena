@@ -43,9 +43,9 @@ public interface SRS_URI {
     public static final String WGS84_CRS = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
     /**
-     * Base part of the EPSG CRS URI. Needs a specific EPSG code adding to it.
+     * Base part of the EPSG SRS URI. Needs a specific EPSG code adding to it.
      */
-    public static final String EPSG_BASE_CRS_URI = "http://www.opengis.net/def/crs/EPSG/0/";
+    public static final String EPSG_BASE_SRS_URI = "http://www.opengis.net/def/crs/EPSG/0/";
 
     /**
      * WGS84 World Mercator SRS_URI Name used for Latitude, Longitude in

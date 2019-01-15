@@ -30,7 +30,7 @@ import org.opengis.util.FactoryException;
  *
  *
  */
-public class CRSInfo {
+public class SRSInfo {
 
     private final String srsURI;
     private final CoordinateReferenceSystem crs;
@@ -44,7 +44,7 @@ public class CRSInfo {
 
     private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
 
-    public CRSInfo(String srsURI) {
+    public SRSInfo(String srsURI) {
         this.srsURI = srsURI;
 
         try {
@@ -56,11 +56,11 @@ public class CRSInfo {
             this.domainEnvelope = buildDomainEnvelope(crs, isAxisXY);
             this.domainRangeX = Math.abs(domainEnvelope.getMinX()) + Math.abs(domainEnvelope.getMaxX());
         } catch (FactoryException ex) {
-            throw new CRSInfoException("Invalid CRS code: " + srsURI + " - " + ex.getMessage(), ex);
+            throw new SRSInfoException("Invalid SRS URI code: " + srsURI + " - " + ex.getMessage(), ex);
         }
     }
 
-    private CRSInfo(String srsURI, CoordinateReferenceSystem crs, boolean isSRSRecognised) {
+    private SRSInfo(String srsURI, CoordinateReferenceSystem crs, boolean isSRSRecognised) {
         this.srsURI = srsURI;
         this.crs = crs;
         this.isAxisXY = checkAxisXY(crs);
@@ -157,7 +157,7 @@ public class CRSInfo {
     }
 
     /**
-     * Check if the CRS is geographic (i.e. latitude, longitude on a sphere).
+     * Check if the SRS is geographic (i.e. latitude, longitude on a sphere).
      *
      * @return
      */
@@ -186,15 +186,15 @@ public class CRSInfo {
     /**
      *
      * @param srsURI Allows alternative srsURI to be associated with CRS84.
-     * @return CRSInfo with default setup for WKT without SRS URI.
+     * @return SRSInfo with default setup for WKT without SRS URI.
      */
-    public static final CRSInfo getDefaultWktCRS84(String srsURI) {
+    public static final SRSInfo getDefaultWktCRS84(String srsURI) {
 
         try {
             CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
-            return new CRSInfo(srsURI, crs, true);
+            return new SRSInfo(srsURI, crs, true);
         } catch (FactoryException ex) {
-            throw new CRSInfoException("Invalid CRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage(), ex);
+            throw new SRSInfoException("Invalid SRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage(), ex);
         }
     }
 
@@ -203,21 +203,21 @@ public class CRSInfo {
      * operations do not error but may not complete as expected.
      *
      * @param srsURI
-     * @return CRSInfo with default setup for WKT without SRS URI
+     * @return SRSInfo with default setup for WKT without SRS URI
      */
-    public static final CRSInfo getUnrecognised(String srsURI) {
+    public static final SRSInfo getUnrecognised(String srsURI) {
 
         try {
             CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
-            return new CRSInfo(srsURI, crs, false);
+            return new SRSInfo(srsURI, crs, false);
         } catch (FactoryException ex) {
-            throw new CRSInfoException("Invalid CRS code: " + srsURI + " - " + ex.getMessage(), ex);
+            throw new SRSInfoException("Invalid SRS URI code: " + srsURI + " - " + ex.getMessage(), ex);
         }
     }
 
     @Override
     public String toString() {
-        return "CRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isGeographic=" + isGeographic + ", isSRSRecognised=" + isSRSRecognised + ", domainEnvelope=" + domainEnvelope + ", domainRangeX=" + domainRangeX + '}';
+        return "SRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isGeographic=" + isGeographic + ", isSRSRecognised=" + isSRSRecognised + ", domainEnvelope=" + domainEnvelope + ", domainRangeX=" + domainRangeX + '}';
     }
 
     @Override
@@ -245,7 +245,7 @@ public class CRSInfo {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CRSInfo other = (CRSInfo) obj;
+        final SRSInfo other = (SRSInfo) obj;
         if (Double.doubleToLongBits(this.domainRangeX) != Double.doubleToLongBits(other.domainRangeX)) {
             return false;
         }

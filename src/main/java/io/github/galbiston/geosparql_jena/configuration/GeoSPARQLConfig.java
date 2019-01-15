@@ -29,7 +29,7 @@ import io.github.galbiston.geosparql_jena.implementation.function_registration.S
 import io.github.galbiston.geosparql_jena.implementation.function_registration.Spatial;
 import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguration;
 import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguration.IndexOption;
-import io.github.galbiston.geosparql_jena.implementation.registry.CRSRegistry;
+import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import java.io.File;
@@ -188,7 +188,7 @@ public class GeoSPARQLConfig {
     private static void setupSupport() {
         if (!IS_SUPPORT_SETUP) {
             //Setup Default Cordinate Reference Systems
-            CRSRegistry.setupDefaultCRS();
+            SRSRegistry.setupDefaultSRS();
 
             //Register GeometryLiteral datatypes for CSV conversion
             CSVConversion.registerDatatypes();

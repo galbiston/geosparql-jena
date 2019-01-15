@@ -15,8 +15,8 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.great_circle;
 
-import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import java.util.Objects;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
@@ -80,9 +80,9 @@ public class CoordinatePair {
     public static final CoordinatePair findNearestPair(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) {
 
         //Both GeoemtryWrappers should be same SRS andn Geographic.
-        CRSInfo sourceCRSInfo = sourceGeometry.getCrsInfo();
-        CRSInfo targetCRSInfo = targetGeometry.getCrsInfo();
-        if (!(sourceCRSInfo.isGeographic() && targetCRSInfo.isGeographic()) || !(sourceCRSInfo.getSrsURI().equals(targetCRSInfo.getSrsURI()))) {
+        SRSInfo sourceSRSInfo = sourceGeometry.getSrsInfo();
+        SRSInfo targetSRSInfo = targetGeometry.getSrsInfo();
+        if (!(sourceSRSInfo.isGeographic() && targetSRSInfo.isGeographic()) || !(sourceSRSInfo.getSrsURI().equals(targetSRSInfo.getSrsURI()))) {
             throw new AssertionError("Expected same Geographic SRS for GeometryWrappers. " + sourceGeometry + " : " + targetGeometry);
         }
 
@@ -106,10 +106,10 @@ public class CoordinatePair {
             return new CoordinatePair(point1.getCoordinate(), point2.getCoordinate());
         }
 
-        //Both same CRS so same domain  range.
+        //Both same SRS so same domain range.
         Envelope sourceEnvelope = sourceGeometry.getEnvelope();
         Envelope targetEnvelope = targetGeometry.getEnvelope();
-        double domainRange = sourceCRSInfo.getDomainRangeX();
+        double domainRange = sourceSRSInfo.getDomainRangeX();
         double halfRange = domainRange / 2;
 
         double diff = targetEnvelope.getMaxX() - sourceEnvelope.getMinX();
