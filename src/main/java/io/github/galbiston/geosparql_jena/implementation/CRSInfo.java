@@ -39,6 +39,7 @@ public class CRSInfo {
     private final Boolean isGeographic;
     private final Boolean isSRSRecognised;
     private final Envelope domainEnvelope;
+    private final double domainRangeX;
     public static final String DEFAULT_WKT_CRS84_CODE = "CRS:84";
 
     private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
@@ -53,6 +54,7 @@ public class CRSInfo {
             this.isSRSRecognised = true;
             this.isGeographic = crs instanceof GeographicCRS;
             this.domainEnvelope = buildDomainEnvelope(crs, isAxisXY);
+            this.domainRangeX = Math.abs(domainEnvelope.getMinX()) + Math.abs(domainEnvelope.getMaxX());
         } catch (FactoryException ex) {
             throw new CRSInfoException("Invalid CRS code: " + srsURI + " - " + ex.getMessage(), ex);
         }
@@ -66,6 +68,7 @@ public class CRSInfo {
         this.isSRSRecognised = isSRSRecognised;
         this.isGeographic = crs instanceof GeographicCRS;
         this.domainEnvelope = buildDomainEnvelope(crs, isAxisXY);
+        this.domainRangeX = Math.abs(domainEnvelope.getMinX()) + Math.abs(domainEnvelope.getMaxX());
     }
 
     protected static final Boolean checkAxisXY(CoordinateReferenceSystem crs) {
@@ -172,6 +175,15 @@ public class CRSInfo {
     }
 
     /**
+     * Range of domain of validity in X axis.
+     *
+     * @return
+     */
+    public double getDomainRangeX() {
+        return domainRangeX;
+    }
+
+    /**
      *
      * @param srsURI Allows alternative srsURI to be associated with CRS84.
      * @return CRSInfo with default setup for WKT without SRS URI.
@@ -205,7 +217,7 @@ public class CRSInfo {
 
     @Override
     public String toString() {
-        return "CRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isSRSRecognised=" + isSRSRecognised + ", domainEnvelope=" + domainEnvelope + '}';
+        return "CRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isGeographic=" + isGeographic + ", isSRSRecognised=" + isSRSRecognised + ", domainEnvelope=" + domainEnvelope + ", domainRangeX=" + domainRangeX + '}';
     }
 
     @Override
@@ -215,8 +227,10 @@ public class CRSInfo {
         hash = 23 * hash + Objects.hashCode(this.crs);
         hash = 23 * hash + Objects.hashCode(this.unitsOfMeasure);
         hash = 23 * hash + Objects.hashCode(this.isAxisXY);
+        hash = 23 * hash + Objects.hashCode(this.isGeographic);
         hash = 23 * hash + Objects.hashCode(this.isSRSRecognised);
         hash = 23 * hash + Objects.hashCode(this.domainEnvelope);
+        hash = 23 * hash + (int) (Double.doubleToLongBits(this.domainRangeX) ^ (Double.doubleToLongBits(this.domainRangeX) >>> 32));
         return hash;
     }
 
@@ -232,6 +246,9 @@ public class CRSInfo {
             return false;
         }
         final CRSInfo other = (CRSInfo) obj;
+        if (Double.doubleToLongBits(this.domainRangeX) != Double.doubleToLongBits(other.domainRangeX)) {
+            return false;
+        }
         if (!Objects.equals(this.srsURI, other.srsURI)) {
             return false;
         }
@@ -242,6 +259,9 @@ public class CRSInfo {
             return false;
         }
         if (!Objects.equals(this.isAxisXY, other.isAxisXY)) {
+            return false;
+        }
+        if (!Objects.equals(this.isGeographic, other.isGeographic)) {
             return false;
         }
         if (!Objects.equals(this.isSRSRecognised, other.isSRSRecognised)) {

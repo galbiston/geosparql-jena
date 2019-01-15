@@ -54,11 +54,12 @@ public class SearchEnvelope {
 
         if (crsInfo.isGeographic()) {
 
-            double domRange = Math.abs(domMaxX) + Math.abs(domMinX);
+            double domRange = crsInfo.getDomainRangeX();
 
             //Check whether Envelope exceeds bounds so requires wrapping.
             double minX = envelope.getMinX();
             double maxX = envelope.getMaxX();
+
             if (minX < domMinX) {
                 this.mainEnvelope = new Envelope(domMinX, maxX, envelope.getMinY(), envelope.getMaxY());
                 this.wrapEnvelope = new Envelope(minX + domRange, domMaxX, envelope.getMinY(), envelope.getMaxY());
