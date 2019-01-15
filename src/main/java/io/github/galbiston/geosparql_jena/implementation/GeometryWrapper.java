@@ -38,6 +38,7 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.sis.geometry.DirectPosition2D;
+import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -45,6 +46,8 @@ import org.locationtech.jts.geom.IntersectionMatrix;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
+import org.locationtech.jts.geom.util.AffineTransformation;
+import org.locationtech.jts.operation.distance.DistanceOp;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -63,6 +66,8 @@ public class GeometryWrapper implements Serializable {
     private final Geometry xyGeometry;
     private final Geometry parsingGeometry;
     private PreparedGeometry preparedGeometry;
+    private Envelope envelope;
+    private Geometry translateXYGeometry;
     private final String geometryDatatypeURI;
     private String lexicalForm;
     private String utmURI = null;
@@ -81,7 +86,8 @@ public class GeometryWrapper implements Serializable {
         this.parsingGeometry = parsingGeometry;
         this.xyGeometry = xyGeometry;
         this.preparedGeometry = null; //Initialised when required by spatial relations checkPreparedGeometry.
-
+        this.envelope = null; //Initialised when required by getEnvelope().
+        this.translateXYGeometry = null; //Initialised when required by translateGeometry().
         this.geometryDatatypeURI = geometryDatatypeURI;
 
         if (srsURI.isEmpty()) {
@@ -149,6 +155,8 @@ public class GeometryWrapper implements Serializable {
         this.xyGeometry = geometryWrapper.xyGeometry;
         this.parsingGeometry = geometryWrapper.parsingGeometry;
         this.preparedGeometry = geometryWrapper.preparedGeometry;
+        this.envelope = geometryWrapper.envelope;
+        this.translateXYGeometry = geometryWrapper.translateXYGeometry;
         this.utmURI = geometryWrapper.utmURI;
         this.latitude = geometryWrapper.latitude;
         this.geometryDatatypeURI = geometryWrapper.geometryDatatypeURI;
@@ -254,6 +262,30 @@ public class GeometryWrapper implements Serializable {
      */
     public Geometry getParsingGeometry() {
         return parsingGeometry;
+    }
+
+    /**
+     * XY geometry translated by the domain range of the CRS, if a Geographic
+     * CRS.<br>
+     * Returns XY geometry if not a Geographic CRS.
+     *
+     * @return
+     */
+    public Geometry translateXYGeometry() {
+
+        if (translateXYGeometry == null) {
+
+            if (crsInfo.isGeographic()) {
+                double xTranslate = crsInfo.getDomainRangeX();
+                AffineTransformation translation = AffineTransformation.translationInstance(xTranslate, 0);
+                translateXYGeometry = translation.transform(xyGeometry);
+            } else {
+                translateXYGeometry = xyGeometry;
+            }
+
+        }
+
+        return translateXYGeometry;
     }
 
     /**
@@ -500,11 +532,12 @@ public class GeometryWrapper implements Serializable {
 
         GeometryWrapper transformedTargetGeometry = transformedSourceGeometry.checkTransformCRS(targetGeometry);
 
-        //Find Centroid of shape. Centroid returned in Lon/Lat order.
-        Point point1 = transformedSourceGeometry.xyGeometry.getCentroid();
-        Point point2 = transformedTargetGeometry.xyGeometry.getCentroid();
+        CoordinatePair coordinatePair = findCoordinatePair(transformedSourceGeometry, transformedTargetGeometry);
+        Coordinate coord1 = coordinatePair.coord1;
+        Coordinate coord2 = coordinatePair.coord2;
 
-        double distance = GreatCircleDistance.vincentyFormula(point1.getY(), point1.getX(), point2.getY(), point2.getX());
+        double distance = GreatCircleDistance.vincentyFormula(coord1.getY(), coord1.getX(), coord2.getY(), coord2.getX());
+        //double distance = GreatCircleDistance.haversineFormula(coord1.getY(), coord1.getX(), coord2.getY(), coord2.getX());
 
         Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
         double targetDistance;
@@ -516,6 +549,77 @@ public class GeometryWrapper implements Serializable {
         }
 
         return targetDistance;
+    }
+
+    private CoordinatePair findCoordinatePair(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) {
+
+        //Both GeoemtryWrappers should be same SRS andn Geographic.
+        CRSInfo sourceCRSInfo = sourceGeometry.crsInfo;
+        CRSInfo targetCRSInfo = targetGeometry.crsInfo;
+        if (!(sourceCRSInfo.isGeographic() && targetCRSInfo.isGeographic()) || !(sourceCRSInfo.getSrsURI().equals(targetCRSInfo.getSrsURI()))) {
+            throw new AssertionError("Expected same Geographic SRS for GeometryWrappers. " + sourceGeometry + " : " + targetGeometry);
+        }
+
+        //Find nearest points.
+        Point point1 = null;
+        Point point2 = null;
+
+        Geometry sourceXYGeometry = sourceGeometry.xyGeometry;
+        Geometry targetXYGeometry = targetGeometry.xyGeometry;
+
+        //Check whether only dealing with Point geometries.
+        if (sourceXYGeometry instanceof Point) {
+            point1 = (Point) sourceXYGeometry;
+        }
+        if (targetXYGeometry instanceof Point) {
+            point2 = (Point) targetXYGeometry;
+        }
+
+        //Exit if both are points.
+        if (point1 != null && point2 != null) {
+            return new CoordinatePair(point1.getCoordinate(), point2.getCoordinate());
+        }
+
+        //Both same CRS so same domain  range.
+        Envelope sourceEnvelope = sourceGeometry.getEnvelope();
+        Envelope targetEnvelope = targetGeometry.getEnvelope();
+        double domainRange = sourceCRSInfo.getDomainRangeX();
+        double halfRange = domainRange / 2;
+
+        double diff = targetEnvelope.getMaxX() - sourceEnvelope.getMinX();
+
+        Geometry adjustedSource;
+        Geometry adjustedTarget;
+        if (diff > halfRange) {
+            //Difference is greater than positive half range, then translate source by the range.
+            adjustedSource = sourceGeometry.translateXYGeometry();
+            adjustedTarget = targetXYGeometry;
+        } else if (diff < -halfRange) {
+            //Difference is less than negative half range, then translate target by the range.
+            adjustedSource = sourceXYGeometry;
+            adjustedTarget = targetGeometry.translateXYGeometry();
+        } else {
+            //Difference is between the ranges so don't translate.
+            adjustedSource = sourceXYGeometry;
+            adjustedTarget = targetXYGeometry;
+        }
+
+        DistanceOp distanceOp = new DistanceOp(adjustedSource, adjustedTarget);
+
+        Coordinate[] nearest = distanceOp.nearestPoints();
+        return new CoordinatePair(nearest[0], nearest[1]);
+    }
+
+    private class CoordinatePair {
+
+        private final Coordinate coord1;
+        private final Coordinate coord2;
+
+        public CoordinatePair(Coordinate coord1, Coordinate coord2) {
+            this.coord1 = coord1;
+            this.coord2 = coord2;
+        }
+
     }
 
     /**
@@ -607,7 +711,9 @@ public class GeometryWrapper implements Serializable {
      * @return Envelope of GeometryWrapper
      */
     public GeometryWrapper envelope() {
-        Geometry xyGeo = this.xyGeometry.getEnvelope();
+        GeometryFactory geometryFactory = this.xyGeometry.getFactory();
+        Envelope xyEnvelope = this.getEnvelope();
+        Geometry xyGeo = geometryFactory.toGeometry(xyEnvelope);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, crsInfo);
         return new GeometryWrapper(parsingGeo, xyGeo, crsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo, null);
     }
@@ -618,7 +724,11 @@ public class GeometryWrapper implements Serializable {
      * @return Envelope of GeometryWrapper
      */
     public Envelope getEnvelope() {
-        return this.xyGeometry.getEnvelopeInternal();
+        if (envelope == null) {
+            envelope = this.xyGeometry.getEnvelopeInternal();
+        }
+
+        return envelope;
     }
 
     /**

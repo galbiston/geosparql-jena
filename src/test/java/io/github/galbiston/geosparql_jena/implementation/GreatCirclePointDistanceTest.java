@@ -67,7 +67,7 @@ public class GreatCirclePointDistanceTest {
         double distance = 100000.0;
         double bearingRad = 0.0;
         GreatCirclePointDistance instance = new GreatCirclePointDistance(startLat, startLon, distance);
-        double expResult = 0.86833;
+        double expResult = 0.86834;
         double result = instance.latitude(bearingRad);
 
         //System.out.println("Exp: " + expResult);
@@ -172,7 +172,7 @@ public class GreatCirclePointDistanceTest {
         double distance = 100000.0;
         Point startPoint = GEOMETRY_FACTORY.createPoint(new Coordinate(startLat, startLon));
         double bearing = 0.0;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(49.75172528411952, -2.3488));
+        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(49.75273160591873, -2.3488));
         Point result = GreatCirclePointDistance.getPoint(startPoint, distance, bearing);
 
         //System.out.println("Exp: " + expResult);
@@ -190,7 +190,7 @@ public class GreatCirclePointDistanceTest {
         double startLon = -2.3488;
         double distance = 100000.0;
         double bearing = 0.0;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(49.75172528411952, -2.3488));
+        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(49.75273160591873, -2.3488));
         Point result = GreatCirclePointDistance.getPoint(startLat, startLon, distance, bearing);
 
         //System.out.println("Exp: " + expResult);
@@ -210,7 +210,7 @@ public class GreatCirclePointDistanceTest {
         double distance = 100000.0;
         Point startPoint = GEOMETRY_FACTORY.createPoint(new Coordinate(startLat, startLon));
         double bearing = 90.0;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(48.84535149015191, -0.9837003466724981));
+        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(48.84533342706068, -0.9821714466039844));
         Point result = GreatCirclePointDistance.getPoint(startPoint, distance, bearing);
 
         //System.out.println("Exp: " + expResult);
@@ -228,7 +228,7 @@ public class GreatCirclePointDistanceTest {
         double startLon = -2.3488;
         double distance = 100000.0;
         double bearing = 90.0;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(48.84535149015191, -0.9837003466724981));
+        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(48.84533342706068, -0.9821714466039844));
         Point result = GreatCirclePointDistance.getPoint(startLat, startLon, distance, bearing);
 
         //System.out.println("Exp: " + expResult);

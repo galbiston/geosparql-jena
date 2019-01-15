@@ -15,10 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation;
 
-import java.lang.invoke.MethodHandles;
 import org.locationtech.jts.geom.Point;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -26,10 +23,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GreatCircleDistance {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    public static final double EARTH_RADIUS = 6378137; //WGS84 Ellipsoid radius in metres.
-    //public static final double EARTH_RADIUS = 6371e3;
+    public static final double EARTH_RADIUS = 6371e3; //Earth Mean Radius
 
     /**
      * Great circle distance between Points using Vincenty formula.
@@ -48,6 +42,15 @@ public class GreatCircleDistance {
         return vincentyFormula(lat1, lon1, lat2, lon2);
     }
 
+    /**
+     * Great circle distance between Points using Vincenty formula.
+     *
+     * @param lat1 Lat in degrees of first point.
+     * @param lon1 Lon in degrees of first point.
+     * @param lat2 Lat in degrees of second point.
+     * @param lon2 Lon in degrees of second point.
+     * @return Distance in metres.
+     */
     public static final double vincentyFormula(double lat1, double lon1, double lat2, double lon2) {
         double lat1Rad = Math.toRadians(lat1);
         double lat2Rad = Math.toRadians(lat2);
@@ -77,14 +80,27 @@ public class GreatCircleDistance {
      * @return Distance in metres.
      */
     public static final double haversineFormula(Point point1, Point point2) {
-        //Based on Haversine formula: https://www.movable-type.co.uk/scripts/latlong.html
-        //Apparently there are inaccurcies for distances of points on opposite sides of the sphere so prefer Vincenty formula.
         double lat1 = point1.getX();
         double lon1 = point1.getY();
 
         double lat2 = point2.getX();
         double lon2 = point2.getY();
 
+        return haversineFormula(lat1, lon1, lat2, lon2);
+    }
+
+    /**
+     * Great circle distance between Points using Haversine formula.
+     *
+     * @param lat1 Lat in degrees of first point.
+     * @param lon1 Lon in degrees of first point.
+     * @param lat2 Lat in degrees of second point.
+     * @param lon2 Lon in degrees of second point.
+     * @return Distance in metres.
+     */
+    public static final double haversineFormula(double lat1, double lon1, double lat2, double lon2) {
+        //Based on Haversine formula: https://www.movable-type.co.uk/scripts/latlong.html
+        //Apparently there are inaccurcies for distances of points on opposite sides of the sphere so prefer Vincenty formula.
         double lat1Rad = Math.toRadians(lat1);
         double lat2Rad = Math.toRadians(lat2);
 

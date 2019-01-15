@@ -57,7 +57,7 @@ public class GreatCircleDistanceTest {
         double lon1 = -0.12574;
         double lat2 = 48.85341;
         double lon2 = 2.34880;
-        double expResult = 344155;
+        double expResult = 343770;
         double result = GreatCircleDistance.vincentyFormula(lat1, lon1, lat2, lon2);
 
         //System.out.println("Exp: " + expResult);
@@ -75,7 +75,7 @@ public class GreatCircleDistanceTest {
         double lon2 = -0.12574;
         double lat1 = 48.85341;
         double lon1 = 2.34880;
-        double expResult = 344155;
+        double expResult = 343770;
         double result = GreatCircleDistance.vincentyFormula(lat1, lon1, lat2, lon2);
 
         //System.out.println("Exp: " + expResult);

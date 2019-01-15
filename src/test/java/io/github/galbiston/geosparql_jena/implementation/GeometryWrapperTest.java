@@ -133,6 +133,26 @@ public class GeometryWrapperTest {
     }
 
     /**
+     * Test of getXYGeometry method, of class GeometryWrapper.
+     *
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    @Test
+    public void testGetXYGeometry_polygon() throws FactoryException, MismatchedDimensionException, TransformException {
+        System.out.println("getXYGeometry_polygon");
+        GeometryWrapper instance = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 -180.0, 20.0 -180.0, 20.0 -170.0, 10.0 -170.0, 10.0 -180.0))", WKTDatatype.URI);
+
+        Coordinate[] coordinates = {new Coordinate(-180.0, 10.0), new Coordinate(-180.0, 20.0), new Coordinate(-170.0, 20.0), new Coordinate(-170.0, 10.0), new Coordinate(-180.0, 10.0)};
+        Geometry expResult = GEOMETRY_FACTORY.createPolygon(coordinates);
+        Geometry result = instance.getXYGeometry();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
      * Test of getParsingGeometry method, of class GeometryWrapper.
      */
     @Test
@@ -447,12 +467,91 @@ public class GeometryWrapperTest {
         GeometryWrapper testGeometryWrapper = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER;
         String unitsURI = Unit_URI.KILOMETER_URL;
 
-        double expResult = 344.155;
+        double expResult = 343.77;
         double result = instance.distanceGreatCircle(testGeometryWrapper, unitsURI);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result, 0.1);
+    }
+
+    /**
+     * Test of distanceGreatCircle method, of class GeometryWrapper.
+     *
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    @Test
+    public void testDistanceGreatCircle_polygon() throws FactoryException, MismatchedDimensionException, TransformException {
+        System.out.println("distanceGreatCircle_polygon");
+        GeometryWrapper instance = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 -180.0, 20.0 -180.0, 20.0 -170.0, 10.0 -170.0, 10.0 -180.0))", WKTDatatype.URI);
+        GeometryWrapper testGeometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 170.0, 20.0 170.0, 20.0 179.0, 10.0 179.0, 10.0 170.0))", WKTDatatype.URI);
+        String unitsURI = Unit_URI.KILOMETER_URL;
+
+        double expResult = 104.4888;
+        double result = instance.distanceGreatCircle(testGeometryWrapper, unitsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.0001);
+    }
+
+    /**
+     * Test of distanceGreatCircle method, of class GeometryWrapper.
+     *
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    @Test
+    public void testDistanceGreatCircle_polygon2() throws FactoryException, MismatchedDimensionException, TransformException {
+        System.out.println("distanceGreatCircle_polygon2");
+        GeometryWrapper instance = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 0.0, 20.0 0.0, 20.0 10.0, 10.0 10.0, 10.0 0.0))", WKTDatatype.URI);
+        GeometryWrapper testGeometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 -10.0, 20.0 -10.0, 20.0 -1.0, 10.0 -1.0, 10.0 -10.0))", WKTDatatype.URI);
+        String unitsURI = Unit_URI.KILOMETER_URL;
+
+        double expResult = 104.4888;
+        double result = instance.distanceGreatCircle(testGeometryWrapper, unitsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.0001);
+    }
+
+    /**
+     * Test of translateXYGeometry method, of class GeometryWrapper.
+     *
+     */
+    @Test
+    public void testTranslateXYGeometry_geographic() {
+        System.out.println("translateXYGeometry_geographic");
+        GeometryWrapper instance = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 -180.0, 20.0 -180.0, 20.0 -170.0, 10.0 -170.0, 10.0 -180.0))", WKTDatatype.URI);
+
+        //Exp Result is based on the same WGS84 coordinates but shifted by 360 degrees along longitude.
+        GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 180.0, 20.0 180.0, 20.0 190.0, 10.0 190.0, 10.0 180.0))", WKTDatatype.URI);
+        Geometry expResult = geometryWrapper.getXYGeometry();
+        Geometry result = instance.translateXYGeometry();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of translateXYGeometry method, of class GeometryWrapper.
+     *
+     */
+    @Test
+    public void testTranslateXYGeometry_non_geographic() {
+        System.out.println("translateXYGeometry_non_geographic");
+        GeometryWrapper instance = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((10.0 -180.0, 20.0 -180.0, 20.0 -170.0, 10.0 -170.0, 10.0 -180.0))", WKTDatatype.URI);
+
+        //Exp Result is unchanged as only geographic CRS are translated.
+        Geometry expResult = instance.getXYGeometry();
+        Geometry result = instance.translateXYGeometry();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }
