@@ -191,15 +191,16 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Transform the GeometryWrapper into another spatial reference system.
+     * Transform the GeometryWrapper into another spatial reference system.<br>
      *
      * @param srsURI
-     * @return GeometryWrapper after transformation.
+     * @return New GeometryWrapper after transformation, or this GeometryWrapper
+     * if no transformation.
      * @throws MismatchedDimensionException
      * @throws TransformException
      * @throws FactoryException
      */
-    protected GeometryWrapper transform(String srsURI) throws MismatchedDimensionException, TransformException, FactoryException {
+    public GeometryWrapper transform(String srsURI) throws MismatchedDimensionException, TransformException, FactoryException {
         return transform(srsURI, true);
     }
 
@@ -215,6 +216,10 @@ public class GeometryWrapper implements Serializable {
      * @throws FactoryException
      */
     protected GeometryWrapper transform(String srsURI, Boolean storeSRSTransform) throws MismatchedDimensionException, TransformException, FactoryException {
+        if (srsInfo.getSrsURI().equals(srsURI)) {
+            return this;
+        }
+
         return GeometryTransformIndex.transform(this, srsURI, storeSRSTransform);
     }
 
