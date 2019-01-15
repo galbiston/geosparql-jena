@@ -20,6 +20,8 @@ package io.github.galbiston.geosparql_jena.implementation;
 import io.github.galbiston.geosparql_jena.implementation.datatype.GMLDatatype;
 import io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
+import io.github.galbiston.geosparql_jena.implementation.great_circle.CoordinatePair;
+import io.github.galbiston.geosparql_jena.implementation.great_circle.GreatCircleDistance;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryTransformIndex;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
@@ -47,7 +49,6 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import org.locationtech.jts.geom.util.AffineTransformation;
-import org.locationtech.jts.operation.distance.DistanceOp;
 import org.opengis.geometry.DirectPosition;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -278,7 +279,7 @@ public class GeometryWrapper implements Serializable {
             if (crsInfo.isGeographic()) {
                 double xTranslate = crsInfo.getDomainRangeX();
                 AffineTransformation translation = AffineTransformation.translationInstance(xTranslate, 0);
-                translateXYGeometry = translation.transform(xyGeometry);
+                translateXYGeometry = translation.transform(xyGeometry); //Translate seems to be copying Y values into Z and M.
             } else {
                 translateXYGeometry = xyGeometry;
             }
@@ -303,6 +304,14 @@ public class GeometryWrapper implements Serializable {
      */
     public String getSRID() {
         return crsInfo.getSrsURI();
+    }
+
+    /**
+     *
+     * @return CRS information that the Geometry Wrapper is using.
+     */
+    public CRSInfo getCrsInfo() {
+        return crsInfo;
     }
 
     /**
@@ -485,7 +494,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Distance (Great Circle) defaulting to metres from centroid.
+     * Distance (Great Circle) defaulting to metres.
      *
      * @param targetGeometry
      * @return Distance
@@ -497,7 +506,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Distance (Great Circle) in the Units of Measure from centroid.
+     * Distance (Great Circle) in the Units of Measure.
      *
      * @param targetGeometry
      * @param unitsOfMeasure
@@ -510,8 +519,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Distance (Great Circle) in the Units of Measure stated in URI from
-     * centroid.
+     * Distance (Great Circle) in the Units of Measure stated in URI.
      *
      * @param targetGeometry
      * @param targetDistanceUnitsURI
@@ -532,13 +540,17 @@ public class GeometryWrapper implements Serializable {
 
         GeometryWrapper transformedTargetGeometry = transformedSourceGeometry.checkTransformCRS(targetGeometry);
 
-        CoordinatePair coordinatePair = findCoordinatePair(transformedSourceGeometry, transformedTargetGeometry);
-        Coordinate coord1 = coordinatePair.coord1;
-        Coordinate coord2 = coordinatePair.coord2;
+        //Find the nearest pair of coordinates from each Geometry using Euclidean distance (adjusting for wrap around).
+        //These are then used for Great Circle distance.
+        CoordinatePair coordinatePair = CoordinatePair.findNearestPair(transformedSourceGeometry, transformedTargetGeometry);
+        Coordinate coord1 = coordinatePair.getCoord1();
+        Coordinate coord2 = coordinatePair.getCoord2();
 
+        //Vincenty Formula is apparently more accurate at the Longitude boundary.
         double distance = GreatCircleDistance.vincentyFormula(coord1.getY(), coord1.getX(), coord2.getY(), coord2.getX());
         //double distance = GreatCircleDistance.haversineFormula(coord1.getY(), coord1.getX(), coord2.getY(), coord2.getX());
 
+        //Convert the Great Circle distance from metres into the requested units.
         Boolean isTargetUnitsLinear = UnitsRegistry.isLinearUnits(targetDistanceUnitsURI);
         double targetDistance;
         if (isTargetUnitsLinear) {
@@ -549,77 +561,6 @@ public class GeometryWrapper implements Serializable {
         }
 
         return targetDistance;
-    }
-
-    private CoordinatePair findCoordinatePair(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) {
-
-        //Both GeoemtryWrappers should be same SRS andn Geographic.
-        CRSInfo sourceCRSInfo = sourceGeometry.crsInfo;
-        CRSInfo targetCRSInfo = targetGeometry.crsInfo;
-        if (!(sourceCRSInfo.isGeographic() && targetCRSInfo.isGeographic()) || !(sourceCRSInfo.getSrsURI().equals(targetCRSInfo.getSrsURI()))) {
-            throw new AssertionError("Expected same Geographic SRS for GeometryWrappers. " + sourceGeometry + " : " + targetGeometry);
-        }
-
-        //Find nearest points.
-        Point point1 = null;
-        Point point2 = null;
-
-        Geometry sourceXYGeometry = sourceGeometry.xyGeometry;
-        Geometry targetXYGeometry = targetGeometry.xyGeometry;
-
-        //Check whether only dealing with Point geometries.
-        if (sourceXYGeometry instanceof Point) {
-            point1 = (Point) sourceXYGeometry;
-        }
-        if (targetXYGeometry instanceof Point) {
-            point2 = (Point) targetXYGeometry;
-        }
-
-        //Exit if both are points.
-        if (point1 != null && point2 != null) {
-            return new CoordinatePair(point1.getCoordinate(), point2.getCoordinate());
-        }
-
-        //Both same CRS so same domain  range.
-        Envelope sourceEnvelope = sourceGeometry.getEnvelope();
-        Envelope targetEnvelope = targetGeometry.getEnvelope();
-        double domainRange = sourceCRSInfo.getDomainRangeX();
-        double halfRange = domainRange / 2;
-
-        double diff = targetEnvelope.getMaxX() - sourceEnvelope.getMinX();
-
-        Geometry adjustedSource;
-        Geometry adjustedTarget;
-        if (diff > halfRange) {
-            //Difference is greater than positive half range, then translate source by the range.
-            adjustedSource = sourceGeometry.translateXYGeometry();
-            adjustedTarget = targetXYGeometry;
-        } else if (diff < -halfRange) {
-            //Difference is less than negative half range, then translate target by the range.
-            adjustedSource = sourceXYGeometry;
-            adjustedTarget = targetGeometry.translateXYGeometry();
-        } else {
-            //Difference is between the ranges so don't translate.
-            adjustedSource = sourceXYGeometry;
-            adjustedTarget = targetXYGeometry;
-        }
-
-        DistanceOp distanceOp = new DistanceOp(adjustedSource, adjustedTarget);
-
-        Coordinate[] nearest = distanceOp.nearestPoints();
-        return new CoordinatePair(nearest[0], nearest[1]);
-    }
-
-    private class CoordinatePair {
-
-        private final Coordinate coord1;
-        private final Coordinate coord2;
-
-        public CoordinatePair(Coordinate coord1, Coordinate coord2) {
-            this.coord1 = coord1;
-            this.coord2 = coord2;
-        }
-
     }
 
     /**

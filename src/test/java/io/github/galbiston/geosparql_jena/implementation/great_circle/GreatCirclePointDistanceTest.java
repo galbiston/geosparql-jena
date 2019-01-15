@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.galbiston.geosparql_jena.implementation;
+package io.github.galbiston.geosparql_jena.implementation.great_circle;
 
+import io.github.galbiston.geosparql_jena.implementation.great_circle.GreatCirclePointDistance;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import org.junit.After;
 import org.junit.AfterClass;

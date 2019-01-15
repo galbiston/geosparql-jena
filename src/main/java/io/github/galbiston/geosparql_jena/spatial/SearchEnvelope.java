@@ -17,7 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial;
 
 import io.github.galbiston.geosparql_jena.implementation.CRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.GreatCirclePointDistance;
+import io.github.galbiston.geosparql_jena.implementation.great_circle.GreatCirclePointDistance;
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
