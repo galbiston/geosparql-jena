@@ -17,16 +17,22 @@
  */
 package io.github.galbiston.geosparql_jena.geof.nontopological.filter_functions;
 
+import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
 
 /**
  *
@@ -89,7 +95,6 @@ public class BufferFFTest {
         assertEquals(expResult, result);
     }
 
-    //TODO improve the checking of buffer distance.
     /**
      * Test of exec method, of class BufferFF.
      */
@@ -106,6 +111,64 @@ public class BufferFFTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of exec method, of class BufferFF.
+     *
+     * @throws org.opengis.referencing.operation.TransformException
+     * @throws org.opengis.util.FactoryException
+     */
+    @Test
+    public void testExec_Geographic_Linear2() throws MismatchedDimensionException, TransformException, FactoryException {
+        System.out.println("exec_Geographic_Linear2");
+
+        //Test that buffering with Geographic geometry and Linear distance yields similar results to Projected geometry and Linear distance.
+        GeometryWrapper originalGeometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((0.0 0.0, 0.0 100.0, 100.0 100.0, 100.0 0.0, 0.0 0.0))", WKTDatatype.URI);
+
+        //Convert a projected GeometryWrapper to Geographic. Apply linear buffering. Convert back again.
+        NodeValue v1a = originalGeometryWrapper.transform(SRS_URI.WGS84_CRS).asNode();
+        NodeValue v2 = NodeValue.makeDecimal(20);
+        NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(Unit_URI.METRE_URL));
+        BufferFF instance = new BufferFF();
+        NodeValue bufferedGeographicNodeValue = instance.exec(v1a, v2, v3);
+        GeometryWrapper bufferedGeographic = GeometryWrapper.extract(bufferedGeographicNodeValue);
+        String resultLexicalForm = bufferedGeographic.transform(SRS_URI.OSGB36_CRS).asLiteral().getLexicalForm();
+
+        //Apply linear buffering to projected GeometryWrapper.
+        NodeValue v1b = originalGeometryWrapper.asNode();
+        NodeValue bufferedProjectedNodeValue = instance.exec(v1b, v2, v3);
+        GeometryWrapper bufferedProjected = GeometryWrapper.extract(bufferedProjectedNodeValue);
+        String expResultLexicalForm = bufferedProjected.asLiteral().getLexicalForm();
+
+        //Unpack the values into arrays so can do comparison with tolerance.
+        String[] resultsStr = resultLexicalForm.substring(resultLexicalForm.indexOf("((") + 2, resultLexicalForm.indexOf("))")).split(", ");
+        String[] expResultsStr = expResultLexicalForm.substring(expResultLexicalForm.indexOf("((") + 2, expResultLexicalForm.indexOf("))")).split(", ");
+
+        double[] results = new double[resultsStr.length * 2];
+        int i = 0;
+        for (String result : resultsStr) {
+            String[] res = result.split(" ");
+            results[i] = Double.parseDouble(res[0]);
+            i++;
+            results[i] = Double.parseDouble(res[1]);
+            i++;
+        }
+
+        double[] expResults = new double[expResultsStr.length * 2];
+        int j = 0;
+        for (String result : expResultsStr) {
+            String[] res = result.split(" ");
+            expResults[j] = Double.parseDouble(res[0]);
+            j++;
+            expResults[j] = Double.parseDouble(res[1]);
+            j++;
+        }
+
+        //System.out.println("Exp: " + Arrays.toString(expResults));
+        //System.out.println("Res: " + Arrays.toString(results));
+        //Test accuracy of buffering to within 0.1m. Some error from coordinate transformations.
+        Assert.assertArrayEquals(expResults, results, 0.1);
     }
 
     /**
