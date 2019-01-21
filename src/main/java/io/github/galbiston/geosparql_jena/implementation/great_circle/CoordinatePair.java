@@ -32,10 +32,12 @@ public class CoordinatePair {
 
     private final Coordinate coord1;
     private final Coordinate coord2;
+    private final boolean equal;
 
     public CoordinatePair(Coordinate coord1, Coordinate coord2) {
         this.coord1 = coord1;
         this.coord2 = coord2;
+        this.equal = coord1.equals2D(coord2);
     }
 
     public Coordinate getCoord1() {
@@ -46,16 +48,21 @@ public class CoordinatePair {
         return coord2;
     }
 
+    public boolean isEqual() {
+        return equal;
+    }
+
     @Override
     public String toString() {
-        return "CoordinatePair{" + "coord1=" + coord1 + ", coord2=" + coord2 + '}';
+        return "CoordinatePair{" + "coord1=" + coord1 + ", coord2=" + coord2 + ", equal=" + equal + '}';
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.coord1);
-        hash = 79 * hash + Objects.hashCode(this.coord2);
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.coord1);
+        hash = 97 * hash + Objects.hashCode(this.coord2);
+        hash = 97 * hash + (this.equal ? 1 : 0);
         return hash;
     }
 
@@ -71,6 +78,9 @@ public class CoordinatePair {
             return false;
         }
         final CoordinatePair other = (CoordinatePair) obj;
+        if (this.equal != other.equal) {
+            return false;
+        }
         if (!Objects.equals(this.coord1, other.coord1)) {
             return false;
         }

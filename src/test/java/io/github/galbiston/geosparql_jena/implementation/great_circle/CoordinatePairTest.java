@@ -168,4 +168,80 @@ public class CoordinatePairTest {
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
+
+    /**
+     * Test of isEqual method, of class CoordinatePair.
+     */
+    @Test
+    public void testIsEqual_overlap() {
+        System.out.println("isEqual_overlap");
+        GeometryWrapper sourceGeometry = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 0.0, 10.0 0.0, 10.0 10.0, 0.0 10.0, 0.0 0.0))", WKTDatatype.URI);
+        GeometryWrapper targetGeometry = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((5.0 5.0, 15.0 5.0, 15.0 15.0, 5.0 15.0, 5.0 5.0))", WKTDatatype.URI);
+
+        CoordinatePair instance = CoordinatePair.findNearestPair(sourceGeometry, targetGeometry);
+
+        boolean expResult = true;
+        boolean result = instance.isEqual();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of isEqual method, of class CoordinatePair.
+     */
+    @Test
+    public void testIsEqual_no_overlap() {
+        System.out.println("isEqual_no_overlap");
+        GeometryWrapper sourceGeometry = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 0.0, 10.0 0.0, 10.0 10.0, 0.0 10.0, 0.0 0.0))", WKTDatatype.URI);
+        GeometryWrapper targetGeometry = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((15.0 15.0, 25.0 15.0, 25.0 25.0, 15.0 25.0, 15.0 15.0))", WKTDatatype.URI);
+
+        CoordinatePair instance = CoordinatePair.findNearestPair(sourceGeometry, targetGeometry);
+
+        boolean expResult = false;
+        boolean result = instance.isEqual();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of isEqual method, of class CoordinatePair.
+     */
+    @Test
+    public void testIsEqual_within() {
+        System.out.println("isEqual_within");
+        GeometryWrapper sourceGeometry = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 0.0, 10.0 0.0, 10.0 10.0, 0.0 10.0, 0.0 0.0))", WKTDatatype.URI);
+        GeometryWrapper targetGeometry = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(5.0 5.0)", WKTDatatype.URI);
+
+        CoordinatePair instance = CoordinatePair.findNearestPair(sourceGeometry, targetGeometry);
+
+        boolean expResult = true;
+        boolean result = instance.isEqual();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of isEqual method, of class CoordinatePair.
+     */
+    @Test
+    public void testIsEqual_no_within() {
+        System.out.println("isEqual_no_within");
+        GeometryWrapper sourceGeometry = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 0.0, 10.0 0.0, 10.0 10.0, 0.0 10.0, 0.0 0.0))", WKTDatatype.URI);
+        GeometryWrapper targetGeometry = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(15.0 15.0)", WKTDatatype.URI);
+
+        CoordinatePair instance = CoordinatePair.findNearestPair(sourceGeometry, targetGeometry);
+
+        boolean expResult = false;
+        boolean result = instance.isEqual();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
 }
