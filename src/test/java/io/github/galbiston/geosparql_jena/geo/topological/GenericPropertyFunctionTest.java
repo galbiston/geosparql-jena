@@ -15,10 +15,11 @@
  */
 package io.github.galbiston.geosparql_jena.geo.topological;
 
-import io.github.galbiston.geosparql_jena.geo.topological.property_functions.simple_features.SfContainsPF;
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
+import io.github.galbiston.geosparql_jena.geo.topological.property_functions.simple_features.SfContainsPF;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguration.IndexOption;
+import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import org.apache.jena.graph.BlankNodeId;
 import org.apache.jena.graph.Graph;
@@ -113,8 +114,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = true;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -132,8 +134,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_C_BLANK.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = true;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -172,8 +175,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = false;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         GeoSPARQLConfig.setup(IndexOption.MEMORY, Boolean.TRUE);
         //System.out.println("Exp: " + expResult);
@@ -192,8 +196,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = true;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -211,8 +216,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = true;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -230,8 +236,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = true;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -250,8 +257,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = false;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         GeoSPARQLConfig.setup(IndexOption.MEMORY, Boolean.TRUE);
         //System.out.println("Exp: " + expResult);
@@ -270,8 +278,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = false;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -289,8 +298,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = false;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -308,8 +318,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = false;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -327,8 +338,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = false;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -411,8 +423,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_F.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = true;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -431,8 +444,9 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_F.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
         Boolean expResult = true;
-        Boolean result = instance.queryRewrite(graph, subject, predicate, object);
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         GeoSPARQLConfig.setup(IndexOption.MEMORY, Boolean.TRUE);
         //System.out.println("Exp: " + expResult);

@@ -17,10 +17,10 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.index;
 
-import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
-import io.github.galbiston.geosparql_jena.implementation.registry.MathTransformRegistry;
 import static io.github.galbiston.expiring_map.MapDefaultValues.NO_MAP;
 import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
+import io.github.galbiston.geosparql_jena.implementation.registry.MathTransformRegistry;
+import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import java.util.UUID;
 
 /**
@@ -59,7 +59,7 @@ public class IndexConfiguration {
     public static void setupMemoryIndex() {
         GeometryLiteralIndex.setMaxSize(UNLIMITED_MAP);
         GeometryTransformIndex.setMaxSize(UNLIMITED_MAP);
-        QueryRewriteIndex.setMaxSize(UNLIMITED_MAP);
+        QueryRewriteIndex.setExpiry(UNLIMITED_MAP);
     }
 
     /**
@@ -91,7 +91,6 @@ public class IndexConfiguration {
 
     public static final void resetIndexesAndRegistries() {
         GeometryLiteralIndex.clear();
-        QueryRewriteIndex.clear();
         SRSRegistry.reset();
         MathTransformRegistry.clear();
     }

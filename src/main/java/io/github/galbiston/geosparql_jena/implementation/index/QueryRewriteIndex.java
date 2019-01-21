@@ -31,10 +31,22 @@ import org.apache.jena.rdf.model.Property;
  */
 public class QueryRewriteIndex {
 
-    private static Boolean IS_INDEX_ACTIVE = true;
-    private static final String QUERY_REWRITE_LABEL = "Query Rewrite";
-    private static ExpiringMap<String, Boolean> QUERY_REWRITE_INDEX = new ExpiringMap<>(QUERY_REWRITE_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
-    public static Long RETRIEVAL_COUNT = 0L;
+    private Boolean indexActive = true;
+    private final String queryRewriteLabel;
+    private ExpiringMap<String, Boolean> queryRewriteIndex;
+    public Long retrievalCount = 0L;
+    private static int MAP_SIZE_DEFAULT = UNLIMITED_MAP;
+    private static long MAP_EXPIRY_INTERVAL_DEFAULT = MAP_EXPIRY_INTERVAL;
+
+    public QueryRewriteIndex() {
+        this.queryRewriteLabel = "Query Rewrite";
+        this.queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, MAP_SIZE_DEFAULT, MAP_EXPIRY_INTERVAL_DEFAULT);
+    }
+
+    public QueryRewriteIndex(String queryRewriteLabel, int maxSize, long expiryInterval) {
+        this.queryRewriteLabel = queryRewriteLabel;
+        this.queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, maxSize, expiryInterval);
+    }
 
     /**
      *
@@ -44,7 +56,7 @@ public class QueryRewriteIndex {
      * @param propertyFunction
      * @return Result of relation between subject and object.
      */
-    public static final Boolean test(Node subjectGeometryLiteral, Property predicate, Node objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
+    public final Boolean test(Node subjectGeometryLiteral, Property predicate, Node objectGeometryLiteral, GenericPropertyFunction propertyFunction) {
 
         if (!subjectGeometryLiteral.isLiteral() || !objectGeometryLiteral.isLiteral()) {
             return false;
@@ -52,14 +64,14 @@ public class QueryRewriteIndex {
 
         Boolean result;
         String key = subjectGeometryLiteral.getLiteralLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLiteralLexicalForm();
-        RETRIEVAL_COUNT++;
-        if (IS_INDEX_ACTIVE) {
+        retrievalCount++;
+        if (indexActive) {
             try {
-                if (QUERY_REWRITE_INDEX.containsKey(key)) {
-                    result = QUERY_REWRITE_INDEX.get(key);
+                if (queryRewriteIndex.containsKey(key)) {
+                    result = queryRewriteIndex.get(key);
                 } else {
                     result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
-                    QUERY_REWRITE_INDEX.put(key, result);
+                    queryRewriteIndex.put(key, result);
                 }
                 return result;
             } catch (NullPointerException ex) {
@@ -70,11 +82,11 @@ public class QueryRewriteIndex {
         return propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
     }
 
-    public static final void clear() {
-        if (QUERY_REWRITE_INDEX != null) {
-            QUERY_REWRITE_INDEX.clear();
+    public final void clear() {
+        if (queryRewriteIndex != null) {
+            queryRewriteIndex.clear();
         }
-        RETRIEVAL_COUNT = 0L;
+        retrievalCount = 0L;
     }
 
     /**
@@ -83,20 +95,20 @@ public class QueryRewriteIndex {
      *
      * @param maxSize : use -1 for unlimited size
      */
-    public static final void setMaxSize(int maxSize) {
-        IS_INDEX_ACTIVE = NO_MAP != maxSize;
+    public final void setMapSize(int maxSize) {
+        indexActive = NO_MAP != maxSize;
 
-        if (IS_INDEX_ACTIVE) {
-            if (QUERY_REWRITE_INDEX != null) {
-                QUERY_REWRITE_INDEX.stopExpiry();
+        if (indexActive) {
+            if (queryRewriteIndex != null) {
+                queryRewriteIndex.stopExpiry();
             }
-            QUERY_REWRITE_INDEX = new ExpiringMap<>(QUERY_REWRITE_LABEL, maxSize, MAP_EXPIRY_INTERVAL);
-            QUERY_REWRITE_INDEX.startExpiry();
+            queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, maxSize, MAP_EXPIRY_INTERVAL_DEFAULT);
+            queryRewriteIndex.startExpiry();
         } else {
-            if (QUERY_REWRITE_INDEX != null) {
-                QUERY_REWRITE_INDEX.stopExpiry();
+            if (queryRewriteIndex != null) {
+                queryRewriteIndex.stopExpiry();
             }
-            QUERY_REWRITE_INDEX = null;
+            queryRewriteIndex = null;
         }
     }
 
@@ -106,28 +118,40 @@ public class QueryRewriteIndex {
      *
      * @param expiryInterval : use 0 or negative for unlimited timeout
      */
-    public static final void setExpiry(long expiryInterval) {
+    public final void setMapExpiry(long expiryInterval) {
 
-        if (IS_INDEX_ACTIVE) {
+        if (indexActive) {
             if (expiryInterval > UNLIMITED_EXPIRY) {
-                QUERY_REWRITE_INDEX.stopExpiry();
-                QUERY_REWRITE_INDEX.setExpiryInterval(expiryInterval);
-                QUERY_REWRITE_INDEX.startExpiry();
+                queryRewriteIndex.stopExpiry();
+                queryRewriteIndex.setExpiryInterval(expiryInterval);
+                queryRewriteIndex.startExpiry();
             } else {
-                QUERY_REWRITE_INDEX.stopExpiry();
+                queryRewriteIndex.stopExpiry();
             }
         }
     }
 
-    public static final Integer getQueryRewriteIndexSize() {
-        if (QUERY_REWRITE_INDEX != null) {
-            return QUERY_REWRITE_INDEX.size();
+    public final void setActive(boolean isActive) {
+        indexActive = isActive;
+    }
+
+    public final Integer getQueryRewriteIndexSize() {
+        if (queryRewriteIndex != null) {
+            return queryRewriteIndex.size();
         } else {
             return 0;
         }
     }
 
-    public static final Long getRetrievalCount() {
-        return RETRIEVAL_COUNT;
+    public static void setMaxSize(int mapSizeDefault) {
+        QueryRewriteIndex.MAP_SIZE_DEFAULT = mapSizeDefault;
+    }
+
+    public static void setExpiry(long mapExpiryIntervalDefault) {
+        QueryRewriteIndex.MAP_EXPIRY_INTERVAL_DEFAULT = mapExpiryIntervalDefault;
+    }
+
+    public final Long getRetrievalCount() {
+        return retrievalCount;
     }
 }

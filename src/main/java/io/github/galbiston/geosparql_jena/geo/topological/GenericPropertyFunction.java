@@ -21,6 +21,7 @@ import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.geof.topological.GenericFilterFunction;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.jena.graph.Graph;
@@ -76,7 +77,9 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     private QueryIterator bothBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
         Graph graph = execCxt.getActiveGraph();
-        Boolean isPositiveResult = queryRewrite(graph, subject, predicate, object);
+        SpatialIndex spatialIndex = SpatialIndex.retrieve(execCxt);
+        QueryRewriteIndex queryRewriteIndex = spatialIndex.getQueryRewriteIndex();
+        Boolean isPositiveResult = queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         if (isPositiveResult) {
             //Filter function test succeded so retain binding.
@@ -198,7 +201,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
     }
 
-    protected Boolean queryRewrite(Graph graph, Node subject, Node predicate, Node object) {
+    protected final Boolean queryRewrite(Graph graph, Node subject, Node predicate, Node object, QueryRewriteIndex queryRewriteIndex) {
 
         if (graph.contains(subject, predicate, object)) {
             //The graph contains the asserted triple, return the current binding.
@@ -225,7 +228,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
         //Check the QueryRewriteIndex for the result.
         Property predicateProp = ResourceFactory.createProperty(predicate.getURI());
-        Boolean isPositive = QueryRewriteIndex.test(subjectSpatialLiteral.getGeometryLiteral(), predicateProp, objectSpatialLiteral.getGeometryLiteral(), this);
+        Boolean isPositive = queryRewriteIndex.test(subjectSpatialLiteral.getGeometryLiteral(), predicateProp, objectSpatialLiteral.getGeometryLiteral(), this);
         return isPositive;
     }
 

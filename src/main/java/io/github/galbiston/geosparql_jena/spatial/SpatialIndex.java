@@ -15,8 +15,9 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
-import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
+import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
@@ -67,11 +68,13 @@ public class SpatialIndex implements Serializable {
     private final SRSInfo srsInfo;
     private boolean isBuilt;
     private final STRtree strTree;
+    private final QueryRewriteIndex queryRewriteIndex;
 
     public SpatialIndex(int capacity, String srsURI) {
         this.strTree = new STRtree(capacity);
         this.isBuilt = false;
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
+        this.queryRewriteIndex = new QueryRewriteIndex();
     }
 
     public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
@@ -80,6 +83,7 @@ public class SpatialIndex implements Serializable {
         this.strTree.build();
         this.isBuilt = true;
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
+        this.queryRewriteIndex = new QueryRewriteIndex();
     }
 
     public SRSInfo getCrsInfo() {
@@ -92,6 +96,10 @@ public class SpatialIndex implements Serializable {
 
     public boolean isBuilt() {
         return isBuilt;
+    }
+
+    public QueryRewriteIndex getQueryRewriteIndex() {
+        return queryRewriteIndex;
     }
 
     public void build() {
@@ -123,7 +131,7 @@ public class SpatialIndex implements Serializable {
 
     @Override
     public String toString() {
-        return "SpatialIndex{" + "srsInfo=" + srsInfo + ", isBuilt=" + isBuilt + ", strTree=" + strTree + '}';
+        return "SpatialIndex{" + "srsInfo=" + srsInfo + ", isBuilt=" + isBuilt + ", strTree=" + strTree + ", queryRewriteIndex=" + queryRewriteIndex + '}';
     }
 
     public static final SpatialIndex retrieve(ExecutionContext execCxt) throws SpatialIndexException {
