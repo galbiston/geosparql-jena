@@ -164,7 +164,7 @@ public class GreatCirclePointDistance {
      * @param startPoint
      * @param distance
      * @param bearing
-     * @return
+     * @return Lat/Lon point in the distance and bearing from start point.
      */
     public static final Point getPoint(Point startPoint, double distance, double bearing) {
 
@@ -182,7 +182,7 @@ public class GreatCirclePointDistance {
      * @param startLon
      * @param distance
      * @param bearing
-     * @return
+     * @return Lat/Lon point in the distance and bearing from start point.
      */
     public static final Point getPoint(double startLat, double startLon, double distance, double bearing) {
         //Based on: https://www.movable-type.co.uk/scripts/latlong.html

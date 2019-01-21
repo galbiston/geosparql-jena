@@ -134,7 +134,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
      *
      * @param spatialArguments
      * @param targetGeometryWrapper
-     * @return
+     * @return Result of second filter.
      */
     protected abstract boolean checkSecondFilter(SpatialArguments spatialArguments, GeometryWrapper targetGeometryWrapper);
 
@@ -143,7 +143,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
      * SpatialIndex uses bounding box to retrieve objects which may be over
      * generous or produce some false positives. Seconds
      *
-     * @return
+     * @return Whether a second filter check is required.
      */
     protected abstract boolean requireSecondFilter();
 

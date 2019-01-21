@@ -113,7 +113,7 @@ public class SRSInfo {
      * URI of the Spatial Reference System<br>
      * Identical values to SRID.
      *
-     * @return
+     * @return SRS URI
      */
     public String getSrsURI() {
         return srsURI;
@@ -122,7 +122,7 @@ public class SRSInfo {
     /**
      * OpenGIS Coordinate Reference System.
      *
-     * @return
+     * @return Coordinate Reference System
      */
     public CoordinateReferenceSystem getCrs() {
         return crs;
@@ -131,7 +131,7 @@ public class SRSInfo {
     /**
      * Units of Measure for the coordinate reference system.
      *
-     * @return
+     * @return Units of Measure
      */
     public UnitsOfMeasure getUnitsOfMeasure() {
         return unitsOfMeasure;
@@ -140,7 +140,7 @@ public class SRSInfo {
     /**
      * Check if axis is in XY order.
      *
-     * @return
+     * @return True if XY order.
      */
     public Boolean isAxisXY() {
         return isAxisXY;
@@ -150,7 +150,7 @@ public class SRSInfo {
      * Check if the SRS URI is recognised as a OpenGIS coordinate reference
      * system.
      *
-     * @return
+     * @return True if SRS is recognised.
      */
     public Boolean isSRSRecognised() {
         return isSRSRecognised;
@@ -159,7 +159,7 @@ public class SRSInfo {
     /**
      * Check if the SRS is geographic (i.e. latitude, longitude on a sphere).
      *
-     * @return
+     * @return True if a Geographic SRS, e.g. WGS84.
      */
     public Boolean isGeographic() {
         return isGeographic;
@@ -168,7 +168,7 @@ public class SRSInfo {
     /**
      * Domain of validity in XY coordinate order.
      *
-     * @return
+     * @return Bounding box of valid values.
      */
     public Envelope getDomainEnvelope() {
         return domainEnvelope;
@@ -177,7 +177,7 @@ public class SRSInfo {
     /**
      * Range of domain of validity in X axis.
      *
-     * @return
+     * @return Difference between min and max values in X axis.
      */
     public double getDomainRangeX() {
         return domainRangeX;

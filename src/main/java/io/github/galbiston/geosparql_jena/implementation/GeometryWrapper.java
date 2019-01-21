@@ -275,7 +275,7 @@ public class GeometryWrapper implements Serializable {
      * SRS.<br>
      * Returns XY geometry if not a Geographic SRS.
      *
-     * @return
+     * @return Geometry after translation in X direction.
      */
     public Geometry translateXYGeometry() {
 
@@ -417,7 +417,7 @@ public class GeometryWrapper implements Serializable {
      * Latitude if Geographic SRS or in WGS84.<br>
      * Used to convert between linear and non-linear units of measure.
      *
-     * @return
+     * @return Latitude of Geometry.
      * @throws org.opengis.util.FactoryException
      * @throws org.opengis.referencing.operation.TransformException
      */

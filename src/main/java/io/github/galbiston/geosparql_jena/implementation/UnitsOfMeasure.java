@@ -126,7 +126,7 @@ public class UnitsOfMeasure implements Serializable {
      * @param targetDistanceUnitsURI
      * @param isTargetUnitsLinear
      * @param latitude
-     * @return
+     * @return Distance in target units.
      */
     public static final double convertBetween(double distance, String unitsURI, String targetDistanceUnitsURI, boolean isTargetUnitsLinear, double latitude) {
         double targetDistance;
