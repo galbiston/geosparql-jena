@@ -44,9 +44,9 @@ import org.junit.Test;
  *
  *
  */
-public class DistanceFFTest {
+public class GreatCircleGeomFFTest {
 
-    public DistanceFFTest() {
+    public GreatCircleGeomFFTest() {
     }
 
     @BeforeClass
@@ -67,7 +67,7 @@ public class DistanceFFTest {
     }
 
     /**
-     * Test of exec method, of class DistanceFF.
+     * Test of exec method, of class GreatCircleGeomFF.
      */
     @Test
     public void testExec() {
@@ -75,7 +75,7 @@ public class DistanceFFTest {
         NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
         NodeValue v2 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 21.0)", WKTDatatype.INSTANCE);
         NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(Unit_URI.KILOMETER_URL));
-        DistanceFF instance = new DistanceFF();
+        GreatCircleGeomFF instance = new GreatCircleGeomFF();
         double expResult = 109.5055;
         double result = instance.exec(v1, v2, v3).getDouble();
 
@@ -85,7 +85,7 @@ public class DistanceFFTest {
     }
 
     /**
-     * Test of exec method, of class DistanceFF.
+     * Test of exec method, of class GreatCircleGeomFF.
      */
     @Test
     public void testExec2() {
@@ -93,7 +93,7 @@ public class DistanceFFTest {
         NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
         NodeValue v2 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(11.0 20.0)", WKTDatatype.INSTANCE);
         NodeValue v3 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
-        DistanceFF instance = new DistanceFF();
+        GreatCircleGeomFF instance = new GreatCircleGeomFF();
         double expResult = 111.1949;
         double result = instance.exec(v1, v2, v3).getDouble();
 
@@ -103,7 +103,7 @@ public class DistanceFFTest {
     }
 
     /**
-     * Test of exec method, of class DistanceFF.
+     * Test of exec method, of class GreatCircleGeomFF.
      */
     @Test
     public void testExec_Paris_London() {
@@ -111,7 +111,7 @@ public class DistanceFFTest {
         NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNode();
         NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNode();
         NodeValue v3 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
-        DistanceFF instance = new DistanceFF();
+        GreatCircleGeomFF instance = new GreatCircleGeomFF();
         double expResult = 343.7708;
         double result = instance.exec(v1, v2, v3).getDouble();
 
@@ -121,25 +121,7 @@ public class DistanceFFTest {
     }
 
     /**
-     * Test of exec method, of class DistanceFF.
-     */
-    @Test
-    public void testExec_OSGB() {
-        System.out.println("exec_OSGB");
-        NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(0.0 0.0)", WKTDatatype.INSTANCE);
-        NodeValue v2 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(10000.0 0.0)", WKTDatatype.INSTANCE);
-        NodeValue v3 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
-        DistanceFF instance = new DistanceFF();
-        double expResult = 10;
-        double result = instance.exec(v1, v2, v3).getDouble();
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result, 0.0001);
-    }
-
-    /**
-     * Test of exec method, of class DistanceFF.
+     * Test of exec method, of class GreatCircleGeomFF.
      */
     @Test(expected = ExprEvalException.class)
     public void testExec_pos0_fail() {
@@ -147,7 +129,7 @@ public class DistanceFFTest {
         NodeValue v1 = NodeValue.makeString("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)");
         NodeValue v2 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0001)", WKTDatatype.INSTANCE);
         NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(Unit_URI.KILOMETER_URL));
-        DistanceFF instance = new DistanceFF();
+        GreatCircleGeomFF instance = new GreatCircleGeomFF();
         NodeValue expResult = NodeValue.makeDouble(20);
         NodeValue result = instance.exec(v1, v2, v3);
 
@@ -157,7 +139,7 @@ public class DistanceFFTest {
     }
 
     /**
-     * Test of exec method, of class DistanceFF.
+     * Test of exec method, of class GreatCircleGeomFF.
      */
     @Test(expected = ExprEvalException.class)
     public void testExec_pos1_fail() {
@@ -165,7 +147,7 @@ public class DistanceFFTest {
         NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
         NodeValue v2 = NodeValue.makeString("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0001)");
         NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(Unit_URI.KILOMETER_URL));
-        DistanceFF instance = new DistanceFF();
+        GreatCircleGeomFF instance = new GreatCircleGeomFF();
         NodeValue expResult = NodeValue.makeDouble(20);
         NodeValue result = instance.exec(v1, v2, v3);
 
@@ -175,7 +157,7 @@ public class DistanceFFTest {
     }
 
     /**
-     * Test of exec method, of class DistanceFF.
+     * Test of exec method, of class GreatCircleGeomFF.
      */
     @Test(expected = ExprEvalException.class)
     public void testExec_pos2_fail() {
@@ -183,7 +165,7 @@ public class DistanceFFTest {
         NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
         NodeValue v2 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0001)", WKTDatatype.INSTANCE);
         NodeValue v3 = NodeValue.makeInteger(20);
-        DistanceFF instance = new DistanceFF();
+        GreatCircleGeomFF instance = new GreatCircleGeomFF();
         NodeValue expResult = NodeValue.makeDouble(20);
         NodeValue result = instance.exec(v1, v2, v3);
 
@@ -193,7 +175,7 @@ public class DistanceFFTest {
     }
 
     /**
-     * Test of exec method, of class DistanceFF.
+     * Test of exec method, of class GreatCircleGeomFF.
      */
     @Test
     public void testExec_query() {
@@ -207,7 +189,7 @@ public class DistanceFFTest {
                 + "WHERE{\n"
                 + "    BIND( \"<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(51.50853 -0.12574)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?geom1)"
                 + "    BIND( \"<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(48.857487 2.373047)\"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?geom2)"
-                + "    BIND( spatialF:distance(?geom1, ?geom2, <http://www.opengis.net/def/uom/OGC/1.0/kilometer>) AS ?dist) \n"
+                + "    BIND( spatialF:greatCircleGeom(?geom1, ?geom2, <http://www.opengis.net/def/uom/OGC/1.0/kilometer>) AS ?dist) \n"
                 + "}ORDER by ?dist";
 
         List<Literal> results = new ArrayList<>();
