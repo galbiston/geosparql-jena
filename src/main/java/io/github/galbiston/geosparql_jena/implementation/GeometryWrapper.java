@@ -548,6 +548,13 @@ public class GeometryWrapper implements Serializable {
         //Find the nearest pair of coordinates from each Geometry using Euclidean distance (adjusting for wrap around).
         //These are then used for Great Circle distance.
         CoordinatePair coordinatePair = CoordinatePair.findNearestPair(transformedSourceGeometry, transformedTargetGeometry);
+
+        //Check whether the nearest pair are the same, i.e. the overlap or within each other.
+        if (coordinatePair.isEqual()) {
+            //Exit early as the distance is zero.
+            return 0.0;
+        }
+
         Coordinate coord1 = coordinatePair.getCoord1();
         Coordinate coord2 = coordinatePair.getCoord2();
 

@@ -554,4 +554,25 @@ public class GeometryWrapperTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Test of distanceGreatCircle method, of class GeometryWrapper.
+     *
+     * @throws org.opengis.util.FactoryException
+     * @throws org.opengis.referencing.operation.TransformException
+     */
+    @Test
+    public void testDistanceGreatCircle_overlap() throws FactoryException, MismatchedDimensionException, TransformException {
+        System.out.println("distanceGreatCircle_overlap");
+        GeometryWrapper instance = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 0.0, 20.0 0.0, 20.0 10.0, 10.0 10.0, 10.0 0.0))", WKTDatatype.URI);
+        GeometryWrapper testGeometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 0.0)", WKTDatatype.URI);
+        String unitsURI = Unit_URI.KILOMETER_URL;
+
+        double expResult = 0.0;
+        double result = instance.distanceGreatCircle(testGeometryWrapper, unitsURI);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result, 0.0001);
+    }
+
 }
