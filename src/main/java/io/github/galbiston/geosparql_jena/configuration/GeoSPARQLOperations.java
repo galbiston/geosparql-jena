@@ -541,4 +541,32 @@ public class GeoSPARQLOperations {
 
     }
 
+    public static final String findModeSRS(Dataset dataset) {
+        LOGGER.info("Find Mode SRS - Started");
+        ModeSRS modeSRS = new ModeSRS();
+        //Default Model
+        dataset.begin(ReadWrite.READ);
+        Model defaultModel = dataset.getDefaultModel();
+        modeSRS.search(defaultModel);
+
+        //Named Models
+        Iterator<String> graphNames = dataset.listNames();
+        while (graphNames.hasNext()) {
+            String graphName = graphNames.next();
+            Model namedModel = dataset.getNamedModel(graphName);
+            modeSRS.search(namedModel);
+        }
+
+        LOGGER.info("Find Mode SRS - Completed");
+        dataset.end();
+
+        return modeSRS.getModeURI();
+    }
+
+    public static final String findModeSRS(Model model) {
+        ModeSRS modeSRS = new ModeSRS();
+        modeSRS.search(model);
+        return modeSRS.getModeURI();
+    }
+
 }
