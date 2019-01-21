@@ -49,7 +49,7 @@ public class EastGeomPFTest {
 
     @BeforeClass
     public static void setUpClass() {
-        GeoSPARQLConfig.setupSpatial();
+         GeoSPARQLConfig.setupNoIndex();
     }
 
     @AfterClass

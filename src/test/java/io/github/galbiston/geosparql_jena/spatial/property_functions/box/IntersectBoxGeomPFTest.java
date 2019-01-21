@@ -53,7 +53,7 @@ public class IntersectBoxGeomPFTest {
 
     @BeforeClass
     public static void setUpClass() {
-        GeoSPARQLConfig.setupSpatial();
+         GeoSPARQLConfig.setupNoIndex();
     }
 
     @AfterClass

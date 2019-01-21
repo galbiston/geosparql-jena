@@ -47,7 +47,6 @@ public class GeoSPARQLConfig {
      * GeoSPARQL schema
      */
     private static Boolean IS_FUNCTIONS_REGISTERED = false;
-    private static Boolean IS_SPATIAL_FUNCTIONS_REGISTERED = false;
     private static Boolean IS_QUERY_REWRITE_ENABLED = true;
     private static Boolean IS_SUPPORT_SETUP = false;
 
@@ -181,6 +180,8 @@ public class GeoSPARQLConfig {
             RCC8.loadFilterFunctions(functionRegistry);
             Relate.loadRelateFunction(functionRegistry);
             GeometryProperty.loadPropertyFunctions(propertyRegistry);
+            Spatial.loadPropertyFunctions(propertyRegistry);
+            Spatial.loadFilterFunctions(functionRegistry);
             IS_FUNCTIONS_REGISTERED = true;
         }
     }
@@ -211,21 +212,7 @@ public class GeoSPARQLConfig {
         return IS_QUERY_REWRITE_ENABLED;
     }
 
-    public static final void setupSpatial() {
-        //Only register functions once.
-        if (!IS_SPATIAL_FUNCTIONS_REGISTERED) {
-            setupSupport();
-            PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
-            FunctionRegistry functionRegistry = FunctionRegistry.get();
-            Spatial.loadPropertyFunctions(propertyRegistry);
-            Spatial.loadFilterFunctions(functionRegistry);
-            IS_SPATIAL_FUNCTIONS_REGISTERED = true;
-        }
-
-    }
-
-    public static final void setupSpatial(Dataset dataset, String srsURI, File spatialIndexFile) {
-        setupSpatial();
+    public static final void setupSpatialIndex(Dataset dataset, String srsURI, File spatialIndexFile) {
         SpatialIndex.buildSpatialIndex(dataset, srsURI, spatialIndexFile);
     }
 

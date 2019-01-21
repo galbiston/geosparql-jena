@@ -53,7 +53,7 @@ public class WithinBoxGeomPFTest {
 
     @BeforeClass
     public static void setUpClass() {
-        GeoSPARQLConfig.setupSpatial();
+         GeoSPARQLConfig.setupNoIndex();
     }
 
     @AfterClass

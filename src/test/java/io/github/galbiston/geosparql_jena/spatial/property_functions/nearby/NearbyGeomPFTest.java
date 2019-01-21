@@ -56,7 +56,7 @@ public class NearbyGeomPFTest {
 
     @BeforeClass
     public static void setUpClass() {
-        GeoSPARQLConfig.setupSpatial();
+         GeoSPARQLConfig.setupNoIndex();
     }
 
     @AfterClass
