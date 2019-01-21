@@ -479,25 +479,27 @@ public class GeoSPARQLOperations {
     }
 
     /**
-     * Convert Geo Predicates (Lat/Lon) in Dataset to WKT Geometry Literal.
+     * Convert Geo Predicates (Lat/Lon) in Dataset to WKT Geometry Literal.<br>
+     * Option to remove Lat and Lon predicates after combination.
      *
      * @param dataset
+     * @param isRemoveGeoPredicate
      *
      */
-    public static final void convertGeoPredicates(Dataset dataset) {
+    public static final void convertGeoPredicates(Dataset dataset, boolean isRemoveGeoPredicate) {
 
         LOGGER.info("Convert Geo Predicates - Started");
         //Default Model
         dataset.begin(ReadWrite.WRITE);
         Model defaultModel = dataset.getDefaultModel();
-        convertGeoPredicates(defaultModel);
+        convertGeoPredicates(defaultModel, isRemoveGeoPredicate);
 
         //Named Models
         Iterator<String> graphNames = dataset.listNames();
         while (graphNames.hasNext()) {
             String graphName = graphNames.next();
             Model namedModel = dataset.getNamedModel(graphName);
-            convertGeoPredicates(namedModel);
+            convertGeoPredicates(namedModel, isRemoveGeoPredicate);
         }
 
         LOGGER.info("Convert Geo Predicates - Completed");
@@ -505,18 +507,25 @@ public class GeoSPARQLOperations {
         dataset.end();
     }
 
-    public static final void convertGeoPredicates(Model model) {
+    /**
+     * Convert Geo Predicates (Lat/Lon) in Dataset to WKT Geometry Literal.<br>
+     * Option to remove Lat and Lon predicates after combination.
+     *
+     * @param model
+     * @param isRemoveGeoPredicates
+     */
+    public static final void convertGeoPredicates(Model model, boolean isRemoveGeoPredicates) {
 
         if (model.containsResource(SpatialExtension.GEO_LAT_PROP)) {
 
             ResIterator resIt = model.listSubjectsWithProperty(SpatialExtension.GEO_LAT_PROP);
             while (resIt.hasNext()) {
                 Resource feature = resIt.nextResource();
-                if (feature.hasProperty(SpatialExtension.GEO_LONG_PROP) && feature.hasProperty(SpatialExtension.GEO_LAT_PROP)) {
+                if (feature.hasProperty(SpatialExtension.GEO_LON_PROP) && feature.hasProperty(SpatialExtension.GEO_LAT_PROP)) {
 
                     //Create a GeometryLiteral from Lat/Lon
                     Literal lat = feature.getProperty(SpatialExtension.GEO_LAT_PROP).getLiteral();
-                    Literal lon = feature.getProperty(SpatialExtension.GEO_LONG_PROP).getLiteral();
+                    Literal lon = feature.getProperty(SpatialExtension.GEO_LON_PROP).getLiteral();
                     try {
                         Literal latLonPoint = ConvertLatLon.toLiteral(lat.getFloat(), lon.getFloat());
 
@@ -537,10 +546,21 @@ public class GeoSPARQLOperations {
                     }
                 }
             }
-        }
 
+            if (isRemoveGeoPredicates) {
+                model.removeAll(null, SpatialExtension.GEO_LAT_PROP, null);
+                model.removeAll(null, SpatialExtension.GEO_LON_PROP, null);
+            }
+
+        }
     }
 
+    /**
+     * Find the most frequent SRS URI of Geometry Literals in the dataset.
+     *
+     * @param dataset
+     * @return SRS URI
+     */
     public static final String findModeSRS(Dataset dataset) {
         LOGGER.info("Find Mode SRS - Started");
         ModeSRS modeSRS = new ModeSRS();
@@ -563,6 +583,12 @@ public class GeoSPARQLOperations {
         return modeSRS.getModeURI();
     }
 
+    /**
+     * Find the most frequent SRS URI of Geometry Literals in the model.
+     *
+     * @param model
+     * @return SRS URI
+     */
     public static final String findModeSRS(Model model) {
         ModeSRS modeSRS = new ModeSRS();
         modeSRS.search(model);
