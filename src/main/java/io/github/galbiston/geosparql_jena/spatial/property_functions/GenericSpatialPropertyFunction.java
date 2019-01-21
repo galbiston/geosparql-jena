@@ -73,7 +73,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     private QueryIterator search(Binding binding, ExecutionContext execCxt, Node subject, int limit) {
 
         //Subject is bound
-        if (subject.isURI()) {
+        if (subject.isURI() || subject.isBlank()) {
             boolean isMatched = checkBound(execCxt, subject);
             if (isMatched) {
                 return QueryIterSingleton.create(binding, execCxt);
@@ -85,8 +85,8 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         if (subject.isVariable()) {
             return checkUnbound(binding, execCxt, subject, limit);
         } else {
-            //Subject is not a variable (and not a URI - tested earlier).
-            throw new ExprEvalException("Not a URI or variable: " + FmtUtils.stringForNode(subject));
+            //Subject is not a variable (and not a URI or Blank - tested earlier).
+            throw new ExprEvalException("Not a URI, Blank or variable: " + FmtUtils.stringForNode(subject));
         }
     }
 
