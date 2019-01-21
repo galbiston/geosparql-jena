@@ -23,9 +23,7 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -109,22 +107,19 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     private QueryIterator bothUnbound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
         QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
+        Var subjectVar = Var.alloc(subject.getName());
 
         Graph graph = execCxt.getActiveGraph();
 
         ExtendedIterator<Triple> spatialObjects = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
-        List<Triple> subjectTriples = spatialObjects.toList();
-        List<Triple> objectTriples = new ArrayList<>(subjectTriples);
 
-        Var subjectVar = Var.alloc(subject.getName());
-        Var objectVar = Var.alloc(object.getName());
-        for (Triple subjectTriple : subjectTriples) {
-            for (Triple objectTriple : objectTriples) {
-                Binding startBind = BindingFactory.binding(binding, subjectVar, subjectTriple.getSubject());
-                Binding newBind = BindingFactory.binding(startBind, objectVar, objectTriple.getSubject());
-                QueryIterator queryIter = bothBound(newBind, subjectTriple.getSubject(), predicate, objectTriple.getSubject(), execCxt);
-                queryIterConcat.add(queryIter);
-            }
+        //Bind all the Spatial Objects once as the subject and search for corresponding Objects.
+        while (spatialObjects.hasNext()) {
+            Triple spatialObjectTriple = spatialObjects.next();
+            Node boundSubject = spatialObjectTriple.getSubject();
+            Binding subjectBind = BindingFactory.binding(binding, subjectVar, boundSubject);
+            QueryIterator queryIter = oneBound(subjectBind, boundSubject, predicate, object, execCxt);
+            queryIterConcat.add(queryIter);
         }
 
         return queryIterConcat;
