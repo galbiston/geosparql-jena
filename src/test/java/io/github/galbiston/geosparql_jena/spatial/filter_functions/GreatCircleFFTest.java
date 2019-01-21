@@ -254,8 +254,8 @@ public class GreatCircleFFTest {
 
         List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("344.26594906194606e0", XSDDatatype.XSDdouble));
 
-        System.out.println("Exp: " + expResults);
-        System.out.println("Res: " + results);
+        //System.out.println("Exp: " + expResults);
+        //System.out.println("Res: " + results);
         assertEquals(expResults, results);
     }
 
