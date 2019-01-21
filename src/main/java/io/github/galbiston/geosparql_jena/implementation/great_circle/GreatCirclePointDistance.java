@@ -22,7 +22,10 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
 /**
- *
+ * Determines final Latitude and Longitude based on a bearing.<br>
+ * Constant values are calculated once to avoid repetition.<br>
+ * Latitude and longitude calculated in stages to avoid unnecessary
+ * calculations.
  *
  */
 public class GreatCirclePointDistance {
