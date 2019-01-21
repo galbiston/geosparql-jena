@@ -36,7 +36,7 @@ public class SfIntersectsFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisjoint() {
+    public boolean isDisjoint() {
         return false;
     }
 
@@ -46,7 +46,7 @@ public class SfIntersectsFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisconnected() {
+    public boolean isDisconnected() {
         return false;
     }
 }

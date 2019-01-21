@@ -37,7 +37,7 @@ public class EhEqualsFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisjoint() {
+    public boolean isDisjoint() {
         return false;
     }
 
@@ -47,7 +47,7 @@ public class EhEqualsFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisconnected() {
+    public boolean isDisconnected() {
         return false;
     }
 }

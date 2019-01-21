@@ -37,12 +37,12 @@ public class EhContainsFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisjoint() {
+    public boolean isDisjoint() {
         return false;
     }
 
     @Override
-    protected boolean isDisconnected() {
+    public boolean isDisconnected() {
         return false;
     }
 

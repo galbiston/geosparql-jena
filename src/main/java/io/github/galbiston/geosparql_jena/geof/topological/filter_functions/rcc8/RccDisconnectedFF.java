@@ -37,7 +37,7 @@ public class RccDisconnectedFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisjoint() {
+    public boolean isDisjoint() {
         return true;
     }
 
@@ -47,7 +47,7 @@ public class RccDisconnectedFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisconnected() {
+    public boolean isDisconnected() {
         return true;
     }
 }

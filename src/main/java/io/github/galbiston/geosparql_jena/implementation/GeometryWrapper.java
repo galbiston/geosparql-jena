@@ -206,6 +206,20 @@ public class GeometryWrapper implements Serializable {
 
     /**
      * Transform the GeometryWrapper into another spatial reference system.<br>
+     *
+     * @param srsInfo
+     * @return New GeometryWrapper after transformation, or this GeometryWrapper
+     * if no transformation.
+     * @throws MismatchedDimensionException
+     * @throws TransformException
+     * @throws FactoryException
+     */
+    public GeometryWrapper transform(SRSInfo srsInfo) throws MismatchedDimensionException, TransformException, FactoryException {
+        return transform(srsInfo.getSrsURI(), true);
+    }
+
+    /**
+     * Transform the GeometryWrapper into another spatial reference system.<br>
      * Option to store the resulting GeometryWrapper in the index.
      *
      * @param srsURI

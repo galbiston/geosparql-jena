@@ -43,6 +43,12 @@ public class QueryRewriteIndex {
         this.queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, MAP_SIZE_DEFAULT, MAP_EXPIRY_INTERVAL_DEFAULT);
     }
 
+    public QueryRewriteIndex(boolean isActive) {
+        this.queryRewriteLabel = "Query Rewrite";
+        this.indexActive = false;
+        this.queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, 1, MAP_EXPIRY_INTERVAL_DEFAULT);
+    }
+
     public QueryRewriteIndex(String queryRewriteLabel, int maxSize, long expiryInterval) {
         this.queryRewriteLabel = queryRewriteLabel;
         this.queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, maxSize, expiryInterval);
@@ -62,11 +68,11 @@ public class QueryRewriteIndex {
             return false;
         }
 
-        Boolean result;
-        String key = subjectGeometryLiteral.getLiteralLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLiteralLexicalForm();
         retrievalCount++;
         if (indexActive) {
+            String key = subjectGeometryLiteral.getLiteralLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLiteralLexicalForm();
             try {
+                Boolean result;
                 if (queryRewriteIndex.containsKey(key)) {
                     result = queryRewriteIndex.get(key);
                 } else {

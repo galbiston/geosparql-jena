@@ -55,7 +55,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
 
         spatialIndex = SpatialIndex.retrieve(execCxt);
-        spatialArguments = extractObjectArguments(predicate, object, spatialIndex.getCrsInfo());
+        spatialArguments = extractObjectArguments(predicate, object, spatialIndex.getSrsInfo());
         return search(binding, execCxt, subject, spatialArguments.limit);
     }
 

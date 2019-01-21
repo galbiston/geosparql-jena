@@ -76,8 +76,8 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
     protected abstract boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException;
 
-    protected abstract boolean isDisjoint();
+    public abstract boolean isDisjoint();
 
-    protected abstract boolean isDisconnected();
+    public abstract boolean isDisconnected();
 
 }

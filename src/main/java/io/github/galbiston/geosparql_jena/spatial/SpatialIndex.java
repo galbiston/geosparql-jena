@@ -86,7 +86,7 @@ public class SpatialIndex implements Serializable {
         this.queryRewriteIndex = new QueryRewriteIndex();
     }
 
-    public SRSInfo getCrsInfo() {
+    public SRSInfo getSrsInfo() {
         return srsInfo;
     }
 
@@ -144,6 +144,11 @@ public class SpatialIndex implements Serializable {
         }
 
         return spatialIndex;
+    }
+
+    public static final boolean isDefined(ExecutionContext execCxt) {
+        Context context = execCxt.getContext();
+        return context.isDefined(SPATIAL_INDEX_SYMBOL);
     }
 
     public static final void setSpatialIndex(Dataset dataset, SpatialIndex spatialIndex) {

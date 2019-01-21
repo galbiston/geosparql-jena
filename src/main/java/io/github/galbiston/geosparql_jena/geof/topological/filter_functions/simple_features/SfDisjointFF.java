@@ -36,7 +36,7 @@ public class SfDisjointFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisjoint() {
+    public boolean isDisjoint() {
         return true;
     }
 
@@ -46,7 +46,7 @@ public class SfDisjointFF extends GenericFilterFunction {
     }
 
     @Override
-    protected boolean isDisconnected() {
+    public boolean isDisconnected() {
         return false;
     }
 }

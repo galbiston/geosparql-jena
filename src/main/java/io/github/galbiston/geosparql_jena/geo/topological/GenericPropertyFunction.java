@@ -19,15 +19,18 @@ package io.github.galbiston.geosparql_jena.geo.topological;
 
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.geof.topological.GenericFilterFunction;
+import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
@@ -37,9 +40,15 @@ import org.apache.jena.sparql.engine.binding.BindingFactory;
 import org.apache.jena.sparql.engine.iterator.QueryIterConcat;
 import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
+import org.apache.jena.sparql.expr.ExprEvalException;
 import org.apache.jena.sparql.pfunction.PFuncSimple;
+import org.apache.jena.sparql.util.FmtUtils;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.RDF;
+import org.locationtech.jts.geom.Envelope;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.operation.TransformException;
+import org.opengis.util.FactoryException;
 
 /**
  *
@@ -77,8 +86,14 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     private QueryIterator bothBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
         Graph graph = execCxt.getActiveGraph();
-        SpatialIndex spatialIndex = SpatialIndex.retrieve(execCxt);
-        QueryRewriteIndex queryRewriteIndex = spatialIndex.getQueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex;
+        if (SpatialIndex.isDefined(execCxt)) {
+            SpatialIndex spatialIndex = SpatialIndex.retrieve(execCxt);
+            queryRewriteIndex = spatialIndex.getQueryRewriteIndex();
+        } else {
+            //Create a small disabled temporary index.
+            queryRewriteIndex = new QueryRewriteIndex(false);
+        }
         Boolean isPositiveResult = queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         if (isPositiveResult) {
@@ -134,26 +149,92 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
 
         if (!graph.contains(boundNode, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE)) {
-            //Subject is not a Feature or a Geometry so exit.
+            //Bound node is not a Feature or a Geometry so exit.
             return QueryIterNullIterator.create(execCxt);
         }
 
-        ExtendedIterator<Triple> unboundTriples = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
+        boolean isNoSpatialIndex = SpatialIndex.isDefined(execCxt);
+        QueryIterConcat queryIterConcat;
+        if (filterFunction.isDisjoint() || isNoSpatialIndex) {
+            //Disjointed so retrieve all cases.
+            queryIterConcat = findAll(graph, boundNode, unboundNode, binding, isSubjectBound, predicate, execCxt);
+        } else {
+            //Only retrieve those in the spatial index which are within same bounding box.
+            queryIterConcat = findSpecific(graph, boundNode, unboundNode, binding, isSubjectBound, predicate, execCxt);
+        }
+
+        return queryIterConcat;
+    }
+
+    private QueryIterConcat findAll(Graph graph, Node boundNode, Node unboundNode, Binding binding, boolean isSubjectBound, Node predicate, ExecutionContext execCxt) {
+
+        //Prepare the results.
         Var unboundVar = Var.alloc(unboundNode.getName());
         QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
+
+        //Search for both Features and Geometry in the Graph.
+        ExtendedIterator<Triple> unboundTriples = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
         while (unboundTriples.hasNext()) {
             Triple unboundTriple = unboundTriples.next();
-            Binding newBind = BindingFactory.binding(binding, unboundVar, unboundTriple.getSubject());
+            Node spatialNode = unboundTriple.getSubject();
+            Binding newBind = BindingFactory.binding(binding, unboundVar, spatialNode);
             QueryIterator queryIter;
             if (isSubjectBound) {
-                queryIter = bothBound(newBind, boundNode, predicate, unboundTriple.getSubject(), execCxt);
+                queryIter = bothBound(newBind, boundNode, predicate, spatialNode, execCxt);
             } else {
-                queryIter = bothBound(newBind, unboundTriple.getSubject(), predicate, boundNode, execCxt);
+                queryIter = bothBound(newBind, spatialNode, predicate, boundNode, execCxt);
             }
             queryIterConcat.add(queryIter);
         }
 
         return queryIterConcat;
+    }
+
+    private QueryIterConcat findSpecific(Graph graph, Node boundNode, Node unboundNode, Binding binding, boolean isSubjectBound, Node predicate, ExecutionContext execCxt) {
+
+        try {
+            //Perform the search of the Spatial Index of the Dataset.
+            SpatialIndex spatialIndex = SpatialIndex.retrieve(execCxt);
+            GeometryWrapper geom = GeometryWrapper.extract(boundNode);
+            GeometryWrapper transformedGeom = geom.transform(spatialIndex.getSrsInfo());
+            Envelope searchEnvelope = transformedGeom.getEnvelope();
+            HashSet<Resource> features = spatialIndex.query(searchEnvelope);
+
+            //Prepare the results.
+            Var unboundVar = Var.alloc(unboundNode.getName());
+            QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
+
+            //Check each of the Features that match the search.
+            for (Resource feature : features) {
+                Node featureNode = feature.asNode();
+                Binding newBind = BindingFactory.binding(binding, unboundVar, featureNode);
+                QueryIterator queryIter;
+                if (isSubjectBound) {
+                    queryIter = bothBound(newBind, boundNode, predicate, featureNode, execCxt);
+                } else {
+                    queryIter = bothBound(newBind, featureNode, predicate, boundNode, execCxt);
+                }
+                queryIterConcat.add(queryIter);
+
+                //Also test all Geometry of the Features. All, some or one Geometry may have matched.
+                ExtendedIterator<Triple> featureGeometryTriples = graph.find(feature.asNode(), Geo.HAS_GEOMETRY_NODE, null);
+                while (featureGeometryTriples.hasNext()) {
+                    Triple unboundTriple = featureGeometryTriples.next();
+                    Node geomNode = unboundTriple.getObject();
+                    newBind = BindingFactory.binding(binding, unboundVar, geomNode);
+                    if (isSubjectBound) {
+                        queryIter = bothBound(newBind, boundNode, predicate, geomNode, execCxt);
+                    } else {
+                        queryIter = bothBound(newBind, geomNode, predicate, boundNode, execCxt);
+                    }
+                    queryIterConcat.add(queryIter);
+                }
+            }
+
+            return queryIterConcat;
+        } catch (MismatchedDimensionException | TransformException | FactoryException ex) {
+            throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(boundNode) + ", " + FmtUtils.stringForNode(unboundNode) + ", " + FmtUtils.stringForNode(predicate), ex);
+        }
     }
 
     /**
