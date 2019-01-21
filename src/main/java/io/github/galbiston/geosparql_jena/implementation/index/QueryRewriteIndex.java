@@ -34,7 +34,6 @@ public class QueryRewriteIndex {
     private Boolean indexActive = true;
     private final String queryRewriteLabel;
     private ExpiringMap<String, Boolean> queryRewriteIndex;
-    public Long retrievalCount = 0L;
     private static int MAP_SIZE_DEFAULT = UNLIMITED_MAP;
     private static long MAP_EXPIRY_INTERVAL_DEFAULT = MAP_EXPIRY_INTERVAL;
 
@@ -68,7 +67,6 @@ public class QueryRewriteIndex {
             return false;
         }
 
-        retrievalCount++;
         if (indexActive) {
             String key = subjectGeometryLiteral.getLiteralLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLiteralLexicalForm();
             try {
@@ -92,7 +90,6 @@ public class QueryRewriteIndex {
         if (queryRewriteIndex != null) {
             queryRewriteIndex.clear();
         }
-        retrievalCount = 0L;
     }
 
     /**
@@ -157,7 +154,4 @@ public class QueryRewriteIndex {
         QueryRewriteIndex.MAP_EXPIRY_INTERVAL_DEFAULT = mapExpiryIntervalDefault;
     }
 
-    public final Long getRetrievalCount() {
-        return retrievalCount;
-    }
 }

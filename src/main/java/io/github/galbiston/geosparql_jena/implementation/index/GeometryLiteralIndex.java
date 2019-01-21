@@ -37,7 +37,6 @@ public class GeometryLiteralIndex {
     private static final String SECONDARY_INDEX_LABEL = "Secondary Geometry Literal Index";
     private static ExpiringMap<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringMap<>(PRIMARY_INDEX_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
     private static ExpiringMap<String, GeometryWrapper> SECONDARY_INDEX = new ExpiringMap<>(SECONDARY_INDEX_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
-    private static Long RETRIEVAL_COUNT = 0L;
 
     public enum GeometryIndex {
         PRIMARY, SECONDARY
@@ -60,8 +59,6 @@ public class GeometryLiteralIndex {
     private static GeometryWrapper retrieveMemoryIndex(String geometryLiteral, GeometryDatatype geometryDatatype, Map<String, GeometryWrapper> index, Map<String, GeometryWrapper> otherIndex) {
 
         GeometryWrapper geometryWrapper;
-
-        RETRIEVAL_COUNT++;
 
         if (INDEX_ACTIVE) {
 
@@ -98,7 +95,6 @@ public class GeometryLiteralIndex {
         if (SECONDARY_INDEX != null) {
             SECONDARY_INDEX.clear();
         }
-        RETRIEVAL_COUNT = 0L;
     }
 
     /**
@@ -168,10 +164,6 @@ public class GeometryLiteralIndex {
         } else {
             return 0;
         }
-    }
-
-    public static final Long getRetrievalCount() {
-        return RETRIEVAL_COUNT;
     }
 
     public static Boolean isIndexActive() {

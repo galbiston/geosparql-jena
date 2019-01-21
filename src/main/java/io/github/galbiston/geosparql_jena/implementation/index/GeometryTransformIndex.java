@@ -43,7 +43,6 @@ public class GeometryTransformIndex {
     private static Boolean IS_INDEX_ACTIVE = true;
     private static final String GEOMETRY_TRANSFORM_LABEL = "Geometry Transform";
     private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(GEOMETRY_TRANSFORM_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
-    public static Long RETRIEVAL_COUNT = 0L;
 
     /**
      *
@@ -58,7 +57,6 @@ public class GeometryTransformIndex {
 
         GeometryWrapper transformedGeometryWrapper;
         String key = sourceGeometryWrapper.getLexicalForm() + "@" + srsURI;
-        RETRIEVAL_COUNT++;
 
         if (IS_INDEX_ACTIVE && storeSRSTransform) {
             try {
@@ -98,7 +96,6 @@ public class GeometryTransformIndex {
         if (GEOMETRY_TRANSFORM_INDEX != null) {
             GEOMETRY_TRANSFORM_INDEX.clear();
         }
-        RETRIEVAL_COUNT = 0L;
     }
 
     /**
@@ -151,7 +148,4 @@ public class GeometryTransformIndex {
         }
     }
 
-    public static final Long getRetrievalCount() {
-        return RETRIEVAL_COUNT;
-    }
 }
