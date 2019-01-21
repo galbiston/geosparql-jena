@@ -19,6 +19,7 @@ import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExten
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.DistanceFF;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.GreatCircleFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.GreatCircleGeomFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxGeomPF;
@@ -81,6 +82,7 @@ public class Spatial {
         functionRegistry.put(SpatialExtension.NEARBY, NearbyFF.class);
         functionRegistry.put(SpatialExtension.WITHIN_CIRCLE, NearbyFF.class);
         functionRegistry.put(SpatialExtension.DISTANCE, DistanceFF.class);
+        functionRegistry.put(SpatialExtension.GREAT_CIRCLE, GreatCircleFF.class);
         functionRegistry.put(SpatialExtension.GREAT_CIRCLE_GEOM, GreatCircleGeomFF.class);
     }
 
