@@ -56,5 +56,5 @@ public class SpatialExtension {
     public static final String GEO_POS_LAT = GEO_POS_URI + "lat";
     public static final String GEO_POS_LONG = GEO_POS_URI + "long";
     public static final Property GEO_LAT_PROP = ResourceFactory.createProperty(GEO_POS_LAT);
-    public static final Property GEO_LONG_PROP = ResourceFactory.createProperty(GEO_POS_LONG);
+    public static final Property GEO_LON_PROP = ResourceFactory.createProperty(GEO_POS_LONG);
 }
