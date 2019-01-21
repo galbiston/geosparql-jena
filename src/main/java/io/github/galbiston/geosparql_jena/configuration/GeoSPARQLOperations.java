@@ -90,7 +90,7 @@ public class GeoSPARQLOperations {
      *
      * @param dataset
      */
-    public static void applyDefaultGeometry(Dataset dataset) {
+    public static final void applyDefaultGeometry(Dataset dataset) {
 
         try {
             LOGGER.info("Applying hasDefaultGeometry - Started");
@@ -226,7 +226,7 @@ public class GeoSPARQLOperations {
      *
      * @return Output model.
      */
-    public static Model loadGeoSPARQLSchema() {
+    public static final Model loadGeoSPARQLSchema() {
         Model geosparqlSchema = ModelFactory.createDefaultModel();
         InputStream inputStream = GeoSPARQLOperations.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA_FILE);
         RDFDataMgr.read(geosparqlSchema, inputStream, Lang.RDFXML);
@@ -240,7 +240,7 @@ public class GeoSPARQLOperations {
      *
      * @param dataset
      */
-    public static void applyInferencing(Dataset dataset) {
+    public static final void applyInferencing(Dataset dataset) {
         Model geosparqlSchema = loadGeoSPARQLSchema();
         applyInferencing(geosparqlSchema, dataset);
     }
@@ -251,7 +251,7 @@ public class GeoSPARQLOperations {
      * @param geosparqlSchema
      * @param dataset
      */
-    public static void applyInferencing(Model geosparqlSchema, Dataset dataset) {
+    public static final void applyInferencing(Model geosparqlSchema, Dataset dataset) {
 
         LOGGER.info("Applying GeoSPARQL Schema - Started");
 
@@ -284,7 +284,7 @@ public class GeoSPARQLOperations {
      *
      * @param dataModel
      */
-    public static void applyInferencing(Model dataModel) {
+    public static final void applyInferencing(Model dataModel) {
         Model geosparqlSchema = loadGeoSPARQLSchema();
         GeoSPARQLOperations.applyInferencing(geosparqlSchema, dataModel);
     }
@@ -295,7 +295,7 @@ public class GeoSPARQLOperations {
      * @param geosparqlSchema
      * @param dataModel
      */
-    public static void applyInferencing(Model geosparqlSchema, Model dataModel) {
+    public static final void applyInferencing(Model geosparqlSchema, Model dataModel) {
         applyInferencing(geosparqlSchema, dataModel, "unnamed");
     }
 
@@ -307,7 +307,7 @@ public class GeoSPARQLOperations {
      * @param model
      * @param graphName
      */
-    public static void applyInferencing(Model geosparqlSchema, Model model, String graphName) {
+    public static final void applyInferencing(Model geosparqlSchema, Model model, String graphName) {
         if (!model.isEmpty()) {
             InfModel infModel = ModelFactory.createRDFSModel(geosparqlSchema, model);
             model.add(infModel);
@@ -324,7 +324,7 @@ public class GeoSPARQLOperations {
      *
      * @return Output model.
      */
-    public static InfModel prepare() {
+    public static final InfModel prepare() {
         return prepareRDFS(ModelFactory.createDefaultModel());
     }
 
@@ -336,7 +336,7 @@ public class GeoSPARQLOperations {
      * @param model
      * @return Output model.
      */
-    public static InfModel prepareRDFS(Model model) {
+    public static final InfModel prepareRDFS(Model model) {
         return prepare(model, ReasonerRegistry.getRDFSReasoner());
     }
 
@@ -350,7 +350,7 @@ public class GeoSPARQLOperations {
      * @param reasoner
      * @return Output model.
      */
-    public static InfModel prepare(Model model, Reasoner reasoner) {
+    public static final InfModel prepare(Model model, Reasoner reasoner) {
         InputStream geosparqlSchemaInputStream = GeoSPARQLOperations.class.getClassLoader().getResourceAsStream(GEOSPARQL_SCHEMA_FILE);
         return prepare(geosparqlSchemaInputStream, model, reasoner);
     }
@@ -363,7 +363,7 @@ public class GeoSPARQLOperations {
      * @param inputStream
      * @return Output model.
      */
-    public static InfModel prepareRDFS(InputStream inputStream) {
+    public static final InfModel prepareRDFS(InputStream inputStream) {
         return prepare(inputStream, ReasonerRegistry.getRDFSReasoner());
     }
 
@@ -376,7 +376,7 @@ public class GeoSPARQLOperations {
      * @param reasoner
      * @return Output model.
      */
-    public static InfModel prepare(InputStream inputStream, Reasoner reasoner) {
+    public static final InfModel prepare(InputStream inputStream, Reasoner reasoner) {
         Model model = ModelFactory.createDefaultModel();
         model.read(inputStream, null);
 
@@ -394,7 +394,7 @@ public class GeoSPARQLOperations {
      * @param reasoner
      * @return Output model.
      */
-    public static InfModel prepare(InputStream geosparqlSchemaInputStream, Model model, Reasoner reasoner) {
+    public static final InfModel prepare(InputStream geosparqlSchemaInputStream, Model model, Reasoner reasoner) {
 
         //Register GeoSPARQL functions if required.
         GeoSPARQLConfig.setupMemoryIndex();
@@ -418,7 +418,7 @@ public class GeoSPARQLOperations {
      * @param dataset
      * @return Whether dataset is valid.
      */
-    public static boolean validateGeometryLiteral(Dataset dataset) {
+    public static final boolean validateGeometryLiteral(Dataset dataset) {
 
         boolean isValid = true;
 
@@ -484,7 +484,7 @@ public class GeoSPARQLOperations {
      * @param dataset
      *
      */
-    public static void convertGeoPredicates(Dataset dataset) {
+    public static final void convertGeoPredicates(Dataset dataset) {
 
         LOGGER.info("Convert Geo Predicates - Started");
         //Default Model
@@ -505,7 +505,7 @@ public class GeoSPARQLOperations {
         dataset.end();
     }
 
-    public static void convertGeoPredicates(Model model) {
+    public static final void convertGeoPredicates(Model model) {
 
         if (model.containsResource(SpatialExtension.GEO_LAT_PROP)) {
 
