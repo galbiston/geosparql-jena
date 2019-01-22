@@ -44,7 +44,7 @@ public class GenericSpatialPropertyFunctionTest {
 
     @BeforeClass
     public static void setUpClass() {
-         GeoSPARQLConfig.setupNoIndex();
+        GeoSPARQLConfig.setupNoIndex();
     }
 
     @AfterClass

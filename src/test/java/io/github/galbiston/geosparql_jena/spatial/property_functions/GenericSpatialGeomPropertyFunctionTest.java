@@ -157,7 +157,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        //assertEquals(expResult, result);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -190,7 +190,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        //assertEquals(expResult, result);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -223,7 +223,7 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        //assertEquals(expResult, result);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -256,6 +256,6 @@ public class GenericSpatialGeomPropertyFunctionTest {
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
-        //assertEquals(expResult, result);
+        assertEquals(expResult, result);
     }
 }
