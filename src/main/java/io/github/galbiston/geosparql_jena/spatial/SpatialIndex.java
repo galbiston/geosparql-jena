@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
+import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
@@ -71,14 +72,16 @@ public class SpatialIndex implements Serializable {
     private final QueryRewriteIndex queryRewriteIndex;
 
     public SpatialIndex(int capacity, String srsURI) {
-        this.strTree = new STRtree(capacity);
+        int indexCapacity = capacity > 0 ? capacity : 1;
+        this.strTree = new STRtree(indexCapacity);
         this.isBuilt = false;
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
         this.queryRewriteIndex = new QueryRewriteIndex();
     }
 
     public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
-        this.strTree = new STRtree(spatialIndexItems.size());
+        int indexCapacity = spatialIndexItems.isEmpty() ? 1 : spatialIndexItems.size();
+        this.strTree = new STRtree(indexCapacity);
         insertItems(spatialIndexItems);
         this.strTree.build();
         this.isBuilt = true;
@@ -156,6 +159,16 @@ public class SpatialIndex implements Serializable {
         context.set(SPATIAL_INDEX_SYMBOL, spatialIndex);
     }
 
+    /**
+     * Build Spatial Index from all graphs in Dataset.<br>
+     * Dataset contains SpatialIndex in Context.<br>
+     * Spatial Index written to file.
+     *
+     * @param dataset
+     * @param srsURI
+     * @param spatialIndexFile
+     * @return SpatialIndex constructed.
+     */
     public static SpatialIndex buildSpatialIndex(Dataset dataset, String srsURI, File spatialIndexFile) {
 
         SpatialIndex spatialIndex = load(spatialIndexFile);
@@ -166,6 +179,22 @@ public class SpatialIndex implements Serializable {
         }
 
         setSpatialIndex(dataset, spatialIndex);
+        return spatialIndex;
+    }
+
+    /**
+     * Build Spatial Index from all graphs in Dataset.<br>
+     * Dataset contains SpatialIndex in Context.<br>
+     * SRS URI based on most frequent found in Dataset.<br>
+     * Spatial Index written to file.
+     *
+     * @param dataset
+     * @param spatialIndexFile
+     * @return SpatialIndex constructed.
+     */
+    public static SpatialIndex buildSpatialIndex(Dataset dataset, File spatialIndexFile) {
+        String srsURI = GeoSPARQLOperations.findModeSRS(dataset);
+        SpatialIndex spatialIndex = buildSpatialIndex(dataset, srsURI, spatialIndexFile);
         return spatialIndex;
     }
 
@@ -200,6 +229,20 @@ public class SpatialIndex implements Serializable {
         spatialIndex.build();
         setSpatialIndex(dataset, spatialIndex);
 
+        return spatialIndex;
+    }
+
+    /**
+     * Build Spatial Index from all graphs in Dataset.<br>
+     * Dataset contains SpatialIndex in Context.<br>
+     * SRS URI based on most frequent found in Dataset.
+     *
+     * @param dataset
+     * @return SpatialIndex constructed.
+     */
+    public static SpatialIndex buildSpatialIndex(Dataset dataset) {
+        String srsURI = GeoSPARQLOperations.findModeSRS(dataset);
+        SpatialIndex spatialIndex = buildSpatialIndex(dataset, srsURI);
         return spatialIndex;
     }
 
