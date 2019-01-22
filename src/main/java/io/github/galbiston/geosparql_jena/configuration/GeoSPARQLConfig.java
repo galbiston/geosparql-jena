@@ -208,10 +208,43 @@ public class GeoSPARQLConfig {
         IndexConfiguration.resetIndexesAndRegistries();
     }
 
+    /**
+     *
+     * @return True if query rewrite enabled.
+     */
     public static Boolean isQueryRewriteEnabled() {
         return IS_QUERY_REWRITE_ENABLED;
     }
 
+    /**
+     * Setup Spatial Index using Dataset and most frequent SRS URI in Dataset.
+     *
+     * @param dataset
+     */
+    public static final void setupSpatialIndex(Dataset dataset) {
+        SpatialIndex.buildSpatialIndex(dataset);
+    }
+
+    /**
+     * Setup Spatial Index using Dataset and most frequent SRS URI in
+     * Dataset.<br>
+     * Spatial Index written to file once created.
+     *
+     * @param dataset
+     * @param spatialIndexFile
+     */
+    public static final void setupSpatialIndex(Dataset dataset, File spatialIndexFile) {
+        SpatialIndex.buildSpatialIndex(dataset, spatialIndexFile);
+    }
+
+    /**
+     * Setup Spatial Index using Dataset using provided SRS URI.<br>
+     * Spatial Index written to file once created.
+     *
+     * @param dataset
+     * @param srsURI
+     * @param spatialIndexFile
+     */
     public static final void setupSpatialIndex(Dataset dataset, String srsURI, File spatialIndexFile) {
         SpatialIndex.buildSpatialIndex(dataset, srsURI, spatialIndexFile);
     }
