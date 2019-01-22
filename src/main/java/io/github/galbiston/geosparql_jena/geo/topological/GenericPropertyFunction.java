@@ -188,16 +188,26 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     private QueryIterConcat findSpecific(Graph graph, Node boundNode, Node unboundNode, Binding binding, boolean isSubjectBound, Node predicate, ExecutionContext execCxt) {
 
         try {
+            QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
+
+            //Find the GeometryLiteral of the Bound Node.
+            SpatialObjectGeometryLiteral boundGeometryLiteral = SpatialObjectGeometryLiteral.retrieve(graph, boundNode);
+            if (!boundGeometryLiteral.isValid()) {
+                //Bound Node is not a Feature or a Geometry or there is no GeometryLiteral so exit.
+                return queryIterConcat;
+            }
+
+            Node geometryLiteral = boundGeometryLiteral.getGeometryLiteral();
+
             //Perform the search of the Spatial Index of the Dataset.
             SpatialIndex spatialIndex = SpatialIndex.retrieve(execCxt);
-            GeometryWrapper geom = GeometryWrapper.extract(boundNode);
+            GeometryWrapper geom = GeometryWrapper.extract(geometryLiteral);
             GeometryWrapper transformedGeom = geom.transform(spatialIndex.getSrsInfo());
             Envelope searchEnvelope = transformedGeom.getEnvelope();
             HashSet<Resource> features = spatialIndex.query(searchEnvelope);
 
-            //Prepare the results.
+            //Allocate the variable for results.
             Var unboundVar = Var.alloc(unboundNode.getName());
-            QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
 
             //Check each of the Features that match the search.
             for (Resource feature : features) {
@@ -232,51 +242,6 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
     }
 
-    /**
-     * Retrieve the default Geometry Literal for Feature or Geometry (Spatial
-     * Objects).
-     *
-     * @param graph
-     * @param targetSpatialObject
-     * @return SpatialObject/GeometryLiteral pair.
-     */
-    protected static final SpatialObjectGeometryLiteral retrieveGeometryLiteral(Graph graph, Node targetSpatialObject) {
-
-        Node geometry;
-        if (graph.contains(targetSpatialObject, RDF.type.asNode(), Geo.FEATURE_NODE)) {
-            //Target is Feature - find the default Geometry.
-            ExtendedIterator<Triple> geomIter = graph.find(targetSpatialObject, Geo.HAS_DEFAULT_GEOMETRY_NODE, null);
-            geometry = extractObject(geomIter);
-        } else if (graph.contains(targetSpatialObject, RDF.type.asNode(), Geo.GEOMETRY_NODE)) {
-            //Target is a Geometry.
-            geometry = targetSpatialObject;
-        } else {
-            //Target is not a Feature or Geometry.
-            geometry = null;
-        }
-
-        if (geometry != null) {
-            //Find the Geometry Literal of the Geometry.
-            ExtendedIterator<Triple> iter = graph.find(geometry, Geo.HAS_SERIALIZATION_NODE, null);
-            Node literalNode = extractObject(iter);
-            if (literalNode != null) {
-                return new SpatialObjectGeometryLiteral(targetSpatialObject, literalNode);
-            }
-        }
-        return null;
-
-    }
-
-    private static Node extractObject(ExtendedIterator<Triple> iter) {
-
-        if (iter.hasNext()) {
-            Triple triple = iter.next();
-            return triple.getObject();
-        } else {
-            return null;
-        }
-    }
-
     protected final Boolean queryRewrite(Graph graph, Node subject, Node predicate, Node object, QueryRewriteIndex queryRewriteIndex) {
 
         if (graph.contains(subject, predicate, object)) {
@@ -290,15 +255,15 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
 
         //Begin Query Re-write by finding the literals of the Feature or Geometry.
-        SpatialObjectGeometryLiteral subjectSpatialLiteral = retrieveGeometryLiteral(graph, subject);
-        if (subjectSpatialLiteral == null) {
-            //Subject is not a Feature or a Geometry so exit.
+        SpatialObjectGeometryLiteral subjectSpatialLiteral = SpatialObjectGeometryLiteral.retrieve(graph, subject);
+        if (!subjectSpatialLiteral.isValid()) {
+            //Subject is not a Feature or a Geometry or there is no GeometryLiteral so exit.
             return false;
         }
 
-        SpatialObjectGeometryLiteral objectSpatialLiteral = retrieveGeometryLiteral(graph, object);
-        if (objectSpatialLiteral == null) {
-            //Object is not a Feature or a Geometry so exit.
+        SpatialObjectGeometryLiteral objectSpatialLiteral = SpatialObjectGeometryLiteral.retrieve(graph, object);
+        if (!objectSpatialLiteral.isValid()) {
+            //Object is not a Feature or a Geometry or there is no GeometryLiteral so exit.
             return false;
         }
 
