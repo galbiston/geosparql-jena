@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.geo.topological;
 
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.simple_features.SfContainsPF;
+import io.github.galbiston.geosparql_jena.geo.topological.property_functions.simple_features.SfDisjointPF;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguration.IndexOption;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
@@ -390,8 +391,8 @@ public class GenericPropertyFunctionTest {
         SpatialObjectGeometryLiteral expResult = null;
         SpatialObjectGeometryLiteral result = GenericPropertyFunction.retrieveGeometryLiteral(MODEL.getGraph(), targetSpatialObject.asNode());
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
         assertEquals(expResult, result);
     }
 
@@ -449,6 +450,46 @@ public class GenericPropertyFunctionTest {
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
         GeoSPARQLConfig.setup(IndexOption.MEMORY, Boolean.TRUE);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_feature_feature_disjoint() {
+        System.out.println("queryRewrite_feature_feature_disjoint");
+        Graph graph = MODEL.getGraph();
+        Node subject = FEATURE_A.asNode();
+        Node predicate = Geo.SF_DISJOINT_NODE;
+        Node object = FEATURE_D.asNode();
+        GenericPropertyFunction instance = new SfDisjointPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        Boolean expResult = true;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of queryRewrite method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testQueryRewrite_feature_feature_disjoint_false() {
+        System.out.println("queryRewrite_feature_feature_disjoint_false");
+        Graph graph = MODEL.getGraph();
+        Node subject = FEATURE_A.asNode();
+        Node predicate = Geo.SF_DISJOINT_NODE;
+        Node object = FEATURE_B.asNode();
+        GenericPropertyFunction instance = new SfDisjointPF();
+        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        Boolean expResult = false;
+        Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
+
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result);
