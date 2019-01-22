@@ -59,7 +59,7 @@ public class IndexConfiguration {
     public static void setupMemoryIndex() {
         GeometryLiteralIndex.setMaxSize(UNLIMITED_MAP);
         GeometryTransformIndex.setMaxSize(UNLIMITED_MAP);
-        QueryRewriteIndex.setExpiry(UNLIMITED_MAP);
+        QueryRewriteIndex.setMaxSize(UNLIMITED_MAP);
     }
 
     /**
