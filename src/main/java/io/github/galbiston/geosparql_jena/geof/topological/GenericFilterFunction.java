@@ -65,9 +65,7 @@ public abstract class GenericFilterFunction extends FunctionBase2 {
 
             boolean result = relate(geometry1, geometry2);
             return result;
-        } catch (DatatypeFormatException ex) {
-            throw new ExprEvalException(ex.getMessage(), ex);
-        } catch (FactoryException | MismatchedDimensionException | TransformException ex) {
+        } catch (DatatypeFormatException | FactoryException | MismatchedDimensionException | TransformException ex) {
             throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(v1) + ", " + FmtUtils.stringForNode(v2), ex);
         }
     }
