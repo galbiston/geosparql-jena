@@ -17,8 +17,13 @@
  */
 package io.github.galbiston.geosparql_jena.geo.topological;
 
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import java.util.Objects;
+import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
+import org.apache.jena.util.iterator.ExtendedIterator;
+import org.apache.jena.vocabulary.RDF;
 
 /**
  *
@@ -28,10 +33,12 @@ public class SpatialObjectGeometryLiteral {
 
     private final Node spatialObject;
     private final Node geometryLiteral;
+    private final boolean valid;
 
     public SpatialObjectGeometryLiteral(Node spatialObject, Node geometryLiteral) {
         this.spatialObject = spatialObject;
         this.geometryLiteral = geometryLiteral;
+        this.valid = !(geometryLiteral == null || spatialObject == null);
     }
 
     public Node getSpatialObject() {
@@ -42,11 +49,16 @@ public class SpatialObjectGeometryLiteral {
         return geometryLiteral;
     }
 
+    public boolean isValid() {
+        return valid;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 73 * hash + Objects.hashCode(this.spatialObject);
-        hash = 73 * hash + Objects.hashCode(this.geometryLiteral);
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.spatialObject);
+        hash = 47 * hash + Objects.hashCode(this.geometryLiteral);
+        hash = 47 * hash + (this.valid ? 1 : 0);
         return hash;
     }
 
@@ -62,6 +74,9 @@ public class SpatialObjectGeometryLiteral {
             return false;
         }
         final SpatialObjectGeometryLiteral other = (SpatialObjectGeometryLiteral) obj;
+        if (this.valid != other.valid) {
+            return false;
+        }
         if (!Objects.equals(this.spatialObject, other.spatialObject)) {
             return false;
         }
@@ -70,7 +85,52 @@ public class SpatialObjectGeometryLiteral {
 
     @Override
     public String toString() {
-        return "SpatialObjectGeometryLiteral{" + "spatialObject=" + spatialObject + ", geometryLiteral=" + geometryLiteral + '}';
+        return "SpatialObjectGeometryLiteral{" + "spatialObject=" + spatialObject + ", geometryLiteral=" + geometryLiteral + ", valid=" + valid + '}';
+    }
+
+    /**
+     * Retrieve the default Geometry Literal for Feature or Geometry (Spatial
+     * Objects).
+     *
+     * @param graph
+     * @param targetSpatialObject
+     * @return SpatialObject/GeometryLiteral pair.
+     */
+    protected static final SpatialObjectGeometryLiteral retrieve(Graph graph, Node targetSpatialObject) {
+
+        Node geometry;
+        if (graph.contains(targetSpatialObject, RDF.type.asNode(), Geo.FEATURE_NODE)) {
+            //Target is Feature - find the default Geometry.
+            ExtendedIterator<Triple> geomIter = graph.find(targetSpatialObject, Geo.HAS_DEFAULT_GEOMETRY_NODE, null);
+            geometry = extractObject(geomIter);
+        } else if (graph.contains(targetSpatialObject, RDF.type.asNode(), Geo.GEOMETRY_NODE)) {
+            //Target is a Geometry.
+            geometry = targetSpatialObject;
+        } else {
+            //Target is not a Feature or Geometry.
+            geometry = null;
+        }
+
+        if (geometry != null) {
+            //Find the Geometry Literal of the Geometry.
+            ExtendedIterator<Triple> iter = graph.find(geometry, Geo.HAS_SERIALIZATION_NODE, null);
+            Node literalNode = extractObject(iter);
+            if (literalNode != null) {
+                return new SpatialObjectGeometryLiteral(targetSpatialObject, literalNode);
+            }
+        }
+
+        return new SpatialObjectGeometryLiteral(null, null);
+    }
+
+    private static Node extractObject(ExtendedIterator<Triple> iter) {
+
+        if (iter.hasNext()) {
+            Triple triple = iter.next();
+            return triple.getObject();
+        } else {
+            return null;
+        }
     }
 
 }
