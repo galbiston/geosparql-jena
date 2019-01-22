@@ -148,9 +148,9 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             return QueryIterNullIterator.create(execCxt);
         }
 
-        boolean isNoSpatialIndex = SpatialIndex.isDefined(execCxt);
+        boolean isSpatialIndex = SpatialIndex.isDefined(execCxt);
         QueryIterConcat queryIterConcat;
-        if (filterFunction.isDisjoint() || isNoSpatialIndex) {
+        if (!isSpatialIndex || filterFunction.isDisjoint() || filterFunction.isDisconnected()) {
             //Disjointed so retrieve all cases.
             queryIterConcat = findAll(graph, boundNode, unboundNode, binding, isSubjectBound, predicate, execCxt);
         } else {
