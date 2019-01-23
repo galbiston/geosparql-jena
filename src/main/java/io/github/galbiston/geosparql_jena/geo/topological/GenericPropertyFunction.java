@@ -157,7 +157,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             queryIterConcat = findAll(graph, boundNode, unboundNode, binding, isSubjectBound, predicate, execCxt);
         } else {
             //Only retrieve those in the spatial index which are within same bounding box.
-            queryIterConcat = findSpecific(graph, boundNode, unboundNode, binding, isSubjectBound, predicate, execCxt);
+            queryIterConcat = findIndex(graph, boundNode, unboundNode, binding, isSubjectBound, predicate, execCxt);
         }
 
         return queryIterConcat;
@@ -187,7 +187,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         return queryIterConcat;
     }
 
-    private QueryIterConcat findSpecific(Graph graph, Node boundNode, Node unboundNode, Binding binding, boolean isSubjectBound, Node predicate, ExecutionContext execCxt) {
+    private QueryIterConcat findIndex(Graph graph, Node boundNode, Node unboundNode, Binding binding, boolean isSubjectBound, Node predicate, ExecutionContext execCxt) {
 
         try {
             //Prepare for results.
