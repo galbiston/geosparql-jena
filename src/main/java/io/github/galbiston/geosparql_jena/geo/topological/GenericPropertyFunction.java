@@ -23,7 +23,9 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
@@ -188,7 +190,17 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     private QueryIterConcat findSpecific(Graph graph, Node boundNode, Node unboundNode, Binding binding, boolean isSubjectBound, Node predicate, ExecutionContext execCxt) {
 
         try {
+            //Prepare for results.
+            Var unboundVar = Var.alloc(unboundNode.getName());
             QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
+
+            //Find the asserted triples.
+            List<Node> assertedNodes = findAsserted(graph, boundNode, isSubjectBound, predicate);
+            for (Node node : assertedNodes) {
+                Binding newBind = BindingFactory.binding(binding, unboundVar, node);
+                QueryIterator queryIter = QueryIterSingleton.create(newBind, execCxt);
+                queryIterConcat.add(queryIter);
+            }
 
             //Find the GeometryLiteral of the Bound Node.
             SpatialObjectGeometryLiteral boundGeometryLiteral = SpatialObjectGeometryLiteral.retrieve(graph, boundNode);
@@ -206,33 +218,40 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             Envelope searchEnvelope = transformedGeom.getEnvelope();
             HashSet<Resource> features = spatialIndex.query(searchEnvelope);
 
-            //Allocate the variable for results.
-            Var unboundVar = Var.alloc(unboundNode.getName());
-
             //Check each of the Features that match the search.
             for (Resource feature : features) {
                 Node featureNode = feature.asNode();
-                Binding newBind = BindingFactory.binding(binding, unboundVar, featureNode);
-                QueryIterator queryIter;
-                if (isSubjectBound) {
-                    queryIter = bothBound(newBind, boundNode, predicate, featureNode, execCxt);
-                } else {
-                    queryIter = bothBound(newBind, featureNode, predicate, boundNode, execCxt);
+
+                //Ensure not already an asserted node.
+                if (!assertedNodes.contains(featureNode)) {
+
+                    Binding newBind = BindingFactory.binding(binding, unboundVar, featureNode);
+                    QueryIterator queryIter;
+                    if (isSubjectBound) {
+                        queryIter = bothBound(newBind, boundNode, predicate, featureNode, execCxt);
+                    } else {
+                        queryIter = bothBound(newBind, featureNode, predicate, boundNode, execCxt);
+                    }
+                    queryIterConcat.add(queryIter);
                 }
-                queryIterConcat.add(queryIter);
 
                 //Also test all Geometry of the Features. All, some or one Geometry may have matched.
                 ExtendedIterator<Triple> featureGeometryTriples = graph.find(feature.asNode(), Geo.HAS_GEOMETRY_NODE, null);
                 while (featureGeometryTriples.hasNext()) {
                     Triple unboundTriple = featureGeometryTriples.next();
                     Node geomNode = unboundTriple.getObject();
-                    newBind = BindingFactory.binding(binding, unboundVar, geomNode);
-                    if (isSubjectBound) {
-                        queryIter = bothBound(newBind, boundNode, predicate, geomNode, execCxt);
-                    } else {
-                        queryIter = bothBound(newBind, geomNode, predicate, boundNode, execCxt);
+
+                    //Ensure not already an asserted node.
+                    if (!assertedNodes.contains(geomNode)) {
+                        Binding newBind = BindingFactory.binding(binding, unboundVar, geomNode);
+                        QueryIterator queryIter;
+                        if (isSubjectBound) {
+                            queryIter = bothBound(newBind, boundNode, predicate, geomNode, execCxt);
+                        } else {
+                            queryIter = bothBound(newBind, geomNode, predicate, boundNode, execCxt);
+                        }
+                        queryIterConcat.add(queryIter);
                     }
-                    queryIterConcat.add(queryIter);
                 }
             }
 
@@ -240,6 +259,24 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         } catch (MismatchedDimensionException | TransformException | FactoryException ex) {
             throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(boundNode) + ", " + FmtUtils.stringForNode(unboundNode) + ", " + FmtUtils.stringForNode(predicate), ex);
         }
+    }
+
+    private List<Node> findAsserted(Graph graph, Node boundNode, boolean isSubjectBound, Node predicate) {
+        List<Node> assertedNodes = new ArrayList<>();
+        if (isSubjectBound) {
+            ExtendedIterator<Triple> assertedTriples = graph.find(boundNode, predicate, null);
+            while (assertedTriples.hasNext()) {
+                Node assertedNode = assertedTriples.next().getObject();
+                assertedNodes.add(assertedNode);
+            }
+        } else {
+            ExtendedIterator<Triple> assertedTriples = graph.find(null, predicate, boundNode);
+            while (assertedTriples.hasNext()) {
+                Node assertedNode = assertedTriples.next().getSubject();
+                assertedNodes.add(assertedNode);
+            }
+        }
+        return assertedNodes;
     }
 
     protected final Boolean queryRewrite(Graph graph, Node subject, Node predicate, Node object, QueryRewriteIndex queryRewriteIndex) {

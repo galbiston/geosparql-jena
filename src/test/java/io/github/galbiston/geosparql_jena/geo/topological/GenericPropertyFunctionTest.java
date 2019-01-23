@@ -439,8 +439,9 @@ public class GenericPropertyFunctionTest {
             }
         }
 
+        //Blank nodes limit a value check.
         boolean expResult = true;
-        boolean result = subjects.size() == 24 && objects.size() == 24; //Blank nodes prevent a value check.
+        boolean result = subjects.size() == 25 && objects.size() == 25;
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -475,12 +476,49 @@ public class GenericPropertyFunctionTest {
             }
         }
 
+        //Blank nodes limit a value check.
         int expResult = 6;
         int result = objects.size();
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         //System.out.println("Objects: " + objects);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of execEvaluated method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testExecEvaluated_subject_bound_geometry() {
+        System.out.println("execEvaluated_subject_bound");
+
+        String query = "PREFIX geo: <http://www.opengis.net/ont/geosparql#>\n"
+                + "\n"
+                + "SELECT ?obj\n"
+                + "WHERE{\n"
+                + "    BIND(<http://example.org#GeometryA> AS ?subj) \n"
+                + "    ?subj geo:sfContains ?obj .\n"
+                + "}ORDER by ?obj";
+
+        List<Resource> objects = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+
+                Resource result = qs.getResource("obj");
+                objects.add(result);
+            }
+        }
+
+//Blank nodes limit a value check.
+        int expResult = 7;
+        int result = objects.size();
+
+        System.out.println("Exp: " + expResult);
+        System.out.println("Res: " + result);
+        System.out.println("Objects: " + objects);
         assertEquals(expResult, result);
     }
 
