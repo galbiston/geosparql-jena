@@ -20,6 +20,7 @@ package io.github.galbiston.geosparql_jena.implementation.index;
 import io.github.galbiston.expiring_map.ExpiringMap;
 import static io.github.galbiston.expiring_map.MapDefaultValues.MAP_EXPIRY_INTERVAL;
 import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
+import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.geo.topological.GenericPropertyFunction;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Property;
@@ -29,25 +30,22 @@ import org.apache.jena.rdf.model.Property;
  */
 public class QueryRewriteIndex {
 
-    private boolean indexActive = true;
+    private boolean indexActive;
     private final String queryRewriteLabel;
     private ExpiringMap<String, Boolean> index;
+    private static String LABEL_DEFAULT = "Query Rewrite";
     private static int MAP_SIZE_DEFAULT = UNLIMITED_MAP;
     private static long MAP_EXPIRY_INTERVAL_DEFAULT = MAP_EXPIRY_INTERVAL;
 
     public QueryRewriteIndex() {
-        this.queryRewriteLabel = "Query Rewrite";
-        this.index = new ExpiringMap<>(queryRewriteLabel, MAP_SIZE_DEFAULT, MAP_EXPIRY_INTERVAL_DEFAULT);
-    }
-
-    public QueryRewriteIndex(boolean isActive) {
-        this.queryRewriteLabel = "Query Rewrite";
+        this.queryRewriteLabel = LABEL_DEFAULT;
         this.indexActive = false;
-        this.index = new ExpiringMap<>(queryRewriteLabel, 1, MAP_EXPIRY_INTERVAL_DEFAULT);
+        this.index = new ExpiringMap<>(queryRewriteLabel, 1, MAP_EXPIRY_INTERVAL);
     }
 
     public QueryRewriteIndex(String queryRewriteLabel, int maxSize, long expiryInterval) {
         this.queryRewriteLabel = queryRewriteLabel;
+        this.indexActive = true;
         this.index = new ExpiringMap<>(queryRewriteLabel, maxSize, expiryInterval);
     }
 
@@ -159,6 +157,15 @@ public class QueryRewriteIndex {
 
     public static void setExpiry(long mapExpiryIntervalDefault) {
         QueryRewriteIndex.MAP_EXPIRY_INTERVAL_DEFAULT = mapExpiryIntervalDefault;
+    }
+
+    public static QueryRewriteIndex createDefault() {
+
+        if (GeoSPARQLConfig.isQueryRewriteEnabled()) {
+            return new QueryRewriteIndex(LABEL_DEFAULT, MAP_SIZE_DEFAULT, MAP_EXPIRY_INTERVAL_DEFAULT);
+        } else {
+            return new QueryRewriteIndex();
+        }
     }
 
 }

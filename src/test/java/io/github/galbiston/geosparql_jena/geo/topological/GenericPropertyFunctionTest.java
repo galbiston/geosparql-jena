@@ -95,7 +95,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -115,7 +115,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_C_BLANK.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -156,7 +156,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -177,7 +177,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -197,7 +197,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -217,7 +217,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -238,7 +238,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -259,7 +259,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -279,7 +279,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -299,7 +299,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -319,7 +319,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = FEATURE_D.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -340,7 +340,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_F.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -361,7 +361,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_CONTAINS_NODE;
         Node object = GEOMETRY_F.asNode();
         GenericPropertyFunction instance = new SfContainsPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -382,7 +382,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_DISJOINT_NODE;
         Node object = FEATURE_D.asNode();
         GenericPropertyFunction instance = new SfDisjointPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = true;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -402,7 +402,7 @@ public class GenericPropertyFunctionTest {
         Node predicate = Geo.SF_DISJOINT_NODE;
         Node object = FEATURE_B.asNode();
         GenericPropertyFunction instance = new SfDisjointPF();
-        QueryRewriteIndex queryRewriteIndex = new QueryRewriteIndex();
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.createDefault();
         Boolean expResult = false;
         Boolean result = instance.queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
