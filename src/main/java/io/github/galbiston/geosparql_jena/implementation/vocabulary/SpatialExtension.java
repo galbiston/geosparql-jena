@@ -18,6 +18,7 @@ package io.github.galbiston.geosparql_jena.implementation.vocabulary;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEO_POS_URI;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.SPATIAL_FUNCTION_URI;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.SPATIAL_URI;
+import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
 
@@ -56,7 +57,9 @@ public class SpatialExtension {
 
     //Lat/Lon
     public static final String GEO_POS_LAT = GEO_POS_URI + "lat";
-    public static final String GEO_POS_LONG = GEO_POS_URI + "long";
+    public static final String GEO_POS_LON = GEO_POS_URI + "long";
     public static final Property GEO_LAT_PROP = ResourceFactory.createProperty(GEO_POS_LAT);
-    public static final Property GEO_LON_PROP = ResourceFactory.createProperty(GEO_POS_LONG);
+    public static final Property GEO_LON_PROP = ResourceFactory.createProperty(GEO_POS_LON);
+    public static final Node GEO_LAT_NODE = GEO_LAT_PROP.asNode();
+    public static final Node GEO_LON_NODE = GEO_LON_PROP.asNode();
 }
