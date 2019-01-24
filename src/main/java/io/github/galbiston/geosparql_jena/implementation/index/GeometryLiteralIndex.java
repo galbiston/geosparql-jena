@@ -172,6 +172,13 @@ public class GeometryLiteralIndex {
 
     public static void setIndexActive(Boolean indexActive) {
         INDEX_ACTIVE = indexActive;
+        if (INDEX_ACTIVE) {
+            PRIMARY_INDEX.startExpiry();
+            SECONDARY_INDEX.startExpiry();
+        } else {
+            PRIMARY_INDEX.stopExpiry();
+            SECONDARY_INDEX.stopExpiry();
+        }
     }
 
 }
