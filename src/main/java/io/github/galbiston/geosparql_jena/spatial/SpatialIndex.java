@@ -57,7 +57,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * SpatialIndex for testing bounding box collisions between geometries within a
+ * Dataset.<br>
+ * Queries must be performed using the same SRS URI as the SpatialIndex.<br>
+ * The SpatialIndex is added to the Dataset Context when it is built.<br>
+ * QueryRewriteIndex is also stored in the SpatialIndex as its content is
+ * Dataset specific.
  *
  */
 public class SpatialIndex implements Serializable {
@@ -71,40 +76,97 @@ public class SpatialIndex implements Serializable {
     private final STRtree strTree;
     private final QueryRewriteIndex queryRewriteIndex;
 
+    /**
+     * Unbuilt Spatial Index with provided capacity and default Query Rewrite
+     * Index.
+     *
+     * @param capacity
+     * @param srsURI
+     */
     public SpatialIndex(int capacity, String srsURI) {
         int indexCapacity = capacity > 0 ? capacity : 1;
         this.strTree = new STRtree(indexCapacity);
         this.isBuilt = false;
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
-        this.queryRewriteIndex = new QueryRewriteIndex();
+        this.queryRewriteIndex = QueryRewriteIndex.createDefault();
     }
 
-    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
+    /**
+     * Built Spatial Index with provided capacity and Query Rewrite Index.
+     *
+     * @param spatialIndexItems
+     * @param srsURI
+     * @param queryRewriteIndex
+     */
+    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI, QueryRewriteIndex queryRewriteIndex) {
         int indexCapacity = spatialIndexItems.isEmpty() ? 1 : spatialIndexItems.size();
         this.strTree = new STRtree(indexCapacity);
         insertItems(spatialIndexItems);
         this.strTree.build();
         this.isBuilt = true;
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
-        this.queryRewriteIndex = new QueryRewriteIndex();
+        this.queryRewriteIndex = queryRewriteIndex;
     }
 
+    /**
+     * Built Spatial Index with provided items and default Query Rewrite Index.
+     *
+     * @param spatialIndexItems
+     * @param srsURI
+     */
+    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
+        this(spatialIndexItems, srsURI, QueryRewriteIndex.createDefault());
+    }
+
+    /**
+     * Built Spatial Index with provided capacity and provided Query Rewrite
+     * Index parameters.
+     *
+     * @param spatialIndexItems
+     * @param srsURI
+     * @param queryRewriteLabel
+     * @param maxSize
+     * @param expiryInterval
+     */
+    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI, String queryRewriteLabel, int maxSize, long expiryInterval) {
+        this(spatialIndexItems, srsURI, new QueryRewriteIndex(queryRewriteLabel, maxSize, expiryInterval));
+    }
+
+    /**
+     *
+     * @return Information about the SRS used by the SpatialIndex.
+     */
     public SRSInfo getSrsInfo() {
         return srsInfo;
     }
 
+    /**
+     *
+     * @return True if the SpatialIndex is empty.
+     */
     public boolean isEmpty() {
         return strTree.isEmpty();
     }
 
+    /**
+     *
+     * @return True if the SpatialIndex has been built.
+     */
     public boolean isBuilt() {
         return isBuilt;
     }
 
+    /**
+     *
+     * @return QueryRewriteIndex stored with the SpatialIndex.
+     */
     public QueryRewriteIndex getQueryRewriteIndex() {
         return queryRewriteIndex;
     }
 
+    /**
+     * Build the Spatial Index. No more items can be added.
+     */
     public void build() {
         if (!isBuilt) {
             strTree.build();
@@ -112,6 +174,11 @@ public class SpatialIndex implements Serializable {
         }
     }
 
+    /**
+     * Items to add to an unbuilt Spatial Index.
+     *
+     * @param indexItems
+     */
     public final void insertItems(Collection<SpatialIndexItem> indexItems) {
 
         for (SpatialIndexItem indexItem : indexItems) {
@@ -119,8 +186,18 @@ public class SpatialIndex implements Serializable {
         }
     }
 
+    /**
+     * Item to add to an unbuilt Spatial Index.
+     *
+     * @param envelope
+     * @param item
+     */
     public final void insertItem(Envelope envelope, Resource item) {
-        strTree.insert(envelope, item);
+        if (!isBuilt) {
+            strTree.insert(envelope, item);
+        } else {
+            throw new SpatialIndexException("SpatialIndex has been built and cannot have additional items.");
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -149,11 +226,23 @@ public class SpatialIndex implements Serializable {
         return spatialIndex;
     }
 
+    /**
+     *
+     * @param execCxt
+     * @return True if a SpatialIndex is defined in the ExecutionContext.
+     */
     public static final boolean isDefined(ExecutionContext execCxt) {
         Context context = execCxt.getContext();
         return context.isDefined(SPATIAL_INDEX_SYMBOL);
     }
 
+    /**
+     * Set the SpatialIndex into the Context of the Dataset for later retrieval
+     * and use in spatial functions.
+     *
+     * @param dataset
+     * @param spatialIndex
+     */
     public static final void setSpatialIndex(Dataset dataset, SpatialIndex spatialIndex) {
         Context context = dataset.getContext();
         context.set(SPATIAL_INDEX_SYMBOL, spatialIndex);
@@ -262,6 +351,13 @@ public class SpatialIndex implements Serializable {
         return dataset;
     }
 
+    /**
+     * Find items from the Model transformed to the SRS URI.
+     *
+     * @param model
+     * @param srsURI
+     * @return Items found in the Model in the SRS URI.
+     */
     public static final Collection<SpatialIndexItem> getSpatialIndexItems(Model model, String srsURI) {
 
         List<SpatialIndexItem> items = new ArrayList<>();
@@ -338,6 +434,13 @@ public class SpatialIndex implements Serializable {
         return items;
     }
 
+    /**
+     * Load a SpatialIndex from file.
+     *
+     * @param spatialIndexFile
+     * @return
+     * @throws SpatialIndexException
+     */
     public static final SpatialIndex load(File spatialIndexFile) throws SpatialIndexException {
 
         if (spatialIndexFile != null && spatialIndexFile.exists()) {
@@ -354,6 +457,12 @@ public class SpatialIndex implements Serializable {
         }
     }
 
+    /**
+     * Save SpatialIndex to file.
+     *
+     * @param spatialIndexFile
+     * @param spatialIndex
+     */
     public static final void save(File spatialIndexFile, SpatialIndex spatialIndex) {
 
         if (spatialIndexFile != null) {
