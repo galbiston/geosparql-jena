@@ -19,8 +19,6 @@ package io.github.galbiston.geosparql_jena.implementation.index;
 
 import io.github.galbiston.expiring_map.ExpiringMap;
 import static io.github.galbiston.expiring_map.MapDefaultValues.MAP_EXPIRY_INTERVAL;
-import static io.github.galbiston.expiring_map.MapDefaultValues.NO_MAP;
-import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_EXPIRY;
 import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
@@ -40,7 +38,7 @@ import org.opengis.util.FactoryException;
  */
 public class GeometryTransformIndex {
 
-    private static Boolean INDEX_ACTIVE = true;
+    private static boolean INDEX_ACTIVE = true;
     private static final String GEOMETRY_TRANSFORM_LABEL = "Geometry Transform";
     private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(GEOMETRY_TRANSFORM_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
 
@@ -92,33 +90,20 @@ public class GeometryTransformIndex {
         return new GeometryWrapper(transformedGeometry, srsURI, geometryDatatypeURI, dimensionInfo);
     }
 
+    /**
+     * Empty the Geometry Transform Index.
+     */
     public static final void clear() {
-        if (GEOMETRY_TRANSFORM_INDEX != null) {
-            GEOMETRY_TRANSFORM_INDEX.clear();
-        }
+        GEOMETRY_TRANSFORM_INDEX.clear();
     }
 
     /**
-     * Sets whether the Geometry Transform Index is active.
-     * <br> The index will be empty after this process.
+     * Sets whether the maximum size of the Geometry Transform Index.
      *
      * @param maxSize : use -1 for unlimited size
      */
     public static final void setMaxSize(int maxSize) {
-        INDEX_ACTIVE = NO_MAP != maxSize;
-
-        if (INDEX_ACTIVE) {
-            if (GEOMETRY_TRANSFORM_INDEX != null) {
-                GEOMETRY_TRANSFORM_INDEX.stopExpiry();
-            }
-            GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(GEOMETRY_TRANSFORM_LABEL, maxSize, MAP_EXPIRY_INTERVAL);
-            GEOMETRY_TRANSFORM_INDEX.startExpiry();
-        } else {
-            if (GEOMETRY_TRANSFORM_INDEX != null) {
-                GEOMETRY_TRANSFORM_INDEX.stopExpiry();
-            }
-            GEOMETRY_TRANSFORM_INDEX = null;
-        }
+        GEOMETRY_TRANSFORM_INDEX.setMaxSize(maxSize);
     }
 
     /**
@@ -128,36 +113,47 @@ public class GeometryTransformIndex {
      * @param expiryInterval : use 0 or negative for unlimited timeout
      */
     public static final void setExpiry(long expiryInterval) {
-
-        if (INDEX_ACTIVE) {
-            if (expiryInterval > UNLIMITED_EXPIRY) {
-                GEOMETRY_TRANSFORM_INDEX.stopExpiry();
-                GEOMETRY_TRANSFORM_INDEX.setExpiryInterval(expiryInterval);
-                GEOMETRY_TRANSFORM_INDEX.startExpiry();
-            } else {
-                GEOMETRY_TRANSFORM_INDEX.stopExpiry();
-            }
-        }
+        GEOMETRY_TRANSFORM_INDEX.setExpiryInterval(expiryInterval);
     }
 
-    public static final Integer getGeometryTransformIndexSize() {
-        if (GEOMETRY_TRANSFORM_INDEX != null) {
-            return GEOMETRY_TRANSFORM_INDEX.size();
-        } else {
-            return 0;
-        }
+    /**
+     *
+     * @return Number of items in the index.
+     */
+    public static final long getGeometryTransformIndexSize() {
+        return GEOMETRY_TRANSFORM_INDEX.mappingCount();
     }
 
-    public static Boolean isIndexActive() {
+    /**
+     *
+     * @return True if index is active.
+     */
+    public static boolean isIndexActive() {
         return INDEX_ACTIVE;
     }
 
-    public static void setIndexActive(Boolean indexActive) {
+    /**
+     * Sets whether the index is active.
+     *
+     * @param indexActive
+     */
+    public static void setIndexActive(boolean indexActive) {
         INDEX_ACTIVE = indexActive;
         if (INDEX_ACTIVE) {
             GEOMETRY_TRANSFORM_INDEX.startExpiry();
         } else {
             GEOMETRY_TRANSFORM_INDEX.stopExpiry();
         }
+    }
+
+    /**
+     * Reset the index to the provided max size and expiry interval.<br>
+     * All contents will be lost.
+     *
+     * @param maxSize
+     * @param expiryInterval
+     */
+    public static void reset(int maxSize, long expiryInterval) {
+        GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(GEOMETRY_TRANSFORM_LABEL, maxSize, expiryInterval);
     }
 }
