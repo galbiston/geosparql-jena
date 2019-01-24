@@ -40,7 +40,7 @@ import org.opengis.util.FactoryException;
  */
 public class GeometryTransformIndex {
 
-    private static Boolean IS_INDEX_ACTIVE = true;
+    private static Boolean INDEX_ACTIVE = true;
     private static final String GEOMETRY_TRANSFORM_LABEL = "Geometry Transform";
     private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(GEOMETRY_TRANSFORM_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
 
@@ -58,7 +58,7 @@ public class GeometryTransformIndex {
         GeometryWrapper transformedGeometryWrapper;
         String key = sourceGeometryWrapper.getLexicalForm() + "@" + srsURI;
 
-        if (IS_INDEX_ACTIVE && storeSRSTransform) {
+        if (INDEX_ACTIVE && storeSRSTransform) {
             try {
                 if (GEOMETRY_TRANSFORM_INDEX.containsKey(key)) {
 
@@ -105,9 +105,9 @@ public class GeometryTransformIndex {
      * @param maxSize : use -1 for unlimited size
      */
     public static final void setMaxSize(int maxSize) {
-        IS_INDEX_ACTIVE = NO_MAP != maxSize;
+        INDEX_ACTIVE = NO_MAP != maxSize;
 
-        if (IS_INDEX_ACTIVE) {
+        if (INDEX_ACTIVE) {
             if (GEOMETRY_TRANSFORM_INDEX != null) {
                 GEOMETRY_TRANSFORM_INDEX.stopExpiry();
             }
@@ -129,7 +129,7 @@ public class GeometryTransformIndex {
      */
     public static final void setExpiry(long expiryInterval) {
 
-        if (IS_INDEX_ACTIVE) {
+        if (INDEX_ACTIVE) {
             if (expiryInterval > UNLIMITED_EXPIRY) {
                 GEOMETRY_TRANSFORM_INDEX.stopExpiry();
                 GEOMETRY_TRANSFORM_INDEX.setExpiryInterval(expiryInterval);
@@ -148,4 +148,16 @@ public class GeometryTransformIndex {
         }
     }
 
+    public static Boolean isIndexActive() {
+        return INDEX_ACTIVE;
+    }
+
+    public static void setIndexActive(Boolean indexActive) {
+        INDEX_ACTIVE = indexActive;
+        if (INDEX_ACTIVE) {
+            GEOMETRY_TRANSFORM_INDEX.startExpiry();
+        } else {
+            GEOMETRY_TRANSFORM_INDEX.stopExpiry();
+        }
+    }
 }
