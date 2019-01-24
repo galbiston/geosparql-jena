@@ -91,6 +91,7 @@ public class IndexConfiguration {
 
     public static final void resetIndexesAndRegistries() {
         GeometryLiteralIndex.clear();
+        GeometryTransformIndex.clear();
         SRSRegistry.reset();
         MathTransformRegistry.clear();
     }
