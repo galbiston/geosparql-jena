@@ -24,6 +24,8 @@ import static io.github.galbiston.geosparql_jena.geo.topological.QueryRewriteTes
 import static io.github.galbiston.geosparql_jena.geo.topological.QueryRewriteTestData.GEOMETRY_C_BLANK;
 import static io.github.galbiston.geosparql_jena.geo.topological.QueryRewriteTestData.GEOMETRY_D;
 import static io.github.galbiston.geosparql_jena.geo.topological.QueryRewriteTestData.GEOMETRY_F;
+import static io.github.galbiston.geosparql_jena.geo.topological.QueryRewriteTestData.GEO_FEATURE_Y;
+import static io.github.galbiston.geosparql_jena.geo.topological.QueryRewriteTestData.GEO_FEATURE_Z;
 import static io.github.galbiston.geosparql_jena.geo.topological.QueryRewriteTestData.TEST_SRS_URI;
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.simple_features.SfContainsPF;
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.simple_features.SfDisjointPF;
@@ -588,6 +590,46 @@ public class GenericPropertyFunctionTest {
         boolean expResult = true;
         List<Resource> expSubjects = Arrays.asList(FEATURE_A);
         List<Resource> expObjects = Arrays.asList(FEATURE_B);
+        boolean result = subjects.equals(expSubjects) && objects.equals(expObjects);
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of execEvaluated method, of class GenericPropertyFunction.
+     */
+    @Test
+    public void testExecEvaluated_both_bound_geo() {
+        System.out.println("execEvaluated_both_bound_geo");
+
+        String query = "PREFIX geo: <http://www.opengis.net/ont/geosparql#>\n"
+                + "\n"
+                + "SELECT ?subj ?obj\n"
+                + "WHERE{\n"
+                + "    BIND(<http://example.org#GeoFeatureY> AS ?subj) \n"
+                + "    BIND(<http://example.org#GeoFeatureZ> AS ?obj) \n"
+                + "    ?subj geo:sfContains ?obj .\n"
+                + "}ORDER by ?subj ?obj";
+
+        List<Resource> subjects = new ArrayList<>();
+        List<Resource> objects = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Resource subject = qs.getResource("subj");
+                subjects.add(subject);
+
+                Resource object = qs.getResource("obj");
+                objects.add(object);
+            }
+        }
+
+        boolean expResult = true;
+        List<Resource> expSubjects = Arrays.asList(GEO_FEATURE_Y);
+        List<Resource> expObjects = Arrays.asList(GEO_FEATURE_Z);
         boolean result = subjects.equals(expSubjects) && objects.equals(expObjects);
 
         //System.out.println("Exp: " + expResult);

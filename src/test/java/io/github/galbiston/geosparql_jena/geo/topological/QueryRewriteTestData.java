@@ -18,6 +18,8 @@ package io.github.galbiston.geosparql_jena.geo.topological;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -43,6 +45,12 @@ public class QueryRewriteTestData {
     public static final Resource FEATURE_D = ResourceFactory.createResource("http://example.org#FeatureD");
 
     public static final Literal LITERAL_B = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(1 1)", WKTDatatype.INSTANCE);
+
+    public static final Resource GEO_FEATURE_Y = ResourceFactory.createResource("http://example.org#GeoFeatureY");
+    public static final Resource GEO_FEATURE_Z = ResourceFactory.createResource("http://example.org#GeoFeatureZ");
+    public static final Literal GEO_FEATURE_LAT = ResourceFactory.createTypedLiteral("60.0", XSDDatatype.XSDfloat);
+    public static final Literal GEO_FEATURE_LON = ResourceFactory.createTypedLiteral("70.0", XSDDatatype.XSDfloat);
+    public static final Literal GEO_FEATURE_LITERAL = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(60.0 70.0)", WKTDatatype.INSTANCE);
 
     public static final String TEST_SRS_URI = SRS_URI.OSGB36_CRS;
 
@@ -91,8 +99,15 @@ public class QueryRewriteTestData {
             TEST_MODEL.add(GEOMETRY_E, RDF.type, Geo.SPATIAL_OBJECT_RES);
             TEST_MODEL.add(GEOMETRY_F, RDF.type, Geo.SPATIAL_OBJECT_RES);
 
-            //Contains
+            //Contains asserted
             TEST_MODEL.add(GEOMETRY_A, Geo.SF_CONTAINS_PROP, GEOMETRY_F);
+
+            //Geo Features
+            TEST_MODEL.add(GEO_FEATURE_Y, SpatialExtension.GEO_LAT_PROP, GEO_FEATURE_LAT);
+            TEST_MODEL.add(GEO_FEATURE_Y, SpatialExtension.GEO_LON_PROP, GEO_FEATURE_LON);
+            TEST_MODEL.add(GEO_FEATURE_Z, SpatialExtension.GEO_LAT_PROP, GEO_FEATURE_LAT);
+            TEST_MODEL.add(GEO_FEATURE_Z, SpatialExtension.GEO_LON_PROP, GEO_FEATURE_LON);
+
         }
         return TEST_MODEL;
     }
