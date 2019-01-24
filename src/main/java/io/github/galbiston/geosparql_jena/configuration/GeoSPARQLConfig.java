@@ -48,7 +48,6 @@ public class GeoSPARQLConfig {
      */
     private static Boolean IS_FUNCTIONS_REGISTERED = false;
     private static Boolean IS_QUERY_REWRITE_ENABLED = true;
-    private static Boolean IS_SUPPORT_SETUP = false;
 
     /**
      * Initialise all GeoSPARQL property and filter functions with memory
@@ -167,7 +166,16 @@ public class GeoSPARQLConfig {
         //Only register functions once.
         if (!IS_FUNCTIONS_REGISTERED) {
 
-            setupSupport();
+            //Setup Default Cordinate Reference Systems
+            SRSRegistry.setupDefaultSRS();
+
+            //Register GeometryLiteral datatypes for CSV conversion
+            CSVConversion.registerDatatypes();
+
+            //Register GeometryDatatypes with the TypeMapper.
+            GeometryDatatype.registerDatatypes();
+
+            //Register Property and Filter functions.
             PropertyFunctionRegistry propertyRegistry = PropertyFunctionRegistry.get();
             FunctionRegistry functionRegistry = FunctionRegistry.get();
             NonTopological.loadFilterFunctions(functionRegistry);
@@ -183,20 +191,6 @@ public class GeoSPARQLConfig {
             Spatial.loadPropertyFunctions(propertyRegistry);
             Spatial.loadFilterFunctions(functionRegistry);
             IS_FUNCTIONS_REGISTERED = true;
-        }
-    }
-
-    private static void setupSupport() {
-        if (!IS_SUPPORT_SETUP) {
-            //Setup Default Cordinate Reference Systems
-            SRSRegistry.setupDefaultSRS();
-
-            //Register GeometryLiteral datatypes for CSV conversion
-            CSVConversion.registerDatatypes();
-
-            //Register GeometryDatatypes with the TypeMapper.
-            GeometryDatatype.registerDatatypes();
-            IS_SUPPORT_SETUP = true;
         }
     }
 
