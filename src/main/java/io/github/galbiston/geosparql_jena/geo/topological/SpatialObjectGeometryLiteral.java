@@ -18,6 +18,8 @@
 package io.github.galbiston.geosparql_jena.geo.topological;
 
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import java.util.Objects;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
@@ -98,7 +100,7 @@ public class SpatialObjectGeometryLiteral {
      */
     protected static final SpatialObjectGeometryLiteral retrieve(Graph graph, Node targetSpatialObject) {
 
-        Node geometry;
+        Node geometry = null;
         if (graph.contains(targetSpatialObject, RDF.type.asNode(), Geo.FEATURE_NODE)) {
             //Target is Feature - find the default Geometry.
             ExtendedIterator<Triple> geomIter = graph.find(targetSpatialObject, Geo.HAS_DEFAULT_GEOMETRY_NODE, null);
@@ -106,9 +108,6 @@ public class SpatialObjectGeometryLiteral {
         } else if (graph.contains(targetSpatialObject, RDF.type.asNode(), Geo.GEOMETRY_NODE)) {
             //Target is a Geometry.
             geometry = targetSpatialObject;
-        } else {
-            //Target is not a Feature or Geometry.
-            geometry = null;
         }
 
         if (geometry != null) {
@@ -117,6 +116,14 @@ public class SpatialObjectGeometryLiteral {
             Node literalNode = extractObject(iter);
             if (literalNode != null) {
                 return new SpatialObjectGeometryLiteral(targetSpatialObject, literalNode);
+            }
+        } else {
+            //Target is not a Feature or Geometry but could have Geo Predicates.
+            if (graph.contains(targetSpatialObject, SpatialExtension.GEO_LAT_NODE, null) && graph.contains(targetSpatialObject, SpatialExtension.GEO_LON_NODE, null)) {
+                Node lat = graph.find(targetSpatialObject, SpatialExtension.GEO_LAT_NODE, null).next().getObject();
+                Node lon = graph.find(targetSpatialObject, SpatialExtension.GEO_LON_NODE, null).next().getObject();
+                Node latLonGeometryLiteral = ConvertLatLon.convert(lat, lon);
+                return new SpatialObjectGeometryLiteral(targetSpatialObject, latLonGeometryLiteral);
             }
         }
 
