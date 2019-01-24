@@ -19,8 +19,6 @@ package io.github.galbiston.geosparql_jena.implementation.index;
 
 import io.github.galbiston.expiring_map.ExpiringMap;
 import static io.github.galbiston.expiring_map.MapDefaultValues.MAP_EXPIRY_INTERVAL;
-import static io.github.galbiston.expiring_map.MapDefaultValues.NO_MAP;
-import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_EXPIRY;
 import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
 import io.github.galbiston.geosparql_jena.geo.topological.GenericPropertyFunction;
 import org.apache.jena.graph.Node;
@@ -31,26 +29,26 @@ import org.apache.jena.rdf.model.Property;
  */
 public class QueryRewriteIndex {
 
-    private Boolean indexActive = true;
+    private boolean indexActive = true;
     private final String queryRewriteLabel;
-    private ExpiringMap<String, Boolean> queryRewriteIndex;
+    private ExpiringMap<String, Boolean> index;
     private static int MAP_SIZE_DEFAULT = UNLIMITED_MAP;
     private static long MAP_EXPIRY_INTERVAL_DEFAULT = MAP_EXPIRY_INTERVAL;
 
     public QueryRewriteIndex() {
         this.queryRewriteLabel = "Query Rewrite";
-        this.queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, MAP_SIZE_DEFAULT, MAP_EXPIRY_INTERVAL_DEFAULT);
+        this.index = new ExpiringMap<>(queryRewriteLabel, MAP_SIZE_DEFAULT, MAP_EXPIRY_INTERVAL_DEFAULT);
     }
 
     public QueryRewriteIndex(boolean isActive) {
         this.queryRewriteLabel = "Query Rewrite";
         this.indexActive = false;
-        this.queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, 1, MAP_EXPIRY_INTERVAL_DEFAULT);
+        this.index = new ExpiringMap<>(queryRewriteLabel, 1, MAP_EXPIRY_INTERVAL_DEFAULT);
     }
 
     public QueryRewriteIndex(String queryRewriteLabel, int maxSize, long expiryInterval) {
         this.queryRewriteLabel = queryRewriteLabel;
-        this.queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, maxSize, expiryInterval);
+        this.index = new ExpiringMap<>(queryRewriteLabel, maxSize, expiryInterval);
     }
 
     /**
@@ -71,11 +69,11 @@ public class QueryRewriteIndex {
             String key = subjectGeometryLiteral.getLiteralLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLiteralLexicalForm();
             try {
                 Boolean result;
-                if (queryRewriteIndex.containsKey(key)) {
-                    result = queryRewriteIndex.get(key);
+                if (index.containsKey(key)) {
+                    result = index.get(key);
                 } else {
                     result = propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
-                    queryRewriteIndex.put(key, result);
+                    index.put(key, result);
                 }
                 return result;
             } catch (NullPointerException ex) {
@@ -86,10 +84,11 @@ public class QueryRewriteIndex {
         return propertyFunction.testFilterFunction(subjectGeometryLiteral, objectGeometryLiteral);
     }
 
+    /**
+     * Empty the index.
+     */
     public final void clear() {
-        if (queryRewriteIndex != null) {
-            queryRewriteIndex.clear();
-        }
+        index.clear();
     }
 
     /**
@@ -99,20 +98,7 @@ public class QueryRewriteIndex {
      * @param maxSize : use -1 for unlimited size
      */
     public final void setMapSize(int maxSize) {
-        indexActive = NO_MAP != maxSize;
-
-        if (indexActive) {
-            if (queryRewriteIndex != null) {
-                queryRewriteIndex.stopExpiry();
-            }
-            queryRewriteIndex = new ExpiringMap<>(queryRewriteLabel, maxSize, MAP_EXPIRY_INTERVAL_DEFAULT);
-            queryRewriteIndex.startExpiry();
-        } else {
-            if (queryRewriteIndex != null) {
-                queryRewriteIndex.stopExpiry();
-            }
-            queryRewriteIndex = null;
-        }
+        index.setMaxSize(maxSize);
     }
 
     /**
@@ -122,28 +108,49 @@ public class QueryRewriteIndex {
      * @param expiryInterval : use 0 or negative for unlimited timeout
      */
     public final void setMapExpiry(long expiryInterval) {
+        index.setExpiryInterval(expiryInterval);
+    }
+
+    /**
+     *
+     * @return True if index is active.
+     */
+    public boolean isIndexActive() {
+        return indexActive;
+    }
+
+    /**
+     * Sets whether the index is active.
+     *
+     * @param indexActive
+     */
+    public final void setActive(boolean indexActive) {
+        this.indexActive = indexActive;
 
         if (indexActive) {
-            if (expiryInterval > UNLIMITED_EXPIRY) {
-                queryRewriteIndex.stopExpiry();
-                queryRewriteIndex.setExpiryInterval(expiryInterval);
-                queryRewriteIndex.startExpiry();
-            } else {
-                queryRewriteIndex.stopExpiry();
-            }
-        }
-    }
-
-    public final void setActive(boolean isActive) {
-        indexActive = isActive;
-    }
-
-    public final Integer getQueryRewriteIndexSize() {
-        if (queryRewriteIndex != null) {
-            return queryRewriteIndex.size();
+            index.startExpiry();
         } else {
-            return 0;
+            index.stopExpiry();
         }
+    }
+
+    /**
+     *
+     * @return Number of items in the index.
+     */
+    public final long getIndexSize() {
+        return index.mappingCount();
+    }
+
+    /**
+     * Reset the index to the provided max size and expiry interval.<br>
+     * All contents will be lost.
+     *
+     * @param maxSize
+     * @param expiryInterval
+     */
+    public void reset(int maxSize, long expiryInterval) {
+        index = new ExpiringMap<>(queryRewriteLabel, maxSize, expiryInterval);
     }
 
     public static void setMaxSize(int mapSizeDefault) {
