@@ -214,6 +214,13 @@ public class SpatialIndex implements Serializable {
         return "SpatialIndex{" + "srsInfo=" + srsInfo + ", isBuilt=" + isBuilt + ", strTree=" + strTree + ", queryRewriteIndex=" + queryRewriteIndex + '}';
     }
 
+    /**
+     * Retrieve the SpatialIndex from the Context.
+     *
+     * @param execCxt
+     * @return SpatialIndex contained in the Context.
+     * @throws SpatialIndexException
+     */
     public static final SpatialIndex retrieve(ExecutionContext execCxt) throws SpatialIndexException {
 
         Context context = execCxt.getContext();
@@ -364,18 +371,27 @@ public class SpatialIndex implements Serializable {
 
         //Only add one set of statements as a converted dataset will duplicate the same info.
         if (model.contains(null, Geo.HAS_GEOMETRY_PROP, (Resource) null)) {
-            LOGGER.info("Feature-hasGeometry-Geometry statements found. Any Geo predicates will not be added to index.");
+            LOGGER.info("Feature-hasGeometry-Geometry statements found.");
+            if (model.contains(null, SpatialExtension.GEO_LAT_PROP, (Literal) null)) {
+                LOGGER.warn("Lat/Lon Geo predicates also found but will not be added to index.");
+            }
             Collection<SpatialIndexItem> geometryLiteralItems = getGeometryLiteralIndexItems(model, srsURI);
             items.addAll(geometryLiteralItems);
         } else if (model.contains(null, SpatialExtension.GEO_LAT_PROP, (Literal) null)) {
             LOGGER.info("Geo predicate statements found.");
-            Collection<SpatialIndexItem> geoPredicateItems = buildGeoPredicateIndex(model, srsURI);
+            Collection<SpatialIndexItem> geoPredicateItems = getGeoPredicateIndexItems(model, srsURI);
             items.addAll(geoPredicateItems);
         }
 
         return items;
     }
 
+    /**
+     *
+     * @param model
+     * @param srsURI
+     * @return GeometryLiteral items prepared for adding to SpatialIndex.
+     */
     private static Collection<SpatialIndexItem> getGeometryLiteralIndexItems(Model model, String srsURI) {
         List<SpatialIndexItem> items = new ArrayList<>();
         StmtIterator stmtIt = model.listStatements(null, Geo.HAS_GEOMETRY_PROP, (Resource) null);
@@ -406,8 +422,13 @@ public class SpatialIndex implements Serializable {
         return items;
     }
 
-//TODO - force conversion to GeometryLiteral. These won't get picked up in the query search.
-    private static Collection<SpatialIndexItem> buildGeoPredicateIndex(Model model, String srsURI) {
+    /**
+     *
+     * @param model
+     * @param srsURI
+     * @return Geo predicate objects prepared for adding to SpatialIndex.
+     */
+    private static Collection<SpatialIndexItem> getGeoPredicateIndexItems(Model model, String srsURI) {
         List<SpatialIndexItem> items = new ArrayList<>();
         ResIterator resIt = model.listResourcesWithProperty(SpatialExtension.GEO_LAT_PROP);
 
