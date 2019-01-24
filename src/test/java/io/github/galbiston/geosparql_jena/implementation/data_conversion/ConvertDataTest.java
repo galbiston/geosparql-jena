@@ -307,8 +307,9 @@ public class ConvertDataTest {
         System.out.println("convertGeoPredicates_remove");
         Model model = GEO_DATA;
         boolean isRemoveGeoPredicates = true;
-        long expResult = CONVERTED_SRS_DATA.size();
-        long result = ConvertData.convertGeoPredicates(model, isRemoveGeoPredicates).size();
+        TreeSet<String> expResult = extract(CONVERTED_SRS_DATA);
+        Model instance = ConvertData.convertGeoPredicates(model, isRemoveGeoPredicates);
+        TreeSet<String> result = extract(instance);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
