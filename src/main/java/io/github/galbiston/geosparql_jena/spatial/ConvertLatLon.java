@@ -42,24 +42,24 @@ public class ConvertLatLon {
         return ResourceFactory.createTypedLiteral(wktPoint, WKTDatatype.INSTANCE);
     }
 
-    public static final NodeValue convert(NodeValue v1, NodeValue v2) {
-        if (!v1.isNumber()) {
-            throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(v1.asNode()));
+    public static final NodeValue convert(NodeValue latNodeValue, NodeValue lonNodeValue) {
+        if (!latNodeValue.isNumber()) {
+            throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(latNodeValue.asNode()));
         }
 
-        if (!v2.isNumber()) {
-            throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(v2.asNode()));
+        if (!lonNodeValue.isNumber()) {
+            throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(lonNodeValue.asNode()));
         }
 
-        float lat = v1.getFloat();
-        float lon = v2.getFloat();
+        float lat = latNodeValue.getFloat();
+        float lon = lonNodeValue.getFloat();
         String wktPoint = toWKT(lat, lon);
 
         return NodeValue.makeNode(wktPoint, WKTDatatype.INSTANCE);
     }
 
-    public static final Node convert(Node n1, Node n2) {
-        NodeValue result = convert(NodeValue.makeNode(n1), NodeValue.makeNode(n2));
+    public static final Node convert(Node latNode, Node lonNode) {
+        NodeValue result = convert(NodeValue.makeNode(latNode), NodeValue.makeNode(lonNode));
         return result.asNode();
     }
 
