@@ -18,8 +18,11 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.apache.commons.collections4.iterators.IteratorChain;
@@ -96,6 +99,8 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
             Graph graph = execCxt.getActiveGraph();
 
             IteratorChain<Triple> geometryLiteralTriples = new IteratorChain<>();
+
+            //Check for Geometry and so GeometryLiterals.
             if (graph.contains(subject, Geo.HAS_GEOMETRY_NODE, null)) {
                 //A Feature can have many geometries so add each of them. The check Geo.HAS_DEFAULT_GEOMETRY_NODE will only return one but requires the data to have these present.
                 Iterator<Triple> geometryTriples = graph.find(subject, Geo.HAS_GEOMETRY_NODE, null);
@@ -103,9 +108,20 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
                     Node geometry = geometryTriples.next().getObject();
                     geometryLiteralTriples.addIterator(graph.find(geometry, Geo.HAS_SERIALIZATION_NODE, null));
                 }
+            }
 
-            } else {
-                //No GeometryLiteral so return false.
+            //Check for Geo predicates against the feature.
+            if (graph.contains(subject, SpatialExtension.GEO_LAT_NODE, null) && graph.contains(subject, SpatialExtension.GEO_LON_NODE, null)) {
+                Node lat = graph.find(subject, SpatialExtension.GEO_LAT_NODE, null).next().getObject();
+                Node lon = graph.find(subject, SpatialExtension.GEO_LON_NODE, null).next().getObject();
+                Node latLonGeometryLiteral = ConvertLatLon.convert(lat, lon);
+                Triple triple = new Triple(subject, Geo.HAS_GEOMETRY_NODE, latLonGeometryLiteral);
+                geometryLiteralTriples.addIterator(Arrays.asList(triple).iterator());
+            }
+
+            //Check that found at least one GeometryLiteral serialisation.
+            if (!geometryLiteralTriples.hasNext()) {
+                //No GeometryLiteral or Geo predicates so return false.
                 return false;
             }
 
