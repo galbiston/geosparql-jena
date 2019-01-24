@@ -18,8 +18,10 @@
 package io.github.galbiston.geosparql_jena.implementation.data_conversion;
 
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
+import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype;
+import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEO_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
@@ -36,6 +38,7 @@ import java.util.UUID;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
@@ -60,6 +63,17 @@ import org.slf4j.LoggerFactory;
 public class ConvertData {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    /**
+     * Convert the input model to the most frequent coordinate reference system
+     * and default datatype.
+     *
+     * @param inputModel
+     * @return Output of conversion.
+     */
+    public static final Model convert(Model inputModel) {
+        return convertSRSDatatype(inputModel, null, null);
+    }
 
     /**
      * Convert the input model to the output coordinate reference system.
@@ -96,11 +110,94 @@ public class ConvertData {
         return convertSRSDatatype(inputModel, outputSrsURI, outputDatatype);
     }
 
+    /**
+     * Convert the input dataset to the most frequent coordinate reference
+     * system and default datatype.
+     *
+     * @param dataset
+     * @return Converted dataset.
+     */
+    public static final Dataset convert(Dataset dataset) {
+        return convert(dataset, null, null);
+    }
+
+    /**
+     * Convert the input dataset to the output coordinate reference system.
+     *
+     * @param dataset
+     * @param outputSrsURI
+     * @return Converted dataset.
+     */
+    public static final Dataset convert(Dataset dataset, String outputSrsURI) {
+        return convert(dataset, outputSrsURI, null);
+    }
+
+    /**
+     * Convert the input dataset to the output geometry literal datatype.
+     *
+     * @param dataset
+     * @param outputDatatype
+     * @return Converted dataset.
+     */
+    public static final Dataset convert(Dataset dataset, GeometryDatatype outputDatatype) {
+        return convert(dataset, null, outputDatatype);
+    }
+
+    /**
+     * Convert the input dataset to the output coordinate reference system and
+     * geometry literal datatype.
+     *
+     * @param inputDataset
+     * @param outputSrsURI
+     * @param outputDatatype
+     * @return Converted dataset.
+     */
+    public static final Dataset convert(Dataset inputDataset, String outputSrsURI, GeometryDatatype outputDatatype) {
+
+        LOGGER.info("Convert Dataset - Started SRS: {}, Datatype: {}", outputSrsURI, outputDatatype);
+        if (outputSrsURI == null) {
+            outputSrsURI = GeoSPARQLOperations.findModeSRS(inputDataset);
+            LOGGER.info("SRS URI not specified. Defaulting to most frequent SRS URI: {}", outputSrsURI);
+        }
+        if (outputDatatype == null || !GeometryDatatype.check(outputDatatype)) {
+            LOGGER.warn("Output datatype {} is not a recognised for Geometry Literal. Defaulting to {}.", outputDatatype, WKTDatatype.URI);
+            outputDatatype = WKTDatatype.INSTANCE;
+        }
+
+        Dataset dataset = DatasetFactory.createTxnMem();
+        dataset.begin(ReadWrite.WRITE);
+        //Default Model
+        inputDataset.begin(ReadWrite.READ);
+        Model defaultModel = inputDataset.getDefaultModel();
+        Model convertedModel = convertSRSDatatype(defaultModel, outputSrsURI, outputDatatype);
+        dataset.setDefaultModel(convertedModel);
+
+        //Named Models
+        Iterator<String> graphNames = inputDataset.listNames();
+        while (graphNames.hasNext()) {
+            String graphName = graphNames.next();
+            Model namedModel = inputDataset.getNamedModel(graphName);
+            Model convertedNamedModel = convertSRSDatatype(namedModel, outputSrsURI, outputDatatype);
+            dataset.addNamedModel(graphName, convertedNamedModel);
+        }
+
+        LOGGER.info("Convert Dataset - Completed SRS: {}, Datatype: {}", outputSrsURI, outputDatatype);
+        dataset.commit();
+        dataset.end();
+        inputDataset.end();
+
+        return dataset;
+    }
+
     private static Model convertSRSDatatype(Model inputModel, String outputSrsURI, GeometryDatatype outputDatatype) {
 
-        if (!GeometryDatatype.check(outputDatatype)) {
-            LOGGER.error("Output datatype {} is not a recognised Geometry Literal", outputDatatype);
-            return null;
+        if (outputSrsURI == null) {
+            outputSrsURI = GeoSPARQLOperations.findModeSRS(inputModel);
+        }
+
+        if (outputDatatype == null || !GeometryDatatype.check(outputDatatype)) {
+            LOGGER.warn("Output datatype {} is not a recognised for Geometry Literal. Defaulting to {}.", outputDatatype, WKTDatatype.URI);
+            outputDatatype = WKTDatatype.INSTANCE;
         }
 
         //Setup SRS registries but without indexing.
@@ -146,7 +243,8 @@ public class ConvertData {
                 outputDatatype = GeometryDatatype.get(datatype);
             }
 
-            Statement outputStatement = ResourceFactory.createStatement(statement.getSubject(), statement.getPredicate(), convertedGeom.asLiteral(outputDatatype));
+            Literal convertedGeometryLiteral = convertedGeom.asLiteral(outputDatatype);
+            Statement outputStatement = ResourceFactory.createStatement(statement.getSubject(), statement.getPredicate(), convertedGeometryLiteral);
             outputModel.add(outputStatement);
         } else {
             //Not a statement of interest so store for output.
@@ -373,27 +471,36 @@ public class ConvertData {
      *
      * @param dataset
      * @param isRemoveGeoPredicate
+     * @return Converted dataset.
      *
      */
-    public static final void convertGeoPredicates(Dataset dataset, boolean isRemoveGeoPredicate) {
+    public static final Dataset convertGeoPredicates(Dataset dataset, boolean isRemoveGeoPredicate) {
 
         LOGGER.info("Convert Geo Predicates - Started");
+
+        Dataset outputDataset = DatasetFactory.createTxnMem();
+        outputDataset.begin(ReadWrite.WRITE);
+
         //Default Model
-        dataset.begin(ReadWrite.WRITE);
+        dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
-        convertGeoPredicates(defaultModel, isRemoveGeoPredicate);
+        Model convertedModel = convertGeoPredicates(defaultModel, isRemoveGeoPredicate);
+        outputDataset.setDefaultModel(convertedModel);
 
         //Named Models
         Iterator<String> graphNames = dataset.listNames();
         while (graphNames.hasNext()) {
             String graphName = graphNames.next();
             Model namedModel = dataset.getNamedModel(graphName);
-            convertGeoPredicates(namedModel, isRemoveGeoPredicate);
+            Model convertedNamedModel = convertGeoPredicates(namedModel, isRemoveGeoPredicate);
+            outputDataset.addNamedModel(graphName, convertedNamedModel);
         }
 
         LOGGER.info("Convert Geo Predicates - Completed");
-        dataset.commit();
         dataset.end();
+        outputDataset.commit();
+        outputDataset.end();
+        return outputDataset;
     }
 
     /**
@@ -402,12 +509,16 @@ public class ConvertData {
      *
      * @param model
      * @param isRemoveGeoPredicates
+     * @return Converted model.
      */
-    public static final void convertGeoPredicates(Model model, boolean isRemoveGeoPredicates) {
+    public static final Model convertGeoPredicates(Model model, boolean isRemoveGeoPredicates) {
 
-        if (model.containsResource(SpatialExtension.GEO_LAT_PROP)) {
+        Model outputModel = ModelFactory.createDefaultModel();
+        outputModel.add(model);
 
-            ResIterator resIt = model.listSubjectsWithProperty(SpatialExtension.GEO_LAT_PROP);
+        if (outputModel.containsResource(SpatialExtension.GEO_LAT_PROP)) {
+
+            ResIterator resIt = outputModel.listSubjectsWithProperty(SpatialExtension.GEO_LAT_PROP);
             while (resIt.hasNext()) {
                 Resource feature = resIt.nextResource();
                 if (feature.hasProperty(SpatialExtension.GEO_LON_PROP) && feature.hasProperty(SpatialExtension.GEO_LAT_PROP)) {
@@ -425,7 +536,7 @@ public class ConvertData {
                         } else {
                             geometryURI = GEO_URI + "Geom-" + UUID.randomUUID().toString();
                         }
-                        Resource geometry = ResourceFactory.createResource(geometryURI);
+                        Resource geometry = outputModel.createResource(geometryURI);
 
                         //Add Geometry to Feature and GeometryLiteral to Geometry.
                         feature.addProperty(Geo.HAS_GEOMETRY_PROP, geometry);
@@ -437,11 +548,13 @@ public class ConvertData {
             }
 
             if (isRemoveGeoPredicates) {
-                model.removeAll(null, SpatialExtension.GEO_LAT_PROP, null);
-                model.removeAll(null, SpatialExtension.GEO_LON_PROP, null);
+                outputModel.removeAll(null, SpatialExtension.GEO_LAT_PROP, null);
+                outputModel.removeAll(null, SpatialExtension.GEO_LON_PROP, null);
             }
 
         }
+
+        return outputModel;
     }
 
 }
