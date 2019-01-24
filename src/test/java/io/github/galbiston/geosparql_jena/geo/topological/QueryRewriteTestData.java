@@ -50,7 +50,7 @@ public class QueryRewriteTestData {
     public static final Resource GEO_FEATURE_Z = ResourceFactory.createResource("http://example.org#GeoFeatureZ");
     public static final Literal GEO_FEATURE_LAT = ResourceFactory.createTypedLiteral("60.0", XSDDatatype.XSDfloat);
     public static final Literal GEO_FEATURE_LON = ResourceFactory.createTypedLiteral("70.0", XSDDatatype.XSDfloat);
-    public static final Literal GEO_FEATURE_LITERAL = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(60.0 70.0)", WKTDatatype.INSTANCE);
+    public static final Literal GEO_FEATURE_LITERAL = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(60 70)", WKTDatatype.INSTANCE);
 
     public static final String TEST_SRS_URI = SRS_URI.OSGB36_CRS;
 

@@ -474,8 +474,8 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
 
         StringBuilder sb = new StringBuilder();
 
-        String xValue = minimise(x[index]);
-        String yValue = minimise(y[index]);
+        String xValue = trim(x[index]);
+        String yValue = trim(y[index]);
         String zValue;
         String mValue;
         switch (dimensions) {
@@ -483,16 +483,16 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
                 sb.append(xValue).append(" ").append(yValue);
                 break;
             case XYZ:
-                zValue = minimise(z[index]);
+                zValue = trim(z[index]);
                 sb.append(xValue).append(" ").append(yValue).append(" ").append(zValue);
                 break;
             case XYM:
-                mValue = minimise(m[index]);
+                mValue = trim(m[index]);
                 sb.append(xValue).append(" ").append(yValue).append(" ").append(mValue);
                 break;
             default:
-                zValue = minimise(z[index]);
-                mValue = minimise(m[index]);
+                zValue = trim(z[index]);
+                mValue = trim(m[index]);
                 sb.append(xValue).append(" ").append(yValue).append(" ").append(zValue).append(" ").append(mValue);
                 break;
 
@@ -506,7 +506,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
      * @param value
      * @return
      */
-    private String minimise(Double value) {
+    private String trim(Double value) {
 
         long longValue = value.longValue();
 

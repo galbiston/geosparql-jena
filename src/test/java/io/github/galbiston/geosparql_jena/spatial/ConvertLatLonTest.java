@@ -62,7 +62,7 @@ public class ConvertLatLonTest {
         System.out.println("convert");
         NodeValue v1 = NodeValue.makeFloat(10.0f);
         NodeValue v2 = NodeValue.makeFloat(20.0f);
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10 20)", WKTDatatype.INSTANCE);
         NodeValue result = ConvertLatLon.convert(v1, v2);
 
         //System.out.println("Exp: " + expResult);
@@ -166,7 +166,7 @@ public class ConvertLatLonTest {
         System.out.println("toWKT");
         float lat = 10.0F;
         float lon = 20.0F;
-        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)";
+        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10 20)";
         String result = ConvertLatLon.toWKT(lat, lon);
 
         //System.out.println("Exp: " + expResult);
@@ -182,7 +182,7 @@ public class ConvertLatLonTest {
         System.out.println("toLiteral");
         float lat = 10.0F;
         float lon = 20.0F;
-        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
+        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10 20)", WKTDatatype.INSTANCE);
         Literal result = ConvertLatLon.toLiteral(lat, lon);
 
         //System.out.println("Exp: " + expResult);
@@ -198,7 +198,7 @@ public class ConvertLatLonTest {
         System.out.println("convert");
         Node n1 = NodeValue.makeFloat(10.0f).asNode();
         Node n2 = NodeValue.makeFloat(20.0f).asNode();
-        Node expResult = NodeFactory.createLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10.0 20.0)", WKTDatatype.INSTANCE);
+        Node expResult = NodeFactory.createLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10 20)", WKTDatatype.INSTANCE);
         Node result = ConvertLatLon.convert(n1, n2);
 
         //System.out.println("Exp: " + expResult);

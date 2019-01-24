@@ -34,7 +34,24 @@ public class ConvertLatLon {
 
     public static final String toWKT(float lat, float lon) {
         checkBounds(lat, lon);
-        return PREFIX + lat + " " + lon + ")";
+        return PREFIX + trim(lat) + " " + trim(lon) + ")";
+    }
+
+    /**
+     * Reduce precision if decimal places are zero.
+     *
+     * @param value
+     * @return
+     */
+    private static String trim(Float value) {
+        //Same method as performed in CustomCoordinateSequence, so seeking consistency.
+        int intValue = value.intValue();
+
+        if (value == intValue) {
+            return Integer.toString(intValue);
+        } else {
+            return value.toString();
+        }
     }
 
     public static final Literal toLiteral(float lat, float lon) {
