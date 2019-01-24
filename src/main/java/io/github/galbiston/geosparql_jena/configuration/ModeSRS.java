@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.configuration;
 
+import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
@@ -48,15 +49,8 @@ public class ModeSRS {
         while (nodeIter.hasNext()) {
             RDFNode node = nodeIter.next();
             if (node.isLiteral()) {
-                String geomLiteral = node.asLiteral().getLexicalForm();
-                String srsURI;
-                int start = geomLiteral.indexOf("<");
-                if (start > -1) {
-                    int end = geomLiteral.indexOf(">");
-                    srsURI = geomLiteral.substring(start + 1, end);
-                } else {
-                    srsURI = SRS_URI.DEFAULT_WKT_CRS84;
-                }
+                GeometryWrapper geometryWrapper = GeometryWrapper.extract(node.asLiteral());
+                String srsURI = geometryWrapper.getSrsURI();
 
                 //Put the SRS URI into the map.
                 Integer count;
