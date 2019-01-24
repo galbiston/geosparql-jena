@@ -16,16 +16,22 @@
 package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -187,6 +193,43 @@ public class GenericSpatialPropertyFunctionTest {
         }
 
         List<Resource> expResult = new ArrayList<>();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of execEvaluated method, of class GenericSpatialPropertyFunction.
+     */
+    @Test
+    public void testExecEvaluated_Nearby_geo() {
+        System.out.println("execEvaluated_Nearby_geo");
+
+        Model model = ModelFactory.createDefaultModel();
+        Resource geoFeature = ResourceFactory.createResource("http://example.org/GeoFeatureX");
+        model.add(geoFeature, SpatialExtension.GEO_LAT_PROP, ResourceFactory.createTypedLiteral("0.0", XSDDatatype.XSDfloat));
+        model.add(geoFeature, SpatialExtension.GEO_LON_PROP, ResourceFactory.createTypedLiteral("0.0", XSDDatatype.XSDfloat));
+        Dataset dataset = SpatialIndex.wrapModel(model);
+
+        String query = "PREFIX spatial: <http://jena.apache.org/spatial#>\n"
+                + "\n"
+                + "SELECT ?subj\n"
+                + "WHERE{\n"
+                + "    ?subj spatial:nearby(0.0 0.0 10) .\n"
+                + "}ORDER by ?subj";
+
+        List<Resource> result = new ArrayList<>();
+        try (QueryExecution qe = QueryExecutionFactory.create(query, dataset)) {
+            ResultSet rs = qe.execSelect();
+            while (rs.hasNext()) {
+                QuerySolution qs = rs.nextSolution();
+                Resource feature = qs.getResource("subj");
+                result.add(feature);
+            }
+        }
+
+        List<Resource> expResult = Arrays.asList(geoFeature);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
