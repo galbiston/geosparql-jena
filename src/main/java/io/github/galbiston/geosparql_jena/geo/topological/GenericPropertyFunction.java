@@ -17,7 +17,6 @@
  */
 package io.github.galbiston.geosparql_jena.geo.topological;
 
-import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.geof.topological.GenericFilterFunction;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
@@ -91,8 +90,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             SpatialIndex spatialIndex = SpatialIndex.retrieve(execCxt);
             queryRewriteIndex = spatialIndex.getQueryRewriteIndex();
         } else {
-            //Create a small disabled temporary index.
-            queryRewriteIndex = new QueryRewriteIndex(false);
+            queryRewriteIndex = null;
         }
         Boolean isPositiveResult = queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
 
@@ -287,7 +285,8 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
 
         //If query re-writing is disabled then exit - graph does not contain the asserted relation.
-        if (!GeoSPARQLConfig.isQueryRewriteEnabled()) {
+        //May be null if there is no SpatialIndex created and to avoid constant recreation.
+        if (queryRewriteIndex == null || !queryRewriteIndex.isIndexActive()) {
             return false;
         }
 
