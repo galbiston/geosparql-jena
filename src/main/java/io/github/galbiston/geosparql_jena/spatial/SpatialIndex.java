@@ -75,6 +75,7 @@ public class SpatialIndex implements Serializable {
     private boolean isBuilt;
     private final STRtree strTree;
     private final QueryRewriteIndex queryRewriteIndex;
+    private static final int MINIMUM_CAPACITY = 2;
 
     /**
      * Unbuilt Spatial Index with provided capacity and default Query Rewrite
@@ -84,7 +85,7 @@ public class SpatialIndex implements Serializable {
      * @param srsURI
      */
     public SpatialIndex(int capacity, String srsURI) {
-        int indexCapacity = capacity > 0 ? capacity : 1;
+        int indexCapacity = capacity < MINIMUM_CAPACITY ? MINIMUM_CAPACITY : capacity;
         this.strTree = new STRtree(indexCapacity);
         this.isBuilt = false;
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
@@ -99,7 +100,7 @@ public class SpatialIndex implements Serializable {
      * @param queryRewriteIndex
      */
     public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI, QueryRewriteIndex queryRewriteIndex) {
-        int indexCapacity = spatialIndexItems.isEmpty() ? 1 : spatialIndexItems.size();
+        int indexCapacity = spatialIndexItems.size() < MINIMUM_CAPACITY ? MINIMUM_CAPACITY : spatialIndexItems.size();
         this.strTree = new STRtree(indexCapacity);
         insertItems(spatialIndexItems);
         this.strTree.build();
@@ -353,6 +354,21 @@ public class SpatialIndex implements Serializable {
 
         Dataset dataset = DatasetFactory.createTxnMem();
         dataset.setDefaultModel(model);
+        buildSpatialIndex(dataset, srsURI);
+
+        return dataset;
+    }
+
+    /**
+     * Wrap Model in a Dataset and build SpatialIndex.
+     *
+     * @param model
+     * @return Dataset with default Model and SpatialIndex in Context.
+     */
+    public static final Dataset wrapModel(Model model) {
+        Dataset dataset = DatasetFactory.createTxnMem();
+        dataset.setDefaultModel(model);
+        String srsURI = GeoSPARQLOperations.findModeSRS(dataset);
         buildSpatialIndex(dataset, srsURI);
 
         return dataset;
