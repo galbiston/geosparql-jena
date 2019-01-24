@@ -14,7 +14,9 @@
     <logger name="org.apache.jena.sparql.core.mem.PMapTripleTable" level="ERROR" />
     <logger name="org.apache.jena.sparql.core.mem.PMapQuadTable" level="ERROR" />
     <logger name="TDB" level="ERROR" />
-
+    <logger name="io.github.galbiston.geosparql_jena.implementation.data_conversion.ConvertData" level="ERROR" />
+    <logger name="io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations" level="ERROR" />
+ 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
