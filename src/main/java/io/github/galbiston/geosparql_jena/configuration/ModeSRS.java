@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.configuration;
 
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class ModeSRS {
     public void search(Model model) {
 
         NodeIterator nodeIter = model.listObjectsOfProperty(Geo.HAS_SERIALIZATION_PROP);
+        boolean isGeometryLiteralsFound = nodeIter.hasNext();
         while (nodeIter.hasNext()) {
             RDFNode node = nodeIter.next();
             if (node.isLiteral()) {
@@ -68,6 +70,15 @@ public class ModeSRS {
             }
         }
 
+        if (!isGeometryLiteralsFound) {
+            //No GeometryLiterals so check for Geo predicates use.
+            List<RDFNode> geoList = model.listObjectsOfProperty(SpatialExtension.GEO_LAT_PROP).toList();
+
+            if (!geoList.isEmpty()) {
+                srsMap.put(SRS_URI.WGS84_CRS, geoList.size());
+            }
+        }
+
         srsList = srsMap.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toList());
     }
 
@@ -84,8 +95,13 @@ public class ModeSRS {
         if (!srsList.isEmpty()) {
             return srsList.get(0).getKey();
         } else {
-            return null;
+            throw new ModeSrsException("No Geometry Literals or Geo predicates found in Dataset or Model.");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ModeSRS{" + "srsMap=" + srsMap + ", srsList=" + srsList + '}';
     }
 
 }
