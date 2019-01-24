@@ -98,7 +98,7 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
         try {
             Graph graph = execCxt.getActiveGraph();
 
-            IteratorChain<Triple> geometryLiteralTriples = new IteratorChain<>();
+            IteratorChain<Triple> spatialTriples = new IteratorChain<>();
 
             //Check for Geometry and so GeometryLiterals.
             if (graph.contains(subject, Geo.HAS_GEOMETRY_NODE, null)) {
@@ -106,32 +106,24 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
                 Iterator<Triple> geometryTriples = graph.find(subject, Geo.HAS_GEOMETRY_NODE, null);
                 while (geometryTriples.hasNext()) {
                     Node geometry = geometryTriples.next().getObject();
-                    geometryLiteralTriples.addIterator(graph.find(geometry, Geo.HAS_SERIALIZATION_NODE, null));
+                    spatialTriples.addIterator(graph.find(geometry, Geo.HAS_SERIALIZATION_NODE, null));
                 }
-            }
-
-            //Check for Geo predicates against the feature when no geometry literals found.
-            if (!geometryLiteralTriples.hasNext()) {
+            } else {
+                //Check for Geo predicates against the feature when no geometry literals found.
                 if (graph.contains(subject, SpatialExtension.GEO_LAT_NODE, null) && graph.contains(subject, SpatialExtension.GEO_LON_NODE, null)) {
                     Node lat = graph.find(subject, SpatialExtension.GEO_LAT_NODE, null).next().getObject();
                     Node lon = graph.find(subject, SpatialExtension.GEO_LON_NODE, null).next().getObject();
                     Node latLonGeometryLiteral = ConvertLatLon.convert(lat, lon);
                     Triple triple = new Triple(subject, Geo.HAS_GEOMETRY_NODE, latLonGeometryLiteral);
-                    geometryLiteralTriples.addIterator(Arrays.asList(triple).iterator());
+                    spatialTriples.addIterator(Arrays.asList(triple).iterator());
                 }
-            }
-
-            //Check that found at least one GeometryLiteral serialisation.
-            if (!geometryLiteralTriples.hasNext()) {
-                //No GeometryLiteral or Geo predicates so return false.
-                return false;
             }
 
             //Check through each Geometry and stop if one is accepted.
             boolean isMatched = false;
-            while (geometryLiteralTriples.hasNext()) {
+            while (spatialTriples.hasNext()) {
 
-                Triple triple = geometryLiteralTriples.next();
+                Triple triple = spatialTriples.next();
                 Node geometryLiteral = triple.getObject();
                 GeometryWrapper targetGeometryWrapper = GeometryWrapper.extract(geometryLiteral);
                 isMatched = checkSecondFilter(spatialArguments, targetGeometryWrapper);
