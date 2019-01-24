@@ -21,9 +21,6 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.data_conversion.ConvertData;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
-import static io.github.galbiston.geosparql_jena.implementation.vocabulary.GeoSPARQL_URI.GEO_URI;
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
-import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,7 +28,6 @@ import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
@@ -43,7 +39,6 @@ import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
@@ -476,83 +471,6 @@ public class GeoSPARQLOperations {
         GeometryLiteralIndex.setIndexActive(isIndexActive);
 
         return isValid;
-    }
-
-    /**
-     * Convert Geo Predicates (Lat/Lon) in Dataset to WKT Geometry Literal.<br>
-     * Option to remove Lat and Lon predicates after combination.
-     *
-     * @param dataset
-     * @param isRemoveGeoPredicate
-     *
-     */
-    public static final void convertGeoPredicates(Dataset dataset, boolean isRemoveGeoPredicate) {
-
-        LOGGER.info("Convert Geo Predicates - Started");
-        //Default Model
-        dataset.begin(ReadWrite.WRITE);
-        Model defaultModel = dataset.getDefaultModel();
-        convertGeoPredicates(defaultModel, isRemoveGeoPredicate);
-
-        //Named Models
-        Iterator<String> graphNames = dataset.listNames();
-        while (graphNames.hasNext()) {
-            String graphName = graphNames.next();
-            Model namedModel = dataset.getNamedModel(graphName);
-            convertGeoPredicates(namedModel, isRemoveGeoPredicate);
-        }
-
-        LOGGER.info("Convert Geo Predicates - Completed");
-        dataset.commit();
-        dataset.end();
-    }
-
-    /**
-     * Convert Geo Predicates (Lat/Lon) in Dataset to WKT Geometry Literal.<br>
-     * Option to remove Lat and Lon predicates after combination.
-     *
-     * @param model
-     * @param isRemoveGeoPredicates
-     */
-    public static final void convertGeoPredicates(Model model, boolean isRemoveGeoPredicates) {
-
-        if (model.containsResource(SpatialExtension.GEO_LAT_PROP)) {
-
-            ResIterator resIt = model.listSubjectsWithProperty(SpatialExtension.GEO_LAT_PROP);
-            while (resIt.hasNext()) {
-                Resource feature = resIt.nextResource();
-                if (feature.hasProperty(SpatialExtension.GEO_LON_PROP) && feature.hasProperty(SpatialExtension.GEO_LAT_PROP)) {
-
-                    //Create a GeometryLiteral from Lat/Lon
-                    Literal lat = feature.getProperty(SpatialExtension.GEO_LAT_PROP).getLiteral();
-                    Literal lon = feature.getProperty(SpatialExtension.GEO_LON_PROP).getLiteral();
-                    try {
-                        Literal latLonPoint = ConvertLatLon.toLiteral(lat.getFloat(), lon.getFloat());
-
-                        //Create a Geometry - re-use Feature if a URI or build a URI for blank node.
-                        String geometryURI;
-                        if (feature.isURIResource()) {
-                            geometryURI = feature.getURI() + "-Geom-" + UUID.randomUUID().toString();
-                        } else {
-                            geometryURI = GEO_URI + "Geom-" + UUID.randomUUID().toString();
-                        }
-                        Resource geometry = ResourceFactory.createResource(geometryURI);
-
-                        //Add Geometry to Feature and GeometryLiteral to Geometry.
-                        feature.addProperty(Geo.HAS_GEOMETRY_PROP, geometry);
-                        geometry.addLiteral(Geo.HAS_SERIALIZATION_PROP, latLonPoint);
-                    } catch (DatatypeFormatException ex) {
-                        LOGGER.error("Feature: {} has geo lat/lon out of bounds. Lat: {}, Lon: {}", feature, lat, lon);
-                    }
-                }
-            }
-
-            if (isRemoveGeoPredicates) {
-                model.removeAll(null, SpatialExtension.GEO_LAT_PROP, null);
-                model.removeAll(null, SpatialExtension.GEO_LON_PROP, null);
-            }
-
-        }
     }
 
     /**
