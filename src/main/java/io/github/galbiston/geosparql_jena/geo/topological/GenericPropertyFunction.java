@@ -21,6 +21,7 @@ import io.github.galbiston.geosparql_jena.geof.topological.GenericFilterFunction
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -111,12 +112,19 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
 
         Graph graph = execCxt.getActiveGraph();
 
-        ExtendedIterator<Triple> spatialObjects = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
+        ExtendedIterator<Triple> subjectTriples;
+        if (graph.contains(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE)) {
+            subjectTriples = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
+        } else {
+            //Check for Geo Predicate Features in the Graph if no GeometryLiterals found.
+            subjectTriples = graph.find(null, SpatialExtension.GEO_LAT_NODE, null);
 
-        //Bind all the Spatial Objects once as the subject and search for corresponding Objects.
-        while (spatialObjects.hasNext()) {
-            Triple spatialObjectTriple = spatialObjects.next();
-            Node boundSubject = spatialObjectTriple.getSubject();
+        }
+
+        //Bind all the Spatial Objects or Geo Predicates once as the subject and search for corresponding Objects.
+        while (subjectTriples.hasNext()) {
+            Triple subjectTriple = subjectTriples.next();
+            Node boundSubject = subjectTriple.getSubject();
             Binding subjectBind = BindingFactory.binding(binding, subjectVar, boundSubject);
             QueryIterator queryIter = oneBound(subjectBind, boundSubject, predicate, object, execCxt);
             queryIterConcat.add(queryIter);
@@ -144,8 +152,10 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         }
 
         if (!graph.contains(boundNode, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE)) {
-            //Bound node is not a Feature or a Geometry so exit.
-            return QueryIterNullIterator.create(execCxt);
+            if (!graph.contains(boundNode, SpatialExtension.GEO_LAT_NODE, null)) {
+                //Bound node is not a Feature or a Geometry or has Geo predicates so exit.
+                return QueryIterNullIterator.create(execCxt);
+            }
         }
 
         boolean isSpatialIndex = SpatialIndex.isDefined(execCxt);
@@ -168,10 +178,17 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         QueryIterConcat queryIterConcat = new QueryIterConcat(execCxt);
 
         //Search for both Features and Geometry in the Graph.
-        ExtendedIterator<Triple> unboundTriples = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
-        while (unboundTriples.hasNext()) {
-            Triple unboundTriple = unboundTriples.next();
-            Node spatialNode = unboundTriple.getSubject();
+        ExtendedIterator<Triple> spatialTriples;
+        if (graph.contains(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE)) {
+            spatialTriples = graph.find(null, RDF.type.asNode(), Geo.SPATIAL_OBJECT_NODE);
+        } else {
+            //Check for Geo Predicate Features in the Graph if no GeometryLiterals found.
+            spatialTriples = graph.find(null, SpatialExtension.GEO_LAT_NODE, null);
+        }
+
+        while (spatialTriples.hasNext()) {
+            Triple spatialTriple = spatialTriples.next();
+            Node spatialNode = spatialTriple.getSubject();
             Binding newBind = BindingFactory.binding(binding, unboundVar, spatialNode);
             QueryIterator queryIter;
             if (isSubjectBound) {
