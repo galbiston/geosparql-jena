@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.great_circle;
 
+import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import org.locationtech.jts.geom.Point;
 
 /**
@@ -22,8 +23,6 @@ import org.locationtech.jts.geom.Point;
  *
  */
 public class GreatCircleDistance {
-
-    public static final double EARTH_RADIUS = 6371008.7714; //Earth Mean Radius
 
     /**
      * Great circle distance between Points using Vincenty formula.
@@ -66,7 +65,7 @@ public class GreatCircleDistance {
 
         double e = Math.atan(c / d);
 
-        double distance = EARTH_RADIUS * e;
+        double distance = UnitsOfMeasure.EARTH_MEAN_RADIUS * e;
 
         //Distance is in metres.
         return distance;
@@ -112,7 +111,7 @@ public class GreatCircleDistance {
                 * Math.pow(Math.sin(diffLonRad / 2), 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        double distance = EARTH_RADIUS * c;
+        double distance = UnitsOfMeasure.EARTH_MEAN_RADIUS * c;
         return distance;
     }
 

@@ -45,6 +45,10 @@ public class UnitsOfMeasure implements Serializable {
     public static final UnitsOfMeasure METRE_UNITS = new UnitsOfMeasure(Unit_URI.METRE_URL);
     public static final UnitsOfMeasure DEGREE_UNITS = new UnitsOfMeasure(Unit_URI.DEGREE_URL);
 
+    //https://en.wikipedia.org/wiki/Decimal_degrees
+    private static final double EQUATORIAL_METRES = 111319.9;
+    public static final double EARTH_MEAN_RADIUS = 6371008.7714; //Earth Mean Radius
+
     public UnitsOfMeasure(CoordinateReferenceSystem crs) {
         this.unit = crs.getCoordinateSystem().getAxis(0).getUnit();
         this.unitURI = UnitsRegistry.getUnitURI(unit);
@@ -140,9 +144,6 @@ public class UnitsOfMeasure implements Serializable {
 
         return targetDistance;
     }
-
-    //https://en.wikipedia.org/wiki/Decimal_degrees
-    private static final double EQUATORIAL_METRES = 111319.9;
 
     /**
      * Provides conversion of linear units to degrees.

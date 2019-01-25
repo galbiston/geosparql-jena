@@ -15,7 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.great_circle;
 
-import static io.github.galbiston.geosparql_jena.implementation.great_circle.GreatCircleDistance.EARTH_RADIUS;
+import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -48,7 +48,7 @@ public class GreatCirclePointDistance {
         this.startLat = startLat;
         this.startLon = startLon;
 
-        this.angDistance = distance / EARTH_RADIUS;
+        this.angDistance = distance / UnitsOfMeasure.EARTH_MEAN_RADIUS;
         this.latRad = Math.toRadians(startLat);
         this.lonRad = Math.toRadians(startLon);
 
