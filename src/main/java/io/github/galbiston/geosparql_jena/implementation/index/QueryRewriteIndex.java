@@ -22,8 +22,13 @@ import static io.github.galbiston.expiring_map.MapDefaultValues.MAP_EXPIRY_INTER
 import static io.github.galbiston.expiring_map.MapDefaultValues.UNLIMITED_MAP;
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.geo.topological.GenericPropertyFunction;
+import java.util.Map.Entry;
 import org.apache.jena.graph.Node;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 
 /**
  *
@@ -36,6 +41,7 @@ public class QueryRewriteIndex {
     private static String LABEL_DEFAULT = "Query Rewrite";
     private static int MAP_SIZE_DEFAULT = UNLIMITED_MAP;
     private static long MAP_EXPIRY_INTERVAL_DEFAULT = MAP_EXPIRY_INTERVAL;
+    private static final String KEY_SEPARATOR = "@";
 
     public QueryRewriteIndex() {
         this.queryRewriteLabel = LABEL_DEFAULT;
@@ -64,7 +70,7 @@ public class QueryRewriteIndex {
         }
 
         if (indexActive) {
-            String key = subjectGeometryLiteral.getLiteralLexicalForm() + "@" + predicate.getURI() + "@" + objectGeometryLiteral.getLiteralLexicalForm();
+            String key = subjectGeometryLiteral.getLiteralLexicalForm() + KEY_SEPARATOR + predicate.getURI() + KEY_SEPARATOR + objectGeometryLiteral.getLiteralLexicalForm();
             try {
                 Boolean result;
                 if (index.containsKey(key)) {
@@ -115,6 +121,27 @@ public class QueryRewriteIndex {
      */
     public boolean isIndexActive() {
         return indexActive;
+    }
+
+    /**
+     * COnverts the index to a model of asserted spatial relation statements.
+     *
+     * @return Model containing all true assertions.
+     */
+    public Model toModel() {
+        Model model = ModelFactory.createDefaultModel();
+        for (Entry<String, Boolean> entry : index.entrySet()) {
+            Boolean value = entry.getValue();
+            if (value) {
+                String[] parts = entry.getKey().split(KEY_SEPARATOR);
+                Resource subject = ResourceFactory.createResource(parts[0]);
+                Property property = ResourceFactory.createProperty(parts[1]);
+                Resource object = ResourceFactory.createResource(parts[2]);
+                model.add(subject, property, object);
+            }
+        }
+
+        return model;
     }
 
     /**
