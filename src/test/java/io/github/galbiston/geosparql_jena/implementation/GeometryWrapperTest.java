@@ -488,7 +488,7 @@ public class GeometryWrapperTest {
         GeometryWrapper testGeometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 170.0, 20.0 170.0, 20.0 179.0, 10.0 179.0, 10.0 170.0))", WKTDatatype.URI);
         String unitsURI = Unit_URI.KILOMETER_URL;
 
-        double expResult = 104.4888;
+        double expResult = 104.4890;
         double result = instance.distanceGreatCircle(testGeometryWrapper, unitsURI);
 
         //System.out.println("Exp: " + expResult);
@@ -509,7 +509,7 @@ public class GeometryWrapperTest {
         GeometryWrapper testGeometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((10.0 -10.0, 20.0 -10.0, 20.0 -1.0, 10.0 -1.0, 10.0 -10.0))", WKTDatatype.URI);
         String unitsURI = Unit_URI.KILOMETER_URL;
 
-        double expResult = 104.4888;
+        double expResult = 104.4890;
         double result = instance.distanceGreatCircle(testGeometryWrapper, unitsURI);
 
         //System.out.println("Exp: " + expResult);

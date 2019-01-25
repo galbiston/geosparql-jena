@@ -23,7 +23,7 @@ import org.locationtech.jts.geom.Point;
  */
 public class GreatCircleDistance {
 
-    public static final double EARTH_RADIUS = 6371e3; //Earth Mean Radius
+    public static final double EARTH_RADIUS = 6371008.7714; //Earth Mean Radius
 
     /**
      * Great circle distance between Points using Vincenty formula.

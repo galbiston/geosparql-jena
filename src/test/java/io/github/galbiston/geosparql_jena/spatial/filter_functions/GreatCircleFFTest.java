@@ -77,7 +77,7 @@ public class GreatCircleFFTest {
         NodeValue v4 = NodeValue.makeDouble(21.0);
         NodeValue v5 = NodeValue.makeNode(NodeFactory.createURI(Unit_URI.KILOMETER_URL));
         GreatCircleFF instance = new GreatCircleFF();
-        double expResult = 109.5055;
+        double expResult = 109.5057;
         double result = instance.exec(v1, v2, v3, v4, v5).getDouble();
 
         //System.out.println("Exp: " + expResult);
@@ -97,7 +97,7 @@ public class GreatCircleFFTest {
         NodeValue v4 = NodeValue.makeDouble(20.0);
         NodeValue v5 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
         GreatCircleFF instance = new GreatCircleFF();
-        double expResult = 111.1949;
+        double expResult = 111.1950;
         double result = instance.exec(v1, v2, v3, v4, v5).getDouble();
 
         //System.out.println("Exp: " + expResult);
@@ -118,7 +118,7 @@ public class GreatCircleFFTest {
         NodeValue v4 = NodeValue.makeDouble(-0.12574);
         NodeValue v5 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
         GreatCircleFF instance = new GreatCircleFF();
-        double expResult = 343.7708;
+        double expResult = 343.7713;
         double result = instance.exec(v1, v2, v3, v4, v5).getDouble();
 
         //System.out.println("Exp: " + expResult);
@@ -252,7 +252,7 @@ public class GreatCircleFFTest {
             }
         }
 
-        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("344.26594906194606e0", XSDDatatype.XSDdouble));
+        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("344.2664230368865e0", XSDDatatype.XSDdouble));
 
         //System.out.println("Exp: " + expResults);
         //System.out.println("Res: " + results);
