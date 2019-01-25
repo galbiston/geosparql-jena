@@ -17,6 +17,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.jts;
 
+import static io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory.reducePrecision;
 import java.io.Serializable;
 import java.util.Arrays;
 import org.locationtech.jts.geom.Coordinate;
@@ -474,8 +475,8 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
 
         StringBuilder sb = new StringBuilder();
 
-        String xValue = trim(x[index]);
-        String yValue = trim(y[index]);
+        String xValue = reducePrecision(x[index]);
+        String yValue = reducePrecision(y[index]);
         String zValue;
         String mValue;
         switch (dimensions) {
@@ -483,38 +484,21 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
                 sb.append(xValue).append(" ").append(yValue);
                 break;
             case XYZ:
-                zValue = trim(z[index]);
+                zValue = reducePrecision(z[index]);
                 sb.append(xValue).append(" ").append(yValue).append(" ").append(zValue);
                 break;
             case XYM:
-                mValue = trim(m[index]);
+                mValue = reducePrecision(m[index]);
                 sb.append(xValue).append(" ").append(yValue).append(" ").append(mValue);
                 break;
             default:
-                zValue = trim(z[index]);
-                mValue = trim(m[index]);
+                zValue = reducePrecision(z[index]);
+                mValue = reducePrecision(m[index]);
                 sb.append(xValue).append(" ").append(yValue).append(" ").append(zValue).append(" ").append(mValue);
                 break;
 
         }
         return sb.toString();
-    }
-
-    /**
-     * Reduce precision if decimal places are zero.
-     *
-     * @param value
-     * @return
-     */
-    private String trim(Double value) {
-
-        long longValue = value.longValue();
-
-        if (value == longValue) {
-            return Long.toString(longValue);
-        } else {
-            return value.toString();
-        }
     }
 
     public static final CoordinateSequenceDimensions findCoordinateSequenceDimensions(int coordinateDimension, int spatialDimension) {

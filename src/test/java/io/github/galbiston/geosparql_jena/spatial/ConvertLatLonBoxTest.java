@@ -63,7 +63,7 @@ public class ConvertLatLonBoxTest {
         float lonMin = 1.0F;
         float latMax = 10.0F;
         float lonMax = 11.0F;
-        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 1.0, 10.0 1.0, 10.0 11.0, 0.0 11.0, 0.0 1.0))";
+        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0 1, 10 1, 10 11, 0 11, 0 1))";
         String result = ConvertLatLonBox.toWKT(latMin, lonMin, latMax, lonMax);
 
         //System.out.println("Exp: " + expResult);
@@ -81,7 +81,7 @@ public class ConvertLatLonBoxTest {
         float lonMin = 1.0F;
         float latMax = 10.0F;
         float lonMax = 11.0F;
-        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 1.0, 10.0 1.0, 10.0 11.0, 0.0 11.0, 0.0 1.0))", WKTDatatype.INSTANCE);
+        Literal expResult = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0 1, 10 1, 10 11, 0 11, 0 1))", WKTDatatype.INSTANCE);
         Literal result = ConvertLatLonBox.toLiteral(latMin, lonMin, latMax, lonMax);
 
         //System.out.println("Exp: " + expResult);
@@ -99,7 +99,7 @@ public class ConvertLatLonBoxTest {
         NodeValue v2 = NodeValue.makeFloat(1.0f);
         NodeValue v3 = NodeValue.makeFloat(10.0f);
         NodeValue v4 = NodeValue.makeFloat(11.0f);
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 1.0, 10.0 1.0, 10.0 11.0, 0.0 11.0, 0.0 1.0))", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0 1, 10 1, 10 11, 0 11, 0 1))", WKTDatatype.INSTANCE);
         NodeValue result = ConvertLatLonBox.convert(v1, v2, v3, v4);
 
         //System.out.println("Exp: " + expResult);
@@ -117,7 +117,7 @@ public class ConvertLatLonBoxTest {
         Node n2 = NodeValue.makeFloat(1.0f).asNode();
         Node n3 = NodeValue.makeFloat(10.0f).asNode();
         Node n4 = NodeValue.makeFloat(11.0f).asNode();
-        Node expResult = NodeFactory.createLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 1.0, 10.0 1.0, 10.0 11.0, 0.0 11.0, 0.0 1.0))", WKTDatatype.INSTANCE);
+        Node expResult = NodeFactory.createLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0 1, 10 1, 10 11, 0 11, 0 1))", WKTDatatype.INSTANCE);
         Node result = ConvertLatLonBox.convert(n1, n2, n3, n4);
 
         //System.out.println("Exp: " + expResult);

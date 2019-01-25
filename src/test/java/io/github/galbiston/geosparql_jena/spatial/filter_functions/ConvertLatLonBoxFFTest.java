@@ -74,7 +74,7 @@ public class ConvertLatLonBoxFFTest {
         NodeValue v3 = NodeValue.makeFloat(10.0f);
         NodeValue v4 = NodeValue.makeFloat(11.0f);
         ConvertLatLonBoxFF instance = new ConvertLatLonBoxFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 1.0, 10.0 1.0, 10.0 11.0, 0.0 11.0, 0.0 1.0))", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0 1, 10 1, 10 11, 0 11, 0 1))", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2, v3, v4);
 
         //System.out.println("Exp: " + expResult);
@@ -184,7 +184,7 @@ public class ConvertLatLonBoxFFTest {
             }
         }
 
-        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0.0 1.0, 10.0 1.0, 10.0 11.0, 0.0 11.0, 0.0 1.0))", WKTDatatype.INSTANCE));
+        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0 1, 10 1, 10 11, 0 11, 0 1))", WKTDatatype.INSTANCE));
 
         //System.out.println("Exp: " + expResults);
         //System.out.println("Res: " + results);

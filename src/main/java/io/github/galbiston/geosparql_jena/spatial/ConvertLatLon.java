@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial;
 
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import static io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory.reducePrecision;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
@@ -32,29 +33,12 @@ public class ConvertLatLon {
 
     private static final String PREFIX = "<" + SRS_URI.WGS84_CRS + "> POINT(";
 
-    public static final String toWKT(float lat, float lon) {
+    public static final String toWKT(double lat, double lon) {
         checkBounds(lat, lon);
-        return PREFIX + trim(lat) + " " + trim(lon) + ")";
+        return PREFIX + reducePrecision(lat) + " " + reducePrecision(lon) + ")";
     }
 
-    /**
-     * Reduce precision if decimal places are zero.
-     *
-     * @param value
-     * @return
-     */
-    private static String trim(Float value) {
-        //Same method as performed in CustomCoordinateSequence, so seeking consistency.
-        int intValue = value.intValue();
-
-        if (value == intValue) {
-            return Integer.toString(intValue);
-        } else {
-            return value.toString();
-        }
-    }
-
-    public static final Literal toLiteral(float lat, float lon) {
+    public static final Literal toLiteral(double lat, double lon) {
         String wktPoint = toWKT(lat, lon);
         return ResourceFactory.createTypedLiteral(wktPoint, WKTDatatype.INSTANCE);
     }
@@ -68,8 +52,8 @@ public class ConvertLatLon {
             throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(lonNodeValue.asNode()));
         }
 
-        float lat = latNodeValue.getFloat();
-        float lon = lonNodeValue.getFloat();
+        double lat = latNodeValue.getDouble();
+        double lon = lonNodeValue.getDouble();
         String wktPoint = toWKT(lat, lon);
 
         return NodeValue.makeNode(wktPoint, WKTDatatype.INSTANCE);

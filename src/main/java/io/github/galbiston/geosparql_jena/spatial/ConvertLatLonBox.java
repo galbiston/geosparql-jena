@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial;
 
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import static io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory.reducePrecision;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
@@ -32,13 +33,13 @@ public class ConvertLatLonBox {
 
     private static final String PREFIX = "<" + SRS_URI.WGS84_CRS + "> POLYGON((";
 
-    public static final String toWKT(float latMin, float lonMin, float latMax, float lonMax) {
+    public static final String toWKT(double latMin, double lonMin, double latMax, double lonMax) {
         ConvertLatLon.checkBounds(latMin, lonMin);
         ConvertLatLon.checkBounds(latMax, lonMax);
-        return PREFIX + latMin + " " + lonMin + ", " + latMax + " " + lonMin + ", " + latMax + " " + lonMax + ", " + latMin + " " + lonMax + ", " + latMin + " " + lonMin + "))";
+        return PREFIX + reducePrecision(latMin) + " " + reducePrecision(lonMin) + ", " + reducePrecision(latMax) + " " + reducePrecision(lonMin) + ", " + reducePrecision(latMax) + " " + reducePrecision(lonMax) + ", " + reducePrecision(latMin) + " " + reducePrecision(lonMax) + ", " + reducePrecision(latMin) + " " + reducePrecision(lonMin) + "))";
     }
 
-    public static final Literal toLiteral(float latMin, float lonMin, float latMax, float lonMax) {
+    public static final Literal toLiteral(double latMin, double lonMin, double latMax, double lonMax) {
         String wktPolygon = toWKT(latMin, lonMin, latMax, lonMax);
         return ResourceFactory.createTypedLiteral(wktPolygon, WKTDatatype.INSTANCE);
     }
@@ -60,10 +61,10 @@ public class ConvertLatLonBox {
             throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(v4.asNode()));
         }
 
-        float latMin = v1.getFloat();
-        float lonMin = v2.getFloat();
-        float latMax = v3.getFloat();
-        float lonMax = v4.getFloat();
+        double latMin = v1.getDouble();
+        double lonMin = v2.getDouble();
+        double latMax = v3.getDouble();
+        double lonMax = v4.getDouble();
         String wktPolygon = toWKT(latMin, lonMin, latMax, lonMax);
 
         return NodeValue.makeNode(wktPolygon, WKTDatatype.INSTANCE);
