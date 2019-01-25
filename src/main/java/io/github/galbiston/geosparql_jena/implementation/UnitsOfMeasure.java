@@ -46,7 +46,7 @@ public class UnitsOfMeasure implements Serializable {
     public static final UnitsOfMeasure DEGREE_UNITS = new UnitsOfMeasure(Unit_URI.DEGREE_URL);
 
     //https://en.wikipedia.org/wiki/Decimal_degrees
-    private static final double EQUATORIAL_METRES = 111319.9;
+    public static final double EQUATORIAL_DEGREE_TO_METRES = 111319.9;
     public static final double EARTH_MEAN_RADIUS = 6371008.7714; //Earth Mean Radius
 
     public UnitsOfMeasure(CoordinateReferenceSystem crs) {
@@ -163,7 +163,7 @@ public class UnitsOfMeasure implements Serializable {
 
         if (units.isLinearUnits()) {
             double latitudeRadians = Math.toRadians(latitude);
-            double longitudeRatio = Math.cos(latitudeRadians) * EQUATORIAL_METRES;
+            double longitudeRatio = Math.cos(latitudeRadians) * EQUATORIAL_DEGREE_TO_METRES;
             double metreDistance = UnitsOfMeasure.conversion(distance, units, METRE_UNITS);
             return metreDistance / longitudeRatio;
         } else {
@@ -176,7 +176,7 @@ public class UnitsOfMeasure implements Serializable {
         UnitsOfMeasure units = new UnitsOfMeasure(unitsURI);
         if (!units.isLinearUnits()) {
             double latitudeRadians = Math.toRadians(latitude);
-            double longitudeRatio = Math.cos(latitudeRadians) * EQUATORIAL_METRES;
+            double longitudeRatio = Math.cos(latitudeRadians) * EQUATORIAL_DEGREE_TO_METRES;
             double degreeDistance = UnitsOfMeasure.conversion(distance, units, DEGREE_UNITS);
             return degreeDistance * longitudeRatio;
         } else {
