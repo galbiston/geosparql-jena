@@ -275,7 +275,7 @@ public class UnitsOfMeasureTest {
         double distance = 1.0;
         String unitsURI = Unit_URI.DEGREE_URL;
         double latitude = 0.0;
-        double expResult = 111319.9;
+        double expResult = 111319.8922;
         double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
 
         //System.out.println("Exp: " + expResult);
@@ -292,7 +292,7 @@ public class UnitsOfMeasureTest {
         double distance = 1.0;
         String unitsURI = Unit_URI.DEGREE_URL;
         double latitude = 23.0;
-        double expResult = 102470.508;
+        double expResult = 102470.501;
         double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
 
         //System.out.println("Exp: " + expResult);
@@ -309,7 +309,7 @@ public class UnitsOfMeasureTest {
         double distance = 1.0;
         String unitsURI = Unit_URI.DEGREE_URL;
         double latitude = 45.0;
-        double expResult = 78715.056;
+        double expResult = 78715.050;
         double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
 
         //System.out.println("Exp: " + expResult);
@@ -326,7 +326,7 @@ public class UnitsOfMeasureTest {
         double distance = 1.0;
         String unitsURI = Unit_URI.DEGREE_URL;
         double latitude = 67.0;
-        double expResult = 43496.15;
+        double expResult = 43496.147;
         double result = UnitsOfMeasure.convertToMetres(distance, unitsURI, latitude);
 
         //System.out.println("Exp: " + expResult);
