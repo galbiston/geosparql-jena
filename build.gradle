@@ -54,11 +54,7 @@ dependencies {
 
     //JUnit Testing
     ext.junitVersion = "4.12"
-    testImplementation "junit:junit:$junitVersion"
-
-    //RDF Tables
-    ext.rdfTablesVersion = "1.0.3"
-    api "io.github.galbiston:rdf-tables:$rdfTablesVersion"
+    testImplementation "junit:junit:$junitVersion"    
 
     //Expiring Map
     ext.expiringMapVersion = "1.0.2"

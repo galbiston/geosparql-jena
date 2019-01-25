@@ -18,7 +18,6 @@
 package io.github.galbiston.geosparql_jena.configuration;
 
 import io.github.galbiston.geosparql_jena.geof.topological.RelateFF;
-import io.github.galbiston.geosparql_jena.implementation.data_conversion.CSVConversion;
 import io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype;
 import io.github.galbiston.geosparql_jena.implementation.function_registration.Egenhofer;
 import io.github.galbiston.geosparql_jena.implementation.function_registration.GeometryProperty;
@@ -168,9 +167,6 @@ public class GeoSPARQLConfig {
 
             //Setup Default Cordinate Reference Systems
             SRSRegistry.setupDefaultSRS();
-
-            //Register GeometryLiteral datatypes for CSV conversion
-            CSVConversion.registerDatatypes();
 
             //Register GeometryDatatypes with the TypeMapper.
             GeometryDatatype.registerDatatypes();
