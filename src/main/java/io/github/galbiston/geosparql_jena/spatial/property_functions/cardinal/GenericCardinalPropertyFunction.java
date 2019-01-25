@@ -71,8 +71,7 @@ public abstract class GenericCardinalPropertyFunction extends GenericCardinalGeo
                 limit = DEFAULT_LIMIT;
             }
 
-            Node geometryNode = ConvertLatLon.toNode(lat, lon);
-            GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
+            GeometryWrapper geometryWrapper = ConvertLatLon.toGeometryWrapper(lat, lon);
 
             SearchEnvelope searchEnvelope = buildSearchEnvelope(geometryWrapper, indexSRSInfo);
 

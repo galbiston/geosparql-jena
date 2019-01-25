@@ -241,7 +241,7 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
     }
 
     public static final CustomCoordinateSequence createPoint(double x, double y) {
-        return new CustomCoordinateSequence(new double[]{x}, new double[]{y}, new double[1], new double[1]);
+        return new CustomCoordinateSequence(new double[]{x}, new double[]{y}, new double[]{Double.NaN}, new double[]{Double.NaN});
     }
 
     public CustomCoordinateSequence(double[] x, double[] y, double[] z, double[] m) {

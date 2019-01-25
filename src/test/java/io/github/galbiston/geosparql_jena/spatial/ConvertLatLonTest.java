@@ -191,7 +191,7 @@ public class ConvertLatLonTest {
     }
 
     /**
-     * Test of toNodeValue method, of class ConvertLatLonFF.
+     * Test of toNode method, of class ConvertLatLonFF.
      */
     @Test
     public void testConvert_Node_Node() {

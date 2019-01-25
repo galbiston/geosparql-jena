@@ -15,9 +15,10 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
+import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import static io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory.reducePrecision;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
-import static io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory.reducePrecision;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
@@ -62,6 +63,24 @@ public class ConvertLatLon {
     public static final Node toNode(Node latNode, Node lonNode) {
         NodeValue result = toNodeValue(NodeValue.makeNode(latNode), NodeValue.makeNode(lonNode));
         return result.asNode();
+    }
+
+    public static final GeometryWrapper toGeometryWrapper(Node latNode, Node lonNode) {
+
+        NodeValue latNodeValue = NodeValue.makeNode(latNode);
+        NodeValue lonNodeValue = NodeValue.makeNode(lonNode);
+
+        if (!latNodeValue.isNumber()) {
+            throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(latNodeValue.asNode()));
+        }
+
+        if (!lonNodeValue.isNumber()) {
+            throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(lonNodeValue.asNode()));
+        }
+        double lat = latNodeValue.getDouble();
+        double lon = lonNodeValue.getDouble();
+        checkBounds(lat, lon);
+        return GeometryWrapper.fromPoint(lat, lon, SRS_URI.WGS84_CRS);
     }
 
     public static final void checkBounds(double latitude, double longitude) throws DatatypeFormatException {

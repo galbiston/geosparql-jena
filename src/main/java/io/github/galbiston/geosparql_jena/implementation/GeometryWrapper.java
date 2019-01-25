@@ -98,7 +98,7 @@ public class GeometryWrapper implements Serializable {
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
 
         this.dimensionInfo = dimensionInfo;
-        this.lexicalForm = lexicalForm;
+        this.lexicalForm = lexicalForm; //If not Initialised then required by asLiteral() etc.
     }
 
     /**
@@ -129,9 +129,8 @@ public class GeometryWrapper implements Serializable {
      *
      * @param srsURI
      * @param geometryDatatypeURI
-     * @param dimensionInfo
      */
-    public GeometryWrapper(String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo) {
+    public GeometryWrapper(String srsURI, String geometryDatatypeURI) {
         this(new CustomCoordinateSequence(DimensionInfo.XY_POINT().getDimensions()), geometryDatatypeURI, srsURI);
     }
 
@@ -1019,8 +1018,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Extract Geometry Wrapper from Geometry Literal.<br>
-     * Returns null if invalid node value provided.
+     * Extract Geometry Wrapper from Geometry Literal.
      *
      * @param nodeValue
      * @param targetIndex
@@ -1034,8 +1032,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Extract Geometry Wrapper from Geometry Literal.<br>
-     * Returns null if invalid node value provided.
+     * Extract Geometry Wrapper from Geometry Literal.
      *
      * @param node
      * @param targetIndex
@@ -1053,8 +1050,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Extract Geometry Wrapper from Geometry Literal.<br>
-     * Returns null if invalid node value provided.
+     * Extract Geometry Wrapper from Geometry Literal.
      *
      * @param nodeValue
      * @return Geometry Wrapper of the Geometry Literal.
@@ -1064,8 +1060,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Extract Geometry Wrapper from Geometry Literal.<br>
-     * Returns null if invalid node value provided.
+     * Extract Geometry Wrapper from Geometry Literal.
      *
      * @param node
      * @return Geometry Wrapper of the Geometry Literal.
@@ -1075,8 +1070,8 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Extract Geometry Wrapper from Geometry Literal.<br>
-     * Returns null if invalid literal provided.
+     * Extract Geometry Wrapper from Geometry Literal. Returns null if invalid
+     * literal provided.
      *
      * @param geometryLiteral
      * @param targetIndex
@@ -1087,7 +1082,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Returns null if invalid literal provided.
+     * Extract Geometry Wrapper from Geometry Literal.
      *
      * @param geometryLiteral
      * @return Geometry Wrapper of the Geometry Literal.
@@ -1097,8 +1092,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Extract Geometry Wrapper from Geometry Literal.<br>
-     * Returns null if invalid literal provided.
+     * Extract Geometry Wrapper from Geometry Literal.
      *
      * @param lexicalForm
      * @param datatypeURI
@@ -1109,8 +1103,7 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Extract Geometry Wrapper from Geometry Literal.<br>
-     * Returns null if invalid literal provided.
+     * Extract Geometry Wrapper from Geometry Literal.
      *
      * @param lexicalForm
      * @param datatypeURI
@@ -1126,6 +1119,19 @@ public class GeometryWrapper implements Serializable {
         GeometryDatatype datatype = GeometryDatatype.get(datatypeURI);
         GeometryWrapper geometry = datatype.parse(lexicalForm, targetIndex);
         return geometry;
+    }
+
+    /**
+     * Builds a WKT Point of Geometry Wrapper.<br>
+     * This method does not use the GeometryLiteralIndex and so is best used for
+     * one of Geometry Wrappers.
+     *
+     * @return Geometry Wrapper of WKT Point.
+     */
+    public static final GeometryWrapper fromPoint(double x, double y, String srsURI) {
+        CustomCoordinateSequence coordSequence = CustomCoordinateSequence.createPoint(x, y);
+        GeometryWrapper geometryWrapper = new GeometryWrapper(coordSequence, WKTDatatype.URI, srsURI);
+        return geometryWrapper;
     }
 
     /**
