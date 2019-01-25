@@ -90,7 +90,7 @@ public class ConvertLatLonBoxTest {
     }
 
     /**
-     * Test of convert method, of class ConvertLatLonBox.
+     * Test of toNodeValue method, of class ConvertLatLonBox.
      */
     @Test
     public void testConvert_4args_1() {
@@ -100,7 +100,7 @@ public class ConvertLatLonBoxTest {
         NodeValue v3 = NodeValue.makeFloat(10.0f);
         NodeValue v4 = NodeValue.makeFloat(11.0f);
         NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0 1, 10 1, 10 11, 0 11, 0 1))", WKTDatatype.INSTANCE);
-        NodeValue result = ConvertLatLonBox.convert(v1, v2, v3, v4);
+        NodeValue result = ConvertLatLonBox.toNodeValue(v1, v2, v3, v4);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -108,7 +108,7 @@ public class ConvertLatLonBoxTest {
     }
 
     /**
-     * Test of convert method, of class ConvertLatLonBox.
+     * Test of toNodeValue method, of class ConvertLatLonBox.
      */
     @Test
     public void testConvert_4args_2() {
@@ -118,7 +118,7 @@ public class ConvertLatLonBoxTest {
         Node n3 = NodeValue.makeFloat(10.0f).asNode();
         Node n4 = NodeValue.makeFloat(11.0f).asNode();
         Node expResult = NodeFactory.createLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((0 1, 10 1, 10 11, 0 11, 0 1))", WKTDatatype.INSTANCE);
-        Node result = ConvertLatLonBox.convert(n1, n2, n3, n4);
+        Node result = ConvertLatLonBox.toNode(n1, n2, n3, n4);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

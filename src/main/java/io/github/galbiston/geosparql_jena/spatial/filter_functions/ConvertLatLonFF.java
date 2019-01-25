@@ -31,7 +31,7 @@ public class ConvertLatLonFF extends FunctionBase2 {
     public NodeValue exec(NodeValue v1, NodeValue v2) {
 
         try {
-            NodeValue result = ConvertLatLon.convert(v1, v2);
+            NodeValue result = ConvertLatLon.toNodeValue(v1, v2);
             return result;
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);

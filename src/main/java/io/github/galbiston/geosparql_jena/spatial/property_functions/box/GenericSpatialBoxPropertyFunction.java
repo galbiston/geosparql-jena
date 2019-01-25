@@ -74,7 +74,7 @@ public abstract class GenericSpatialBoxPropertyFunction extends GenericSpatialGe
                 limit = DEFAULT_LIMIT;
             }
 
-            Node geometryNode = ConvertLatLonBox.convert(latMin, lonMin, latMax, lonMax);
+            Node geometryNode = ConvertLatLonBox.toNode(latMin, lonMin, latMax, lonMax);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
             SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, indexSRSInfo);

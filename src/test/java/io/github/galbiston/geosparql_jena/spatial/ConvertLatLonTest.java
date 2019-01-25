@@ -55,7 +55,7 @@ public class ConvertLatLonTest {
     }
 
     /**
-     * Test of convert method, of class ConvertLatLon.
+     * Test of toNodeValue method, of class ConvertLatLon.
      */
     @Test
     public void testConvert_NodeValue_NodeValue() {
@@ -63,7 +63,7 @@ public class ConvertLatLonTest {
         NodeValue v1 = NodeValue.makeFloat(10.0f);
         NodeValue v2 = NodeValue.makeFloat(20.0f);
         NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10 20)", WKTDatatype.INSTANCE);
-        NodeValue result = ConvertLatLon.convert(v1, v2);
+        NodeValue result = ConvertLatLon.toNodeValue(v1, v2);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -191,7 +191,7 @@ public class ConvertLatLonTest {
     }
 
     /**
-     * Test of convert method, of class ConvertLatLonFF.
+     * Test of toNodeValue method, of class ConvertLatLonFF.
      */
     @Test
     public void testConvert_Node_Node() {
@@ -199,7 +199,7 @@ public class ConvertLatLonTest {
         Node n1 = NodeValue.makeFloat(10.0f).asNode();
         Node n2 = NodeValue.makeFloat(20.0f).asNode();
         Node expResult = NodeFactory.createLiteral("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(10 20)", WKTDatatype.INSTANCE);
-        Node result = ConvertLatLon.convert(n1, n2);
+        Node result = ConvertLatLon.toNode(n1, n2);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

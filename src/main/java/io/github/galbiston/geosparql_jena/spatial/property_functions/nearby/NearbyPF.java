@@ -88,7 +88,7 @@ public class NearbyPF extends NearbyGeomPF {
                 limit = DEFAULT_LIMIT;
             }
 
-            Node geometryNode = ConvertLatLon.convert(lat, lon);
+            Node geometryNode = ConvertLatLon.toNode(lat, lon);
             GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryNode);
 
             SearchEnvelope searchEnvelope = SearchEnvelope.build(geometryWrapper, indexSRSInfo, radius, unitsURI);

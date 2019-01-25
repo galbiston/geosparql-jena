@@ -43,7 +43,7 @@ public class ConvertLatLon {
         return ResourceFactory.createTypedLiteral(wktPoint, WKTDatatype.INSTANCE);
     }
 
-    public static final NodeValue convert(NodeValue latNodeValue, NodeValue lonNodeValue) {
+    public static final NodeValue toNodeValue(NodeValue latNodeValue, NodeValue lonNodeValue) {
         if (!latNodeValue.isNumber()) {
             throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(latNodeValue.asNode()));
         }
@@ -59,8 +59,8 @@ public class ConvertLatLon {
         return NodeValue.makeNode(wktPoint, WKTDatatype.INSTANCE);
     }
 
-    public static final Node convert(Node latNode, Node lonNode) {
-        NodeValue result = convert(NodeValue.makeNode(latNode), NodeValue.makeNode(lonNode));
+    public static final Node toNode(Node latNode, Node lonNode) {
+        NodeValue result = toNodeValue(NodeValue.makeNode(latNode), NodeValue.makeNode(lonNode));
         return result.asNode();
     }
 

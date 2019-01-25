@@ -593,7 +593,7 @@ public class GeoSPARQLOperations {
         }
         //Setup SRS registries but without indexing.
         GeoSPARQLConfig.setupNoIndex();
-        //Iterate through all statements: convert geometry literals and just add the rest.
+        //Iterate through all statements: toNodeValue geometry literals and just add the rest.
         Model outputModel = ModelFactory.createDefaultModel();
         Iterator<Statement> statementIt = inputModel.listStatements();
         while (statementIt.hasNext()) {

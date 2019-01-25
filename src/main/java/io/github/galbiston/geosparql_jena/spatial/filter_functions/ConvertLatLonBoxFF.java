@@ -30,7 +30,7 @@ public class ConvertLatLonBoxFF extends FunctionBase4 {
     @Override
     public NodeValue exec(NodeValue v1, NodeValue v2, NodeValue v3, NodeValue v4) {
         try {
-            NodeValue result = ConvertLatLonBox.convert(v1, v2, v3, v4);
+            NodeValue result = ConvertLatLonBox.toNodeValue(v1, v2, v3, v4);
             return result;
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);

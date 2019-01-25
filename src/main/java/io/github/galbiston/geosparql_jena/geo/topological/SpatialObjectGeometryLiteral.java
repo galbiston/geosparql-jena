@@ -122,7 +122,7 @@ public class SpatialObjectGeometryLiteral {
             if (graph.contains(targetSpatialObject, SpatialExtension.GEO_LAT_NODE, null) && graph.contains(targetSpatialObject, SpatialExtension.GEO_LON_NODE, null)) {
                 Node lat = graph.find(targetSpatialObject, SpatialExtension.GEO_LAT_NODE, null).next().getObject();
                 Node lon = graph.find(targetSpatialObject, SpatialExtension.GEO_LON_NODE, null).next().getObject();
-                Node latLonGeometryLiteral = ConvertLatLon.convert(lat, lon);
+                Node latLonGeometryLiteral = ConvertLatLon.toNode(lat, lon);
                 return new SpatialObjectGeometryLiteral(targetSpatialObject, latLonGeometryLiteral);
             }
         }

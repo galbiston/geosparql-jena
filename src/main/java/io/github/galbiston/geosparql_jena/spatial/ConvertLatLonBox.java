@@ -44,7 +44,7 @@ public class ConvertLatLonBox {
         return ResourceFactory.createTypedLiteral(wktPolygon, WKTDatatype.INSTANCE);
     }
 
-    public static final NodeValue convert(NodeValue v1, NodeValue v2, NodeValue v3, NodeValue v4) {
+    public static final NodeValue toNodeValue(NodeValue v1, NodeValue v2, NodeValue v3, NodeValue v4) {
         if (!v1.isNumber()) {
             throw new DatatypeFormatException("Not a number: " + FmtUtils.stringForNode(v1.asNode()));
         }
@@ -70,8 +70,8 @@ public class ConvertLatLonBox {
         return NodeValue.makeNode(wktPolygon, WKTDatatype.INSTANCE);
     }
 
-    public static final Node convert(Node n1, Node n2, Node n3, Node n4) {
-        NodeValue result = convert(NodeValue.makeNode(n1), NodeValue.makeNode(n2), NodeValue.makeNode(n3), NodeValue.makeNode(n4));
+    public static final Node toNode(Node n1, Node n2, Node n3, Node n4) {
+        NodeValue result = toNodeValue(NodeValue.makeNode(n1), NodeValue.makeNode(n2), NodeValue.makeNode(n3), NodeValue.makeNode(n4));
         return result.asNode();
     }
 }
