@@ -328,20 +328,21 @@ Function Name | Description
 ------------- | -------------
 *?wktString* **spatialF:convertLatLon**(*?lat*, *?lon*) | Converts Lat and Lon double values into WKT string of a Point with WGS84 SRS.
 *?wktString* **spatialF:convertLatLonBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax*) | Converts Lat and Lon double values into WKT string of a Polygon forming a box with WGS84 SRS.
-*?boolean* **spatialF:nearby**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
-*?boolean* **spatialF:withinCircle**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
+*?boolean* **spatialF:nearby**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True, if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
+*?boolean* **spatialF:withinCircle**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True, if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
 *?distance* **spatialF:greatCircle**(*?lat1*, *?lon1*, *?lat2*, *?lon2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Lat/Lon Points in distance *units*.
-*?distance* **spatialF:greatCircleGeom**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Geometry Literals in distance *units*. See `http://www.opengis.net/def/function/geosparql/distance` in GeoSPARQL for Euclidean distance.
+*?distance* **spatialF:greatCircleGeom**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Geometry Literals in distance *units*. Use `http://www.opengis.net/def/function/geosparql/distance` from GeoSPARQL standard for Euclidean distance.
 *?distance* **spatialF:distance**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Distance between two Geometry Literals in distance *units*. Chooses distance measure based on SRS type. Great Circle distance for Geographic SRS and Euclidean otherwise.
 
 ### Property Functions
 These property functions are available in the `http://jena.apache.org/spatial#` namespace and here use the prefix `spatial`. 
 This is the same namespace as the `jena-spatial` functions utilise and these form direct replacements.
 The subject `Feature` may be bound, to test the pattern is true, or unbound, to find all cases the pattern is true.
-These methods require a `Spatial Index` to be setup for the dataset.
+These property functions require a `Spatial Index` to be setup for the dataset.
 
 The optional *?limit* parameter restricts the number of results returned. The default value is -1 which returns all results. No guarantee is given for ordering of results.
 The optional *?unitsURI* parameter specifies the units of a distance. The default value is kilometres through the string or resource `http://www.opengis.net/def/uom/OGC/1.0/kilometre`.
+
 Function Name | Description
 ------------- | -------------
 *?feature* **spatial:intersectBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax* [,*?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
