@@ -60,7 +60,7 @@ Therefore, the memory usage will grow during query execution and then recede as 
 All the _indexes_ support concurrency and can be set to a maximum size or allowed to increase capacity as required.
 
 * _Geometry Literal_: Geometry objects following de-serialisation from `Geometry Literal`.
-* _Geometry Transform_: Geometry objects resulting from coordinate transformations.
+* _Geometry Transform_: Geometry objects resulting from coordinate transformations between spatial reference systems.
 * _Query Rewrite_: results of spatial relations between `Feature` and `Geometry` spatial objects.
 
 Testing has found up to 20% improvement in query completion durations using the indexes.
@@ -72,11 +72,11 @@ The _indexes_ can be configured by size, retention duration and frequency of cle
 
 * Indexes set to remove objects not used after 5 seconds: `GeoSPARQLConfig.setupMemoryIndexExpiry(5000, 5000, 5000)`
 
-* No indexes setup: `GeoSPARQLConfig.setupNoIndex()`
+* No indexes setup (Query rewrite still performed but results not stored) : `GeoSPARQLConfig.setupNoIndex()`
 
-* No indexes and no query rewrite setup: `GeoSPARQLConfig.setupNoIndex(false)`
+* No indexes and no query rewriting: `GeoSPARQLConfig.setupNoIndex(false)`
 
-* Reset indexes: `GeoSPARQLConfig.reset()`
+* Reset indexes and other stored data: `GeoSPARQLConfig.reset()`
 
 A variety of configuration methods are provided in `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig`.
 Caching of frequently used but small quantity data is also applied in several _registries_, e.g. coordinate reference systems and mathematical transformations.
@@ -255,6 +255,16 @@ e.g. FeatureA is bound in a query on a dataset only containing FeatureA and Geom
 Therefore, filtering using `FILTER(!sameTerm(?subj, ?obj))` etc. may be needed in some cases.
 The query rewrite functionality can be switched off in the library configuration, see `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig`.
 
+Each dataset is assigned a Query Rewrite Index to store the results of previous tests.
+There is the potential that relations are tested multiple times in a query (i.e. Feature-Feature, Feature-Geometry, Geometry-Geometry, Geometry-Feature).
+Therefore, it is useful to retain the results for at least a short period of time.
+
+Iterating through all combinations of spatial relations and _n_ geometry literals in a dataset will produce 27_n_^2 results.
+Control is given on a dataset basis to allow choice in when and how storage of rewrite results is applied, e.g. store all found results on a small dataset but on demand for a large dataset.
+
+This index can be configured on a global and individual dataset basis for the maximum size and duration until unused items are removed.
+Query rewriting can be switched on independently of the indexes, i.e. query rewriting can be performed but an index is configured to not store the result.
+
 ### Dataset Conversion
 Methods to convert datasets between serialisations and spatial/coordinate reference systems are available in:
 `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations`
@@ -331,13 +341,14 @@ Cardinal Function Name | Description
 
 ### Spatial Index
 A Spatial Index can be created to improve searching of a dataset.
-The Spatial Index is unique to the dataset and cannot be shared.
+The Spatial Index is expected to be unique to the dataset and should not be shared between datasets.
 Once built the Spatial Index cannot have additional items added to it.
 
 A Spatial Index is required for the `jena-spatial` property functions and is optional for the GeoSPARQL spatial relations.
 Only a single SRS can be used for a Spatial Index and it is recommended that datasets are converted to a single SRS, see `GeoSPARQLOperations`.
 
-The methods for building, loading and saving Spatial Indexes are provided in `io.github.galbiston.geosparql_jena.spatial.SpatialIndex`.
+Setting up a Spatial Index can be done through `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig`.
+Additional methods for building, loading and saving Spatial Indexes are provided in `io.github.galbiston.geosparql_jena.spatial.SpatialIndex`.
 
 ### Units URI
 Spatial/coordinate reference systems use a variety of measuring systems for defining distances.
