@@ -114,6 +114,10 @@ More information on SPARQL querying using Apache Jena can be found on their webs
 If your dataset needs to be separate from your application and accessed over HTTP then you probably need the GeoSPARQL Fuseki project (https://github.com/galbiston/geosparql-fuseki).
 The GeoSPARQL functionality needs to be setup in the application or Fuseki server where the dataset is located.
 
+It is **recommended** that `hasDefaultGeometry` properties are included in the dataset to access all functionality.
+It is **necessary** that `SpatialObject` classes are asserted or inferred (i.e. a reasoner with the GeoSPARQL schema is applied) in the dataset.
+Methods to prepare a dataset can be found in `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations`.
+
 ### API
 The library can be used as an API in Java.
 The main class to handle geometries and their spatial relations is the `GeometryWrapper`.
@@ -132,7 +136,7 @@ There is overlap between spatial relation families so repeated methods are not s
 
 * Geometry Property: `boolean isEmpty = geometryWrapper.isEmpty();`
 
-The GeoSPARQL standard specifies that WKT Geometry Literals without an SRS URI are defaulted to CRS84 "http://www.opengis.net/def/crs/OGC/1.3/CRS84".
+The GeoSPARQL standard specifies that WKT Geometry Literals without an SRS URI are defaulted to CRS84 `http://www.opengis.net/def/crs/OGC/1.3/CRS84`.
 
 ## Key Dependencies
 
@@ -253,9 +257,105 @@ The query rewrite functionality can be switched off in the library configuration
 
 ### Dataset Conversion
 Methods to convert datasets between serialisations and spatial/coordinate reference systems are available in:
-`io.github.galbiston.geosparql_jena.implementation.data_conversion.ConvertData`
+`io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations`
 
 These conversions can be applied to files, folders and Jena Models.
+
+### Jena Spatial/WGS84 Geo Predicates
+The `jena-spatial` module contains several SPARQL functions for querying datasets using the WGS84 Geo predicates for latitude (`http://www.w3.org/2003/01/geo/wgs84_pos#lat`) and longitude (`http://www.w3.org/2003/01/geo/wgs84_pos#long`).
+These `jena-spatial` functions are supported for both Geo predicates and Geometry Literals, i.e. a GeoSPARQL dataset.
+Additional SPARQL filter functions have been provided to convert Geo predicate properties into WKT strings and calculate Great Circle and Euclidean distances.
+
+#### Supported Features
+The Geo predicate form of spatial representation is restricted to only 'Point' shapes in the WGS84 spatial/coordinate reference system.
+The Geo predicates are properties of the `Feature` and do not use the properties and structure of the GeoSPARQL standard, including Geometry Literals.
+Methods are available to convert datasets from Geo predicates to GeoSPARQL structure, see: `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations`
+
+The spatial relations and query re-writing of GeoSPARQL outlined previously has been implemented for Geo predicates.
+However, only certain spatial relations are valid for `Point` to `Point` relationships.
+Refer to pages 8-10 of 11-052r4 GeoSPARQL standard for more details.
+To access relationships between other shapes requires conversion to the GeoSPARQL structure.
+Alternatively, Geo predicates can be converted to Geometry Literals in query and then used with the GeoSPARQL filter functions.
+
+Datasets can contain both Geo predicates and Geometry Literals without interference.
+However, a dataset containing both types will only examine those `Features` which have Geometry Literals for spatial relations, i.e. the check for Geo predicates is a fallback when Geometry Literals aren't found.
+Therefore, it is **not** recommended to insert new Geo predicate properties after a dataset has been converted to GeoSPARQL structure.
+
+#### Filter Functions
+These filter functions are available in the `http://jena.apache.org/function/spatial#` namespace and here use the prefix `spatialF`.
+
+Function Name | Description
+------------- | -------------
+*?wktString* **spatialF:convertLatLon**(*?lat*, *?lon*) | Converts Lat and Lon double values into WKT string of a Point with WGS84 SRS.
+*?wktString* **spatialF:convertLatLonBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax*) | Converts Lat and Lon double values into WKT string of a Polygon forming a box with WGS84 SRS.
+*?boolean* **spatialF:nearby**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
+*?boolean* **spatialF:withinCircle**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
+*?distance* **spatialF:greatCircle**(*?lat1*, *?lon1*, *?lat2*, *?lon2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Lat/Lon Points in distance *units*.
+*?distance* **spatialF:greatCircleGeom**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Geometry Literals in distance *units*. See `http://www.opengis.net/def/function/geosparql/distance` in GeoSPARQL for Euclidean distance.
+*?distance* **spatialF:distance**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Distance between two Geometry Literals in distance *units*. Chooses distance measure based on SRS type. Great Circle distance for Geographic SRS and Euclidean otherwise.
+
+#### Property Functions
+These property functions are available in the `http://jena.apache.org/spatial#` namespace and here use the prefix `spatial`. 
+This is the same namespace as the `jena-spatial` functions utilise and these form direct replacements.
+The subject `Feature` may be bound, to test the pattern is true, or unbound, to find all cases the pattern is true.
+These methods require a `Spatial Index` to be setup for the dataset, see below.
+
+The optional *?limit* parameter restricts the number of results returned. The default value is -1 which returns all results. No guarantee is given for ordering of results.
+The optional *?unitsURI* parameter specifies the units of a distance, see section below. The default value is kilometres.
+Function Name | Description
+------------- | -------------
+*?feature* **spatial:intersectBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax* [,*?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
+*?feature* **spatial:intersectBoxGeom**(*?geomLit1*, *?geomLit2* [,*?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
+*?feature* **spatial:withinBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax* [,*?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
+*?feature* **spatial:withinBoxGeom**(*?geomLit1*, *?geomLit2* [,*?limit*]) | Find *features* that are within the provided box, up to the *limit*.
+*?feature* **spatial:nearby**(*?lat*, *?lon*, *?radius* [, *?unitsURI* [,*?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
+*?feature* **spatial:nearbyGeom**(*?geomLit*, *?radius*, [, *?unitsURI* [,*?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
+*?feature* **spatial:withinCircle**(*?lat*, *?lon*, *?radius* [, *?unitsURI* [,*?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
+*?feature* **spatial:withinCircleGeom**(*?geomLit*, *?radius*, [, *?unitsURI* [,*?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
+
+The Cardinal Functions find all `Features` that are present in the specified direction.
+In Geographic spatial reference systems (SRS), e.g. WGS84 and CRS84, the East/West directions wrap around.
+Therefore, a search is made from the shape's edge for up to half the range of the SRS (i.e. 180 degrees in WGS84) and will continue across the East/West boundary if necessary.
+In other SRS, e.g. Projected onto a flat plane, the East/West check is made from the shape's edge to the farthest limit of the SRS range, i.e. there is no wrap around.  
+
+Cardinal Function Name | Description
+------------- | -------------
+*?feature* **spatial:north**(*?lat*, *?lon*, [,*?limit*]) | Find *features* that are North of the Lat/Lon point (point to +90 degrees), up to the *limit*.
+*?feature* **spatial:northGeom**(*?geomLit*, [,*?limit*]) | Find *features* that are North of the Geometry Literal, up to the *limit*.
+*?feature* **spatial:south**(*?lat*, *?lon*, [,*?limit*]) | Find *features* that are South of the Lat/Lon point (point to -90 degrees), up to the *limit*.
+*?feature* **spatial:southGeom**(*?geomLit*, [,*?limit*]) | Find *features* that are South of the Geometry Literal, up to the *limit*.
+*?feature* **spatial:east**(*?lat*, *?lon*, [,*?limit*]) | Find *features* that are East of the Lat/Lon point (point plus 180 degrees longitude, wrapping round), up to the *limit*.
+*?feature* **spatial:eastGeom**(*?geomLit*, [,*?limit*]) | Find *features* that are East of the Geometry Literal, up to the *limit*.
+*?feature* **spatial:west**(*?lat*, *?lon*, [,*?limit*]) | Find *features* that are West of the Lat/Lon point (point minus 180 degrees longitude, wrapping round), up to the *limit*.
+*?feature* **spatial:westGeom**(*?geomLit*, [,*?limit*]) | Find *features* that are West of the Geometry Literal, up to the *limit*.
+
+### Spatial Index
+A Spatial Index can be created to improve searching of a dataset.
+The Spatial Index is unique to the dataset and cannot be shared.
+Once built the Spatial Index cannot have additional items added to it.
+
+A Spatial Index is required for the `jena-spatial` property functions and is optional for the GeoSPARQL spatial relations.
+Only a single SRS can be used for a Spatial Index and it is recommended that datasets are converted to a single SRS, see `GeoSPARQLOperations`.
+
+The methods for building, loading and saving Spatial Indexes are provided in `io.github.galbiston.geosparql_jena.spatial.SpatialIndex`.
+
+### Units URI
+Spatial/coordinate reference systems use a variety of measuring systems for defining distances.
+These can be specified using a URI identifier, as either URL or URN, with conversion undertaken automatically as required.
+It should be noted that there is error inherent in spatial reference systems and some variation in values may occur between different systems.
+
+The following table gives some examples of units that are supported (additonal units can be added to the `UnitsRegistry` using the `javax.measure.Unit` API.
+These URI are all in the namespace `http://www.opengis.net/def/uom/OGC/1.0/` and here use the prefix `units`.
+
+URI | Description
+---- | ----
+units:kilometre or units:kilometer | Kilometres
+units:metre or units:meter | Metres
+units:mile or units:statuteMile | Miles
+units:degree | Degrees
+units:radian | Radians
+
+Full listing of default Units can be found in `io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI`.
 
 ## Future Work
 
