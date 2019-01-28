@@ -38,7 +38,7 @@ import org.opengis.util.FactoryException;
  */
 public class GeometryTransformIndex {
 
-    private static boolean INDEX_ACTIVE = true;
+    private static boolean INDEX_ACTIVE = false;
     private static final String GEOMETRY_TRANSFORM_LABEL = "Geometry Transform";
     private static ExpiringMap<String, GeometryWrapper> GEOMETRY_TRANSFORM_INDEX = new ExpiringMap<>(GEOMETRY_TRANSFORM_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
 

@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class GeometryLiteralIndex {
 
-    private static boolean INDEX_ACTIVE = true;
+    private static boolean INDEX_ACTIVE = false;
     private static final String PRIMARY_INDEX_LABEL = "Primary Geometry Literal Index";
     private static final String SECONDARY_INDEX_LABEL = "Secondary Geometry Literal Index";
     private static ExpiringMap<String, GeometryWrapper> PRIMARY_INDEX = new ExpiringMap<>(PRIMARY_INDEX_LABEL, UNLIMITED_MAP, MAP_EXPIRY_INTERVAL);
@@ -60,23 +60,18 @@ public class GeometryLiteralIndex {
 
         if (INDEX_ACTIVE) {
 
-            try {
-                if (index.containsKey(geometryLiteral)) {
-                    geometryWrapper = index.get(geometryLiteral);
+            if (index.containsKey(geometryLiteral)) {
+                geometryWrapper = index.get(geometryLiteral);
+            } else {
+                if (otherIndex.containsKey(geometryLiteral)) {
+                    geometryWrapper = otherIndex.get(geometryLiteral);
                 } else {
-                    if (otherIndex.containsKey(geometryLiteral)) {
-                        geometryWrapper = otherIndex.get(geometryLiteral);
-                    } else {
-                        geometryWrapper = geometryDatatype.read(geometryLiteral);
-                    }
-                    index.put(geometryLiteral, geometryWrapper);
-
+                    geometryWrapper = geometryDatatype.read(geometryLiteral);
                 }
-
-                return geometryWrapper;
-            } catch (NullPointerException ex) {
-                //Catch NullPointerException and fall through to default action.
+                index.put(geometryLiteral, geometryWrapper);
             }
+
+            return geometryWrapper;
         }
 
         return geometryDatatype.read(geometryLiteral);

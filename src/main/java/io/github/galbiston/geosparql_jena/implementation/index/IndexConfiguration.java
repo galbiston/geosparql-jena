@@ -51,6 +51,7 @@ public class IndexConfiguration {
     }
 
     public static void setupNoIndex() {
+        IndexConfiguration.stopIndexes();
         GeometryLiteralIndex.setMaxSize(NO_MAP);
         GeometryTransformIndex.setMaxSize(NO_MAP);
         QueryRewriteIndex.setMaxSize(NO_MAP);
@@ -60,6 +61,19 @@ public class IndexConfiguration {
         GeometryLiteralIndex.setMaxSize(UNLIMITED_MAP);
         GeometryTransformIndex.setMaxSize(UNLIMITED_MAP);
         QueryRewriteIndex.setMaxSize(UNLIMITED_MAP);
+        IndexConfiguration.startIndexes();
+    }
+
+    public static void startIndexes() {
+        GeometryLiteralIndex.setIndexActive(true);
+        GeometryTransformIndex.setIndexActive(true);
+        //QueryRewriteIndex are on a Dataset basis.
+    }
+
+    public static void stopIndexes() {
+        GeometryLiteralIndex.setIndexActive(false);
+        GeometryTransformIndex.setIndexActive(false);
+        //QueryRewriteIndex are on a Dataset basis.
     }
 
     /**
