@@ -301,7 +301,7 @@ units:radian | Radians
 Full listing of default Units can be found in `io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI`.
 
 
-## Jena Spatial/WGS84 Geo Predicates
+## Apache Jena Spatial Functions/WGS84 Geo Predicates
 The `jena-spatial` module contains several SPARQL functions for querying datasets using the WGS84 Geo predicates for latitude (`http://www.w3.org/2003/01/geo/wgs84_pos#lat`) and longitude (`http://www.w3.org/2003/01/geo/wgs84_pos#long`).
 These `jena-spatial` functions are supported for both Geo predicates and Geometry Literals, i.e. a GeoSPARQL dataset.
 Additional SPARQL filter functions have been provided to convert Geo predicate properties into WKT strings and calculate Great Circle and Euclidean distances.
