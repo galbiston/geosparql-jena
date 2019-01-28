@@ -269,7 +269,7 @@ Query rewriting can be switched on independently of the indexes, i.e. query rewr
 Methods to convert datasets between serialisations and spatial/coordinate reference systems are available in:
 `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations`
 
-These conversions can be applied to files, folders and Jena Models.
+These conversions can be applied to files, folders and Jena Models or Datasets.
 
 ### Jena Spatial/WGS84 Geo Predicates
 The `jena-spatial` module contains several SPARQL functions for querying datasets using the WGS84 Geo predicates for latitude (`http://www.w3.org/2003/01/geo/wgs84_pos#lat`) and longitude (`http://www.w3.org/2003/01/geo/wgs84_pos#long`).
