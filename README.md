@@ -256,7 +256,7 @@ Therefore, filtering using `FILTER(!sameTerm(?subj, ?obj))` etc. may be needed i
 The query rewrite functionality can be switched off in the library configuration, see `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig`.
 
 Each dataset is assigned a Query Rewrite Index to store the results of previous tests.
-There is the potential that relations are tested multiple times in a query (i.e. _Feature-Feature_ , _Feature-Geometry_ , _Geometry-Geometry_ , _Geometry-Feature_ ).
+There is the potential that relations are tested multiple times in a query (i.e. *Feature-Feature*, *Feature-Geometry*, *Geometry-Geometry*, *Geometry-Feature*).
 Therefore, it is useful to retain the results for at least a short period of time.
 
 Iterating through all combinations of spatial relations and _n_ geometry literals in a dataset will produce 27*n*^2 results.
