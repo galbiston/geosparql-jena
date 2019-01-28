@@ -50,26 +50,39 @@ public class IndexConfiguration {
         }
     }
 
-    public static void setupNoIndex() {
+    /**
+     * Indexes are cleared, stopped and set to minimum storage size.
+     */
+    private static void setupNoIndex() {
+        IndexConfiguration.resetIndexes();
         IndexConfiguration.stopIndexes();
         GeometryLiteralIndex.setMaxSize(NO_MAP);
         GeometryTransformIndex.setMaxSize(NO_MAP);
         QueryRewriteIndex.setMaxSize(NO_MAP);
     }
 
-    public static void setupMemoryIndex() {
+    /**
+     * Indexes are set to unlimited storage and started.
+     */
+    private static void setupMemoryIndex() {
         GeometryLiteralIndex.setMaxSize(UNLIMITED_MAP);
         GeometryTransformIndex.setMaxSize(UNLIMITED_MAP);
         QueryRewriteIndex.setMaxSize(UNLIMITED_MAP);
         IndexConfiguration.startIndexes();
     }
 
+    /**
+     * Indexes are made active and started.
+     */
     public static void startIndexes() {
         GeometryLiteralIndex.setIndexActive(true);
         GeometryTransformIndex.setIndexActive(true);
         //QueryRewriteIndex are on a Dataset basis.
     }
 
+    /**
+     * Indexes are made active and stopped.
+     */
     public static void stopIndexes() {
         GeometryLiteralIndex.setIndexActive(false);
         GeometryTransformIndex.setIndexActive(false);
@@ -77,8 +90,8 @@ public class IndexConfiguration {
     }
 
     /**
-     * Set the maximum size of the indexes and switch spatial index on/off. Zero
-     * for no index and -1 for unlimited size.
+     * Set the maximum size of the indexes.<br>
+     * Zero for no index and -1 for unlimited size.
      *
      * @param geometryLiteralIndex
      * @param geometryTransformIndex
@@ -101,6 +114,12 @@ public class IndexConfiguration {
         GeometryLiteralIndex.setExpiry(geometryLiteralIndex);
         GeometryTransformIndex.setExpiry(geometryTransformIndex);
         QueryRewriteIndex.setExpiry(queryRewriteIndex);
+    }
+
+    public static final void resetIndexes() {
+        GeometryLiteralIndex.clear();
+        GeometryTransformIndex.clear();
+        //QueryRewriteIndex are on a Dataset basis.
     }
 
     public static final void resetIndexesAndRegistries() {
