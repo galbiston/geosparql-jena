@@ -259,7 +259,7 @@ Each dataset is assigned a Query Rewrite Index to store the results of previous 
 There is the potential that relations are tested multiple times in a query (i.e. _Feature-Feature_ , _Feature-Geometry_ , _Geometry-Geometry_ , _Geometry-Feature_ ).
 Therefore, it is useful to retain the results for at least a short period of time.
 
-Iterating through all combinations of spatial relations and _n_ geometry literals in a dataset will produce 27_n_^2 results.
+Iterating through all combinations of spatial relations and _n_ geometry literals in a dataset will produce 27*n*^2 results.
 Control is given on a dataset basis to allow choice in when and how storage of rewrite results is applied, e.g. store all found results on a small dataset but on demand for a large dataset.
 
 This index can be configured on a global and individual dataset basis for the maximum size and duration until unused items are removed.
