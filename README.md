@@ -43,7 +43,7 @@ GeoSPARQL Jena can be accessed as a library using Maven etc. from Maven Central.
 <dependency>
     <groupId>io.github.galbiston</groupId>
     <artifactId>geosparql-jena</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -314,12 +314,27 @@ Methods are available to convert datasets from Geo predicates to GeoSPARQL struc
 The spatial relations and query re-writing of GeoSPARQL outlined previously has been implemented for Geo predicates.
 However, only certain spatial relations are valid for `Point` to `Point` relationships.
 Refer to pages 8-10 of 11-052r4 GeoSPARQL standard for more details.
-To access relationships between other shapes requires conversion to the GeoSPARQL structure.
-Alternatively, Geo predicates can be converted to Geometry Literals in query and then used with the GeoSPARQL filter functions.
+
+Geo predicates can be converted to Geometry Literals in query and then used with the GeoSPARQL filter functions.
+
+```
+    ?subj wgs:lat ?lat .
+    ?subj wgs:long ?lon .
+    BIND(spatialF:convertLatLon(?lat, ?lon) as ?point) .
+    BIND("POLYGON((...))"^^http://www.opengis.net/ont/geosparql#wktLiteral AS ?box) .
+    FILTER(geof:sfContains(?box, ?point))
+```
+
+Alternatively, utilising more shapes, relations and spatial reference systems can be achieved by converting the dataset to the GeoSPARQL structure.
+
+```
+    BIND("POLYGON((...))"^^http://www.opengis.net/ont/geosparql#wktLiteral AS ?box) .
+    ?box geof:sfContain ?subj
+```
 
 Datasets can contain both Geo predicates and Geometry Literals without interference.
 However, a dataset containing both types will only examine those `Features` which have Geometry Literals for spatial relations, i.e. the check for Geo predicates is a fallback when Geometry Literals aren't found.
-Therefore, it is **not** recommended to insert new Geo predicate properties after a dataset has been converted to GeoSPARQL structure.
+Therefore, it is **not** recommended to insert new Geo predicate properties after a dataset has been converted to GeoSPARQL structure (unless corresponding Geometry and Geometry Literals are included).
 
 ### Filter Functions
 These filter functions are available in the `http://jena.apache.org/function/spatial#` namespace and here use the prefix `spatialF`.
@@ -345,14 +360,14 @@ The optional *?unitsURI* parameter specifies the units of a distance. The defaul
 
 Function Name | Description
 ------------- | -------------
-*?feature* **spatial:intersectBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax* [,*?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
-*?feature* **spatial:intersectBoxGeom**(*?geomLit1*, *?geomLit2* [,*?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
-*?feature* **spatial:withinBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax* [,*?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
-*?feature* **spatial:withinBoxGeom**(*?geomLit1*, *?geomLit2* [,*?limit*]) | Find *features* that are within the provided box, up to the *limit*.
-*?feature* **spatial:nearby**(*?lat*, *?lon*, *?radius* [, *?unitsURI* [,*?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
-*?feature* **spatial:nearbyGeom**(*?geomLit*, *?radius*, [, *?unitsURI* [,*?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
-*?feature* **spatial:withinCircle**(*?lat*, *?lon*, *?radius* [, *?unitsURI* [,*?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
-*?feature* **spatial:withinCircleGeom**(*?geomLit*, *?radius*, [, *?unitsURI* [,*?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
+*?feature* **spatial:intersectBox**(*?latMin* *?lonMin* *?latMax* *?lonMax* [ *?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
+*?feature* **spatial:intersectBoxGeom**(*?geomLit1* *?geomLit2* [ *?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
+*?feature* **spatial:withinBox**(*?latMin* *?lonMin* *?latMax* *?lonMax* [ *?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
+*?feature* **spatial:withinBoxGeom**(*?geomLit1* *?geomLit2* [ *?limit*]) | Find *features* that are within the provided box, up to the *limit*.
+*?feature* **spatial:nearby**(*?lat* *?lon* *?radius* [ *?unitsURI* [ *?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
+*?feature* **spatial:nearbyGeom**(*?geomLit* *?radius* [ *?unitsURI* [ *?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
+*?feature* **spatial:withinCircle**(*?lat* *?lon* *?radius* [ *?unitsURI* [ *?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
+*?feature* **spatial:withinCircleGeom**(*?geomLit* *?radius* [ *?unitsURI* [ *?limit*]]) | Find *features* that are within *radius* of the *distance* units, up to the *limit*.
 
 The Cardinal Functions find all `Features` that are present in the specified direction.
 In Geographic spatial reference systems (SRS), e.g. WGS84 and CRS84, the East/West directions wrap around.
@@ -361,14 +376,14 @@ In other SRS, e.g. Projected onto a flat plane, the East/West check is made from
 
 Cardinal Function Name | Description
 ------------- | -------------
-*?feature* **spatial:north**(*?lat*, *?lon*, [,*?limit*]) | Find *features* that are North of the Lat/Lon point (point to +90 degrees), up to the *limit*.
-*?feature* **spatial:northGeom**(*?geomLit*, [,*?limit*]) | Find *features* that are North of the Geometry Literal, up to the *limit*.
-*?feature* **spatial:south**(*?lat*, *?lon*, [,*?limit*]) | Find *features* that are South of the Lat/Lon point (point to -90 degrees), up to the *limit*.
-*?feature* **spatial:southGeom**(*?geomLit*, [,*?limit*]) | Find *features* that are South of the Geometry Literal, up to the *limit*.
-*?feature* **spatial:east**(*?lat*, *?lon*, [,*?limit*]) | Find *features* that are East of the Lat/Lon point (point plus 180 degrees longitude, wrapping round), up to the *limit*.
-*?feature* **spatial:eastGeom**(*?geomLit*, [,*?limit*]) | Find *features* that are East of the Geometry Literal, up to the *limit*.
-*?feature* **spatial:west**(*?lat*, *?lon*, [,*?limit*]) | Find *features* that are West of the Lat/Lon point (point minus 180 degrees longitude, wrapping round), up to the *limit*.
-*?feature* **spatial:westGeom**(*?geomLit*, [,*?limit*]) | Find *features* that are West of the Geometry Literal, up to the *limit*.
+*?feature* **spatial:north**(*?lat* *?lon* [ *?limit*]) | Find *features* that are North of the Lat/Lon point (point to +90 degrees), up to the *limit*.
+*?feature* **spatial:northGeom**(*?geomLit* [ *?limit*]) | Find *features* that are North of the Geometry Literal, up to the *limit*.
+*?feature* **spatial:south**(*?lat* *?lon* [ *?limit*]) | Find *features* that are South of the Lat/Lon point (point to -90 degrees), up to the *limit*.
+*?feature* **spatial:southGeom**(*?geomLit* [ *?limit*]) | Find *features* that are South of the Geometry Literal, up to the *limit*.
+*?feature* **spatial:east**(*?lat* *?lon* [ *?limit*]) | Find *features* that are East of the Lat/Lon point (point plus 180 degrees longitude, wrapping round), up to the *limit*.
+*?feature* **spatial:eastGeom**(*?geomLit* [ *?limit*]) | Find *features* that are East of the Geometry Literal, up to the *limit*.
+*?feature* **spatial:west**(*?lat* *?lon* [ *?limit*]) | Find *features* that are West of the Lat/Lon point (point minus 180 degrees longitude, wrapping round), up to the *limit*.
+*?feature* **spatial:westGeom**(*?geomLit* [ *?limit*]) | Find *features* that are West of the Geometry Literal, up to the *limit*.
 
 ## Future Work
 
