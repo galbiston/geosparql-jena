@@ -57,6 +57,10 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
     @Override
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
 
+        if (!SpatialIndex.isDefined(execCxt)) {
+            throw new ExprEvalException("Dataset has not been setup with a SpatialIndex");
+        }
+
         spatialIndex = SpatialIndex.retrieve(execCxt);
         spatialArguments = extractObjectArguments(predicate, object, spatialIndex.getSrsInfo());
         return search(binding, execCxt, subject, spatialArguments.limit);
