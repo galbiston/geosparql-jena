@@ -78,6 +78,33 @@ public class WKTLiteralFactory {
         return ResourceFactory.createTypedLiteral(tidyURI + "LINESTRING(" + reducePrecision(xMin) + " " + reducePrecision(yMin) + ", " + reducePrecision(xMax) + " " + reducePrecision(yMax) + ")", WKTDatatype.INSTANCE);
     }
 
+    /**
+     * WKT Polygon box from two points.
+     *
+     * @param xMin
+     * @param yMin
+     * @param xMax
+     * @param yMax
+     * @return WKT LineString in default WKT CRS84.
+     */
+    public static final Literal createBox(Double xMin, Double yMin, Double xMax, Double yMax) {
+        return createLineString(xMin, yMin, xMax, yMax, "");
+    }
+
+    /**
+     * WKT Polygon box from two points with no check for value range or order.
+     *
+     * @param xMin
+     * @param yMin
+     * @param xMax
+     * @param yMax
+     * @return WKT LineString with SRS URI.
+     */
+    public static final Literal createBox(Double xMin, Double yMin, Double xMax, Double yMax, String srsURI) {
+        String tidyURI = tidySrsURI(srsURI);
+        return ResourceFactory.createTypedLiteral(tidyURI + "POLYGON((" + reducePrecision(xMin) + " " + reducePrecision(yMin) + ", " + reducePrecision(xMax) + " " + reducePrecision(yMin) + ", " + reducePrecision(xMax) + " " + reducePrecision(yMax) + ", " + reducePrecision(xMin) + " " + reducePrecision(yMax) + ", " + reducePrecision(xMin) + " " + reducePrecision(yMin) + "))", WKTDatatype.INSTANCE);
+    }
+
     private static String tidySrsURI(String srsURI) {
         String tidyURI;
         if (!srsURI.isEmpty()) {

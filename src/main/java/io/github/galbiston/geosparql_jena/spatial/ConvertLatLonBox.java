@@ -15,13 +15,11 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
-import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
+import io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
-import static io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory.reducePrecision;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.util.FmtUtils;
 
@@ -31,17 +29,15 @@ import org.apache.jena.sparql.util.FmtUtils;
  */
 public class ConvertLatLonBox {
 
-    private static final String PREFIX = "<" + SRS_URI.WGS84_CRS + "> POLYGON((";
-
     public static final String toWKT(double latMin, double lonMin, double latMax, double lonMax) {
-        ConvertLatLon.checkBounds(latMin, lonMin);
-        ConvertLatLon.checkBounds(latMax, lonMax);
-        return PREFIX + reducePrecision(latMin) + " " + reducePrecision(lonMin) + ", " + reducePrecision(latMax) + " " + reducePrecision(lonMin) + ", " + reducePrecision(latMax) + " " + reducePrecision(lonMax) + ", " + reducePrecision(latMin) + " " + reducePrecision(lonMax) + ", " + reducePrecision(latMin) + " " + reducePrecision(lonMin) + "))";
+        Literal wktBox = toLiteral(latMin, lonMin, latMax, lonMax);
+        return wktBox.getLexicalForm();
     }
 
     public static final Literal toLiteral(double latMin, double lonMin, double latMax, double lonMax) {
-        String wktPolygon = toWKT(latMin, lonMin, latMax, lonMax);
-        return ResourceFactory.createTypedLiteral(wktPolygon, WKTDatatype.INSTANCE);
+        ConvertLatLon.checkBounds(latMin, lonMin);
+        ConvertLatLon.checkBounds(latMax, lonMax);
+        return WKTLiteralFactory.createBox(latMin, lonMin, latMax, lonMax, SRS_URI.WGS84_CRS);
     }
 
     public static final NodeValue toNodeValue(NodeValue v1, NodeValue v2, NodeValue v3, NodeValue v4) {
@@ -65,13 +61,14 @@ public class ConvertLatLonBox {
         double lonMin = v2.getDouble();
         double latMax = v3.getDouble();
         double lonMax = v4.getDouble();
-        String wktPolygon = toWKT(latMin, lonMin, latMax, lonMax);
+        Literal wktBox = toLiteral(latMin, lonMin, latMax, lonMax);
 
-        return NodeValue.makeNode(wktPolygon, WKTDatatype.INSTANCE);
+        return NodeValue.makeNode(wktBox.asNode());
     }
 
     public static final Node toNode(Node n1, Node n2, Node n3, Node n4) {
         NodeValue result = toNodeValue(NodeValue.makeNode(n1), NodeValue.makeNode(n2), NodeValue.makeNode(n3), NodeValue.makeNode(n4));
         return result.asNode();
     }
+
 }
