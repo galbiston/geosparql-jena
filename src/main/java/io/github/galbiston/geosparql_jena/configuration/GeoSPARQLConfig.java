@@ -28,6 +28,7 @@ import io.github.galbiston.geosparql_jena.implementation.function_registration.S
 import io.github.galbiston.geosparql_jena.implementation.function_registration.Spatial;
 import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguration;
 import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguration.IndexOption;
+import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
@@ -204,6 +205,19 @@ public class GeoSPARQLConfig {
      */
     public static Boolean isQueryRewriteEnabled() {
         return IS_QUERY_REWRITE_ENABLED;
+    }
+
+    /**
+     * Setup Query Rewrite Index using Dataset.<br>
+     * The index will be set active.
+     *
+     * @param dataset
+     * @param queryRewriteLabel
+     * @param maxSize
+     * @param expiryInterval
+     */
+    public static final void setupQueryRewriteIndex(Dataset dataset, String queryRewriteLabel, int maxSize, long expiryInterval) {
+        QueryRewriteIndex.prepare(dataset, queryRewriteLabel, maxSize, expiryInterval);
     }
 
     /**
