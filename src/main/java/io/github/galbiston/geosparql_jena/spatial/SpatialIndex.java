@@ -18,7 +18,6 @@ package io.github.galbiston.geosparql_jena.spatial;
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
-import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
@@ -74,12 +73,10 @@ public class SpatialIndex implements Serializable {
     private final SRSInfo srsInfo;
     private boolean isBuilt;
     private final STRtree strTree;
-    private final QueryRewriteIndex queryRewriteIndex;
     private static final int MINIMUM_CAPACITY = 2;
 
     /**
-     * Unbuilt Spatial Index with provided capacity and default Query Rewrite
-     * Index.
+     * Unbuilt Spatial Index with provided capacity.
      *
      * @param capacity
      * @param srsURI
@@ -89,48 +86,21 @@ public class SpatialIndex implements Serializable {
         this.strTree = new STRtree(indexCapacity);
         this.isBuilt = false;
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
-        this.queryRewriteIndex = QueryRewriteIndex.createDefault();
     }
 
     /**
-     * Built Spatial Index with provided capacity and Query Rewrite Index.
+     * Built Spatial Index with provided capacity.
      *
      * @param spatialIndexItems
      * @param srsURI
-     * @param queryRewriteIndex
      */
-    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI, QueryRewriteIndex queryRewriteIndex) {
+    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
         int indexCapacity = spatialIndexItems.size() < MINIMUM_CAPACITY ? MINIMUM_CAPACITY : spatialIndexItems.size();
         this.strTree = new STRtree(indexCapacity);
         insertItems(spatialIndexItems);
         this.strTree.build();
         this.isBuilt = true;
         this.srsInfo = SRSRegistry.getSRSInfo(srsURI);
-        this.queryRewriteIndex = queryRewriteIndex;
-    }
-
-    /**
-     * Built Spatial Index with provided items and default Query Rewrite Index.
-     *
-     * @param spatialIndexItems
-     * @param srsURI
-     */
-    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
-        this(spatialIndexItems, srsURI, QueryRewriteIndex.createDefault());
-    }
-
-    /**
-     * Built Spatial Index with provided capacity and provided Query Rewrite
-     * Index parameters.
-     *
-     * @param spatialIndexItems
-     * @param srsURI
-     * @param queryRewriteLabel
-     * @param maxSize
-     * @param expiryInterval
-     */
-    public SpatialIndex(Collection<SpatialIndexItem> spatialIndexItems, String srsURI, String queryRewriteLabel, int maxSize, long expiryInterval) {
-        this(spatialIndexItems, srsURI, new QueryRewriteIndex(queryRewriteLabel, maxSize, expiryInterval));
     }
 
     /**
@@ -155,14 +125,6 @@ public class SpatialIndex implements Serializable {
      */
     public boolean isBuilt() {
         return isBuilt;
-    }
-
-    /**
-     *
-     * @return QueryRewriteIndex stored with the SpatialIndex.
-     */
-    public QueryRewriteIndex getQueryRewriteIndex() {
-        return queryRewriteIndex;
     }
 
     /**
@@ -212,7 +174,7 @@ public class SpatialIndex implements Serializable {
 
     @Override
     public String toString() {
-        return "SpatialIndex{" + "srsInfo=" + srsInfo + ", isBuilt=" + isBuilt + ", strTree=" + strTree + ", queryRewriteIndex=" + queryRewriteIndex + '}';
+        return "SpatialIndex{" + "srsInfo=" + srsInfo + ", isBuilt=" + isBuilt + ", strTree=" + strTree + '}';
     }
 
     /**

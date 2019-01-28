@@ -86,15 +86,9 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
     private QueryIterator bothBound(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
 
         Graph graph = execCxt.getActiveGraph();
-        QueryRewriteIndex queryRewriteIndex;
-        if (SpatialIndex.isDefined(execCxt)) {
-            SpatialIndex spatialIndex = SpatialIndex.retrieve(execCxt);
-            queryRewriteIndex = spatialIndex.getQueryRewriteIndex();
-        } else {
-            queryRewriteIndex = null;
-        }
-        Boolean isPositiveResult = queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
+        QueryRewriteIndex queryRewriteIndex = QueryRewriteIndex.retrieve(execCxt);
 
+        Boolean isPositiveResult = queryRewrite(graph, subject, predicate, object, queryRewriteIndex);
         if (isPositiveResult) {
             //Filter function test succeded so retain binding.
             return QueryIterSingleton.create(binding, execCxt);
@@ -301,9 +295,8 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             return true;
         }
 
-        //If query re-writing is disabled then exit - graph does not contain the asserted relation.
-        //May be null if there is no SpatialIndex created and to avoid constant recreation.
-        if (queryRewriteIndex == null || !queryRewriteIndex.isIndexActive()) {
+        //If query re-writing is disabled then exit - already checked that graph does not contain the asserted relation.
+        if (!queryRewriteIndex.isIndexActive()) {
             return false;
         }
 

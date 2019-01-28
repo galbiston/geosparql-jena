@@ -24,11 +24,16 @@ import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.geo.topological.GenericPropertyFunction;
 import java.util.Map.Entry;
 import org.apache.jena.graph.Node;
+import org.apache.jena.query.Dataset;
+import org.apache.jena.query.DatasetFactory;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.sparql.engine.ExecutionContext;
+import org.apache.jena.sparql.util.Context;
+import org.apache.jena.sparql.util.Symbol;
 
 /**
  *
@@ -43,16 +48,22 @@ public class QueryRewriteIndex {
     private static long MAP_EXPIRY_INTERVAL_DEFAULT = MAP_EXPIRY_INTERVAL;
     private static final String KEY_SEPARATOR = "@";
 
+    public static final Symbol QUERY_REWRITE_INDEX_SYMBOL = Symbol.create("http://jena.apache.org/spatial#query-index");
+
     public QueryRewriteIndex() {
         this.queryRewriteLabel = LABEL_DEFAULT;
-        this.indexActive = false;
-        this.index = new ExpiringMap<>(queryRewriteLabel, 1, MAP_EXPIRY_INTERVAL);
+        this.indexActive = GeoSPARQLConfig.isQueryRewriteEnabled();
+        this.index = new ExpiringMap<>(queryRewriteLabel, MAP_SIZE_DEFAULT, MAP_EXPIRY_INTERVAL_DEFAULT);
+        if (indexActive) {
+            index.startExpiry();
+        }
     }
 
     public QueryRewriteIndex(String queryRewriteLabel, int maxSize, long expiryInterval) {
         this.queryRewriteLabel = queryRewriteLabel;
         this.indexActive = true;
         this.index = new ExpiringMap<>(queryRewriteLabel, maxSize, expiryInterval);
+        this.index.startExpiry();
     }
 
     /**
@@ -178,21 +189,89 @@ public class QueryRewriteIndex {
         index = new ExpiringMap<>(queryRewriteLabel, maxSize, expiryInterval);
     }
 
-    public static void setMaxSize(int mapSizeDefault) {
+    /**
+     * Set the maximum default size of QueryRewriteIndexes. -1 for no limit, 0
+     * for no storage.
+     *
+     * @param mapSizeDefault
+     */
+    public static final void setMaxSize(int mapSizeDefault) {
         QueryRewriteIndex.MAP_SIZE_DEFAULT = mapSizeDefault;
     }
 
-    public static void setExpiry(long mapExpiryIntervalDefault) {
+    /**
+     * Set the maximum default expiry interval in millisecond of
+     * QueryRewriteIndexes. 0 for no expiry.
+     *
+     * @param mapExpiryIntervalDefault
+     */
+    public static final void setExpiry(long mapExpiryIntervalDefault) {
         QueryRewriteIndex.MAP_EXPIRY_INTERVAL_DEFAULT = mapExpiryIntervalDefault;
     }
 
-    public static QueryRewriteIndex createDefault() {
-
-        if (GeoSPARQLConfig.isQueryRewriteEnabled()) {
-            return new QueryRewriteIndex(LABEL_DEFAULT, MAP_SIZE_DEFAULT, MAP_EXPIRY_INTERVAL_DEFAULT);
-        } else {
-            return new QueryRewriteIndex();
-        }
+    /**
+     * Create QueryRewriteIndex using the default global settings.
+     *
+     * @return
+     */
+    public static final QueryRewriteIndex createDefault() {
+        return new QueryRewriteIndex();
     }
 
+    /**
+     * Prepare a Dataset with the default QueryRewriteIndex settings.
+     *
+     * @param dataset
+     */
+    public static final void prepare(Dataset dataset) {
+        Context context = dataset.getContext();
+        context.set(QUERY_REWRITE_INDEX_SYMBOL, createDefault());
+    }
+
+    /**
+     * Prepare a Dataset with the provided QueryRewriteIndex settings.
+     *
+     * @param dataset
+     * @param queryRewriteLabel
+     * @param maxSize
+     * @param expiryInterval
+     */
+    public static final void prepare(Dataset dataset, String queryRewriteLabel, int maxSize, long expiryInterval) {
+        Context context = dataset.getContext();
+        context.set(QUERY_REWRITE_INDEX_SYMBOL, new QueryRewriteIndex(queryRewriteLabel, maxSize, expiryInterval));
+    }
+
+    /**
+     * Retrieve the QueryRewriteIndex from the Context.<br>
+     * If no index has been setup then
+     *
+     * @param execCxt
+     * @return QueryRewriteIndex contained in the Context.
+     */
+    public static final QueryRewriteIndex retrieve(ExecutionContext execCxt) {
+
+        Context context = execCxt.getContext();
+        QueryRewriteIndex queryRewriteIndex = (QueryRewriteIndex) context.get(QUERY_REWRITE_INDEX_SYMBOL, null);
+
+        if (queryRewriteIndex == null) {
+            queryRewriteIndex = createDefault();
+            context.set(QUERY_REWRITE_INDEX_SYMBOL, queryRewriteIndex);
+        }
+
+        return queryRewriteIndex;
+    }
+
+    /**
+     * Wrap Model in a Dataset and include QueryRewriteIndex.
+     *
+     * @param model
+     * @return Dataset with default Model and QueryRewriteIndex in Context.
+     */
+    public static final Dataset wrapModel(Model model) {
+        Dataset dataset = DatasetFactory.createTxnMem();
+        dataset.setDefaultModel(model);
+        prepare(dataset);
+
+        return dataset;
+    }
 }
