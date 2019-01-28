@@ -16,13 +16,11 @@
 package io.github.galbiston.geosparql_jena.spatial;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import static io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory.reducePrecision;
-import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
+import io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
 import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.util.FmtUtils;
 
@@ -32,16 +30,14 @@ import org.apache.jena.sparql.util.FmtUtils;
  */
 public class ConvertLatLon {
 
-    private static final String PREFIX = "<" + SRS_URI.WGS84_CRS + "> POINT(";
-
-    public static final String toWKT(double lat, double lon) {
+    public static final Literal toLiteral(double lat, double lon) {
         checkBounds(lat, lon);
-        return PREFIX + reducePrecision(lat) + " " + reducePrecision(lon) + ")";
+        return WKTLiteralFactory.createPoint(lat, lon, SRS_URI.WGS84_CRS);
     }
 
-    public static final Literal toLiteral(double lat, double lon) {
-        String wktPoint = toWKT(lat, lon);
-        return ResourceFactory.createTypedLiteral(wktPoint, WKTDatatype.INSTANCE);
+    public static final String toWKT(double lat, double lon) {
+        Literal wktPoint = toLiteral(lat, lon);
+        return wktPoint.getLexicalForm();
     }
 
     public static final NodeValue toNodeValue(NodeValue latNodeValue, NodeValue lonNodeValue) {
@@ -55,9 +51,9 @@ public class ConvertLatLon {
 
         double lat = latNodeValue.getDouble();
         double lon = lonNodeValue.getDouble();
-        String wktPoint = toWKT(lat, lon);
+        Literal wktPoint = toLiteral(lat, lon);
 
-        return NodeValue.makeNode(wktPoint, WKTDatatype.INSTANCE);
+        return NodeValue.makeNode(wktPoint.asNode());
     }
 
     public static final Node toNode(Node latNode, Node lonNode) {
