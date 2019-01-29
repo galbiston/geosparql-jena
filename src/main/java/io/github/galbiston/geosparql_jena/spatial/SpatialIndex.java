@@ -459,6 +459,16 @@ public class SpatialIndex implements Serializable {
     /**
      * Save SpatialIndex to file.
      *
+     * @param spatialIndexFileURI
+     * @param spatialIndex
+     */
+    public static final void save(String spatialIndexFileURI, SpatialIndex spatialIndex) {
+        save(new File(spatialIndexFileURI), spatialIndex);
+    }
+
+    /**
+     * Save SpatialIndex to file.
+     *
      * @param spatialIndexFile
      * @param spatialIndex
      */
