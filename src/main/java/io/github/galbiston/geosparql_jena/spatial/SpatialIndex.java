@@ -437,7 +437,7 @@ public class SpatialIndex implements Serializable {
      * Load a SpatialIndex from file.
      *
      * @param spatialIndexFile
-     * @return
+     * @return Built Spatial Index.
      * @throws SpatialIndexException
      */
     public static final SpatialIndex load(File spatialIndexFile) throws SpatialIndexException {

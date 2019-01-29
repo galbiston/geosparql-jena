@@ -212,7 +212,7 @@ public class QueryRewriteIndex {
     /**
      * Create QueryRewriteIndex using the default global settings.
      *
-     * @return
+     * @return Query Rewrite Index using default global settings.
      */
     public static final QueryRewriteIndex createDefault() {
         return new QueryRewriteIndex();
