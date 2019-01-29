@@ -59,7 +59,6 @@ import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.vocabulary.RDFS;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
@@ -1116,19 +1115,6 @@ public class GeoSPARQLOperations {
             count++;
         }
         LOGGER.info("Graph: {} has {} unique out of {} Geometry Literals.", graphName, literalStrings.size(), count);
-        return count;
-    }
-
-    /**
-     *
-     * @param tdbFolder
-     * @return Count of Geometry Literals in whole TDB.
-     */
-    public static final int countGeometryLiterals(File tdbFolder) {
-        LOGGER.info("----------Checking Geometry Literal count in TDB: {} Started----------", tdbFolder);
-        Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
-        int count = countGeometryLiterals(dataset);
-        LOGGER.info("----------Checking Geometry Literal count in TDB: {} Completed----------", tdbFolder);
         return count;
     }
 
