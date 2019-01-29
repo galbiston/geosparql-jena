@@ -321,15 +321,17 @@ Geo predicates can be converted to Geometry Literals in query and then used with
     ?subj wgs:lat ?lat .
     ?subj wgs:long ?lon .
     BIND(spatialF:convertLatLon(?lat, ?lon) as ?point) .
-    BIND("POLYGON((...))"^^http://www.opengis.net/ont/geosparql#wktLiteral AS ?box) . #Coordinate order is Lon/Lat without SRS URI.
+    BIND("POLYGON((...))"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?box) . #Coordinate order is Lon/Lat without stated SRS URI.
     FILTER(geof:sfContains(?box, ?point))
 ```
 
 Alternatively, utilising more shapes, relations and spatial reference systems can be achieved by converting the dataset to the GeoSPARQL structure.
 
 ```
-    BIND("POLYGON((...))"^^http://www.opengis.net/ont/geosparql#wktLiteral AS ?box) . #Coordinate order is Lon/Lat without SRS URI.
-    ?box geof:sfContain ?subj
+    ?subj geo:hasGeometry ?geom .
+    ?geom geo:hasSerialization ?geomLit .
+    BIND("POLYGON((...))"^^<http://www.opengis.net/ont/geosparql#wktLiteral> AS ?box) . #Coordinate order is Lon/Lat without stated SRS URI.
+    FILTER(geof:sfContains(?box, ?geomLit))
 ```
 
 Datasets can contain both Geo predicates and Geometry Literals without interference.
