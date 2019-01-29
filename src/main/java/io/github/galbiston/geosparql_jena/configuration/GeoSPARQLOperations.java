@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -47,11 +48,13 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.reasoner.Reasoner;
 import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.riot.Lang;
@@ -235,7 +238,7 @@ public class GeoSPARQLOperations {
     /**
      * Load GeoSPARQL v1.0 (corrected version) as a Model.
      *
-     * @return Output model.
+     * @return Model containing the schema.
      */
     public static final Model loadGeoSPARQLSchema() {
         Model geosparqlSchema = ModelFactory.createDefaultModel();
@@ -247,7 +250,8 @@ public class GeoSPARQLOperations {
 
     /**
      * Apply GeoSPARQL inferencing using GeoSPARPQL v1.0 (corrected version) and
-     * RDFS reasoner.
+     * RDFS reasoner.<br>
+     * Statements will be added to the dataset.
      *
      * @param dataset
      */
@@ -257,7 +261,8 @@ public class GeoSPARQLOperations {
     }
 
     /**
-     * Apply GeoSPARQL inferencing using schema model and RDFS reasoner.
+     * Apply GeoSPARQL inferencing using schema model and RDFS reasoner.<br>
+     * Statements will be added to the Dataset.
      *
      * @param geosparqlSchema
      * @param dataset
@@ -291,28 +296,31 @@ public class GeoSPARQLOperations {
 
     /**
      * Apply GeoSPARQL inferencing using GeoSPARPQL v1.0 (corrected version) and
-     * RDFS reasoner.
+     * RDFS reasoner.<br>
+     * Statements will be added to the dataModel.
      *
      * @param dataModel
      */
     public static final void applyInferencing(Model dataModel) {
         Model geosparqlSchema = loadGeoSPARQLSchema();
-        GeoSPARQLOperations.applyInferencing(geosparqlSchema, dataModel);
+        applyInferencing(geosparqlSchema, dataModel);
     }
 
     /**
-     * Apply GeoSPARQL inferencing using schema model and RDFS reasoner.
+     * Apply GeoSPARQL inferencing using schema model and RDFS reasoner.<br>
+     * Statements will be added to the Model.
      *
      * @param geosparqlSchema
-     * @param dataModel
+     * @param model
      */
-    public static final void applyInferencing(Model geosparqlSchema, Model dataModel) {
-        applyInferencing(geosparqlSchema, dataModel, "unnamed");
+    public static final void applyInferencing(Model geosparqlSchema, Model model) {
+        applyInferencing(geosparqlSchema, model, "unnamed");
     }
 
     /**
-     * Apply GeoSPARQL inferencing using schema model and RDFS reasoner.
-     * <br> Graph name supplied for logging purposes only.
+     * Apply GeoSPARQL inferencing using schema model and RDFS reasoner.<br>
+     * Statements will be added to the Model.<br>
+     * Graph name supplied for logging purposes only.
      *
      * @param geosparqlSchema
      * @param model
@@ -406,9 +414,6 @@ public class GeoSPARQLOperations {
      * @return Output model.
      */
     public static final InfModel prepare(InputStream geosparqlSchemaInputStream, Model model, Reasoner reasoner) {
-
-        //Register GeoSPARQL functions if required.
-        GeoSPARQLConfig.setupMemoryIndex();
 
         //Load GeoSPARQL Schema
         Model schema = ModelFactory.createDefaultModel();
@@ -591,8 +596,7 @@ public class GeoSPARQLOperations {
             LOGGER.warn("Output datatype {} is not a recognised for Geometry Literal. Defaulting to {}.", outputDatatype, WKTDatatype.URI);
             outputDatatype = WKTDatatype.INSTANCE;
         }
-        //Setup SRS registries but without indexing.
-        GeoSPARQLConfig.setupNoIndex();
+
         //Iterate through all statements: toNodeValue geometry literals and just add the rest.
         Model outputModel = ModelFactory.createDefaultModel();
         Iterator<Statement> statementIt = inputModel.listStatements();
@@ -758,7 +762,7 @@ public class GeoSPARQLOperations {
     }
 
     /**
-     * Convert Geo Predicates (Lat/Lon) in Dataset to WKT Geometry Literal.<br>
+     * Convert Geo Predicates (Lat/Lon) in Model to WKT Geometry Literal.<br>
      * Option to remove Lat and Lon predicates after combining.
      *
      * @param model
@@ -778,17 +782,11 @@ public class GeoSPARQLOperations {
                     Literal lon = feature.getProperty(SpatialExtension.GEO_LON_PROP).getLiteral();
                     try {
                         Literal latLonPoint = ConvertLatLon.toLiteral(lat.getFloat(), lon.getFloat());
-                        //Create a Geometry - re-use Feature if a URI or build a URI for blank node.
-                        String geometryURI;
-                        if (feature.isURIResource()) {
-                            geometryURI = feature.getURI() + "-Geom-" + UUID.randomUUID().toString();
-                        } else {
-                            geometryURI = GeoSPARQL_URI.GEO_URI + "Geom-" + UUID.randomUUID().toString();
-                        }
-                        Resource geometry = outputModel.createResource(geometryURI);
+                        Resource geometry = createGeometry(feature);
+
                         //Add Geometry to Feature and GeometryLiteral to Geometry.
-                        feature.addProperty(Geo.HAS_GEOMETRY_PROP, geometry);
-                        geometry.addLiteral(Geo.HAS_SERIALIZATION_PROP, latLonPoint);
+                        outputModel.add(feature, Geo.HAS_GEOMETRY_PROP, geometry);
+                        outputModel.add(geometry, Geo.HAS_SERIALIZATION_PROP, latLonPoint);
                     } catch (DatatypeFormatException ex) {
                         LOGGER.error("Feature: {} has geo lat/lon out of bounds. Lat: {}, Lon: {}", feature, lat, lon);
                     }
@@ -799,6 +797,113 @@ public class GeoSPARQLOperations {
                 outputModel.removeAll(null, SpatialExtension.GEO_LON_PROP, null);
             }
         }
+        return outputModel;
+    }
+
+    private static Resource createGeometry(Resource feature) {
+        //Create a Geometry - re-use Feature if a URI or build a URI for blank node.
+        String geometryURI;
+        if (feature.isURIResource()) {
+            geometryURI = feature.getURI() + "-Geom-" + UUID.randomUUID().toString();
+        } else {
+            geometryURI = GeoSPARQL_URI.GEO_URI + "Geom-" + UUID.randomUUID().toString();
+        }
+        Resource geometry = ResourceFactory.createResource(geometryURI);
+
+        return geometry;
+    }
+
+    /**
+     * Convert Geometry Datatypes (WKT, GML, etc.) in Model to GeoSPARQL
+     * structure.<br>
+     * (Subject-property-GeometryLiteral) becomes (Feature-hasGeometry-Geometry)
+     * and (Geometry-hasSerialization-GeometryLiteral).<br>
+     * Original property will be removed from resulting Dataset.
+     *
+     *
+     * @param dataset
+     * @return Converted dataset.
+     *
+     */
+    public static final Dataset convertGeometryStructure(Dataset dataset) {
+        LOGGER.info("Convert Geometry Structure - Started");
+        Dataset outputDataset = DatasetFactory.createTxnMem();
+        outputDataset.begin(ReadWrite.WRITE);
+        //Default Model
+        dataset.begin(ReadWrite.READ);
+        Model defaultModel = dataset.getDefaultModel();
+        Model convertedModel = convertGeometryStructure(defaultModel);
+        outputDataset.setDefaultModel(convertedModel);
+        //Named Models
+        Iterator<String> graphNames = dataset.listNames();
+        while (graphNames.hasNext()) {
+            String graphName = graphNames.next();
+            Model namedModel = dataset.getNamedModel(graphName);
+            Model convertedNamedModel = convertGeometryStructure(namedModel);
+            outputDataset.addNamedModel(graphName, convertedNamedModel);
+        }
+        LOGGER.info("Convert Geometry Structure - Completed");
+        dataset.end();
+        outputDataset.commit();
+        outputDataset.end();
+        return outputDataset;
+    }
+
+    /**
+     * Convert Geometry Datatypes (WKT, GML, etc.) in Model to GeoSPARQL
+     * structure.<br>
+     * (Subject-property-GeometryLiteral) becomes (Feature-hasGeometry-Geometry)
+     * and (Geometry-hasSerialization-GeometryLiteral).<br>
+     * Original property will be removed from resulting Model.
+     *
+     * @param model
+     * @return Converted model.
+     */
+    public static final Model convertGeometryStructure(Model model) {
+        /*
+        if (!GeoSPARQLConfig.isFunctionRegistered()) {
+            GeoSPARQLConfig.setupNoIndex();
+        }
+         */
+
+        Model outputModel = ModelFactory.createDefaultModel();
+        outputModel.add(model);
+
+        List<Statement> additionalStatements = new ArrayList<>();
+
+        StmtIterator stmtIter = outputModel.listStatements();
+
+        while (stmtIter.hasNext()) {
+            Statement stmt = stmtIter.nextStatement();
+            RDFNode object = stmt.getObject();
+            if (object.isLiteral()) {
+                Literal literal = object.asLiteral();
+                RDFDatatype datatype = literal.getDatatype();
+                if (GeometryDatatype.check(datatype)) {
+
+                    Property property = stmt.getPredicate();
+                    if (property.equals(Geo.HAS_SERIALIZATION_PROP) || property.equals(Geo.AS_WKT_PROP) || property.equals(Geo.AS_GML_PROP)) {
+                        //Model already contains the GeoSPARQL properties for this literal so skipping.
+                        continue;
+                    }
+
+                    if (outputModel.contains(property, RDFS.subPropertyOf, Geo.HAS_SERIALIZATION_PROP)) {
+                        //The property is a sub property of hasSerialization so skipping. Only RDFS inferencing needs to be applied.
+                        continue;
+                    }
+
+                    Resource feature = stmt.getSubject();
+                    Resource geometry = createGeometry(feature);
+
+                    additionalStatements.add(ResourceFactory.createStatement(feature, Geo.HAS_GEOMETRY_PROP, geometry));
+                    additionalStatements.add(ResourceFactory.createStatement(geometry, Geo.HAS_SERIALIZATION_PROP, literal));
+                    stmtIter.remove();
+                }
+            }
+        }
+
+        outputModel.add(additionalStatements);
+
         return outputModel;
     }
 
@@ -908,6 +1013,19 @@ public class GeoSPARQLOperations {
     }
 
     /**
+     * Convert the input model to the output coordinate reference system and
+     * geometry literal datatype.
+     *
+     * @param inputModel
+     * @param outputSrsURI
+     * @param outputDatatypeURI
+     * @return Output of conversion.
+     */
+    public static final Model convert(Model inputModel, String outputSrsURI, String outputDatatypeURI) {
+        return convertSRSDatatype(inputModel, outputSrsURI, GeometryDatatype.get(outputDatatypeURI));
+    }
+
+    /**
      * Convert the input dataset to the most frequent coordinate reference
      * system and default datatype.
      *
@@ -981,6 +1099,12 @@ public class GeoSPARQLOperations {
         return dataset;
     }
 
+    /**
+     *
+     * @param model
+     * @param graphName Name of graph for logging purposes.
+     * @return Number of Geometry Literals contained in Model.
+     */
     public static final int countGeometryLiterals(Model model, String graphName) {
         Set<String> literalStrings = new TreeSet<>();
         Iterator<Statement> iterator = model.listStatements(null, Geo.HAS_SERIALIZATION_PROP, (RDFNode) null);
@@ -995,6 +1119,11 @@ public class GeoSPARQLOperations {
         return count;
     }
 
+    /**
+     *
+     * @param tdbFolder
+     * @return Count of Geometry Literals in whole TDB.
+     */
     public static final int countGeometryLiterals(File tdbFolder) {
         LOGGER.info("----------Checking Geometry Literal count in TDB: {} Started----------", tdbFolder);
         Dataset dataset = TDBFactory.createDataset(tdbFolder.getAbsolutePath());
@@ -1003,6 +1132,11 @@ public class GeoSPARQLOperations {
         return count;
     }
 
+    /**
+     *
+     * @param dataset
+     * @return Count of Geometry Literals in whole Dataset.
+     */
     public static final int countGeometryLiterals(Dataset dataset) {
         dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
@@ -1010,12 +1144,41 @@ public class GeoSPARQLOperations {
         Iterator<String> iterator = dataset.listNames();
         while (iterator.hasNext()) {
             String graphName = iterator.next();
-            Model model = dataset.getNamedModel(graphName);
-            count += countGeometryLiterals(model, graphName);
+            Model namedModel = dataset.getNamedModel(graphName);
+            count += countGeometryLiterals(namedModel, graphName);
         }
         dataset.end();
-        dataset.close();
         return count;
+    }
+
+    /**
+     * Apply a set of commonly used prefixes for GeoSPARQL URIs to the Model.
+     *
+     * @param model
+     */
+    public static final void applyPrefixes(Model model) {
+        HashMap<String, String> geoPrefixes = GeoSPARQL_URI.getPrefixes();
+        model.setNsPrefixes(geoPrefixes);
+    }
+
+    /**
+     * Apply a set of commonly used prefixes for GeoSPARQL URIs to the whole
+     * Dataset.
+     *
+     * @param dataset
+     */
+    public static final void applyPrefixes(Dataset dataset) {
+        dataset.begin(ReadWrite.READ);
+        Model defaultModel = dataset.getDefaultModel();
+        applyPrefixes(defaultModel);
+        Iterator<String> iterator = dataset.listNames();
+        while (iterator.hasNext()) {
+            String graphName = iterator.next();
+            Model namedModel = dataset.getNamedModel(graphName);
+            applyPrefixes(namedModel);
+        }
+        dataset.commit();
+        dataset.end();
     }
 
 }
