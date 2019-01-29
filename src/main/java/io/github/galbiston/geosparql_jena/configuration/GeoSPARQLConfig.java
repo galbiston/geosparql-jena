@@ -54,6 +54,8 @@ public class GeoSPARQLConfig {
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup. Query re-write
      * enabled.
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
+     *
      */
     public static final void setupMemoryIndex() {
         setup(IndexOption.MEMORY, true);
@@ -64,6 +66,7 @@ public class GeoSPARQLConfig {
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup. Query re-write
      * optional.
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
      *
      * @param isQueryRewriteEnabled
      */
@@ -76,6 +79,7 @@ public class GeoSPARQLConfig {
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup and to control the
      * index sizes. Expiry is defaulted to 5,000 milliseconds.
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
      *
      * @param geometryLiteralIndex
      * @param geometryTransformIndex
@@ -91,6 +95,7 @@ public class GeoSPARQLConfig {
      * indexing.
      * <br>Use this for in-memory indexing GeoSPARQL setup and to control the
      * index expiry rate (milliseconds). Size is defaulted to unlimited.
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
      *
      * @param geometryLiteralIndex
      * @param geometryTransformIndex
@@ -107,6 +112,7 @@ public class GeoSPARQLConfig {
      * <br>Use this for in-memory indexing GeoSPARQL setup and to control the
      * index sizes (default: unlimited) and expiry rate (default: 5,000
      * milliseconds).
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
      *
      * @param geometryLiteralIndex
      * @param geometryTransformIndex
@@ -125,6 +131,7 @@ public class GeoSPARQLConfig {
     /**
      * Initialise all GeoSPARQL property and filter functions with no indexing.
      * <br>Use this for no indexing GeoSPARQL setup.
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
      */
     public static final void setupNoIndex() {
         setup(IndexOption.NONE, true);
@@ -133,6 +140,7 @@ public class GeoSPARQLConfig {
     /**
      * Initialise all GeoSPARQL property and filter functions with no indexing.
      * <br>Use this for no indexing GeoSPARQL setup.
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
      *
      * @param isQueryRewriteEnabled
      */
@@ -143,15 +151,17 @@ public class GeoSPARQLConfig {
     /**
      * Initialise all GeoSPARQL property and filter functions. Query rewrite
      * enabled.
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
      *
      * @param indexOption
      */
     public static final void setup(IndexOption indexOption) {
-
+        setup(indexOption, true);
     }
 
     /**
      * Initialise all GeoSPARQL property and filter functions.
+     * <br>This does not affect the use of Spatial Indexes for Datasets.
      *
      * @param indexOption
      * @param isQueryRewriteEnabled
@@ -201,6 +211,7 @@ public class GeoSPARQLConfig {
 
     /**
      * Empty all indexes and registries currently in use.
+     * <br>This does not affect Spatial Indexes for Datasets.
      */
     public static final void reset() {
         //Convenience method so that setup and clearing in one class.
