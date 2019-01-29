@@ -90,14 +90,15 @@ public abstract class GeometryDatatype extends BaseDatatype {
         registerDatatypes();
         RDFDatatype rdfDatatype = TYPE_MAPPER.getTypeByName(datatypeURI);
         if (rdfDatatype != null) {
-            return check(rdfDatatype);
+            return rdfDatatype instanceof GeometryDatatype;
         } else {
-            throw new DatatypeFormatException("Datatype not found: " + datatypeURI + " Ensure that GeoSPARQLSupport is enabled and Datatype has been registered.");
+            throw new DatatypeFormatException("Datatype not found: " + datatypeURI + " Ensure that GeoSPARQL is enabled and Datatype has been registered.");
         }
     }
 
     public static final boolean check(RDFDatatype rdfDatatype) {
-        return rdfDatatype instanceof GeometryDatatype;
+        //Ensure that the registered datatypes from the type mapper are used.
+        return checkURI(rdfDatatype.getURI());
     }
 
 }
