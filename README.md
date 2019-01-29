@@ -269,7 +269,39 @@ Query rewriting can be switched on independently of the indexes, i.e. query rewr
 Methods to convert datasets between serialisations and spatial/coordinate reference systems are available in:
 `io.github.galbiston.geosparql_jena.configuration.GeoSPARQLOperations`
 
-These conversions can be applied to files, folders and Jena Models or Datasets.
+The following example shows the operations that could be performed on a Jena Model loaded from file.
+Once conversion is completed the 
+
+* A Model is loaded from file.
+* A new Model is created by converting to the GeoSPARQL structure.
+* Additional `hasDefaultGeometry` statements used for Query Rewriting are added.
+* The Geometry Literals of the Model are all changed to the WGS84 spatial reference system and WKT datatype. 
+* The GeoSPARQL schema is then applied using RDFS inferencing. Additional statements are asserted in the Model.
+* Commonly used GeoSPARQL prefixes for URIs are applied to the model. This can reduce file sizes and improve readability.
+* A Spatial Index is created with the Model placed in a Dataset for use in queries.
+* Filter and Property Functions, with supporting indexes, are setup for querying.
+
+```
+    Model dataModel = RDFDataMgr.loadModel("data.ttl");
+
+    Model geosparqlModel = GeoSPARQLOperations.convertGeometryStructure(dataModel);
+    
+    GeoSPARQLOperations.applyDefaultGeometry(geosparqlModel);
+    
+    Model model = GeoSPARQLOperations.convert(geosparqlModel, "http://www.opengis.net/def/crs/EPSG/0/4326", "http://www.opengis.net/ont/geosparql#wktLiteral");
+    
+    GeoSPARQLOperations.applyInferencing(model);
+    
+    GeoSPARQLOperations.applyPrefixes(model);
+
+    Dataset dataset = SpatialIndex.wrapModel(model);
+
+    GeoSPARQLConfig.setupMemoryIndex();
+```
+
+
+
+These operations can be applied to a Dataset containing multiple Models and in some cases files and folders.
 
 ### Spatial Index
 A Spatial Index can be created to improve searching of a dataset.
