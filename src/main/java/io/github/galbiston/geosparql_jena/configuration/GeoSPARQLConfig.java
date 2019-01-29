@@ -192,6 +192,14 @@ public class GeoSPARQLConfig {
     }
 
     /**
+     *
+     * @return True, if the GeoSPARQL functions have been registered.
+     */
+    public static final Boolean isFunctionRegistered() {
+        return IS_FUNCTIONS_REGISTERED;
+    }
+
+    /**
      * Empty all indexes and registries currently in use.
      */
     public static final void reset() {
