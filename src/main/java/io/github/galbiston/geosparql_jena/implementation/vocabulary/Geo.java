@@ -34,7 +34,10 @@ public interface Geo {
     public static final Node HAS_SERIALIZATION_NODE = HAS_SERIALIZATION_PROP.asNode();
 
     public static final Property AS_WKT_PROP = ResourceFactory.createProperty(GEO_URI + "asWKT");
+    public static final Node AS_WKT_NODE = AS_WKT_PROP.asNode();
+
     public static final Property AS_GML_PROP = ResourceFactory.createProperty(GEO_URI + "asGML");
+    public static final Node AS_GML_NODE = AS_GML_PROP.asNode();
 
     public static final Property HAS_DEFAULT_GEOMETRY_PROP = ResourceFactory.createProperty(GEO_URI + "hasDefaultGeometry");
     public static final Node HAS_DEFAULT_GEOMETRY_NODE = HAS_DEFAULT_GEOMETRY_PROP.asNode();
