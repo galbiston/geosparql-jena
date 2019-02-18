@@ -20,6 +20,7 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,6 +75,13 @@ public class SpatialIndex implements Serializable {
     private boolean isBuilt;
     private final STRtree strTree;
     private static final int MINIMUM_CAPACITY = 2;
+
+    private SpatialIndex() {
+        this.strTree = new STRtree(MINIMUM_CAPACITY);
+        this.isBuilt = true;
+        this.strTree.build();
+        this.srsInfo = SRSRegistry.getSRSInfo(SRS_URI.DEFAULT_WKT_CRS84);
+    }
 
     /**
      * Unbuilt Spatial Index with provided capacity.
@@ -434,7 +442,8 @@ public class SpatialIndex implements Serializable {
     }
 
     /**
-     * Load a SpatialIndex from file.
+     * Load a SpatialIndex from file.<br>
+     * Index will be built and empty if file does not exist or is null.
      *
      * @param spatialIndexFile
      * @return Built Spatial Index.
@@ -452,7 +461,7 @@ public class SpatialIndex implements Serializable {
                 throw new SpatialIndexException("Loading Exception: " + ex.getMessage(), ex);
             }
         } else {
-            throw new SpatialIndexException("File is null or does not exist.");
+            return new SpatialIndex();
         }
     }
 
