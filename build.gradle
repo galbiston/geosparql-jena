@@ -45,7 +45,7 @@ dependencies {
 
     //JUnit Testing
     ext.junitVersion = "4.12"
-    testImplementation "junit:junit:$junitVersion"    
+    testImplementation "junit:junit:$junitVersion"
 
     //Expiring Map
     ext.expiringMapVersion = "1.0.2"
@@ -57,7 +57,7 @@ dependencies {
 }
 
 group = 'io.github.galbiston'
-version = '1.0.4'
+version = '1.0.5'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
