@@ -43,7 +43,7 @@ GeoSPARQL Jena can be accessed as a library using Maven etc. from Maven Central.
 <dependency>
     <groupId>io.github.galbiston</groupId>
     <artifactId>geosparql-jena</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
@@ -372,7 +372,7 @@ Function Name | Description
 *?distance* **spatialF:distance**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Distance between two Geometry Literals in distance *units*. Chooses distance measure based on SRS type. Great Circle distance for Geographic SRS and Euclidean otherwise.
 
 ### Property Functions
-These property functions are available in the `http://jena.apache.org/spatial#` namespace and here use the prefix `spatial`. 
+These property functions are available in the `http://jena.apache.org/spatial#` namespace and here use the prefix `spatial`.
 This is the same namespace as the `jena-spatial` functions utilise and these form direct replacements.
 The subject `Feature` may be bound, to test the pattern is true, or unbound, to find all cases the pattern is true.
 These property functions require a `Spatial Index` to be setup for the dataset.
@@ -394,7 +394,7 @@ Function Name | Description
 The Cardinal Functions find all `Features` that are present in the specified direction.
 In Geographic spatial reference systems (SRS), e.g. WGS84 and CRS84, the East/West directions wrap around.
 Therefore, a search is made from the shape's edge for up to half the range of the SRS (i.e. 180 degrees in WGS84) and will continue across the East/West boundary if necessary.
-In other SRS, e.g. Projected onto a flat plane, the East/West check is made from the shape's edge to the farthest limit of the SRS range, i.e. there is no wrap around.  
+In other SRS, e.g. Projected onto a flat plane, the East/West check is made from the shape's edge to the farthest limit of the SRS range, i.e. there is no wrap around.
 
 Cardinal Function Name | Description
 ------------- | -------------
