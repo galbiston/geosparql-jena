@@ -418,7 +418,7 @@ The following individuals have made contributions to this project:
 * Haozhe Chen
 * Taha Osman
 
-## Why Use This Implementation?
+## Why Use This Implementation
 There are several implementations of the GeoSPARQL standard.
 The conformance and completeness of these implementations is difficult to ascertain and varies between features.
 
