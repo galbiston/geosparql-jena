@@ -21,7 +21,7 @@ dependencies {
     testImplementation "org.apache.sis.non-free:sis-embedded-data:$sisVersion"
 
     //JTS Core
-    ext.jtsVersion = "1.16.0"
+    ext.jtsVersion = "1.16.1"
     api "org.locationtech.jts:jts-core:$jtsVersion"
 
     //JDON XML
@@ -57,7 +57,7 @@ dependencies {
 }
 
 group = 'io.github.galbiston'
-version = '1.0.5'
+version = '1.0.6'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
