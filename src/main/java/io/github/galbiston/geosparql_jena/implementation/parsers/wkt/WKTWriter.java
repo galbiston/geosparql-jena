@@ -18,8 +18,8 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.wkt;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
-import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;

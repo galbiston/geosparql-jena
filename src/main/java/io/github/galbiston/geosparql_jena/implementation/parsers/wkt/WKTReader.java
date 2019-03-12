@@ -18,8 +18,8 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.wkt;
 
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
-import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import java.util.Arrays;
 import java.util.Objects;
@@ -38,19 +38,33 @@ public class WKTReader {
 
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
-    private final CoordinateSequenceDimensions coordinateSequenceDimensions;
+    private final CoordinateSequenceDimensions dims;
     private final Geometry geometry;
+    private final DimensionInfo dimensionInfo;
 
-    public WKTReader(String geometryType, String dimension, String coordinates) {
-        this.coordinateSequenceDimensions = convertDimensions(dimension);
+    public WKTReader(String geometryType, String dimensionString, String coordinates) {
+        this.dims = convertDimensionString(dimensionString);
         this.geometry = buildGeometry(geometryType, coordinates);
+        this.dimensionInfo = new DimensionInfo(dims, geometry.getDimension());
     }
 
     public WKTReader() {
         this("point", "", "");
     }
 
-    private static CoordinateSequenceDimensions convertDimensions(String dimensionsString) {
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    public CoordinateSequenceDimensions getDimensions() {
+        return dims;
+    }
+
+    public DimensionInfo getDimensionInfo() {
+        return dimensionInfo;
+    }
+
+    private static CoordinateSequenceDimensions convertDimensionString(String dimensionsString) {
 
         CoordinateSequenceDimensions dims;
         switch (dimensionsString) {
@@ -70,38 +84,6 @@ public class WKTReader {
         return dims;
     }
 
-    public DimensionInfo getDimensionInfo() {
-        return new DimensionInfo(getCoordinateDimension(), getSpatialDimension(), geometry.getDimension());
-    }
-
-    public Geometry getGeometry() {
-        return geometry;
-    }
-
-    public int getSpatialDimension() {
-
-        switch (coordinateSequenceDimensions) {
-            case XYZ:
-            case XYZM:
-                return 3;
-            default:
-                return 2;
-        }
-    }
-
-    public int getCoordinateDimension() {
-
-        switch (coordinateSequenceDimensions) {
-            case XYZ:
-            case XYM:
-                return 3;
-            case XYZM:
-                return 4;
-            default:
-                return 2;
-        }
-    }
-
     private Geometry buildGeometry(String geometryType, String coordinates) throws DatatypeFormatException {
 
         Geometry geo;
@@ -109,22 +91,22 @@ public class WKTReader {
         try {
             switch (geometryType) {
                 case "point":
-                    CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                    CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(dims, clean(coordinates));
                     geo = GEOMETRY_FACTORY.createPoint(pointSequence);
                     break;
                 case "linestring":
-                    CustomCoordinateSequence lineSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                    CustomCoordinateSequence lineSequence = new CustomCoordinateSequence(dims, clean(coordinates));
                     geo = GEOMETRY_FACTORY.createLineString(lineSequence);
                     break;
                 case "linearring":
-                    CustomCoordinateSequence linearSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                    CustomCoordinateSequence linearSequence = new CustomCoordinateSequence(dims, clean(coordinates));
                     geo = GEOMETRY_FACTORY.createLinearRing(linearSequence);
                     break;
                 case "polygon":
                     geo = buildPolygon(coordinates);
                     break;
                 case "multipoint":
-                    CustomCoordinateSequence multiPointSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+                    CustomCoordinateSequence multiPointSequence = new CustomCoordinateSequence(dims, clean(coordinates));
                     geo = GEOMETRY_FACTORY.createMultiPoint(multiPointSequence);
                     break;
                 case "multilinestring":
@@ -202,16 +184,16 @@ public class WKTReader {
 
         String[] splitCoordinates = splitCoordinates(coordinates);
         if (splitCoordinates.length == 1) { //Polygon without holes.
-            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(coordinates));
+            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(dims, clean(coordinates));
             polygon = GEOMETRY_FACTORY.createPolygon(shellSequence);
         } else {    //Polygon with holes
             String shellCoordinates = splitCoordinates[0];
 
-            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(shellCoordinates));
+            CustomCoordinateSequence shellSequence = new CustomCoordinateSequence(dims, clean(shellCoordinates));
             LinearRing shellLinearRing = GEOMETRY_FACTORY.createLinearRing(shellSequence);
 
             String[] splitHoleCoordinates = Arrays.copyOfRange(splitCoordinates, 1, splitCoordinates.length);
-            LinearRing[] holesLinearRing = splitLinearRings(splitHoleCoordinates);
+            LinearRing[] holesLinearRing = splitLinearRings(dims, splitHoleCoordinates);
 
             polygon = GEOMETRY_FACTORY.createPolygon(shellLinearRing, holesLinearRing);
 
@@ -231,7 +213,7 @@ public class WKTReader {
         LineString[] lineStrings = new LineString[splitCoordinates.length];
 
         for (int i = 0; i < splitCoordinates.length; i++) {
-            CustomCoordinateSequence sequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(splitCoordinates[i]));
+            CustomCoordinateSequence sequence = new CustomCoordinateSequence(dims, clean(splitCoordinates[i]));
             LineString lineString = GEOMETRY_FACTORY.createLineString(sequence);
             lineStrings[i] = lineString;
         }
@@ -240,12 +222,12 @@ public class WKTReader {
 
     }
 
-    private LinearRing[] splitLinearRings(String[] splitCoordinates) {
+    private LinearRing[] splitLinearRings(CoordinateSequenceDimensions dims, String[] splitCoordinates) {
 
         LinearRing[] linearRings = new LinearRing[splitCoordinates.length];
 
         for (int i = 0; i < splitCoordinates.length; i++) {
-            CustomCoordinateSequence sequence = new CustomCoordinateSequence(coordinateSequenceDimensions, clean(splitCoordinates[i]));
+            CustomCoordinateSequence sequence = new CustomCoordinateSequence(dims, clean(splitCoordinates[i]));
             LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(sequence);
             linearRings[i] = linearRing;
         }
@@ -293,8 +275,8 @@ public class WKTReader {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.coordinateSequenceDimensions);
-        hash = 37 * hash + Objects.hashCode(this.geometry);
+        hash = 79 * hash + Objects.hashCode(this.dims);
+        hash = 79 * hash + Objects.hashCode(this.geometry);
         return hash;
     }
 
@@ -310,7 +292,7 @@ public class WKTReader {
             return false;
         }
         final WKTReader other = (WKTReader) obj;
-        if (this.coordinateSequenceDimensions != other.coordinateSequenceDimensions) {
+        if (this.dims != other.dims) {
             return false;
         }
         return Objects.equals(this.geometry, other.geometry);
@@ -318,7 +300,7 @@ public class WKTReader {
 
     @Override
     public String toString() {
-        return "WKTInfo{" + "dimensions=" + coordinateSequenceDimensions + ", geometry=" + geometry + '}';
+        return "WKTReader{" + "dimensions=" + dims + ", geometry=" + geometry + '}';
     }
 
 }

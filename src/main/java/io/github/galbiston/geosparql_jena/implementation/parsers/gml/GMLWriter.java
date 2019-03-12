@@ -18,8 +18,8 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.gml;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
-import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -39,7 +39,7 @@ public class GMLWriter {
     public static String write(GeometryWrapper geometryWrapper) {
 
         Geometry geometry = geometryWrapper.getParsingGeometry();
-        CustomCoordinateSequence.CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
+        CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
         String srsName = geometryWrapper.getSrsURI();
         Element gmlElement = expand(geometry, dimensions, srsName);
         String output = XML_OUTPUT.outputString(gmlElement);

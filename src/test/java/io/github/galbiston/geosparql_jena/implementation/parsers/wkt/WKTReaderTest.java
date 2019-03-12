@@ -18,8 +18,8 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.wkt;
 
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
-import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -159,36 +159,6 @@ public class WKTReaderTest {
         WKTReader instance = new WKTReader("point", "z", "(11.0 12.0 8.0)");
         Geometry expResult = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZ, "11.0 12.0 8.0"));
         Geometry result = instance.getGeometry();
-
-        //System.out.println("Expected: " + expResult);
-        //System.out.println("Result: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getSpatialDimension method, of class WKTReader.
-     */
-    @Test
-    public void testGetSpatialDimension() {
-        System.out.println("getSpatialDimension");
-        WKTReader instance = new WKTReader("point", "", "(11.0 12.0)");
-        int expResult = 2;
-        int result = instance.getSpatialDimension();
-
-        //System.out.println("Expected: " + expResult);
-        //System.out.println("Result: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getCoordinateDimension method, of class WKTReader.
-     */
-    @Test
-    public void testGetCoordinateDimension() {
-        System.out.println("getCoordinateDimension");
-        WKTReader instance = new WKTReader("point", "", "(11.0 12.0)");
-        int expResult = 2;
-        int result = instance.getCoordinateDimension();
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);

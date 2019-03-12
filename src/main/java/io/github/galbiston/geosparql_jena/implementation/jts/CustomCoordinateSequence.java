@@ -42,10 +42,6 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
     private final int measuresDimension;
     private final CoordinateSequenceDimensions dimensions;
 
-    public enum CoordinateSequenceDimensions {
-        XY, XYZ, XYZM, XYM
-    };
-
     public CustomCoordinateSequence() {
         this.size = 0;
         this.x = new double[size];

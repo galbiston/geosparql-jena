@@ -17,9 +17,10 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.datatype;
 
-import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
+import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
@@ -244,7 +245,7 @@ public class WKTDatatypeTest {
         System.out.println("readPoint");
         String wktLiteral = "POINT ZM (11.0 12.0 8.0 5.0)";
 
-        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11.0 12.0 8.0 5.0"));
+        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "11.0 12.0 8.0 5.0"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(4, 3, 0));
         GeometryWrapper result = WKT_DATATYPE.read(wktLiteral);
 
@@ -261,7 +262,7 @@ public class WKTDatatypeTest {
         System.out.println("readPoint2");
         String wktLiteral = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT ZM(11.0 12.0 8.0 5.0)";
 
-        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11.0 12.0 8.0 5.0"));
+        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "11.0 12.0 8.0 5.0"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(4, 3, 0), wktLiteral);
         GeometryWrapper result = WKT_DATATYPE.read(wktLiteral);
 
@@ -278,7 +279,7 @@ public class WKTDatatypeTest {
         System.out.println("readLineString");
         String wktLiteral = "LINESTRING ZM (11 12.1 8 5, 3 4 6 2)";
 
-        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "11 12.1 8 5, 3 4 6 2"));
+        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "11 12.1 8 5, 3 4 6 2"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(4, 3, 1));
         GeometryWrapper result = WKT_DATATYPE.read(wktLiteral);
 
@@ -295,7 +296,7 @@ public class WKTDatatypeTest {
         System.out.println("readPolygon");
         String wktLiteral = "POLYGON ZM((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1))";
 
-        Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
+        Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(4, 3, 2), wktLiteral);
         GeometryWrapper result = WKT_DATATYPE.read(wktLiteral);
 
@@ -312,8 +313,8 @@ public class WKTDatatypeTest {
         System.out.println("readPolygon2");
         String wktLiteral = "POLYGON ZM((30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1), (20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1))";
 
-        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
-        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1"))};
+        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "30 10 0 1, 40 40 0 1, 20 40 0 1, 10 20 0 1, 30 10 0 1"));
+        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "20 30 0 1, 35 35 0 1, 30 20 0 1, 20 30 0 1"))};
         Geometry geometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
 
         GeometryWrapper expResult = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(4, 3, 2));
@@ -332,7 +333,7 @@ public class WKTDatatypeTest {
         System.out.println("readMultiPoint");
         String wktLiteral = "MULTIPOINT ZM((10 40 0 1), (40 30 0 1), (20 20 0 1), (30 10 0 1))";
 
-        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "10 40 0 1, 40 30 0 1, 20 20 0 1, 30 10 0 1"));
+        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "10 40 0 1, 40 30 0 1, 20 20 0 1, 30 10 0 1"));
         GeometryWrapper expResult = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(4, 3, 0));
         GeometryWrapper result = WKT_DATATYPE.read(wktLiteral);
 
@@ -350,8 +351,8 @@ public class WKTDatatypeTest {
         String wktLiteral = "MULTILINESTRING ZM((10 10 0 1, 20 20 0 1, 10 40 0 1), (40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1))";
 
         LineString[] lineStrings = new LineString[2];
-        lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "10 10 0 1, 20 20 0 1, 10 40 0 1"));
-        lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1"));
+        lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "10 10 0 1, 20 20 0 1, 10 40 0 1"));
+        lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "40 40 0 1, 30 30 0 1, 40 20 0 1, 30 10 0 1"));
         Geometry geometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
 
         GeometryWrapper expResult = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(4, 3, 1));
@@ -371,9 +372,9 @@ public class WKTDatatypeTest {
         String wktLiteral = "MULTIPOLYGON ZM(((40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1)), ((20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1), (30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1)))";
 
         Polygon[] polygons = new Polygon[2];
-        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1"));
-        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1"));
-        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1"))};
+        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "40 40 0 1, 20 45 0 1, 45 30 0 1, 40 40 0 1"));
+        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "20 35 0 1, 10 30 0 1, 10 10 0 1, 30 5 0 1, 45 20 0 1, 20 35 0 1"));
+        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "30 20 0 1, 20 15 0 1, 20 25 0 1, 30 20 0 1"))};
         polygons[1] = GEOMETRY_FACTORY.createPolygon(shell, holes);
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
 
@@ -394,8 +395,8 @@ public class WKTDatatypeTest {
         String wktLiteral = "GEOMETRYCOLLECTION ZM(POINT ZM (4 6 0 1), LINESTRING ZM (4 6 0 1, 7 10 0 1))";
 
         Geometry[] geometries = new Geometry[2];
-        geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "4 6 0 1"));
-        geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XYZM, "4 6 0 1,7 10 0 1"));
+        geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "4 6 0 1"));
+        geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XYZM, "4 6 0 1,7 10 0 1"));
         Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection(geometries);
 
         GeometryWrapper expResult = new GeometryWrapper(geometry, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(4, 3, 1));

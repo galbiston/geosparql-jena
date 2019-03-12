@@ -17,9 +17,10 @@
  */
 package io.github.galbiston.geosparql_jena.implementation;
 
-import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import static io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.findCoordinateSequenceDimensions;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -36,6 +37,16 @@ public class DimensionInfo implements Serializable {
     private final boolean isLine;
     private final boolean isArea;
 
+    public DimensionInfo(CoordinateSequenceDimensions coordinateSequenceDimensions, int topological) {
+        this.coordinateSequenceDimensions = coordinateSequenceDimensions;
+        this.topological = topological;
+        this.coordinate = findCoordinateDimension(coordinateSequenceDimensions);
+        this.spatial = findSpatialDimension(coordinateSequenceDimensions);
+        this.isPoint = topological == 0;
+        this.isLine = topological == 1;
+        this.isArea = topological == 2;
+    }
+
     public DimensionInfo(int coordinate, int spatial, int topological) {
         this.coordinate = coordinate;
         this.spatial = spatial;
@@ -44,6 +55,29 @@ public class DimensionInfo implements Serializable {
         this.isPoint = topological == 0;
         this.isLine = topological == 1;
         this.isArea = topological == 2;
+    }
+
+    private static int findSpatialDimension(CoordinateSequenceDimensions dims) {
+
+        switch (dims) {
+            case XYZ:
+            case XYZM:
+                return 3;
+            default:
+                return 2;
+        }
+    }
+
+    private static int findCoordinateDimension(CoordinateSequenceDimensions dims) {
+        switch (dims) {
+            case XYZ:
+            case XYM:
+                return 3;
+            case XYZM:
+                return 4;
+            default:
+                return 2;
+        }
     }
 
     public int getCoordinate() {
@@ -76,10 +110,11 @@ public class DimensionInfo implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + this.coordinate;
-        hash = 97 * hash + this.spatial;
-        hash = 97 * hash + this.topological;
+        int hash = 7;
+        hash = 53 * hash + this.coordinate;
+        hash = 53 * hash + this.spatial;
+        hash = 53 * hash + this.topological;
+        hash = 53 * hash + Objects.hashCode(this.coordinateSequenceDimensions);
         return hash;
     }
 
@@ -101,12 +136,15 @@ public class DimensionInfo implements Serializable {
         if (this.spatial != other.spatial) {
             return false;
         }
-        return this.topological == other.topological;
+        if (this.topological != other.topological) {
+            return false;
+        }
+        return this.coordinateSequenceDimensions == other.coordinateSequenceDimensions;
     }
 
     @Override
     public String toString() {
-        return "DimensionInfo{" + "coordinate=" + coordinate + ", spatial=" + spatial + ", topological=" + topological + '}';
+        return "DimensionInfo{" + "coordinate=" + coordinate + ", spatial=" + spatial + ", topological=" + topological + ", coordinateSequenceDimensions=" + coordinateSequenceDimensions + ", isPoint=" + isPoint + ", isLine=" + isLine + ", isArea=" + isArea + '}';
     }
 
     public static DimensionInfo XY_POINT() {

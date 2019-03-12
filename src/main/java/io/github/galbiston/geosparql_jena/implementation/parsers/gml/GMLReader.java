@@ -18,6 +18,7 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.gml;
 
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
@@ -51,11 +52,11 @@ public class GMLReader {
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     //Geometry attributes
-    private final CustomCoordinateSequence.CoordinateSequenceDimensions coordinateSequenceDimensions;
     private final Geometry geometry;
     private final String srsName;
     private final CoordinateReferenceSystem crs;
     private final int srsDimension;
+    private final CoordinateSequenceDimensions dims;
     private final DimensionInfo dimensionInfo;
 
     private static final Namespace GML_NAMESPACE = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
@@ -79,10 +80,22 @@ public class GMLReader {
         this.srsName = getSRSName(gmlElement);
         this.crs = SRSRegistry.getCRS(srsName);
         this.srsDimension = getSRSDimension(gmlElement, crs);
-        this.coordinateSequenceDimensions = convertDimensions(srsDimension);
+        this.dims = convertDimensionInt(srsDimension);
         String shape = gmlElement.getName();
         this.geometry = buildGeometry(shape, gmlElement);
-        this.dimensionInfo = new DimensionInfo(srsDimension, srsDimension, geometry.getDimension());
+        this.dimensionInfo = new DimensionInfo(dims, geometry.getDimension());
+    }
+
+    public static CoordinateSequenceDimensions convertDimensionInt(int srsDimension) {
+
+        switch (srsDimension) {
+            case 4:
+                return CoordinateSequenceDimensions.XYZM;
+            case 3:
+                return CoordinateSequenceDimensions.XYZ;
+            default:
+                return CoordinateSequenceDimensions.XY;
+        }
     }
 
     public Geometry getGeometry() {
@@ -93,16 +106,16 @@ public class GMLReader {
         return srsName;
     }
 
-    public CustomCoordinateSequence.CoordinateSequenceDimensions getCoordinateSequenceDimensions() {
-        return coordinateSequenceDimensions;
-    }
-
     public CoordinateReferenceSystem getCrs() {
         return crs;
     }
 
     public int getSrsDimension() {
         return srsDimension;
+    }
+
+    public CoordinateSequenceDimensions getDimensions() {
+        return dims;
     }
 
     public DimensionInfo getDimensionInfo() {
@@ -141,15 +154,6 @@ public class GMLReader {
         }
 
         return srsDim;
-    }
-
-    private static CustomCoordinateSequence.CoordinateSequenceDimensions convertDimensions(int dimension) {
-
-        if (dimension == 3) {
-            return CustomCoordinateSequence.CoordinateSequenceDimensions.XYZ;
-        } else {
-            return CustomCoordinateSequence.CoordinateSequenceDimensions.XY;
-        }
     }
 
     private Geometry buildGeometry(String shape, Element gmlElement) throws DatatypeFormatException {
@@ -193,12 +197,12 @@ public class GMLReader {
         if (coordinates == null) {
             coordinates = "";
         }
-        return new CustomCoordinateSequence(coordinateSequenceDimensions, coordinates);
+        return new CustomCoordinateSequence(dims, coordinates);
     }
 
     private CustomCoordinateSequence extractPosList(Element gmlElement) {
         String posList = gmlElement.getChildTextNormalize("posList", GML_NAMESPACE);
-        return new CustomCoordinateSequence(coordinateSequenceDimensions, convertPosList(posList));
+        return new CustomCoordinateSequence(dims, convertPosList(posList));
     }
 
     private String convertPosList(String originalCoordinates) {
@@ -349,13 +353,12 @@ public class GMLReader {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 61 * hash + Objects.hashCode(this.coordinateSequenceDimensions);
-        hash = 61 * hash + Objects.hashCode(this.geometry);
-        hash = 61 * hash + Objects.hashCode(this.srsName);
-        hash = 61 * hash + Objects.hashCode(this.crs);
-        hash = 61 * hash + this.srsDimension;
-        hash = 61 * hash + Objects.hashCode(this.dimensionInfo);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.geometry);
+        hash = 29 * hash + Objects.hashCode(this.srsName);
+        hash = 29 * hash + Objects.hashCode(this.crs);
+        hash = 29 * hash + this.srsDimension;
+        hash = 29 * hash + Objects.hashCode(this.dims);
         return hash;
     }
 
@@ -377,21 +380,18 @@ public class GMLReader {
         if (!Objects.equals(this.srsName, other.srsName)) {
             return false;
         }
-        if (this.coordinateSequenceDimensions != other.coordinateSequenceDimensions) {
-            return false;
-        }
         if (!Objects.equals(this.geometry, other.geometry)) {
             return false;
         }
         if (!Objects.equals(this.crs, other.crs)) {
             return false;
         }
-        return Objects.equals(this.dimensionInfo, other.dimensionInfo);
+        return this.dims == other.dims;
     }
 
     @Override
     public String toString() {
-        return "GMLGeometryBuilder{" + "coordinateSequenceDimensions=" + coordinateSequenceDimensions + ", geometry=" + geometry + ", srsName=" + srsName + ", crs=" + crs + ", srsDimension=" + srsDimension + ", dimensionInfo=" + dimensionInfo + '}';
+        return "GMLReader{" + "geometry=" + geometry + ", srsName=" + srsName + ", crs=" + crs + ", srsDimension=" + srsDimension + ", dimensions=" + dims + '}';
     }
 
 }

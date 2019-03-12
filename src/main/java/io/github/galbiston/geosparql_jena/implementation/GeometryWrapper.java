@@ -24,8 +24,8 @@ import io.github.galbiston.geosparql_jena.implementation.great_circle.Coordinate
 import io.github.galbiston.geosparql_jena.implementation.great_circle.GreatCircleDistance;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryLiteralIndex.GeometryIndex;
 import io.github.galbiston.geosparql_jena.implementation.index.GeometryTransformIndex;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
-import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import io.github.galbiston.geosparql_jena.implementation.registry.MathTransformRegistry;
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;

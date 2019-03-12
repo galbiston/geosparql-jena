@@ -20,6 +20,7 @@ package io.github.galbiston.geosparql_jena.implementation.parsers.gml;
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.GMLDatatype;
+import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import org.junit.After;
@@ -66,7 +67,7 @@ public class GMLWriterTest {
     @Test
     public void testWritePoint() {
         System.out.println("writePoint");
-        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "11.0 12.1"));
+        Geometry geometry = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "11.0 12.1"));
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
@@ -81,7 +82,7 @@ public class GMLWriterTest {
     @Test
     public void testWriteLineString() {
         System.out.println("writeLineString");
-        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "11.0 12.1, 15.0 8.0"));
+        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "11.0 12.1, 15.0 8.0"));
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
@@ -96,7 +97,7 @@ public class GMLWriterTest {
     @Test
     public void testWritePolygon() {
         System.out.println("writePolygon");
-        Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "30 10, 40 40, 20 40, 10 20, 30 10"));
+        Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "30 10, 40 40, 20 40, 10 20, 30 10"));
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
@@ -110,8 +111,8 @@ public class GMLWriterTest {
     @Test
     public void testWritePolygon2() {
         System.out.println("writePolygon2");
-        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "30 10, 40 40, 20 40, 10 20, 30 10"));
-        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "20 30, 35 35, 30 20, 20 30"))};
+        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "30 10, 40 40, 20 40, 10 20, 30 10"));
+        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "20 30, 35 35, 30 20, 20 30"))};
         Geometry geometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
@@ -126,7 +127,7 @@ public class GMLWriterTest {
     @Test
     public void testWriteMultiPoint() {
         System.out.println("writeMultiPoint");
-        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "10 40, 40 30, 20 20, 30 10"));
+        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "10 40, 40 30, 20 20, 30 10"));
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
@@ -141,8 +142,8 @@ public class GMLWriterTest {
     public void testWriteMultiLineString() {
         System.out.println("writeMultiLineString");
         LineString[] lineStrings = new LineString[2];
-        lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "10 10, 20 20, 10 40"));
-        lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "40 40, 30 30, 40 20, 30 10"));
+        lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "10 10, 20 20, 10 40"));
+        lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 30 30, 40 20, 30 10"));
         Geometry geometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
@@ -158,9 +159,9 @@ public class GMLWriterTest {
     public void testWriteMultiPolygon() {
         System.out.println("writeMultiPolygon");
         Polygon[] polygons = new Polygon[2];
-        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "40 40, 20 45, 45 30, 40 40"));
-        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "20 35, 10 30, 10 10, 30 5, 45 20, 20 35"));
-        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "30 20, 20 15, 20 25, 30 20"))};
+        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 20 45, 45 30, 40 40"));
+        LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "20 35, 10 30, 10 10, 30 5, 45 20, 20 35"));
+        LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "30 20, 20 15, 20 25, 30 20"))};
         polygons[1] = GEOMETRY_FACTORY.createPolygon(shell, holes);
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
@@ -177,8 +178,8 @@ public class GMLWriterTest {
     public void testWriteGeometryCollection() {
         System.out.println("writeGeometryCollection");
         Geometry[] geometries = new Geometry[2];
-        geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "4 6"));
-        geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CustomCoordinateSequence.CoordinateSequenceDimensions.XY, "4 6,7 10"));
+        geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "4 6"));
+        geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "4 6,7 10"));
         Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection(geometries);
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
