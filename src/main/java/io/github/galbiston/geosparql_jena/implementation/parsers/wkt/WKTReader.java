@@ -81,24 +81,24 @@ public class WKTReader {
     public int getSpatialDimension() {
 
         switch (coordinateSequenceDimensions) {
-            default:
-                return 2;
             case XYZ:
             case XYZM:
                 return 3;
+            default:
+                return 2;
         }
     }
 
     public int getCoordinateDimension() {
 
         switch (coordinateSequenceDimensions) {
-            default:
-                return 2;
             case XYZ:
             case XYM:
                 return 3;
             case XYZM:
                 return 4;
+            default:
+                return 2;
         }
     }
 
