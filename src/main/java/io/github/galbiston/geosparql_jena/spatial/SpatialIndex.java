@@ -20,6 +20,7 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -64,16 +64,23 @@ import org.slf4j.LoggerFactory;
  * Dataset specific.
  *
  */
-public class SpatialIndex implements Serializable {
+public class SpatialIndex {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static final Symbol SPATIAL_INDEX_SYMBOL = Symbol.create("http://jena.apache.org/spatial#index");
 
-    private final SRSInfo srsInfo;
+    private transient SRSInfo srsInfo;
     private boolean isBuilt;
     private final STRtree strTree;
     private static final int MINIMUM_CAPACITY = 2;
+
+    private SpatialIndex() {
+        this.strTree = new STRtree(MINIMUM_CAPACITY);
+        this.isBuilt = true;
+        this.strTree.build();
+        this.srsInfo = SRSRegistry.getSRSInfo(SRS_URI.DEFAULT_WKT_CRS84);
+    }
 
     /**
      * Unbuilt Spatial Index with provided capacity.
@@ -233,8 +240,10 @@ public class SpatialIndex implements Serializable {
         SpatialIndex spatialIndex = load(spatialIndexFile);
 
         if (spatialIndex.isEmpty()) {
-            spatialIndex = buildSpatialIndex(dataset, srsURI);
-            save(spatialIndexFile, spatialIndex);
+            Collection<SpatialIndexItem> spatialIndexItems = findSpatialIndexItems(dataset, srsURI);
+            save(spatialIndexFile, spatialIndexItems, srsURI);
+            spatialIndex = new SpatialIndex(spatialIndexItems, srsURI);
+            spatialIndex.build();
         }
 
         setSpatialIndex(dataset, spatialIndex);
@@ -268,6 +277,22 @@ public class SpatialIndex implements Serializable {
     public static SpatialIndex buildSpatialIndex(Dataset dataset, String srsURI) {
         LOGGER.info("Building Spatial Index - Started");
 
+        Collection<SpatialIndexItem> items = findSpatialIndexItems(dataset, srsURI);
+        SpatialIndex spatialIndex = new SpatialIndex(items, srsURI);
+        spatialIndex.build();
+        setSpatialIndex(dataset, spatialIndex);
+        LOGGER.info("Building Spatial Index - Completed");
+        return spatialIndex;
+    }
+
+    /**
+     * Find Spatial Index Items from all graphs in Dataset.<br>
+     *
+     * @param dataset
+     * @param srsURI
+     * @return SpatialIndexItems found.
+     */
+    public static Collection<SpatialIndexItem> findSpatialIndexItems(Dataset dataset, String srsURI) {
         //Default Model
         dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
@@ -282,13 +307,9 @@ public class SpatialIndex implements Serializable {
             items.addAll(graphItems);
         }
 
-        LOGGER.info("Building Spatial Index - Completed");
         dataset.end();
-        SpatialIndex spatialIndex = new SpatialIndex(items, srsURI);
-        spatialIndex.build();
-        setSpatialIndex(dataset, spatialIndex);
 
-        return spatialIndex;
+        return items;
     }
 
     /**
@@ -434,7 +455,8 @@ public class SpatialIndex implements Serializable {
     }
 
     /**
-     * Load a SpatialIndex from file.
+     * Load a SpatialIndex from file.<br>
+     * Index will be built and empty if file does not exist or is null.
      *
      * @param spatialIndexFile
      * @return Built Spatial Index.
@@ -443,40 +465,49 @@ public class SpatialIndex implements Serializable {
     public static final SpatialIndex load(File spatialIndexFile) throws SpatialIndexException {
 
         if (spatialIndexFile != null && spatialIndexFile.exists()) {
-
+            LOGGER.info("Loading Spatial Index - Started: {}", spatialIndexFile.getAbsolutePath());
+            //Cannot directly store the SpatialIndex due to Resources not being serializable, use SpatialIndexStorage class.
             try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(spatialIndexFile))) {
-                SpatialIndex spatialIndex = (SpatialIndex) in.readObject();
-                spatialIndex.build();
+                SpatialIndexStorage storage = (SpatialIndexStorage) in.readObject();
+
+                SpatialIndex spatialIndex = storage.getSpatialIndex();
+                LOGGER.info("Loading Spatial Index - Completed: {}", spatialIndexFile.getAbsolutePath());
                 return spatialIndex;
             } catch (ClassNotFoundException | IOException ex) {
                 throw new SpatialIndexException("Loading Exception: " + ex.getMessage(), ex);
             }
         } else {
-            throw new SpatialIndexException("File is null or does not exist.");
+            return new SpatialIndex();
         }
     }
 
     /**
-     * Save SpatialIndex to file.
+     * Save SpatialIndex contents to file.
      *
      * @param spatialIndexFileURI
-     * @param spatialIndex
+     * @param spatialIndexItems
+     * @param srsURI
      */
-    public static final void save(String spatialIndexFileURI, SpatialIndex spatialIndex) {
-        save(new File(spatialIndexFileURI), spatialIndex);
+    public static final void save(String spatialIndexFileURI, Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
+        save(new File(spatialIndexFileURI), spatialIndexItems, srsURI);
     }
 
     /**
-     * Save SpatialIndex to file.
+     * Save SpatialIndex contents to file.
      *
      * @param spatialIndexFile
-     * @param spatialIndex
+     * @param spatialIndexItems
+     * @param srsURI
      */
-    public static final void save(File spatialIndexFile, SpatialIndex spatialIndex) {
+    public static final void save(File spatialIndexFile, Collection<SpatialIndexItem> spatialIndexItems, String srsURI) {
 
+        //Cannot directly store the SpatialIndex due to Resources not being serializable, use SpatialIndexStorage class.
         if (spatialIndexFile != null) {
+            LOGGER.info("Saving Spatial Index - Started: {}", spatialIndexFile.getAbsolutePath());
+            SpatialIndexStorage storage = new SpatialIndexStorage(spatialIndexItems, srsURI);
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(spatialIndexFile))) {
-                out.writeObject(spatialIndex);
+                out.writeObject(storage);
+                LOGGER.info("Saving Spatial Index - Completed: {}", spatialIndexFile.getAbsolutePath());
             } catch (Exception ex) {
                 throw new SpatialIndexException("Save Exception: " + ex.getMessage());
             }
