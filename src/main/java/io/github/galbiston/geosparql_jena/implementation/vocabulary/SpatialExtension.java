@@ -36,6 +36,7 @@ public class SpatialExtension {
     public static final String DISTANCE = SPATIAL_FUNCTION_URI + "distance";
     public static final String GREAT_CIRCLE = SPATIAL_FUNCTION_URI + "greatCircle";
     public static final String GREAT_CIRCLE_GEOM = SPATIAL_FUNCTION_URI + "greatCircleGeom";
+    public static final String TRANSFORM_DATATYPE = SPATIAL_FUNCTION_URI + "transformDatatype";
 
     //Property Functions
     public static final String NEARBY_PROP = SPATIAL_URI + "nearby";
