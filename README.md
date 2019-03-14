@@ -370,6 +370,9 @@ Function Name | Description
 *?distance* **spatialF:greatCircle**(*?lat1*, *?lon1*, *?lat2*, *?lon2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Lat/Lon Points in distance *units*.
 *?distance* **spatialF:greatCircleGeom**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Geometry Literals in distance *units*. Use `http://www.opengis.net/def/function/geosparql/distance` from GeoSPARQL standard for Euclidean distance.
 *?distance* **spatialF:distance**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Distance between two Geometry Literals in distance *units*. Chooses distance measure based on SRS type. Great Circle distance for Geographic SRS and Euclidean otherwise.
+*?geomLit2* **spatialF:transform**(*?geomLit1*, *?datatypeURI*, *?srsURI*) | Transform Geometry Literal by Datatype and SRS.
+*?geomLit2* **spatialF:transformDatatype**(*?geomLit1*, *?datatypeURI*) | Transform Geometry Literal by Datatype.
+*?geomLit2* **spatialF:transformSRS**(*?geomLit1*, *?srsURI*) | Transform Geometry Literal by SRS.
 
 ### Property Functions
 These property functions are available in the `http://jena.apache.org/spatial#` namespace and here use the prefix `spatial`.
