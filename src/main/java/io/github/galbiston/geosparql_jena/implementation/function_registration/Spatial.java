@@ -16,13 +16,14 @@
 package io.github.galbiston.geosparql_jena.implementation.function_registration;
 
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
-import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformDatatypeFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.DistanceFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.GreatCircleFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.GreatCircleGeomFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformDatatypeFF;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformSRSFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxGeomPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.WithinBoxGeomPF;
@@ -86,6 +87,7 @@ public class Spatial {
         functionRegistry.put(SpatialExtension.GREAT_CIRCLE, GreatCircleFF.class);
         functionRegistry.put(SpatialExtension.GREAT_CIRCLE_GEOM, GreatCircleGeomFF.class);
         functionRegistry.put(SpatialExtension.TRANSFORM_DATATYPE, TransformDatatypeFF.class);
+        functionRegistry.put(SpatialExtension.TRANSFORM_SRS, TransformSRSFF.class);
     }
 
 }
