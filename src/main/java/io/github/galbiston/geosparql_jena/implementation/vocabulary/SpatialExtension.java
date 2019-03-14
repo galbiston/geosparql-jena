@@ -38,6 +38,7 @@ public class SpatialExtension {
     public static final String GREAT_CIRCLE_GEOM = SPATIAL_FUNCTION_URI + "greatCircleGeom";
     public static final String TRANSFORM_DATATYPE = SPATIAL_FUNCTION_URI + "transformDatatype";
     public static final String TRANSFORM_SRS = SPATIAL_FUNCTION_URI + "transformSRS";
+    public static final String TRANSFORM = SPATIAL_FUNCTION_URI + "transform";
 
     //Property Functions
     public static final String NEARBY_PROP = SPATIAL_URI + "nearby";

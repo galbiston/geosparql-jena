@@ -23,6 +23,7 @@ import io.github.galbiston.geosparql_jena.spatial.filter_functions.GreatCircleFF
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.GreatCircleGeomFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformDatatypeFF;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformSRSFF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxGeomPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxPF;
@@ -88,6 +89,7 @@ public class Spatial {
         functionRegistry.put(SpatialExtension.GREAT_CIRCLE_GEOM, GreatCircleGeomFF.class);
         functionRegistry.put(SpatialExtension.TRANSFORM_DATATYPE, TransformDatatypeFF.class);
         functionRegistry.put(SpatialExtension.TRANSFORM_SRS, TransformSRSFF.class);
+        functionRegistry.put(SpatialExtension.TRANSFORM, TransformFF.class);
     }
 
 }
