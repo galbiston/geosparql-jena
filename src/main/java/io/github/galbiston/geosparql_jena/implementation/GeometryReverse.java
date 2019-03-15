@@ -84,7 +84,7 @@ public class GeometryReverse {
      * @param geometry
      * @return Geometry in x,y coordinate order.
      */
-    private static Geometry reverseGeometry(Geometry geometry) {
+    public static Geometry reverseGeometry(Geometry geometry) {
 
         if (geometry.isEmpty()) {
             return geometry.copy();
