@@ -20,8 +20,12 @@ package io.github.galbiston.geosparql_jena.implementation;
 import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import static io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.findCoordinateSequenceDimensions;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.CoordinateXY;
+import org.locationtech.jts.geom.CoordinateXYM;
+import org.locationtech.jts.geom.CoordinateXYZM;
 
 /**
  *
@@ -82,38 +86,67 @@ public class DimensionInfo implements Serializable {
     }
 
     public static DimensionInfo findForPoint(Coordinate coordinate) {
-        if (coordinate.getZ() == Double.NaN && coordinate.getM() == Double.NaN) {
+
+        if (coordinate instanceof CoordinateXY) {
             return XY_POINT;
-        } else if (coordinate.getZ() != Double.NaN && coordinate.getM() == Double.NaN) {
-            return XYZ_POINT;
-        } else if (coordinate.getZ() == Double.NaN && coordinate.getM() != Double.NaN) {
+        } else if (coordinate instanceof CoordinateXYM) {
             return XYM_POINT;
-        } else {
+        } else if (coordinate instanceof CoordinateXYZM) {
             return XYZM_POINT;
         }
-    }
 
-    public static DimensionInfo findForLineString(Coordinate coordinate) {
-        if (coordinate.getZ() == Double.NaN && coordinate.getM() == Double.NaN) {
-            return XY_LINESTRING;
-        } else if (coordinate.getZ() != Double.NaN && coordinate.getM() == Double.NaN) {
-            return XYZ_LINESTRING;
-        } else if (coordinate.getZ() == Double.NaN && coordinate.getM() != Double.NaN) {
-            return XYM_LINESTRING;
+        //Coordinate can be either XY or XYZ.
+        if (Double.isNaN(coordinate.getZ())) {
+            return XY_POINT;
         } else {
-            return XYZM_LINESTRING;
+            return XYZ_POINT;
         }
     }
 
-    public static DimensionInfo findForPolygon(Coordinate coordinate) {
-        if (coordinate.getZ() == Double.NaN && coordinate.getM() == Double.NaN) {
-            return XY_POLYGON;
-        } else if (coordinate.getZ() != Double.NaN && coordinate.getM() == Double.NaN) {
-            return XYZ_POLYGON;
-        } else if (coordinate.getZ() == Double.NaN && coordinate.getM() != Double.NaN) {
-            return XYM_POLYGON;
+    public static DimensionInfo findForLineString(List<Coordinate> coordinates) {
+
+        if (coordinates.isEmpty()) {
+            return XY_LINESTRING;
+        }
+
+        Coordinate coordinate = coordinates.get(0);
+
+        if (coordinate instanceof CoordinateXY) {
+            return XY_LINESTRING;
+        } else if (coordinate instanceof CoordinateXYM) {
+            return XYM_LINESTRING;
+        } else if (coordinate instanceof CoordinateXYZM) {
+            return XYZM_LINESTRING;
+        }
+
+        //Coordinate can be either XY or XYZ.
+        if (Double.isNaN(coordinate.getZ())) {
+            return XY_LINESTRING;
         } else {
+            return XYZ_LINESTRING;
+        }
+    }
+
+    public static DimensionInfo findForPolygon(List<Coordinate> coordinates) {
+        if (coordinates.isEmpty()) {
+            return XY_POLYGON;
+        }
+
+        Coordinate coordinate = coordinates.get(0);
+
+        if (coordinate instanceof CoordinateXY) {
+            return XY_POLYGON;
+        } else if (coordinate instanceof CoordinateXYM) {
+            return XYM_POLYGON;
+        } else if (coordinate instanceof CoordinateXYZM) {
             return XYZM_POLYGON;
+        }
+
+        //Coordinate can be either XY or XYZ.
+        if (Double.isNaN(coordinate.getZ())) {
+            return XY_POLYGON;
+        } else {
+            return XYZ_POLYGON;
         }
     }
 
