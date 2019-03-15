@@ -23,6 +23,8 @@ import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFacto
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
+import java.util.Arrays;
+import java.util.List;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.sis.referencing.CRS;
@@ -573,6 +575,126 @@ public class GeometryWrapperTest {
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
         assertEquals(expResult, result, 0.0001);
+    }
+
+    /**
+     * Test of createPoint method, of class GeometryWrapper.
+     */
+    @Test
+    public void testCreatPoint() {
+        System.out.println("createPoint");
+        Coordinate coordinate = new Coordinate(1, 2);
+        String srsURI = SRS_URI.WGS84_CRS;
+        String geometryDatatypeURI = WKTDatatype.URI;
+
+        GeometryWrapper instance = GeometryWrapper.createPoint(coordinate, srsURI, geometryDatatypeURI);
+
+        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(2 1)";
+        String result = instance.asLiteral().getLexicalForm();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of createPoint method, of class GeometryWrapper.
+     */
+    @Test
+    public void testCreatPoint_xy() {
+        System.out.println("createPoint_xy");
+        Coordinate coordinate = new Coordinate(1, 2);
+        String srsURI = SRS_URI.DEFAULT_WKT_CRS84;
+        String geometryDatatypeURI = WKTDatatype.URI;
+
+        GeometryWrapper instance = GeometryWrapper.createPoint(coordinate, srsURI, geometryDatatypeURI);
+
+        String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(1 2)";
+        String result = instance.asLiteral().getLexicalForm();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of createLineString method, of class GeometryWrapper.
+     */
+    @Test
+    public void testCreatLineString() {
+        System.out.println("createLineString");
+        List<Coordinate> coordinates = Arrays.asList(new Coordinate(1, 2), new Coordinate(10, 20));
+        String srsURI = SRS_URI.WGS84_CRS;
+        String geometryDatatypeURI = WKTDatatype.URI;
+
+        GeometryWrapper instance = GeometryWrapper.createLineString(coordinates, srsURI, geometryDatatypeURI);
+
+        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> LINESTRING(2 1, 20 10)";
+        String result = instance.asLiteral().getLexicalForm();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of createLineString method, of class GeometryWrapper.
+     */
+    @Test
+    public void testCreatLineString_xy() {
+        System.out.println("createLineString_xy");
+        List<Coordinate> coordinates = Arrays.asList(new Coordinate(1, 2), new Coordinate(10, 20));
+        String srsURI = SRS_URI.DEFAULT_WKT_CRS84;
+        String geometryDatatypeURI = WKTDatatype.URI;
+
+        GeometryWrapper instance = GeometryWrapper.createLineString(coordinates, srsURI, geometryDatatypeURI);
+
+        String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING(1 2, 10 20)";
+        String result = instance.asLiteral().getLexicalForm();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of createPolygon method, of class GeometryWrapper.
+     */
+    @Test
+    public void testCreatPolygon() {
+        System.out.println("createPolygon");
+        List<Coordinate> coordinates = Arrays.asList(new Coordinate(1, 2), new Coordinate(10, 2), new Coordinate(10, 20), new Coordinate(1, 20), new Coordinate(1, 2));
+        String srsURI = SRS_URI.WGS84_CRS;
+        String geometryDatatypeURI = WKTDatatype.URI;
+
+        GeometryWrapper instance = GeometryWrapper.createPolygon(coordinates, srsURI, geometryDatatypeURI);
+
+        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POLYGON((2 1, 2 10, 20 10, 20 1, 2 1))";
+        String result = instance.asLiteral().getLexicalForm();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of createPolygon method, of class GeometryWrapper.
+     */
+    @Test
+    public void testCreatPolygon_xy() {
+        System.out.println("createPolygon_xy");
+        List<Coordinate> coordinates = Arrays.asList(new Coordinate(1, 2), new Coordinate(10, 2), new Coordinate(10, 20), new Coordinate(1, 20), new Coordinate(1, 2));
+        String srsURI = SRS_URI.DEFAULT_WKT_CRS84;
+        String geometryDatatypeURI = WKTDatatype.URI;
+
+        GeometryWrapper instance = GeometryWrapper.createPolygon(coordinates, srsURI, geometryDatatypeURI);
+
+        String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POLYGON((1 2, 10 2, 10 20, 1 20, 1 2))";
+        String result = instance.asLiteral().getLexicalForm();
+
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        assertEquals(expResult, result);
     }
 
 }

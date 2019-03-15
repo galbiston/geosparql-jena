@@ -33,6 +33,7 @@ import io.github.galbiston.geosparql_jena.implementation.registry.UnitsRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Node;
@@ -45,7 +46,9 @@ import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.IntersectionMatrix;
+import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import org.locationtech.jts.geom.util.AffineTransformation;
@@ -83,6 +86,10 @@ public class GeometryWrapper implements Serializable {
         this(geometry, GeometryReverse.check(geometry, srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, geometryDatatypeURI, dimensionInfo, geometryLiteral);
     }
 
+    private GeometryWrapper(Geometry parsingGeometry, Geometry xyGeometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo) {
+        this(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimensionInfo, null);
+    }
+
     private GeometryWrapper(Geometry parsingGeometry, Geometry xyGeometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo, String lexicalForm) {
 
         this.parsingGeometry = parsingGeometry;
@@ -110,7 +117,7 @@ public class GeometryWrapper implements Serializable {
      * @param geometryDatatypeURI
      */
     public GeometryWrapper(Geometry geometry, String geometryDatatypeURI) {
-        this(geometry, "", geometryDatatypeURI, DimensionInfo.XY_POINT());
+        this(geometry, "", geometryDatatypeURI, DimensionInfo.XY_POINT);
     }
 
     /**
@@ -121,7 +128,7 @@ public class GeometryWrapper implements Serializable {
      * @param geometryDatatypeURI
      */
     public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI) {
-        this(geometry, srsURI, geometryDatatypeURI, DimensionInfo.XY_POINT());
+        this(geometry, srsURI, geometryDatatypeURI, DimensionInfo.XY_POINT);
     }
 
     transient private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
@@ -133,7 +140,7 @@ public class GeometryWrapper implements Serializable {
      * @param geometryDatatypeURI
      */
     public GeometryWrapper(String srsURI, String geometryDatatypeURI) {
-        this(new CustomCoordinateSequence(DimensionInfo.XY_POINT().getDimensions()), geometryDatatypeURI, srsURI);
+        this(new CustomCoordinateSequence(DimensionInfo.XY_POINT.getDimensions()), geometryDatatypeURI, srsURI);
     }
 
     /**
@@ -144,7 +151,7 @@ public class GeometryWrapper implements Serializable {
      * @param srsURI
      */
     public GeometryWrapper(CustomCoordinateSequence pointCoordinateSequence, String geometryDatatypeURI, String srsURI) {
-        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, geometryDatatypeURI, DimensionInfo.XY_POINT());
+        this(GEOMETRY_FACTORY.createPoint(pointCoordinateSequence), srsURI, geometryDatatypeURI, DimensionInfo.XY_POINT);
     }
 
     /**
@@ -1163,6 +1170,87 @@ public class GeometryWrapper implements Serializable {
      */
     public static final GeometryWrapper getEmptyGML() {
         return GMLDatatype.INSTANCE.read("");
+    }
+
+    /**
+     * Create Point GeometryWrapper.
+     *
+     * @param coordinate
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPoint(Coordinate coordinate, String srsURI, String geometryDatatypeURI) {
+        Point xyGeometry = GEOMETRY_FACTORY.createPoint(coordinate);
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.findForPoint(coordinate);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create LineString GeometryWrapper.
+     *
+     * @param coordinates
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createLineString(List<Coordinate> coordinates, String srsURI, String geometryDatatypeURI) {
+        LineString xyGeometry = GEOMETRY_FACTORY.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.findForLineString(coordinates);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create Polygon GeometryWrapper.
+     *
+     * @param coordinates
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPolygon(List<Coordinate> coordinates, String srsURI, String geometryDatatypeURI) {
+        Polygon xyGeometry = GEOMETRY_FACTORY.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.findForLineString(coordinates);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create Point GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param coordinate
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPoint(Coordinate coordinate, String geometryDatatypeURI) {
+        return createPoint(coordinate, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create LineString GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param coordinates
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createLineString(List<Coordinate> coordinates, String geometryDatatypeURI) {
+        return createLineString(coordinates, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create Polygon GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param coordinates
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPolygon(List<Coordinate> coordinates, String geometryDatatypeURI) {
+        return createPolygon(coordinates, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
     }
 
     @Override
