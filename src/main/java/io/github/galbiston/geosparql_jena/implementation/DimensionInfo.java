@@ -24,8 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateXY;
-import org.locationtech.jts.geom.CoordinateXYM;
-import org.locationtech.jts.geom.CoordinateXYZM;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  *
@@ -85,69 +84,32 @@ public class DimensionInfo implements Serializable {
         }
     }
 
-    public static DimensionInfo findForPoint(Coordinate coordinate) {
-
-        if (coordinate instanceof CoordinateXY) {
-            return XY_POINT;
-        } else if (coordinate instanceof CoordinateXYM) {
-            return XYM_POINT;
-        } else if (coordinate instanceof CoordinateXYZM) {
-            return XYZM_POINT;
-        }
-
-        //Coordinate can be either XY or XYZ.
-        if (Double.isNaN(coordinate.getZ())) {
-            return XY_POINT;
-        } else {
-            return XYZ_POINT;
-        }
+    public static DimensionInfo find(Coordinate coordinate, Geometry geometry) {
+        CoordinateSequenceDimensions coordDims = CoordinateSequenceDimensions.find(coordinate);
+        return new DimensionInfo(coordDims, geometry.getDimension());
     }
 
-    public static DimensionInfo findForLineString(List<Coordinate> coordinates) {
+    private static final Coordinate XY_COORDINATE = new CoordinateXY(0, 0);
 
+    public static DimensionInfo find(List<Coordinate> coordinates, Geometry geometry) {
+        Coordinate coordinate;
         if (coordinates.isEmpty()) {
-            return XY_LINESTRING;
-        }
-
-        Coordinate coordinate = coordinates.get(0);
-
-        if (coordinate instanceof CoordinateXY) {
-            return XY_LINESTRING;
-        } else if (coordinate instanceof CoordinateXYM) {
-            return XYM_LINESTRING;
-        } else if (coordinate instanceof CoordinateXYZM) {
-            return XYZM_LINESTRING;
-        }
-
-        //Coordinate can be either XY or XYZ.
-        if (Double.isNaN(coordinate.getZ())) {
-            return XY_LINESTRING;
+            coordinate = XY_COORDINATE;
         } else {
-            return XYZ_LINESTRING;
+            coordinate = coordinates.get(0);
         }
+        return find(coordinate, geometry);
     }
 
-    public static DimensionInfo findForPolygon(List<Coordinate> coordinates) {
-        if (coordinates.isEmpty()) {
-            return XY_POLYGON;
-        }
-
-        Coordinate coordinate = coordinates.get(0);
-
-        if (coordinate instanceof CoordinateXY) {
-            return XY_POLYGON;
-        } else if (coordinate instanceof CoordinateXYM) {
-            return XYM_POLYGON;
-        } else if (coordinate instanceof CoordinateXYZM) {
-            return XYZM_POLYGON;
-        }
-
-        //Coordinate can be either XY or XYZ.
-        if (Double.isNaN(coordinate.getZ())) {
-            return XY_POLYGON;
+    public static DimensionInfo findCollection(List<? extends Geometry> geometries, Geometry geometry) {
+        Coordinate coordinate;
+        if (geometries.isEmpty()) {
+            coordinate = XY_COORDINATE;
         } else {
-            return XYZ_POLYGON;
+            Geometry geom = geometries.get(0);
+            coordinate = geom.getCoordinate();
         }
+        return find(coordinate, geometry);
     }
 
     public int getCoordinate() {

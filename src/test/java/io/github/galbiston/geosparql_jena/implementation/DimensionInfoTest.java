@@ -24,8 +24,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.CoordinateXYM;
-import org.locationtech.jts.geom.CoordinateXYZM;
+import org.locationtech.jts.geom.CoordinateXY;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 
 /**
  *
@@ -53,14 +55,16 @@ public class DimensionInfoTest {
     }
 
     /**
-     * Test of findForPoint method, of class DimensionInfo.
+     * Test of find method, of class DimensionInfo.
      */
     @Test
-    public void testFindForPoint_xy() {
-        System.out.println("findForPoint_xy");
-        Coordinate coordinate = new Coordinate(1.0, 2.0);
+    public void testFind_Coordinate_Geometry() {
+        System.out.println("find");
+        Coordinate coordinate = new CoordinateXY(1.0, 2.0);
+        GeometryFactory factory = new GeometryFactory();
+        Geometry geometry = factory.createPoint(coordinate);
         DimensionInfo expResult = DimensionInfo.XY_POINT;
-        DimensionInfo result = DimensionInfo.findForPoint(coordinate);
+        DimensionInfo result = DimensionInfo.find(coordinate, geometry);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -68,60 +72,16 @@ public class DimensionInfoTest {
     }
 
     /**
-     * Test of findForPoint method, of class DimensionInfo.
+     * Test of find method, of class DimensionInfo.
      */
     @Test
-    public void testFindForPoint_xyz() {
-        System.out.println("findForPoint_xyz");
-        Coordinate coordinate = new Coordinate(1.0, 2.0, 3.0);
-        DimensionInfo expResult = DimensionInfo.XYZ_POINT;
-        DimensionInfo result = DimensionInfo.findForPoint(coordinate);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForPoint method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForPoint_xym() {
-        System.out.println("findForPoint_xym");
-        Coordinate coordinate = new CoordinateXYM(1.0, 2.0, 3.0);
-        DimensionInfo expResult = DimensionInfo.XYM_POINT;
-        DimensionInfo result = DimensionInfo.findForPoint(coordinate);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForPoint method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForPoint_xyzm() {
-        System.out.println("findForPoint_xyzm");
-        Coordinate coordinate = new CoordinateXYZM(1.0, 2.0, 3.0, 4.0);
-        DimensionInfo expResult = DimensionInfo.XYZM_POINT;
-        DimensionInfo result = DimensionInfo.findForPoint(coordinate);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForLineString method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForLineString_xy() {
-        System.out.println("findForLineString_xy");
-        Coordinate coordinate = new Coordinate(1.0, 2.0);
-        List<Coordinate> coordinates = Arrays.asList(coordinate);
+    public void testFind_List_Geometry() {
+        System.out.println("find");
+        List<Coordinate> coordinates = Arrays.asList(new CoordinateXY(1.0, 2.0), new CoordinateXY(10.0, 20.0));
+        GeometryFactory factory = new GeometryFactory();
+        Geometry geometry = factory.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
         DimensionInfo expResult = DimensionInfo.XY_LINESTRING;
-        DimensionInfo result = DimensionInfo.findForLineString(coordinates);
+        DimensionInfo result = DimensionInfo.find(coordinates, geometry);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -129,111 +89,17 @@ public class DimensionInfoTest {
     }
 
     /**
-     * Test of findForLineString method, of class DimensionInfo.
+     * Test of findCollection method, of class DimensionInfo.
      */
     @Test
-    public void testFindForLineString_xyz() {
-        System.out.println("findForLineString_xyz");
-        Coordinate coordinate = new Coordinate(1.0, 2.0, 3.0);
-        List<Coordinate> coordinates = Arrays.asList(coordinate);
-        DimensionInfo expResult = DimensionInfo.XYZ_LINESTRING;
-        DimensionInfo result = DimensionInfo.findForLineString(coordinates);
+    public void testFindCollection() {
+        System.out.println("findCollection");
+        GeometryFactory factory = new GeometryFactory();
+        List<Point> points = Arrays.asList(factory.createPoint(new Coordinate(1.0, 2.0)), factory.createPoint(new Coordinate(10.0, 20.0)));
 
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForLineString method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForLineString_xym() {
-        System.out.println("findForLineString_xym");
-        Coordinate coordinate = new CoordinateXYM(1.0, 2.0, 3.0);
-        List<Coordinate> coordinates = Arrays.asList(coordinate);
-        DimensionInfo expResult = DimensionInfo.XYM_LINESTRING;
-        DimensionInfo result = DimensionInfo.findForLineString(coordinates);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForLineString method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForLineString_xyzm() {
-        System.out.println("findForLineString_xyzm");
-        Coordinate coordinate = new CoordinateXYZM(1.0, 2.0, 3.0, 4.0);
-        List<Coordinate> coordinates = Arrays.asList(coordinate);
-        DimensionInfo expResult = DimensionInfo.XYZM_LINESTRING;
-        DimensionInfo result = DimensionInfo.findForLineString(coordinates);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForPolygon method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForPolygon_xy() {
-        System.out.println("findForPolygon_xy");
-        Coordinate coordinate = new Coordinate(1.0, 2.0);
-        List<Coordinate> coordinates = Arrays.asList(coordinate);
-        DimensionInfo expResult = DimensionInfo.XY_POLYGON;
-        DimensionInfo result = DimensionInfo.findForPolygon(coordinates);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForPolygon method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForPolygon_xyz() {
-        System.out.println("findForPolygon_xyz");
-        Coordinate coordinate = new Coordinate(1.0, 2.0, 3.0);
-        List<Coordinate> coordinates = Arrays.asList(coordinate);
-        DimensionInfo expResult = DimensionInfo.XYZ_POLYGON;
-        DimensionInfo result = DimensionInfo.findForPolygon(coordinates);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForPolygon method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForPolygon_xym() {
-        System.out.println("findForPolygon_xym");
-        Coordinate coordinate = new CoordinateXYM(1.0, 2.0, 3.0);
-        List<Coordinate> coordinates = Arrays.asList(coordinate);
-        DimensionInfo expResult = DimensionInfo.XYM_POLYGON;
-        DimensionInfo result = DimensionInfo.findForPolygon(coordinates);
-
-        //System.out.println("Exp: " + expResult);
-        //System.out.println("Res: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of findForPolygon method, of class DimensionInfo.
-     */
-    @Test
-    public void testFindForPolygon_xyzm() {
-        System.out.println("findForPolygon_xyzm");
-        Coordinate coordinate = new CoordinateXYZM(1.0, 2.0, 3.0, 4.0);
-        List<Coordinate> coordinates = Arrays.asList(coordinate);
-        DimensionInfo expResult = DimensionInfo.XYZM_POLYGON;
-        DimensionInfo result = DimensionInfo.findForPolygon(coordinates);
+        Geometry geometry = factory.createMultiPoint(points.toArray(new Point[points.size()]));
+        DimensionInfo expResult = DimensionInfo.XY_POINT;
+        DimensionInfo result = DimensionInfo.findCollection(points, geometry);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
