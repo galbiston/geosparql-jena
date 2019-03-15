@@ -70,6 +70,7 @@ public class GeometryWrapper implements Serializable {
     private Envelope envelope;
     private Geometry translateXYGeometry;
     private final String geometryDatatypeURI;
+    private GeometryDatatype geometryDatatype;
     private String lexicalForm;
     private String utmURI = null;
     private Double latitude = null;
@@ -90,6 +91,7 @@ public class GeometryWrapper implements Serializable {
         this.envelope = null; //Initialised when required by getEnvelope().
         this.translateXYGeometry = null; //Initialised when required by translateGeometry().
         this.geometryDatatypeURI = geometryDatatypeURI;
+        this.geometryDatatype = null; //Inilialised when required by getGeometryDatatype().
 
         if (srsURI.isEmpty()) {
             srsURI = SRS_URI.DEFAULT_WKT_CRS84;
@@ -160,6 +162,7 @@ public class GeometryWrapper implements Serializable {
         this.utmURI = geometryWrapper.utmURI;
         this.latitude = geometryWrapper.latitude;
         this.geometryDatatypeURI = geometryWrapper.geometryDatatypeURI;
+        this.geometryDatatype = geometryWrapper.geometryDatatype;
 
         this.srsInfo = geometryWrapper.srsInfo;
         this.dimensionInfo = geometryWrapper.dimensionInfo;
@@ -347,6 +350,18 @@ public class GeometryWrapper implements Serializable {
      */
     public String getGeometryDatatypeURI() {
         return geometryDatatypeURI;
+    }
+
+    /**
+     *
+     * @return GeometryDatatype of the literal.
+     */
+    public GeometryDatatype getGeometryDatatype() {
+
+        if (geometryDatatype == null) {
+            geometryDatatype = GeometryDatatype.get(geometryDatatypeURI);
+        }
+        return geometryDatatype;
     }
 
     /**
@@ -908,7 +923,7 @@ public class GeometryWrapper implements Serializable {
      */
     public Literal asLiteral() throws DatatypeFormatException {
 
-        GeometryDatatype datatype = GeometryDatatype.get(geometryDatatypeURI);
+        GeometryDatatype datatype = getGeometryDatatype(); //Datatype is only retrieved when required.
         if (lexicalForm != null) {
             return ResourceFactory.createTypedLiteral(lexicalForm, datatype);
         }
