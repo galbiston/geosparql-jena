@@ -44,9 +44,14 @@ import org.apache.sis.geometry.DirectPosition2D;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.IntersectionMatrix;
 import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPoint;
+import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
@@ -78,10 +83,25 @@ public class GeometryWrapper implements Serializable {
     private String utmURI = null;
     private Double latitude = null;
 
+    /**
+     *
+     * @param geometry In X/Y or Y/X coordinate order of the SRS URI.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @param dimensionInfo
+     */
     public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo) {
         this(geometry, srsURI, geometryDatatypeURI, dimensionInfo, null);
     }
 
+    /**
+     *
+     * @param geometry In X/Y or Y/X coordinate order of the SRS URI.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @param dimensionInfo
+     * @param geometryLiteral
+     */
     public GeometryWrapper(Geometry geometry, String srsURI, String geometryDatatypeURI, DimensionInfo dimensionInfo, String geometryLiteral) {
         this(geometry, GeometryReverse.check(geometry, srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI), srsURI.isEmpty() ? SRS_URI.DEFAULT_WKT_CRS84 : srsURI, geometryDatatypeURI, dimensionInfo, geometryLiteral);
     }
@@ -111,9 +131,9 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
-     * Default to WGS84 and XY coordinate dimensions.
+     * Default to WGS84 geometry and XY coordinate dimensions.
      *
-     * @param geometry
+     * @param geometry In X/Y or Y/X coordinate order of WGS84.
      * @param geometryDatatypeURI
      */
     public GeometryWrapper(Geometry geometry, String geometryDatatypeURI) {
@@ -123,7 +143,7 @@ public class GeometryWrapper implements Serializable {
     /**
      * Default to XY coordinate dimensions.
      *
-     * @param geometry
+     * @param geometry In X/Y or Y/X coordinate order of the SRS URI.
      * @param srsURI
      * @param geometryDatatypeURI
      */
@@ -1175,7 +1195,7 @@ public class GeometryWrapper implements Serializable {
     /**
      * Create Point GeometryWrapper.
      *
-     * @param coordinate
+     * @param coordinate In X/Y order.
      * @param srsURI
      * @param geometryDatatypeURI
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
@@ -1183,7 +1203,7 @@ public class GeometryWrapper implements Serializable {
     public static final GeometryWrapper createPoint(Coordinate coordinate, String srsURI, String geometryDatatypeURI) {
         Point xyGeometry = GEOMETRY_FACTORY.createPoint(coordinate);
         Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.findForPoint(coordinate);
+        DimensionInfo dimsInfo = DimensionInfo.find(coordinate, xyGeometry);
 
         return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
     }
@@ -1191,7 +1211,7 @@ public class GeometryWrapper implements Serializable {
     /**
      * Create LineString GeometryWrapper.
      *
-     * @param coordinates
+     * @param coordinates In X/Y order.
      * @param srsURI
      * @param geometryDatatypeURI
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
@@ -1199,7 +1219,23 @@ public class GeometryWrapper implements Serializable {
     public static final GeometryWrapper createLineString(List<Coordinate> coordinates, String srsURI, String geometryDatatypeURI) {
         LineString xyGeometry = GEOMETRY_FACTORY.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
         Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.findForLineString(coordinates);
+        DimensionInfo dimsInfo = DimensionInfo.find(coordinates, xyGeometry);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create LineString GeometryWrapper.
+     *
+     * @param lineString In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createLineString(LineString lineString, String srsURI, String geometryDatatypeURI) {
+        LineString xyGeometry = lineString;
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.find(lineString.getCoordinate(), xyGeometry);
 
         return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
     }
@@ -1207,7 +1243,7 @@ public class GeometryWrapper implements Serializable {
     /**
      * Create Polygon GeometryWrapper.
      *
-     * @param coordinates
+     * @param coordinates In X/Y order.
      * @param srsURI
      * @param geometryDatatypeURI
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
@@ -1215,7 +1251,104 @@ public class GeometryWrapper implements Serializable {
     public static final GeometryWrapper createPolygon(List<Coordinate> coordinates, String srsURI, String geometryDatatypeURI) {
         Polygon xyGeometry = GEOMETRY_FACTORY.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
         Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.findForLineString(coordinates);
+        DimensionInfo dimsInfo = DimensionInfo.find(coordinates, xyGeometry);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create Polygon GeometryWrapper.
+     *
+     * @param shell In X/Y order.
+     * @param holes In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPolygon(LinearRing shell, LinearRing[] holes, String srsURI, String geometryDatatypeURI) {
+        Polygon xyGeometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.find(shell.getCoordinate(), xyGeometry);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create MultiPoint GeometryWrapper.
+     *
+     * @param coordinates In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createMultiPoint(List<Coordinate> coordinates, String srsURI, String geometryDatatypeURI) {
+        MultiPoint xyGeometry = GEOMETRY_FACTORY.createMultiPointFromCoords(coordinates.toArray(new Coordinate[coordinates.size()]));
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.find(coordinates, xyGeometry);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create MultiLineString GeometryWrapper.
+     *
+     * @param lineStrings In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createMultiLineString(List<LineString> lineStrings, String srsURI, String geometryDatatypeURI) {
+        MultiLineString xyGeometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings.toArray(new LineString[lineStrings.size()]));
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.findCollection(lineStrings, xyGeometry);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create MultiPolygon GeometryWrapper.
+     *
+     * @param polygons In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createMultiPolygon(List<Polygon> polygons, String srsURI, String geometryDatatypeURI) {
+        MultiPolygon xyGeometry = GEOMETRY_FACTORY.createMultiPolygon(polygons.toArray(new Polygon[polygons.size()]));
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.findCollection(polygons, xyGeometry);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create GeometryCollection GeometryWrapper.
+     *
+     * @param geometries In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createGeometryCollection(List<Geometry> geometries, String srsURI, String geometryDatatypeURI) {
+        GeometryCollection xyGeometry = GEOMETRY_FACTORY.createGeometryCollection(geometries.toArray(new Geometry[geometries.size()]));
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.findCollection(geometries, xyGeometry);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
+     * Create Geometry GeometryWrapper.
+     *
+     * @param geometry In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createGeometry(Geometry geometry, String srsURI, String geometryDatatypeURI) {
+        Geometry xyGeometry = geometry;
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.find(geometry.getCoordinate(), xyGeometry);
 
         return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
     }
@@ -1223,7 +1356,7 @@ public class GeometryWrapper implements Serializable {
     /**
      * Create Point GeometryWrapper using the default WKT CRS84 SRS URI.
      *
-     * @param coordinate
+     * @param coordinate In X/Y order.
      * @param geometryDatatypeURI
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
@@ -1234,7 +1367,7 @@ public class GeometryWrapper implements Serializable {
     /**
      * Create LineString GeometryWrapper using the default WKT CRS84 SRS URI.
      *
-     * @param coordinates
+     * @param coordinates In X/Y order.
      * @param geometryDatatypeURI
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
@@ -1243,14 +1376,82 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
+     * Create LineString GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param lineString In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createLineString(LineString lineString, String geometryDatatypeURI) {
+        return createLineString(lineString, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
      * Create Polygon GeometryWrapper using the default WKT CRS84 SRS URI.
      *
-     * @param coordinates
+     * @param coordinates In X/Y order.
      * @param geometryDatatypeURI
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createPolygon(List<Coordinate> coordinates, String geometryDatatypeURI) {
         return createPolygon(coordinates, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create Polygon GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param shell In X/Y order.
+     * @param holes In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPolygon(LinearRing shell, LinearRing[] holes, String geometryDatatypeURI) {
+        return createPolygon(shell, holes, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create MultiPoint GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param coordinates In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createMultiPoint(List<Coordinate> coordinates, String geometryDatatypeURI) {
+        return createMultiPoint(coordinates, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create MultiLineString GeometryWrapper using the default WKT CRS84 SRS
+     * URI.
+     *
+     * @param lineString In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createMultiLineString(List<LineString> lineStrings, String geometryDatatypeURI) {
+        return createMultiLineString(lineStrings, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create MultiPolygon GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param polygons In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createMultiPolygon(List<Polygon> polygons, String geometryDatatypeURI) {
+        return createMultiPolygon(polygons, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create Geometry GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param geometry In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createGeometry(Geometry geometry, String geometryDatatypeURI) {
+        return createGeometry(geometry, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
     }
 
     @Override
