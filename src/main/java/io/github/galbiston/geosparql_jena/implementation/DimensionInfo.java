@@ -21,6 +21,7 @@ import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceD
 import static io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence.findCoordinateSequenceDimensions;
 import java.io.Serializable;
 import java.util.Objects;
+import org.locationtech.jts.geom.Coordinate;
 
 /**
  *
@@ -57,7 +58,7 @@ public class DimensionInfo implements Serializable {
         this.isArea = topological == 2;
     }
 
-    private static int findSpatialDimension(CoordinateSequenceDimensions dims) {
+    public static int findSpatialDimension(CoordinateSequenceDimensions dims) {
 
         switch (dims) {
             case XYZ:
@@ -68,7 +69,7 @@ public class DimensionInfo implements Serializable {
         }
     }
 
-    private static int findCoordinateDimension(CoordinateSequenceDimensions dims) {
+    public static int findCoordinateDimension(CoordinateSequenceDimensions dims) {
         switch (dims) {
             case XYZ:
             case XYM:
@@ -77,6 +78,42 @@ public class DimensionInfo implements Serializable {
                 return 4;
             default:
                 return 2;
+        }
+    }
+
+    public static DimensionInfo findForPoint(Coordinate coordinate) {
+        if (coordinate.getZ() == Double.NaN && coordinate.getM() == Double.NaN) {
+            return XY_POINT;
+        } else if (coordinate.getZ() != Double.NaN && coordinate.getM() == Double.NaN) {
+            return XYZ_POINT;
+        } else if (coordinate.getZ() == Double.NaN && coordinate.getM() != Double.NaN) {
+            return XYM_POINT;
+        } else {
+            return XYZM_POINT;
+        }
+    }
+
+    public static DimensionInfo findForLineString(Coordinate coordinate) {
+        if (coordinate.getZ() == Double.NaN && coordinate.getM() == Double.NaN) {
+            return XY_LINESTRING;
+        } else if (coordinate.getZ() != Double.NaN && coordinate.getM() == Double.NaN) {
+            return XYZ_LINESTRING;
+        } else if (coordinate.getZ() == Double.NaN && coordinate.getM() != Double.NaN) {
+            return XYM_LINESTRING;
+        } else {
+            return XYZM_LINESTRING;
+        }
+    }
+
+    public static DimensionInfo findForPolygon(Coordinate coordinate) {
+        if (coordinate.getZ() == Double.NaN && coordinate.getM() == Double.NaN) {
+            return XY_POLYGON;
+        } else if (coordinate.getZ() != Double.NaN && coordinate.getM() == Double.NaN) {
+            return XYZ_POLYGON;
+        } else if (coordinate.getZ() == Double.NaN && coordinate.getM() != Double.NaN) {
+            return XYM_POLYGON;
+        } else {
+            return XYZM_POLYGON;
         }
     }
 
@@ -147,52 +184,28 @@ public class DimensionInfo implements Serializable {
         return "DimensionInfo{" + "coordinate=" + coordinate + ", spatial=" + spatial + ", topological=" + topological + ", coordinateSequenceDimensions=" + coordinateSequenceDimensions + ", isPoint=" + isPoint + ", isLine=" + isLine + ", isArea=" + isArea + '}';
     }
 
-    public static DimensionInfo XY_POINT() {
-        return new DimensionInfo(2, 2, 0);
-    }
+    public static DimensionInfo XY_POINT = new DimensionInfo(2, 2, 0);
 
-    public static DimensionInfo XYZ_POINT() {
-        return new DimensionInfo(3, 3, 0);
-    }
+    public static DimensionInfo XYZ_POINT = new DimensionInfo(3, 3, 0);
 
-    public static DimensionInfo XYM_POINT() {
-        return new DimensionInfo(3, 2, 0);
-    }
+    public static DimensionInfo XYM_POINT = new DimensionInfo(3, 2, 0);
 
-    public static DimensionInfo XYZM_POINT() {
-        return new DimensionInfo(4, 3, 0);
-    }
+    public static DimensionInfo XYZM_POINT = new DimensionInfo(4, 3, 0);
 
-    public static DimensionInfo XY_LINESTRING() {
-        return new DimensionInfo(2, 2, 1);
-    }
+    public static DimensionInfo XY_LINESTRING = new DimensionInfo(2, 2, 1);
 
-    public static DimensionInfo XYZ_LINESTRING() {
-        return new DimensionInfo(3, 3, 1);
-    }
+    public static DimensionInfo XYZ_LINESTRING = new DimensionInfo(3, 3, 1);
 
-    public static DimensionInfo XYM_LINESTRING() {
-        return new DimensionInfo(3, 2, 1);
-    }
+    public static DimensionInfo XYM_LINESTRING = new DimensionInfo(3, 2, 1);
 
-    public static DimensionInfo XYZM_LINESTRING() {
-        return new DimensionInfo(4, 3, 1);
-    }
+    public static DimensionInfo XYZM_LINESTRING = new DimensionInfo(4, 3, 1);
 
-    public static DimensionInfo XY_POLYGON() {
-        return new DimensionInfo(2, 2, 2);
-    }
+    public static DimensionInfo XY_POLYGON = new DimensionInfo(2, 2, 2);
 
-    public static DimensionInfo XYZ_POLYGON() {
-        return new DimensionInfo(3, 3, 2);
-    }
+    public static DimensionInfo XYZ_POLYGON = new DimensionInfo(3, 3, 2);
 
-    public static DimensionInfo XYM_POLYGON() {
-        return new DimensionInfo(3, 2, 2);
-    }
+    public static DimensionInfo XYM_POLYGON = new DimensionInfo(3, 2, 2);
 
-    public static DimensionInfo XYZM_POLYGON() {
-        return new DimensionInfo(4, 3, 2);
-    }
+    public static DimensionInfo XYZM_POLYGON = new DimensionInfo(4, 3, 2);
 
 }

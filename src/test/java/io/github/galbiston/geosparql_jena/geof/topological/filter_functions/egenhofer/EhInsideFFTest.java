@@ -230,8 +230,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_point_point() {
         System.out.println("permittedTopology_point_point");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
@@ -247,8 +247,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_point_linestring() {
         System.out.println("permittedTopology_point_linestring");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
@@ -264,8 +264,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_point_polygon() {
         System.out.println("permittedTopology_point_polygon");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
@@ -281,8 +281,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_linestring_linestring() {
         System.out.println("permittedTopology_linestring_linestring");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
@@ -298,8 +298,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_linestring_point() {
         System.out.println("permittedTopology_linestring_point");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
@@ -315,8 +315,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_linestring_polygon() {
         System.out.println("permittedTopology_linestring_polygon");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
@@ -332,8 +332,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_polygon_polygon() {
         System.out.println("permittedTopology_polygon_polygon");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
@@ -349,8 +349,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_polygon_linestring() {
         System.out.println("permittedTopology_polygon_linestring");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
@@ -366,8 +366,8 @@ public class EhInsideFFTest {
     @Test
     public void testPermittedTopology_polygon_point() {
         System.out.println("permittedTopology_polygon_point");
-        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON();
-        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT();
+        DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON;
+        DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT;
         EhInsideFF instance = new EhInsideFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
