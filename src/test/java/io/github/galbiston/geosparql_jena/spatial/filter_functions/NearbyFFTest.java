@@ -111,8 +111,8 @@ public class NearbyFFTest {
     @Test
     public void testExec_Paris_London() {
         System.out.println("exec_Paris_London");
-        NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNode();
-        NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNode();
+        NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNodeValue();
+        NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNodeValue();
         NodeValue v3 = NodeValue.makeFloat(345);
         NodeValue v4 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
         NearbyFF instance = new NearbyFF();
@@ -130,8 +130,8 @@ public class NearbyFFTest {
     @Test
     public void testExec_Paris_London_fail() {
         System.out.println("exec_Paris_London_fail");
-        NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNode();
-        NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNode();
+        NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNodeValue();
+        NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNodeValue();
         NodeValue v3 = NodeValue.makeFloat(200);
         NodeValue v4 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
         NearbyFF instance = new NearbyFF();

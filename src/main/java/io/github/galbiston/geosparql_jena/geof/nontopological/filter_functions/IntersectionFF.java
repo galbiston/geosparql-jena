@@ -44,7 +44,7 @@ public class IntersectionFF extends FunctionBase2 {
 
             GeometryWrapper intersection = geometry1.intersection(geometry2);
 
-            return intersection.asNode();
+            return intersection.asNodeValue();
 
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);

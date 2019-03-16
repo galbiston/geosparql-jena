@@ -43,7 +43,7 @@ public class UnionFF extends FunctionBase2 {
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
 
             GeometryWrapper union = geometry1.union(geometry2);
-            return union.asNode();
+            return union.asNodeValue();
 
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);

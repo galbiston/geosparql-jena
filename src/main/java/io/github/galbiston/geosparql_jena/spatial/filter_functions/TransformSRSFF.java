@@ -50,7 +50,7 @@ public class TransformSRSFF extends FunctionBase2 {
             GeometryWrapper geometry = GeometryWrapper.extract(v1, GeometryLiteralIndex.GeometryIndex.PRIMARY);
             GeometryWrapper convertedGeom = geometry.transform(srsURI);
 
-            return convertedGeom.asNode();
+            return convertedGeom.asNodeValue();
         } catch (DatatypeFormatException | TransformException | FactoryException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);
         }

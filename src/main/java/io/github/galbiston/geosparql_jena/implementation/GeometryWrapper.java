@@ -947,9 +947,17 @@ public class GeometryWrapper implements Serializable {
      *
      * @return GeometryWrapper as NodeValue
      */
-    public NodeValue asNode() throws DatatypeFormatException {
+    public NodeValue asNodeValue() throws DatatypeFormatException {
         Literal literal = asLiteral();
         return NodeValue.makeNode(literal.getLexicalForm(), literal.getDatatype());
+    }
+
+    /**
+     *
+     * @return GeometryWrapper as Node
+     */
+    public Node asNode() throws DatatypeFormatException {
+        return asNodeValue().asNode();
     }
 
     /**

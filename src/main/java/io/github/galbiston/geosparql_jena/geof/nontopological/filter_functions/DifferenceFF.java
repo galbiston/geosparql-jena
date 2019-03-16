@@ -43,7 +43,7 @@ public class DifferenceFF extends FunctionBase2 {
             GeometryWrapper geometry2 = GeometryWrapper.extract(v2, GeometryIndex.SECONDARY);
 
             GeometryWrapper difference = geometry1.difference(geometry2);
-            return difference.asNode();
+            return difference.asNodeValue();
 
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);

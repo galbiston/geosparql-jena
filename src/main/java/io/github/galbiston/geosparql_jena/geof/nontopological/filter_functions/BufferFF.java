@@ -58,7 +58,7 @@ public class BufferFF extends FunctionBase3 {
             String unitsURI = v3.getNode().getURI();
             GeometryWrapper buffer = geometry.buffer(radius, unitsURI);
 
-            return buffer.asNode();
+            return buffer.asNodeValue();
         } catch (DatatypeFormatException ex) {
             throw new ExprEvalException(ex.getMessage(), ex);
         } catch (FactoryException | MismatchedDimensionException | TransformException ex) {

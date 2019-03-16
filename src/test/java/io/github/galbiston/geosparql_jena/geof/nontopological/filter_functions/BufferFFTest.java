@@ -127,7 +127,7 @@ public class BufferFFTest {
         GeometryWrapper originalGeometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((0.0 0.0, 0.0 100.0, 100.0 100.0, 100.0 0.0, 0.0 0.0))", WKTDatatype.URI);
 
         //Convert a projected GeometryWrapper to Geographic. Apply linear buffering. Convert back again.
-        NodeValue v1a = originalGeometryWrapper.transform(SRS_URI.WGS84_CRS).asNode();
+        NodeValue v1a = originalGeometryWrapper.transform(SRS_URI.WGS84_CRS).asNodeValue();
         NodeValue v2 = NodeValue.makeDecimal(20);
         NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(Unit_URI.METRE_URL));
         BufferFF instance = new BufferFF();
@@ -136,7 +136,7 @@ public class BufferFFTest {
         String resultLexicalForm = bufferedGeographic.transform(SRS_URI.OSGB36_CRS).asLiteral().getLexicalForm();
 
         //Apply linear buffering to projected GeometryWrapper.
-        NodeValue v1b = originalGeometryWrapper.asNode();
+        NodeValue v1b = originalGeometryWrapper.asNodeValue();
         NodeValue bufferedProjectedNodeValue = instance.exec(v1b, v2, v3);
         GeometryWrapper bufferedProjected = GeometryWrapper.extract(bufferedProjectedNodeValue);
         String expResultLexicalForm = bufferedProjected.asLiteral().getLexicalForm();

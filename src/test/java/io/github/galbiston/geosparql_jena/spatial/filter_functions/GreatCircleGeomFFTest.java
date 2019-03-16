@@ -108,8 +108,8 @@ public class GreatCircleGeomFFTest {
     @Test
     public void testExec_Paris_London() {
         System.out.println("exec_Paris_London");
-        NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNode();
-        NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNode();
+        NodeValue v1 = SpatialIndexTestData.PARIS_GEOMETRY_WRAPPER.asNodeValue();
+        NodeValue v2 = SpatialIndexTestData.LONDON_GEOMETRY_WRAPPER.asNodeValue();
         NodeValue v3 = NodeValue.makeString(Unit_URI.KILOMETER_URL);
         GreatCircleGeomFF instance = new GreatCircleGeomFF();
         double expResult = 343.7713;
