@@ -1241,7 +1241,19 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createLineString(List<Coordinate> coordinates, String srsURI, String geometryDatatypeURI) {
-        LineString xyGeometry = GEOMETRY_FACTORY.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
+        return createLineString(coordinates.toArray(new Coordinate[coordinates.size()]), srsURI, geometryDatatypeURI);
+    }
+
+    /**
+     * Create LineString GeometryWrapper.
+     *
+     * @param coordinates In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createLineString(Coordinate[] coordinates, String srsURI, String geometryDatatypeURI) {
+        LineString xyGeometry = GEOMETRY_FACTORY.createLineString(coordinates);
         Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
         DimensionInfo dimsInfo = DimensionInfo.find(coordinates, xyGeometry);
 
@@ -1386,6 +1398,17 @@ public class GeometryWrapper implements Serializable {
      */
     public static final GeometryWrapper createPoint(Coordinate coordinate, String geometryDatatypeURI) {
         return createPoint(coordinate, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create LineString GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param coordinates In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createLineString(Coordinate[] coordinates, String geometryDatatypeURI) {
+        return createLineString(coordinates, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
     }
 
     /**

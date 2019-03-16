@@ -91,6 +91,16 @@ public class DimensionInfo implements Serializable {
 
     private static final Coordinate XY_COORDINATE = new CoordinateXY(0, 0);
 
+    public static DimensionInfo find(Coordinate[] coordinates, Geometry geometry) {
+        Coordinate coordinate;
+        if (coordinates.length == 0) {
+            coordinate = XY_COORDINATE;
+        } else {
+            coordinate = coordinates[0];
+        }
+        return find(coordinate, geometry);
+    }
+
     public static DimensionInfo find(List<Coordinate> coordinates, Geometry geometry) {
         Coordinate coordinate;
         if (coordinates.isEmpty()) {
