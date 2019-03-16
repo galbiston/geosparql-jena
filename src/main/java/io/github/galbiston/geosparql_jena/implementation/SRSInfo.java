@@ -44,6 +44,7 @@ public class SRSInfo {
     private final double domainRangeX;
 
     public static final String DEFAULT_WKT_CRS84_CODE = "CRS:84";
+    public static final SRSInfo DEFAULT_WKT_CRS84 = getDefaultWktCRS84(SRS_URI.DEFAULT_WKT_CRS84);
 
     private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
 
@@ -201,7 +202,7 @@ public class SRSInfo {
     /**
      *
      * @param srsURI Allows alternative srsURI to be associated with CRS84.
-     * @return SRSInfo with default setup for WKT without SRS URI.
+     * @return SRSInfo using default setup for WKT but alternative srsURI.
      */
     public static final SRSInfo getDefaultWktCRS84(String srsURI) {
 
@@ -231,21 +232,17 @@ public class SRSInfo {
     }
 
     @Override
-    public String toString() {
-        return "SRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isGeographic=" + isGeographic + ", isSRSRecognised=" + isSRSRecognised + ", isWktDefault=" + isWktDefault + ", domainEnvelope=" + domainEnvelope + ", domainRangeX=" + domainRangeX + '}';
-    }
-
-    @Override
     public int hashCode() {
         int hash = 7;
-        hash = 23 * hash + Objects.hashCode(this.srsURI);
-        hash = 23 * hash + Objects.hashCode(this.crs);
-        hash = 23 * hash + Objects.hashCode(this.unitsOfMeasure);
-        hash = 23 * hash + Objects.hashCode(this.isAxisXY);
-        hash = 23 * hash + Objects.hashCode(this.isGeographic);
-        hash = 23 * hash + Objects.hashCode(this.isSRSRecognised);
-        hash = 23 * hash + Objects.hashCode(this.domainEnvelope);
-        hash = 23 * hash + (int) (Double.doubleToLongBits(this.domainRangeX) ^ (Double.doubleToLongBits(this.domainRangeX) >>> 32));
+        hash = 59 * hash + Objects.hashCode(this.srsURI);
+        hash = 59 * hash + Objects.hashCode(this.crs);
+        hash = 59 * hash + Objects.hashCode(this.unitsOfMeasure);
+        hash = 59 * hash + Objects.hashCode(this.isAxisXY);
+        hash = 59 * hash + Objects.hashCode(this.isGeographic);
+        hash = 59 * hash + Objects.hashCode(this.isSRSRecognised);
+        hash = 59 * hash + Objects.hashCode(this.isWktDefault);
+        hash = 59 * hash + Objects.hashCode(this.domainEnvelope);
+        hash = 59 * hash + (int) (Double.doubleToLongBits(this.domainRangeX) ^ (Double.doubleToLongBits(this.domainRangeX) >>> 32));
         return hash;
     }
 
@@ -282,7 +279,15 @@ public class SRSInfo {
         if (!Objects.equals(this.isSRSRecognised, other.isSRSRecognised)) {
             return false;
         }
+        if (!Objects.equals(this.isWktDefault, other.isWktDefault)) {
+            return false;
+        }
         return Objects.equals(this.domainEnvelope, other.domainEnvelope);
+    }
+
+    @Override
+    public String toString() {
+        return "SRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isGeographic=" + isGeographic + ", isSRSRecognised=" + isSRSRecognised + ", isWktDefault=" + isWktDefault + ", domainEnvelope=" + domainEnvelope + ", domainRangeX=" + domainRangeX + '}';
     }
 
 }
