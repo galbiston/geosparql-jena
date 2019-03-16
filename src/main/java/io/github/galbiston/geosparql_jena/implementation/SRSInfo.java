@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation;
 
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -38,8 +39,10 @@ public class SRSInfo {
     private final Boolean isAxisXY;
     private final Boolean isGeographic;
     private final Boolean isSRSRecognised;
+    private final Boolean isWktDefault;
     private final Envelope domainEnvelope;
     private final double domainRangeX;
+
     public static final String DEFAULT_WKT_CRS84_CODE = "CRS:84";
 
     private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
@@ -53,6 +56,7 @@ public class SRSInfo {
             this.unitsOfMeasure = new UnitsOfMeasure(crs);
             this.isSRSRecognised = true;
             this.isGeographic = crs instanceof GeographicCRS;
+            this.isWktDefault = srsURI.equals(SRS_URI.DEFAULT_WKT_CRS84);
             this.domainEnvelope = buildDomainEnvelope(crs, isAxisXY);
             this.domainRangeX = Math.abs(domainEnvelope.getMinX()) + Math.abs(domainEnvelope.getMaxX());
         } catch (FactoryException ex) {
@@ -67,6 +71,7 @@ public class SRSInfo {
         this.unitsOfMeasure = new UnitsOfMeasure(crs);
         this.isSRSRecognised = isSRSRecognised;
         this.isGeographic = crs instanceof GeographicCRS;
+        this.isWktDefault = srsURI.equals(SRS_URI.DEFAULT_WKT_CRS84);
         this.domainEnvelope = buildDomainEnvelope(crs, isAxisXY);
         this.domainRangeX = Math.abs(domainEnvelope.getMinX()) + Math.abs(domainEnvelope.getMaxX());
     }
@@ -166,6 +171,16 @@ public class SRSInfo {
     }
 
     /**
+     * Check if the SRS is default for WKT Literals.
+     *
+     * @return True if CRS84 SRS, i.e.
+     * http://www.opengis.net/def/crs/OGC/1.3/CRS84.
+     */
+    public Boolean isWktDefault() {
+        return isWktDefault;
+    }
+
+    /**
      * Domain of validity in XY coordinate order.
      *
      * @return Bounding box of valid values.
@@ -217,7 +232,7 @@ public class SRSInfo {
 
     @Override
     public String toString() {
-        return "SRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isGeographic=" + isGeographic + ", isSRSRecognised=" + isSRSRecognised + ", domainEnvelope=" + domainEnvelope + ", domainRangeX=" + domainRangeX + '}';
+        return "SRSInfo{" + "srsURI=" + srsURI + ", crs=" + crs + ", unitsOfMeasure=" + unitsOfMeasure + ", isAxisXY=" + isAxisXY + ", isGeographic=" + isGeographic + ", isSRSRecognised=" + isSRSRecognised + ", isWktDefault=" + isWktDefault + ", domainEnvelope=" + domainEnvelope + ", domainRangeX=" + domainRangeX + '}';
     }
 
     @Override
