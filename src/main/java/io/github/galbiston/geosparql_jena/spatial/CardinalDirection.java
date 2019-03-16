@@ -17,7 +17,7 @@ package io.github.galbiston.geosparql_jena.spatial;
 
 /**
  *
- * @author Gerg
+ *
  */
 public enum CardinalDirection {
     NORTH, SOUTH, EAST, WEST

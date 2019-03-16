@@ -36,7 +36,7 @@ import org.opengis.util.FactoryException;
 
 /**
  *
- * @author Gerg
+ *
  */
 public class BufferFFTest {
 

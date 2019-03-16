@@ -31,7 +31,7 @@ import org.locationtech.jts.geom.Envelope;
 
 /**
  *
- * @author Gerg
+ *
  */
 public class SearchEnvelopeTest {
 

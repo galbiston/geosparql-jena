@@ -39,7 +39,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Gerg
+ *
  */
 public class ConvertLatLonFFTest {
 
