@@ -74,7 +74,7 @@ public class TransformSRSFFTest {
         NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(0 10)", WKTDatatype.INSTANCE);
         NodeValue v2 = NodeValue.makeString(SRS_URI.DEFAULT_WKT_CRS84);
         TransformSRSFF instance = new TransformSRSFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2);
         assertEquals(expResult, result);
     }
@@ -88,7 +88,7 @@ public class TransformSRSFFTest {
         NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(0 10)", WKTDatatype.INSTANCE);
         NodeValue v2 = NodeValue.makeNode(NodeFactory.createURI(SRS_URI.DEFAULT_WKT_CRS84));
         TransformSRSFF instance = new TransformSRSFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2);
         assertEquals(expResult, result);
     }
@@ -102,7 +102,7 @@ public class TransformSRSFFTest {
         NodeValue v1 = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(0 10)", WKTDatatype.INSTANCE);
         NodeValue v2 = NodeValue.makeInteger(8);
         TransformSRSFF instance = new TransformSRSFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2);
         assertEquals(expResult, result);
     }
@@ -135,7 +135,7 @@ public class TransformSRSFFTest {
             }
         }
 
-        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE));
+        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("POINT(10 0)", WKTDatatype.INSTANCE));
 
         //System.out.println("Exp: " + expResults);
         //System.out.println("Res: " + results);

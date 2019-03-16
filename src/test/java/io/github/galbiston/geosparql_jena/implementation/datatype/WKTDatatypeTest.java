@@ -76,11 +76,36 @@ public class WKTDatatypeTest {
     public void testUnparse() {
         System.out.println("unparse");
 
-        String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(-83.38 33.95)";
+        String expResult = "POINT(-83.38 33.95)";
 
         Coordinate coord = new Coordinate(-83.38, 33.95);
         Point point = GEOMETRY_FACTORY.createPoint(coord);
         String srsURI = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+
+        DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
+
+        GeometryWrapper geometry = new GeometryWrapper(point, srsURI, WKTDatatype.URI, dimensionInfo);
+
+        String result = WKT_DATATYPE.unparse(geometry);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+
+    }
+
+    /**
+     * Test of unparse method, of class WKTDatatype.
+     */
+    @Test
+    public void testUnparse_srs() {
+        System.out.println("unparse");
+
+        String expResult = "<http://www.opengis.net/def/crs/EPSG/0/4326> POINT(-83.38 33.95)";
+
+        Coordinate coord = new Coordinate(-83.38, 33.95);
+        Point point = GEOMETRY_FACTORY.createPoint(coord);
+        String srsURI = "http://www.opengis.net/def/crs/EPSG/0/4326";
 
         DimensionInfo dimensionInfo = new DimensionInfo(2, 2, 0);
 

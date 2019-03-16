@@ -76,7 +76,7 @@ public class TransformFFTest {
         NodeValue v2 = NodeValue.makeString(WKTDatatype.URI);
         NodeValue v3 = NodeValue.makeString(SRS_URI.DEFAULT_WKT_CRS84);
         TransformFF instance = new TransformFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2, v3);
         assertEquals(expResult, result);
     }
@@ -91,7 +91,7 @@ public class TransformFFTest {
         NodeValue v2 = NodeValue.makeString(WKTDatatype.URI);
         NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(SRS_URI.DEFAULT_WKT_CRS84));
         TransformFF instance = new TransformFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2, v3);
         assertEquals(expResult, result);
     }
@@ -106,7 +106,7 @@ public class TransformFFTest {
         NodeValue v2 = NodeValue.makeNode(NodeFactory.createURI(WKTDatatype.URI));
         NodeValue v3 = NodeValue.makeString(SRS_URI.DEFAULT_WKT_CRS84);
         TransformFF instance = new TransformFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2, v3);
         assertEquals(expResult, result);
     }
@@ -121,7 +121,7 @@ public class TransformFFTest {
         NodeValue v2 = NodeValue.makeNode(NodeFactory.createURI(WKTDatatype.URI));
         NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(SRS_URI.DEFAULT_WKT_CRS84));
         TransformFF instance = new TransformFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2, v3);
         assertEquals(expResult, result);
     }
@@ -136,7 +136,7 @@ public class TransformFFTest {
         NodeValue v2 = NodeValue.makeInteger(8);
         NodeValue v3 = NodeValue.makeNode(NodeFactory.createURI(SRS_URI.DEFAULT_WKT_CRS84));
         TransformFF instance = new TransformFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2, v3);
         assertEquals(expResult, result);
     }
@@ -151,7 +151,7 @@ public class TransformFFTest {
         NodeValue v2 = NodeValue.makeNode(NodeFactory.createURI(WKTDatatype.URI));
         NodeValue v3 = NodeValue.makeInteger(8);
         TransformFF instance = new TransformFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("POINT(10 0)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v1, v2, v3);
         assertEquals(expResult, result);
     }
@@ -185,7 +185,7 @@ public class TransformFFTest {
             }
         }
 
-        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(10 0)", WKTDatatype.INSTANCE));
+        List<Literal> expResults = Arrays.asList(ResourceFactory.createTypedLiteral("POINT(10 0)", WKTDatatype.INSTANCE));
 
         //System.out.println("Exp: " + expResults);
         //System.out.println("Res: " + results);

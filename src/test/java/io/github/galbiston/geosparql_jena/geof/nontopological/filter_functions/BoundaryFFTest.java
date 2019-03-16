@@ -60,7 +60,7 @@ public class BoundaryFFTest {
 
         NodeValue v = NodeValue.makeNode("POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
         BoundaryFF instance = new BoundaryFF();
-        NodeValue expResult = NodeValue.makeNode("<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING(30 40, 30 70, 90 70, 90 40, 30 40)", WKTDatatype.INSTANCE);
+        NodeValue expResult = NodeValue.makeNode("LINESTRING(30 40, 30 70, 90 70, 90 40, 30 40)", WKTDatatype.INSTANCE);
         NodeValue result = instance.exec(v);
 
         //System.out.println("Exp: " + expResult);

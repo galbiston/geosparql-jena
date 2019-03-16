@@ -609,7 +609,7 @@ public class GeometryWrapperTest {
 
         GeometryWrapper instance = GeometryWrapper.createPoint(coordinate, srsURI, geometryDatatypeURI);
 
-        String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POINT(1 2)";
+        String expResult = "POINT(1 2)";
         String result = instance.asLiteral().getLexicalForm();
 
         //System.out.println("Exp: " + expResult);
@@ -649,7 +649,7 @@ public class GeometryWrapperTest {
 
         GeometryWrapper instance = GeometryWrapper.createLineString(coordinates, srsURI, geometryDatatypeURI);
 
-        String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> LINESTRING(1 2, 10 20)";
+        String expResult = "LINESTRING(1 2, 10 20)";
         String result = instance.asLiteral().getLexicalForm();
 
         //System.out.println("Exp: " + expResult);
@@ -689,7 +689,7 @@ public class GeometryWrapperTest {
 
         GeometryWrapper instance = GeometryWrapper.createPolygon(coordinates, srsURI, geometryDatatypeURI);
 
-        String expResult = "<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POLYGON((1 2, 10 2, 10 20, 1 20, 1 2))";
+        String expResult = "POLYGON((1 2, 10 2, 10 20, 1 20, 1 2))";
         String result = instance.asLiteral().getLexicalForm();
 
         //System.out.println("Exp: " + expResult);
