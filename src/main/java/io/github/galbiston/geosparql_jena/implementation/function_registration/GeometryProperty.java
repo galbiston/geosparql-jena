@@ -21,11 +21,13 @@ import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geo
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geometry_property.DimensionPF;
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geometry_property.IsEmptyPF;
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geometry_property.IsSimplePF;
+import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geometry_property.IsValidPF;
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geometry_property.SpatialDimensionPF;
 import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.CoordinateDimensionFF;
 import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.DimensionFF;
 import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.IsEmptyFF;
 import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.IsSimpleFF;
+import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.IsValidFF;
 import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.SpatialDimensionFF;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geof;
@@ -50,6 +52,7 @@ public class GeometryProperty {
         registry.put(Geo.SPATIAL_DIMENSION, SpatialDimensionPF.class);
         registry.put(Geo.IS_SIMPLE, IsSimplePF.class);
         registry.put(Geo.IS_EMPTY, IsEmptyPF.class);
+        registry.put(Geo.IS_VALID, IsValidPF.class);
     }
 
     /**
@@ -66,6 +69,7 @@ public class GeometryProperty {
         registry.put(Geof.SPATIAL_DIMENSION, SpatialDimensionFF.class);
         registry.put(Geof.IS_SIMPLE, IsSimpleFF.class);
         registry.put(Geof.IS_EMPTY, IsEmptyFF.class);
+        registry.put(Geof.IS_VALID, IsValidFF.class);
     }
 
 }

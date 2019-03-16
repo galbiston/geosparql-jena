@@ -153,6 +153,7 @@ public interface Geo {
     public static final String SPATIAL_DIMENSION = GEO_URI + "spatialDimension";
     public static final String IS_EMPTY = GEO_URI + "isEmpty";
     public static final String IS_SIMPLE = GEO_URI + "isSimple";
+    public static final String IS_VALID = GEO_URI + "isValid";
 
     public static final Property DIMENSION_PROP = ResourceFactory.createProperty(DIMENSION);
     public static final Node DIMENSION_NODE = DIMENSION_PROP.asNode();
@@ -164,6 +165,8 @@ public interface Geo {
     public static final Node IS_EMPTY_NODE = IS_EMPTY_PROP.asNode();
     public static final Property IS_SIMPLE_PROP = ResourceFactory.createProperty(IS_SIMPLE);
     public static final Node IS_SIMPLE_NODE = IS_SIMPLE_PROP.asNode();
+    public static final Property IS_VALID_PROP = ResourceFactory.createProperty(IS_VALID);
+    public static final Node IS_VALID_NODE = IS_VALID_PROP.asNode();
 
     //Geometry Literal Datatypes
     public static final String WKT = GEO_URI + "wktLiteral";

@@ -425,8 +425,10 @@ Geometry Property Filter Function Name | Description
 *?integer* **geof:spatialDimension**(*?geometryLiteral*) | Spatial dimension, e.g. 2 for XY coordinates and 3 for XYZM coordinates.
 *?boolean* **geof:isEmpty**(*?geometryLiteral*) | True, if geometry is empty.
 *?boolean* **geof:isSimple**(*?geometryLiteral*) | True, if geometry is simple.
+*?boolean* **geof:isValid**(*?geometryLiteral*) | True, if geometry is topologically valid.
 
 A dataset that follows the GeoSPARQL Feature-Geometry-GeometryLiteral can have simpler SPARQL queries without needing to use these functions by taking advantage of the Query Rewriting functionality.
+The `geof:isValid` filter function and `geo:isValid` property for a Geometry resource are not part of the GeoSPARQL standard but have been included as a minor variation.
 
 ## Future Work
 

@@ -1053,7 +1053,7 @@ public class GeometryWrapper implements Serializable {
 
     /**
      *
-     * @return GeometryWrapper is empty of coordinates.
+     * @return Geometry is empty of coordinates.
      */
     public boolean isEmpty() {
         return this.xyGeometry.isEmpty();
@@ -1061,10 +1061,18 @@ public class GeometryWrapper implements Serializable {
 
     /**
      *
-     * @return GeometryWrapper is in simple form.
+     * @return Geometry is in simple form.
      */
     public boolean isSimple() {
         return this.xyGeometry.isSimple();
+    }
+
+    /**
+     *
+     * @return Geometry is topologically valid.
+     */
+    public boolean isValid() {
+        return this.xyGeometry.isValid();
     }
 
     /**
