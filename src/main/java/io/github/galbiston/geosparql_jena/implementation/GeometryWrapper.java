@@ -1310,6 +1310,22 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
+     * Create Polygon GeometryWrapper.
+     *
+     * @param shell In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPolygon(LinearRing shell, String srsURI, String geometryDatatypeURI) {
+        Polygon xyGeometry = GEOMETRY_FACTORY.createPolygon(shell);
+        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
+        DimensionInfo dimsInfo = DimensionInfo.find(shell.getCoordinate(), xyGeometry);
+
+        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+    }
+
+    /**
      * Create MultiPoint GeometryWrapper.
      *
      * @param coordinates In X/Y order.
@@ -1454,6 +1470,17 @@ public class GeometryWrapper implements Serializable {
      */
     public static final GeometryWrapper createPolygon(LinearRing shell, LinearRing[] holes, String geometryDatatypeURI) {
         return createPolygon(shell, holes, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create Polygon GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param shell In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPolygon(LinearRing shell, String geometryDatatypeURI) {
+        return createPolygon(shell, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
     }
 
     /**
