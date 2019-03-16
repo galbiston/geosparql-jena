@@ -52,11 +52,11 @@ public class SpatialDimensionFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class SpatialDimensionFF.
+     * Test of exec method, of class SpatialDimensionFF.
      */
     @Test
-    public void testApplyPredicate_2_Dimension() {
-        System.out.println("applyPredicate_2_Dimension");
+    public void testExec_2_Dimension() {
+        System.out.println("exec_2_Dimension");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(90 60)", WKTDatatype.INSTANCE);
         SpatialDimensionFF instance = new SpatialDimensionFF();
         NodeValue expResult = NodeValue.makeNodeInteger(2);
@@ -68,11 +68,11 @@ public class SpatialDimensionFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class SpatialDimensionFF.
+     * Test of exec method, of class SpatialDimensionFF.
      */
     @Test
-    public void testApplyPredicate_3_Dimension() {
-        System.out.println("applyPredicate_3_Dimension");
+    public void testExec_3_Dimension() {
+        System.out.println("exec_3_Dimension");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT Z (90 60 30)", WKTDatatype.INSTANCE);
         SpatialDimensionFF instance = new SpatialDimensionFF();
         NodeValue expResult = NodeValue.makeNodeInteger(3);
@@ -84,11 +84,11 @@ public class SpatialDimensionFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class SpatialDimensionFF.
+     * Test of exec method, of class SpatialDimensionFF.
      */
     @Test
-    public void testApplyPredicate_2M_Dimension() {
-        System.out.println("applyPredicate_2M_Dimension");
+    public void testExec_2M_Dimension() {
+        System.out.println("exec_2M_Dimension");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT M (90 60 30)", WKTDatatype.INSTANCE);
         SpatialDimensionFF instance = new SpatialDimensionFF();
         NodeValue expResult = NodeValue.makeNodeInteger(2);
@@ -100,11 +100,11 @@ public class SpatialDimensionFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class SpatialDimensionFF.
+     * Test of exec method, of class SpatialDimensionFF.
      */
     @Test
-    public void testApplyPredicate_3M_Dimension() {
-        System.out.println("applyPredicate_3M_Dimension");
+    public void testExec_3M_Dimension() {
+        System.out.println("exec_3M_Dimension");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT ZM (90 60 30 10)", WKTDatatype.INSTANCE);
         SpatialDimensionFF instance = new SpatialDimensionFF();
         NodeValue expResult = NodeValue.makeNodeInteger(3);

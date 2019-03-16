@@ -52,11 +52,11 @@ public class DimensionFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class DimensionFF.
+     * Test of exec method, of class DimensionFF.
      */
     @Test
-    public void testApplyPredicate_0_Dimension() {
-        System.out.println("applyPredicate_0_Dimension");
+    public void testExec_0_Dimension() {
+        System.out.println("exec_0_Dimension");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(90 60)", WKTDatatype.INSTANCE);
         DimensionFF instance = new DimensionFF();
         NodeValue expResult = NodeValue.makeNodeInteger(0);
@@ -68,11 +68,11 @@ public class DimensionFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class DimensionFF.
+     * Test of exec method, of class DimensionFF.
      */
     @Test
-    public void testApplyPredicate_1_Dimension() {
-        System.out.println("applyPredicate_1_Dimension");
+    public void testExec_1_Dimension() {
+        System.out.println("exec_1_Dimension");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(90 60, 100 70)", WKTDatatype.INSTANCE);
         DimensionFF instance = new DimensionFF();
         NodeValue expResult = NodeValue.makeNodeInteger(1);
@@ -84,11 +84,11 @@ public class DimensionFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class DimensionFF.
+     * Test of exec method, of class DimensionFF.
      */
     @Test
-    public void testApplyPredicate_2_Dimension() {
-        System.out.println("applyPredicate_2_Dimension");
+    public void testExec_2_Dimension() {
+        System.out.println("exec_2_Dimension");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))", WKTDatatype.INSTANCE);
         DimensionFF instance = new DimensionFF();
         NodeValue expResult = NodeValue.makeNodeInteger(2);

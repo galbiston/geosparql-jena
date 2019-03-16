@@ -52,11 +52,11 @@ public class IsValidFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class IsValidFF.
+     * Test of exec method, of class IsValidFF.
      */
     @Test
-    public void testApplyPredicate_true() {
-        System.out.println("applyPredicate_true");
+    public void testExec_true() {
+        System.out.println("exec_true");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(0 0, 1 1)", WKTDatatype.INSTANCE);
         IsValidFF instance = new IsValidFF();
         NodeValue expResult = NodeValue.makeNodeBoolean(true);
@@ -68,11 +68,11 @@ public class IsValidFFTest {
     }
 
     /**
-     * Test of applyPredicate method, of class IsValidFF.
+     * Test of exec method, of class IsValidFF.
      */
     @Test
-    public void testApplyPredicate_false() {
-        System.out.println("applyPredicate_false");
+    public void testExec_false() {
+        System.out.println("exec_false");
         NodeValue geometryLiteral = NodeValue.makeNode("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(0 0, 0 0, 0 0)", WKTDatatype.INSTANCE);
         IsValidFF instance = new IsValidFF();
         NodeValue expResult = NodeValue.makeNodeBoolean(false);
