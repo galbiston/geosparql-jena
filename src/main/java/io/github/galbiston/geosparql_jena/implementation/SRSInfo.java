@@ -16,6 +16,7 @@
 package io.github.galbiston.geosparql_jena.implementation;
 
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_SRS_URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -63,6 +64,16 @@ public class SRSInfo {
         } catch (FactoryException ex) {
             throw new SRSInfoException("Invalid SRS URI code: " + srsURI + " - " + ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * SRID will be converted to EPSG URI:
+     * http://www.opengis.net/def/crs/EPSG/0/srid.
+     *
+     * @param srid
+     */
+    public SRSInfo(int srid) {
+        this(EPSG_BASE_SRS_URI + srid);
     }
 
     private SRSInfo(String srsURI, CoordinateReferenceSystem crs, boolean isSRSRecognised) {
