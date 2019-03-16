@@ -18,6 +18,7 @@
 package io.github.galbiston.geosparql_jena.implementation.parsers.wkt;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import org.locationtech.jts.geom.CoordinateSequence;
@@ -40,8 +41,11 @@ public class WKTWriter {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("<").append(geometryWrapper.getSrsURI()).append(">");
-        sb.append(" ");
+        SRSInfo srsInfo = geometryWrapper.getSrsInfo();
+
+        if (!srsInfo.isWktDefault()) {
+            sb.append("<").append(geometryWrapper.getSrsURI()).append("> ");
+        }
 
         Geometry geometry = geometryWrapper.getParsingGeometry();
         CoordinateSequenceDimensions dimensions = geometryWrapper.getCoordinateSequenceDimensions();
