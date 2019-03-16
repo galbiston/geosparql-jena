@@ -195,6 +195,7 @@ public class GeoSPARQLConfig {
             RCC8.loadFilterFunctions(functionRegistry);
             Relate.loadRelateFunction(functionRegistry);
             GeometryProperty.loadPropertyFunctions(propertyRegistry);
+            GeometryProperty.loadFilterFunctions(functionRegistry);
             Spatial.loadPropertyFunctions(propertyRegistry);
             Spatial.loadFilterFunctions(functionRegistry);
             IS_FUNCTIONS_REGISTERED = true;

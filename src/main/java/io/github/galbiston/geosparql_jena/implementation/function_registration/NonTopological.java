@@ -45,7 +45,7 @@ public class NonTopological {
      */
     public static void loadFilterFunctions(FunctionRegistry registry) {
 
-        // Simple Feature Filter Functions
+        // Non Topological Filter Functions
         registry.put(Geof.BOUNDARY_NAME, BoundaryFF.class);
         registry.put(Geof.BUFFER_NAME, BufferFF.class);
         registry.put(Geof.CONVEXHULL_NAME, ConvexHullFF.class);

@@ -22,7 +22,14 @@ import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geo
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geometry_property.IsEmptyPF;
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geometry_property.IsSimplePF;
 import io.github.galbiston.geosparql_jena.geo.topological.property_functions.geometry_property.SpatialDimensionPF;
+import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.CoordinateDimensionFF;
+import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.DimensionFF;
+import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.IsEmptyFF;
+import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.IsSimpleFF;
+import io.github.galbiston.geosparql_jena.geof.topological.filter_functions.geometry_property.SpatialDimensionFF;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geof;
+import org.apache.jena.sparql.function.FunctionRegistry;
 import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 
 /**
@@ -32,7 +39,7 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 public class GeometryProperty {
 
     /**
-     * This method loads all the Geometry property base function
+     * This method loads all the Geometry property property functions.
      *
      * @param registry - the PropertyFunctionRegistry to be used
      */
@@ -43,6 +50,22 @@ public class GeometryProperty {
         registry.put(Geo.SPATIAL_DIMENSION, SpatialDimensionPF.class);
         registry.put(Geo.IS_SIMPLE, IsSimplePF.class);
         registry.put(Geo.IS_EMPTY, IsEmptyPF.class);
+    }
+
+    /**
+     * This method loads all the Geometry property filter functions.<br>
+     * N.B. These functions are not part of the GeoSPARQL standard but have been
+     * included for convenience using GeometryLiterals.
+     *
+     * @param registry - the FunctionRegistry to be used
+     */
+    public static void loadFilterFunctions(FunctionRegistry registry) {
+
+        registry.put(Geof.DIMENSION, DimensionFF.class);
+        registry.put(Geof.COORDINATE_DIMENSION, CoordinateDimensionFF.class);
+        registry.put(Geof.SPATIAL_DIMENSION, SpatialDimensionFF.class);
+        registry.put(Geof.IS_SIMPLE, IsSimpleFF.class);
+        registry.put(Geof.IS_EMPTY, IsEmptyFF.class);
     }
 
 }

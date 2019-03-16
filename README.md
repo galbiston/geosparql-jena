@@ -35,6 +35,7 @@ The following additional features are also provided:
 * Units of measure are automatically converted to the appropriate units for the coordinate reference system.
 * Geometry, transformation and spatial relation results are stored in persistent and configurable time-limited caches to improve response times and reduce recalculations.
 * Dataset conversion between serialisations and spatial/coordinate reference systems. Tabular data can also be loaded, see RDF Tables project (https://github.com/galbiston/rdf-tables).
+* Functions to test Geometry properties directly on Geometry Literals have been included for convenience.
 
 ## Getting Started
 GeoSPARQL Jena can be accessed as a library using Maven etc. from Maven Central.
@@ -409,6 +410,23 @@ Cardinal Function Name | Description
 *?feature* **spatial:eastGeom**(*?geomLit* [ *?limit*]) | Find *features* that are East of the Geometry Literal, up to the *limit*.
 *?feature* **spatial:west**(*?lat* *?lon* [ *?limit*]) | Find *features* that are West of the Lat/Lon point (point minus 180 degrees longitude, wrapping round), up to the *limit*.
 *?feature* **spatial:westGeom**(*?geomLit* [ *?limit*]) | Find *features* that are West of the Geometry Literal, up to the *limit*.
+
+## Geometry Property Filter Functions
+The GeoSPARQL standard provides a set of properties related to geometries, see Section 8.4.
+These are applied on the Geometry resource and are automatically determined if not asserted in the data.
+However, it may be necessary to retrieve the properties of a Geometry Literal directly without an associated Geometry resource.
+Filter functions to do this have been included as part of the `http://www.opengis.net/def/function/geosparql/` namespace as a minor variation.
+The relevant functions using the `geof` prefix are:
+
+Geometry Property Filter Function Name | Description
+------------- | -------------
+*?integer* **geof:dimension**(*?geometryLiteral*) | Topological dimension, e.g. 0 for Point, 1 for LineString and 2 for Polygon.
+*?integer* **geof:coordinateDimension**(*?geometryLiteral*) | Coordinate dimension, e.g. 2 for XY coordinates and 4 for XYZM coordinates.
+*?integer* **geof:spatialDimension**(*?geometryLiteral*) | Spatial dimension, e.g. 2 for XY coordinates and 3 for XYZM coordinates.
+*?boolean* **geof:isEmpty**(*?geometryLiteral*) | True, if geometry is empty.
+*?boolean* **geof:isSimple**(*?geometryLiteral*) | True, if geometry is simple.
+
+A dataset that follows the GeoSPARQL Feature-Geometry-GeometryLiteral can have simpler SPARQL queries without needing to use these functions by taking advantage of the Query Rewriting functionality.
 
 ## Future Work
 
