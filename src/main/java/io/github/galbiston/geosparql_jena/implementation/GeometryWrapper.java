@@ -1432,7 +1432,7 @@ public class GeometryWrapper implements Serializable {
      * Create MultiLineString GeometryWrapper using the default WKT CRS84 SRS
      * URI.
      *
-     * @param lineString In X/Y order.
+     * @param lineStrings In X/Y order.
      * @param geometryDatatypeURI
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
