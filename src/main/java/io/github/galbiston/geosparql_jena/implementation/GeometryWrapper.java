@@ -381,6 +381,14 @@ public class GeometryWrapper implements Serializable {
 
     /**
      *
+     * @return The name of the parsing Geometry's actual class.
+     */
+    public String getGeometryType() {
+        return parsingGeometry.getGeometryType();
+    }
+
+    /**
+     *
      * @return GeometryDatatype of the literal.
      */
     public GeometryDatatype getGeometryDatatype() {
