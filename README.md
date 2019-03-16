@@ -129,6 +129,10 @@ There is overlap between spatial relation families so repeated methods are not s
 
 * Extract from a Jena Literal: `GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryLiteral);`
 
+* Create from a JTS Geometry: `GeometryWrapper geometryWrapper = GeometryWrapper.createGeometry(geometry, srsURI, geometryDatatypeURI);`
+
+* Create from a JTS Point Geometry: `GeometryWrapper geometryWrapper = GeometryWrapper.createPoint(coordinate, srsURI, geometryDatatypeURI);`
+
 * Convert CRS/SRS: `GeometryWrapper otherGeometryWrapper = geometryWrapper.convertCRS("http://www.opengis.net/def/crs/EPSG/0/27700")`
 
 * Spatial Relation: `boolean isCrossing = geometryWrapper.crosses(otherGeometryWrapper);`
