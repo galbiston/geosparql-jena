@@ -19,9 +19,7 @@ package io.github.galbiston.geosparql_jena.geo.topological.property_functions.ge
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -62,8 +60,8 @@ public class SpatialDimensionPFTest {
         System.out.println("applyPredicate_2_Dimension");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(90 60)", WKTDatatype.URI);
         SpatialDimensionPF instance = new SpatialDimensionPF();
-        Literal expResult = ResourceFactory.createTypedLiteral("2", XSDDatatype.XSDinteger);
-        Literal result = instance.applyPredicate(geometryWrapper);
+        NodeValue expResult = NodeValue.makeNodeInteger(2);
+        NodeValue result = instance.applyPredicate(geometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -78,8 +76,8 @@ public class SpatialDimensionPFTest {
         System.out.println("applyPredicate_3_Dimension");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT Z (90 60 30)", WKTDatatype.URI);
         SpatialDimensionPF instance = new SpatialDimensionPF();
-        Literal expResult = ResourceFactory.createTypedLiteral("3", XSDDatatype.XSDinteger);
-        Literal result = instance.applyPredicate(geometryWrapper);
+        NodeValue expResult = NodeValue.makeNodeInteger(3);
+        NodeValue result = instance.applyPredicate(geometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -94,8 +92,8 @@ public class SpatialDimensionPFTest {
         System.out.println("applyPredicate_2M_Dimension");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT M (90 60 30)", WKTDatatype.URI);
         SpatialDimensionPF instance = new SpatialDimensionPF();
-        Literal expResult = ResourceFactory.createTypedLiteral("2", XSDDatatype.XSDinteger);
-        Literal result = instance.applyPredicate(geometryWrapper);
+        NodeValue expResult = NodeValue.makeNodeInteger(2);
+        NodeValue result = instance.applyPredicate(geometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -110,8 +108,8 @@ public class SpatialDimensionPFTest {
         System.out.println("applyPredicate_3M_Dimension");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT ZM (90 60 30 10)", WKTDatatype.URI);
         SpatialDimensionPF instance = new SpatialDimensionPF();
-        Literal expResult = ResourceFactory.createTypedLiteral("3", XSDDatatype.XSDinteger);
-        Literal result = instance.applyPredicate(geometryWrapper);
+        NodeValue expResult = NodeValue.makeNodeInteger(3);
+        NodeValue result = instance.applyPredicate(geometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

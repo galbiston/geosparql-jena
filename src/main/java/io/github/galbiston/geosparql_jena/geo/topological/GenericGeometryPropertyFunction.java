@@ -21,7 +21,6 @@ import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.Triple;
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.sparql.core.Var;
 import org.apache.jena.sparql.engine.ExecutionContext;
 import org.apache.jena.sparql.engine.QueryIterator;
@@ -31,6 +30,7 @@ import org.apache.jena.sparql.engine.iterator.QueryIterConcat;
 import org.apache.jena.sparql.engine.iterator.QueryIterNullIterator;
 import org.apache.jena.sparql.engine.iterator.QueryIterSingleton;
 import org.apache.jena.sparql.expr.ExprEvalException;
+import org.apache.jena.sparql.expr.NodeValue;
 import org.apache.jena.sparql.pfunction.PFuncSimple;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import org.apache.jena.vocabulary.RDF;
@@ -41,7 +41,7 @@ import org.apache.jena.vocabulary.RDF;
  */
 public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
-    protected abstract Literal applyPredicate(GeometryWrapper geometryWrapper);
+    protected abstract NodeValue applyPredicate(GeometryWrapper geometryWrapper);
 
     @Override
     public QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, Node object, ExecutionContext execCxt) {
@@ -79,8 +79,8 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
                 if (geomLiteral != null) {
                     GeometryWrapper geometryWrapper = GeometryWrapper.extract(geomLiteral);
-                    Literal geometryLiteral = applyPredicate(geometryWrapper);
-                    return geometryLiteral.asNode();
+                    NodeValue predicateResult = applyPredicate(geometryWrapper);
+                    return predicateResult.asNode();
                 }
             }
             return null;

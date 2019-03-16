@@ -19,9 +19,7 @@ package io.github.galbiston.geosparql_jena.geo.topological.property_functions.ge
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
-import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.sparql.expr.NodeValue;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -62,8 +60,8 @@ public class IsEmptyPFTest {
         System.out.println("applyPredicate_false");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(90 60)", WKTDatatype.URI);
         IsEmptyPF instance = new IsEmptyPF();
-        Literal expResult = ResourceFactory.createTypedLiteral("false", XSDDatatype.XSDboolean);
-        Literal result = instance.applyPredicate(geometryWrapper);
+        NodeValue expResult = NodeValue.makeNodeBoolean(false);
+        NodeValue result = instance.applyPredicate(geometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -78,8 +76,8 @@ public class IsEmptyPFTest {
         System.out.println("applyPredicate_true");
         GeometryWrapper geometryWrapper = GeometryWrapper.extract("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT EMPTY", WKTDatatype.URI);
         IsEmptyPF instance = new IsEmptyPF();
-        Literal expResult = ResourceFactory.createTypedLiteral("true", XSDDatatype.XSDboolean);
-        Literal result = instance.applyPredicate(geometryWrapper);
+        NodeValue expResult = NodeValue.makeNodeBoolean(true);
+        NodeValue result = instance.applyPredicate(geometryWrapper);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

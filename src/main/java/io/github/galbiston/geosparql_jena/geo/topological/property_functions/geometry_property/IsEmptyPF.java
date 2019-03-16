@@ -19,9 +19,7 @@ package io.github.galbiston.geosparql_jena.geo.topological.property_functions.ge
 
 import io.github.galbiston.geosparql_jena.geo.topological.GenericGeometryPropertyFunction;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import org.apache.jena.datatypes.xsd.impl.XSDBaseNumericType;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.sparql.expr.NodeValue;
 
 /**
  *
@@ -30,9 +28,9 @@ import org.apache.jena.rdf.model.ResourceFactory;
 public class IsEmptyPF extends GenericGeometryPropertyFunction {
 
     @Override
-    protected Literal applyPredicate(GeometryWrapper geometryWrapper) {
+    protected NodeValue applyPredicate(GeometryWrapper geometryWrapper) {
         Boolean isEmpty = geometryWrapper.isEmpty();
-        return ResourceFactory.createTypedLiteral(isEmpty.toString(), XSDBaseNumericType.XSDboolean);
+        return NodeValue.makeNodeBoolean(isEmpty);
     }
 
 }
