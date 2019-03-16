@@ -1070,13 +1070,13 @@ public class GeometryWrapper implements Serializable {
     /**
      * Extract Geometry Wrapper from Geometry Literal.
      *
-     * @param nodeValue
+     * @param geometryLiteral
      * @param targetIndex
      * @return Geometry Wrapper of the Geometry Literal.
      */
-    public static final GeometryWrapper extract(NodeValue nodeValue, GeometryIndex targetIndex) {
+    public static final GeometryWrapper extract(NodeValue geometryLiteral, GeometryIndex targetIndex) {
 
-        Node node = nodeValue.asNode();
+        Node node = geometryLiteral.asNode();
 
         return extract(node, targetIndex);
     }
@@ -1084,39 +1084,39 @@ public class GeometryWrapper implements Serializable {
     /**
      * Extract Geometry Wrapper from Geometry Literal.
      *
-     * @param node
+     * @param geometryLiteral
      * @param targetIndex
      * @return Geometry Wrapper of the Geometry Literal.
      */
-    public static final GeometryWrapper extract(Node node, GeometryIndex targetIndex) {
+    public static final GeometryWrapper extract(Node geometryLiteral, GeometryIndex targetIndex) {
 
-        if (!node.isLiteral()) {
-            throw new DatatypeFormatException("Not a Literal: " + node);
+        if (!geometryLiteral.isLiteral()) {
+            throw new DatatypeFormatException("Not a Literal: " + geometryLiteral);
         }
 
-        String datatypeURI = node.getLiteralDatatypeURI();
-        String lexicalForm = node.getLiteralLexicalForm();
+        String datatypeURI = geometryLiteral.getLiteralDatatypeURI();
+        String lexicalForm = geometryLiteral.getLiteralLexicalForm();
         return extract(lexicalForm, datatypeURI, targetIndex);
     }
 
     /**
      * Extract Geometry Wrapper from Geometry Literal.
      *
-     * @param nodeValue
+     * @param geometryLiteral
      * @return Geometry Wrapper of the Geometry Literal.
      */
-    public static final GeometryWrapper extract(NodeValue nodeValue) {
-        return extract(nodeValue, GeometryIndex.PRIMARY);
+    public static final GeometryWrapper extract(NodeValue geometryLiteral) {
+        return extract(geometryLiteral, GeometryIndex.PRIMARY);
     }
 
     /**
      * Extract Geometry Wrapper from Geometry Literal.
      *
-     * @param node
+     * @param geometryLiteral
      * @return Geometry Wrapper of the Geometry Literal.
      */
-    public static final GeometryWrapper extract(Node node) {
-        return extract(node, GeometryIndex.PRIMARY);
+    public static final GeometryWrapper extract(Node geometryLiteral) {
+        return extract(geometryLiteral, GeometryIndex.PRIMARY);
     }
 
     /**
