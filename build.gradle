@@ -57,7 +57,7 @@ dependencies {
 }
 
 group = 'io.github.galbiston'
-version = '1.0.6'
+version = '1.0.7'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
