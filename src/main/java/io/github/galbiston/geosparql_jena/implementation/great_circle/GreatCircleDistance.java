@@ -16,7 +16,6 @@
 package io.github.galbiston.geosparql_jena.implementation.great_circle;
 
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
-import org.locationtech.jts.geom.Point;
 
 /**
  *
@@ -25,19 +24,19 @@ import org.locationtech.jts.geom.Point;
 public class GreatCircleDistance {
 
     /**
-     * Great circle distance between Points using Vincenty formula.
+     * Great circle distance between Lat/Lon Points using Vincenty formula.
      *
-     * @param point1 Lat/x and Lon/y Point in degrees.
-     * @param point2 Lat/x and Lon/y Point in degrees.
+     * @param point1 LatLon Point in degrees.
+     * @param point2 LatLon Point in degrees.
      * @return Distance in metres.
      */
-    public static final double vincentyFormula(Point point1, Point point2) {
+    public static final double vincentyFormula(LatLonPoint point1, LatLonPoint point2) {
         //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
-        double lat1 = point1.getX();
-        double lon1 = point1.getY();
+        double lat1 = point1.getLat();
+        double lon1 = point1.getLon();
 
-        double lat2 = point2.getX();
-        double lon2 = point2.getY();
+        double lat2 = point2.getLat();
+        double lon2 = point2.getLon();
         return vincentyFormula(lat1, lon1, lat2, lon2);
     }
 
@@ -72,18 +71,18 @@ public class GreatCircleDistance {
     }
 
     /**
-     * Great circle distance between Points using Haversine formula.
+     * Great circle distance between Lat/Lon Points using Haversine formula.
      *
-     * @param point1 Lat/x and Lon/y Point in degrees.
-     * @param point2 Lat/x and Lon/y Point in degrees.
+     * @param point1 LatLon Point in degrees.
+     * @param point2 LatLon Point in degrees.
      * @return Distance in metres.
      */
-    public static final double haversineFormula(Point point1, Point point2) {
-        double lat1 = point1.getX();
-        double lon1 = point1.getY();
+    public static final double haversineFormula(LatLonPoint point1, LatLonPoint point2) {
+        double lat1 = point1.getLat();
+        double lon1 = point1.getLon();
 
-        double lat2 = point2.getX();
-        double lon2 = point2.getY();
+        double lat2 = point2.getLat();
+        double lon2 = point2.getLon();
 
         return haversineFormula(lat1, lon1, lat2, lon2);
     }

@@ -16,10 +16,6 @@
 package io.github.galbiston.geosparql_jena.implementation.great_circle;
 
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
-import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 
 /**
  * Determines final Latitude and Longitude based on a bearing.<br>
@@ -40,8 +36,6 @@ public class GreatCirclePointDistance {
     private final double cosStartLat;
     private final double sinAngDistance;
     private final double cosAngDistance;
-
-    private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     public GreatCirclePointDistance(double startLat, double startLon, double distance) {
         this.distance = distance;
@@ -119,7 +113,7 @@ public class GreatCirclePointDistance {
      * @param lonRad
      * @return Lat/Lon Point in degrees.
      */
-    public static final Point radToPoint(double latRad, double lonRad) {
+    public static final LatLonPoint radToPoint(double latRad, double lonRad) {
         return radToPoint(latRad, lonRad, true);
     }
 
@@ -131,13 +125,14 @@ public class GreatCirclePointDistance {
      * @param isNormaliseLon Normalise Longitude between -180 and 180.
      * @return Lat/Lon Point in degrees.
      */
-    public static final Point radToPoint(double latRad, double lonRad, boolean isNormaliseLon) {
+    public static final LatLonPoint radToPoint(double latRad, double lonRad, boolean isNormaliseLon) {
         double lat = Math.toDegrees(latRad);
         double lon = Math.toDegrees(lonRad);
         if (isNormaliseLon) {
             lon = normaliseLongitude(lon);
         }
-        Point point = GEOMETRY_FACTORY.createPoint(new Coordinate(lat, lon));
+
+        LatLonPoint point = new LatLonPoint(lat, lon);
         return point;
     }
 
@@ -158,25 +153,25 @@ public class GreatCirclePointDistance {
     }
 
     /**
-     * Point (Lat/x,Lon/y) from start Point (Lat/x,Lon/y) following bearing
-     * degrees (clockwise from north) and distance (metres).
+     * Lat/Lon Point from start Lat/Lon Point following bearing degrees
+     * (clockwise from north) and distance (metres).
      *
      * @param startPoint
      * @param distance
      * @param bearing
      * @return Lat/Lon point in the distance and bearing from start point.
      */
-    public static final Point getPoint(Point startPoint, double distance, double bearing) {
+    public static final LatLonPoint getPoint(LatLonPoint startPoint, double distance, double bearing) {
 
-        double startLat = startPoint.getX();
-        double startLon = startPoint.getY();
+        double startLat = startPoint.getLat();
+        double startLon = startPoint.getLon();
 
         return GreatCirclePointDistance.getPoint(startLat, startLon, distance, bearing);
     }
 
     /**
-     * Point (Lat/x,Lon/y) from start Lat/x,Lon/y following bearing degrees
-     * (clockwise from north) and distance (metres).
+     * Lat/Lon Point from start Lat/x,Lon/y following bearing degrees (clockwise
+     * from north) and distance (metres).
      *
      * @param startLat
      * @param startLon
@@ -184,7 +179,7 @@ public class GreatCirclePointDistance {
      * @param bearing
      * @return Lat/Lon point in the distance and bearing from start point.
      */
-    public static final Point getPoint(double startLat, double startLon, double distance, double bearing) {
+    public static final LatLonPoint getPoint(double startLat, double startLon, double distance, double bearing) {
         //Based on: https://www.movable-type.co.uk/scripts/latlong.html
         double bearingRad = Math.toRadians(bearing);
         GreatCirclePointDistance pointDistance = new GreatCirclePointDistance(startLat, startLon, distance);
@@ -193,7 +188,7 @@ public class GreatCirclePointDistance {
 
         double endLonRad = pointDistance.longitude(endLatRad, bearingRad);
 
-        Point endPoint = radToPoint(endLatRad, endLonRad);
+        LatLonPoint endPoint = radToPoint(endLatRad, endLonRad);
         return endPoint;
     }
 

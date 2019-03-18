@@ -24,9 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 
 /**
  *
@@ -103,8 +101,8 @@ public class GreatCirclePointDistanceTest {
         System.out.println("radToPoint");
         double latRad = 0.5;
         double lonRad = 0.1;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(Math.toDegrees(latRad), Math.toDegrees(lonRad)));
-        Point result = GreatCirclePointDistance.radToPoint(latRad, lonRad);
+        LatLonPoint expResult = new LatLonPoint(Math.toDegrees(latRad), Math.toDegrees(lonRad));
+        LatLonPoint result = GreatCirclePointDistance.radToPoint(latRad, lonRad);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -120,8 +118,8 @@ public class GreatCirclePointDistanceTest {
         double latRad = 0.5;
         double lonRad = Math.PI + 0.1;
         boolean isNormaliseLon = false;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(Math.toDegrees(latRad), Math.toDegrees(lonRad)));
-        Point result = GreatCirclePointDistance.radToPoint(latRad, lonRad, isNormaliseLon);
+        LatLonPoint expResult = new LatLonPoint(Math.toDegrees(latRad), Math.toDegrees(lonRad));
+        LatLonPoint result = GreatCirclePointDistance.radToPoint(latRad, lonRad, isNormaliseLon);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -137,8 +135,8 @@ public class GreatCirclePointDistanceTest {
         double latRad = 0.5;
         double lonRad = Math.PI + 0.2;
         boolean isNormaliseLon = true;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(Math.toDegrees(latRad), Math.toDegrees(-Math.PI + 0.2)));
-        Point result = GreatCirclePointDistance.radToPoint(latRad, lonRad, isNormaliseLon);
+        LatLonPoint expResult = new LatLonPoint(Math.toDegrees(latRad), Math.toDegrees(-Math.PI + 0.2));
+        LatLonPoint result = GreatCirclePointDistance.radToPoint(latRad, lonRad, isNormaliseLon);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -170,10 +168,10 @@ public class GreatCirclePointDistanceTest {
         double startLat = 48.85341;
         double startLon = -2.3488;
         double distance = 100000.0;
-        Point startPoint = GEOMETRY_FACTORY.createPoint(new Coordinate(startLat, startLon));
+        LatLonPoint startPoint = new LatLonPoint(startLat, startLon);
         double bearing = 0.0;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(49.752730367761664, -2.3488));
-        Point result = GreatCirclePointDistance.getPoint(startPoint, distance, bearing);
+        LatLonPoint expResult = new LatLonPoint(49.752730367761664, -2.3488);
+        LatLonPoint result = GreatCirclePointDistance.getPoint(startPoint, distance, bearing);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -190,8 +188,8 @@ public class GreatCirclePointDistanceTest {
         double startLon = -2.3488;
         double distance = 100000.0;
         double bearing = 0.0;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(49.752730367761664, -2.3488));
-        Point result = GreatCirclePointDistance.getPoint(startLat, startLon, distance, bearing);
+        LatLonPoint expResult = new LatLonPoint(49.752730367761664, -2.3488);
+        LatLonPoint result = GreatCirclePointDistance.getPoint(startLat, startLon, distance, bearing);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -208,10 +206,10 @@ public class GreatCirclePointDistanceTest {
         double startLat = 48.85341;
         double startLon = -2.3488;
         double distance = 100000.0;
-        Point startPoint = GEOMETRY_FACTORY.createPoint(new Coordinate(startLat, startLon));
+        LatLonPoint startPoint = new LatLonPoint(startLat, startLon);
         double bearing = 90.0;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(48.84533344929755, -0.9821733277296272));
-        Point result = GreatCirclePointDistance.getPoint(startPoint, distance, bearing);
+        LatLonPoint expResult = new LatLonPoint(48.84533344929755, -0.9821733277296272);
+        LatLonPoint result = GreatCirclePointDistance.getPoint(startPoint, distance, bearing);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);
@@ -228,8 +226,8 @@ public class GreatCirclePointDistanceTest {
         double startLon = -2.3488;
         double distance = 100000.0;
         double bearing = 90.0;
-        Point expResult = GEOMETRY_FACTORY.createPoint(new Coordinate(48.84533344929755, -0.9821733277296272));
-        Point result = GreatCirclePointDistance.getPoint(startLat, startLon, distance, bearing);
+        LatLonPoint expResult = new LatLonPoint(48.84533344929755, -0.9821733277296272);
+        LatLonPoint result = GreatCirclePointDistance.getPoint(startLat, startLon, distance, bearing);
 
         //System.out.println("Exp: " + expResult);
         //System.out.println("Res: " + result);

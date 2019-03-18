@@ -19,13 +19,13 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.great_circle.GreatCirclePointDistance;
+import io.github.galbiston.geosparql_jena.implementation.great_circle.LatLonPoint;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.Objects;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.sparql.expr.ExprEvalException;
 import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Point;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -223,11 +223,11 @@ public class SearchEnvelope {
         double latRad = pointDistance.latitude(latBearing);
         double lonRad = pointDistance.longitude(latRad, lonBearing);
 
-        Point point = GreatCirclePointDistance.radToPoint(latRad, lonRad, false);
+        LatLonPoint point = GreatCirclePointDistance.radToPoint(latRad, lonRad, false);
 
         //Find the difference between the outer point and the extreme values.
-        double latDiff = Math.abs(extLat - point.getX());
-        double lonDiff = Math.abs(extLon - point.getY());
+        double latDiff = Math.abs(extLat - point.getLat());
+        double lonDiff = Math.abs(extLon - point.getLon());
 
         //Find differences of the longitude and wrap the values if required.
         double normMinLon = GreatCirclePointDistance.normaliseLongitude(minLon - lonDiff);
