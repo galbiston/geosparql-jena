@@ -1225,11 +1225,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createPoint(Coordinate coordinate, String srsURI, String geometryDatatypeURI) {
-        Point xyGeometry = GEOMETRY_FACTORY.createPoint(coordinate);
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.find(coordinate, xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        Point geometry = GEOMETRY_FACTORY.createPoint(coordinate);
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1253,11 +1250,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createLineString(Coordinate[] coordinates, String srsURI, String geometryDatatypeURI) {
-        LineString xyGeometry = GEOMETRY_FACTORY.createLineString(coordinates);
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.find(coordinates, xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        LineString geometry = GEOMETRY_FACTORY.createLineString(coordinates);
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1269,11 +1263,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createLineString(LineString lineString, String srsURI, String geometryDatatypeURI) {
-        LineString xyGeometry = lineString;
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.find(lineString.getCoordinate(), xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        LineString geometry = lineString;
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1285,11 +1276,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createPolygon(List<Coordinate> coordinates, String srsURI, String geometryDatatypeURI) {
-        Polygon xyGeometry = GEOMETRY_FACTORY.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.find(coordinates, xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        Polygon geometry = GEOMETRY_FACTORY.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1302,11 +1290,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createPolygon(LinearRing shell, LinearRing[] holes, String srsURI, String geometryDatatypeURI) {
-        Polygon xyGeometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.find(shell.getCoordinate(), xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        Polygon geometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1318,11 +1303,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createPolygon(LinearRing shell, String srsURI, String geometryDatatypeURI) {
-        Polygon xyGeometry = GEOMETRY_FACTORY.createPolygon(shell);
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.find(shell.getCoordinate(), xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        Polygon geometry = GEOMETRY_FACTORY.createPolygon(shell);
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1355,11 +1337,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createMultiPoint(List<Coordinate> coordinates, String srsURI, String geometryDatatypeURI) {
-        MultiPoint xyGeometry = GEOMETRY_FACTORY.createMultiPointFromCoords(coordinates.toArray(new Coordinate[coordinates.size()]));
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.find(coordinates, xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        MultiPoint geometry = GEOMETRY_FACTORY.createMultiPointFromCoords(coordinates.toArray(new Coordinate[coordinates.size()]));
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1371,11 +1350,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createMultiLineString(List<LineString> lineStrings, String srsURI, String geometryDatatypeURI) {
-        MultiLineString xyGeometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings.toArray(new LineString[lineStrings.size()]));
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.findCollection(lineStrings, xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        MultiLineString geometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings.toArray(new LineString[lineStrings.size()]));
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1387,11 +1363,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createMultiPolygon(List<Polygon> polygons, String srsURI, String geometryDatatypeURI) {
-        MultiPolygon xyGeometry = GEOMETRY_FACTORY.createMultiPolygon(polygons.toArray(new Polygon[polygons.size()]));
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.findCollection(polygons, xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        MultiPolygon geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons.toArray(new Polygon[polygons.size()]));
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
@@ -1403,11 +1376,8 @@ public class GeometryWrapper implements Serializable {
      * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
      */
     public static final GeometryWrapper createGeometryCollection(List<Geometry> geometries, String srsURI, String geometryDatatypeURI) {
-        GeometryCollection xyGeometry = GEOMETRY_FACTORY.createGeometryCollection(geometries.toArray(new Geometry[geometries.size()]));
-        Geometry parsingGeometry = GeometryReverse.check(xyGeometry, srsURI);
-        DimensionInfo dimsInfo = DimensionInfo.findCollection(geometries, xyGeometry);
-
-        return new GeometryWrapper(parsingGeometry, xyGeometry, srsURI, geometryDatatypeURI, dimsInfo);
+        GeometryCollection geometry = GEOMETRY_FACTORY.createGeometryCollection(geometries.toArray(new Geometry[geometries.size()]));
+        return createGeometry(geometry, srsURI, geometryDatatypeURI);
     }
 
     /**
