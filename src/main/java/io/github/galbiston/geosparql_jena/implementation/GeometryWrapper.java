@@ -1326,6 +1326,27 @@ public class GeometryWrapper implements Serializable {
     }
 
     /**
+     * Create Polygon GeometryWrapper from Envelope.
+     *
+     * @param envelope In X/Y order.
+     * @param srsURI
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPolygon(Envelope envelope, String srsURI, String geometryDatatypeURI) {
+        LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(
+                new Coordinate[]{
+                    new Coordinate(envelope.getMinX(), envelope.getMinY()),
+                    new Coordinate(envelope.getMaxX(), envelope.getMinY()),
+                    new Coordinate(envelope.getMaxX(), envelope.getMaxY()),
+                    new Coordinate(envelope.getMinX(), envelope.getMaxY()),
+                    new Coordinate(envelope.getMinX(), envelope.getMinY())
+                });
+
+        return createPolygon(linearRing, srsURI, geometryDatatypeURI);
+    }
+
+    /**
      * Create MultiPoint GeometryWrapper.
      *
      * @param coordinates In X/Y order.
@@ -1481,6 +1502,17 @@ public class GeometryWrapper implements Serializable {
      */
     public static final GeometryWrapper createPolygon(LinearRing shell, String geometryDatatypeURI) {
         return createPolygon(shell, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
+    }
+
+    /**
+     * Create Polygon GeometryWrapper using the default WKT CRS84 SRS URI.
+     *
+     * @param envelope In X/Y order.
+     * @param geometryDatatypeURI
+     * @return GeometryWrapper with SRS URI and GeometryDatatype URI.
+     */
+    public static final GeometryWrapper createPolygon(Envelope envelope, String geometryDatatypeURI) {
+        return createPolygon(envelope, SRS_URI.DEFAULT_WKT_CRS84, geometryDatatypeURI);
     }
 
     /**
