@@ -16,6 +16,8 @@
 package io.github.galbiston.geosparql_jena.implementation.great_circle;
 
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Point;
 
 /**
  *
@@ -37,6 +39,42 @@ public class GreatCircleDistance {
 
         double lat2 = point2.getLat();
         double lon2 = point2.getLon();
+        return vincentyFormula(lat1, lon1, lat2, lon2);
+    }
+
+    /**
+     * Great circle distance between Points (x is Lon, y is Lat) using Vincenty
+     * formula.
+     *
+     * @param point1 Point in degrees.
+     * @param point2 Point in degrees.
+     * @return Distance in metres.
+     */
+    public static final double vincentyFormula(Point point1, Point point2) {
+        //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
+        double lat1 = point1.getY();
+        double lon1 = point1.getX();
+
+        double lat2 = point2.getY();
+        double lon2 = point2.getX();
+        return vincentyFormula(lat1, lon1, lat2, lon2);
+    }
+
+    /**
+     * Great circle distance between Points (x is Lon, y is Lat) using Vincenty
+     * formula.
+     *
+     * @param coord1 Point in degrees.
+     * @param coord2 Point in degrees.
+     * @return Distance in metres.
+     */
+    public static final double vincentyFormula(Coordinate coord1, Coordinate coord2) {
+        //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
+        double lat1 = coord1.getY();
+        double lon1 = coord1.getX();
+
+        double lat2 = coord2.getY();
+        double lon2 = coord2.getX();
         return vincentyFormula(lat1, lon1, lat2, lon2);
     }
 
@@ -85,6 +123,42 @@ public class GreatCircleDistance {
         double lon2 = point2.getLon();
 
         return haversineFormula(lat1, lon1, lat2, lon2);
+    }
+
+    /**
+     * Great circle distance between Points (x is Lon, y is Lat) using Haversine
+     * formula.
+     *
+     * @param point1 Point in degrees.
+     * @param point2 Point in degrees.
+     * @return Distance in metres.
+     */
+    public static final double haversineFormula(Point point1, Point point2) {
+        //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
+        double lat1 = point1.getY();
+        double lon1 = point1.getX();
+
+        double lat2 = point2.getY();
+        double lon2 = point2.getX();
+        return vincentyFormula(lat1, lon1, lat2, lon2);
+    }
+
+    /**
+     * Great circle distance between Points (x is Lon, y is Lat) using Haversine
+     * formula.
+     *
+     * @param coord1 Point in degrees.
+     * @param coord2 Point in degrees.
+     * @return Distance in metres.
+     */
+    public static final double haversineFormula(Coordinate coord1, Coordinate coord2) {
+        //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
+        double lat1 = coord1.getY();
+        double lon1 = coord1.getX();
+
+        double lat2 = coord2.getY();
+        double lon2 = coord2.getX();
+        return vincentyFormula(lat1, lon1, lat2, lon2);
     }
 
     /**
