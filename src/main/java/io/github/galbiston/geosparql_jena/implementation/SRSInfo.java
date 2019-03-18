@@ -17,6 +17,7 @@ package io.github.galbiston.geosparql_jena.implementation;
 
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_SRS_URI;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -73,7 +74,7 @@ public class SRSInfo {
      * @param srid
      */
     public SRSInfo(int srid) {
-        this(EPSG_BASE_SRS_URI + srid);
+        this(convertSRID(srid));
     }
 
     private SRSInfo(String srsURI, CoordinateReferenceSystem crs, boolean isSRSRecognised) {
@@ -88,7 +89,7 @@ public class SRSInfo {
         this.domainRangeX = Math.abs(domainEnvelope.getMinX()) + Math.abs(domainEnvelope.getMaxX());
     }
 
-    protected static final Boolean checkAxisXY(CoordinateReferenceSystem crs) {
+    public static final Boolean checkAxisXY(CoordinateReferenceSystem crs) {
 
         AxisDirection axisDirection = crs.getCoordinateSystem().getAxis(0).getDirection();
 
@@ -101,7 +102,7 @@ public class SRSInfo {
         }
     }
 
-    protected static final Envelope buildDomainEnvelope(CoordinateReferenceSystem crs, Boolean isAxisXY) {
+    public static final Envelope buildDomainEnvelope(CoordinateReferenceSystem crs, Boolean isAxisXY) {
 
         org.opengis.geometry.Envelope crsDomain = CRS.getDomainOfValidity(crs);
         DirectPosition lowerCorner = crsDomain.getLowerCorner();
@@ -124,6 +125,24 @@ public class SRSInfo {
 
         Envelope envelope = new Envelope(x1, x2, y1, y2);
         return envelope;
+    }
+
+    /**
+     *
+     * @param srid
+     * @return srsURI using SRID
+     */
+    public static final String convertSRID(BigInteger srid) {
+        return convertSRID(srid.intValue());
+    }
+
+    /**
+     *
+     * @param srid
+     * @return srsURI using SRID
+     */
+    public static final String convertSRID(int srid) {
+        return EPSG_BASE_SRS_URI + srid;
     }
 
     /**
