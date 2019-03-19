@@ -33,11 +33,13 @@ public class SpatialExtension {
     public static final String CONVERT_LAT_LON_BOX = SPATIAL_FUNCTION_URI + "convertLatLonBox";
     public static final String NEARBY = SPATIAL_FUNCTION_URI + "nearby";
     public static final String WITHIN_CIRCLE = SPATIAL_FUNCTION_URI + "withinCircle";
+    public static final String ANGLE = SPATIAL_FUNCTION_URI + "angle";
+    public static final String ANGLE_DEGREES = SPATIAL_FUNCTION_URI + "angleDeg";
     public static final String DISTANCE = SPATIAL_FUNCTION_URI + "distance";
-    public static final String GREAT_CIRCLE = SPATIAL_FUNCTION_URI + "greatCircle";
-    public static final String GREAT_CIRCLE_GEOM = SPATIAL_FUNCTION_URI + "greatCircleGeom";
     public static final String AZIMUTH = SPATIAL_FUNCTION_URI + "azimuth";
     public static final String AZIMUTH_DEGREES = SPATIAL_FUNCTION_URI + "azimuthDeg";
+    public static final String GREAT_CIRCLE = SPATIAL_FUNCTION_URI + "greatCircle";
+    public static final String GREAT_CIRCLE_GEOM = SPATIAL_FUNCTION_URI + "greatCircleGeom";
     public static final String TRANSFORM_DATATYPE = SPATIAL_FUNCTION_URI + "transformDatatype";
     public static final String TRANSFORM_SRS = SPATIAL_FUNCTION_URI + "transformSRS";
     public static final String TRANSFORM = SPATIAL_FUNCTION_URI + "transform";

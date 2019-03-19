@@ -16,6 +16,8 @@
 package io.github.galbiston.geosparql_jena.implementation.function_registration;
 
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.AngleDegreesFF;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.AngleFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.AzimuthDegreesFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.AzimuthFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
@@ -86,6 +88,8 @@ public class Spatial {
         functionRegistry.put(SpatialExtension.CONVERT_LAT_LON_BOX, ConvertLatLonBoxFF.class);
         functionRegistry.put(SpatialExtension.NEARBY, NearbyFF.class);
         functionRegistry.put(SpatialExtension.WITHIN_CIRCLE, NearbyFF.class);
+        functionRegistry.put(SpatialExtension.ANGLE, AngleFF.class);
+        functionRegistry.put(SpatialExtension.ANGLE_DEGREES, AngleDegreesFF.class);
         functionRegistry.put(SpatialExtension.DISTANCE, DistanceFF.class);
         functionRegistry.put(SpatialExtension.AZIMUTH, AzimuthFF.class);
         functionRegistry.put(SpatialExtension.AZIMUTH_DEGREES, AzimuthDegreesFF.class);
