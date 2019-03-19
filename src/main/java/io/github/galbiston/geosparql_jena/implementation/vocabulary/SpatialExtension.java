@@ -36,6 +36,8 @@ public class SpatialExtension {
     public static final String DISTANCE = SPATIAL_FUNCTION_URI + "distance";
     public static final String GREAT_CIRCLE = SPATIAL_FUNCTION_URI + "greatCircle";
     public static final String GREAT_CIRCLE_GEOM = SPATIAL_FUNCTION_URI + "greatCircleGeom";
+    public static final String AZIMUTH = SPATIAL_FUNCTION_URI + "azimuth";
+    public static final String AZIMUTH_DEGREES = SPATIAL_FUNCTION_URI + "azimuthDeg";
     public static final String TRANSFORM_DATATYPE = SPATIAL_FUNCTION_URI + "transformDatatype";
     public static final String TRANSFORM_SRS = SPATIAL_FUNCTION_URI + "transformSRS";
     public static final String TRANSFORM = SPATIAL_FUNCTION_URI + "transform";

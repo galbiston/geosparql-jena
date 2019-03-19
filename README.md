@@ -372,6 +372,8 @@ Function Name | Description
 *?wktString* **spatialF:convertLatLonBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax*) | Converts Lat and Lon double values into WKT string of a Polygon forming a box with WGS84 SRS.
 *?boolean* **spatialF:nearby**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True, if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
 *?boolean* **spatialF:withinCircle**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True, if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
+*?radians* **spatialF:azimuth**(*?lat1*, *?lon1*, *?lat2*, *?lon2*) | Forward azimuth clockwise from North between two Lat/Lon Points in 0 to 2π radians.
+*?degrees* **spatialF:azimuthDeg**(*?lat1*, *?lon1*, *?lat2*, *?lon2*) | Forward azimuth clockwise from North between two Lat/Lon Points in 0 to 360 degrees.
 *?distance* **spatialF:greatCircle**(*?lat1*, *?lon1*, *?lat2*, *?lon2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Lat/Lon Points in distance *units*.
 *?distance* **spatialF:greatCircleGeom**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Great Circle distance (Vincenty formula) between two Geometry Literals in distance *units*. Use `http://www.opengis.net/def/function/geosparql/distance` from GeoSPARQL standard for Euclidean distance.
 *?distance* **spatialF:distance**(*?geomLit1*, *?geomLit2*, *?unitsURI*) | Distance between two Geometry Literals in distance *units*. Chooses distance measure based on SRS type. Great Circle distance for Geographic SRS and Euclidean otherwise.
