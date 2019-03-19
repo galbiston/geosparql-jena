@@ -40,13 +40,12 @@ public class Azimuth {
         double lat1Rad = Math.toRadians(lat1);
         double lat2Rad = Math.toRadians(lat2);
 
-        //double diffLatRad = Math.toRadians(lat2 - lat1);
+        //Δλ
         double diffLonRad = Math.toRadians(lon2 - lon1);
 
         //https://www.omnicalculator.com/other/azimuth#how-to-calculate-the-azimuth-from-latitude-and-longitude
         //λ is lon, φ is lat.
-        //θ = atan2 [(sin Δλ ⋅ cos φ₂), (cos φ₁ ⋅ sin φ₂ − sin φ₁ ⋅ cos φ₂ ⋅ cos Δλ)]
-        //double diffLon = lon2 - lon1;
+        //θ = atan2 [(sin Δλ * cos φ2), (cos φ1 * sin φ2 − sin φ1 * cos φ2 * cos Δλ)]
         double x = Math.cos(lat1Rad) * Math.sin(lat2Rad) - Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(diffLonRad);
         double y = Math.sin(diffLonRad) * Math.cos(lat2Rad);
         double azimuth = Math.atan2(y, x);
@@ -65,7 +64,6 @@ public class Azimuth {
      * @return Azimuth from North in 0 to 2π radians.
      */
     public static final double find(LatLonPoint point1, LatLonPoint point2) {
-        //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
         double lat1 = point1.getLat();
         double lon1 = point1.getLon();
 
@@ -82,7 +80,6 @@ public class Azimuth {
      * @return Azimuth from North in 0 to 2π radians.
      */
     public static final double find(Point point1, Point point2) {
-        //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
         double lat1 = point1.getY();
         double lon1 = point1.getX();
 
