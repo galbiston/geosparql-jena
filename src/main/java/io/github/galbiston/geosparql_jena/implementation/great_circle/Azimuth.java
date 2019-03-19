@@ -33,7 +33,7 @@ public class Azimuth {
      * @param lon1 Lon in degrees of first point.
      * @param lat2 Lat in degrees of second point.
      * @param lon2 Lon in degrees of second point.
-     * @return Azimuth from North in radians.
+     * @return Azimuth from North in 0 to 2π radians.
      */
     public static final double find(double lat1, double lon1, double lat2, double lon2) {
 
@@ -62,7 +62,7 @@ public class Azimuth {
      *
      * @param point1 LatLon Point in degrees.
      * @param point2 LatLon Point in degrees.
-     * @return Azimuth from North in radians.
+     * @return Azimuth from North in 0 to 2π radians.
      */
     public static final double find(LatLonPoint point1, LatLonPoint point2) {
         //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
@@ -79,7 +79,7 @@ public class Azimuth {
      *
      * @param point1 Point in degrees.
      * @param point2 Point in degrees.
-     * @return Azimuth from North in radians.
+     * @return Azimuth from North in 0 to 2π radians.
      */
     public static final double find(Point point1, Point point2) {
         //Based on Vincenty formula: https://en.wikipedia.org/wiki/Great-circle_distance
@@ -96,7 +96,7 @@ public class Azimuth {
      *
      * @param coord1 Point in degrees.
      * @param coord2 Point in degrees.
-     * @return Azimuth from North in radians.
+     * @return Azimuth from North in 0 to 2π radians.
      */
     public static final double find(Coordinate coord1, Coordinate coord2) {
         double lat1 = coord1.getY();
