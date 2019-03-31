@@ -499,7 +499,7 @@ public class GeoSPARQLOperations {
      * @param dataset
      * @return SRS URI
      */
-    public static final String findModeSRS(Dataset dataset) throws ModeSrsException {
+    public static final String findModeSRS(Dataset dataset) throws SrsException {
         LOGGER.info("Find Mode SRS - Started");
         ModeSRS modeSRS = new ModeSRS();
         //Default Model
@@ -527,7 +527,7 @@ public class GeoSPARQLOperations {
      * @param model
      * @return SRS URI
      */
-    public static final String findModeSRS(Model model) throws ModeSrsException {
+    public static final String findModeSRS(Model model) throws SrsException {
         ModeSRS modeSRS = new ModeSRS();
         modeSRS.search(model);
         return modeSRS.getModeURI();

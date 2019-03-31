@@ -18,6 +18,7 @@ package io.github.galbiston.geosparql_jena.spatial.property_functions;
 import io.github.galbiston.geosparql_jena.configuration.GeoSPARQLConfig;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexException;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndexTestData;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -203,7 +204,7 @@ public class GenericSpatialPropertyFunctionTest {
      * Test of execEvaluated method, of class GenericSpatialPropertyFunction.
      */
     @Test
-    public void testExecEvaluated_Nearby_geo() {
+    public void testExecEvaluated_Nearby_geo() throws SpatialIndexException {
         System.out.println("execEvaluated_Nearby_geo");
 
         Model model = ModelFactory.createDefaultModel();

@@ -19,13 +19,13 @@ package io.github.galbiston.geosparql_jena.configuration;
  *
  *
  */
-public class ModeSrsException extends RuntimeException {
+public class SrsException extends RuntimeException {
 
-    public ModeSrsException(String msg) {
+    public SrsException(String msg) {
         super(msg);
     }
 
-    public ModeSrsException(String msg, Throwable cause) {
+    public SrsException(String msg, Throwable cause) {
         super(msg, cause);
     }
 }

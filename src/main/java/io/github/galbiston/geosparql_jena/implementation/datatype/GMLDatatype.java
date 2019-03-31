@@ -74,7 +74,7 @@ public class GMLDatatype extends GeometryDatatype {
             GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
             return GMLWriter.write(geometryWrapper);
         } else {
-            throw new AssertionError("Object passed to GMLDatatype is not a GeometryWrapper: " + geometry);
+            throw new DatatypeFormatException("Object to unparse GMLDatatype is not a GeometryWrapper: " + geometry);
         }
     }
 

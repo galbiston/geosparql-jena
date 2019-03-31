@@ -15,8 +15,8 @@
  */
 package io.github.galbiston.geosparql_jena.spatial;
 
-import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
@@ -64,15 +64,19 @@ public class SpatialIndexTestData {
     public static final SpatialIndex createTestIndex() {
 
         if (TEST_SPATIAL_INDEX == null) {
-            SpatialIndex spatialIndex = new SpatialIndex(100, SRS_URI.WGS84_CRS);
-            spatialIndex.insertItem(LONDON_GEOMETRY_WRAPPER.getEnvelope(), LONDON_FEATURE);
-            spatialIndex.insertItem(NEW_YORK_GEOMETRY_WRAPPER.getEnvelope(), NEW_YORK_FEATURE);
-            spatialIndex.insertItem(HONOLULU_GEOMETRY_WRAPPER.getEnvelope(), HONOLULU_FEATURE);
-            spatialIndex.insertItem(PERTH_GEOMETRY_WRAPPER.getEnvelope(), PERTH_FEATURE);
-            spatialIndex.insertItem(AUCKLAND_GEOMETRY_WRAPPER.getEnvelope(), AUCKLAND_FEATURE);
+            try {
+                SpatialIndex spatialIndex = new SpatialIndex(100, SRS_URI.WGS84_CRS);
+                spatialIndex.insertItem(LONDON_GEOMETRY_WRAPPER.getEnvelope(), LONDON_FEATURE);
+                spatialIndex.insertItem(NEW_YORK_GEOMETRY_WRAPPER.getEnvelope(), NEW_YORK_FEATURE);
+                spatialIndex.insertItem(HONOLULU_GEOMETRY_WRAPPER.getEnvelope(), HONOLULU_FEATURE);
+                spatialIndex.insertItem(PERTH_GEOMETRY_WRAPPER.getEnvelope(), PERTH_FEATURE);
+                spatialIndex.insertItem(AUCKLAND_GEOMETRY_WRAPPER.getEnvelope(), AUCKLAND_FEATURE);
 
-            spatialIndex.build();
-            TEST_SPATIAL_INDEX = spatialIndex;
+                spatialIndex.build();
+                TEST_SPATIAL_INDEX = spatialIndex;
+            } catch (SpatialIndexException ex) {
+                System.out.println("Spatial Index Error: " + ex.getMessage());
+            }
         }
 
         return TEST_SPATIAL_INDEX;

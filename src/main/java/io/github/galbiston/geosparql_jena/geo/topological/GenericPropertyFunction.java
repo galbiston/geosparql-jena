@@ -23,6 +23,7 @@ import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExtension;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -196,7 +197,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
         return queryIterConcat;
     }
 
-    private QueryIterConcat findIndex(Graph graph, Node boundNode, Node unboundNode, Binding binding, boolean isSubjectBound, Node predicate, ExecutionContext execCxt) {
+    private QueryIterConcat findIndex(Graph graph, Node boundNode, Node unboundNode, Binding binding, boolean isSubjectBound, Node predicate, ExecutionContext execCxt) throws ExprEvalException {
 
         try {
             //Prepare for results.
@@ -265,7 +266,7 @@ public abstract class GenericPropertyFunction extends PFuncSimple {
             }
 
             return queryIterConcat;
-        } catch (MismatchedDimensionException | TransformException | FactoryException ex) {
+        } catch (MismatchedDimensionException | TransformException | FactoryException | SpatialIndexException ex) {
             throw new ExprEvalException(ex.getMessage() + ": " + FmtUtils.stringForNode(boundNode) + ", " + FmtUtils.stringForNode(unboundNode) + ", " + FmtUtils.stringForNode(predicate), ex);
         }
     }

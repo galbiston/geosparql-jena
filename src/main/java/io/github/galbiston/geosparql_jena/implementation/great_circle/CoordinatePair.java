@@ -15,6 +15,7 @@
  */
 package io.github.galbiston.geosparql_jena.implementation.great_circle;
 
+import io.github.galbiston.geosparql_jena.configuration.SrsException;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import java.util.Objects;
@@ -87,13 +88,13 @@ public class CoordinatePair {
         return Objects.equals(this.coord2, other.coord2);
     }
 
-    public static final CoordinatePair findNearestPair(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) {
+    public static final CoordinatePair findNearestPair(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws SrsException {
 
         //Both GeoemtryWrappers should be same SRS andn Geographic.
         SRSInfo sourceSRSInfo = sourceGeometry.getSrsInfo();
         SRSInfo targetSRSInfo = targetGeometry.getSrsInfo();
         if (!(sourceSRSInfo.isGeographic() && targetSRSInfo.isGeographic()) || !(sourceSRSInfo.getSrsURI().equals(targetSRSInfo.getSrsURI()))) {
-            throw new AssertionError("Expected same Geographic SRS for GeometryWrappers. " + sourceGeometry + " : " + targetGeometry);
+            throw new SrsException("Expected same Geographic SRS for GeometryWrappers. " + sourceGeometry + " : " + targetGeometry);
         }
 
         //Find nearest points.

@@ -62,7 +62,7 @@ public abstract class GenericGeometryPropertyFunction extends PFuncSimple {
 
     }
 
-    protected Node getGeometryLiteral(Node subject, Node predicate, Graph graph) {
+    protected Node getGeometryLiteral(Node subject, Node predicate, Graph graph) throws ExprEvalException {
 
         try {
             //Check for the asserted value and return if found.

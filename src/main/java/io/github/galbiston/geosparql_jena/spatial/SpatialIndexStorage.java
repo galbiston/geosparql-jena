@@ -60,7 +60,7 @@ public class SpatialIndexStorage implements Serializable {
         return indexItems;
     }
 
-    public SpatialIndex getSpatialIndex() {
+    public SpatialIndex getSpatialIndex() throws SpatialIndexException {
         return new SpatialIndex(getIndexItems(), srsURI);
     }
 

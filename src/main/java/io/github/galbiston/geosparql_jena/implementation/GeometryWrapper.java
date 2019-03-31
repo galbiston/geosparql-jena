@@ -1104,7 +1104,7 @@ public class GeometryWrapper implements Serializable {
      * @param targetIndex
      * @return Geometry Wrapper of the Geometry Literal.
      */
-    public static final GeometryWrapper extract(Node geometryLiteral, GeometryIndex targetIndex) {
+    public static final GeometryWrapper extract(Node geometryLiteral, GeometryIndex targetIndex) throws DatatypeFormatException {
 
         if (!geometryLiteral.isLiteral()) {
             throw new DatatypeFormatException("Not a Literal: " + geometryLiteral);
@@ -1176,7 +1176,7 @@ public class GeometryWrapper implements Serializable {
      * @param targetIndex
      * @return Geometry Wrapper of the Geometry Literal.
      */
-    public static GeometryWrapper extract(String lexicalForm, String datatypeURI, GeometryIndex targetIndex) {
+    public static GeometryWrapper extract(String lexicalForm, String datatypeURI, GeometryIndex targetIndex) throws DatatypeFormatException {
 
         if (lexicalForm == null || datatypeURI == null) {
             throw new DatatypeFormatException("GeometryWrapper extraction: arguments cannot be null - " + lexicalForm + ", " + datatypeURI);

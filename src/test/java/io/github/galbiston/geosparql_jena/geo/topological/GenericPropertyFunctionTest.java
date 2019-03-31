@@ -33,6 +33,7 @@ import io.github.galbiston.geosparql_jena.implementation.index.IndexConfiguratio
 import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +69,7 @@ public class GenericPropertyFunctionTest {
     }
 
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SpatialIndexException {
         GeoSPARQLConfig.setup(IndexOption.MEMORY, Boolean.TRUE);
         model = QueryRewriteTestData.createTestData();
         dataset = SpatialIndex.wrapModel(model, TEST_SRS_URI);

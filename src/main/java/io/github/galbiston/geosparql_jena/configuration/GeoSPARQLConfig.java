@@ -32,6 +32,7 @@ import io.github.galbiston.geosparql_jena.implementation.index.QueryRewriteIndex
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexException;
 import java.io.File;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.sparql.function.FunctionRegistry;
@@ -245,7 +246,7 @@ public class GeoSPARQLConfig {
      *
      * @param dataset
      */
-    public static final void setupSpatialIndex(Dataset dataset) {
+    public static final void setupSpatialIndex(Dataset dataset) throws SpatialIndexException {
         SpatialIndex.buildSpatialIndex(dataset);
     }
 
@@ -257,7 +258,7 @@ public class GeoSPARQLConfig {
      * @param dataset
      * @param spatialIndexFile
      */
-    public static final void setupSpatialIndex(Dataset dataset, File spatialIndexFile) {
+    public static final void setupSpatialIndex(Dataset dataset, File spatialIndexFile) throws SpatialIndexException {
         SpatialIndex.buildSpatialIndex(dataset, spatialIndexFile);
     }
 
@@ -269,7 +270,7 @@ public class GeoSPARQLConfig {
      * @param srsURI
      * @param spatialIndexFile
      */
-    public static final void setupSpatialIndex(Dataset dataset, String srsURI, File spatialIndexFile) {
+    public static final void setupSpatialIndex(Dataset dataset, String srsURI, File spatialIndexFile) throws SpatialIndexException {
         SpatialIndex.buildSpatialIndex(dataset, srsURI, spatialIndexFile);
     }
 

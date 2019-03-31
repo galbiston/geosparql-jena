@@ -80,9 +80,10 @@ public class UnitsOfMeasure implements Serializable {
      * @param sourceDistanceUnitsURI
      * @param targetDistanceUnitsURI
      * @return Distance after conversion.
+     * @throws UnitsConversionException
      */
     @SuppressWarnings("unchecked")
-    public static final Double conversion(double sourceDistance, String sourceDistanceUnitsURI, String targetDistanceUnitsURI) {
+    public static final Double conversion(double sourceDistance, String sourceDistanceUnitsURI, String targetDistanceUnitsURI) throws UnitsConversionException {
 
         return conversion(sourceDistance, new UnitsOfMeasure(sourceDistanceUnitsURI), new UnitsOfMeasure(targetDistanceUnitsURI));
     }
@@ -94,9 +95,10 @@ public class UnitsOfMeasure implements Serializable {
      * @param sourceUnits
      * @param targetUnits
      * @return Distance after conversion.
+     * @throws UnitsConversionException
      */
     @SuppressWarnings("unchecked")
-    public static final Double conversion(double sourceDistance, UnitsOfMeasure sourceUnits, UnitsOfMeasure targetUnits) {
+    public static final Double conversion(double sourceDistance, UnitsOfMeasure sourceUnits, UnitsOfMeasure targetUnits) throws UnitsConversionException {
 
         Boolean isSourceUnitsLinear = sourceUnits.isLinearUnits();
         Boolean isTargetUnitsLinear = targetUnits.isLinearUnits();

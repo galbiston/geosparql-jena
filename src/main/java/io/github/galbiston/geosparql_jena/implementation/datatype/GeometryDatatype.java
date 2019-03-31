@@ -71,7 +71,7 @@ public abstract class GeometryDatatype extends BaseDatatype {
         }
     }
 
-    public static final GeometryDatatype get(RDFDatatype rdfDatatype) {
+    public static final GeometryDatatype get(RDFDatatype rdfDatatype) throws DatatypeFormatException {
         if (rdfDatatype instanceof GeometryDatatype) {
             return (GeometryDatatype) rdfDatatype;
         } else {
@@ -86,7 +86,7 @@ public abstract class GeometryDatatype extends BaseDatatype {
         return GeometryDatatype.get(rdfDatatype);
     }
 
-    public static final boolean checkURI(String datatypeURI) {
+    public static final boolean checkURI(String datatypeURI) throws DatatypeFormatException {
         registerDatatypes();
         RDFDatatype rdfDatatype = TYPE_MAPPER.getTypeByName(datatypeURI);
         if (rdfDatatype != null) {

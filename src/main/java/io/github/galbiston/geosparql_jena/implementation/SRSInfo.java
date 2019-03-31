@@ -50,7 +50,7 @@ public class SRSInfo {
 
     private static final List<AxisDirection> OTHER_Y_AXIS_DIRECTIONS = Arrays.asList(AxisDirection.NORTH_EAST, AxisDirection.NORTH_WEST, AxisDirection.SOUTH_EAST, AxisDirection.SOUTH_WEST, AxisDirection.NORTH_NORTH_EAST, AxisDirection.NORTH_NORTH_WEST, AxisDirection.SOUTH_SOUTH_EAST, AxisDirection.SOUTH_SOUTH_WEST);
 
-    public SRSInfo(String srsURI) {
+    public SRSInfo(String srsURI) throws SRSInfoException {
         this.srsURI = srsURI;
 
         try {
@@ -73,7 +73,7 @@ public class SRSInfo {
      *
      * @param srid
      */
-    public SRSInfo(int srid) {
+    public SRSInfo(int srid) throws SRSInfoException {
         this(convertSRID(srid));
     }
 
@@ -234,7 +234,7 @@ public class SRSInfo {
      * @param srsURI Allows alternative srsURI to be associated with CRS84.
      * @return SRSInfo using default setup for WKT but alternative srsURI.
      */
-    public static final SRSInfo getDefaultWktCRS84(String srsURI) {
+    public static final SRSInfo getDefaultWktCRS84(String srsURI) throws SRSInfoException {
 
         try {
             CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
@@ -251,7 +251,7 @@ public class SRSInfo {
      * @param srsURI
      * @return SRSInfo with default setup for WKT without SRS URI
      */
-    public static final SRSInfo getUnrecognised(String srsURI) {
+    public static final SRSInfo getUnrecognised(String srsURI) throws SRSInfoException {
 
         try {
             CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);

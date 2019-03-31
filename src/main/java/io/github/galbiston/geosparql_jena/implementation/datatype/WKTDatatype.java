@@ -23,6 +23,7 @@ import io.github.galbiston.geosparql_jena.implementation.parsers.wkt.WKTReader;
 import io.github.galbiston.geosparql_jena.implementation.parsers.wkt.WKTWriter;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,7 @@ public class WKTDatatype extends GeometryDatatype {
             GeometryWrapper geometryWrapper = (GeometryWrapper) geometry;
             return WKTWriter.write(geometryWrapper);
         } else {
-            throw new AssertionError("Object passed to WKTDatatype is not a GeometryWrapper: " + geometry);
+            throw new DatatypeFormatException("Object to unparse WKTDatatype is not a GeometryWrapper: " + geometry);
         }
     }
 
