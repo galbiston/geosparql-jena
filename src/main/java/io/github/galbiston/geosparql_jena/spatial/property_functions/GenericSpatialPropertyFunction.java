@@ -22,6 +22,7 @@ import io.github.galbiston.geosparql_jena.implementation.vocabulary.SpatialExten
 import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
 import io.github.galbiston.geosparql_jena.spatial.SpatialIndex;
+import io.github.galbiston.geosparql_jena.spatial.SpatialIndexException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -56,14 +57,13 @@ public abstract class GenericSpatialPropertyFunction extends PFuncSimpleAndList 
 
     @Override
     public final QueryIterator execEvaluated(Binding binding, Node subject, Node predicate, PropFuncArg object, ExecutionContext execCxt) {
-
-        if (!SpatialIndex.isDefined(execCxt)) {
-            throw new ExprEvalException("Dataset has not been setup with a SpatialIndex");
+        try {
+            spatialIndex = SpatialIndex.retrieve(execCxt);
+            spatialArguments = extractObjectArguments(predicate, object, spatialIndex.getSrsInfo());
+            return search(binding, execCxt, subject, spatialArguments.limit);
+        } catch (SpatialIndexException ex) {
+            throw new ExprEvalException(ex.getMessage(), ex);
         }
-
-        spatialIndex = SpatialIndex.retrieve(execCxt);
-        spatialArguments = extractObjectArguments(predicate, object, spatialIndex.getSrsInfo());
-        return search(binding, execCxt, subject, spatialArguments.limit);
     }
 
     /**

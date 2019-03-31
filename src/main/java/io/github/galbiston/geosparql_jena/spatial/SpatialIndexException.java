@@ -19,7 +19,7 @@ package io.github.galbiston.geosparql_jena.spatial;
  *
  *
  */
-public class SpatialIndexException extends RuntimeException {
+public class SpatialIndexException extends Exception {
 
     public SpatialIndexException(String msg) {
         super(msg);
