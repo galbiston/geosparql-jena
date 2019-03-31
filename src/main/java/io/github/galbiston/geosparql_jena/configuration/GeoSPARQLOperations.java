@@ -598,6 +598,7 @@ public class GeoSPARQLOperations {
 
         //Iterate through all statements: toNodeValue geometry literals and just add the rest.
         Model outputModel = ModelFactory.createDefaultModel();
+        outputModel.setNsPrefixes(inputModel.getNsPrefixMap());
         Iterator<Statement> statementIt = inputModel.listStatements();
         while (statementIt.hasNext()) {
             Statement statement = statementIt.next();
@@ -744,6 +745,7 @@ public class GeoSPARQLOperations {
         dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
         Model convertedModel = convertGeoPredicates(defaultModel, isRemoveGeoPredicate);
+        convertedModel.setNsPrefixes(defaultModel.getNsPrefixMap());
         outputDataset.setDefaultModel(convertedModel);
         //Named Models
         Iterator<String> graphNames = dataset.listNames();
@@ -751,6 +753,7 @@ public class GeoSPARQLOperations {
             String graphName = graphNames.next();
             Model namedModel = dataset.getNamedModel(graphName);
             Model convertedNamedModel = convertGeoPredicates(namedModel, isRemoveGeoPredicate);
+            convertedNamedModel.setNsPrefixes(namedModel.getNsPrefixMap());
             outputDataset.addNamedModel(graphName, convertedNamedModel);
         }
         LOGGER.info("Convert Geo Predicates - Completed");
@@ -771,6 +774,7 @@ public class GeoSPARQLOperations {
     public static final Model convertGeoPredicates(Model model, boolean isRemoveGeoPredicates) {
         Model outputModel = ModelFactory.createDefaultModel();
         outputModel.add(model);
+        outputModel.setNsPrefixes(model.getNsPrefixMap());
         if (outputModel.containsResource(SpatialExtension.GEO_LAT_PROP)) {
             ResIterator resIt = outputModel.listSubjectsWithProperty(SpatialExtension.GEO_LAT_PROP);
             while (resIt.hasNext()) {
@@ -832,6 +836,7 @@ public class GeoSPARQLOperations {
         dataset.begin(ReadWrite.READ);
         Model defaultModel = dataset.getDefaultModel();
         Model convertedModel = convertGeometryStructure(defaultModel);
+        convertedModel.setNsPrefixes(defaultModel.getNsPrefixMap());
         outputDataset.setDefaultModel(convertedModel);
         //Named Models
         Iterator<String> graphNames = dataset.listNames();
@@ -839,6 +844,7 @@ public class GeoSPARQLOperations {
             String graphName = graphNames.next();
             Model namedModel = dataset.getNamedModel(graphName);
             Model convertedNamedModel = convertGeometryStructure(namedModel);
+            convertedNamedModel.setNsPrefixes(namedModel.getNsPrefixMap());
             outputDataset.addNamedModel(graphName, convertedNamedModel);
         }
         LOGGER.info("Convert Geometry Structure - Completed");
@@ -859,14 +865,10 @@ public class GeoSPARQLOperations {
      * @return Converted model.
      */
     public static final Model convertGeometryStructure(Model model) {
-        /*
-        if (!GeoSPARQLConfig.isFunctionRegistered()) {
-            GeoSPARQLConfig.setupNoIndex();
-        }
-         */
 
         Model outputModel = ModelFactory.createDefaultModel();
         outputModel.add(model);
+        outputModel.setNsPrefixes(model.getNsPrefixMap());
 
         List<Statement> additionalStatements = new ArrayList<>();
 
