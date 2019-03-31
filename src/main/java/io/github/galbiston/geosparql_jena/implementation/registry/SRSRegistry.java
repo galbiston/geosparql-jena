@@ -21,6 +21,7 @@ import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfoException;
 import io.github.galbiston.geosparql_jena.implementation.UnitsOfMeasure;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
+import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_SRS_URI;
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
@@ -30,7 +31,6 @@ import java.util.Map;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI.EPSG_BASE_SRS_URI;
 
 /**
  *
@@ -72,7 +72,7 @@ public class SRSRegistry implements Serializable {
             try {
                 srsInfo = new SRSInfo(srsURI);
             } catch (SRSInfoException ex) {
-                LOGGER.error("SRS URI not recognised - Operations may not complete correctly: {} - {}", srsURI, ex.getMessage());
+                LOGGER.warn("SRS URI not recognised - Operations may not complete correctly: {} - {}", srsURI, ex.getMessage());
                 srsInfo = SRSInfo.getUnrecognised(srsURI);
             }
 
