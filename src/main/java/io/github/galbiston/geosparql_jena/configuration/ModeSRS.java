@@ -89,7 +89,7 @@ public class ModeSRS {
         if (!srsList.isEmpty()) {
             return srsList.get(0).getKey();
         } else {
-            throw new ModeSrsException("No Geometry Literals or Geo predicates found in Dataset or Model.");
+            throw new ModeSrsException("No Geometry Literals or Geo predicates found in Dataset or Model. hint: Inferencing with GeoSPARQL schema maybe required.");
         }
     }
 
