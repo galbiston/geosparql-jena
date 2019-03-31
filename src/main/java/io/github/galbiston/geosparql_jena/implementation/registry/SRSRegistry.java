@@ -72,7 +72,7 @@ public class SRSRegistry implements Serializable {
             try {
                 srsInfo = new SRSInfo(srsURI);
             } catch (SRSInfoException ex) {
-                LOGGER.warn("SRS URI not recognised - Operations may not complete correctly: {} - {}", srsURI, ex.getMessage());
+                LOGGER.warn("SRS URI not recognised so operation results may not be correct or accurate: {} - {}", srsURI, ex.getMessage());
                 srsInfo = SRSInfo.getUnrecognised(srsURI);
             }
 
