@@ -63,7 +63,7 @@ public class SRSInfo {
             this.domainEnvelope = buildDomainEnvelope(crs, isAxisXY);
             this.domainRangeX = Math.abs(domainEnvelope.getMinX()) + Math.abs(domainEnvelope.getMaxX());
         } catch (FactoryException ex) {
-            throw new SRSInfoException("Invalid SRS URI code: " + srsURI + " - " + ex.getMessage(), ex);
+            throw new SRSInfoException("Unrecognised SRS URI code: " + srsURI + " - " + ex.getMessage(), ex);
         }
     }
 
@@ -240,7 +240,7 @@ public class SRSInfo {
             CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
             return new SRSInfo(srsURI, crs, true);
         } catch (FactoryException ex) {
-            throw new SRSInfoException("Invalid SRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage(), ex);
+            throw new SRSInfoException("Unrecognised SRS code: " + DEFAULT_WKT_CRS84_CODE + " - " + ex.getMessage(), ex);
         }
     }
 
@@ -257,7 +257,7 @@ public class SRSInfo {
             CoordinateReferenceSystem crs = CRS.forCode(DEFAULT_WKT_CRS84_CODE);
             return new SRSInfo(srsURI, crs, false);
         } catch (FactoryException ex) {
-            throw new SRSInfoException("Invalid SRS URI code: " + srsURI + " - " + ex.getMessage(), ex);
+            throw new SRSInfoException("Unrecognised SRS URI code: " + srsURI + " - " + ex.getMessage(), ex);
         }
     }
 
