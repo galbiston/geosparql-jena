@@ -342,7 +342,7 @@ public class GMLReader implements ParserReader {
         return GEOMETRY_FACTORY.createGeometryCollection(geometries);
     }
 
-    private static final String EMPTY_GML_TEXT = "<gml:Point xmlns:gml='http://www.opengis.net/ont/gml'></gml:Point>";
+    private static final String EMPTY_GML_TEXT = "<gml:Point xmlns:gml='http://www.opengis.net/ont/gml' srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" />";
 
     public static GMLReader extract(String gmlText) throws JDOMException, IOException {
 
