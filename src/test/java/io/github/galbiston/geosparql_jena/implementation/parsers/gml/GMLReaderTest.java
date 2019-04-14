@@ -29,11 +29,9 @@ import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateXY;
-import org.locationtech.jts.geom.CoordinateXYM;
 import org.locationtech.jts.geom.CoordinateXYZM;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -124,6 +122,7 @@ public class GMLReaderTest {
      * 10-100r3, page 22 states "c) coordinate reference systems may have 1, 2
      * or 3 dimensions".
      */
+    /*
     @Test
     @Ignore
     public void testGetDimensionInfo3b() {
@@ -136,7 +135,7 @@ public class GMLReaderTest {
         //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
-
+     */
     /**
      * Test of getDimensionInfo method, of class GMLReader.
      */
@@ -216,6 +215,7 @@ public class GMLReaderTest {
     /**
      * Test of extract method, of class GMLReader.
      */
+    /*
     @Test
     @Ignore
     public void testExtractPoint3b() throws JDOMException, IOException {
@@ -229,7 +229,7 @@ public class GMLReaderTest {
         //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
-
+     */
     /**
      * Test of extract method, of class GMLReader.
      */
