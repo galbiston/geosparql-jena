@@ -122,16 +122,18 @@ Methods to prepare a dataset can be found in `io.github.galbiston.geosparql_jena
 ### API
 The library can be used as an API in Java.
 The main class to handle geometries and their spatial relations is the `GeometryWrapper`.
-This can be obtained by parsing the string representation of a geometry using the appropriate datatype (WKT or GML).
+This can be obtained by parsing the string representation of a geometry using the appropriate datatype (e.g. WKT or GML).
+Alternatively, a Literal can be extracted automatically using the `GeometryWrapper.extract()` method and registered datatypes.
+The `GeometryWrapperFactory` can be used to directly construct a `GeometryWrapper`.
 There is overlap between spatial relation families so repeated methods are not specified.
 
 * Parse a `Geometry Literal`: `GeometryWrapper geometryWrapper = WKTDatatype.INSTANCE.parse("POINT(1 1)");`
 
 * Extract from a Jena Literal: `GeometryWrapper geometryWrapper = GeometryWrapper.extract(geometryLiteral);`
 
-* Create from a JTS Geometry: `GeometryWrapper geometryWrapper = GeometryWrapper.createGeometry(geometry, srsURI, geometryDatatypeURI);`
+* Create from a JTS Geometry: `GeometryWrapper geometryWrapper = GeometryWrapperFactory.createGeometry(geometry, srsURI, geometryDatatypeURI);`
 
-* Create from a JTS Point Geometry: `GeometryWrapper geometryWrapper = GeometryWrapper.createPoint(coordinate, srsURI, geometryDatatypeURI);`
+* Create from a JTS Point Geometry: `GeometryWrapper geometryWrapper = GeometryWrapperFactory.createPoint(coordinate, srsURI, geometryDatatypeURI);`
 
 * Convert CRS/SRS: `GeometryWrapper otherGeometryWrapper = geometryWrapper.convertCRS("http://www.opengis.net/def/crs/EPSG/0/27700")`
 
