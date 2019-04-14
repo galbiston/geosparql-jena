@@ -23,6 +23,7 @@ import io.github.galbiston.geosparql_jena.implementation.datatype.GMLDatatype;
 import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -160,6 +161,23 @@ public class GMLWriterTest {
         System.out.println("writeMultiPolygon");
         Polygon[] polygons = new Polygon[2];
         polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 20 45, 45 30, 40 40"));
+        polygons[1] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "20 35, 10 30, 10 10, 30 5, 45 20, 20 35"));
+        Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
+
+        String result = GMLWriter.write(geometryWrapper);
+        String expResult = "<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:PolygonMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:exterior></gml:Polygon></gml:PolygonMember><gml:PolygonMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:exterior></gml:Polygon></gml:PolygonMember></gml:MultiPolygon>";
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult.trim(), result.trim());
+    }
+
+    @Test
+    public void testWriteMultiPolygon2() {
+        System.out.println("writeMultiPolygon2");
+        Polygon[] polygons = new Polygon[2];
+        polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 20 45, 45 30, 40 40"));
         LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "20 35, 10 30, 10 10, 30 5, 45 20, 20 35"));
         LinearRing[] holes = new LinearRing[]{GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "30 20, 20 15, 20 25, 30 20"))};
         polygons[1] = GEOMETRY_FACTORY.createPolygon(shell, holes);
@@ -190,4 +208,121 @@ public class GMLWriterTest {
         //System.out.println("Result: " + result);
         assertEquals(expResult.trim(), result.trim());
     }
+
+    /**
+     * Test of writePointEmpty method, of class GMLWriter.
+     */
+    @Test
+    public void testWritePointEmpty() {
+        System.out.println("writePointEmpty");
+
+        Geometry geometry = GEOMETRY_FACTORY.createPoint();
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
+        String result = GMLWriter.write(geometryWrapper);
+        String expResult = "<gml:Point xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of writeLineStringEmpty method, of class GMLWriter.
+     */
+    @Test
+    public void testWriteLineStringEmpty() {
+        System.out.println("writeLineEmpty");
+        Geometry geometry = GEOMETRY_FACTORY.createLineString();
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
+        String result = GMLWriter.write(geometryWrapper);
+        String expResult = "<gml:LineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of writePolygonEmpty method, of class GMLWriter.
+     */
+    @Test
+    public void testWritePolygonEmpty() {
+        System.out.println("writePolygonEmpty");
+        Geometry geometry = GEOMETRY_FACTORY.createPolygon();
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
+        String result = GMLWriter.write(geometryWrapper);
+        String expResult = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of writeMultiPointEmpty method, of class GMLWriter.
+     */
+    @Test
+    public void testWriteMultiPointEmpty() {
+        System.out.println("writeMultiPointEmpty");
+        Geometry geometry = GEOMETRY_FACTORY.createMultiPoint();
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
+        String result = GMLWriter.write(geometryWrapper);
+        String expResult = "<gml:MultiPoint xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of writeMultiLineString method, of class GMLWriter.
+     */
+    @Test
+    public void testWriteMultiLineStringEmpty() {
+        System.out.println("writeMultiLineStringEmpty");
+
+        Geometry geometry = GEOMETRY_FACTORY.createMultiLineString();
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
+        String result = GMLWriter.write(geometryWrapper);
+        String expResult = "<gml:MultiLineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of writeMultiPolygonEmpty method, of class GMLWriter.
+     */
+    @Test
+    public void testWriteMultiPolygonEmpty() {
+        System.out.println("writeMultiPolygonEmpty");
+
+        Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon();
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
+        String result = GMLWriter.write(geometryWrapper);
+        String expResult = "<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of writeGeometryCollectionEmpty method, of class GMLWriter.
+     */
+    @Test
+    public void testWriteGeometryCollectionEmpty() {
+        System.out.println("writeGeometryCollectionEmpty");
+
+        Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection();
+        GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
+        String result = GMLWriter.write(geometryWrapper);
+        String expResult = "<gml:GeometryCollection xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
 }
