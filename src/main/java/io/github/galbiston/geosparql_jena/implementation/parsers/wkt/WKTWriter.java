@@ -59,7 +59,7 @@ public class WKTWriter {
     private static String expand(final Geometry geometry, final CoordinateSequenceDimensions dimensions) {
 
         String wktString = "";
-        String dimensionString = convertDimensions(dimensions);
+        String dimensionString = CoordinateSequenceDimensions.convertDimensions(dimensions);
         switch (geometry.getGeometryType()) {
             case "Point":
                 Point point = (Point) geometry;
@@ -95,7 +95,7 @@ public class WKTWriter {
         return wktString;
     }
 
-    public static String convertToWKTText(CustomCoordinateSequence coordSequence) {
+    private static String convertToWKTText(CustomCoordinateSequence coordSequence) {
 
         StringBuilder sb = new StringBuilder();
         int size = coordSequence.getSize();
@@ -129,7 +129,9 @@ public class WKTWriter {
 
         StringBuilder sb = new StringBuilder(geometryType);
 
-        sb.append(dimensionString);
+        if (!wktText.equals(" EMPTY")) {
+            sb.append(dimensionString);
+        }
 
         sb.append(wktText);
 
@@ -142,11 +144,12 @@ public class WKTWriter {
 
         if (isIncludeGeometryType) {
             sb.append("POLYGON");
-            sb.append(dimensionString);
         }
 
         if (!polygon.isEmpty()) {
-
+            if (isIncludeGeometryType) {
+                sb.append(dimensionString);
+            }
             sb.append("(");
 
             //Find exterior shell
@@ -174,10 +177,10 @@ public class WKTWriter {
     private static String buildMultiPoint(final MultiPoint multiPoint, final String dimensionString) {
 
         StringBuilder sb = new StringBuilder("MULTIPOINT");
-        sb.append(dimensionString);
 
         if (!multiPoint.isEmpty()) {
 
+            sb.append(dimensionString);
             sb.append("(");
             //Find first point
             Point point = (Point) multiPoint.getGeometryN(0);
@@ -203,9 +206,9 @@ public class WKTWriter {
     private static String buildMultiLineString(final MultiLineString multiLineString, final String dimensionString) {
 
         StringBuilder sb = new StringBuilder("MULTILINESTRING");
-        sb.append(dimensionString);
 
         if (!multiLineString.isEmpty()) {
+            sb.append(dimensionString);
             sb.append("(");
 
             //Find first linestring
@@ -233,10 +236,8 @@ public class WKTWriter {
 
         StringBuilder sb = new StringBuilder("MULTIPOLYGON");
 
-        sb.append(dimensionString);
-
         if (!multiPolygon.isEmpty()) {
-
+            sb.append(dimensionString);
             sb.append("(");
 
             //Find first polygon
@@ -263,10 +264,9 @@ public class WKTWriter {
 
         StringBuilder sb = new StringBuilder("GEOMETRYCOLLECTION");
 
-        String dimensionString = convertDimensions(dimensions);
-        sb.append(dimensionString);
-
         if (!geometryCollection.isEmpty()) {
+            String dimensionString = CoordinateSequenceDimensions.convertDimensions(dimensions);
+            sb.append(dimensionString);
 
             Geometry geometry = geometryCollection.getGeometryN(0);
 
@@ -285,20 +285,6 @@ public class WKTWriter {
         }
 
         return sb.toString();
-    }
-
-    private static String convertDimensions(final CoordinateSequenceDimensions dimensions) {
-
-        switch (dimensions) {
-            case XYZ:
-                return " Z";
-            case XYM:
-                return " M";
-            case XYZM:
-                return " ZM";
-            default:
-                return "";
-        }
     }
 
 }
