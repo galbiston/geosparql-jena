@@ -296,8 +296,8 @@ public class GMLReaderTest {
         String gmlText = "<gml:LineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">11 12.1 15 8</gml:posList></gml:LineString>";
         GMLReader result = GMLReader.extract(gmlText);
 
-        System.out.println("Expected: " + expResult);
-        System.out.println("Result: " + result);
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
         assertEquals(expResult, result);
     }
 
@@ -511,6 +511,24 @@ public class GMLReaderTest {
         Geometry result = instance.getGeometry();
 
         Geometry expResult = GEOMETRY_FACTORY.createGeometryCollection();
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildEmpty method, of class GMLReader.<br>
+     * Req 16 An empty geo:gmlLiteral shall be interpreted as an empty geometry.
+     */
+    @Test
+    public void testBuildEmpty() throws JDOMException, IOException {
+        System.out.println("buildEmpty");
+        GMLReader instance = GMLReader.extract("");
+        Geometry result = instance.getGeometry();
+
+        CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "");
+        Geometry expResult = GEOMETRY_FACTORY.createPoint(pointSequence);
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);

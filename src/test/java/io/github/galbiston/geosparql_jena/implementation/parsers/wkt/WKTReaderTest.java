@@ -382,7 +382,7 @@ public class WKTReaderTest {
      */
     @Test
     public void testBuildLineStringEmpty() {
-        System.out.println("buildLineEmpty");
+        System.out.println("buildLineStringEmpty");
         WKTReader instance = WKTReader.extract("LINESTRING EMPTY");
         Geometry result = instance.getGeometry();
 
@@ -469,6 +469,25 @@ public class WKTReaderTest {
         Geometry result = instance.getGeometry();
 
         Geometry expResult = GEOMETRY_FACTORY.createGeometryCollection(new Geometry[0]);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildEmpty method, of class WKTReader.<br>
+     * Req 13 An empty RDFS Literal of type geo:wktLiteral shall be interpreted
+     * as an empty geometry.
+     */
+    @Test
+    public void testBuildEmpty() {
+        System.out.println("buildEmpty");
+        WKTReader instance = WKTReader.extract("");
+        Geometry result = instance.getGeometry();
+
+        CustomCoordinateSequence pointSequence = new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "");
+        Geometry expResult = GEOMETRY_FACTORY.createPoint(pointSequence);
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);

@@ -432,4 +432,19 @@ public class WKTDatatypeTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Test of empty geometry literal, of class WKTDatatype.<br>
+     * Req 16 An empty geo:gmlLiteral shall be interpreted as an empty geometry.
+     */
+    @Test
+    public void testEmpty() {
+        GeometryWrapper geo = WKT_DATATYPE.read("");
+        Geometry test = GEOMETRY_FACTORY.createPoint();
+        GeometryWrapper expResult = new GeometryWrapper(test, SRS_URI.DEFAULT_WKT_CRS84, WKTDatatype.URI, new DimensionInfo(2, 2, 0));
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + geo);
+        assertEquals(geo, expResult);
+    }
+
 }

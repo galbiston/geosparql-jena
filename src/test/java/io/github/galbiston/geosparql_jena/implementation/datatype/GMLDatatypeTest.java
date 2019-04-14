@@ -23,6 +23,7 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import java.io.IOException;
 import static org.hamcrest.CoreMatchers.not;
 import org.jdom2.JDOMException;
@@ -282,6 +283,21 @@ public class GMLDatatypeTest {
         geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "4 6,7 10"));
         Geometry test = GEOMETRY_FACTORY.createGeometryCollection(geometries);
         GeometryWrapper expResult = new GeometryWrapper(test, URN_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 1));
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + geo);
+        assertEquals(geo, expResult);
+    }
+
+    /**
+     * Test of empty geometry literal, of class GMLDatatype.<br>
+     * Req 16 An empty geo:gmlLiteral shall be interpreted as an empty geometry.
+     */
+    @Test
+    public void testEmpty() throws JDOMException, IOException {
+        GeometryWrapper geo = GML_DATATYPE.read("");
+        Geometry test = GEOMETRY_FACTORY.createPoint();
+        GeometryWrapper expResult = new GeometryWrapper(test, SRS_URI.DEFAULT_WKT_CRS84, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + geo);
