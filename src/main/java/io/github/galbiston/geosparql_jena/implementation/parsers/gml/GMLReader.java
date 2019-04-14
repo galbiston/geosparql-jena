@@ -65,8 +65,8 @@ public class GMLReader {
      * Based on GML Simple Features Profile 2.0: 10-100R3. All point geometries
      * must use {@code <gml:pos>} child element and all other geometries
      * {@code <gml:posList>}. "srsDimension" attribute found on the
-     * {@code <gml:posList>} element. Supporting * the same geometries found as
-     * in WKT: Point, LineString and Polygon.
+     * {@code <gml:posList>} element. Supporting the same geometries found as in
+     * WKT: Point, LineString and Polygon.
      *
      * @see
      * <a href="https://en.wikipedia.org/wiki/Geography_Markup_Language#GML_Simple_Features_Profile"></a>
@@ -80,22 +80,10 @@ public class GMLReader {
         this.srsName = getSRSName(gmlElement);
         this.crs = SRSRegistry.getCRS(srsName);
         this.srsDimension = getSRSDimension(gmlElement, crs);
-        this.dims = convertDimensionInt(srsDimension);
+        this.dims = CoordinateSequenceDimensions.convertDimensionInt(srsDimension);
         String shape = gmlElement.getName();
         this.geometry = buildGeometry(shape, gmlElement);
         this.dimensionInfo = new DimensionInfo(dims, geometry.getDimension());
-    }
-
-    public static CoordinateSequenceDimensions convertDimensionInt(int srsDimension) {
-
-        switch (srsDimension) {
-            case 4:
-                return CoordinateSequenceDimensions.XYZM;
-            case 3:
-                return CoordinateSequenceDimensions.XYZ;
-            default:
-                return CoordinateSequenceDimensions.XY;
-        }
     }
 
     public Geometry getGeometry() {

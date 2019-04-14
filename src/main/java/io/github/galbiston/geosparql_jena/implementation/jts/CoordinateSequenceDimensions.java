@@ -44,4 +44,16 @@ public enum CoordinateSequenceDimensions {
         }
     }
 
+    public static CoordinateSequenceDimensions convertDimensionInt(int srsDimension) {
+
+        switch (srsDimension) {
+            case 4:
+                return CoordinateSequenceDimensions.XYZM;
+            case 3:
+                return CoordinateSequenceDimensions.XYZ;
+            default:
+                return CoordinateSequenceDimensions.XY;
+        }
+    }
+
 }
