@@ -21,6 +21,8 @@ import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
+import io.github.galbiston.geosparql_jena.implementation.parsers.ParserReader;
+import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import java.util.Arrays;
 import java.util.Objects;
 import org.apache.jena.datatypes.DatatypeFormatException;
@@ -34,34 +36,48 @@ import org.locationtech.jts.geom.Polygon;
  *
  *
  */
-public class WKTReader {
+public class WKTReader implements ParserReader {
 
     private static final GeometryFactory GEOMETRY_FACTORY = CustomGeometryFactory.theInstance();
 
     private final CoordinateSequenceDimensions dims;
     private final Geometry geometry;
     private final DimensionInfo dimensionInfo;
+    private final String srsURI;
 
-    public WKTReader(String geometryType, String dimensionString, String coordinates) {
+    protected WKTReader(String geometryType, String dimensionString, String coordinates, String srsURI) {
         this.dims = convertDimensionString(dimensionString);
         this.geometry = buildGeometry(geometryType, coordinates);
         this.dimensionInfo = new DimensionInfo(dims, geometry.getDimension());
+        this.srsURI = srsURI;
     }
 
-    public WKTReader() {
-        this("point", "", "");
+    protected WKTReader(String geometryType, String dimensionString, String coordinates) {
+        this(geometryType, dimensionString, coordinates, SRS_URI.DEFAULT_WKT_CRS84);
     }
 
+    protected WKTReader() {
+        this("point", "", "", SRS_URI.DEFAULT_WKT_CRS84);
+    }
+
+    @Override
     public Geometry getGeometry() {
         return geometry;
     }
 
+    @Override
     public CoordinateSequenceDimensions getDimensions() {
         return dims;
     }
 
+    @Override
     public DimensionInfo getDimensionInfo() {
         return dimensionInfo;
+    }
+
+    @Override
+    public String getSrsURI() {
+        return srsURI;
     }
 
     private static CoordinateSequenceDimensions convertDimensionString(String dimensionsString) {
@@ -236,8 +252,12 @@ public class WKTReader {
 
     }
 
-    public static WKTReader extract(String wktText) throws DatatypeFormatException {
+    public static WKTReader extract(String geometryLiteral) throws DatatypeFormatException {
 
+        WKTTextSRS wktTextSRS = new WKTTextSRS(geometryLiteral);
+
+        String srsURI = wktTextSRS.srsURI;
+        String wktText = wktTextSRS.wktText;
         String goemetryType = "point";
         String dimension = "";
         String coordinates = "";
@@ -269,14 +289,16 @@ public class WKTReader {
             }
         }
 
-        return new WKTReader(goemetryType, dimension, coordinates);
+        return new WKTReader(goemetryType, dimension, coordinates, srsURI);
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 79 * hash + Objects.hashCode(this.dims);
-        hash = 79 * hash + Objects.hashCode(this.geometry);
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.dims);
+        hash = 83 * hash + Objects.hashCode(this.geometry);
+        hash = 83 * hash + Objects.hashCode(this.dimensionInfo);
+        hash = 83 * hash + Objects.hashCode(this.srsURI);
         return hash;
     }
 
@@ -292,15 +314,51 @@ public class WKTReader {
             return false;
         }
         final WKTReader other = (WKTReader) obj;
+        if (!Objects.equals(this.srsURI, other.srsURI)) {
+            return false;
+        }
         if (this.dims != other.dims) {
             return false;
         }
-        return Objects.equals(this.geometry, other.geometry);
+        if (!Objects.equals(this.geometry, other.geometry)) {
+            return false;
+        }
+        return Objects.equals(this.dimensionInfo, other.dimensionInfo);
     }
 
     @Override
     public String toString() {
-        return "WKTReader{" + "dimensions=" + dims + ", geometry=" + geometry + '}';
+        return "WKTReader{" + "dims=" + dims + ", geometry=" + geometry + ", dimensionInfo=" + dimensionInfo + ", srsURI=" + srsURI + '}';
+    }
+
+    private static class WKTTextSRS {
+
+        private final String wktText;
+        private final String srsURI;
+
+        public WKTTextSRS(String wktLiteral) {
+            int startSRS = wktLiteral.indexOf("<");
+            int endSRS = wktLiteral.indexOf(">");
+
+            //Check that both chevrons are located and extract SRS_URI name, otherwise default.
+            if (startSRS != -1 && endSRS != -1) {
+                srsURI = wktLiteral.substring(startSRS + 1, endSRS);
+                wktText = wktLiteral.substring(endSRS + 1);
+
+            } else {
+                srsURI = SRS_URI.DEFAULT_WKT_CRS84;
+                wktText = wktLiteral;
+            }
+        }
+
+        public String getWktText() {
+            return wktText;
+        }
+
+        public String getSrsURI() {
+            return srsURI;
+        }
+
     }
 
 }

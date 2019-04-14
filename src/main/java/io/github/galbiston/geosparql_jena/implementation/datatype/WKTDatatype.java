@@ -22,7 +22,6 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.parsers.wkt.WKTReader;
 import io.github.galbiston.geosparql_jena.implementation.parsers.wkt.WKTWriter;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.Geo;
-import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
@@ -86,44 +85,14 @@ public class WKTDatatype extends GeometryDatatype {
 
     @Override
     public GeometryWrapper read(String geometryLiteral) {
-        WKTTextSRS wktTextSRS = new WKTTextSRS(geometryLiteral);
 
-        WKTReader wktReader = WKTReader.extract(wktTextSRS.getWktText());
+        WKTReader wktReader = WKTReader.extract(geometryLiteral);
 
         Geometry geometry = wktReader.getGeometry();
+        String srsURI = wktReader.getSrsURI();
         DimensionInfo dimensionInfo = wktReader.getDimensionInfo();
 
-        return new GeometryWrapper(geometry, wktTextSRS.getSrsURI(), URI, dimensionInfo, geometryLiteral);
-    }
-
-    private class WKTTextSRS {
-
-        private final String wktText;
-        private final String srsURI;
-
-        public WKTTextSRS(String wktLiteral) {
-            int startSRS = wktLiteral.indexOf("<");
-            int endSRS = wktLiteral.indexOf(">");
-
-            //Check that both chevrons are located and extract SRS_URI name, otherwise default.
-            if (startSRS != -1 && endSRS != -1) {
-                srsURI = wktLiteral.substring(startSRS + 1, endSRS);
-                wktText = wktLiteral.substring(endSRS + 1);
-
-            } else {
-                srsURI = SRS_URI.DEFAULT_WKT_CRS84;
-                wktText = wktLiteral;
-            }
-        }
-
-        public String getWktText() {
-            return wktText;
-        }
-
-        public String getSrsURI() {
-            return srsURI;
-        }
-
+        return new GeometryWrapper(geometry, srsURI, URI, dimensionInfo, geometryLiteral);
     }
 
     @Override

@@ -56,4 +56,18 @@ public enum CoordinateSequenceDimensions {
         }
     }
 
+    public static String convertDimensions(final CoordinateSequenceDimensions dimensions) {
+
+        switch (dimensions) {
+            case XYZ:
+                return " Z";
+            case XYM:
+                return " M";
+            case XYZM:
+                return " ZM";
+            default:
+                return " ";
+        }
+    }
+
 }
