@@ -21,6 +21,7 @@ import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.jts.CoordinateSequenceDimensions;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSequence;
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
+import io.github.galbiston.geosparql_jena.implementation.parsers.ParserReader;
 import io.github.galbiston.geosparql_jena.implementation.registry.SRSRegistry;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import java.io.ByteArrayInputStream;
@@ -45,7 +46,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-public class GMLReader {
+public class GMLReader implements ParserReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
@@ -53,9 +54,7 @@ public class GMLReader {
 
     //Geometry attributes
     private final Geometry geometry;
-    private final String srsName;
-    private final CoordinateReferenceSystem crs;
-    private final int srsDimension;
+    private final String srsURI;
     private final CoordinateSequenceDimensions dims;
     private final DimensionInfo dimensionInfo;
 
@@ -66,7 +65,13 @@ public class GMLReader {
      * must use {@code <gml:pos>} child element and all other geometries
      * {@code <gml:posList>}. "srsDimension" attribute found on the
      * {@code <gml:posList>} element. Supporting the same geometries found as in
-     * WKT: Point, LineString and Polygon.
+     * WKT: Point, LineString and Polygon.<br>
+     * Only X,Y and X,Y,Z coordinate and spatial dimensions supported.<br>
+     * 07-036, page 310 states "srsDimension is the dimension of the coordinate
+     * reference system as stated in the coordinate reference system
+     * definition."<br>
+     * 10-100r3, page 22 states "c) coordinate reference systems may have 1, 2
+     * or 3 dimensions".
      *
      * @see
      * <a href="https://en.wikipedia.org/wiki/Geography_Markup_Language#GML_Simple_Features_Profile"></a>
@@ -76,43 +81,50 @@ public class GMLReader {
      * @param gmlElement
      * @throws DatatypeFormatException
      */
-    public GMLReader(Element gmlElement) throws DatatypeFormatException {
-        this.srsName = getSRSName(gmlElement);
-        this.crs = SRSRegistry.getCRS(srsName);
-        this.srsDimension = getSRSDimension(gmlElement, crs);
+    protected GMLReader(Element gmlElement) throws DatatypeFormatException {
+        this.srsURI = getSrsURI(gmlElement);
+        CoordinateReferenceSystem crs = SRSRegistry.getCRS(srsURI);
+        int srsDimension = getSRSDimension(gmlElement, crs);
         this.dims = CoordinateSequenceDimensions.convertDimensionInt(srsDimension);
-        String shape = gmlElement.getName();
-        this.geometry = buildGeometry(shape, gmlElement);
+        String geometryType = gmlElement.getName();
+        this.geometry = buildGeometry(geometryType, gmlElement, srsDimension);
         this.dimensionInfo = new DimensionInfo(dims, geometry.getDimension());
     }
 
+    protected GMLReader(Geometry geometry, int srsDimension, String srsURI) {
+        this.srsURI = srsURI;
+        this.geometry = geometry;
+        this.dims = CoordinateSequenceDimensions.convertDimensionInt(srsDimension);
+        this.dimensionInfo = new DimensionInfo(dims, geometry.getDimension());
+    }
+
+    protected GMLReader(Geometry geometry, int srsDimension) {
+        this(geometry, srsDimension, SRS_URI.DEFAULT_WKT_CRS84);
+    }
+
+    @Override
     public Geometry getGeometry() {
         return geometry;
     }
 
-    public String getSrsName() {
-        return srsName;
+    @Override
+    public String getSrsURI() {
+        return srsURI;
     }
 
-    public CoordinateReferenceSystem getCrs() {
-        return crs;
-    }
-
-    public int getSrsDimension() {
-        return srsDimension;
-    }
-
+    @Override
     public CoordinateSequenceDimensions getDimensions() {
         return dims;
     }
 
+    @Override
     public DimensionInfo getDimensionInfo() {
         return dimensionInfo;
     }
 
     private static Boolean isSRSNameWarningIssued = false;
 
-    private String getSRSName(Element gmlElement) {
+    private String getSrsURI(Element gmlElement) {
         String srsNameURI = gmlElement.getAttributeValue("srsName");
         if (srsNameURI == null) {
             srsNameURI = SRS_URI.DEFAULT_WKT_CRS84;
@@ -144,7 +156,7 @@ public class GMLReader {
         return srsDim;
     }
 
-    private Geometry buildGeometry(String shape, Element gmlElement) throws DatatypeFormatException {
+    private Geometry buildGeometry(String shape, Element gmlElement, int srsDimension) throws DatatypeFormatException {
 
         Geometry geo;
         try {
@@ -153,22 +165,22 @@ public class GMLReader {
                     geo = buildPoint(gmlElement);
                     break;
                 case "LineString":
-                    geo = buildLineString(gmlElement);
+                    geo = buildLineString(gmlElement, srsDimension);
                     break;
                 case "Polygon":
-                    geo = buildPolygon(gmlElement);
+                    geo = buildPolygon(gmlElement, srsDimension);
                     break;
                 case "MultiPoint":
                     geo = buildMultiPoint(gmlElement);
                     break;
                 case "MultiLineString":
-                    geo = buildMultiLineString(gmlElement);
+                    geo = buildMultiLineString(gmlElement, srsDimension);
                     break;
                 case "MultiPolygon":
-                    geo = buildMultiPolygon(gmlElement);
+                    geo = buildMultiPolygon(gmlElement, srsDimension);
                     break;
                 case "GeometryCollection":
-                    geo = buildGeometryCollection(gmlElement);
+                    geo = buildGeometryCollection(gmlElement, srsDimension);
                     break;
                 default:
                     throw new DatatypeFormatException("Geometry shape not supported: " + shape);
@@ -188,12 +200,16 @@ public class GMLReader {
         return new CustomCoordinateSequence(dims, coordinates);
     }
 
-    private CustomCoordinateSequence extractPosList(Element gmlElement) {
+    private CustomCoordinateSequence extractPosList(Element gmlElement, int srsDimension) {
         String posList = gmlElement.getChildTextNormalize("posList", GML_NAMESPACE);
-        return new CustomCoordinateSequence(dims, convertPosList(posList));
+        if (posList == null) {
+            return new CustomCoordinateSequence();
+        }
+        String cleanPosList = convertPosList(posList, srsDimension);
+        return new CustomCoordinateSequence(dims, cleanPosList);
     }
 
-    private String convertPosList(String originalCoordinates) {
+    private String convertPosList(String originalCoordinates, int srsDimension) {
         StringBuilder sb = new StringBuilder("");
         String[] coordinates = originalCoordinates.trim().split(" ");
 
@@ -222,12 +238,12 @@ public class GMLReader {
         return GEOMETRY_FACTORY.createPoint(coordinateSequence);
     }
 
-    private LineString buildLineString(Element gmlElement) {
-        CustomCoordinateSequence coordinateSequence = extractPosList(gmlElement);
+    private LineString buildLineString(Element gmlElement, int srsDimension) {
+        CustomCoordinateSequence coordinateSequence = extractPosList(gmlElement, srsDimension);
         return GEOMETRY_FACTORY.createLineString(coordinateSequence);
     }
 
-    private Polygon buildPolygon(Element gmlElement) {
+    private Polygon buildPolygon(Element gmlElement, int srsDimension) {
         //Following Polygon structure from: http://www.gdal.org/drv_gml.html
         Polygon polygon;
 
@@ -236,9 +252,13 @@ public class GMLReader {
         if (exteriorElement == null) {
             exteriorElement = gmlElement.getChild("outerBoundaryIs", GML_NAMESPACE);
         }
-        Element exteriorLinearRingElement = exteriorElement.getChild("LinearRing", GML_NAMESPACE);
-        CustomCoordinateSequence exteriorSequence = extractPosList(exteriorLinearRingElement);
-
+        CustomCoordinateSequence exteriorSequence;
+        if (exteriorElement != null) {
+            Element exteriorLinearRingElement = exteriorElement.getChild("LinearRing", GML_NAMESPACE);
+            exteriorSequence = extractPosList(exteriorLinearRingElement, srsDimension);
+        } else {
+            exteriorSequence = new CustomCoordinateSequence();
+        }
         //Interior shell - that may not be present.
         List<Element> interiorElements = gmlElement.getChildren("interior", GML_NAMESPACE);
         if (interiorElements == null) {
@@ -247,7 +267,7 @@ public class GMLReader {
         List<LinearRing> interiorLinearRingList = new ArrayList<>();
         for (Element interiorElement : interiorElements) {
             Element interiorLinearRingElement = interiorElement.getChild("LinearRing", GML_NAMESPACE);
-            CustomCoordinateSequence interiorSequence = extractPosList(interiorLinearRingElement);
+            CustomCoordinateSequence interiorSequence = extractPosList(interiorLinearRingElement, srsDimension);
             LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(interiorSequence);
             interiorLinearRingList.add(linearRing);
         }
@@ -278,33 +298,33 @@ public class GMLReader {
         return GEOMETRY_FACTORY.createMultiPoint(points);
     }
 
-    private Geometry buildMultiLineString(Element gmlElement) {
+    private Geometry buildMultiLineString(Element gmlElement, int srsDimension) {
 
         List<Element> children = gmlElement.getChildren();
         LineString[] lineStrings = new LineString[children.size()];
         for (int i = 0; i < children.size(); i++) {
             Element child = children.get(i);
             Element lineString = child.getChild("LineString", GML_NAMESPACE);
-            CustomCoordinateSequence sequence = extractPosList(lineString);
+            CustomCoordinateSequence sequence = extractPosList(lineString, srsDimension);
 
             lineStrings[i] = GEOMETRY_FACTORY.createLineString(sequence);
         }
         return GEOMETRY_FACTORY.createMultiLineString(lineStrings);
     }
 
-    private Geometry buildMultiPolygon(Element gmlElement) {
+    private Geometry buildMultiPolygon(Element gmlElement, int srsDimension) {
 
         List<Element> children = gmlElement.getChildren();
         Polygon[] polygons = new Polygon[children.size()];
         for (int i = 0; i < children.size(); i++) {
             Element child = children.get(i);
-            polygons[i] = buildPolygon(child.getChild("Polygon", GML_NAMESPACE));
+            polygons[i] = buildPolygon(child.getChild("Polygon", GML_NAMESPACE), srsDimension);
         }
 
         return GEOMETRY_FACTORY.createMultiPolygon(polygons);
     }
 
-    private Geometry buildGeometryCollection(Element gmlElement) {
+    private Geometry buildGeometryCollection(Element gmlElement, int srsDimension) {
 
         List<Element> children = gmlElement.getChildren();
         Geometry[] geometries = new Geometry[children.size()];
@@ -315,7 +335,7 @@ public class GMLReader {
             //Geometry Members
             for (Element grandChild : child.getChildren()) {
                 String shape = grandChild.getName();
-                geometries[i] = buildGeometry(shape, grandChild);
+                geometries[i] = buildGeometry(shape, grandChild, srsDimension);
             }
         }
 
@@ -342,11 +362,10 @@ public class GMLReader {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.geometry);
-        hash = 29 * hash + Objects.hashCode(this.srsName);
-        hash = 29 * hash + Objects.hashCode(this.crs);
-        hash = 29 * hash + this.srsDimension;
-        hash = 29 * hash + Objects.hashCode(this.dims);
+        hash = 41 * hash + Objects.hashCode(this.geometry);
+        hash = 41 * hash + Objects.hashCode(this.srsURI);
+        hash = 41 * hash + Objects.hashCode(this.dims);
+        hash = 41 * hash + Objects.hashCode(this.dimensionInfo);
         return hash;
     }
 
@@ -362,24 +381,21 @@ public class GMLReader {
             return false;
         }
         final GMLReader other = (GMLReader) obj;
-        if (this.srsDimension != other.srsDimension) {
-            return false;
-        }
-        if (!Objects.equals(this.srsName, other.srsName)) {
+        if (!Objects.equals(this.srsURI, other.srsURI)) {
             return false;
         }
         if (!Objects.equals(this.geometry, other.geometry)) {
             return false;
         }
-        if (!Objects.equals(this.crs, other.crs)) {
+        if (this.dims != other.dims) {
             return false;
         }
-        return this.dims == other.dims;
+        return Objects.equals(this.dimensionInfo, other.dimensionInfo);
     }
 
     @Override
     public String toString() {
-        return "GMLReader{" + "geometry=" + geometry + ", srsName=" + srsName + ", crs=" + crs + ", srsDimension=" + srsDimension + ", dimensions=" + dims + '}';
+        return "GMLReader{" + "geometry=" + geometry + ", srsURI=" + srsURI + ", dims=" + dims + ", dimensionInfo=" + dimensionInfo + '}';
     }
 
 }
