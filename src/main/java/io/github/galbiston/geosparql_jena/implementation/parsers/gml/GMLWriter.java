@@ -48,7 +48,7 @@ public class GMLWriter {
 
     private static Element expand(final Geometry geometry, final CoordinateSequenceDimensions dimensions, final String srsName) {
 
-        Element gmlElement = new Element("EMPTY");
+        Element gmlElement;
         String srsDimension = convertDimensions(dimensions);
         switch (geometry.getGeometryType()) {
             case "Point":
@@ -113,10 +113,11 @@ public class GMLWriter {
 
         Element gmlRoot = new Element("Point", GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
-        Element pos = new Element("pos", GML_NAMESPACE);
-        pos.addContent(convertToGMLText(coordSequence));
-        gmlRoot.addContent(pos);
-
+        if (coordSequence.size() > 0) {
+            Element pos = new Element("pos", GML_NAMESPACE);
+            pos.addContent(convertToGMLText(coordSequence));
+            gmlRoot.addContent(pos);
+        }
         return gmlRoot;
     }
 
@@ -125,11 +126,12 @@ public class GMLWriter {
 
         Element gmlRoot = new Element("LineString", GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
-        Element posList = new Element("posList", GML_NAMESPACE);
-        posList.setAttribute("srsDimension", dimensionString);
-        posList.addContent(convertToGMLText(coordSequence));
-        gmlRoot.addContent(posList);
-
+        if (coordSequence.size() > 0) {
+            Element posList = new Element("posList", GML_NAMESPACE);
+            posList.setAttribute("srsDimension", dimensionString);
+            posList.addContent(convertToGMLText(coordSequence));
+            gmlRoot.addContent(posList);
+        }
         return gmlRoot;
     }
 
