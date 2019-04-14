@@ -73,7 +73,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, WKTDatatype.URI, new DimensionInfo(2, 2, 0));
 
-        String expResult = "<" + SRS_URI.WGS84_CRS + "> POINT (11 12.1)";
+        String expResult = "<" + SRS_URI.WGS84_CRS + "> POINT(11 12.1)";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -109,7 +109,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, WKTDatatype.URI, new DimensionInfo(2, 2, 1));
 
-        String expResult = "<" + SRS_URI.WGS84_CRS + "> LINESTRING (11 12.1, 3 4)";
+        String expResult = "<" + SRS_URI.WGS84_CRS + "> LINESTRING(11 12.1, 3 4)";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -145,7 +145,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, WKTDatatype.URI, new DimensionInfo(2, 2, 2));
 
-        String expResult = "<" + SRS_URI.WGS84_CRS + "> POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))";
+        String expResult = "<" + SRS_URI.WGS84_CRS + "> POLYGON((30 10, 40 40, 20 40, 10 20, 30 10))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);
@@ -245,7 +245,7 @@ public class WKTWriterTest {
 
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, WKTDatatype.URI, new DimensionInfo(2, 2, 2));
 
-        String expResult = "<" + SRS_URI.WGS84_CRS + "> MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)), ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35)))";
+        String expResult = "<" + SRS_URI.WGS84_CRS + "> MULTIPOLYGON(((40 40, 20 45, 45 30, 40 40)), ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35)))";
         String result = WKTWriter.write(geometryWrapper);
 
         //System.out.println("Expected: " + expResult);

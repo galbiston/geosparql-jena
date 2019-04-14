@@ -66,7 +66,7 @@ public enum CoordinateSequenceDimensions {
             case XYZM:
                 return " ZM";
             default:
-                return " ";
+                return "";
         }
     }
 

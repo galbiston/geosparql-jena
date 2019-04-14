@@ -24,7 +24,7 @@ dependencies {
     ext.jtsVersion = "1.16.1"
     api "org.locationtech.jts:jts-core:$jtsVersion"
 
-    //JDON XML
+    //JDOM XML
     ext.jdomVersion = "2.0.6"
     implementation "org.jdom:jdom2:$jdomVersion"
 
