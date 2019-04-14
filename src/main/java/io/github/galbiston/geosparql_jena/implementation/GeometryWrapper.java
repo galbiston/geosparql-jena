@@ -427,7 +427,7 @@ public class GeometryWrapper implements Serializable {
         Geometry xyGeo = transformedGeometryWrapper.xyGeometry.buffer(transformedDistance);
         DimensionInfo bufferedDimensionInfo = new DimensionInfo(dimensionInfo.getCoordinate(), dimensionInfo.getSpatial(), xyGeo.getDimension());
         Geometry parsingGeo = GeometryReverse.check(xyGeo, transformedGeometryWrapper.srsInfo);
-        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(parsingGeo, xyGeo, transformedGeometryWrapper.srsInfo.getSrsURI(), transformedGeometryWrapper.geometryDatatypeURI, bufferedDimensionInfo, null);
+        GeometryWrapper bufferedGeometryWrapper = new GeometryWrapper(parsingGeo, xyGeo, transformedGeometryWrapper.srsInfo.getSrsURI(), transformedGeometryWrapper.geometryDatatypeURI, bufferedDimensionInfo);
 
         //Check whether need to transform back to the original srsURI.
         if (isTransformNeeded) {
@@ -684,7 +684,7 @@ public class GeometryWrapper implements Serializable {
     public GeometryWrapper boundary() {
         Geometry xyGeo = this.xyGeometry.getBoundary();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, srsInfo);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo);
     }
 
     /**
@@ -694,7 +694,7 @@ public class GeometryWrapper implements Serializable {
     public GeometryWrapper convexHull() {
         Geometry xyGeo = this.xyGeometry.convexHull();
         Geometry parsingGeo = GeometryReverse.check(xyGeo, srsInfo);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo);
     }
 
     /**
@@ -708,7 +708,7 @@ public class GeometryWrapper implements Serializable {
         GeometryWrapper transformedGeometry = checkTransformSRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.difference(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, srsInfo);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo);
     }
 
     /**
@@ -721,7 +721,7 @@ public class GeometryWrapper implements Serializable {
         Envelope xyEnvelope = this.getEnvelope();
         Geometry xyGeo = geometryFactory.toGeometry(xyEnvelope);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, srsInfo);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo);
     }
 
     /**
@@ -748,7 +748,7 @@ public class GeometryWrapper implements Serializable {
         GeometryWrapper transformedGeometry = checkTransformSRS(targetGeometry);
         Geometry xyGeo = this.xyGeometry.intersection(transformedGeometry.xyGeometry);
         Geometry parsingGeo = GeometryReverse.check(xyGeo, srsInfo);
-        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo, null);
+        return new GeometryWrapper(parsingGeo, xyGeo, srsInfo.getSrsURI(), geometryDatatypeURI, dimensionInfo);
     }
 
     /**
