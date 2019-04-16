@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.galbiston.geosparql_jena.geof.topological.filter_functions.simple_features;
+package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
@@ -35,9 +35,9 @@ import org.opengis.util.FactoryException;
  * Equal returns t (TRUE) if two geometries of the same type have identical X,Y
  * coordinate values.
  */
-public class SfEqualsFFTest {
+public class EqualsFFTest {
 
-    public SfEqualsFFTest() {
+    public EqualsFFTest() {
     }
 
     @BeforeClass
@@ -63,9 +63,9 @@ public class SfEqualsFFTest {
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE));
         GeometryWrapper objectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE));
 
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
 
-        Boolean expResult = false; //The boundary of a point is empty. Therefore, the boundary intersection of two points would also be empty.
+        Boolean expResult = true;
         Boolean result = instance.relate(subjectGeometryWrapper, objectGeometryWrapper);
 
         //System.out.println("Exp: " + expResult);
@@ -80,7 +80,7 @@ public class SfEqualsFFTest {
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 80 50)", WKTDatatype.INSTANCE));
         GeometryWrapper objectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 60 50, 80 50)", WKTDatatype.INSTANCE));
 
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
 
         Boolean expResult = true;
         Boolean result = instance.relate(subjectGeometryWrapper, objectGeometryWrapper);
@@ -97,7 +97,7 @@ public class SfEqualsFFTest {
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE));
         GeometryWrapper objectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE));
 
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
 
         Boolean expResult = true;
         Boolean result = instance.relate(subjectGeometryWrapper, objectGeometryWrapper);
@@ -114,7 +114,7 @@ public class SfEqualsFFTest {
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE));
         GeometryWrapper objectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(65 65)", WKTDatatype.INSTANCE));
 
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
 
         Boolean expResult = false;
         Boolean result = instance.relate(subjectGeometryWrapper, objectGeometryWrapper);
@@ -131,7 +131,7 @@ public class SfEqualsFFTest {
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(50 50, 60 50, 80 50)", WKTDatatype.INSTANCE));
         GeometryWrapper objectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 60 50, 80 50)", WKTDatatype.INSTANCE));
 
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
 
         Boolean expResult = false;
         Boolean result = instance.relate(subjectGeometryWrapper, objectGeometryWrapper);
@@ -148,7 +148,7 @@ public class SfEqualsFFTest {
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE));
         GeometryWrapper objectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(30 20)", WKTDatatype.INSTANCE));
 
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
 
         Boolean expResult = false;
         Boolean result = instance.relate(subjectGeometryWrapper, objectGeometryWrapper);
@@ -165,7 +165,7 @@ public class SfEqualsFFTest {
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE));
         GeometryWrapper objectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(75 60, 145 60)", WKTDatatype.INSTANCE));
 
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
 
         Boolean expResult = false;
         Boolean result = instance.relate(subjectGeometryWrapper, objectGeometryWrapper);
@@ -182,7 +182,7 @@ public class SfEqualsFFTest {
         GeometryWrapper subjectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE));
         GeometryWrapper objectGeometryWrapper = GeometryWrapper.extract(ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE));
 
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
 
         Boolean expResult = false;
         Boolean result = instance.relate(subjectGeometryWrapper, objectGeometryWrapper);
@@ -193,12 +193,12 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of isDisjoint method, of class SfEqualsFF.
+     * Test of isDisjoint method, of class EqualsFF.
      */
     @Test
     public void testIsDisjoint() {
         System.out.println("isDisjoint");
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = false;
         boolean result = instance.isDisjoint();
 
@@ -208,12 +208,12 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of isDisconnected method, of class SfEqualsFF.
+     * Test of isDisconnected method, of class EqualsFF.
      */
     @Test
     public void testIsDisconnected() {
         System.out.println("isDisconnected");
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = false;
         boolean result = instance.isDisconnected();
 
@@ -223,14 +223,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_point_point() {
         System.out.println("permittedTopology_point_point");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 
@@ -240,14 +240,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_point_linestring() {
         System.out.println("permittedTopology_point_linestring");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 
@@ -257,14 +257,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_point_polygon() {
         System.out.println("permittedTopology_point_polygon");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POINT;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 
@@ -274,14 +274,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_linestring_linestring() {
         System.out.println("permittedTopology_linestring_linestring");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 
@@ -291,14 +291,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_linestring_point() {
         System.out.println("permittedTopology_linestring_point");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 
@@ -308,14 +308,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_linestring_polygon() {
         System.out.println("permittedTopology_linestring_polygon");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_LINESTRING;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 
@@ -325,14 +325,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_polygon_polygon() {
         System.out.println("permittedTopology_polygon_polygon");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_POLYGON;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 
@@ -342,14 +342,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_polygon_linestring() {
         System.out.println("permittedTopology_polygon_linestring");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_LINESTRING;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 
@@ -359,14 +359,14 @@ public class SfEqualsFFTest {
     }
 
     /**
-     * Test of permittedTopology method, of class SfEqualsFF.
+     * Test of permittedTopology method, of class EqualsFF.
      */
     @Test
     public void testPermittedTopology_polygon_point() {
         System.out.println("permittedTopology_polygon_point");
         DimensionInfo sourceDimensionInfo = DimensionInfo.XY_POLYGON;
         DimensionInfo targetDimensionInfo = DimensionInfo.XY_POINT;
-        SfEqualsFF instance = new SfEqualsFF();
+        EqualsFF instance = new EqualsFF();
         boolean expResult = true;
         boolean result = instance.permittedTopology(sourceDimensionInfo, targetDimensionInfo);
 

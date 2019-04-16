@@ -23,8 +23,8 @@ package io.github.galbiston.geosparql_jena.implementation.intersection_patterns;
  */
 public interface EgenhoferIntersectionPattern {
 
-    public static final String EQUALS = "T*F**FFF*";
-    //Pattern "TFFFTFFFT" stated in GeoSPARQL 11-052r4 p. 9 but incorrect.
+    public static final String EQUALS = "TFFFTFFFT";
+    //Pattern "TFFFTFFFT" stated in GeoSPARQL 11-052r4 p. 9.
 
     public static final String DISJOINT = "FF*FF****";
 

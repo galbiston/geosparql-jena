@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.galbiston.geosparql_jena.geo.topological.property_functions.simple_features;
+package io.github.galbiston.geosparql_jena.spatial.property_functions;
 
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.datatype.WKTDatatype;
@@ -32,9 +32,9 @@ import org.junit.Test;
  * Equal returns t (TRUE) if two geometries have at least one point in common,
  * and no point of either geometry lies in the exterior of the other geometry.
  */
-public class SfEqualsPFTest {
+public class EqualsPFTest {
 
-    public SfEqualsPFTest() {
+    public EqualsPFTest() {
     }
 
     @BeforeClass
@@ -60,9 +60,9 @@ public class SfEqualsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE);
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
-        Boolean expResult = false; //The boundary of a point is empty. Therefore, the boundary intersection of two points would also be empty.
+        Boolean expResult = true;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);
@@ -77,7 +77,7 @@ public class SfEqualsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 80 50)", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 60 50, 80 50)", WKTDatatype.INSTANCE);
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = true;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
@@ -94,7 +94,7 @@ public class SfEqualsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE);
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = true;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
@@ -111,7 +111,7 @@ public class SfEqualsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(60 60)", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(65 65)", WKTDatatype.INSTANCE);
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
@@ -128,7 +128,7 @@ public class SfEqualsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(50 50, 60 50, 80 50)", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(40 50, 60 50, 80 50)", WKTDatatype.INSTANCE);
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
@@ -145,7 +145,7 @@ public class SfEqualsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POINT(30 20)", WKTDatatype.INSTANCE);
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
@@ -162,7 +162,7 @@ public class SfEqualsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> LINESTRING(75 60, 145 60)", WKTDatatype.INSTANCE);
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
@@ -179,7 +179,7 @@ public class SfEqualsPFTest {
         Literal subjectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((30 40, 30 70, 90 70, 90 40, 30 40))", WKTDatatype.INSTANCE);
         Literal objectGeometryLiteral = ResourceFactory.createTypedLiteral("<http://www.opengis.net/def/crs/EPSG/0/27700> POLYGON((140 15, 140 45, 200 45, 200 15, 140 15))", WKTDatatype.INSTANCE);
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
@@ -199,7 +199,7 @@ public class SfEqualsPFTest {
         Literal emptyWKT = GeometryWrapper.getEmptyWKT().asLiteral();
         Literal emptyGML = GeometryWrapper.getEmptyGML().asLiteral();
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(emptyWKT.asNode(), emptyGML.asNode());
@@ -219,7 +219,7 @@ public class SfEqualsPFTest {
         Literal emptyWKT = GeometryWrapper.getEmptyWKT().asLiteral();
         Literal emptyWKT2 = GeometryWrapper.getEmptyWKT().asLiteral();
 
-        SfEqualsPF instance = new SfEqualsPF();
+        EqualsPF instance = new EqualsPF();
 
         Boolean expResult = false;
         Boolean result = instance.testFilterFunction(emptyWKT.asNode(), emptyWKT2.asNode());

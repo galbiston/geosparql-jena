@@ -23,12 +23,14 @@ import io.github.galbiston.geosparql_jena.spatial.filter_functions.AzimuthFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonBoxFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.ConvertLatLonFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.DistanceFF;
+import io.github.galbiston.geosparql_jena.spatial.filter_functions.EqualsFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.GreatCircleFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.GreatCircleGeomFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.NearbyFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformDatatypeFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformFF;
 import io.github.galbiston.geosparql_jena.spatial.filter_functions.TransformSRSFF;
+import io.github.galbiston.geosparql_jena.spatial.property_functions.EqualsPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxGeomPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.IntersectBoxPF;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.box.WithinBoxGeomPF;
@@ -59,6 +61,7 @@ public class Spatial {
      */
     public static void loadPropertyFunctions(PropertyFunctionRegistry registry) {
 
+        registry.put(SpatialExtension.EQUALS_PROP, EqualsPF.class);
         registry.put(SpatialExtension.NEARBY_PROP, NearbyPF.class);
         registry.put(SpatialExtension.NEARBY_GEOM_PROP, NearbyGeomPF.class);
         registry.put(SpatialExtension.WITHIN_CIRCLE_PROP, NearbyPF.class);
@@ -84,6 +87,7 @@ public class Spatial {
      */
     public static void loadFilterFunctions(FunctionRegistry functionRegistry) {
 
+        functionRegistry.put(SpatialExtension.EQUALS, EqualsFF.class);
         functionRegistry.put(SpatialExtension.CONVERT_LAT_LON, ConvertLatLonFF.class);
         functionRegistry.put(SpatialExtension.CONVERT_LAT_LON_BOX, ConvertLatLonBoxFF.class);
         functionRegistry.put(SpatialExtension.NEARBY, NearbyFF.class);

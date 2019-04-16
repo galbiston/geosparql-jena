@@ -15,12 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.galbiston.geosparql_jena.geof.topological.filter_functions.simple_features;
+package io.github.galbiston.geosparql_jena.spatial.filter_functions;
 
 import io.github.galbiston.geosparql_jena.geof.topological.GenericFilterFunction;
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
-import io.github.galbiston.geosparql_jena.implementation.intersection_patterns.SimpleFeaturesIntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -29,12 +28,13 @@ import org.opengis.util.FactoryException;
  *
  *
  */
-public class SfEqualsFF extends GenericFilterFunction {
+public class EqualsFF extends GenericFilterFunction {
 
     //SimmpleFeatures equals patterns differs from those stated in JTS equals, see GeoSPARQL standard page 8.
+    //This method will return true for two identical points.
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.relate(targetGeometry, SimpleFeaturesIntersectionPattern.EQUALS);
+        return sourceGeometry.equalsTopo(targetGeometry);
     }
 
     @Override

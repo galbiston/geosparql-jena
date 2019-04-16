@@ -195,18 +195,18 @@ A corrected version of the schema is available in the `Resources` folder.
 
 ### Spatial Relations
 The GeoSPARQL and Simple Features standard both define the DE-9IM intersection patterns for the three spatial relation families.
-However, these patterns are not consistent with the patterns stated by the JTS library for certain relations.
+However, these patterns are not always consistent with the patterns stated by the JTS library for certain relations.
 
 For example, GeoSPARQL/Simple Features use `TFFFTFFFT` _equals_ relations in _Simple Feature_, _Egenhofer_ and _RCC8_.
-However, this does not yield a true result when comparing a pair of point geometries.
+However, this does not yield the usually expected result when comparing a pair of point geometries.
 The Simple Features standard states that the boundary of a point is empty.
-Therefore, the boundary intersection of two points would also be empty.
+Therefore, the boundary intersection of two points would also be empty so give a negative comparison result.
 
 JTS, and other libraries, use the alternative intersection pattern of `T*F**FFF*`.
 This is a combination of the _within_ and _contains_ relations and yields the expected results for all geometry types.
 
-The spatial relations utilised by JTS have been applied in the library but feedback on this choice is welcome.
-A user can supply their own DE-9IM intersection patterns by using the `geof:relate` filter function.
+The spatial relations utilised by JTS have been implemented as the extension `spatial:equals` filter and property functions.
+A user can also supply their own DE-9IM intersection patterns by using the `geof:relate` filter function.
 
 ### Spatial Relations and Geometry Shapes/Types
 The spatial relations for the three spatial families do not apply to all combinations of the geometry shapes (`Point`, `LineString`, `Polygon`) and their collections  (`MultiPoint`, `MultiLineString`, `MultiPolygon`).
@@ -266,7 +266,7 @@ Each dataset is assigned a Query Rewrite Index to store the results of previous 
 There is the potential that relations are tested multiple times in a query (i.e. *Feature-Feature*, *Feature-Geometry*, *Geometry-Geometry*, *Geometry-Feature*).
 Therefore, it is useful to retain the results for at least a short period of time.
 
-Iterating through all combinations of spatial relations for a dataset containing _n_ Geometry Literals will produce 27*n*^2 results.
+Iterating through all combinations of spatial relations for a dataset containing _n_ Geometry Literals will produce 27*n*^2 true/false results (asserting the true result statements in a dataset would be a subset).
 Control is given on a dataset basis to allow choice in when and how storage of rewrite results is applied, e.g. store all found results on a small dataset but on demand for a large dataset.
 
 This index can be configured on a global and individual dataset basis for the maximum size and duration until unused items are removed.
@@ -372,6 +372,7 @@ Function Name | Description
 ------------- | -------------
 *?wktString* **spatialF:convertLatLon**(*?lat*, *?lon*) | Converts Lat and Lon double values into WKT string of a Point with WGS84 SRS.
 *?wktString* **spatialF:convertLatLonBox**(*?latMin*, *?lonMin*, *?latMax*, *?lonMax*) | Converts Lat and Lon double values into WKT string of a Polygon forming a box with WGS84 SRS.
+*?boolean* **spatialF:equals**(*?geomLit1*, *?geomLit2*) | True, if *geomLit1* is spatially equal to *geomLit2*.
 *?boolean* **spatialF:nearby**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True, if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
 *?boolean* **spatialF:withinCircle**(*?geomLit1*, *?geomLit2*, *?distance*, *?unitsURI*) | True, if *geomLit1* is within *distance* of *geomLit2* using the distance *units*.
 *?radians* **spatialF:angle**(*?x1*, *?y1*, *?x2*, *?y2*) | Angle clockwise from y-axis from Point(x1,y1) to Point (x2,y2) in 0 to 2π radians.
@@ -394,8 +395,11 @@ These property functions require a `Spatial Index` to be setup for the dataset.
 The optional *?limit* parameter restricts the number of results returned. The default value is -1 which returns all results. No guarantee is given for ordering of results.
 The optional *?unitsURI* parameter specifies the units of a distance. The default value is kilometres through the string or resource `http://www.opengis.net/def/uom/OGC/1.0/kilometre`.
 
+The `spatial:equals` property function behaves the same way as the main GeoSPARQL property functions. Either, both or neither of the subject and object can be bound. A `Spatial Index` is **not** required for the dataset with the `spatial:equals` property function.
+
 Function Name | Description
 ------------- | -------------
+*?spatialObject1* **spatial:equals** *?spatialObject2* | Find *spatialObjects* (i.e. *features* or *geometries*) that are spatially equal.
 *?feature* **spatial:intersectBox**(*?latMin* *?lonMin* *?latMax* *?lonMax* [ *?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
 *?feature* **spatial:intersectBoxGeom**(*?geomLit1* *?geomLit2* [ *?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
 *?feature* **spatial:withinBox**(*?latMin* *?lonMin* *?latMax* *?lonMax* [ *?limit*]) | Find *features* that intersect the provided box, up to the *limit*.
@@ -425,7 +429,7 @@ Cardinal Function Name | Description
 The GeoSPARQL standard provides a set of properties related to geometries, see Section 8.4.
 These are applied on the Geometry resource and are automatically determined if not asserted in the data.
 However, it may be necessary to retrieve the properties of a Geometry Literal directly without an associated Geometry resource.
-Filter functions to do this have been included as part of the `http://www.opengis.net/def/function/geosparql/` namespace as a minor variation.
+Filter functions to do this have been included as part of the `http://www.opengis.net/def/function/geosparql/` namespace as a minor variation to the GeoSPARQL standard.
 The relevant functions using the `geof` prefix are:
 
 Geometry Property Filter Function Name | Description
