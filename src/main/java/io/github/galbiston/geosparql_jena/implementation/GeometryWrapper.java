@@ -846,11 +846,11 @@ public class GeometryWrapper implements Serializable {
     /**
      *
      * @param targetGeometry
-     * @return sfEquals of GeometryWrapper with target.
+     * @return Topology equals of GeometryWrapper with target.
      * @throws org.opengis.util.FactoryException
      * @throws org.opengis.referencing.operation.TransformException
      */
-    public boolean equals(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
+    public boolean equalsTopo(GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
         GeometryWrapper transformedGeometry = checkTransformSRS(targetGeometry);
         return this.xyGeometry.equalsTopo(transformedGeometry.xyGeometry);
     }

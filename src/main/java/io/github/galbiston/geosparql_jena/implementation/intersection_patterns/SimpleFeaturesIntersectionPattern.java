@@ -21,22 +21,8 @@ package io.github.galbiston.geosparql_jena.implementation.intersection_patterns;
  *
  *
  */
-public interface RCC8IntersectionPattern {
+public interface SimpleFeaturesIntersectionPattern {
 
     public static final String EQUALS = "TFFFTFFFT";
-
-    public static final String DISCONNECTED = "FFTFFTTTT";
-
-    public static final String EXTERNALLY_CONNECTED = "FFTFTTTTT";
-
-    public static final String PARTIALLY_OVERLAPPING = "TTTTTTTTT";
-
-    public static final String TANGENTIAL_PROPER_PART_INVERSE = "TTTFTTFFT";
-
-    public static final String TANGENTIAL_PROPER_PART = "TFFTTFTTT";
-
-    public static final String NON_TANGENTIAL_PROPER_PART = "TFFTFFTTT";
-
-    public static final String NON_TANGENTIAL_PROPER_PART_INVERSE = "TTTFFTFFT";
 
 }

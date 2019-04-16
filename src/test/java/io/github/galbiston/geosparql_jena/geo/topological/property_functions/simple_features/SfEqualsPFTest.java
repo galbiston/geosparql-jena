@@ -62,7 +62,7 @@ public class SfEqualsPFTest {
 
         SfEqualsPF instance = new SfEqualsPF();
 
-        Boolean expResult = true;
+        Boolean expResult = false; //The boundary of a point is empty. Therefore, the boundary intersection of two points would also be empty.
         Boolean result = instance.testFilterFunction(subjectGeometryLiteral.asNode(), objectGeometryLiteral.asNode());
 
         //System.out.println("Exp: " + expResult);

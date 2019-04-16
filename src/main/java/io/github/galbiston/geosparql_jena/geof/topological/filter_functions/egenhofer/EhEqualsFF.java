@@ -20,6 +20,7 @@ package io.github.galbiston.geosparql_jena.geof.topological.filter_functions.ege
 import io.github.galbiston.geosparql_jena.geof.topological.GenericFilterFunction;
 import io.github.galbiston.geosparql_jena.implementation.DimensionInfo;
 import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
+import io.github.galbiston.geosparql_jena.implementation.intersection_patterns.EgenhoferIntersectionPattern;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.FactoryException;
@@ -30,10 +31,9 @@ import org.opengis.util.FactoryException;
  */
 public class EhEqualsFF extends GenericFilterFunction {
 
-    //Simple Features and Egenhofer equals intersection patterns are the same, see GeoSPARQL standard page 11.
     @Override
     protected boolean relate(GeometryWrapper sourceGeometry, GeometryWrapper targetGeometry) throws FactoryException, MismatchedDimensionException, TransformException {
-        return sourceGeometry.equals(targetGeometry);
+        return sourceGeometry.relate(targetGeometry, EgenhoferIntersectionPattern.EQUALS);
     }
 
     @Override
