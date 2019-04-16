@@ -29,6 +29,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 public class SpatialExtension {
 
     //Filter Functions
+    public static final String EQUALS = SPATIAL_FUNCTION_URI + "equals";
     public static final String CONVERT_LAT_LON = SPATIAL_FUNCTION_URI + "convertLatLon";
     public static final String CONVERT_LAT_LON_BOX = SPATIAL_FUNCTION_URI + "convertLatLonBox";
     public static final String NEARBY = SPATIAL_FUNCTION_URI + "nearby";
@@ -45,6 +46,7 @@ public class SpatialExtension {
     public static final String TRANSFORM = SPATIAL_FUNCTION_URI + "transform";
 
     //Property Functions
+    public static final String EQUALS_PROP = SPATIAL_URI + "equals";
     public static final String NEARBY_PROP = SPATIAL_URI + "nearby";
     public static final String WITHIN_CIRCLE_PROP = SPATIAL_URI + "withinCircle";
     public static final String WITHIN_BOX_PROP = SPATIAL_URI + "withinBox";
