@@ -103,7 +103,11 @@ public class UnitsRegistry {
     }
 
     public static final Unit getUnit(String unitURI) {
-        return UNITS_REGISTRY.get(unitURI);
+        if (UNITS_REGISTRY.containsKey(unitURI)) {
+            return UNITS_REGISTRY.get(unitURI);
+        } else {
+            throw new UnitsURIException("Unrecognised unit URI: " + unitURI);
+        }
     }
 
     public static final String getUnitURI(UnitsOfMeasure unitOfMeasure) {
@@ -111,7 +115,11 @@ public class UnitsRegistry {
     }
 
     public static final String getUnitURI(Unit unit) {
-        return UNITS_URI_REGISTRY.get(unit);
+        if (UNITS_URI_REGISTRY.containsKey(unit)) {
+            return UNITS_URI_REGISTRY.get(unit);
+        } else {
+            throw new UnitsURIException("Unrecognised unit: " + unit);
+        }
     }
 
     public static final Boolean isLinearUnits(String unitURI) {
