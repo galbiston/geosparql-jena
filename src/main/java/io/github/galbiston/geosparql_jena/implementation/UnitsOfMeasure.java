@@ -84,7 +84,6 @@ public class UnitsOfMeasure implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public static final Double conversion(double sourceDistance, String sourceDistanceUnitsURI, String targetDistanceUnitsURI) throws UnitsConversionException {
-
         return conversion(sourceDistance, new UnitsOfMeasure(sourceDistanceUnitsURI), new UnitsOfMeasure(targetDistanceUnitsURI));
     }
 
