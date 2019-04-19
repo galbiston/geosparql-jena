@@ -198,14 +198,16 @@ public class GMLWriter {
 
     private static Element buildMultiLineString(final MultiLineString multiLineString, final String dimensionString, final String srsName) {
 
-        Element gmlRoot = new Element(multiLineString.getGeometryType(), GML_NAMESPACE);
+        //Element gmlRoot = new Element(multiLineString.getGeometryType(), GML_NAMESPACE);
+        Element gmlRoot = new Element("MultiCurve", GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
 
         if (!multiLineString.isEmpty()) {
 
             int geomCount = multiLineString.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
-                Element lineStringMember = new Element("LineStringMember", GML_NAMESPACE);
+                //Element lineStringMember = new Element("LineStringMember", GML_NAMESPACE);
+                Element lineStringMember = new Element("CurveMember", GML_NAMESPACE);
 
                 LineString lineString = (LineString) multiLineString.getGeometryN(i);
                 Element lineStringElement = buildLineString(lineString.getCoordinateSequence(), dimensionString, srsName);
@@ -221,14 +223,16 @@ public class GMLWriter {
 
     private static Element buildMultiPolygon(final MultiPolygon multiPolygon, final String dimensionString, final String srsName) {
 
-        Element gmlRoot = new Element(multiPolygon.getGeometryType(), GML_NAMESPACE);
+        //Element gmlRoot = new Element(multiPolygon.getGeometryType(), GML_NAMESPACE);
+        Element gmlRoot = new Element("MultiSurface", GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
 
         if (!multiPolygon.isEmpty()) {
 
             int geomCount = multiPolygon.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
-                Element polygonMember = new Element("PolygonMember", GML_NAMESPACE);
+                //Element polygonMember = new Element("PolygonMember", GML_NAMESPACE);
+                Element polygonMember = new Element("SurfaceMember", GML_NAMESPACE);
 
                 Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
 
@@ -244,7 +248,8 @@ public class GMLWriter {
 
     private static Element buildGeometryCollection(final GeometryCollection geometryCollection, final String dimensionString, final CoordinateSequenceDimensions dimensions, final String srsName) {
 
-        Element gmlRoot = new Element(geometryCollection.getGeometryType(), GML_NAMESPACE);
+        //Element gmlRoot = new Element(geometryCollection.getGeometryType(), GML_NAMESPACE);
+        Element gmlRoot = new Element("MultiGeometry", GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
 
         if (!geometryCollection.isEmpty()) {

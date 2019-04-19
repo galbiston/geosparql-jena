@@ -44,7 +44,7 @@ public enum CoordinateSequenceDimensions {
         }
     }
 
-    public static CoordinateSequenceDimensions convertDimensionInt(int srsDimension) {
+    public static CoordinateSequenceDimensions find(int srsDimension) {
 
         switch (srsDimension) {
             case 4:
@@ -67,6 +67,20 @@ public enum CoordinateSequenceDimensions {
                 return " ZM";
             default:
                 return "";
+        }
+    }
+
+    public static int convertToInt(final CoordinateSequenceDimensions dimensions) {
+
+        switch (dimensions) {
+            case XYZ:
+                return 3;
+            case XYM:
+                return 3;
+            case XYZM:
+                return 4;
+            default:
+                return 2;
         }
     }
 

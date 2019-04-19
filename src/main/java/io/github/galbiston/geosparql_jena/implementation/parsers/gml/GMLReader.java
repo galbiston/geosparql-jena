@@ -31,6 +31,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -61,16 +62,22 @@ public class GMLReader implements ParserReader {
     private static final Namespace GML_NAMESPACE = Namespace.getNamespace("gml", "http://www.opengis.net/ont/gml");
 
     /**
-     * Based on GML Simple Features Profile 2.0: 10-100R3. All point geometries
-     * must use {@code <gml:pos>} child element and all other geometries
-     * {@code <gml:posList>}. "srsDimension" attribute found on the
-     * {@code <gml:posList>} element. Supporting the same geometries found as in
-     * WKT: Point, LineString and Polygon.<br>
+     * Aiming to achieve SF-0 of GML Simple Features Profile 2.0 [10-100R3].<br>
+     * This is based on GML3.2 and limits the set of geometries.<br>
+     * <br>
+     * [10-100r3], page 22: All point geometries must use {@code <gml:pos>}
+     * child element and all other geometries {@code <gml:posList>}. <br>
+     * Converting geometries to those found in WKT and supported by JTS: Point,
+     * LineString and Polygon.<br>
+     * <br>
+     * [10-100r3], page 23: The multi-shapes are listed. Multi-shapes have been
+     * renamed between GML2 and GML3. MultiPolygon is now MultiSurface and
+     * MutliLineString is now MultiCurve.<br>
      * Only X,Y and X,Y,Z coordinate and spatial dimensions supported.<br>
-     * 07-036, page 310 states "srsDimension is the dimension of the coordinate
-     * reference system as stated in the coordinate reference system
+     * [07-036], page 310 states "srsDimension is the dimension of the
+     * coordinate reference system as stated in the coordinate reference system
      * definition."<br>
-     * 10-100r3, page 22 states "c) coordinate reference systems may have 1, 2
+     * [10-100r3], page 22 states "c) coordinate reference systems may have 1, 2
      * or 3 dimensions".
      *
      * @see
@@ -84,17 +91,20 @@ public class GMLReader implements ParserReader {
     protected GMLReader(Element gmlElement) throws DatatypeFormatException {
         this.srsURI = getSrsURI(gmlElement);
         CoordinateReferenceSystem crs = SRSRegistry.getCRS(srsURI);
-        int srsDimension = getSRSDimension(gmlElement, crs);
-        this.dims = CoordinateSequenceDimensions.convertDimensionInt(srsDimension);
+
+        // [07-036], page 56: "The optional attribute srsDimension is the number of coordinate values in a position. This dimension is derived
+        // from the coordinate reference system."
+        int srsDimension = crs.getCoordinateSystem().getDimension();
+        this.dims = CoordinateSequenceDimensions.find(srsDimension);
         String geometryType = gmlElement.getName();
-        this.geometry = buildGeometry(geometryType, gmlElement, srsDimension);
+        this.geometry = buildGeometry(geometryType, gmlElement, dims);
         this.dimensionInfo = new DimensionInfo(dims, geometry.getDimension());
     }
 
     protected GMLReader(Geometry geometry, int srsDimension, String srsURI) {
         this.srsURI = srsURI;
         this.geometry = geometry;
-        this.dims = CoordinateSequenceDimensions.convertDimensionInt(srsDimension);
+        this.dims = CoordinateSequenceDimensions.find(srsDimension);
         this.dimensionInfo = new DimensionInfo(dims, geometry.getDimension());
     }
 
@@ -137,50 +147,50 @@ public class GMLReader implements ParserReader {
         return srsNameURI;
     }
 
-    private Integer getSRSDimension(Element gmlElement, CoordinateReferenceSystem crs) {
-        //Get from pos list or SRS_URI.
-        Element posList = gmlElement.getChild("posList", GML_NAMESPACE);
-        Integer srsDim = null;
-        if (posList != null) {
-            String srsDimensionStr = posList.getAttributeValue("srsDimension");
-            if (srsDimensionStr != null) {
-                srsDim = Integer.parseInt(srsDimensionStr);
-            }
-        }
+    private Geometry buildGeometry(String shape, Element gmlElement, CoordinateSequenceDimensions dims) throws DatatypeFormatException {
 
-        //Fall back to SRS_URI coordinate reference system.
-        if (srsDim == null) {
-            srsDim = crs.getCoordinateSystem().getDimension();
-        }
-
-        return srsDim;
-    }
-
-    private Geometry buildGeometry(String shape, Element gmlElement, int srsDimension) throws DatatypeFormatException {
-
+        /**
+         *
+         * LineStringSegment
+         * (http://www.datypic.com/sc/niem21/e-gml32_LineStringSegment.html) has
+         * same structure as LineString
+         * (http://www.datypic.com/sc/niem21/e-gml32_LineString.html).<br>
+         * <br>
+         * PolygonPatch
+         * (http://www.datypic.com/sc/niem21/e-gml32_PolygonPatch.html) has same
+         * structure as Polygon
+         * (http://www.datypic.com/sc/niem21/e-gml32_Polygon.html).
+         */
         Geometry geo;
         try {
             switch (shape) {
                 case "Point":
-                    geo = buildPoint(gmlElement);
+                    geo = buildPoint(gmlElement, dims);
+                    break;
+                case "Curve":
+                    geo = buildCurve(gmlElement, dims);
                     break;
                 case "LineString":
-                    geo = buildLineString(gmlElement, srsDimension);
+                case "LineStringSegment":
+                    geo = buildLineString(gmlElement, dims);
                     break;
                 case "Polygon":
-                    geo = buildPolygon(gmlElement, srsDimension);
+                case "PolygonPatch":
+                    geo = buildPolygon(gmlElement, dims);
                     break;
                 case "MultiPoint":
-                    geo = buildMultiPoint(gmlElement);
+                    geo = buildMultiPoint(gmlElement, dims);
                     break;
-                case "MultiLineString":
-                    geo = buildMultiLineString(gmlElement, srsDimension);
+                //case "MultiLineString":
+                case "MultiCurve":
+                    geo = buildMultiLineString(gmlElement, dims);
                     break;
-                case "MultiPolygon":
-                    geo = buildMultiPolygon(gmlElement, srsDimension);
+                //case "MultiPolygon":
+                case "MultiSurface":
+                    geo = buildMultiPolygon(gmlElement, dims);
                     break;
                 case "GeometryCollection":
-                    geo = buildGeometryCollection(gmlElement, srsDimension);
+                    geo = buildGeometryCollection(gmlElement, dims);
                     break;
                 default:
                     throw new DatatypeFormatException("Geometry shape not supported: " + shape);
@@ -192,7 +202,7 @@ public class GMLReader implements ParserReader {
         return geo;
     }
 
-    private CustomCoordinateSequence extractPos(Element gmlElement) {
+    private CustomCoordinateSequence extractPos(Element gmlElement, CoordinateSequenceDimensions dims) {
         String coordinates = gmlElement.getChildTextNormalize("pos", GML_NAMESPACE);
         if (coordinates == null) {
             coordinates = "";
@@ -200,19 +210,20 @@ public class GMLReader implements ParserReader {
         return new CustomCoordinateSequence(dims, coordinates);
     }
 
-    private CustomCoordinateSequence extractPosList(Element gmlElement, int srsDimension) {
+    private CustomCoordinateSequence extractPosList(Element gmlElement, CoordinateSequenceDimensions dims) {
         String posList = gmlElement.getChildTextNormalize("posList", GML_NAMESPACE);
         if (posList == null) {
             return new CustomCoordinateSequence();
         }
-        String cleanPosList = convertPosList(posList, srsDimension);
+        String cleanPosList = convertPosList(posList, dims);
         return new CustomCoordinateSequence(dims, cleanPosList);
     }
 
-    private String convertPosList(String originalCoordinates, int srsDimension) {
+    private String convertPosList(String originalCoordinates, CoordinateSequenceDimensions dims) {
         StringBuilder sb = new StringBuilder("");
         String[] coordinates = originalCoordinates.trim().split(" ");
 
+        int srsDimension = CoordinateSequenceDimensions.convertToInt(dims);
         int mod = coordinates.length % srsDimension;
         if (mod != 0) {
             throw new DatatypeFormatException("GML Pos List does not divide into srs dimension: " + coordinates.length + " divide " + srsDimension + " remainder " + mod + ".");
@@ -233,17 +244,59 @@ public class GMLReader implements ParserReader {
         return sb.toString();
     }
 
-    private Point buildPoint(Element gmlElement) {
-        CustomCoordinateSequence coordinateSequence = extractPos(gmlElement);
+    private Point buildPoint(Element gmlElement, CoordinateSequenceDimensions dims) {
+        CustomCoordinateSequence coordinateSequence = extractPos(gmlElement, dims);
         return GEOMETRY_FACTORY.createPoint(coordinateSequence);
     }
 
-    private LineString buildLineString(Element gmlElement, int srsDimension) {
-        CustomCoordinateSequence coordinateSequence = extractPosList(gmlElement, srsDimension);
+    /**
+     * Curve has one or more LineStringSegments that have connecting points.
+     * http://www.datypic.com/sc/niem21/e-gml32_Curve.html <br>
+     * "The curve segments are connected to one another, with the end point of
+     * each segment except the last being the start point of the next segment in
+     * the segment list."<br>
+     * [07-036], page 22: "gml:Curve with gml:LineStringSegment, gml:Arc,
+     * gml:Circle or gml:CircleByCenterPoint segments1."
+     *
+     * @param gmlElement
+     * @param srsDimension
+     * @return
+     */
+    private LineString buildCurve(Element gmlElement, CoordinateSequenceDimensions dims) {
+        //TODO Try using: GeometricShapeFactory gsf = new GeometricShapeFactory();
+        //TODO Arc: three points that describe - centre and angles?
+        //TODO Circle: three points that describe - centre and angles?
+        //TODO CicleByCentrePoint: centre <pos></pos> and radius (use GSF or buffer from point as LineString)
+        //TODO Add methods to GeometryWrapperFactory.createGMLArc, createGMLCircle, createGMLCircleByCentrePoint.
+
+        //LineStringSegements
+        List<Element> lineStringSegments = gmlElement.getChildren("LineStringSegments", GML_NAMESPACE);
+
+        int srsDimension = CoordinateSequenceDimensions.convertToInt(dims);
+        String posList = "";
+        for (Element lineStringSegment : lineStringSegments) {
+            String pList = lineStringSegment.getChildTextNormalize("posList", GML_NAMESPACE);
+            if (pList != null) {
+                if (posList.isEmpty()) {
+                    posList = pList;
+                } else {
+                    int firstCoords = StringUtils.ordinalIndexOf(" ", pList, srsDimension);
+                    posList += pList.substring(firstCoords);
+                }
+            }
+        }
+
+        String cleanPosList = convertPosList(posList, dims);
+        CustomCoordinateSequence coordinateSequence = new CustomCoordinateSequence(dims, cleanPosList);
         return GEOMETRY_FACTORY.createLineString(coordinateSequence);
     }
 
-    private Polygon buildPolygon(Element gmlElement, int srsDimension) {
+    private LineString buildLineString(Element gmlElement, CoordinateSequenceDimensions dims) {
+        CustomCoordinateSequence coordinateSequence = extractPosList(gmlElement, dims);
+        return GEOMETRY_FACTORY.createLineString(coordinateSequence);
+    }
+
+    private Polygon buildPolygon(Element gmlElement, CoordinateSequenceDimensions dims) {
         //Following Polygon structure from: http://www.gdal.org/drv_gml.html
         Polygon polygon;
 
@@ -255,7 +308,7 @@ public class GMLReader implements ParserReader {
         CustomCoordinateSequence exteriorSequence;
         if (exteriorElement != null) {
             Element exteriorLinearRingElement = exteriorElement.getChild("LinearRing", GML_NAMESPACE);
-            exteriorSequence = extractPosList(exteriorLinearRingElement, srsDimension);
+            exteriorSequence = extractPosList(exteriorLinearRingElement, dims);
         } else {
             exteriorSequence = new CustomCoordinateSequence();
         }
@@ -267,7 +320,7 @@ public class GMLReader implements ParserReader {
         List<LinearRing> interiorLinearRingList = new ArrayList<>();
         for (Element interiorElement : interiorElements) {
             Element interiorLinearRingElement = interiorElement.getChild("LinearRing", GML_NAMESPACE);
-            CustomCoordinateSequence interiorSequence = extractPosList(interiorLinearRingElement, srsDimension);
+            CustomCoordinateSequence interiorSequence = extractPosList(interiorLinearRingElement, dims);
             LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(interiorSequence);
             interiorLinearRingList.add(linearRing);
         }
@@ -284,47 +337,47 @@ public class GMLReader implements ParserReader {
         return polygon;
     }
 
-    private Geometry buildMultiPoint(Element gmlElement) {
+    private Geometry buildMultiPoint(Element gmlElement, CoordinateSequenceDimensions dims) {
 
         List<Element> children = gmlElement.getChildren();
         Point[] points = new Point[children.size()];
         for (int i = 0; i < children.size(); i++) {
             Element child = children.get(i);
             Element point = child.getChild("Point", GML_NAMESPACE);
-            CustomCoordinateSequence sequence = extractPos(point);
+            CustomCoordinateSequence sequence = extractPos(point, dims);
 
             points[i] = GEOMETRY_FACTORY.createPoint(sequence);
         }
         return GEOMETRY_FACTORY.createMultiPoint(points);
     }
 
-    private Geometry buildMultiLineString(Element gmlElement, int srsDimension) {
+    private Geometry buildMultiLineString(Element gmlElement, CoordinateSequenceDimensions dims) {
 
         List<Element> children = gmlElement.getChildren();
         LineString[] lineStrings = new LineString[children.size()];
         for (int i = 0; i < children.size(); i++) {
             Element child = children.get(i);
             Element lineString = child.getChild("LineString", GML_NAMESPACE);
-            CustomCoordinateSequence sequence = extractPosList(lineString, srsDimension);
+            CustomCoordinateSequence sequence = extractPosList(lineString, dims);
 
             lineStrings[i] = GEOMETRY_FACTORY.createLineString(sequence);
         }
         return GEOMETRY_FACTORY.createMultiLineString(lineStrings);
     }
 
-    private Geometry buildMultiPolygon(Element gmlElement, int srsDimension) {
+    private Geometry buildMultiPolygon(Element gmlElement, CoordinateSequenceDimensions dims) {
 
         List<Element> children = gmlElement.getChildren();
         Polygon[] polygons = new Polygon[children.size()];
         for (int i = 0; i < children.size(); i++) {
             Element child = children.get(i);
-            polygons[i] = buildPolygon(child.getChild("Polygon", GML_NAMESPACE), srsDimension);
+            polygons[i] = buildPolygon(child.getChild("Polygon", GML_NAMESPACE), dims);
         }
 
         return GEOMETRY_FACTORY.createMultiPolygon(polygons);
     }
 
-    private Geometry buildGeometryCollection(Element gmlElement, int srsDimension) {
+    private Geometry buildGeometryCollection(Element gmlElement, CoordinateSequenceDimensions dims) {
 
         List<Element> children = gmlElement.getChildren();
         Geometry[] geometries = new Geometry[children.size()];
@@ -335,7 +388,7 @@ public class GMLReader implements ParserReader {
             //Geometry Members
             for (Element grandChild : child.getChildren()) {
                 String shape = grandChild.getName();
-                geometries[i] = buildGeometry(shape, grandChild, srsDimension);
+                geometries[i] = buildGeometry(shape, grandChild, dims);
             }
         }
 

@@ -305,6 +305,24 @@ public class GMLReaderTest {
      * Test of extract method, of class GMLReader.
      */
     @Test
+    public void testExtractCurve() throws JDOMException, IOException {
+        System.out.println("extractCurve");
+
+        Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "11.0 12.1, 15.0 8.0, 20.0 14.0, 25.0 14.0"));
+        GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
+
+        String gmlText = "<gml:Curve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:segments><gml:LineStringSegment><gml:posList srsDimension=\"2\">11 12.1 15 8</gml:posList></gml:LineStringSegment><gml:LineStringSegment><gml:posList srsDimension=\"2\">15.0 8.0 20.0 14.0 25.0 14.0</gml:posList></gml:LineStringSegment></gml:segments></gml:Curve>";
+        GMLReader result = GMLReader.extract(gmlText);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extract method, of class GMLReader.
+     */
+    @Test
     public void testExtractMultiPoint() throws JDOMException, IOException {
         System.out.println("extractMultiPoint");
 
@@ -426,8 +444,24 @@ public class GMLReaderTest {
      */
     @Test
     public void testBuildLineStringEmpty() throws JDOMException, IOException {
-        System.out.println("buildLineEmpty");
+        System.out.println("buildLineStringEmpty");
         GMLReader instance = GMLReader.extract("<gml:LineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:LineString>");
+        Geometry result = instance.getGeometry();
+
+        Geometry expResult = GEOMETRY_FACTORY.createLineString();
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildCurveEmpty method, of class GMLReader.
+     */
+    @Test
+    public void testBuildCurveEmpty() throws JDOMException, IOException {
+        System.out.println("buildCurveEmpty");
+        GMLReader instance = GMLReader.extract("<gml:Curve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:Curve>");
         Geometry result = instance.getGeometry();
 
         Geometry expResult = GEOMETRY_FACTORY.createLineString();
@@ -486,12 +520,44 @@ public class GMLReaderTest {
     }
 
     /**
+     * Test of buildMultiCurve method, of class GMLReader.
+     */
+    @Test
+    public void testBuildMultiCurveEmpty() throws JDOMException, IOException {
+        System.out.println("buildMultiCurveEmpty");
+        GMLReader instance = GMLReader.extract("<gml:MultiCurve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:MultiCurve>");
+        Geometry result = instance.getGeometry();
+
+        Geometry expResult = GEOMETRY_FACTORY.createMultiLineString();
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
      * Test of buildMultiPolygonEmpty method, of class GMLReader.
      */
     @Test
     public void testBuildMultiPolygonEmpty() throws JDOMException, IOException {
         System.out.println("buildMultiPolygonEmpty");
         GMLReader instance = GMLReader.extract("<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:MultiPolygon>");
+        Geometry result = instance.getGeometry();
+
+        Geometry expResult = GEOMETRY_FACTORY.createMultiPolygon();
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of buildMultiSurfaceEmpty method, of class GMLReader.
+     */
+    @Test
+    public void testBuildMultiSurfaceEmpty() throws JDOMException, IOException {
+        System.out.println("buildMultiSurfaceEmpty");
+        GMLReader instance = GMLReader.extract("<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:MultiSurface>");
         Geometry result = instance.getGeometry();
 
         Geometry expResult = GEOMETRY_FACTORY.createMultiPolygon();
