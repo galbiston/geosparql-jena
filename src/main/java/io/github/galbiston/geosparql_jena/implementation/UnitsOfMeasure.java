@@ -38,7 +38,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  */
 public class UnitsOfMeasure implements Serializable {
 
-    private final Unit unit;
+    private final Unit<Length> unit;
     private final String unitURI;
     private final boolean isLinearUnits;
 
@@ -49,19 +49,21 @@ public class UnitsOfMeasure implements Serializable {
     public static final double EQUATORIAL_DEGREE_TO_METRES = 111319.8922;
     public static final double EARTH_MEAN_RADIUS = 6371008.7714; //Earth Mean Radius
 
+    @SuppressWarnings("unchecked")
     public UnitsOfMeasure(CoordinateReferenceSystem crs) {
-        this.unit = crs.getCoordinateSystem().getAxis(0).getUnit();
+        this.unit = (Unit<Length>)crs.getCoordinateSystem().getAxis(0).getUnit();
         this.unitURI = UnitsRegistry.getUnitURI(unit);
         this.isLinearUnits = UnitsRegistry.isLinearUnits(unitURI);
     }
 
+    @SuppressWarnings("unchecked")
     public UnitsOfMeasure(String unitURI) {
-        this.unit = UnitsRegistry.getUnit(unitURI);
+        this.unit = (Unit<Length>)UnitsRegistry.getUnit(unitURI);
         this.unitURI = UnitsRegistry.getUnitURI(unit);
         this.isLinearUnits = UnitsRegistry.isLinearUnits(unitURI);
     }
 
-    public Unit getUnit() {
+    public Unit<Length> getUnit() {
         return unit;
     }
 
@@ -82,9 +84,7 @@ public class UnitsOfMeasure implements Serializable {
      * @return Distance after conversion.
      * @throws UnitsConversionException
      */
-    @SuppressWarnings("unchecked")
     public static final Double conversion(double sourceDistance, String sourceDistanceUnitsURI, String targetDistanceUnitsURI) throws UnitsConversionException {
-
         return conversion(sourceDistance, new UnitsOfMeasure(sourceDistanceUnitsURI), new UnitsOfMeasure(targetDistanceUnitsURI));
     }
 
@@ -97,7 +97,6 @@ public class UnitsOfMeasure implements Serializable {
      * @return Distance after conversion.
      * @throws UnitsConversionException
      */
-    @SuppressWarnings("unchecked")
     public static final Double conversion(double sourceDistance, UnitsOfMeasure sourceUnits, UnitsOfMeasure targetUnits) throws UnitsConversionException {
 
         Boolean isSourceUnitsLinear = sourceUnits.isLinearUnits();
@@ -113,8 +112,8 @@ public class UnitsOfMeasure implements Serializable {
         }
 
         //Find which type of measure for the distance is being used.
-        Unit sourceUnit = sourceUnits.getUnit();
-        Unit targetUnit = targetUnits.getUnit();
+        Unit<Length> sourceUnit = sourceUnits.getUnit();
+        Unit<Length> targetUnit = targetUnits.getUnit();
 
         Quantity<Length> distance = Quantities.create(sourceDistance, sourceUnit);
         Quantity<Length> targetDistance = distance.to(targetUnit);
