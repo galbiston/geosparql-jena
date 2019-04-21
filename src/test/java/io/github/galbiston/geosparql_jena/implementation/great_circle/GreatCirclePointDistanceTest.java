@@ -26,10 +26,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.locationtech.jts.geom.GeometryFactory;
 
-/**
- *
- *
- */
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GreatCirclePointDistanceTest {
 
