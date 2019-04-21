@@ -37,13 +37,12 @@ import org.slf4j.LoggerFactory;
 public class MathTransformRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private static final MultiKeyMap<MultiKey, MathTransform> MATH_TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new HashedMap<>());
+    private static final MultiKeyMap<CoordinateReferenceSystem, MathTransform> MATH_TRANSFORM_REGISTRY = MultiKeyMap.multiKeyMap(new HashedMap<>());
 
-    @SuppressWarnings("unchecked")
     public synchronized static final MathTransform getMathTransform(CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws FactoryException, MismatchedDimensionException, TransformException {
 
         MathTransform transform;
-        MultiKey key = new MultiKey<>(sourceCRS, targetCRS);
+        MultiKey<CoordinateReferenceSystem> key = new MultiKey<>(sourceCRS, targetCRS);
         if (MATH_TRANSFORM_REGISTRY.containsKey(key)) {
             transform = MATH_TRANSFORM_REGISTRY.get(key);
         } else {

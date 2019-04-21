@@ -153,7 +153,7 @@ public class GeoSPARQLOperationsTest {
         System.out.println("convert");
         Model inputModel = CONVERTED_SRS_DATA;
         GeometryDatatype outputDatatype = GMLDatatype.INSTANCE;
-        TreeSet expResult = extract(CONVERTED_DATATYPE_DATA);
+        TreeSet<String> expResult = extract(CONVERTED_DATATYPE_DATA);
         Model instance = GeoSPARQLOperations.convert(inputModel, outputDatatype);
         TreeSet<String> result = extract(instance);
 

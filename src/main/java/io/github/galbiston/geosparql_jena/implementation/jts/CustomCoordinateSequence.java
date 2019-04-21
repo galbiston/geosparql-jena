@@ -419,7 +419,6 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
 
     @Override
     @Deprecated
-    @SuppressWarnings("deprecation")
     public CustomCoordinateSequence clone() {
         return new CustomCoordinateSequence(x, y, z, m);
     }

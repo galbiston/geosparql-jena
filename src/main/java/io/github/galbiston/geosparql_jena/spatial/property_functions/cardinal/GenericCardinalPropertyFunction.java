@@ -19,7 +19,6 @@ import io.github.galbiston.geosparql_jena.implementation.GeometryWrapper;
 import io.github.galbiston.geosparql_jena.implementation.SRSInfo;
 import io.github.galbiston.geosparql_jena.spatial.ConvertLatLon;
 import io.github.galbiston.geosparql_jena.spatial.SearchEnvelope;
-import static io.github.galbiston.geosparql_jena.spatial.property_functions.GenericSpatialPropertyFunction.DEFAULT_LIMIT;
 import io.github.galbiston.geosparql_jena.spatial.property_functions.SpatialArguments;
 import java.util.List;
 import org.apache.jena.datatypes.DatatypeFormatException;

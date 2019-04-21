@@ -32,8 +32,8 @@ import org.apache.sis.measure.Units;
  */
 public class UnitsRegistry {
 
-    private static final Map<String, Unit> UNITS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
-    private static final Map<Unit, String> UNITS_URI_REGISTRY = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<String, Unit<?>> UNITS_REGISTRY = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<Unit<?>, String> UNITS_URI_REGISTRY = Collections.synchronizedMap(new HashMap<>());
 
     private static final Unit<Length> YARD = Units.METRE.multiply(1.0936132983);
 
@@ -93,7 +93,7 @@ public class UnitsRegistry {
         //TODO: EPSG also defined units URIs at https://epsg.io/9096-units. More exhaustive than OGC.
     }
 
-    public static final void addUnit(String unitURI, Unit unit) {
+    public static final void addUnit(String unitURI, Unit<?> unit) {
         UNITS_REGISTRY.putIfAbsent(unitURI, unit);
         UNITS_URI_REGISTRY.putIfAbsent(unit, unitURI);
     }
@@ -102,7 +102,7 @@ public class UnitsRegistry {
         addUnit(unitsOfMeasure.getUnitURI(), unitsOfMeasure.getUnit());
     }
 
-    public static final Unit getUnit(String unitURI) {
+    public static final Unit<?> getUnit(String unitURI) {
         return UNITS_REGISTRY.get(unitURI);
     }
 
@@ -110,7 +110,7 @@ public class UnitsRegistry {
         return getUnitURI(unitOfMeasure.getUnit());
     }
 
-    public static final String getUnitURI(Unit unit) {
+    public static final String getUnitURI(Unit<?> unit) {
         return UNITS_URI_REGISTRY.get(unit);
     }
 
@@ -118,8 +118,8 @@ public class UnitsRegistry {
 
         if (UNITS_REGISTRY.containsKey(unitURI)) {
 
-            Unit unit = UNITS_REGISTRY.get(unitURI);
-            Unit unitSI = unit.getSystemUnit();
+            Unit<?> unit = UNITS_REGISTRY.get(unitURI);
+            Unit<?> unitSI = unit.getSystemUnit();
 
             return unitSI.equals(Units.METRE);
         } else {

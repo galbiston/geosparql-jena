@@ -137,7 +137,7 @@ public class GreatCirclePointDistance {
     }
 
     /**
-     * Normalise Longitude in degrees to -180 -> 180 range.
+     * Normalise Longitude in degrees to the range -180 to 180.
      *
      * @param lonDegrees
      * @return Lat/Lon Point in degrees.
