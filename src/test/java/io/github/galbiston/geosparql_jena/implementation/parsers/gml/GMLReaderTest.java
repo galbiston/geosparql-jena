@@ -356,7 +356,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createMultiPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "10 40, 40 30, 20 20, 30 10"));
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:MultiPoint xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:PointMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>10 40</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>40 30</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>20 20</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>30 10</gml:pos></gml:Point></gml:PointMember></gml:MultiPoint>";
+        String gmlText = "<gml:MultiPoint xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pointMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>10 40</gml:pos></gml:Point></gml:pointMember><gml:pointMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>40 30</gml:pos></gml:Point></gml:pointMember><gml:pointMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>20 20</gml:pos></gml:Point></gml:pointMember><gml:pointMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>30 10</gml:pos></gml:Point></gml:pointMember></gml:MultiPoint>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -371,8 +371,8 @@ public class GMLReaderTest {
      * @throws java.io.IOException
      */
     @Test
-    public void testExtractMutliLineString() throws JDOMException, IOException {
-        System.out.println("extractMultiLineString");
+    public void testExtractMutliCurve() throws JDOMException, IOException {
+        System.out.println("extractMultiCurve");
 
         LineString[] lineStrings = new LineString[2];
         lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "10 10, 20 20, 10 40"));
@@ -380,7 +380,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:MultiLineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:LineStringMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">10 10 20 20 10 40</gml:posList></gml:LineString></gml:LineStringMember><gml:LineStringMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">40 40 30 30 40 20 30 10</gml:posList></gml:LineString></gml:LineStringMember></gml:MultiLineString>";
+        String gmlText = "<gml:MultiCurve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:curveMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">10 10 20 20 10 40</gml:posList></gml:LineString></gml:curveMember><gml:curveMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">40 40 30 30 40 20 30 10</gml:posList></gml:LineString></gml:curveMember></gml:MultiCurve>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -395,8 +395,8 @@ public class GMLReaderTest {
      * @throws java.io.IOException
      */
     @Test
-    public void testExtractMultiPolygon() throws JDOMException, IOException {
-        System.out.println("extractMultiPolygon");
+    public void testExtractMultiSurface() throws JDOMException, IOException {
+        System.out.println("extractMultiSurface");
 
         Polygon[] polygons = new Polygon[2];
         polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 20 45, 45 30, 40 40"));
@@ -404,7 +404,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:PolygonMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:PolygonMember><gml:PolygonMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:PolygonMember></gml:MultiPolygon>";
+        String gmlText = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -419,8 +419,8 @@ public class GMLReaderTest {
      * @throws java.io.IOException
      */
     @Test
-    public void testExtractMultiPolygon2() throws JDOMException, IOException {
-        System.out.println("extractMultiPolygon2");
+    public void testExtractMultiSurface2() throws JDOMException, IOException {
+        System.out.println("extractMultiSurface2");
 
         Polygon[] polygons = new Polygon[2];
         polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 20 45, 45 30, 40 40"));
@@ -430,7 +430,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:PolygonMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:PolygonMember><gml:PolygonMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:LinearRing></gml:exterior><gml:interior><gml:LinearRing><gml:posList srsDimension=\"2\">30 20 20 15 20 25 30 20</gml:posList></gml:LinearRing></gml:interior></gml:Polygon></gml:PolygonMember></gml:MultiPolygon>";
+        String gmlText = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:LinearRing></gml:exterior><gml:interior><gml:LinearRing><gml:posList srsDimension=\"2\">30 20 20 15 20 25 30 20</gml:posList></gml:LinearRing></gml:interior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -445,8 +445,8 @@ public class GMLReaderTest {
      * @throws java.io.IOException
      */
     @Test
-    public void testExtractGeometryCollection() throws JDOMException, IOException {
-        System.out.println("extractGeometryCollection");
+    public void testExtractMultiGeometry() throws JDOMException, IOException {
+        System.out.println("extractMultiGeometry");
 
         Geometry[] geometries = new Geometry[2];
         geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "4 6"));
@@ -454,7 +454,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection(geometries);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:GeometryCollection xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:GeometryMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>4 6</gml:pos></gml:Point></gml:GeometryMember><gml:GeometryMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">4 6 7 10</gml:posList></gml:LineString></gml:GeometryMember></gml:GeometryCollection>";
+        String gmlText = "<gml:MultiGeometry xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:geometryMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>4 6</gml:pos></gml:Point></gml:geometryMember><gml:geometryMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">4 6 7 10</gml:posList></gml:LineString></gml:geometryMember></gml:MultiGeometry>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -558,25 +558,6 @@ public class GMLReaderTest {
     }
 
     /**
-     * Test of buildMultiLineString method, of class GMLReader.
-     *
-     * @throws org.jdom2.JDOMException
-     * @throws java.io.IOException
-     */
-    @Test
-    public void testBuildMultiLineStringEmpty() throws JDOMException, IOException {
-        System.out.println("buildMultiLineStringEmpty");
-        GMLReader instance = GMLReader.extract("<gml:MultiLineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:MultiLineString>");
-        Geometry result = instance.getGeometry();
-
-        Geometry expResult = GEOMETRY_FACTORY.createMultiLineString();
-
-        //System.out.println("Expected: " + expResult);
-        //System.out.println("Result: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of buildMultiCurve method, of class GMLReader.
      *
      * @throws org.jdom2.JDOMException
@@ -589,25 +570,6 @@ public class GMLReaderTest {
         Geometry result = instance.getGeometry();
 
         Geometry expResult = GEOMETRY_FACTORY.createMultiLineString();
-
-        //System.out.println("Expected: " + expResult);
-        //System.out.println("Result: " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of buildMultiPolygonEmpty method, of class GMLReader.
-     *
-     * @throws org.jdom2.JDOMException
-     * @throws java.io.IOException
-     */
-    @Test
-    public void testBuildMultiPolygonEmpty() throws JDOMException, IOException {
-        System.out.println("buildMultiPolygonEmpty");
-        GMLReader instance = GMLReader.extract("<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:MultiPolygon>");
-        Geometry result = instance.getGeometry();
-
-        Geometry expResult = GEOMETRY_FACTORY.createMultiPolygon();
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -634,15 +596,15 @@ public class GMLReaderTest {
     }
 
     /**
-     * Test of buildGeometryCollectionEmpty method, of class GMLReader.
+     * Test of buildMultiGeometryEmpty method, of class GMLReader.
      *
      * @throws org.jdom2.JDOMException
      * @throws java.io.IOException
      */
     @Test
-    public void testBuildGeometryCollectionEmpty() throws JDOMException, IOException {
-        System.out.println("buildGeometryCollectionEmpty");
-        GMLReader instance = GMLReader.extract("<gml:GeometryCollection xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:GeometryCollection>");
+    public void testBuildMultiGeometryEmpty() throws JDOMException, IOException {
+        System.out.println("buildMultiGeometryEmpty");
+        GMLReader instance = GMLReader.extract("<gml:MultiGeometry xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"></gml:MultiGeometry>");
         Geometry result = instance.getGeometry();
 
         Geometry expResult = GEOMETRY_FACTORY.createGeometryCollection();
