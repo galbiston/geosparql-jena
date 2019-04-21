@@ -193,17 +193,17 @@ public class GMLReader implements ParserReader {
                     break;
                 //case "MultiLineString" is deprecated in GML3.2
                 case "MultiCurve":
-                    geo = buildMultiLineString(gmlElement, dims);
+                    geo = buildMultiCurve(gmlElement, dims, srsInfo);
                     break;
                 //case "MultiPolygon" is deprecated in GML3.2
                 case "MultiSurface":
-                    geo = buildMultiPolygon(gmlElement, dims);
+                    geo = buildMultiSurface(gmlElement, dims, srsInfo);
                     break;
                 case "MultiGeometry":
                     geo = buildMultiGeometry(gmlElement, dims, srsInfo);
                     break;
                 default:
-                    throw new DatatypeFormatException("Geometry shape not supported: " + shape);
+                    throw new DatatypeFormatException("Geometry shape not supported ([10-100r3], page 22): " + shape);
             }
         } catch (ArrayIndexOutOfBoundsException ex) {
             throw new DatatypeFormatException("Build GML Geometry Exception - Shape: " + shape + ", Element: " + gmlElement + ". " + ex.getMessage());
@@ -301,7 +301,7 @@ public class GMLReader implements ParserReader {
      * @param srsDimension
      * @return
      */
-    private Geometry buildCurve(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
+    private LineString buildCurve(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
         //TODO Try using: GeometricShapeFactory gsf = new GeometricShapeFactory();
         //TODO Arc: three points that describe - centre and angles?
         //TODO Circle: three points that describe - centre and angles?
@@ -429,7 +429,7 @@ public class GMLReader implements ParserReader {
         return angle;
     }
 
-    private Polygon buildCircle(List<Element> segments, CoordinateSequenceDimensions dims) {
+    private LineString buildCircle(List<Element> segments, CoordinateSequenceDimensions dims) {
         int srsDimension = CoordinateSequenceDimensions.convertToInt(dims);
 
         Element posListElement = segments.get(0); //Already ensured that non-zero length. gml:Circle only has single posList.
@@ -445,10 +445,11 @@ public class GMLReader implements ParserReader {
         GeometricShapeFactory geometricShapeFactory = new GeometricShapeFactory(GEOMETRY_FACTORY);
         geometricShapeFactory.setCentre(centre);
         geometricShapeFactory.setWidth(radius * 2);
-        return geometricShapeFactory.createCircle();
+        Polygon circlePolygon = geometricShapeFactory.createCircle();
+        return circlePolygon.getExteriorRing();
     }
 
-    private Polygon buildCircleByCentrePoint(List<Element> segments, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
+    private LineString buildCircleByCentrePoint(List<Element> segments, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
 
         Element circleElement = segments.get(0);
         Point point = buildPoint(circleElement, dims);
@@ -473,7 +474,8 @@ public class GMLReader implements ParserReader {
         GeometricShapeFactory geometricShapeFactory = new GeometricShapeFactory(GEOMETRY_FACTORY);
         geometricShapeFactory.setCentre(centre);
         geometricShapeFactory.setSize(radius * 2);  //Set the width and height, i.e. the diameter.
-        return geometricShapeFactory.createCircle();
+        Polygon circlePolygon = geometricShapeFactory.createCircle();
+        return circlePolygon.getExteriorRing();
     }
 
     private Polygon buildPolygon(Element gmlElement, CoordinateSequenceDimensions dims) {
@@ -517,7 +519,7 @@ public class GMLReader implements ParserReader {
         return linearRing;
     }
 
-    private Geometry buildSurface(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
+    private Polygon buildSurface(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
 
         //http://www.datypic.com/sc/niem21/e-gml32_patches.html
         //gml:patches [1..1]
@@ -566,92 +568,139 @@ public class GMLReader implements ParserReader {
         }
 
         //Unionise all the polygons on the surface together.
-        Geometry geom = CascadedPolygonUnion.union(polys);
-        return geom;
+        Geometry unionGeom = CascadedPolygonUnion.union(polys);
+        Polygon unionPolygon;
+        if (unionGeom instanceof Polygon) {
+            unionPolygon = (Polygon) unionGeom;
+        } else {
+            throw new AssertionError("CascadePolygonUnion has not produced a Polygon geometry in GML Reader.");
+        }
+
+        return unionPolygon;
     }
 
-    private Geometry buildSurfacePatch(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
+    private LinearRing buildSurfacePatch(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
         Element linearRingElement = gmlElement.getChild("LinearRing", GML_NAMESPACE);
-        Geometry geom = null;
+        LinearRing linearRing = null;
         if (linearRingElement != null) {
             //LinearRing [1..1]
-            geom = buildLinearRing(linearRingElement, dims);
+            linearRing = buildLinearRing(linearRingElement, dims);
         } else {
             //Ring [1..1] element containing curveMember [1..1] and then Curve [1..1]
             Element ringElement = gmlElement.getChild("Ring", GML_NAMESPACE);
             if (ringElement == null) {
                 Element curveMemberElement = gmlElement.getChild("curveMember", GML_NAMESPACE);
                 if (curveMemberElement != null) {
-                    Element curveElemet = curveMemberElement.getChild("Curve", GML_NAMESPACE);
-                    if (curveElemet != null) {
-                        geom = buildCurve(curveElemet, dims, srsInfo);
+                    Element curveElement = curveMemberElement.getChild("Curve", GML_NAMESPACE);
+                    if (curveElement != null) {
+                        LineString lineString = buildCurve(curveElement, dims, srsInfo);
+                        linearRing = GEOMETRY_FACTORY.createLinearRing(lineString.getCoordinateSequence());
                     }
                 }
             }
         }
-        if (geom == null) {
+        if (linearRing == null) {
             throw new DatatypeFormatException("GML Surface does not contain correct LinearRing or Ring elements ([10-100r3], page 22):" + gmlElement);
         }
-        return geom;
+        return linearRing;
     }
 
     private Geometry buildMultiPoint(Element gmlElement, CoordinateSequenceDimensions dims) {
 
-        List<Element> children = gmlElement.getChildren();
-        Point[] points = new Point[children.size()];
-        for (int i = 0; i < children.size(); i++) {
-            Element child = children.get(i);
-            Element point = child.getChild("Point", GML_NAMESPACE);
-            CustomCoordinateSequence sequence = extractPos(point, dims);
+        List<Element> memberElements = getMembers(gmlElement, "pointMember");
+        List<Point> points = new ArrayList<>(memberElements.size());
 
-            points[i] = GEOMETRY_FACTORY.createPoint(sequence);
+        for (Element member : memberElements) {
+            Point point = buildPoint(member, dims);
+            points.add(point);
         }
-        return GEOMETRY_FACTORY.createMultiPoint(points);
+
+        Point[] pointArray = points.toArray(new Point[points.size()]);
+        return GEOMETRY_FACTORY.createMultiPoint(pointArray);
     }
 
-    private Geometry buildMultiLineString(Element gmlElement, CoordinateSequenceDimensions dims) {
-        int srsDimension = CoordinateSequenceDimensions.convertToInt(dims);
+    private Geometry buildMultiCurve(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
 
-        List<Element> children = gmlElement.getChildren();
-        LineString[] lineStrings = new LineString[children.size()];
-        for (int i = 0; i < children.size(); i++) {
-            Element child = children.get(i);
-            Element lineString = child.getChild("LineString", GML_NAMESPACE);
-            String posList = extractPosList(lineString, srsDimension);
-            CustomCoordinateSequence sequence = new CustomCoordinateSequence(dims, posList);
-            lineStrings[i] = GEOMETRY_FACTORY.createLineString(sequence);
+        List<Element> memberElements = getMembers(gmlElement, "curveMember");
+        List<LineString> lineStrings = new ArrayList<>(memberElements.size());
+
+        for (Element member : memberElements) {
+            String shape = member.getName();
+            LineString lineString;
+            switch (shape) {
+                case "LineString":
+                    lineString = buildLineString(member, dims);
+                    break;
+                case "Curve":
+                    lineString = buildCurve(member, dims, srsInfo);
+                    break;
+                default:
+                    throw new DatatypeFormatException("GML MultiCurve does not contain LineString or Curve elements ([10-100r3], page 22):" + gmlElement);
+            }
+            lineStrings.add(lineString);
         }
-        return GEOMETRY_FACTORY.createMultiLineString(lineStrings);
+
+        LineString[] lineStringArray = lineStrings.toArray(new LineString[lineStrings.size()]);
+        return GEOMETRY_FACTORY.createMultiLineString(lineStringArray);
     }
 
-    private Geometry buildMultiPolygon(Element gmlElement, CoordinateSequenceDimensions dims) {
+    private Geometry buildMultiSurface(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
 
-        List<Element> children = gmlElement.getChildren();
-        Polygon[] polygons = new Polygon[children.size()];
-        for (int i = 0; i < children.size(); i++) {
-            Element child = children.get(i);
-            polygons[i] = buildPolygon(child.getChild("Polygon", GML_NAMESPACE), dims);
+        List<Element> memberElements = getMembers(gmlElement, "surfaceMember");
+        List<Polygon> polygons = new ArrayList<>(memberElements.size());
+
+        for (Element member : memberElements) {
+            String shape = member.getName();
+            Polygon polygon;
+            switch (shape) {
+                case "Polygon":
+                    polygon = buildPolygon(member, dims);
+                    break;
+                case "Surface":
+                    polygon = buildSurface(member, dims, srsInfo);
+                    break;
+                default:
+                    throw new DatatypeFormatException("GML MultiSurface does not contain Polygon or Surface elements ([10-100r3], page 22):" + gmlElement);
+            }
+            polygons.add(polygon);
         }
 
-        return GEOMETRY_FACTORY.createMultiPolygon(polygons);
+        Polygon[] polygonArray = polygons.toArray(new Polygon[polygons.size()]);
+        return GEOMETRY_FACTORY.createMultiPolygon(polygonArray);
     }
 
     private Geometry buildMultiGeometry(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
 
-        List<Element> children = gmlElement.getChildren();
-        Geometry[] geometries = new Geometry[children.size()];
+        List<Element> memberElements = getMembers(gmlElement, "geometryMember");
+        List<Geometry> geometries = new ArrayList<>(memberElements.size());
 
-        for (int i = 0; i < children.size(); i++) {
-            Element child = children.get(i);
-
-            //Geometry Members
-            for (Element grandChild : child.getChildren("geometryMember", GML_NAMESPACE)) {
-                String shape = grandChild.getName();
-                geometries[i] = buildGeometry(shape, grandChild, dims, srsInfo);
-            }
+        for (Element member : memberElements) {
+            String shape = member.getName();
+            Geometry geom = buildGeometry(shape, member, dims, srsInfo);
+            geometries.add(geom);
         }
 
-        return GEOMETRY_FACTORY.createGeometryCollection(geometries);
+        Geometry[] geometryArray = geometries.toArray(new Geometry[geometries.size()]);
+        return GEOMETRY_FACTORY.createGeometryCollection(geometryArray);
+    }
+
+    private List<Element> getMembers(Element gmlElement, String memberLabel) {
+
+        String membersLabel = memberLabel + "s";    //All the members labels are consistent format.
+        List<Element> memberElements;
+        Element membersElement = gmlElement.getChild(membersLabel, GML_NAMESPACE);
+        if (membersElement != null) {
+            memberElements = membersElement.getChildren();
+        } else {
+            List<Element> memberElementList = gmlElement.getChildren(memberLabel, GML_NAMESPACE);
+            memberElements = new ArrayList<>();
+
+            for (Element memberElement : memberElementList) {
+                List<Element> childElements = memberElement.getChildren();   //Should only be one child which is the geometry.
+                memberElements.addAll(childElements);
+            }
+        }
+        return memberElements;
     }
 
     private static final String EMPTY_GML_TEXT = "<gml:Point xmlns:gml='http://www.opengis.net/ont/gml' srsName=\"http://www.opengis.net/def/crs/OGC/1.3/CRS84\" />";
