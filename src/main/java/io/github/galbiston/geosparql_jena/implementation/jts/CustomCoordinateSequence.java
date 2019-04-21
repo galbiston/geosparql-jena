@@ -20,6 +20,7 @@ package io.github.galbiston.geosparql_jena.implementation.jts;
 import static io.github.galbiston.geosparql_jena.implementation.WKTLiteralFactory.reducePrecision;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.Envelope;
@@ -109,6 +110,63 @@ public class CustomCoordinateSequence implements CoordinateSequence, Serializabl
 
     public CustomCoordinateSequence(CoordinateSequenceDimensions dimensions) {
         this(dimensions, "");
+    }
+
+    public CustomCoordinateSequence(CoordinateSequenceDimensions dimensions, List<Coordinate> coordinates) {
+
+        this.dimensions = dimensions;
+        if (!coordinates.isEmpty()) {
+
+            this.size = coordinates.size();
+            this.x = new double[size];
+            this.y = new double[size];
+            this.z = new double[size];
+            this.m = new double[size];
+
+            for (int i = 0; i < size; i++) {
+                Coordinate coord = coordinates.get(i);
+
+                switch (dimensions) {
+                    default:
+                        this.x[i] = coord.getX();
+                        this.y[i] = coord.getY();
+                        this.z[i] = Double.NaN;
+                        this.m[i] = Double.NaN;
+                        break;
+                    case XYZ:
+                        this.x[i] = coord.getX();
+                        this.y[i] = coord.getY();
+                        this.z[i] = coord.getZ();
+                        this.m[i] = Double.NaN;
+                        break;
+                    case XYM:
+                        this.x[i] = coord.getX();
+                        this.y[i] = coord.getY();
+                        this.z[i] = Double.NaN;
+                        this.m[i] = coord.getM();
+                        break;
+                    case XYZM:
+                        this.x[i] = coord.getX();
+                        this.y[i] = coord.getY();
+                        this.z[i] = coord.getZ();
+                        this.m[i] = coord.getM();
+                        break;
+                }
+
+            }
+
+        } else {
+            this.size = 0;
+            this.x = new double[size];
+            this.y = new double[size];
+            this.z = new double[size];
+            this.m = new double[size];
+        }
+
+        int[] dims = getDimensionValues(dimensions);
+        this.coordinateDimension = dims[0];
+        this.spatialDimension = dims[1];
+        this.measuresDimension = dimensions.equals(CoordinateSequenceDimensions.XYM) || dimensions.equals(CoordinateSequenceDimensions.XYZM) ? 1 : 0;
     }
 
     public CustomCoordinateSequence(CoordinateSequenceDimensions dimensions, String sequence) {
