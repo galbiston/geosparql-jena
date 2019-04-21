@@ -41,6 +41,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.locationtech.jts.geom.*;
+import org.locationtech.jts.operation.union.CascadedPolygonUnion;
 import org.locationtech.jts.util.GeometricShapeFactory;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
@@ -82,6 +83,9 @@ public class GMLReader implements ParserReader {
      * definition."<br>
      * [10-100r3], page 22 states "c) coordinate reference systems may have 1, 2
      * or 3 dimensions".
+     *
+     * At time of implementing: JTS only supports GML1.0 and GML2.0, while
+     * Apache SIS is document based and not GML fragments.
      *
      * @see
      * <a href="https://en.wikipedia.org/wiki/Geography_Markup_Language#GML_Simple_Features_Profile"></a>
@@ -181,6 +185,9 @@ public class GMLReader implements ParserReader {
                 case "Polygon":
                     geo = buildPolygon(gmlElement, dims);
                     break;
+                case "Surface":
+                    geo = buildSurface(gmlElement, dims, srsInfo);
+                    break;
                 case "MultiPoint":
                     geo = buildMultiPoint(gmlElement, dims);
                     break;
@@ -192,8 +199,8 @@ public class GMLReader implements ParserReader {
                 case "MultiSurface":
                     geo = buildMultiPolygon(gmlElement, dims);
                     break;
-                case "GeometryCollection":
-                    geo = buildGeometryCollection(gmlElement, dims, srsInfo);
+                case "MultiGeometry":
+                    geo = buildMultiGeometry(gmlElement, dims, srsInfo);
                     break;
                 default:
                     throw new DatatypeFormatException("Geometry shape not supported: " + shape);
@@ -472,39 +479,120 @@ public class GMLReader implements ParserReader {
     private Polygon buildPolygon(Element gmlElement, CoordinateSequenceDimensions dims) {
 
         Polygon polygon;
-        int srsDimension = CoordinateSequenceDimensions.convertToInt(dims);
 
         //Exterior shell - [0..1]
         Element exteriorElement = gmlElement.getChild("exterior", GML_NAMESPACE);
-        CustomCoordinateSequence exteriorSequence;
+        LinearRing exteriorLinearRing;
         if (exteriorElement != null) {
             Element exteriorLinearRingElement = exteriorElement.getChild("LinearRing", GML_NAMESPACE);
-            String posList = extractPosList(exteriorLinearRingElement, srsDimension);
-            exteriorSequence = new CustomCoordinateSequence(dims, posList);
+            exteriorLinearRing = buildLinearRing(exteriorLinearRingElement, dims);
         } else {
-            exteriorSequence = new CustomCoordinateSequence();
+            exteriorLinearRing = GEOMETRY_FACTORY.createLinearRing();
         }
         //Interior shell - [0..*]
         List<Element> interiorElements = gmlElement.getChildren("interior", GML_NAMESPACE);
-        List<LinearRing> interiorLinearRingList = new ArrayList<>();
+        List<LinearRing> interiorList = new ArrayList<>();
         for (Element interiorElement : interiorElements) {
             Element interiorLinearRingElement = interiorElement.getChild("LinearRing", GML_NAMESPACE);
-            String posList = extractPosList(interiorLinearRingElement, srsDimension);
-            CustomCoordinateSequence interiorSequence = new CustomCoordinateSequence(dims, posList);
-            LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(interiorSequence);
-            interiorLinearRingList.add(linearRing);
+            LinearRing linearRing = buildLinearRing(interiorLinearRingElement, dims);
+            interiorList.add(linearRing);
         }
 
         //Build the polygon depending on whether interior shells were found.
-        if (interiorLinearRingList.isEmpty()) {
-            polygon = GEOMETRY_FACTORY.createPolygon(exteriorSequence);
+        if (interiorList.isEmpty()) {
+            polygon = GEOMETRY_FACTORY.createPolygon(exteriorLinearRing);
         } else {
-            LinearRing exteriorLinearRing = GEOMETRY_FACTORY.createLinearRing(exteriorSequence);
-            LinearRing[] interiorLinerRings = interiorLinearRingList.toArray(new LinearRing[interiorLinearRingList.size()]);
-            polygon = GEOMETRY_FACTORY.createPolygon(exteriorLinearRing, interiorLinerRings);
+            LinearRing[] interiorLinearRings = interiorList.toArray(new LinearRing[interiorList.size()]);
+            polygon = GEOMETRY_FACTORY.createPolygon(exteriorLinearRing, interiorLinearRings);
         }
 
         return polygon;
+    }
+
+    private LinearRing buildLinearRing(Element gmlElement, CoordinateSequenceDimensions dims) {
+        int srsDimension = CoordinateSequenceDimensions.convertToInt(dims);
+        String posList = extractPosList(gmlElement, srsDimension);
+        CustomCoordinateSequence sequence = new CustomCoordinateSequence(dims, posList);
+        LinearRing linearRing = GEOMETRY_FACTORY.createLinearRing(sequence);
+        return linearRing;
+    }
+
+    private Geometry buildSurface(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
+
+        //http://www.datypic.com/sc/niem21/e-gml32_patches.html
+        //gml:patches [1..1]
+        Element patchesElement = gmlElement.getChild("patches", GML_NAMESPACE);
+        if (patchesElement == null) {
+            throw new DatatypeFormatException("GML Surface does not contain patches child: " + gmlElement);
+        }
+
+        //PolygonPatches [0..*]
+        List<Element> polygonPatches = patchesElement.getChildren("PolygonPatch", GML_NAMESPACE);
+        if (polygonPatches.isEmpty()) {
+            throw new DatatypeFormatException("GML Surface does not contain PolygonPatches. Only gml:PolygonPatches are supported in Simple Features profile ([10-100r3], page 22):" + gmlElement);
+        }
+
+        List<Polygon> polys = new ArrayList<>();
+        for (Element patch : polygonPatches) {
+
+            LinearRing exteriorLinearRing;
+            //Exterior shell - [0..1]
+            Element exteriorElement = patch.getChild("exterior", GML_NAMESPACE);
+            if (exteriorElement != null) {
+                Geometry exteriorGeom = buildSurfacePatch(exteriorElement, dims, srsInfo);
+                exteriorLinearRing = GEOMETRY_FACTORY.createLinearRing(exteriorGeom.getCoordinates());
+            } else {
+                exteriorLinearRing = GEOMETRY_FACTORY.createLinearRing();
+            }
+
+            //Interior shell - [0..*]
+            List<Element> interiorElements = gmlElement.getChildren("interior", GML_NAMESPACE);
+            List<LinearRing> interiorList = new ArrayList<>();
+            for (Element interiorElement : interiorElements) {
+                Geometry interiorGeom = buildSurfacePatch(interiorElement, dims, srsInfo);
+                LinearRing interiorLinearRing = GEOMETRY_FACTORY.createLinearRing(interiorGeom.getCoordinates());
+                interiorList.add(interiorLinearRing);
+            }
+
+            //Build the polygon depending on whether interior shells were found.
+            Polygon polygon;
+            if (interiorList.isEmpty()) {
+                polygon = GEOMETRY_FACTORY.createPolygon(exteriorLinearRing);
+            } else {
+                LinearRing[] interiorLinearRings = interiorList.toArray(new LinearRing[interiorList.size()]);
+                polygon = GEOMETRY_FACTORY.createPolygon(exteriorLinearRing, interiorLinearRings);
+            }
+            polys.add(polygon);
+        }
+
+        //Unionise all the polygons on the surface together.
+        Geometry geom = CascadedPolygonUnion.union(polys);
+        return geom;
+    }
+
+    private Geometry buildSurfacePatch(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
+        Element linearRingElement = gmlElement.getChild("LinearRing", GML_NAMESPACE);
+        Geometry geom = null;
+        if (linearRingElement != null) {
+            //LinearRing [1..1]
+            geom = buildLinearRing(linearRingElement, dims);
+        } else {
+            //Ring [1..1] element containing curveMember [1..1] and then Curve [1..1]
+            Element ringElement = gmlElement.getChild("Ring", GML_NAMESPACE);
+            if (ringElement == null) {
+                Element curveMemberElement = gmlElement.getChild("curveMember", GML_NAMESPACE);
+                if (curveMemberElement != null) {
+                    Element curveElemet = curveMemberElement.getChild("Curve", GML_NAMESPACE);
+                    if (curveElemet != null) {
+                        geom = buildCurve(curveElemet, dims, srsInfo);
+                    }
+                }
+            }
+        }
+        if (geom == null) {
+            throw new DatatypeFormatException("GML Surface does not contain correct LinearRing or Ring elements ([10-100r3], page 22):" + gmlElement);
+        }
+        return geom;
     }
 
     private Geometry buildMultiPoint(Element gmlElement, CoordinateSequenceDimensions dims) {
@@ -548,7 +636,7 @@ public class GMLReader implements ParserReader {
         return GEOMETRY_FACTORY.createMultiPolygon(polygons);
     }
 
-    private Geometry buildGeometryCollection(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
+    private Geometry buildMultiGeometry(Element gmlElement, CoordinateSequenceDimensions dims, SRSInfo srsInfo) {
 
         List<Element> children = gmlElement.getChildren();
         Geometry[] geometries = new Geometry[children.size()];
@@ -557,7 +645,7 @@ public class GMLReader implements ParserReader {
             Element child = children.get(i);
 
             //Geometry Members
-            for (Element grandChild : child.getChildren()) {
+            for (Element grandChild : child.getChildren("geometryMember", GML_NAMESPACE)) {
                 String shape = grandChild.getName();
                 geometries[i] = buildGeometry(shape, grandChild, dims, srsInfo);
             }
