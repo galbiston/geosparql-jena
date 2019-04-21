@@ -15,7 +15,7 @@ It implements the six Conformance Classes described in the GeoSPARQL document:
 * RDFS Entailment Extension
 * Query Rewrite Extension
 
-The WKT (as described in 11-052r4) and GML 2.0 Simple Features Profile (11-100r3) serialisations are supported.
+The WKT (as described in 11-052r4) and GML 2.0 Simple Features Profile (10-100r3) serialisations are supported.
 Additional serialisations can be implemented by extending the `io.github.galbiston.geosparql_jena.implementation.datatype.GeometryDatatype` and registering with Apache Jena's `org.apache.jena.datatypes.TypeMapper`.
 
 All three spatial relation families are supported: _Simple Feature_, _Egenhofer_ and _RCC8_.
@@ -327,6 +327,23 @@ units:radian | Radians
 
 Full listing of default Units can be found in `io.github.galbiston.geosparql_jena.implementation.vocabulary.Unit_URI`.
 
+## Geography Markup Language Support (GML)
+The supported GML profile is GML 2.0 Simple Features Profile (10-100r3), which is a profile of GML 3.2.1 (07-036r1).
+The profile restricts the geometry shapes permitted in GML 3.2.1 to a subset, see 10-100r3 page 22.
+The profile supports Points, LineString and Polygon shapes used in WKT. There are also additional shape serialisations available in the profile that do not exist in WKT or JTS to provide simplified representations which would otherwise use LineStrings or Polygons.
+Curves can be described by LineStringSegment, Arc, Circle and CircleByCenterPoint. Surfaces can be formed similarly to Polygons or using Curves.
+These additional shapes can be read as part of a dataset or query but will not be produced if the SRS of the shape is transformed, instead a LineString or Polygon representation will be produced.
+
+Details of the GML structure for these shapes can be found in the [geometryPrimitives.xsd](http://www.datypic.com/sc/niem21/s-geometryPrimitives.xsd.html), [geometryBasic0d1d.xsd](http://www.datypic.com/sc/niem21/s-geometryBasic0d1d.xsd.html), [geometryBasic2d.xsd](http://www.datypic.com/sc/niem21/s-geometryBasic2d.xsd.html) and [geometryAggregates.xsd](http://www.datypic.com/sc/niem21/s-geometryAggregates.xsd.html) schemas.
+
+The labelling of collections is as follows:
+
+Collection | Geometry
+------------- | -------------
+MultiPoint | Point
+MultiCurve | LineString, Curve
+MultiSurface | Polygon, Surface
+MultiGeometry | Point, LineString, Curve, Polygon, Surface
 
 ## Apache Jena Spatial Functions/WGS84 Geo Predicates
 The `jena-spatial` module contains several SPARQL functions for querying datasets using the WGS84 Geo predicates for latitude (`http://www.w3.org/2003/01/geo/wgs84_pos#lat`) and longitude (`http://www.w3.org/2003/01/geo/wgs84_pos#long`).
