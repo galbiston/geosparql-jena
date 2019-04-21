@@ -183,6 +183,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractPoint2() throws JDOMException, IOException {
@@ -198,6 +201,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractPoint3() throws JDOMException, IOException {
@@ -214,6 +220,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     /*
     @Test
@@ -232,6 +241,9 @@ public class GMLReaderTest {
      */
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractPoint4() throws JDOMException, IOException {
@@ -248,6 +260,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractPolygon() throws JDOMException, IOException {
@@ -265,6 +280,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractPolygonHole() throws JDOMException, IOException {
@@ -285,6 +303,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractLineString() throws JDOMException, IOException {
@@ -303,6 +324,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractCurve() throws JDOMException, IOException {
@@ -321,6 +345,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractMultiPoint() throws JDOMException, IOException {
@@ -339,6 +366,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractMutliLineString() throws JDOMException, IOException {
@@ -360,6 +390,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractMultiPolygon() throws JDOMException, IOException {
@@ -381,6 +414,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractMultiPolygon2() throws JDOMException, IOException {
@@ -404,6 +440,9 @@ public class GMLReaderTest {
 
     /**
      * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testExtractGeometryCollection() throws JDOMException, IOException {
@@ -425,6 +464,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildPointEmpty method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildPointEmpty() throws JDOMException, IOException {
@@ -441,6 +483,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildLineStringEmpty method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildLineStringEmpty() throws JDOMException, IOException {
@@ -457,6 +502,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildCurveEmpty method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildCurveEmpty() throws JDOMException, IOException {
@@ -473,6 +521,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildPolygonEmpty method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildPolygonEmpty() throws JDOMException, IOException {
@@ -489,6 +540,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildMultiPointEmpty method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildMultiPointEmpty() throws JDOMException, IOException {
@@ -505,6 +559,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildMultiLineString method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildMultiLineStringEmpty() throws JDOMException, IOException {
@@ -521,6 +578,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildMultiCurve method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildMultiCurveEmpty() throws JDOMException, IOException {
@@ -537,6 +597,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildMultiPolygonEmpty method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildMultiPolygonEmpty() throws JDOMException, IOException {
@@ -553,6 +616,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildMultiSurfaceEmpty method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildMultiSurfaceEmpty() throws JDOMException, IOException {
@@ -569,6 +635,9 @@ public class GMLReaderTest {
 
     /**
      * Test of buildGeometryCollectionEmpty method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildGeometryCollectionEmpty() throws JDOMException, IOException {
@@ -586,6 +655,9 @@ public class GMLReaderTest {
     /**
      * Test of buildEmpty method, of class GMLReader.<br>
      * Req 16 An empty geo:gmlLiteral shall be interpreted as an empty geometry.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
      */
     @Test
     public void testBuildEmpty() throws JDOMException, IOException {
