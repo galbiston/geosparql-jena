@@ -57,11 +57,11 @@ public class GMLWriter {
                 break;
             case "LineString":
                 LineString lineString = (LineString) geometry;
-                gmlElement = buildLineString(lineString.getCoordinateSequence(), srsDimension, srsName);
+                gmlElement = buildLineString(lineString.getCoordinateSequence(), srsName);
                 break;
             case "Polygon":
                 Polygon polygon = (Polygon) geometry;
-                gmlElement = buildPolygon(polygon, srsDimension, srsName);
+                gmlElement = buildPolygon(polygon, srsName);
                 break;
             case "MultiPoint":
                 MultiPoint multiPoint = (MultiPoint) geometry;
@@ -69,7 +69,7 @@ public class GMLWriter {
                 break;
             case "MultiLineString":
                 MultiLineString multiLineString = (MultiLineString) geometry;
-                gmlElement = buildMultiLineString(multiLineString, srsDimension, srsName);
+                gmlElement = buildMultiLineString(multiLineString, srsName);
                 break;
             case "MultiPolygon":
                 MultiPolygon multiPolygon = (MultiPolygon) geometry;
@@ -77,7 +77,7 @@ public class GMLWriter {
                 break;
             case "GeometryCollection":
                 GeometryCollection geometryCollection = (GeometryCollection) geometry;
-                gmlElement = buildGeometryCollection(geometryCollection, srsDimension, dimensions, srsName);
+                gmlElement = buildMultiGeometry(geometryCollection, dimensions, srsName);
                 break;
             default:
                 throw new DatatypeFormatException("Geometry type not supported: " + geometry.getGeometryType());
@@ -121,21 +121,20 @@ public class GMLWriter {
         return gmlRoot;
     }
 
-    private static Element buildLineString(final CoordinateSequence coordSeq, final String dimensionString, final String srsName) {
+    private static Element buildLineString(final CoordinateSequence coordSeq, final String srsName) {
         CustomCoordinateSequence coordSequence = (CustomCoordinateSequence) coordSeq;
 
         Element gmlRoot = new Element("LineString", GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
         if (coordSequence.size() > 0) {
             Element posList = new Element("posList", GML_NAMESPACE);
-            posList.setAttribute("srsDimension", dimensionString);
             posList.addContent(convertToGMLText(coordSequence));
             gmlRoot.addContent(posList);
         }
         return gmlRoot;
     }
 
-    private static Element buildPolygon(final Polygon polygon, final String dimensionString, final String srsName) {
+    private static Element buildPolygon(final Polygon polygon, final String srsName) {
 
         Element gmlRoot = new Element(polygon.getGeometryType(), GML_NAMESPACE);
         gmlRoot.setAttribute("srsName", srsName);
@@ -147,7 +146,6 @@ public class GMLWriter {
             //Find exterior shell
             Element exterior = new Element("exterior", GML_NAMESPACE);
             Element exteriorPosList = new Element("posList", GML_NAMESPACE);
-            exteriorPosList.setAttribute("srsDimension", dimensionString);
             exteriorPosList.addContent(convertToGMLText(coordSequence));
             exterior.addContent(exteriorPosList);
             gmlRoot.addContent(exterior);
@@ -159,7 +157,6 @@ public class GMLWriter {
                 //flush all content
                 Element interior = new Element("interior", GML_NAMESPACE);
                 Element innerPosList = new Element("posList", GML_NAMESPACE);
-                innerPosList.setAttribute("srsDimension", dimensionString);
                 LineString innerLineString = polygon.getInteriorRingN(i);
                 CustomCoordinateSequence innerCoordSequence = (CustomCoordinateSequence) innerLineString.getCoordinateSequence();
                 innerPosList.addContent(convertToGMLText(innerCoordSequence));
@@ -182,7 +179,7 @@ public class GMLWriter {
 
             int geomCount = multiPoint.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
-                Element pointMember = new Element("PointMember", GML_NAMESPACE);
+                Element pointMember = new Element("pointMember", GML_NAMESPACE);
 
                 Point point = (Point) multiPoint.getGeometryN(i);
                 Element pointElement = buildPoint(point.getCoordinateSequence(), srsName);
@@ -196,7 +193,7 @@ public class GMLWriter {
         return gmlRoot;
     }
 
-    private static Element buildMultiLineString(final MultiLineString multiLineString, final String dimensionString, final String srsName) {
+    private static Element buildMultiLineString(final MultiLineString multiLineString, final String srsName) {
 
         //Element gmlRoot = new Element(multiLineString.getGeometryType(), GML_NAMESPACE);
         Element gmlRoot = new Element("MultiCurve", GML_NAMESPACE);
@@ -207,10 +204,10 @@ public class GMLWriter {
             int geomCount = multiLineString.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
                 //Element lineStringMember = new Element("LineStringMember", GML_NAMESPACE);
-                Element lineStringMember = new Element("CurveMember", GML_NAMESPACE);
+                Element lineStringMember = new Element("curveMember", GML_NAMESPACE);
 
                 LineString lineString = (LineString) multiLineString.getGeometryN(i);
-                Element lineStringElement = buildLineString(lineString.getCoordinateSequence(), dimensionString, srsName);
+                Element lineStringElement = buildLineString(lineString.getCoordinateSequence(), srsName);
                 lineStringMember.addContent(lineStringElement);
                 gmlRoot.addContent(lineStringMember);
             }
@@ -232,11 +229,11 @@ public class GMLWriter {
             int geomCount = multiPolygon.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
                 //Element polygonMember = new Element("PolygonMember", GML_NAMESPACE);
-                Element polygonMember = new Element("SurfaceMember", GML_NAMESPACE);
+                Element polygonMember = new Element("surfaceMember", GML_NAMESPACE);
 
                 Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
 
-                polygonMember.addContent(buildPolygon(polygon, dimensionString, srsName));
+                polygonMember.addContent(buildPolygon(polygon, srsName));
                 gmlRoot.addContent(polygonMember);
             }
 
@@ -246,7 +243,7 @@ public class GMLWriter {
         return gmlRoot;
     }
 
-    private static Element buildGeometryCollection(final GeometryCollection geometryCollection, final String dimensionString, final CoordinateSequenceDimensions dimensions, final String srsName) {
+    private static Element buildMultiGeometry(final GeometryCollection geometryCollection, final CoordinateSequenceDimensions dimensions, final String srsName) {
 
         //Element gmlRoot = new Element(geometryCollection.getGeometryType(), GML_NAMESPACE);
         Element gmlRoot = new Element("MultiGeometry", GML_NAMESPACE);
@@ -256,7 +253,7 @@ public class GMLWriter {
 
             int geomCount = geometryCollection.getNumGeometries();
             for (int i = 0; i < geomCount; i++) {
-                Element geometryMember = new Element("GeometryMember", GML_NAMESPACE);
+                Element geometryMember = new Element("geometryMember", GML_NAMESPACE);
 
                 Geometry geometry = geometryCollection.getGeometryN(i);
                 geometryMember.addContent(expand(geometry, dimensions, srsName));
