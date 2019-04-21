@@ -33,7 +33,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.datatypes.DatatypeFormatException;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -222,6 +221,10 @@ public class GMLReader implements ParserReader {
 
     private String extractPosList(Element gmlElement, int srsDimension) {
         String posList = gmlElement.getChildTextNormalize("posList", GML_NAMESPACE);
+        if (posList == null) {
+            return "";
+        }
+
         StringBuilder sb = new StringBuilder("");
         String[] coordinates = posList.trim().split(" ");
 
@@ -309,6 +312,9 @@ public class GMLReader implements ParserReader {
 
         //LineStringSegements
         Element segmentsElement = gmlElement.getChild("segments", GML_NAMESPACE);
+        if (segmentsElement == null) {
+            return GEOMETRY_FACTORY.createLineString();
+        }
 
         List<Element> segments = segmentsElement.getChildren("LineStringSegment", GML_NAMESPACE);
         if (!segments.isEmpty()) {
@@ -337,21 +343,28 @@ public class GMLReader implements ParserReader {
     private LineString buildLineStringSegments(List<Element> segments, CoordinateSequenceDimensions dims) {
 
         int srsDimension = CoordinateSequenceDimensions.convertToInt(dims);
-        String posList = "";
+        List<Coordinate> lineStringCoords = new ArrayList<>();
         for (Element segment : segments) {
 
-            String segmentPosList = extractPosList(segment, srsDimension);
+            List<Coordinate> segmentCoords = buildCoordinateList(segment, srsDimension);
+            if (lineStringCoords.isEmpty()) {
+                lineStringCoords = segmentCoords;
+            } else {
+                if (!segmentCoords.isEmpty()) {
+                    Coordinate lastCoord = lineStringCoords.get(lineStringCoords.size() - 1);
+                    Coordinate firstCoord = segmentCoords.get(0);
 
-            if (segmentPosList != null) {
-                if (posList.isEmpty()) {
-                    posList = segmentPosList;
-                } else {
-                    int firstCoords = StringUtils.ordinalIndexOf(" ", segmentPosList, srsDimension);
-                    posList += segmentPosList.substring(firstCoords);
+                    if (!firstCoord.equals2D(lastCoord)) {
+                        throw new DatatypeFormatException("GML LineString segments do not have matching last and first coordinates: " + lineStringCoords + " - " + segmentCoords);
+                    }
+
+                    segmentCoords.remove(0);
+                    lineStringCoords.addAll(segmentCoords);
                 }
             }
+
         }
-        CustomCoordinateSequence coordinateSequence = new CustomCoordinateSequence(dims, posList);
+        CustomCoordinateSequence coordinateSequence = new CustomCoordinateSequence(dims, lineStringCoords);
         return GEOMETRY_FACTORY.createLineString(coordinateSequence);
     }
 
