@@ -87,7 +87,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:LineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList srsDimension=\"2\">11 12.1 15 8</gml:posList></gml:LineString>";
+        String expResult = "<gml:LineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList>11 12.1 15 8</gml:posList></gml:LineString>";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -102,7 +102,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">30 10 40 40 20 40 10 20 30 10</gml:posList></gml:exterior></gml:Polygon>";
+        String expResult = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList>30 10 40 40 20 40 10 20 30 10</gml:posList></gml:exterior></gml:Polygon>";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -118,7 +118,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">30 10 40 40 20 40 10 20 30 10</gml:posList></gml:exterior><gml:interior><gml:posList srsDimension=\"2\">20 30 35 35 30 20 20 30</gml:posList></gml:interior></gml:Polygon>";
+        String expResult = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList>30 10 40 40 20 40 10 20 30 10</gml:posList></gml:exterior><gml:interior><gml:posList>20 30 35 35 30 20 20 30</gml:posList></gml:interior></gml:Polygon>";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -132,7 +132,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:MultiPoint xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:PointMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>10 40</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>40 30</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>20 20</gml:pos></gml:Point></gml:PointMember><gml:PointMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>30 10</gml:pos></gml:Point></gml:PointMember></gml:MultiPoint>";
+        String expResult = "<gml:MultiPoint xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pointMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>10 40</gml:pos></gml:Point></gml:pointMember><gml:pointMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>40 30</gml:pos></gml:Point></gml:pointMember><gml:pointMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>20 20</gml:pos></gml:Point></gml:pointMember><gml:pointMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>30 10</gml:pos></gml:Point></gml:pointMember></gml:MultiPoint>";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -140,8 +140,8 @@ public class GMLWriterTest {
     }
 
     @Test
-    public void testWriteMultiLineString() {
-        System.out.println("writeMultiLineString");
+    public void testWriteMultiCurve() {
+        System.out.println("writeMultiCurve");
         LineString[] lineStrings = new LineString[2];
         lineStrings[0] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "10 10, 20 20, 10 40"));
         lineStrings[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 30 30, 40 20, 30 10"));
@@ -149,7 +149,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:MultiLineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:LineStringMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList srsDimension=\"2\">10 10 20 20 10 40</gml:posList></gml:LineString></gml:LineStringMember><gml:LineStringMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList srsDimension=\"2\">40 40 30 30 40 20 30 10</gml:posList></gml:LineString></gml:LineStringMember></gml:MultiLineString>";
+        String expResult = "<gml:MultiCurve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:curveMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList>10 10 20 20 10 40</gml:posList></gml:LineString></gml:curveMember><gml:curveMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList>40 40 30 30 40 20 30 10</gml:posList></gml:LineString></gml:curveMember></gml:MultiCurve>";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -157,8 +157,8 @@ public class GMLWriterTest {
     }
 
     @Test
-    public void testWriteMultiPolygon() {
-        System.out.println("writeMultiPolygon");
+    public void testWriteMultiSurface() {
+        System.out.println("writeMultiSurface");
         Polygon[] polygons = new Polygon[2];
         polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 20 45, 45 30, 40 40"));
         polygons[1] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "20 35, 10 30, 10 10, 30 5, 45 20, 20 35"));
@@ -166,7 +166,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:PolygonMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:exterior></gml:Polygon></gml:PolygonMember><gml:PolygonMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:exterior></gml:Polygon></gml:PolygonMember></gml:MultiPolygon>";
+        String expResult = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:surfaceMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList>40 40 20 45 45 30 40 40</gml:posList></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList>20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:exterior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -174,8 +174,8 @@ public class GMLWriterTest {
     }
 
     @Test
-    public void testWriteMultiPolygon2() {
-        System.out.println("writeMultiPolygon2");
+    public void testWriteMultiSurface2() {
+        System.out.println("writeMultiSurface2");
         Polygon[] polygons = new Polygon[2];
         polygons[0] = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "40 40, 20 45, 45 30, 40 40"));
         LinearRing shell = GEOMETRY_FACTORY.createLinearRing(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "20 35, 10 30, 10 10, 30 5, 45 20, 20 35"));
@@ -185,7 +185,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:PolygonMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:exterior></gml:Polygon></gml:PolygonMember><gml:PolygonMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:exterior><gml:interior><gml:posList srsDimension=\"2\">30 20 20 15 20 25 30 20</gml:posList></gml:interior></gml:Polygon></gml:PolygonMember></gml:MultiPolygon>";
+        String expResult = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:surfaceMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList>40 40 20 45 45 30 40 40</gml:posList></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:exterior><gml:posList>20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:exterior><gml:interior><gml:posList>30 20 20 15 20 25 30 20</gml:posList></gml:interior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -193,8 +193,8 @@ public class GMLWriterTest {
     }
 
     @Test
-    public void testWriteGeometryCollection() {
-        System.out.println("writeGeometryCollection");
+    public void testWriteMultiGeometry() {
+        System.out.println("writeMultiGeometry");
         Geometry[] geometries = new Geometry[2];
         geometries[0] = GEOMETRY_FACTORY.createPoint(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "4 6"));
         geometries[1] = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "4 6,7 10"));
@@ -202,7 +202,7 @@ public class GMLWriterTest {
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, GML_SRS_NAMESPACE, GMLDatatype.URI, new DimensionInfo(2, 2, 0));
 
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:GeometryCollection xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:GeometryMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>4 6</gml:pos></gml:Point></gml:GeometryMember><gml:GeometryMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList srsDimension=\"2\">4 6 7 10</gml:posList></gml:LineString></gml:GeometryMember></gml:GeometryCollection>";
+        String expResult = "<gml:MultiGeometry xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:geometryMember><gml:Point srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:pos>4 6</gml:pos></gml:Point></gml:geometryMember><gml:geometryMember><gml:LineString srsName=\"urn:ogc:def:crs:EPSG::27700\"><gml:posList>4 6 7 10</gml:posList></gml:LineString></gml:geometryMember></gml:MultiGeometry>";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -275,16 +275,16 @@ public class GMLWriterTest {
     }
 
     /**
-     * Test of writeMultiLineString method, of class GMLWriter.
+     * Test of writeMultiCurve method, of class GMLWriter.
      */
     @Test
-    public void testWriteMultiLineStringEmpty() {
-        System.out.println("writeMultiLineStringEmpty");
+    public void testWriteMultiCurveEmpty() {
+        System.out.println("writeMultiCurveEmpty");
 
         Geometry geometry = GEOMETRY_FACTORY.createMultiLineString();
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:MultiLineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+        String expResult = "<gml:MultiCurve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -292,16 +292,16 @@ public class GMLWriterTest {
     }
 
     /**
-     * Test of writeMultiPolygonEmpty method, of class GMLWriter.
+     * Test of writeMultiSurfaceEmpty method, of class GMLWriter.
      */
     @Test
-    public void testWriteMultiPolygonEmpty() {
-        System.out.println("writeMultiPolygonEmpty");
+    public void testWriteMultiSurfaceEmpty() {
+        System.out.println("writeMultiSurfaceEmpty");
 
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon();
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:MultiPolygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+        String expResult = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
@@ -309,16 +309,16 @@ public class GMLWriterTest {
     }
 
     /**
-     * Test of writeGeometryCollectionEmpty method, of class GMLWriter.
+     * Test of writeMultiGeometryEmpty method, of class GMLWriter.
      */
     @Test
-    public void testWriteGeometryCollectionEmpty() {
-        System.out.println("writeGeometryCollectionEmpty");
+    public void testWriteMultiGeometryEmpty() {
+        System.out.println("writeMultiGeometryEmpty");
 
         Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection();
         GeometryWrapper geometryWrapper = new GeometryWrapper(geometry, SRS_URI.WGS84_CRS, GMLDatatype.URI, new DimensionInfo(4, 3, 0));
         String result = GMLWriter.write(geometryWrapper);
-        String expResult = "<gml:GeometryCollection xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
+        String expResult = "<gml:MultiGeometry xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/4326\" />";
 
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
