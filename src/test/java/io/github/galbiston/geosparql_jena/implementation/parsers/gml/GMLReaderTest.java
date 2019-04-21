@@ -23,6 +23,8 @@ import io.github.galbiston.geosparql_jena.implementation.jts.CustomCoordinateSeq
 import io.github.galbiston.geosparql_jena.implementation.jts.CustomGeometryFactory;
 import io.github.galbiston.geosparql_jena.implementation.vocabulary.SRS_URI;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import org.jdom2.JDOMException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -38,6 +40,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.util.GeometricShapeFactory;
 
 /**
  *
@@ -268,7 +271,7 @@ public class GMLReaderTest {
     public void testExtractPolygon() throws JDOMException, IOException {
         System.out.println("extractPolygon");
 
-        String gmlText = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">30 10 40 40 20 40 10 20 30 10</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>";
+        String gmlText = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList>30 10 40 40 20 40 10 20 30 10</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>";
         Geometry geometry = GEOMETRY_FACTORY.createPolygon(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "30 10, 40 40, 20 40, 10 20, 30 10"));
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
         GMLReader result = GMLReader.extract(gmlText);
@@ -293,7 +296,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createPolygon(shell, holes);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">30 10 40 40 20 40 10 20 30 10</gml:posList></gml:LinearRing></gml:exterior><gml:interior><gml:LinearRing><gml:posList srsDimension=\"2\">20 30 35 35 30 20 20 30</gml:posList></gml:LinearRing></gml:interior></gml:Polygon>";
+        String gmlText = "<gml:Polygon xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList>30 10 40 40 20 40 10 20 30 10</gml:posList></gml:LinearRing></gml:exterior><gml:interior><gml:LinearRing><gml:posList>20 30 35 35 30 20 20 30</gml:posList></gml:LinearRing></gml:interior></gml:Polygon>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -314,7 +317,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "11.0 12.1, 15.0 8.0"));
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:LineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">11 12.1 15 8</gml:posList></gml:LineString>";
+        String gmlText = "<gml:LineString xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList>11 12.1 15 8</gml:posList></gml:LineString>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -329,13 +332,84 @@ public class GMLReaderTest {
      * @throws java.io.IOException
      */
     @Test
-    public void testExtractCurve() throws JDOMException, IOException {
-        System.out.println("extractCurve");
+    public void testExtractLineStringSegment() throws JDOMException, IOException {
+        System.out.println("extractLineStringSegment");
 
         Geometry geometry = GEOMETRY_FACTORY.createLineString(new CustomCoordinateSequence(CoordinateSequenceDimensions.XY, "11.0 12.1, 15.0 8.0, 20.0 14.0, 25.0 14.0"));
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:Curve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:segments><gml:LineStringSegment><gml:posList srsDimension=\"2\">11 12.1 15 8</gml:posList></gml:LineStringSegment><gml:LineStringSegment><gml:posList srsDimension=\"2\">15.0 8.0 20.0 14.0 25.0 14.0</gml:posList></gml:LineStringSegment></gml:segments></gml:Curve>";
+        String gmlText = "<gml:Curve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:segments><gml:LineStringSegment><gml:posList>11 12.1 15 8</gml:posList></gml:LineStringSegment><gml:LineStringSegment><gml:posList>15.0 8.0 20.0 14.0 25.0 14.0</gml:posList></gml:LineStringSegment></gml:segments></gml:Curve>";
+        GMLReader result = GMLReader.extract(gmlText);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testExtractArc() throws JDOMException, IOException {
+        System.out.println("extractArc");
+
+        GeometricShapeFactory shapeFactory = new GeometricShapeFactory(GEOMETRY_FACTORY);
+        shapeFactory.setCentre(new CoordinateXY(0, 0));
+        shapeFactory.setWidth(10);
+        Geometry arc = shapeFactory.createArc(0, Math.PI);  //Semi-cicle centred around 0,0 and radius 5.
+        GMLReader expResult = new GMLReader(arc, 2, SRS_URI.OSGB36_CRS);
+
+        String gmlText = "<gml:Curve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:segments><gml:Arc><gml:posList>5 0 0 5 -5 0</gml:posList></gml:Arc></gml:segments></gml:Curve>";
+        GMLReader result = GMLReader.extract(gmlText);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testExtractCircle() throws JDOMException, IOException {
+        System.out.println("extractCircle");
+
+        GeometricShapeFactory shapeFactory = new GeometricShapeFactory(GEOMETRY_FACTORY);
+        shapeFactory.setCentre(new CoordinateXY(0, 0));
+        shapeFactory.setWidth(10);
+        Geometry circle = shapeFactory.createCircle().getExteriorRing();
+        GMLReader expResult = new GMLReader(circle, 2, SRS_URI.OSGB36_CRS);
+
+        String gmlText = "<gml:Curve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:segments><gml:Circle><gml:posList>5 0 0 5 -5 0</gml:posList></gml:Circle></gml:segments></gml:Curve>";
+        GMLReader result = GMLReader.extract(gmlText);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of extract method, of class GMLReader.
+     *
+     * @throws org.jdom2.JDOMException
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testExtractCircleByCentrePoint() throws JDOMException, IOException {
+        System.out.println("extractCircleByCentrePoint");
+
+        GeometricShapeFactory shapeFactory = new GeometricShapeFactory(GEOMETRY_FACTORY);
+        shapeFactory.setCentre(new Coordinate(0, 0));
+        shapeFactory.setSize(10);
+        Geometry circle = shapeFactory.createCircle().getExteriorRing();
+        GMLReader expResult = new GMLReader(circle, 2, SRS_URI.OSGB36_CRS);
+        String gmlText = "<gml:Curve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:segments><gml:CircleByCenterPoint ><gml:pos>0 0</gml:pos><gml:radius uom=\"http://www.opengis.net/def/uom/OGC/1.0/metre\">5.0</gml:radius></gml:CircleByCenterPoint></gml:segments></gml:Curve>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -380,7 +454,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createMultiLineString(lineStrings);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:MultiCurve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:curveMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">10 10 20 20 10 40</gml:posList></gml:LineString></gml:curveMember><gml:curveMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">40 40 30 30 40 20 30 10</gml:posList></gml:LineString></gml:curveMember></gml:MultiCurve>";
+        String gmlText = "<gml:MultiCurve xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:curveMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList>10 10 20 20 10 40</gml:posList></gml:LineString></gml:curveMember><gml:curveMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList>40 40 30 30 40 20 30 10</gml:posList></gml:LineString></gml:curveMember></gml:MultiCurve>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -404,7 +478,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>";
+        String gmlText = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList>40 40 20 45 45 30 40 40</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList>20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -430,7 +504,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createMultiPolygon(polygons);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">40 40 20 45 45 30 40 40</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList srsDimension=\"2\">20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:LinearRing></gml:exterior><gml:interior><gml:LinearRing><gml:posList srsDimension=\"2\">30 20 20 15 20 25 30 20</gml:posList></gml:LinearRing></gml:interior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>";
+        String gmlText = "<gml:MultiSurface xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList>40 40 20 45 45 30 40 40</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember><gml:surfaceMember><gml:Polygon srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:exterior><gml:LinearRing><gml:posList>20 35 10 30 10 10 30 5 45 20 20 35</gml:posList></gml:LinearRing></gml:exterior><gml:interior><gml:LinearRing><gml:posList>30 20 20 15 20 25 30 20</gml:posList></gml:LinearRing></gml:interior></gml:Polygon></gml:surfaceMember></gml:MultiSurface>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -454,7 +528,7 @@ public class GMLReaderTest {
         Geometry geometry = GEOMETRY_FACTORY.createGeometryCollection(geometries);
         GMLReader expResult = new GMLReader(geometry, 2, SRS_URI.OSGB36_CRS);
 
-        String gmlText = "<gml:MultiGeometry xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:geometryMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>4 6</gml:pos></gml:Point></gml:geometryMember><gml:geometryMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList srsDimension=\"2\">4 6 7 10</gml:posList></gml:LineString></gml:geometryMember></gml:MultiGeometry>";
+        String gmlText = "<gml:MultiGeometry xmlns:gml=\"http://www.opengis.net/ont/gml\" srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:geometryMember><gml:Point srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:pos>4 6</gml:pos></gml:Point></gml:geometryMember><gml:geometryMember><gml:LineString srsName=\"http://www.opengis.net/def/crs/EPSG/0/27700\"><gml:posList>4 6 7 10</gml:posList></gml:LineString></gml:geometryMember></gml:MultiGeometry>";
         GMLReader result = GMLReader.extract(gmlText);
 
         //System.out.println("Expected: " + expResult);
@@ -633,6 +707,37 @@ public class GMLReaderTest {
         //System.out.println("Expected: " + expResult);
         //System.out.println("Result: " + result);
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of findCentre method, of class GMLReader.
+     */
+    @Test
+    public void testFindCentre() {
+        System.out.println("findCentre");
+        List<Coordinate> coordinates = Arrays.asList(new Coordinate(-3, 4), new Coordinate(4, 5), new Coordinate(1, -4));
+        Coordinate expResult = new Coordinate(1, 1);
+        Coordinate result = GMLReader.findCentre(coordinates);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of findAngle method, of class GMLReader.
+     */
+    @Test
+    public void testFindAngle() {
+        System.out.println("findAngle");
+        Coordinate coord0 = new Coordinate(0, 0);
+        Coordinate coord1 = new Coordinate(5, 5);
+        double expResult = Math.PI / 4; //45 degrees from x-axis.
+        double result = GMLReader.findAngle(coord0, coord1);
+
+        //System.out.println("Expected: " + expResult);
+        //System.out.println("Result: " + result);
+        assertEquals(expResult, result, 0.0);
     }
 
 }
