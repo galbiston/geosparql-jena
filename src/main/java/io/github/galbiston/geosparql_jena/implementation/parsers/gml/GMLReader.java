@@ -184,11 +184,11 @@ public class GMLReader implements ParserReader {
                 case "MultiPoint":
                     geo = buildMultiPoint(gmlElement, dims);
                     break;
-                //case "MultiLineString":
+                //case "MultiLineString" is deprecated in GML3.2
                 case "MultiCurve":
                     geo = buildMultiLineString(gmlElement, dims);
                     break;
-                //case "MultiPolygon":
+                //case "MultiPolygon" is deprecated in GML3.2
                 case "MultiSurface":
                     geo = buildMultiPolygon(gmlElement, dims);
                     break;
@@ -586,10 +586,10 @@ public class GMLReader implements ParserReader {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + Objects.hashCode(this.geometry);
-        hash = 41 * hash + Objects.hashCode(this.srsURI);
-        hash = 41 * hash + Objects.hashCode(this.dims);
-        hash = 41 * hash + Objects.hashCode(this.dimensionInfo);
+        hash = 89 * hash + Objects.hashCode(this.geometry);
+        hash = 89 * hash + Objects.hashCode(this.srsURI);
+        hash = 89 * hash + Objects.hashCode(this.dims);
+        hash = 89 * hash + Objects.hashCode(this.dimensionInfo);
         return hash;
     }
 
