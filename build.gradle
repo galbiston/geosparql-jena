@@ -37,7 +37,7 @@ dependencies {
     implementation "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
 
     //Logging Framework
-    ext.slf4jVersion = "1.7.25"
+    ext.slf4jVersion = "1.7.26"
     implementation "org.slf4j:slf4j-api:$slf4jVersion"
 
     ext.logbackVersion = "1.2.3"
