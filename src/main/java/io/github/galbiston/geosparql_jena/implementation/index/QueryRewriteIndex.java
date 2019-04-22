@@ -243,7 +243,7 @@ public class QueryRewriteIndex {
 
     /**
      * Retrieve the QueryRewriteIndex from the Context.<br>
-     * If no index has been setup then
+     * If no index has been setup then QueryRewriteIndex is created.
      *
      * @param execCxt
      * @return QueryRewriteIndex contained in the Context.
@@ -251,6 +251,30 @@ public class QueryRewriteIndex {
     public static final QueryRewriteIndex retrieve(ExecutionContext execCxt) {
 
         Context context = execCxt.getContext();
+        return retrieve(context);
+    }
+
+    /**
+     * Retrieve the QueryRewriteIndex from the Dataset Context.<br>
+     * If no index has been setup then QueryRewriteIndex is created.
+     *
+     * @param dataset
+     * @return QueryRewriteIndex contained in the Context.
+     */
+    public static final QueryRewriteIndex retrieve(Dataset dataset) {
+
+        Context context = dataset.getContext();
+        return retrieve(context);
+    }
+
+    /**
+     * Retrieve the QueryRewriteIndex from the Dataset Context.<br>
+     * If no index has been setup then QueryRewriteIndex is created.
+     *
+     * @param dataset
+     * @return QueryRewriteIndex contained in the Context.
+     */
+    public static final QueryRewriteIndex retrieve(Context context) {
         QueryRewriteIndex queryRewriteIndex = (QueryRewriteIndex) context.get(QUERY_REWRITE_INDEX_SYMBOL, null);
 
         if (queryRewriteIndex == null) {
