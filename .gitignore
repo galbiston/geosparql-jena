@@ -16,3 +16,10 @@ gradle-app.setting
 v8.6.0.0
 derby.log
 changes TODO.txt
+
+
+# Idea IntelliJ
+*.ipr
+*.iws
+*.iml
+.idea/
