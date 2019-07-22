@@ -29,7 +29,7 @@ dependencies {
     implementation "org.jdom:jdom2:$jdomVersion"
 
     //Apache Jena
-    ext.jenaVersion = "3.10.0"
+    ext.jenaVersion = "3.11.0"
     api "org.apache.jena:jena-arq:$jenaVersion"
 
     //Apache Commons Collections
@@ -57,7 +57,7 @@ dependencies {
 }
 
 group = 'io.github.galbiston'
-version = '1.1.2-SNAPSHOT'
+version = '1.1.2'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
