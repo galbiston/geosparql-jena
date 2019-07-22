@@ -519,9 +519,9 @@ public class GenericPropertyFunctionTest {
         int expResult = 7;
         int result = objects.size();
 
-        System.out.println("Exp: " + expResult);
-        System.out.println("Res: " + result);
-        System.out.println("Objects: " + objects);
+        //System.out.println("Exp: " + expResult);
+        //System.out.println("Res: " + result);
+        //System.out.println("Objects: " + objects);
         assertEquals(expResult, result);
     }
 
