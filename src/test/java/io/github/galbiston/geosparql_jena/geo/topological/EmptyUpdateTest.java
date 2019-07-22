@@ -26,7 +26,6 @@ import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.update.UpdateExecutionFactory;
@@ -55,7 +54,7 @@ public class EmptyUpdateTest {
     public static void setUpClass() {
 
         GeoSPARQLConfig.setupNoIndex();
-        dataset = DatasetFactory.create(ModelFactory.createDefaultModel());
+        dataset = DatasetFactory.create();
         //Add data
         String update = "PREFIX geo: <http://www.opengis.net/ont/geosparql#>\n"
                 + "\n"
