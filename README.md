@@ -44,7 +44,7 @@ GeoSPARQL Jena can be accessed as a library using Maven etc. from Maven Central.
 <dependency>
     <groupId>io.github.galbiston</groupId>
     <artifactId>geosparql-jena</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
