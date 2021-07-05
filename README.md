@@ -1,6 +1,6 @@
 # GeoSPARQL Jena #
 
-**This project has been incorporated as module of the Apache Jena project and is no longer maintained. Go to the Apache Jena project for the latest version and documentation, see https://jena.apache.org/documentation/geosparql/**
+**This project has been incorporated as a module of the Apache Jena project and is no longer maintained. Go to the Apache Jena project for the latest version and documentation, see https://jena.apache.org/documentation/geosparql/**
 
 Implementation of GeoSPARQL 1.0 standard using Apache Jena for SPARQL query or API.
 
